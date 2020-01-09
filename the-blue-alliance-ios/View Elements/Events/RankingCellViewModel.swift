@@ -12,36 +12,36 @@ struct RankingCellViewModel {
     let wltText: String?
 
     init(districtRanking: DistrictRanking) {
-        rankText = "Rank \(districtRanking.rank!.stringValue)"
+        rankText = "Rank \(districtRanking.rank)"
 
-        teamNumber = String(describing: districtRanking.teamKey!.teamNumber)
-        teamName = districtRanking.teamKey!.team?.nickname ?? districtRanking.teamKey!.name
+        teamNumber = String(describing: districtRanking.team.teamNumber)
+        teamName = districtRanking.team.nickname ?? districtRanking.team.teamNumberNickname
 
-        detailText = "\(districtRanking.pointTotal!.stringValue) Points"
+        detailText = "\(districtRanking.pointTotal) Points"
         wltText = nil
     }
 
     init(rank: String, districtEventPoints: DistrictEventPoints) {
         rankText = rank
 
-        teamNumber = String(describing: districtEventPoints.teamKey!.teamNumber)
-        teamName = districtEventPoints.teamKey!.team?.nickname ?? districtEventPoints.teamKey!.name
+        teamNumber = String(describing: districtEventPoints.team.teamNumber)
+        teamName = districtEventPoints.team.nickname ?? districtEventPoints.team.teamNumberNickname
 
-        detailText = "\(districtEventPoints.total!.stringValue) Points"
+        detailText = "\(districtEventPoints.total) Points"
         wltText = nil
     }
 
     init(eventRanking: EventRanking) {
-        rankText = "Rank \(eventRanking.rank!.intValue)"
+        rankText = "Rank \(eventRanking.rank)"
 
-        teamNumber = String(describing: eventRanking.teamKey!.teamNumber)
-        teamName = eventRanking.teamKey!.team?.nickname ?? eventRanking.teamKey!.name
+        teamNumber = String(describing: eventRanking.team.teamNumber)
+        teamName = eventRanking.team.nickname ?? eventRanking.team.teamNumberNickname
 
         detailText = eventRanking.rankingInfoString
 
         wltText = {
             if let qualAverage = eventRanking.qualAverage {
-                return qualAverage.stringValue
+                return "\(qualAverage)"
             } else {
                 return eventRanking.record?.stringValue
             }
@@ -51,10 +51,10 @@ struct RankingCellViewModel {
     init(eventTeamStat: EventTeamStat) {
         rankText = nil
 
-        teamNumber = eventTeamStat.teamKey!.teamNumber
-        teamName = eventTeamStat.teamKey!.team?.nickname ?? eventTeamStat.teamKey!.name
+        teamNumber = String(describing: eventTeamStat.team.teamNumber)
+        teamName = eventTeamStat.team.nickname ?? eventTeamStat.team.teamNumberNickname
 
-        detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)
+        detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr, eventTeamStat.dpr, eventTeamStat.ccwm)
         wltText = nil
     }
 

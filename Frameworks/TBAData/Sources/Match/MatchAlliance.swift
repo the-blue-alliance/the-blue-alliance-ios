@@ -1,22 +1,97 @@
 import CoreData
-import TBAKit
 import Foundation
+import TBAKit
 
-extension MatchAlliance: Managed {
+extension MatchAlliance {
 
-    /**
-     Returns team keys for the alliance.
-     */
-    public var teamKeys: [String] {
-        return (teams!.array as? [TeamKey])?.map({ $0.key! }) ?? []
+    public var allianceKey: String {
+        guard let allianceKey = getValue(\MatchAlliance.allianceKeyRaw) else {
+            fatalError("Save MatchAlliance before accessing allianceKey")
+        }
+        return allianceKey
+    }
+
+    public var score: Int? {
+        return getValue(\MatchAlliance.scoreRaw)?.intValue
+    }
+
+    public var dqTeams: NSOrderedSet {
+        guard let dqTeams = getValue(\MatchAlliance.dqTeamsRaw) else {
+            fatalError("Save MatchAlliance before accessing dqTeams")
+        }
+        return dqTeams
+    }
+
+    public var match: Match {
+        guard let match = getValue(\MatchAlliance.matchRaw) else {
+            fatalError("Save MatchAlliance before accessing match")
+        }
+        return match
+    }
+
+    public var surrogateTeams: NSOrderedSet {
+        guard let surrogateTeams = getValue(\MatchAlliance.surrogateTeamsRaw) else {
+            fatalError("Save MatchAlliance before accessing surrogateTeams")
+        }
+        return surrogateTeams
+    }
+
+    public var teams: NSOrderedSet {
+        guard let teams = getValue(\MatchAlliance.teamsRaw) else {
+            fatalError("Save MatchAlliance before accessing teams")
+        }
+        return teams
     }
 
     /**
      Returns team keys for DQ'd teams for the alliance.
      */
     public var dqTeamKeys: [String] {
-        return (dqTeams?.array as? [TeamKey])?.map({ $0.key! }) ?? []
+        guard let dqTeams = dqTeams.array as? [Team] else {
+            return []
+        }
+        return dqTeams.map({ $0.key })
     }
+
+    /**
+     Returns team keys for surrogate teams for the alliance.
+     */
+    public var surrogateTeamKeys: [String] {
+        guard let surrogateTeams = surrogateTeams.array as? [Team] else {
+            return []
+        }
+        return surrogateTeams.map({ $0.key })
+    }
+
+    /**
+     Returns team keys for the alliance.
+     */
+    public var teamKeys: [String] {
+        guard let teams = teams.array as? [Team] else {
+            return []
+        }
+        return teams.map({ $0.key })
+    }
+
+}
+
+@objc(MatchAlliance)
+public class MatchAlliance: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<MatchAlliance> {
+        return NSFetchRequest<MatchAlliance>(entityName: MatchAlliance.entityName)
+    }
+
+    @NSManaged var allianceKeyRaw: String?
+    @NSManaged var scoreRaw: NSNumber?
+    @NSManaged var dqTeamsRaw: NSOrderedSet?
+    @NSManaged var matchRaw: Match?
+    @NSManaged var surrogateTeamsRaw: NSOrderedSet?
+    @NSManaged var teamsRaw: NSOrderedSet?
+
+}
+
+extension MatchAlliance: Managed {
 
     /**
      Insert a Match Alliance with values from a TBAKit Match Alliance model in to the managed object context.
@@ -35,47 +110,48 @@ extension MatchAlliance: Managed {
      */
     public static func insert(_ model: TBAMatchAlliance, allianceKey: String, matchKey: String, in context: NSManagedObjectContext) -> MatchAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(MatchAlliance.allianceKey), allianceKey,
-                                    #keyPath(MatchAlliance.match.key), matchKey)
+                                    #keyPath(MatchAlliance.allianceKeyRaw), allianceKey,
+                                    #keyPath(MatchAlliance.matchRaw.keyRaw), matchKey)
 
         return findOrCreate(in: context, matching: predicate) { (matchAlliance) in
             // Required: allianceKey, score, teams
-            matchAlliance.allianceKey = allianceKey
+            matchAlliance.allianceKeyRaw = allianceKey
 
             // Match scores for unplayed matches are returned as -1 from the API
             if model.score > -1 {
-                matchAlliance.score = model.score as NSNumber
+                matchAlliance.scoreRaw = NSNumber(value: model.score)
             } else {
-                matchAlliance.score = nil
+                matchAlliance.scoreRaw = nil
             }
 
-            // Don't use updateToManyRelationship to set these up, since Team Key's will never be orphaned.
-            // Additionally, updateToManyRelationship doesn't support ordered sets
-
-            matchAlliance.teams = NSOrderedSet(array: model.teams.map({ (key) -> TeamKey in
-                return TeamKey.insert(withKey: key, in: context)
-            }))
+            matchAlliance.teamsRaw = NSOrderedSet(array: model.teams.map {
+                return Team.insert($0, in: context)
+            })
 
             if let surrogateTeams = model.surrogateTeams {
-                matchAlliance.surrogateTeams = NSOrderedSet(array: surrogateTeams.map({ (key) -> TeamKey in
-                    return TeamKey.insert(withKey: key, in: context)
-                }))
+                matchAlliance.surrogateTeamsRaw = NSOrderedSet(array: surrogateTeams.map {
+                    return Team.insert($0, in: context)
+                })
             } else {
-                matchAlliance.surrogateTeams = nil
+                matchAlliance.surrogateTeamsRaw = nil
             }
 
             if let dqTeams = model.dqTeams {
-                matchAlliance.dqTeams = NSOrderedSet(array: dqTeams.map({ (key) -> TeamKey in
-                    return TeamKey.insert(withKey: key, in: context)
-                }))
+                matchAlliance.dqTeamsRaw = NSOrderedSet(array: dqTeams.map {
+                    return Team.insert($0, in: context)
+                })
             } else {
-                matchAlliance.dqTeams = nil
+                matchAlliance.dqTeamsRaw = nil
             }
         }
     }
 
+}
+
+extension MatchAlliance: Orphanable {
+
     public var isOrphaned: Bool {
-        return match == nil
+        return matchRaw == nil
     }
 
 }

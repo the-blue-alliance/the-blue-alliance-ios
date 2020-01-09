@@ -1,9 +1,15 @@
+import CoreData
 import MyTBAKit
 import TBADataTesting
 import XCTest
 @testable import TBAData
 
 class SubscriptionTestCase: TBADataTestCase {
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Subscription> = Subscription.fetchRequest()
+        XCTAssertEqual(fr.entityName, Subscription.entityName)
+    }
 
     func test_notifications() {
         let subscription = Subscription.init(entity: Subscription.entity(), insertInto: persistentContainer.viewContext)
@@ -104,18 +110,6 @@ class SubscriptionTestCase: TBADataTestCase {
 
         subscription = Subscription.fetch(modelKey: modelKey, modelType: modelType, in: persistentContainer.viewContext)
         XCTAssertNil(subscription)
-    }
-
-    func test_toRemoteModel() {
-        let model = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards])
-        let subscription = Subscription.insert(model, in: persistentContainer.viewContext)
-        XCTAssertEqual(model, subscription.toRemoteModel())
-    }
-
-    func test_isOrphaned() {
-        let subscription = Subscription.init(entity: Subscription.entity(), insertInto: persistentContainer.viewContext)
-        // Subscription should never be orphaned
-        XCTAssertFalse(subscription.isOrphaned)
     }
 
 }

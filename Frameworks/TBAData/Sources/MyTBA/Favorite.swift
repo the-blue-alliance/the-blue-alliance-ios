@@ -2,13 +2,16 @@ import CoreData
 import Foundation
 import MyTBAKit
 
-extension Favorite: MyTBAManaged {
+@objc(Favorite)
+public class Favorite: MyTBAEntity {
 
-    private static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
-        return NSPredicate(format: "%K == %@ && %K == %ld",
-                           #keyPath(Favorite.modelKey), modelKey,
-                           #keyPath(Favorite.modelTypeRaw), modelType.rawValue)
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Favorite> {
+        return NSFetchRequest<Favorite>(entityName: Favorite.entityName)
     }
+
+}
+
+extension Favorite {
 
     /**
      Insert Favorites with values from myTBA Favorite models in to the managed object context.
@@ -59,9 +62,19 @@ extension Favorite: MyTBAManaged {
 
         return findOrCreate(in: context, matching: predicate) { (favorite) in
             // Required: key, type
-            favorite.modelKey = modelKey
-            favorite.modelType = modelType
+            favorite.modelKeyRaw = modelKey
+            favorite.modelTypeRaw = NSNumber(value: modelType.rawValue)
         }
+    }
+
+}
+
+extension Favorite {
+
+    fileprivate static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ && %K == %ld",
+                           #keyPath(Favorite.modelKeyRaw), modelKey,
+                           #keyPath(Favorite.modelTypeRaw), modelType.rawValue)
     }
 
     public static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Favorite? {
@@ -71,12 +84,11 @@ extension Favorite: MyTBAManaged {
 
     public static func favoriteTeamKeys(in context: NSManagedObjectContext) -> [String] {
         return Favorite.fetch(in: context, configurationBlock: { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "%K == %ld", #keyPath(Favorite.modelTypeRaw), MyTBAModelType.team.rawValue)
+            fetchRequest.predicate = NSPredicate(format: "%K == %ld",
+                                                 #keyPath(Favorite.modelTypeRaw), MyTBAModelType.team.rawValue)
         }).compactMap({ $0.modelKey })
     }
 
-    public func toRemoteModel() -> MyTBAFavorite {
-        return MyTBAFavorite(modelKey: modelKey!, modelType: modelType)
-    }
-
 }
+
+extension Favorite: MyTBAManaged {}

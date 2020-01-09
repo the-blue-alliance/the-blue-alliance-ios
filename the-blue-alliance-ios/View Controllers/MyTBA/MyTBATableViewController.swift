@@ -107,17 +107,14 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     private func setupFetchedResultsController() {
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelTypeRaw), ascending: true),
-            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKey), ascending: true)
-        ]
-
         // Only show supported myTBA entities (basically, exclude team@event)
-        fetchRequest.predicate = NSPredicate(format: "%K IN %@",
-                                             #keyPath(MyTBAEntity.modelTypeRaw),
-                                             [MyTBAModelType.event, MyTBAModelType.team, MyTBAModelType.match].map({ $0.rawValue }))
+        fetchRequest.predicate = T.supportedModelTypePredicate()
+        fetchRequest.sortDescriptors = T.sortDescriptors()
 
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: #keyPath(MyTBAEntity.modelTypeRaw), cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                              managedObjectContext: persistentContainer.viewContext,
+                                                              sectionNameKeyPath: T.modelTypeKeyPath(),
+                                                              cacheName: nil)
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()
     }
@@ -270,7 +267,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+                DispatchQueue.main.async {
+                    self.executeUpdate(myTBAModel)
+                }
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
@@ -286,7 +285,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+                DispatchQueue.main.async {
+                    self.executeUpdate(myTBAModel)
+                }
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
@@ -302,37 +303,39 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+                DispatchQueue.main.async {
+                    self.executeUpdate(myTBAModel)
+                }
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
     }
 
     internal func executeUpdate(_ myTBAModel: MyTBAModel) {
-        guard let updateOperation: Operation = {
-            let key = myTBAModel.modelKey
+        let key = myTBAModel.modelKey
+        guard let op: Operation = {
             switch myTBAModel.modelType {
             case .event:
-                guard let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: Event.predicate(key: key)) else {
-                    return nil
+                if let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: Event.predicate(key: key)) {
+                    return self.updateObject(event, for: myTBAModel)
                 }
-                return self.updateObject(event, for: myTBAModel)
+                return nil
             case .team:
-                guard let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: Team.predicate(key: key)) else {
-                    return nil
+                if let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: Team.predicate(key: key)) {
+                    return self.updateObject(team, for: myTBAModel)
                 }
-                return self.updateObject(team, for: myTBAModel)
+                return nil
             case .match:
-                guard let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: key)) else {
-                    return nil
+                if let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: key)) {
+                    return self.updateObject(match, for: myTBAModel)
                 }
-                return self.updateObject(match, for: myTBAModel)
+                return nil
             default:
                 return nil
             }
-            }() else { return }
+        }() else { return }
 
-        OperationQueue.main.addOperation(updateOperation)
+        OperationQueue.main.addOperation(op)
     }
 
     private func updateObject(_ object: NSManagedObject, for model: MyTBAModel) -> Operation? {
@@ -345,10 +348,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             snapshot.insertSection(section, atIndex: model.modelType.rawValue)
             // Insert the object so it's in the same order as it's MyTBAEntity
             guard let obj = self.fetchedResultsController.fetchedObjects?.first(where: { (o) -> Bool in
-                guard let modelKey = o.modelKey else {
-                    return false
-                }
-                return o.modelType == model.modelType && modelKey == model.modelKey
+                return o.modelType == model.modelType && o.modelKey == model.modelKey
             }) else { return }
             if let indexPath = self.fetchedResultsController.indexPath(forObject: obj) {
                 snapshot.insertItem(object, inSection: section, atIndex: indexPath.row)

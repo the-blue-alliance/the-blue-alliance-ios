@@ -23,8 +23,7 @@ class EventTeamsViewController: TeamsViewController {
     // MARK: - Refreshable
 
     override var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
-        return "\(key)_teams"
+        return "\(event.key)_teams"
     }
 
     override var automaticRefreshInterval: DateComponents? {
@@ -33,12 +32,12 @@ class EventTeamsViewController: TeamsViewController {
 
     override var automaticRefreshEndDate: Date? {
         // Refresh event teams until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventTeams(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventTeams(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let teams = try? result.get() {
@@ -61,8 +60,7 @@ class EventTeamsViewController: TeamsViewController {
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var fetchRequestPredicate: NSPredicate? {
-        return NSPredicate(format: "ANY %K = %@",
-                           #keyPath(Team.events), event)
+        return Team.eventPredicate(eventKey: event.key)
     }
 
 }

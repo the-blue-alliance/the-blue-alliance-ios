@@ -2,7 +2,35 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension EventStatusPlayoff: Managed {
+extension EventStatusPlayoff {
+
+    public var currentRecord: WLT? {
+        return getValue(\EventStatusPlayoff.currentRecordRaw)
+    }
+
+    public var level: String? {
+        return getValue(\EventStatusPlayoff.levelRaw)
+    }
+
+    public var playoffAverage: Double? {
+        return getValue(\EventStatusPlayoff.playoffAverageRaw)?.doubleValue
+    }
+
+    public var record: WLT? {
+        return getValue(\EventStatusPlayoff.recordRaw)
+    }
+
+    public var status: String? {
+        return getValue(\EventStatusPlayoff.statusRaw)
+    }
+
+    public var alliance: EventAlliance? {
+        return getValue(\EventStatusPlayoff.allianceRaw)
+    }
+
+    public var eventStatus: EventStatus? {
+        return getValue(\EventStatusPlayoff.eventStatusRaw)
+    }
 
     /**
      How far an alliance got in the eliminiations.
@@ -21,38 +49,66 @@ extension EventStatusPlayoff: Managed {
         }
     }
 
+}
+
+@objc(EventStatusPlayoff)
+public class EventStatusPlayoff: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventStatusPlayoff> {
+        return NSFetchRequest<EventStatusPlayoff>(entityName: EventStatusPlayoff.entityName)
+    }
+
+    @NSManaged var currentRecordRaw: WLT?
+    @NSManaged var levelRaw: String?
+    @NSManaged var playoffAverageRaw: NSNumber?
+    @NSManaged var recordRaw: WLT?
+    @NSManaged var statusRaw: String?
+    @NSManaged var allianceRaw: EventAlliance?
+    @NSManaged var eventStatusRaw: EventStatus?
+
+}
+
+extension EventStatusPlayoff: Managed {
+
     public static func insert(_ model: TBAAllianceStatus, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusPlayoff {
-        // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-        let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.key == %@).@count == 1) OR (%K == %@ AND %K == %@)",
-                                    #keyPath(EventStatusPlayoff.alliance.event.key), eventKey,
-                                    #keyPath(EventStatusPlayoff.alliance.picks), teamKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus.event.key), eventKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus.teamKey.key), teamKey)
+        let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.%K == %@).@count == 1) OR (%K == %@ AND %K == %@)",
+                                    #keyPath(EventStatusPlayoff.allianceRaw.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventStatusPlayoff.allianceRaw.picksRaw), #keyPath(Team.keyRaw), teamKey,
+                                    #keyPath(EventStatusPlayoff.eventStatusRaw.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventStatusPlayoff.eventStatusRaw.teamRaw.keyRaw), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (statusPlayoff) in
             if let currentRecord = model.currentRecord {
-                statusPlayoff.currentRecord = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
+                statusPlayoff.currentRecordRaw = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
             } else {
-                statusPlayoff.currentRecord = nil
+                statusPlayoff.currentRecordRaw = nil
             }
 
-            statusPlayoff.level = model.level
-            statusPlayoff.playoffAverage = model.playoffAverage as NSNumber?
+            statusPlayoff.levelRaw = model.level
+            if let playoffAverage = model.playoffAverage {
+                statusPlayoff.playoffAverageRaw = NSNumber(value: playoffAverage)
+            } else {
+                statusPlayoff.playoffAverageRaw = nil
+            }
 
             if let record = model.record {
-                statusPlayoff.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
+                statusPlayoff.recordRaw = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
             } else {
-                statusPlayoff.record = nil
+                statusPlayoff.recordRaw = nil
             }
 
-            statusPlayoff.status = model.status
+            statusPlayoff.statusRaw = model.status
         })
     }
 
+}
+
+extension EventStatusPlayoff: Orphanable {
+
     public var isOrphaned: Bool {
         // An EventStatusPlayoff is an orphan if it isn't attached to any EventAlliance or an EventStatus.
-        let hasAlliance = (alliance != nil)
-        let hasStatus = (eventStatus != nil)
+        let hasAlliance = (allianceRaw != nil)
+        let hasStatus = (eventStatusRaw != nil)
         return !hasAlliance && !hasStatus
     }
 

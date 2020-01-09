@@ -1,7 +1,6 @@
 import CoreData
 import Foundation
 import TBAKit
-import UIKit
 
 public enum MediaError: Error {
     case error(String)
@@ -57,9 +56,24 @@ public enum MediaType: String {
 
 extension TeamMedia {
 
+    public var details: [String: Any]? {
+        return getValue(\TeamMedia.detailsRaw)
+    }
+
+    public var directURL: String? {
+        return getValue(\TeamMedia.directURLRaw)
+    }
+
+    public var foreignKey: String {
+        guard let foreignKey = getValue(\TeamMedia.foreignKeyRaw) else {
+            fatalError("Save TeamMedia before accessing foreignKey")
+        }
+        return foreignKey
+    }
+
     public var image: UIImage? {
         get {
-            if let mediaData = mediaData {
+            if let mediaData = getValue(\TeamMedia.mediaData) {
                 return UIImage(data: mediaData)
             }
             return nil
@@ -72,7 +86,7 @@ extension TeamMedia {
 
     public var imageError: Error? {
         get {
-            return mediaError
+            return getValue(\TeamMedia.mediaError)
         }
         set {
             mediaError = newValue
@@ -80,23 +94,60 @@ extension TeamMedia {
         }
     }
 
-    public var imageDirectURL: URL? {
-        guard let directURL = getValue(\TeamMedia.directURL) else {
+    public var preferred: Bool {
+        guard let preferred = getValue(\TeamMedia.preferredRaw)?.boolValue else {
+            fatalError("Save TeamMedia before accessing preferred")
+        }
+        return preferred
+    }
+
+    public var type: MediaType? {
+        guard let typeString = getValue(\TeamMedia.typeStringRaw) else {
+            fatalError("Save TeamMedia before accessing type")
+        }
+        guard let type = MediaType(rawValue: typeString) else {
             return nil
         }
-        return URL(string: directURL)
+        return type
+    }
+
+    public var viewURL: String? {
+        return getValue(\TeamMedia.viewURLRaw)
+    }
+
+    public var year: Int {
+        guard let year = getValue(\TeamMedia.yearRaw)?.intValue else {
+            fatalError("Save TeamMedia before accessing year")
+        }
+        return year
+    }
+
+    public var team: Team {
+        guard let team = getValue(\TeamMedia.teamRaw) else {
+            fatalError("Save TeamMedia before accessing team")
+        }
+        return team
     }
 
 }
 
-extension TeamMedia: Playable {
+@objc(TeamMedia)
+public class TeamMedia: NSManagedObject {
 
-    public var youtubeKey: String? {
-        if type == MediaType.youtubeVideo.rawValue {
-            return getValue(\TeamMedia.foreignKey)
-        }
-        return nil
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<TeamMedia> {
+        return NSFetchRequest<TeamMedia>(entityName: "TeamMedia")
     }
+
+    @NSManaged var detailsRaw: [String: Any]?
+    @NSManaged var directURLRaw: String?
+    @NSManaged var foreignKeyRaw: String?
+    @NSManaged var mediaData: Data?
+    @NSManaged var mediaError: Error?
+    @NSManaged var preferredRaw: NSNumber?
+    @NSManaged var typeStringRaw: String?
+    @NSManaged var viewURLRaw: String?
+    @NSManaged var yearRaw: NSNumber?
+    @NSManaged var teamRaw: Team?
 
 }
 
@@ -115,38 +166,71 @@ extension TeamMedia: Managed {
      */
     @discardableResult
     public static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> TeamMedia {
-        var mediaPredicate: NSPredicate?
-        if let key = model.key {
-            mediaPredicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                         #keyPath(TeamMedia.key), key,
-                                         #keyPath(TeamMedia.type), model.type)
-        } else if let foreignKey = model.foreignKey {
-            mediaPredicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                         #keyPath(TeamMedia.foreignKey), foreignKey,
-                                         #keyPath(TeamMedia.type), model.type)
-        }
-        guard let predicate = mediaPredicate else {
-            fatalError("No way to filter media")
-        }
+        var mediaPredicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                         #keyPath(TeamMedia.foreignKeyRaw), model.foreignKey,
+                                         #keyPath(TeamMedia.typeStringRaw), model.type)
 
         let yearPredicate = NSPredicate(format: "%K == %ld",
-                                        #keyPath(TeamMedia.year), year)
+                                        #keyPath(TeamMedia.yearRaw), year)
 
-        return findOrCreate(in: context, matching: NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, yearPredicate])) { (media) in
-            // Required: type, year
-            media.key = model.key
-            media.type = model.type
-            media.year = year as NSNumber
-            media.foreignKey = model.foreignKey
-            media.details = model.details
-            media.preferred = model.preferred ?? false
-            media.viewURL = model.viewURL
-            media.directURL = model.directURL
+        return findOrCreate(in: context, matching: NSCompoundPredicate(andPredicateWithSubpredicates: [mediaPredicate, yearPredicate])) { (media) in
+            // Required: type, year, foreignKey
+            media.typeStringRaw = model.type
+            media.yearRaw = NSNumber(value: year)
+            media.foreignKeyRaw = model.foreignKey
+            media.detailsRaw = model.details
+            media.preferredRaw = NSNumber(value: model.preferred)
+            media.viewURLRaw = model.viewURL
+            media.directURLRaw = model.directURL
         }
     }
 
-    public var isOrphaned: Bool {
-        return team == nil
+}
+
+extension TeamMedia {
+
+    public static func teamYearPrediate(teamKey: String, year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == %ld",
+                           #keyPath(TeamMedia.teamRaw.keyRaw), teamKey,
+                           #keyPath(TeamMedia.yearRaw), year)
+    }
+
+    public static func teamYearImagesPrediate(teamKey: String, year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == %ld AND %K in %@",
+                           #keyPath(TeamMedia.teamRaw.keyRaw), teamKey,
+                           #keyPath(TeamMedia.yearRaw), year,
+                           #keyPath(TeamMedia.typeStringRaw), MediaType.imageTypes)
+    }
+
+    public static func nonePredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == nil",
+                           #keyPath(TeamMedia.teamRaw.keyRaw), teamKey,
+                           #keyPath(TeamMedia.typeStringRaw))
+    }
+
+    public static func sortDescriptors() -> [NSSortDescriptor] {
+        return [
+            NSSortDescriptor(key: #keyPath(TeamMedia.typeStringRaw), ascending: false),
+            NSSortDescriptor(key: #keyPath(TeamMedia.foreignKeyRaw), ascending: false)
+        ]
+    }
+
+    public var imageDirectURL: URL? {
+        guard let directURL = directURL else {
+            return nil
+        }
+        return URL(string: directURL)
+    }
+
+}
+
+extension TeamMedia: Playable {
+
+    public var youtubeKey: String? {
+        if type == .youtubeVideo {
+            return foreignKey
+        }
+        return nil
     }
 
 }

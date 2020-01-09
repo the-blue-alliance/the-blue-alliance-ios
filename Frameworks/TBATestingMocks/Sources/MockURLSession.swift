@@ -6,7 +6,11 @@ public class MockURLSession: URLSession {
     public var cancelExpectation: XCTestExpectation?
 
     var tasksToVend: [MockURLSessionDataTask] = []
-    
+
+    public override init() {
+        // Pass
+    }
+
     override public func dataTask(with request: URLRequest) -> URLSessionDataTask {
         return createTask(with: request)
     }

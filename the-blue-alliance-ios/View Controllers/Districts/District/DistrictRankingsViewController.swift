@@ -62,9 +62,10 @@ class DistrictRankingsViewController: TBATableViewController {
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DistrictRanking.rank), ascending: true)]
-        fetchRequest.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(DistrictRanking.district), district)
+        fetchRequest.sortDescriptors = [
+            DistrictRanking.rankSortDescriptor()
+        ]
+        fetchRequest.predicate = DistrictRanking.districtPredicate(districtKey: district.key)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
@@ -75,8 +76,7 @@ class DistrictRankingsViewController: TBATableViewController {
 extension DistrictRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = district.getValue(\District.key!)
-        return "\(key)_rankings"
+        return "\(district.key)_rankings"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -94,7 +94,7 @@ extension DistrictRankingsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictRankings(key: district.key!) { (result, notModified) in
+        operation = tbaKit.fetchDistrictRankings(key: district.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let rankings = try? result.get() {

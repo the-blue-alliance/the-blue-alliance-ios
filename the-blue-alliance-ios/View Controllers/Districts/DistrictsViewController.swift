@@ -66,7 +66,9 @@ class DistrictsViewController: TBATableViewController {
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(District.name), ascending: true)]
+        fetchRequest.sortDescriptors = [
+            District.nameSortDescriptor()
+        ]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -78,8 +80,7 @@ class DistrictsViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<District>) {
-        request.predicate = NSPredicate(format: "%K == %ld",
-                                        #keyPath(District.year), year)
+        request.predicate = District.yearPredicate(year: year)
     }
 
 }

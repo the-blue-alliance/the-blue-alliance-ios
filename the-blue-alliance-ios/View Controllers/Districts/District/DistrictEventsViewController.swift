@@ -21,8 +21,7 @@ class DistrictEventsViewController: EventsViewController {
     // MARK: - Refreshable
 
     override var refreshKey: String? {
-        let key = district.getValue(\District.key!)
-        return "\(key)_events"
+        return "\(district.key)_events"
     }
 
     override var automaticRefreshInterval: DateComponents? {
@@ -32,13 +31,12 @@ class DistrictEventsViewController: EventsViewController {
     override var automaticRefreshEndDate: Date? {
         // Automatically refresh event districts during the year before the selected year (when events are rolling in)
         // Ex: Districts for 2019 will stop automatically refreshing on January 1st, 2019 (should all be set by then)
-        let year = district.getValue(\District.year!.intValue)
-        return Calendar.current.date(from: DateComponents(year: year))
+        return Calendar.current.date(from: DateComponents(year: district.year))
     }
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictEvents(key: district.key!) { (result, notModified) in
+        operation = tbaKit.fetchDistrictEvents(key: district.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -61,16 +59,15 @@ class DistrictEventsViewController: EventsViewController {
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var firstSortDescriptor: NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.week), ascending: true)
+        return Event.weekSortDescriptor()
     }
 
     override var sectionNameKeyPath: String {
-        return #keyPath(Event.week)
+        return Event.weekKeyPath()
     }
 
     override var fetchRequestPredicate: NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Event.district.key), district.key!)
+        return Event.districtPredicate(districtKey: district.key)
     }
 
 }

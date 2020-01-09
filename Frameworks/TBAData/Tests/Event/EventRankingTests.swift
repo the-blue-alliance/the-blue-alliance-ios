@@ -1,9 +1,125 @@
-import TBAData
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
+@testable import TBAData
 
 class EventRankingTestCase: TBADataTestCase {
+
+    func test_dq() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(ranking.dq)
+        ranking.dqRaw = NSNumber(value: 1)
+        XCTAssertEqual(ranking.dq, 1)
+    }
+
+    func test_matchesPlayed() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(ranking.matchesPlayed)
+        ranking.matchesPlayedRaw = NSNumber(value: 1)
+        XCTAssertEqual(ranking.matchesPlayed, 1)
+    }
+
+    func test_qualAverage() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(ranking.qualAverage)
+        ranking.qualAverageRaw = NSNumber(value: 20.2)
+        XCTAssertEqual(ranking.qualAverage, 20.2)
+    }
+
+    func test_rank() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        ranking.rankRaw = NSNumber(value: 1)
+        XCTAssertEqual(ranking.rank, 1)
+    }
+
+    func test_record() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(ranking.recordRaw)
+        let record = WLT(wins: 1, losses: 2, ties: 3)
+        ranking.recordRaw = record
+        XCTAssertEqual(ranking.record, record)
+    }
+
+    func test_event() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        ranking.eventRaw = event
+        XCTAssertEqual(ranking.event, event)
+    }
+
+    func test_extraStats() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(ranking.extraStats.array as! [EventRankingStat], [])
+        let stat = EventRankingStat.init(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
+        ranking.extraStatsRaw = NSOrderedSet(array: [stat])
+        XCTAssertEqual(ranking.extraStats.array as! [EventRankingStat], [stat])
+    }
+
+    func test_extraStatsInfo() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(ranking.extraStatsInfo.array as! [EventRankingStatInfo], [])
+        let info = EventRankingStatInfo.init(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
+        ranking.extraStatsInfoRaw = NSOrderedSet(array: [info])
+        XCTAssertEqual(ranking.extraStatsInfo.array as! [EventRankingStatInfo], [info])
+    }
+
+    func test_qualStatus() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(ranking.qualStatus)
+        let status = EventStatusQual.init(entity: EventStatusQual.entity(), insertInto: persistentContainer.viewContext)
+        ranking.qualStatusRaw = status
+        XCTAssertEqual(ranking.qualStatus, status)
+    }
+
+    func test_sortOrders() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(ranking.sortOrders.array as! [EventRankingStat], [])
+        let stat = EventRankingStat.init(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
+        ranking.sortOrdersRaw = NSOrderedSet(array: [stat])
+        XCTAssertEqual(ranking.sortOrders.array as! [EventRankingStat], [stat])
+    }
+
+    func test_sortOrdersInfo() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(ranking.sortOrdersInfo.array as! [EventRankingStatInfo], [])
+        let info = EventRankingStatInfo.init(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
+        ranking.sortOrdersInfoRaw = NSOrderedSet(array: [info])
+        XCTAssertEqual(ranking.sortOrdersInfo.array as! [EventRankingStatInfo], [info])
+    }
+
+    func test_team() {
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        ranking.teamRaw = team
+        XCTAssertEqual(ranking.team, team)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
+        XCTAssertEqual(fr.entityName, EventRanking.entityName)
+    }
+
+    func test_eventPredicate() {
+        let event = insertEvent()
+        let predicate = EventRanking.eventPredicate(eventKey: event.key)
+        XCTAssertEqual(predicate.predicateFormat, "eventRaw.keyRaw == \"2015qcmo\"")
+
+        let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        ranking.eventRaw = event
+        _ = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = EventRanking.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [ranking])
+    }
+
+    func test_rankSortDescriptor() {
+        let sd = EventRanking.rankSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(EventRanking.rankRaw))
+        XCTAssert(sd.ascending)
+    }
 
     func test_insert() {
         let event = insertDistrictEvent()
@@ -15,9 +131,9 @@ class EventRankingTestCase: TBADataTestCase {
             TBAEventRankingSortOrder(name: "Second Raking", precision: 0)
         ]
         let model = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25.0, 3], sortOrders: [2.08, 530.0, 3])
-        let ranking = EventRanking.insert(model, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: event.key!, in: persistentContainer.viewContext)
+        let ranking = EventRanking.insert(model, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: event.key, in: persistentContainer.viewContext)
 
-        XCTAssertEqual(ranking.teamKey?.key, "frc1")
+        XCTAssertEqual(ranking.team.key, "frc1")
         XCTAssertEqual(ranking.rank, 2)
         XCTAssertEqual(ranking.dq, 10)
         XCTAssertEqual(ranking.matchesPlayed, 6)
@@ -44,7 +160,7 @@ class EventRankingTestCase: TBADataTestCase {
         // Should throw an error - must be attached to an Event
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
-        event.addToRankings(ranking)
+        event.addToRankingsRaw(ranking)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
@@ -53,22 +169,22 @@ class EventRankingTestCase: TBADataTestCase {
         let model = TBAEventRanking(teamKey: "frc1", rank: 2)
 
         let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
-        ranking.teamKey = TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext)
+        ranking.teamRaw = Team.insert("frc1", in: persistentContainer.viewContext)
 
         // Test inserting a Ranking where EventRanking.qualStatus.eventStatus.event.key == eventKey
         let qualStatus = EventStatusQual.init(entity: EventStatusQual.entity(), insertInto: persistentContainer.viewContext)
         let eventStatus = EventStatus.init(entity: EventStatus.entity(), insertInto: persistentContainer.viewContext)
-        eventStatus.qual = qualStatus
-        eventStatus.event = event
-        ranking.qualStatus = qualStatus
+        eventStatus.qualRaw = qualStatus
+        eventStatus.eventRaw = event
+        ranking.qualStatusRaw = qualStatus
 
-        let qualStatusRanking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key!, in: persistentContainer.viewContext)
+        let qualStatusRanking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key, in: persistentContainer.viewContext)
         XCTAssertEqual(qualStatusRanking, ranking)
-        ranking.qualStatus = nil
+        ranking.qualStatusRaw = nil
 
         // Test inserting a Ranking where EventRanking.event.key == eventKey
-        ranking.event = event
-        let eventRanking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key!, in: persistentContainer.viewContext)
+        ranking.eventRaw = event
+        let eventRanking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key, in: persistentContainer.viewContext)
         XCTAssertEqual(eventRanking, ranking)
     }
 
@@ -82,11 +198,11 @@ class EventRankingTestCase: TBADataTestCase {
             TBAEventRankingSortOrder(name: "Second Raking", precision: 0)
         ]
         let modelOne = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25, 3.0], sortOrders: [2.08, 530.0, 2])
-        let rankingOne = EventRanking.insert(modelOne, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: event.key!, in: persistentContainer.viewContext)
-        event.addToRankings(rankingOne)
+        let rankingOne = EventRanking.insert(modelOne, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: event.key, in: persistentContainer.viewContext)
+        event.addToRankingsRaw(rankingOne)
 
         let modelTwo = TBAEventRanking(teamKey: "frc1", rank: 3, dq: 11, matchesPlayed: 7, qualAverage: 10, record: nil, extraStats: nil, sortOrders: nil)
-        let rankingTwo = EventRanking.insert(modelTwo, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key!, in: persistentContainer.viewContext)
+        let rankingTwo = EventRanking.insert(modelTwo, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key, in: persistentContainer.viewContext)
 
         // Sanity check
         XCTAssertEqual(rankingOne, rankingTwo)
@@ -109,21 +225,21 @@ class EventRankingTestCase: TBADataTestCase {
         let model = TBAEventRanking(teamKey: "frc1", rank: 2)
         let qualStatusModel = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
 
-        let ranking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key!, in: persistentContainer.viewContext)
-        event.addToRankings(ranking)
+        let ranking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key, in: persistentContainer.viewContext)
+        event.addToRankingsRaw(ranking)
 
-        let teamKey = ranking.teamKey!
+        let team = ranking.team
 
-        let qualStatus = EventStatusQual.insert(qualStatusModel, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)
-        ranking.qualStatus = qualStatus
+        let qualStatus = EventStatusQual.insert(qualStatusModel, eventKey: event.key, teamKey: "frc1", in: persistentContainer.viewContext)
+        ranking.qualStatusRaw = qualStatus
 
         // Should be able to delete
         persistentContainer.viewContext.delete(ranking)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
-        // Event and TeamKey should not be deleted
+        // Event and Team should not be deleted
         XCTAssertNotNil(event.managedObjectContext)
-        XCTAssertNotNil(teamKey.managedObjectContext)
+        XCTAssertNotNil(team.managedObjectContext)
 
         // QualStatus is an orphan and should be deleted
         XCTAssertNil(qualStatus.managedObjectContext)
@@ -138,30 +254,30 @@ class EventRankingTestCase: TBADataTestCase {
             TBAEventRankingSortOrder(name: "Total Ranking Points", precision: 0)
         ]
         let model = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25], sortOrders: [2.08])
-        let ranking = EventRanking.insert(model, sortOrderInfo: sortOrderInfoModel, extraStatsInfo: extraStatsInfoModel, eventKey: event.key!, in: persistentContainer.viewContext)
-        event.addToRankings(ranking)
+        let ranking = EventRanking.insert(model, sortOrderInfo: sortOrderInfoModel, extraStatsInfo: extraStatsInfoModel, eventKey: event.key, in: persistentContainer.viewContext)
+        event.addToRankingsRaw(ranking)
 
         let extraStatsInfo = ranking.extraStatsInfoArray.first!
         let firstSortOrderInfo = ranking.sortOrdersInfoArray.first(where: { $0.name == "Ranking Score" })!
         let secondSortOrderInfo = ranking.sortOrdersInfoArray.first(where: { $0.name == "Total Ranking Points" })!
 
         // Sanity check
-        XCTAssertEqual(secondSortOrderInfo.extraStatsRankings?.count, 1)
-        XCTAssertEqual(secondSortOrderInfo.sortOrdersRankings?.count, 1)
+        XCTAssertEqual(secondSortOrderInfo.extraStatsRankings.count, 1)
+        XCTAssertEqual(secondSortOrderInfo.sortOrdersRankings.count, 1)
         XCTAssertEqual(extraStatsInfo, secondSortOrderInfo)
 
         // Connect a second ranking to the same extra stats - should not be deleted
         let secondModel = TBAEventRanking(teamKey: "frc2", rank: 1, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25], sortOrders: nil)
-        let secondRanking = EventRanking.insert(secondModel, sortOrderInfo: nil, extraStatsInfo: extraStatsInfoModel, eventKey: event.key!, in: persistentContainer.viewContext)
-        event.addToRankings(secondRanking)
+        let secondRanking = EventRanking.insert(secondModel, sortOrderInfo: nil, extraStatsInfo: extraStatsInfoModel, eventKey: event.key, in: persistentContainer.viewContext)
+        event.addToRankingsRaw(secondRanking)
 
         // Sanity check
-        XCTAssertEqual(event.rankings?.count, 2)
+        XCTAssertEqual(event.rankings.count, 2)
         XCTAssertEqual(extraStatsInfo, secondSortOrderInfo)
-        XCTAssertEqual(extraStatsInfo.extraStatsRankings?.count, 2)
-        XCTAssertEqual(extraStatsInfo.sortOrdersRankings?.count, 1)
-        XCTAssertEqual(firstSortOrderInfo.extraStatsRankings?.count, 0)
-        XCTAssertEqual(firstSortOrderInfo.sortOrdersRankings?.count, 1)
+        XCTAssertEqual(extraStatsInfo.extraStatsRankings.count, 2)
+        XCTAssertEqual(extraStatsInfo.sortOrdersRankings.count, 1)
+        XCTAssertEqual(firstSortOrderInfo.extraStatsRankings.count, 0)
+        XCTAssertEqual(firstSortOrderInfo.sortOrdersRankings.count, 1)
 
         // Should be able to delete
         persistentContainer.viewContext.delete(ranking)
@@ -172,8 +288,8 @@ class EventRankingTestCase: TBADataTestCase {
         XCTAssertNotNil(secondSortOrderInfo.managedObjectContext)
 
         XCTAssertEqual(extraStatsInfo, secondSortOrderInfo)
-        XCTAssertEqual(extraStatsInfo.extraStatsRankings?.count, 1)
-        XCTAssertEqual(extraStatsInfo.sortOrdersRankings?.count, 0)
+        XCTAssertEqual(extraStatsInfo.extraStatsRankings.count, 1)
+        XCTAssertEqual(extraStatsInfo.sortOrdersRankings.count, 0)
 
         // firstSortOrderInfo is an orphan and should be deleted
         XCTAssertNil(firstSortOrderInfo.managedObjectContext)
@@ -190,17 +306,17 @@ class EventRankingTestCase: TBADataTestCase {
     func test_delete_qualStatus() {
         let event = insertDistrictEvent()
         let model = TBAEventRanking(teamKey: "frc1", rank: 2)
-        let eventStatusModel = TBAEventStatus(teamKey: "frc1", eventKey: event.key!)
+        let eventStatusModel = TBAEventStatus(teamKey: "frc1", eventKey: event.key)
         let qualStatusModel = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
 
-        let ranking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key!, in: persistentContainer.viewContext)
-        event.addToRankings(ranking)
+        let ranking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key, in: persistentContainer.viewContext)
+        event.addToRankingsRaw(ranking)
 
         let eventStatus = EventStatus.insert(eventStatusModel, in: persistentContainer.viewContext)
-        let qualStatus = EventStatusQual.insert(qualStatusModel, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)
-        eventStatus.qual = qualStatus
-        eventStatus.event = event
-        ranking.qualStatus = qualStatus
+        let qualStatus = EventStatusQual.insert(qualStatusModel, eventKey: event.key, teamKey: "frc1", in: persistentContainer.viewContext)
+        eventStatus.qualRaw = qualStatus
+        eventStatus.eventRaw = event
+        ranking.qualStatusRaw = qualStatus
 
         // Should be able to delete
         persistentContainer.viewContext.delete(ranking)
@@ -216,16 +332,16 @@ class EventRankingTestCase: TBADataTestCase {
         XCTAssert(ranking.isOrphaned)
 
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        event.addToRankings(ranking)
+        event.addToRankingsRaw(ranking)
         // Attached to an Event - should not be orphaned
         XCTAssertFalse(ranking.isOrphaned)
-        event.removeFromRankings(ranking)
+        event.removeFromRankingsRaw(ranking)
 
         let status = EventStatusQual.init(entity: EventStatusQual.entity(), insertInto: persistentContainer.viewContext)
-        status.ranking = ranking
+        status.rankingRaw = ranking
         // Attached to a Status - should not be orphaned
         XCTAssertFalse(ranking.isOrphaned)
-        status.ranking = nil
+        status.rankingRaw = nil
 
         // Not attached to an Event or Status - should be orphaned
         XCTAssert(ranking.isOrphaned)
@@ -242,79 +358,79 @@ class EventRankingTestCase: TBADataTestCase {
         let sortOrderValues: [NSNumber] = [1.00, 2.2, 3.33, -1]
 
         // Needs both keys and values
-        ranking.sortOrdersInfo = NSOrderedSet(array: sortOrders.map {
+        ranking.sortOrdersInfoRaw = NSOrderedSet(array: sortOrders.map {
             let (name, precision) = $0
             let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
-            info.name = name
-            info.precision = Int16(precision)
+            info.nameRaw = name
+            info.precisionRaw = NSNumber(value: precision)
             return info
         })
         XCTAssertNil(ranking.rankingInfoString)
-        ranking.sortOrdersInfo = nil
+        ranking.sortOrdersInfoRaw = nil
 
-        ranking.sortOrders = NSOrderedSet(array: sortOrderValues.map {
+        ranking.sortOrdersRaw = NSOrderedSet(array: sortOrderValues.map {
             let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
-            stat.value = $0
+            stat.valueRaw = $0
             return stat
         })
         XCTAssertNil(ranking.rankingInfoString)
-        ranking.sortOrders = nil
+        ranking.sortOrdersRaw = nil
 
-        ranking.extraStatsInfo = NSOrderedSet(array: extraStats.map {
+        ranking.extraStatsInfoRaw = NSOrderedSet(array: extraStats.map {
             let (name, precision) = $0
             let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
-            info.name = name
-            info.precision = Int16(precision)
+            info.nameRaw = name
+            info.precisionRaw = NSNumber(value: precision)
             return info
         })
         XCTAssertNil(ranking.rankingInfoString)
-        ranking.extraStatsInfo = nil
+        ranking.extraStatsInfoRaw = nil
 
-        ranking.extraStats = NSOrderedSet(array: extraStatsValues.map {
+        ranking.extraStatsRaw = NSOrderedSet(array: extraStatsValues.map {
             let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
-            stat.value = $0
+            stat.valueRaw = $0
             return stat
         })
         XCTAssertNil(ranking.rankingInfoString)
 
         // Only with extra stats
-        ranking.extraStatsInfo = NSOrderedSet(array: extraStats.map {
+        ranking.extraStatsInfoRaw = NSOrderedSet(array: extraStats.map {
             let (name, precision) = $0
             let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
-            info.name = name
-            info.precision = Int16(precision)
+            info.nameRaw = name
+            info.precisionRaw = NSNumber(value: precision)
             return info
         })
         XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3.0, Value 5: 49.999")
-        ranking.extraStats = nil
-        ranking.extraStatsInfo = nil
+        ranking.extraStatsRaw = nil
+        ranking.extraStatsInfoRaw = nil
 
         // Only with tiebreaker info
-        ranking.sortOrdersInfo = NSOrderedSet(array: sortOrders.map {
+        ranking.sortOrdersInfoRaw = NSOrderedSet(array: sortOrders.map {
             let (name, precision) = $0
             let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
-            info.name = name
-            info.precision = Int16(precision)
+            info.nameRaw = name
+            info.precisionRaw = NSNumber(value: precision)
             return info
         })
-        ranking.sortOrders = NSOrderedSet(array: sortOrderValues.map {
+        ranking.sortOrdersRaw = NSOrderedSet(array: sortOrderValues.map {
             let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
-            stat.value = $0
+            stat.valueRaw = $0
             return stat
         })
         XCTAssertEqual(ranking.rankingInfoString, "Value 1: 1, Value 2: 2.2, Value 3: 3.33")
 
         // Show with both
-        ranking.extraStatsInfo = NSOrderedSet(array: extraStats.map {
+        ranking.extraStatsInfoRaw = NSOrderedSet(array: extraStats.map {
             let (name, precision) = $0
             let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
-            info.name = name
-            info.precision = Int16(precision)
+            info.nameRaw = name
+            info.precisionRaw = NSNumber(value: precision)
             return info
         })
-        ranking.extraStats = NSOrderedSet(array: extraStatsValues.map {
+        ranking.extraStatsRaw = NSOrderedSet(array: extraStatsValues.map {
             let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
-            stat.value = $0
+            stat.valueRaw = $0
             return stat
         })
         XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3.0, Value 5: 49.999, Value 1: 1, Value 2: 2.2, Value 3: 3.33")

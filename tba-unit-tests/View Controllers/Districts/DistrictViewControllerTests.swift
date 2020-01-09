@@ -148,7 +148,7 @@ class DistrictViewControllerTests: TBATestCase {
     func test_evets_pushesEvent() {
         insertDistrictEvents(district: district)
 
-        let event = district.events!.anyObject() as! Event
+        let event = district.events.first!
         districtViewController.eventSelected(event)
 
         XCTAssert(navigationController.pushedViewController is EventViewController)
@@ -159,7 +159,7 @@ class DistrictViewControllerTests: TBATestCase {
     func test_evets_pushesTeam() {
         insertDistrictTeams(district: district)
 
-        let team = district.teams!.anyObject() as! Team
+        let team = district.teams.first!
         districtViewController.teamSelected(team)
 
         XCTAssert(navigationController.pushedViewController is TeamViewController)
@@ -170,14 +170,14 @@ class DistrictViewControllerTests: TBATestCase {
     func test_events_eventWeekTitle() {
         insertDistrictEvents(district: district)
 
-        let event = (district.events!.allObjects as! [Event]).first(where: { $0.week == 0 })!
+        let event = district.events.first(where: { $0.week == 0 })!
         XCTAssertEqual(districtViewController.title(for: event), "Week 1 Events")
     }
 
     func test_rankings_pushesRanking() {
         insertDistrictRankings(district: district)
 
-        let ranking = district.rankings!.anyObject() as! DistrictRanking
+        let ranking = district.rankings.first!
         districtViewController.districtRankingSelected(ranking)
 
         XCTAssert(navigationController.pushedViewController is TeamAtDistrictViewController)

@@ -42,7 +42,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_district_points", parameters: ["event": event.key!])
+        Analytics.logEvent("event_district_points", parameters: ["event": event.key])
     }
 
 }
@@ -50,7 +50,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: districtEventPoints.team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -113,7 +113,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DistrictEventPoints.total), ascending: false)]
+        fetchRequest.sortDescriptors = [DistrictEventPoints.totalSortDescriptor()]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -121,8 +121,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
-        request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(DistrictEventPoints.eventKey.key), event.key!)
+        request.predicate = DistrictEventPoints.eventPredicate(eventKey: event.key)
     }
 
 }
@@ -130,8 +129,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 extension EventDistrictPointsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
-        return "\(key)_district_points"
+        return "\(event.key)_district_points"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -147,7 +145,7 @@ extension EventDistrictPointsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        let eventKey = event.key!
+        let eventKey = event.key
 
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventDistrictPoints(key: eventKey) { (result, notModified) in

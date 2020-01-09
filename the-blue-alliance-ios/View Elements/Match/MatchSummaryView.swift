@@ -148,8 +148,16 @@ class MatchSummaryView: UIView {
         // Add blue RP to view
         addRPToView(stackView: blueRPStackView, rpCount: viewModel.blueRPCount)
 
-        redScoreLabel.text = viewModel.redScore
-        blueScoreLabel.text = viewModel.blueScore
+        if let redScore = viewModel.redScore {
+            redScoreLabel.text = "\(redScore)"
+        } else {
+            redScoreLabel.text = nil
+        }
+        if let blueScore = viewModel.blueScore {
+            blueScoreLabel.text = "\(blueScore)"
+        } else {
+            blueScoreLabel.text = nil
+        }
 
         timeLabel.text = viewModel.timeString
         timeView.isHidden = viewModel.hasScores

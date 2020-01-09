@@ -8,8 +8,8 @@ struct TeamCellViewModel {
     let teamLocation: String?
 
     init(team: Team) {
-        teamNumber = "\(team.teamNumber!.stringValue)"
-        teamNickname = team.nickname ?? team.fallbackNickname
+        teamNumber = "\(team.teamNumber)"
+        teamNickname = team.nickname ?? team.teamNumberNickname
         teamLocation = team.locationString
     }
 

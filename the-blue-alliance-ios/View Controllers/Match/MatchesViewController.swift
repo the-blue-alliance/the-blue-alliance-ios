@@ -17,7 +17,7 @@ class MatchesViewController: TBATableViewController {
     var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
 
     private let event: Event
-    private let teamKey: TeamKey?
+    private let team: Team?
     private var myTBA: MyTBA
 
     private var dataSource: TableViewDataSource<String, Match>!
@@ -33,9 +33,9 @@ class MatchesViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, team: Team? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.teamKey = teamKey
+        self.team = team
         self.myTBA = myTBA
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -73,8 +73,8 @@ class MatchesViewController: TBATableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
             var baseTeamKeys: Set<String> = Set()
-            if let teamKey = self?.teamKey {
-                baseTeamKeys.insert(teamKey.key!)
+            if let team = self?.team {
+                baseTeamKeys.insert(team.key)
             }
             if let query = self?.query, query.filter.favorites, let favoriteTeamKeys = self?.favoriteTeamKeys {
                 baseTeamKeys.formUnion(favoriteTeamKeys)
@@ -89,7 +89,7 @@ class MatchesViewController: TBATableViewController {
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
         setupFetchRequest(fetchRequest)
 
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelSortOrder", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: Match.compLevelSortOrderKeyPath(), cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
@@ -99,19 +99,13 @@ class MatchesViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         let ascending = !query.sort.reverse
-        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Match.compLevelSortOrder), ascending: ascending),
-                                        NSSortDescriptor(key: #keyPath(Match.setNumber), ascending: ascending),
-                                        NSSortDescriptor(key: #keyPath(Match.matchNumber), ascending: ascending)]
+        request.sortDescriptors = Match.sortDescriptors(ascending: ascending)
 
         let matchPredicate: NSPredicate = {
-            if let teamKey = teamKey {
-                // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-                return NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $a, ANY $a.teams.key == %@).@count > 0",
-                                   #keyPath(Match.event), event,
-                                   #keyPath(Match.alliances), teamKey.key!)
+            if let team = team {
+                return Match.eventTeamPredicate(eventKey: event.key, teamKey: team.key)
             } else {
-                return NSPredicate(format: "%K == %@",
-                                   #keyPath(Match.event), event)
+                return Match.eventPredicate(eventKey: event.key)
             }
         }()
 
@@ -120,8 +114,7 @@ class MatchesViewController: TBATableViewController {
             guard query.filter.favorites else {
                 return nil
             }
-            return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.teams.key IN %@).@count > 0",
-                               #keyPath(Match.alliances), favoriteTeamKeys)
+            return Match.teamKeysPredicate(teamKeys: favoriteTeamKeys)
         }()
 
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [matchPredicate, myTBAFavoritesPredicate].compactMap({ $0 }))
@@ -133,7 +126,7 @@ class MatchesViewController: TBATableViewController {
         guard let firstMatch = fetchedResultsController.dataSource.itemIdentifier(for: IndexPath(row: 0, section: section)) else {
             return "Matches"
         }
-        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString!) Matches"
+        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString) Matches"
     }
 
     // MARK: UITableView Delegate
@@ -173,8 +166,7 @@ extension MatchesViewController: Refreshable {
     // MARK: - Refreshable
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
-        return "\(key)_matches"
+        return "\(event.key)_matches"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -183,7 +175,7 @@ extension MatchesViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event matches until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -196,7 +188,7 @@ extension MatchesViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventMatches(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventMatches(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let matches = try? result.get() {

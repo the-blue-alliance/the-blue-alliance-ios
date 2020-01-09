@@ -145,7 +145,9 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Team.teamNumber), ascending: true)]
+        fetchRequest.sortDescriptors = [
+            Team.teamNumberSortDescriptor()
+        ]
         fetchRequest.fetchBatchSize = 50
         setupFetchRequest(fetchRequest)
 
@@ -162,15 +164,16 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
             guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
                 return nil
             }
-            return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@ OR %K contains[cd] %@)",
-                               #keyPath(Team.nickname), searchText,
-                               #keyPath(Team.teamNumber.stringValue), searchText,
-                               #keyPath(Team.city), searchText)
+            return Team.searchPredicate(searchText: searchText)
         }()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [searchPredicate, fetchRequestPredicate].compactMap({ $0 }))
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            searchPredicate,
+            fetchRequestPredicate,
+            Team.populatedTeamsPredicate()
+        ].compactMap({ $0 }))
     }
 
-    // MARK: - EventsViewControllerDataSourceConfiguration
+    // MARK: - TeamsViewControllerDataSourceConfiguration
 
     var fetchRequestPredicate: NSPredicate? {
         return nil

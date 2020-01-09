@@ -49,7 +49,7 @@ extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
 
     var appProperties: [String : Any]? {
         var insights = event.insights?.insightsDictionary
-        insights?["year"] = event.year!.stringValue
+        insights?["year"] = event.year
         return insights
     }
 
@@ -58,8 +58,7 @@ extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
 extension EventStatsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
-        return "\(key)_insights"
+        return "\(event.key)_insights"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -68,19 +67,19 @@ extension EventStatsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event stats until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
-        guard let insights = event.getValue(\Event.insights) else {
+        guard let insights = event.insights else {
             return true
         }
-        return insights.getValue(\EventInsights.qual) == nil || insights.getValue(\EventInsights.playoff) == nil
+        return insights.qual == nil || insights.playoff == nil
     }
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventInsights(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventInsights(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let insights = try? result.get() {
@@ -100,7 +99,7 @@ extension EventStatsViewController: Stateful {
 
     var noDataText: String {
         if eventStatsUnsupported {
-            return "\(event.year!.stringValue) Event Insights is not supported"
+            return "\(event.year) Event Insights is not supported"
         }
         return "No stats for event"
     }

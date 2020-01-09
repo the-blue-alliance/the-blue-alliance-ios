@@ -28,8 +28,7 @@ class TeamEventsViewController: EventsViewController {
     // MARK: - Refreshable
 
     override var refreshKey: String? {
-        let key = team.getValue(\Team.key!)
-        return "\(key)_events"
+        return "\(team.key)_events"
     }
 
     override var automaticRefreshInterval: DateComponents? {
@@ -47,7 +46,7 @@ class TeamEventsViewController: EventsViewController {
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchTeamEvents(key: team.key!) { (result, notModified) in
+        operation = tbaKit.fetchTeamEvents(key: team.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -71,13 +70,9 @@ class TeamEventsViewController: EventsViewController {
 
     override var fetchRequestPredicate: NSPredicate {
         if let year = year {
-            return NSPredicate(format: "%K == %ld AND ANY %K == %@",
-                               #keyPath(Event.year), year,
-                               #keyPath(Event.teams), team)
+            return Event.teamYearPredicate(teamKey: team.key, year: year)
         } else {
-            return NSPredicate(format: "%K == -1 AND ANY %K == %@",
-                               #keyPath(Event.year),
-                               #keyPath(Event.teams), team)
+            return Event.teamYearNonePredicate(teamKey: team.key)
         }
     }
 

@@ -52,7 +52,7 @@ class EventsContainerViewControllerTests: TBATestCase {
 
     func test_years_showYearSelect() {
         let event = insertEvent(year: 2014)
-        eventsContainerViewController.weekEventSelected(event)
+        eventsContainerViewController.weekEventSelected(year: 2014, weekEvent: event)
         eventsContainerViewController.navigationTitleTapped()
 
         navigationController.presentCalled = {
@@ -67,7 +67,7 @@ class EventsContainerViewControllerTests: TBATestCase {
 
     func test_years_eventWeekSelected() {
         let event = insertEvent(year: 2014)
-        eventsContainerViewController.weekEventSelected(event)
+        eventsContainerViewController.weekEventSelected(year: 2014, weekEvent: event)
 
         XCTAssertEqual(eventsContainerViewController.year, 2014)
         XCTAssertEqual(eventsContainerViewController.eventsViewController.weekEvent, event)

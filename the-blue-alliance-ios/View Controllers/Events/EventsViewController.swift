@@ -95,9 +95,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-        fetchRequest.sortDescriptors = [firstSortDescriptor,
-                                        NSSortDescriptor(key: #keyPath(Event.startDate), ascending: true),
-                                        NSSortDescriptor(key: #keyPath(Event.name), ascending: true)]
+        let sortDescriptors = [firstSortDescriptor] + Event.sortDescriptors()
+        fetchRequest.sortDescriptors = sortDescriptors
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
@@ -109,7 +108,11 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Event>) {
-        request.predicate = fetchRequestPredicate
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            fetchRequestPredicate,
+            Event.populatedEventsPredicate()
+        ].compactMap({ $0 }))
+        request.predicate = predicate
     }
 
     // MARK: TableViewDataSourceDelegate
@@ -126,41 +129,46 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         let district = event.district
         let districtName = district?.name
 
-        let eventType = event.eventType!.intValue
+        let eventType = event.eventType!
         let eventTypeString = event.eventTypeString
 
         if event.isDistrictChampionshipEvent {
             guard let districtName = districtName, let eventTypeString = eventTypeString else {
                 return nil
             }
-            return eventType == EventType.districtChampionshipDivision.rawValue ? "\(districtName) \(eventTypeString)s" : "\(eventTypeString)s"
-        } else if event.isChampionship {
+            return eventType == .districtChampionshipDivision ? "\(districtName) \(eventTypeString)s" : "\(eventTypeString)s"
+        } else if event.isChampionshipEvent {
             guard let eventTypeString = eventTypeString else {
                 return nil
             }
             // CMP Finals are already plural
-            return eventType == EventType.championshipFinals.rawValue ? eventTypeString : "\(eventTypeString)s"
+            return eventType == .championshipFinals ? eventTypeString : "\(eventTypeString)s"
         } else if let districtName = districtName {
             return "\(districtName) District Events"
         } else if event.isFoC {
             return "Festival of Champions"
         } else if event.isOffseason {
-            return "\(event.weekString) Events"
+            if let weekString = event.weekString {
+                return "\(weekString) Events"
+            } else {
+                return "Offseason Events"
+            }
         } else if event.isPreseason {
             return "Preseason Events"
-        } else {
+        } else if event.isRegional {
             return "Regional Events"
         }
+        return "Other Events"
     }
 
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     var firstSortDescriptor: NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
+        return Event.hybridTypeSortDescriptor()
     }
 
     var sectionNameKeyPath: String {
-        return #keyPath(Event.hybridType)
+        return Event.hybridTypeKeyPath()
     }
 
     var fetchRequestPredicate: NSPredicate {

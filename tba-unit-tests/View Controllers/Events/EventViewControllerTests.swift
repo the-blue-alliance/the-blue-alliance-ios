@@ -85,7 +85,7 @@ class EventViewControllerTests: TBATestCase {
         XCTAssert(navigationController.pushedViewController is EventAwardsContainerViewController)
         let awardsViewController = navigationController.pushedViewController as! EventAwardsContainerViewController
         XCTAssertEqual(awardsViewController.event, event)
-        XCTAssertNil(awardsViewController.teamKey)
+        XCTAssertNil(awardsViewController.team)
     }
 
     func test_info_pushesDistrictPoints() {

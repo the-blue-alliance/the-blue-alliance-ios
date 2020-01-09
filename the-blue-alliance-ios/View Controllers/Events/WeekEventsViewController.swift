@@ -62,8 +62,8 @@ class WeekEventsViewController: EventsViewController {
         // Default to refreshing the currently selected year
         // Fall back to the init'd year (used during initial refresh)
         var year = self.year
-        if let weekEventYear = weekEvent?.year?.intValue {
-            year = weekEventYear
+        if let weekEventYear = weekEvent?.year {
+            year = Int(weekEventYear)
         }
 
         var operation: TBAKitOperation!
@@ -102,42 +102,23 @@ class WeekEventsViewController: EventsViewController {
 
     override var fetchRequestPredicate: NSPredicate {
         if let weekEvent = weekEvent {
-            let eventType = weekEvent.eventType!.intValue
-            let key = weekEvent.key!
-            let year = weekEvent.year!
+            let eventType = weekEvent.eventType!
 
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
-                return NSPredicate(format: "%K == %@ && %K == %@",
-                                   #keyPath(Event.week), week,
-                                   #keyPath(Event.year), year)
+                return Event.weekYearPredicate(week: week, year: weekEvent.year)
             } else {
-                if eventType == EventType.championshipFinals.rawValue {
-                    // 2017 and onward - handle multiple CMPs
-                    return NSPredicate(format: "(%K == %ld || %K == %ld) && %K == %@ && (%K == %@ || %K == %@)",
-                                       #keyPath(Event.eventType), EventType.championshipFinals.rawValue,
-                                       #keyPath(Event.eventType), EventType.championshipDivision.rawValue,
-                                       #keyPath(Event.year), year,
-                                       #keyPath(Event.key), key,
-                                       #keyPath(Event.parentEvent.key), key)
-                } else if eventType == EventType.offseason.rawValue {
+                if eventType == .championshipFinals {
+                    return Event.champsYearPredicate(key: weekEvent.key, year: weekEvent.year)
+                } else if eventType == .offseason {
                     // Get all off season events for selected month
-                    // Conversion stuff, since Core Data still uses NSDate's
-                    let firstDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.startOfMonth().timeIntervalSince1970)
-                    let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.endDate!.endOfMonth().timeIntervalSince1970)
-                    return NSPredicate(format: "%K == %ld && %K == %@ && (%K >= %@) AND (%K <= %@)",
-                                       #keyPath(Event.eventType), EventType.offseason.rawValue,
-                                       #keyPath(Event.year), year,
-                                       #keyPath(Event.startDate), firstDayOfMonth,
-                                       #keyPath(Event.endDate), lastDayOfMonth)
+                    return Event.offseasonYearPredicate(startDate: weekEvent.startDate!, endDate: weekEvent.endDate!, year: weekEvent.year)
                 } else {
-                    return NSPredicate(format: "%K == %ld && %K == %@",
-                                       #keyPath(Event.eventType), eventType,
-                                       #keyPath(Event.year), year)
+                    return Event.eventTypeYearPredicate(eventType: eventType, year: weekEvent.year)
                 }
             }
         }
-        return NSPredicate(format: "%K == -1", #keyPath(Event.year))
+        return Event.nonePredicate()
     }
 
     // MARK: - Private
@@ -156,21 +137,26 @@ class WeekEventsViewController: EventsViewController {
     }
 
     private static func currentSeasonWeekEvent(for year: Int, in context: NSManagedObjectContext) -> Event? {
-        // Fetch all events where endDate is today or after today
-        let coreDataDate = NSDate(timeIntervalSince1970: Date().startOfDay().timeIntervalSince1970)
-
         // Find the first non-finished event for the selected year
         let event = Event.fetchSingleObject(in: context) { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K >= %@ && %K != %ld",
-                                                 #keyPath(Event.year), year,
-                                                 #keyPath(Event.endDate), coreDataDate,
-                                                 #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Event.endDate), ascending: true)]
+            let predicate = Event.unplayedEventPredicate(date: Date().startOfDay(), year: year)
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                predicate,
+                Event.populatedEventsPredicate()
+            ])
+            fetchRequest.sortDescriptors = [
+                Event.endDateSortDescriptor()
+            ]
         }
         // Find the first overall event for the selected year
         let firstEvent = Event.fetchSingleObject(in: context) { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "%K == %ld", #keyPath(Event.year), year)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Event.startDate), ascending: true)]
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                Event.yearPredicate(year: year),
+                Event.populatedEventsPredicate()
+            ])
+            fetchRequest.sortDescriptors = [
+                Event.startDateSortDescriptor()
+            ]
         }
 
         if let event = event {

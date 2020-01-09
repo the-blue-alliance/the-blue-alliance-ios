@@ -1,9 +1,35 @@
-import TBAData
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
+@testable import TBAData
 
 class MatchVideoTestCase: TBADataTestCase {
+
+    func test_key() {
+        let video = MatchVideo.init(entity: MatchVideo.entity(), insertInto: persistentContainer.viewContext)
+        video.keyRaw = "2018miket_f1m1"
+        XCTAssertEqual(video.key, "2018miket_f1m1")
+    }
+
+    func test_type() {
+        let video = MatchVideo.init(entity: MatchVideo.entity(), insertInto: persistentContainer.viewContext)
+        video.typeRaw = "youtube"
+        XCTAssertEqual(video.type, .youtube)
+    }
+
+    func test_matches() {
+        let video = MatchVideo.init(entity: MatchVideo.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(video.matches, [])
+        let match = insertMatch()
+        video.matchesRaw = NSSet(array: [match])
+        XCTAssertEqual(video.matches, [match])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<MatchVideo> = MatchVideo.fetchRequest()
+        XCTAssertEqual(fr.entityName, MatchVideo.entityName)
+    }
 
     func test_insert() {
         let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
@@ -12,13 +38,13 @@ class MatchVideoTestCase: TBADataTestCase {
         let video = MatchVideo.insert(model, in: persistentContainer.viewContext)
 
         XCTAssertEqual(video.key, "key")
-        XCTAssertEqual(video.typeString, "youtube")
+        XCTAssertEqual(video.type, .youtube)
 
         // Should fail - needs to be related to a Match
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
         let match = Match.insert(matchModel, in: persistentContainer.viewContext)
-        match.addToVideos(video)
+        match.addToVideosRaw(video)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
@@ -31,12 +57,12 @@ class MatchVideoTestCase: TBADataTestCase {
         let matchModelTwo = TBAMatch(key: "2018miket_f1m2", compLevel: "f", setNumber: 1, matchNumber: 2, eventKey: "2018miket")
         let matchOne = Match.insert(matchModelOne, in: persistentContainer.viewContext)
         let matchTwo = Match.insert(matchModelTwo, in: persistentContainer.viewContext)
-        matchOne.addToVideos(video)
-        matchTwo.addToVideos(video)
+        matchOne.addToVideosRaw(video)
+        matchTwo.addToVideosRaw(video)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
-        XCTAssertEqual(video.matches?.count, 2)
+        XCTAssertEqual(video.matches.count, 2)
     }
 
     func test_delete() {
@@ -45,16 +71,16 @@ class MatchVideoTestCase: TBADataTestCase {
 
         let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
         let match = Match.insert(matchModel, in: persistentContainer.viewContext)
-        match.addToVideos(video)
+        match.addToVideosRaw(video)
 
         XCTAssertEqual(video.key, "key")
-        XCTAssertEqual(video.typeString, "youtube")
+        XCTAssertEqual(video.type, .youtube)
 
         persistentContainer.viewContext.delete(video)
         // Should fail - cannot delete if it's attached to a Match
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
-        match.removeFromVideos(video)
+        match.removeFromVideosRaw(video)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
@@ -62,17 +88,14 @@ class MatchVideoTestCase: TBADataTestCase {
         let video = MatchVideo.init(entity: MatchVideo.entity(), insertInto: persistentContainer.viewContext)
 
         let youtubeKey = "test_youtubeKey"
-        video.key = youtubeKey
-
-        // No type - no youtubeKey
-        XCTAssertNil(video.youtubeKey)
+        video.keyRaw = youtubeKey
 
         // Wrong type - no youtubeKey
-        video.typeString = MatchVideoType.tba.rawValue
+        video.typeRaw = MatchVideoType.tba.rawValue
         XCTAssertNil(video.youtubeKey)
 
         // Right type - should have key
-        video.typeString = MatchVideoType.youtube.rawValue
+        video.typeRaw = MatchVideoType.youtube.rawValue
         XCTAssertEqual(video.youtubeKey, youtubeKey)
     }
 
@@ -81,10 +104,10 @@ class MatchVideoTestCase: TBADataTestCase {
         XCTAssert(video.isOrphaned)
 
         let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
-        match.addToVideos(video)
+        match.addToVideosRaw(video)
         XCTAssertFalse(video.isOrphaned)
 
-        match.removeFromVideos(video)
+        match.removeFromVideosRaw(video)
         XCTAssert(video.isOrphaned)
     }
 

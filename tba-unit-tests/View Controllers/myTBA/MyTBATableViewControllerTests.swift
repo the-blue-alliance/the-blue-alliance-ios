@@ -59,8 +59,8 @@ class MyTBATableViewControllerTests: TBATestCase {
         myTBA.authToken = "abcd123"
 
         let event = insertEvent()
-        Favorite.insert([MyTBAFavorite(modelKey: event.key!, modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
-        Subscription.insert(modelKey: event.key!, modelType: .event, notifications: [.awards], in: persistentContainer.viewContext)
+        Favorite.insert([MyTBAFavorite(modelKey: event.key, modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
+        Subscription.insert(modelKey: event.key, modelType: .event, notifications: [.awards], in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
         // Sanity check
@@ -79,7 +79,7 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     func test_select() {
         let event = insertEvent()
-        Favorite.insert([MyTBAFavorite(modelKey: event.key!, modelType: .event)], in: persistentContainer.viewContext)
+        Favorite.insert([MyTBAFavorite(modelKey: event.key, modelType: .event)], in: persistentContainer.viewContext)
         waitOneSecond() // Wait for our FRC to refetch
 
         let ex = expectation(description: "eventSelectedExpectation called")
@@ -150,7 +150,7 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     private func checkKey<T: Managed & NSManagedObject>(_ Type: T.Type, key: String, shouldBeNil: Bool = false) {
-        let predicate = NSPredicate(format: "key == %@", key)
+        let predicate = NSPredicate(format: "keyRaw == %@", key)
         XCTAssertEqual(T.findOrFetch(in: persistentContainer.viewContext, matching: predicate) == nil, shouldBeNil)
     }
 
@@ -182,7 +182,7 @@ class MyTBATableViewControllerTests: TBATestCase {
         myTBA.authToken = nil
 
         let event = insertEvent()
-        Favorite.insert([MyTBAFavorite(modelKey: event.key!, modelType: .event)], in: persistentContainer.viewContext)
+        Favorite.insert([MyTBAFavorite(modelKey: event.key, modelType: .event)], in: persistentContainer.viewContext)
 
         waitOneSecond() // Wait for our FRC to refetch
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)

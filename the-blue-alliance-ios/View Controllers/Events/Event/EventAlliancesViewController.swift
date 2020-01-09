@@ -45,22 +45,22 @@ class EventAlliancesContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_alliances", parameters: ["event": event.key!])
+        Analytics.logEvent("event_alliances", parameters: ["event": event.key])
     }
 
 }
 
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
-    func teamKeySelected(_ teamKey: TeamKey) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+    func teamSelected(_ team: Team) {
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAlliancesViewControllerDelegate: AnyObject {
-    func teamKeySelected(_ teamKey: TeamKey)
+    func teamSelected(_ team: Team)
 }
 
 private class EventAlliancesViewController: TBATableViewController {
@@ -108,7 +108,7 @@ private class EventAlliancesViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let rows = event.alliances?.count ?? 0
+        let rows = event.alliances.count
         if rows == 0 {
             showNoDataView()
         }
@@ -117,15 +117,15 @@ private class EventAlliancesViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventAllianceTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventAllianceTableViewCell
-        let alliance = event.alliances!.object(at: indexPath.row) as! EventAlliance
+        let alliance = event.alliances.object(at: indexPath.row) as! EventAlliance
 
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: indexPath.row + 1)
         cell.teamKeySelected = { [weak self] (teamKey) in
             guard let context = self?.persistentContainer.viewContext else {
                 return
             }
-            let teamKey = TeamKey.insert(withKey: teamKey, in: context)
-            self?.delegate?.teamKeySelected(teamKey)
+            let team = Team.insert(teamKey, in: context)
+            self?.delegate?.teamSelected(team)
         }
 
         return cell
@@ -136,8 +136,7 @@ private class EventAlliancesViewController: TBATableViewController {
 extension EventAlliancesViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
-        return "\(key)_alliances"
+        return "\(event.key)_alliances"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -149,15 +148,12 @@ extension EventAlliancesViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        guard let alliances = event.alliances else {
-            return true
-        }
-        return alliances.count == 0
+        return event.alliances.count == 0
     }
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventAlliances(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventAlliances(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let alliances = try? result.get() {

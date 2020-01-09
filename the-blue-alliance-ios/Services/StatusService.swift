@@ -42,11 +42,11 @@ class StatusService: NSObject {
     private var previouslyDownEventKeys: [String] = []
 
     var currentSeason: Int {
-        return status.currentSeason!.intValue
+        return status.currentSeason
     }
 
     var maxSeason: Int {
-        return status.maxSeason!.intValue
+        return status.maxSeason
     }
 
     init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
@@ -61,14 +61,8 @@ class StatusService: NSObject {
     func setupStatusObservers() {
         contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
             self?.dispatchStatusChanged(status)
-
-            if let isDatafeedDown = status.isDatafeedDown {
-                self?.dispatchFMSDown(isDatafeedDown.boolValue)
-            }
-
-            if let downEventKeys = status.downEvents?.allObjects as? [EventKey] {
-                self?.dispatchEvents(downEventKeys: downEventKeys.map({ $0.key! }))
-            }
+            self?.dispatchFMSDown(status.isDatafeedDown)
+            self?.dispatchEvents(downEventKeys: status.downEvents.map({ $0.key }))
         }
     }
 
@@ -211,7 +205,7 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        let downEventKeys = (statusService.status.downEvents?.allObjects as? [EventKey] ?? []).map({ $0.key! })
+        let downEventKeys = statusService.status.downEvents.map({ $0.key })
         return downEventKeys.contains(eventKey)
     }
 

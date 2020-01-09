@@ -7,7 +7,7 @@ import TBAKit
 import UIKit
 
 protocol YearSelectViewControllerDelegate: AnyObject {
-    func weekEventSelected(_ weekEvent: Event)
+    func weekEventSelected(year: Int, weekEvent: Event)
 }
 
 class YearSelectViewController: ContainerViewController {
@@ -65,7 +65,7 @@ class YearSelectViewController: ContainerViewController {
 
         var parameters = ["year": NSNumber(value: year), "years": NSArray(array: years)]
         if let week = week {
-            parameters["week"] = NSString(string: week.key!)
+            parameters["week"] = NSString(string: week.key)
         }
         Analytics.logEvent("year_select", parameters: parameters)
     }
@@ -144,11 +144,14 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
     typealias OptionType = Event
 
     func optionSelected(_ option: OptionType) {
-        delegate?.weekEventSelected(option)
+        delegate?.weekEventSelected(year: year, weekEvent: option)
     }
 
     func titleForOption(_ option: OptionType) -> String {
-        return option.weekString
+        if let weekString = option.weekString {
+            return weekString
+        }
+        return "---"
     }
 
 }

@@ -11,6 +11,10 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     private(set) var statusService: StatusService
     private(set) var urlOpener: URLOpener
 
+    private lazy var contextObserver: CoreDataContextObserver<Event> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
+
     private(set) var infoViewController: EventInfoViewController
     private(set) var teamsViewController: EventTeamsViewController
     private(set) var rankingsViewController: EventRankingsViewController
@@ -40,6 +44,12 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
                    userDefaults: userDefaults)
 
         title = event.friendlyNameWithYear
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.title = event.friendlyNameWithYear
+            }
+        }
 
         infoViewController.delegate = self
         teamsViewController.delegate = self
@@ -58,17 +68,16 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
-        let eventKey = event.key!
-        if isEventDown(eventKey: eventKey) {
+        if isEventDown(eventKey: event.key) {
             showOfflineEventMessage(shouldShow: true, animated: false)
         }
-        registerForEventStatusChanges(eventKey: eventKey)
+        registerForEventStatusChanges(eventKey: event.key)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event", parameters: ["event": event.key!])
+        Analytics.logEvent("event", parameters: ["event": event.key])
     }
 
     // MARK: - Interface Methods
@@ -108,7 +117,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
 extension EventViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -117,7 +126,7 @@ extension EventViewController: TeamsViewControllerDelegate {
 extension EventViewController: EventRankingsViewControllerDelegate {
 
     func rankingSelected(_ ranking: EventRanking) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: ranking.teamKey!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: ranking.team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

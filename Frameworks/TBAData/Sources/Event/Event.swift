@@ -4,6 +4,7 @@ import MyTBAKit
 import TBAKit
 import TBAUtils
 
+// https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
 public enum EventType: Int {
     case regional = 0
     case district = 1
@@ -17,7 +18,626 @@ public enum EventType: Int {
     case unlabeled = -1
 }
 
-extension Event: Locatable, Surfable, Managed {
+extension EventType: Comparable {
+
+    public static func < (lhs: EventType, rhs: EventType) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+
+}
+
+extension Event {
+
+    public var address: String? {
+        return getValue(\Event.addressRaw)
+    }
+
+    public var city: String? {
+        return getValue(\Event.cityRaw)
+    }
+
+    public var country: String? {
+        return getValue(\Event.countryRaw)
+    }
+
+    public var endDate: Date? {
+        return getValue(\Event.endDateRaw)
+    }
+
+    public var eventCode: String? {
+        return getValue(\Event.eventCodeRaw)
+    }
+
+    public var eventType: EventType? {
+        guard let eventTypeInt = getValue(\Event.eventTypeRaw)?.intValue else {
+            return nil
+        }
+        guard let eventType = EventType(rawValue: eventTypeInt) else {
+            return nil
+        }
+        return eventType
+    }
+
+    public var eventTypeString: String? {
+        return getValue(\Event.eventTypeStringRaw)
+    }
+
+    public var firstEventCode: String? {
+        return getValue(\Event.firstEventCodeRaw)
+    }
+
+    public var firstEventID: String? {
+        return getValue(\Event.firstEventIDRaw)
+    }
+
+    public var gmapsPlaceID: String? {
+        return getValue(\Event.gmapsPlaceIDRaw)
+    }
+
+    public var gmapsURL: String? {
+        return getValue(\Event.gmapsURLRaw)
+    }
+
+    public var key: String {
+        guard let key = getValue(\Event.keyRaw) else {
+            fatalError("Save Event before accessing key")
+        }
+        return key
+    }
+
+    public var lat: Double? {
+        return getValue(\Event.latRaw)?.doubleValue
+    }
+
+    public var lng: Double? {
+        return getValue(\Event.lngRaw)?.doubleValue
+    }
+
+    public var locationName: String? {
+        return getValue(\Event.locationNameRaw)
+    }
+
+    public var name: String? {
+        return getValue(\Event.nameRaw)
+    }
+
+    public var playoffType: Int? {
+        return getValue(\Event.playoffTypeRaw)?.intValue
+    }
+
+    public var playoffTypeString: String? {
+        return getValue(\Event.playoffTypeStringRaw)
+    }
+
+    public var postalCode: String? {
+        return getValue(\Event.postalCodeRaw)
+    }
+
+    public var shortName: String? {
+        return getValue(\Event.shortNameRaw)
+    }
+
+    public var startDate: Date? {
+        return getValue(\Event.startDateRaw)
+    }
+
+    public var stateProv: String? {
+        return getValue(\Event.stateProvRaw)
+    }
+
+    public var timezone: String? {
+        return getValue(\Event.timezoneRaw)
+    }
+
+    public var website: String? {
+        return getValue(\Event.websiteRaw)
+    }
+
+    public var week: Int? {
+        return getValue(\Event.weekRaw)?.intValue
+    }
+
+    public var year: Int {
+        guard let year = getValue(\Event.yearRaw)?.intValue else {
+            fatalError("Save Event before accessing year")
+        }
+        return year
+    }
+
+    public var alliances: NSOrderedSet {
+        guard let alliances = getValue(\Event.alliancesRaw) else {
+            fatalError("Save Event before accessing alliances")
+        }
+        return alliances
+    }
+
+    public var awards: [Award] {
+        guard let awardsRaw = getValue(\Event.awardsRaw),
+            let awards = awardsRaw.allObjects as? [Award] else {
+                return []
+        }
+        return awards
+    }
+
+    public var district: District? {
+        return getValue(\Event.districtRaw)
+    }
+
+    public var divisions: [Event] {
+        guard let divisionsRaw = getValue(\Event.divisionsRaw),
+            let divisions = divisionsRaw.allObjects as? [Event] else {
+                return []
+        }
+        return divisions
+    }
+
+    public var insights: EventInsights? {
+        return getValue(\Event.insightsRaw)
+    }
+
+    public var matches: [Match] {
+        guard let matchesRaw = getValue(\Event.matchesRaw),
+            let matches = matchesRaw.allObjects as? [Match] else {
+                return []
+        }
+        return matches
+    }
+
+    public var parentEvent: Event? {
+        return getValue(\Event.parentEventRaw)
+    }
+
+    public var points: [DistrictEventPoints] {
+        guard let pointsRaw = getValue(\Event.pointsRaw),
+            let points = pointsRaw.allObjects as? [DistrictEventPoints] else {
+                return []
+        }
+        return points
+    }
+
+    public var rankings: [EventRanking] {
+        guard let rankingsRaw = getValue(\Event.rankingsRaw),
+            let rankings = rankingsRaw.allObjects as? [EventRanking] else {
+                return []
+        }
+        return rankings
+    }
+
+    public var stats: [EventTeamStat] {
+        guard let statsRaw = getValue(\Event.statsRaw),
+            let stats = statsRaw.allObjects as? [EventTeamStat] else {
+                return []
+        }
+        return stats
+    }
+
+    public var status: Status? {
+        return getValue(\Event.statusRaw)
+    }
+
+    public var statuses: [EventStatus] {
+        guard let statusesRaw = getValue(\Event.statusesRaw),
+            let statuses = statusesRaw.allObjects as? [EventStatus] else {
+                return []
+        }
+        return statuses
+    }
+
+    public var teams: [Team] {
+        guard let teamsRaw = getValue(\Event.teamsRaw),
+            let teams = teamsRaw.allObjects as? [Team] else {
+                return []
+        }
+        return teams
+    }
+
+    public var webcasts: [Webcast] {
+        guard let webcastsRaw = getValue(\Event.webcastsRaw),
+            let webcasts = webcastsRaw.allObjects as? [Webcast] else {
+                return []
+        }
+        return webcasts
+    }
+
+    public func awards(for teamKey: String) -> [Award] {
+        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
+        return awards.filter {
+            return teamPredicate.evaluate(with: $0)
+        }
+    }
+
+    public func dateString() -> String? {
+        guard let startDate = startDate, let endDate = endDate else {
+            return nil
+        }
+
+        let calendar = Calendar.current
+
+        let shortDateFormatter = DateFormatter()
+        shortDateFormatter.dateFormat = "MMM dd"
+
+        let longDateFormatter = DateFormatter()
+        longDateFormatter.dateFormat = "MMM dd, y"
+
+        if startDate == endDate {
+            return shortDateFormatter.string(from: endDate)
+        } else if calendar.component(.year, from: startDate) == calendar.component(.year, from: endDate) {
+            return "\(shortDateFormatter.string(from: startDate)) to \(shortDateFormatter.string(from: endDate))"
+        }
+        return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
+    }
+
+    public var weekString: String? {
+        guard let eventType = eventType else {
+            return nil
+        }
+
+        if eventType == .championshipDivision || eventType == .championshipFinals {
+            if self.year >= 2017, let city = city {
+                return "Championship - \(city)"
+            }
+            return "Championship"
+        } else {
+            switch eventType {
+            case .unlabeled:
+                return "Other"
+            case .preseason:
+                return "Preseason"
+            case .offseason:
+                guard let month = month else {
+                    return "Offseason"
+                }
+                return "\(month) Offseason"
+            case .festivalOfChampions:
+                return "Festival of Champions"
+            default:
+                guard let week = week else {
+                    return "Other"
+                }
+
+                /**
+                 * Special cases for 2016:
+                 * Week 1 is actually Week 0.5, eveything else is one less
+                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+                 */
+                if year == 2016 {
+                    if week == 0 {
+                        return "Week 0.5"
+                    }
+                    return "Week \(week)"
+                }
+                return "Week \(week + 1)"
+            }
+        }
+    }
+
+    public var safeShortName: String {
+        guard let name = name else {
+            return key
+        }
+        guard let shortName = shortName else {
+            return name
+        }
+        return shortName.isEmpty ? name : shortName
+    }
+
+    public var friendlyNameWithYear: String {
+        guard let name = name else {
+            return key
+        }
+        var parts = [String(year)]
+        if let shortName = shortName {
+            parts.append(shortName)
+
+            // Append the event type if we have the shortname
+            if let eventTypeString = eventTypeString {
+                parts.append(eventTypeString)
+            } else {
+                parts.append("Event")
+            }
+        } else {
+            parts.append(name)
+        }
+        return parts.joined(separator: " ")
+    }
+
+    /**
+     If the event is a CMP division or a CMP finals field.
+     */
+    public var isChampionshipEvent: Bool {
+        return isChampionshipDivision || isChampionshipFinals
+    }
+
+    /**
+     If the event is a CMP division.
+     */
+    public var isChampionshipDivision: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .championshipDivision
+    }
+
+    /**
+     If the event is a CMP finals field.
+     */
+    public var isChampionshipFinals: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .championshipFinals
+    }
+
+    /**
+     If the event is a district championship or a district championship division.
+     */
+    public var isDistrictChampionshipEvent: Bool {
+        return isDistrictChampionshipDivision || isDistrictChampionship
+    }
+
+    /**
+     If the event is a district championship.
+     */
+    public var isDistrictChampionshipDivision: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .districtChampionshipDivision
+    }
+
+    /**
+     If the event is a district championship.
+     */
+    public var isDistrictChampionship: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .districtChampionship
+    }
+
+    /**
+     If the event is a Festival of Champions event.
+     */
+    public var isFoC: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .festivalOfChampions
+    }
+
+    /**
+     If the event is a preseason event.
+     */
+    public var isPreseason: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .preseason
+    }
+
+    /**
+     If the event is an offseason event.
+     */
+    public var isOffseason: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .offseason
+    }
+
+    /**
+     If the event is a regional event.
+     */
+    public var isRegional: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .regional
+    }
+
+    /**
+     If the event is an unlabeled event.
+     */
+    public var isUnlabeled: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .unlabeled
+    }
+
+    /**
+     If the event is currently going, based on it's start and end dates.
+     */
+    public var isHappeningNow: Bool {
+        guard let startDate = startDate, let endDate = endDate else {
+            return false
+        }
+        return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
+    }
+
+    public var month: String? {
+        guard let startDate = startDate else {
+            return nil
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM"
+        return dateFormatter.string(from: startDate)
+    }
+
+}
+
+@objc(Event)
+public class Event: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Event> {
+        return NSFetchRequest<Event>(entityName: Event.entityName)
+    }
+
+    @NSManaged var addressRaw: String?
+    @NSManaged var cityRaw: String?
+    @NSManaged var countryRaw: String?
+    @NSManaged var endDateRaw: Date?
+    @NSManaged var eventCodeRaw: String?
+    @NSManaged var eventTypeRaw: NSNumber?
+    @NSManaged var eventTypeStringRaw: String?
+    @NSManaged var firstEventCodeRaw: String?
+    @NSManaged var firstEventIDRaw: String?
+    @NSManaged var gmapsPlaceIDRaw: String?
+    @NSManaged var gmapsURLRaw: String?
+    @NSManaged var hybridType: String?
+    @NSManaged var keyRaw: String?
+    @NSManaged var latRaw: NSNumber?
+    @NSManaged var lngRaw: NSNumber?
+    @NSManaged var locationNameRaw: String?
+    @NSManaged var nameRaw: String?
+    @NSManaged var playoffTypeRaw: NSNumber?
+    @NSManaged var playoffTypeStringRaw: String?
+    @NSManaged var postalCodeRaw: String?
+    @NSManaged var shortNameRaw: String?
+    @NSManaged var startDateRaw: Date?
+    @NSManaged var stateProvRaw: String?
+    @NSManaged var timezoneRaw: String?
+    @NSManaged var websiteRaw: String?
+    @NSManaged var weekRaw: NSNumber?
+    @NSManaged var yearRaw: NSNumber?
+    @NSManaged var alliancesRaw: NSOrderedSet?
+    @NSManaged var awardsRaw: NSSet?
+    @NSManaged var districtRaw: District?
+    @NSManaged var divisionsRaw: NSSet?
+    @NSManaged var insightsRaw: EventInsights?
+    @NSManaged var matchesRaw: NSSet?
+    @NSManaged var parentEventRaw: Event?
+    @NSManaged var pointsRaw: NSSet?
+    @NSManaged var rankingsRaw: NSSet?
+    @NSManaged var statsRaw: NSSet?
+    @NSManaged var statusRaw: Status?
+    @NSManaged var statusesRaw: NSSet?
+    @NSManaged var teamsRaw: NSSet?
+    @NSManaged var webcastsRaw: NSSet?
+
+}
+
+// MARK: Generated accessors for alliancesRaw
+extension Event {
+
+    @objc(insertObject:inAlliancesRawAtIndex:)
+    @NSManaged func insertIntoAlliancesRaw(_ value: EventAlliance, at idx: Int)
+
+    @objc(removeObjectFromAlliancesRawAtIndex:)
+    @NSManaged func removeFromAlliancesRaw(at idx: Int)
+
+    @objc(insertAlliancesRaw:atIndexes:)
+    @NSManaged func insertIntoAlliancesRaw(_ values: [EventAlliance], at indexes: NSIndexSet)
+
+    @objc(removeAlliancesRawAtIndexes:)
+    @NSManaged func removeFromAlliancesRaw(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInAlliancesRawAtIndex:withObject:)
+    @NSManaged func replaceAlliancesRaw(at idx: Int, with value: EventAlliance)
+
+    @objc(replaceAlliancesRawAtIndexes:withAlliancesRaw:)
+    @NSManaged func replaceAlliancesRaw(at indexes: NSIndexSet, with values: [EventAlliance])
+
+    @objc(addAlliancesRawObject:)
+    @NSManaged func addToAlliancesRaw(_ value: EventAlliance)
+
+    @objc(removeAlliancesRawObject:)
+    @NSManaged func removeFromAlliancesRaw(_ value: EventAlliance)
+
+    @objc(addAlliancesRaw:)
+    @NSManaged func addToAlliancesRaw(_ values: NSOrderedSet)
+
+    @objc(removeAlliancesRaw:)
+    @NSManaged func removeFromAlliancesRaw(_ values: NSOrderedSet)
+
+}
+
+// MARK: Generated accessors for awardsRaw
+extension Event {
+
+    @objc(addAwardsRawObject:)
+    @NSManaged func addToAwardsRaw(_ value: Award)
+
+    @objc(removeAwardsRawObject:)
+    @NSManaged func removeFromAwardsRaw(_ value: Award)
+
+    @objc(addAwardsRaw:)
+    @NSManaged func addToAwardsRaw(_ values: NSSet)
+
+    @objc(removeAwardsRaw:)
+    @NSManaged func removeFromAwardsRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for matchesRaw
+extension Event {
+
+    @objc(addMatchesRawObject:)
+    @NSManaged func addToMatchesRaw(_ value: Match)
+
+    @objc(removeMatchesRawObject:)
+    @NSManaged func removeFromMatchesRaw(_ value: Match)
+
+    @objc(addMatchesRaw:)
+    @NSManaged func addToMatchesRaw(_ values: NSSet)
+
+    @objc(removeMatchesRaw:)
+    @NSManaged func removeFromMatchesRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for rankingsRaw
+extension Event {
+
+    @objc(addRankingsRawObject:)
+    @NSManaged public func addToRankingsRaw(_ value: EventRanking)
+
+    @objc(removeRankingsRawObject:)
+    @NSManaged public func removeFromRankingsRaw(_ value: EventRanking)
+
+    @objc(addRankingsRaw:)
+    @NSManaged public func addToRankingsRaw(_ values: NSSet)
+
+    @objc(removeRankingsRaw:)
+    @NSManaged public func removeFromRankingsRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for statusesRaw
+extension Event {
+
+    @objc(addStatusesRawObject:)
+    @NSManaged func addToStatusesRaw(_ value: EventStatus)
+
+    @objc(removeStatusesRawObject:)
+    @NSManaged func removeFromStatusesRaw(_ value: EventStatus)
+
+    @objc(addStatusesRaw:)
+    @NSManaged func addToStatusesRaw(_ values: NSSet)
+
+    @objc(removeStatusesRaw:)
+    @NSManaged func removeFromStatusesRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for webcastsRaw
+extension Event {
+
+    @objc(addWebcastsRawObject:)
+    @NSManaged func addToWebcastsRaw(_ value: Webcast)
+
+    @objc(removeWebcastsRawObject:)
+    @NSManaged func removeFromWebcastsRaw(_ value: Webcast)
+
+    @objc(addWebcastsRaw:)
+    @NSManaged func addToWebcastsRaw(_ values: NSSet)
+
+    @objc(removeWebcastsRaw:)
+    @NSManaged func removeFromWebcastsRaw(_ values: NSSet)
+
+}
+
+extension Event: Managed {
 
     static var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -40,7 +660,7 @@ extension Event: Locatable, Surfable, Managed {
         // Fetch all of the previous Events for this year
         let oldEvents = Event.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(Event.year), year)
+                                       #keyPath(Event.yearRaw), year)
         }
 
         // Insert new Events for this year
@@ -54,10 +674,26 @@ extension Event: Locatable, Surfable, Managed {
         })
     }
 
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Event.key), key)
+    /**
+     Insert an Event with a specified key in to the managed object context.
 
+     - Parameter key: The key for the Event.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+
+     - Returns: The inserted Event.
+     */
+    public static func insert(_ key: String, in context: NSManagedObjectContext) -> Event {
+        let predicate = Event.predicate(key: key)
+        return findOrCreate(in: context, matching: predicate) { (event) in
+            // Required: key, year
+            event.keyRaw = key
+
+            let yearString = String(key.prefix(4))
+            if let year = Int(yearString) {
+                event.yearRaw = NSNumber(value: year)
+            }
+        }
     }
 
     /**
@@ -76,53 +712,78 @@ extension Event: Locatable, Surfable, Managed {
         let predicate = Event.predicate(key: model.key)
         return findOrCreate(in: context, matching: predicate) { (event) in
             // Required: endDate, eventCode, eventType, key, name, startDate, year
-            event.address = model.address
-            event.city = model.city
-            event.country = model.country
+            event.addressRaw = model.address
+            event.cityRaw = model.city
+            event.countryRaw = model.country
 
-            event.updateToOneRelationship(relationship: #keyPath(Event.district), newValue: model.district, newObject: {
-                return District.insert($0, in: context)
+            if let district = model.district {
+                event.districtRaw = District.insert(district, in: context)
+            } else {
+                event.districtRaw = nil
+            }
+
+            event.divisionsRaw = NSSet(array: model.divisionKeys.map {
+                return Event.insert($0, in: context)
             })
 
-            event.updateToManyRelationship(relationship: #keyPath(Event.divisions), newValues: model.divisionKeys.map({
-                return EventKey.insert(withKey: $0, in: context)
-            }))
+            event.endDateRaw = model.endDate
+            event.eventCodeRaw = model.eventCode
+            event.eventTypeRaw = NSNumber(value: model.eventType)
+            event.eventTypeStringRaw = model.eventTypeString
+            event.firstEventIDRaw = model.firstEventID
+            event.firstEventCodeRaw = model.firstEventCode
+            event.gmapsPlaceIDRaw = model.gmapsPlaceID
+            event.gmapsURLRaw = model.gmapsURL
 
-            event.endDate = model.endDate
-            event.eventCode = model.eventCode
-            event.eventType = model.eventType as NSNumber
-            event.eventTypeString = model.eventTypeString
-            event.firstEventID = model.firstEventID
-            event.firstEventCode = model.firstEventCode
-            event.gmapsPlaceID = model.gmapsPlaceID
-            event.gmapsURL = model.gmapsURL
+            event.keyRaw = model.key
 
-            event.key = model.key
-            event.lat = model.lat as NSNumber?
-            event.lng = model.lng as NSNumber?
+            if let lat = model.lat {
+                event.latRaw = NSNumber(value: lat)
+            } else {
+                event.latRaw = nil
+            }
+            if let lng = model.lng {
+                event.lngRaw = NSNumber(value: lng)
+            } else {
+                event.lngRaw = nil
+            }
 
-            event.locationName = model.locationName
-            event.name = model.name
+            event.locationNameRaw = model.locationName
+            event.nameRaw = model.name
 
-            event.updateToOneRelationship(relationship: #keyPath(Event.parentEvent), newValue: model.parentEventKey, newObject: {
-                return EventKey.insert(withKey: $0, in: context)
-            })
-            event.playoffType = model.playoffType as NSNumber?
-            event.playoffTypeString = model.playoffTypeString
+            if let parentEventKey = model.parentEventKey {
+                event.parentEventRaw = Event.insert(parentEventKey, in: context)
+            } else {
+                event.parentEventRaw = nil
+            }
+            if let playoffType = model.playoffType {
+                event.playoffTypeRaw = NSNumber(value: playoffType)
+            } else {
+                event.playoffTypeRaw = nil
+            }
+            event.playoffTypeStringRaw = model.playoffTypeString
 
-            event.postalCode = model.postalCode
-            event.shortName = model.shortName
-            event.startDate = model.startDate
-            event.stateProv = model.stateProv
-            event.timezone = model.timezone
+            event.postalCodeRaw = model.postalCode
+            event.shortNameRaw = model.shortName
+            event.startDateRaw = model.startDate
+            event.stateProvRaw = model.stateProv
+            event.timezoneRaw = model.timezone
 
             event.insert(model.webcasts ?? [])
 
-            event.website = model.website
-            event.week = model.week as NSNumber?
-            event.year = model.year as NSNumber
+            event.websiteRaw = model.website
 
-            event.hybridType = event.calculateHybridType()
+            if let week = model.week {
+                event.weekRaw = NSNumber(value: week)
+            } else {
+                event.weekRaw = nil
+            }
+
+            event.yearRaw = NSNumber(value: model.year)
+
+            event.hybridType = calculateHybridType(eventType: model.eventType,
+                                                   startDate: model.startDate,
+                                                   district: model.district)
         }
     }
 
@@ -138,19 +799,9 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        // Fetch all of the previous EventAlliances for this Event
-        let oldAlliances = self.alliances?.array as? [EventAlliance] ?? []
-
-        // Insert new EventAlliances for this year
-        let alliances = alliances.map({
-            return EventAlliance.insert($0, eventKey: key!, in: managedObjectContext)
+        updateToManyRelationship(relationship: #keyPath(Event.alliancesRaw), newValues: alliances.map {
+            return EventAlliance.insert($0, eventKey: key, in: managedObjectContext)
         })
-
-        // Delete orphaned EventAlliances for this Event
-        Set(oldAlliances).subtracting(Set(alliances)).forEach({
-            managedObjectContext.delete($0)
-        })
-        self.alliances = NSOrderedSet(array: alliances)
     }
 
     /**
@@ -165,43 +816,41 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(Event.awards), newValues: awards.map({
+        updateToManyRelationship(relationship: #keyPath(Event.awardsRaw), newValues: awards.map({
             return Award.insert($0, in: managedObjectContext)
         }))
     }
 
     /**
-     Insert Awards for a given TeamKey with values from a TBAKit Award models in to the managed object context.
+     Insert Awards for a given Team key with values from a TBAKit Award models in to the managed object context.
 
-     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a TeamKey on the Event.
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a Team key on the Event.
 
      - Parameter awards: The TBAKit Award representations to set values from.
 
-     - Parameter teamKey: The TeamKey the Awards belong to.
+     - Parameter teamKey: The key for the Team the Awards belong to.
      */
     public func insert(_ awards: [TBAAward], teamKey: String) {
         guard let managedObjectContext = managedObjectContext else {
             return
         }
 
-        // Fetch all of the previous Awards for this Event/TeamKey
-        let oldAwards = Award.fetch(in: managedObjectContext) {
-            // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
-                                       #keyPath(Award.recipients), teamKey)
+        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
+        let oldAwards = self.awards.filter {
+            return teamPredicate.evaluate(with: $0)
         }
 
         // Insert new Awards
         let awards = awards.map({ (model: TBAAward) -> Award in
             let a = Award.insert(model, in: managedObjectContext)
-            addToAwards(a)
+            addToAwardsRaw(a)
             return a
         })
 
         // Delete orphaned Awards for this Event/TeamKey
-        Set(oldAwards).subtracting(Set(awards)).forEach({
+        Set(oldAwards).subtracting(Set(awards)).forEach {
             managedObjectContext.delete($0)
-        })
+        }
     }
 
     /**
@@ -216,24 +865,10 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        updateToOneRelationship(relationship: #keyPath(Event.insights), newValue: insights, newObject: {
-            return EventInsights.insert($0, eventKey: key!, in: managedObjectContext)
+        let key = self.key
+        updateToOneRelationship(relationship: #keyPath(Event.insightsRaw), newValue: insights, newObject: {
+            return EventInsights.insert($0, eventKey: key, in: managedObjectContext)
         })
-    }
-
-    /**
-     Insert a Match with values from a TBAKit Match model in to the managed object context.
-
-     This method will manage setting up a Match's relationship to an Event.
-
-     - Parameter match: The TBAKit Match representation to set values from.
-     */
-    public func insert(_ match: TBAMatch) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        addToMatches(Match.insert(match, in: managedObjectContext))
     }
 
     /**
@@ -248,7 +883,7 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(Event.matches), newValues: matches.map({
+        updateToManyRelationship(relationship: #keyPath(Event.matchesRaw), newValues: matches.map({
             return Match.insert($0, in: managedObjectContext)
         }))
     }
@@ -269,8 +904,8 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(Event.rankings), newValues: rankings.map({
-            return EventRanking.insert($0, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: key!, in: managedObjectContext)
+        updateToManyRelationship(relationship: #keyPath(Event.rankingsRaw), newValues: rankings.map({
+            return EventRanking.insert($0, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: key, in: managedObjectContext)
         }))
     }
 
@@ -286,8 +921,8 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(Event.stats), newValues: stats.map({
-            return EventTeamStat.insert($0, eventKey: key!, in: managedObjectContext)
+        updateToManyRelationship(relationship: #keyPath(Event.statsRaw), newValues: stats.map({
+            return EventTeamStat.insert($0, eventKey: key, in: managedObjectContext)
         }))
     }
 
@@ -304,9 +939,9 @@ extension Event: Locatable, Surfable, Managed {
         }
 
         let status = EventStatus.insert(status, in: managedObjectContext)
-        status.qual?.ranking?.event = self
+        status.qual?.ranking?.setEvent(event: self)
 
-        addToStatuses(status)
+        addToStatusesRaw(status)
     }
 
     /**
@@ -321,7 +956,7 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        self.teams = NSSet(array: teams.map({
+        self.teamsRaw = NSSet(array: teams.map({
             return Team.insert($0, in: managedObjectContext)
         }))
     }
@@ -338,196 +973,163 @@ extension Event: Locatable, Surfable, Managed {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(Event.webcasts), newValues: webcasts.map({
+        updateToManyRelationship(relationship: #keyPath(Event.webcastsRaw), newValues: webcasts.map({
             return Webcast.insert($0, in: managedObjectContext)
         }))
     }
 
-    public var isOrphaned: Bool {
-        // Event is a root object, so it should never be an orphan
-        return false
-    }
-    
     /// Event's shouldn't really be deleted, but sometimes they can be
     public override func prepareForDeletion() {
         super.prepareForDeletion()
 
-        (webcasts?.allObjects as? [Webcast])?.forEach({
-            if $0.events!.onlyObject(self) {
+        webcasts.forEach {
+            if $0.events.onlyObject(self) {
                 // Webcast will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {
-                $0.removeFromEvents(self)
-            }
-        })
-    }
-
-    public func awards(for teamKey: TeamKey) -> [Award] {
-        guard let awards = awards else {
-            return []
-        }
-        return Array(NSMutableSet(set: awards).filtered(using: NSPredicate(format: "ANY recipients.teamKey.key == %@", teamKey.key!))) as? [Award] ?? []
-    }
-
-    // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
-    // of event data to kinda "move around" events in our data model to get groups/order right
-    func calculateHybridType() -> String {
-        var hybridType = eventType!.stringValue
-        // Group districts together, group district CMPs together
-        if isDistrictChampionshipEvent {
-            // Due to how DCMP divisions come *after* everything else if sorted by default
-            // This is a bit of a hack to get them to show up before DCMPs
-            // Future-proofing - group DCMP divisions together based on district
-            if eventType!.intValue == EventType.districtChampionshipDivision.rawValue, let district = district {
-                hybridType = "\(EventType.districtChampionship.rawValue)..\(district.abbreviation!).dcmpd"
-            } else {
-                hybridType = "\(hybridType).dcmp"
-            }
-        } else if let district = district, !isDistrictChampionshipEvent {
-            hybridType = "\(hybridType).\(district.abbreviation!)"
-        } else if eventType!.intValue == EventType.offseason.rawValue, let startDate = startDate {
-            // Group offseason events together by month
-            let month = Calendar.current.component(.month, from: startDate)
-            hybridType = "\(hybridType).\(month)"
-        }
-        return hybridType
-    }
-
-    public func dateString() -> String? {
-        guard let startDate = startDate, let endDate = endDate else {
-            return nil
-        }
-
-        let calendar = Calendar.current
-
-        let shortDateFormatter = DateFormatter()
-        shortDateFormatter.dateFormat = "MMM dd"
-
-        let longDateFormatter = DateFormatter()
-        longDateFormatter.dateFormat = "MMM dd, y"
-
-        if startDate == endDate {
-            return shortDateFormatter.string(from: endDate)
-        } else if calendar.component(.year, from: startDate) == calendar.component(.year, from: endDate) {
-            return "\(shortDateFormatter.string(from: startDate)) to \(shortDateFormatter.string(from: endDate))"
-        } else {
-            return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
-        }
-    }
-
-    public var weekString: String {
-        let eventType = self.eventType!.intValue
-        let year = self.year!.intValue
-
-        if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
-            if year >= 2017, let city = city {
-                return "Championship - \(city)"
-            } else {
-                return "Championship"
-            }
-        } else {
-            switch eventType {
-            case EventType.unlabeled.rawValue:
-                return "Other"
-            case EventType.preseason.rawValue:
-                return "Preseason"
-            case EventType.offseason.rawValue:
-                guard let month = month else {
-                    return "Offseason"
-                }
-                return "\(month) Offseason"
-            case EventType.festivalOfChampions.rawValue:
-                return "Festival of Champions"
-            default:
-                guard let week = week?.intValue else {
-                    return "Other"
-                }
-
-                /**
-                 * Special cases for 2016:
-                 * Week 1 is actually Week 0.5, eveything else is one less
-                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
-                 */
-                if year == 2016 {
-                    if week == 0 {
-                        return "Week 0.5"
-                    } else {
-                        return "Week \(week)"
-                    }
-                } else {
-                    return "Week \(week + 1)"
-                }
+                $0.removeFromEventsRaw(self)
             }
         }
     }
 
-    public var safeShortName: String {
-        guard let shortName = shortName else {
-            return name!
-        }
-        return shortName.isEmpty ? name! : shortName
+}
+
+extension Event: Locatable, Surfable {}
+
+extension Event {
+
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Event.keyRaw), key)
     }
 
-    public var friendlyNameWithYear: String {
-        return "\(year!.stringValue) \(safeShortName) \(eventTypeString ?? "Event")"
+    public static func districtPredicate(districtKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(Event.districtRaw), #keyPath(District.keyRaw), districtKey)
+    }
+
+    public static func champsYearPredicate(key: String, year: Int) -> NSPredicate {
+        // 2017 and onward - handle multiple CMPs
+        let yearPredicate = Event.yearPredicate(year: year)
+        let predicate = NSPredicate(format: "(%K == %ld || %K == %ld) && (%K == %@ || %K == %@)",
+                                    #keyPath(Event.eventTypeRaw), EventType.championshipFinals.rawValue,
+                                    #keyPath(Event.eventTypeRaw), EventType.championshipDivision.rawValue,
+                                    #keyPath(Event.keyRaw), key,
+                                    #keyPath(Event.parentEventRaw.keyRaw), key)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    }
+
+    public static func eventTypeYearPredicate(eventType: EventType, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+        let predicate = NSPredicate(format: "%K == %ld",
+                                    #keyPath(Event.eventTypeRaw), eventType.rawValue)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    }
+
+    public static func offseasonYearPredicate(startDate: Date, endDate: Date, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+
+        // Conversion stuff, since Core Data still uses NSDate's
+        let firstDayOfMonth = NSDate(timeIntervalSince1970: startDate.startOfMonth().timeIntervalSince1970)
+        let lastDayOfMonth = NSDate(timeIntervalSince1970: endDate.endOfMonth().timeIntervalSince1970)
+        let predicate = NSPredicate(format: "%K == %ld && (%K >= %@) AND (%K <= %@)",
+                                    #keyPath(Event.eventTypeRaw), EventType.offseason.rawValue,
+                                    #keyPath(Event.startDateRaw), firstDayOfMonth,
+                                    #keyPath(Event.endDateRaw), lastDayOfMonth)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    }
+
+    public static func teamPredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "SUBQUERY(%K, $t, $t.%K == %@).@count > 0",
+                           #keyPath(Event.teamsRaw), #keyPath(Team.keyRaw), teamKey)
+    }
+
+    public static func teamYearPredicate(teamKey: String, year: Int) -> NSPredicate {
+        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
+        let yearPredicate = Event.yearPredicate(year: year)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
+    }
+
+    public static func teamYearNonePredicate(teamKey: String) -> NSPredicate {
+        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
+        let yearPredicate = Event.yearPredicate(year: -1)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
+    }
+
+    public static func unplayedEventPredicate(date: Date, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+
+        let coreDataDate = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
+        let beforeEndDatePredicate = NSPredicate(format: "%K >= %@ && %K != %ld",
+                                                 #keyPath(Event.endDateRaw), coreDataDate,
+                                                 #keyPath(Event.eventTypeRaw), EventType.championshipDivision.rawValue)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, beforeEndDatePredicate])
+    }
+
+    public static func weekYearPredicate(week: Int, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+        // Event has a week - filter based on the week
+        let weekPredicate = NSPredicate(format: "%K == %ld",
+                                        #keyPath(Event.weekRaw), week)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, weekPredicate])
+    }
+
+    public static func yearPredicate(year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld", #keyPath(Event.yearRaw), year)
+    }
+
+    public static func nonePredicate() -> NSPredicate {
+        return NSPredicate(format: "%K == -1", #keyPath(Event.yearRaw))
+    }
+
+    public static func sortDescriptors() -> [NSSortDescriptor] {
+        return [Event.startDateSortDescriptor(), Event.nameSortDescriptor()]
+    }
+
+    public static func endDateSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.endDateRaw), ascending: true)
+    }
+
+    public static func hybridTypeSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
+    }
+
+    public static func nameSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.nameRaw), ascending: true)
+    }
+
+    public static func startDateSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.startDateRaw), ascending: true)
+    }
+
+    public static func weekSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.weekRaw), ascending: true)
+    }
+
+    public static func hybridTypeKeyPath() -> String {
+        return #keyPath(Event.hybridType)
+    }
+
+    public static func weekKeyPath() -> String {
+        return #keyPath(Event.weekRaw)
     }
 
     /**
-     If the event is a CMP division or a CMP finals field.
-    */
-    public var isChampionship: Bool {
-        let type = getValue(\Event.eventType!.intValue)
-        return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
-    }
-
-    /**
-     If the event is a district championship or a district championship division.
+     Returns an NSPredicate for full Event objects - aka, they have all required API fields.
+     This includes endDate, eventCode, eventType, key, name, startDate, year
      */
-    public var isDistrictChampionshipEvent: Bool {
-        let type = getValue(\Event.eventType!.intValue)
-        return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
-    }
-
-    /**
-     If the event is a district championship.
-     */
-    public var isDistrictChampionship: Bool {
-        let type = getValue(\Event.eventType!.intValue)
-        return type == EventType.districtChampionship.rawValue
-    }
-
-    public var isFoC: Bool {
-        let type = getValue(\Event.eventType!.intValue)
-        return type == EventType.festivalOfChampions.rawValue;
-    }
-    
-    public var isPreseason: Bool {
-        let type = getValue(\Event.eventType!.intValue)
-        return type == EventType.preseason.rawValue;
-    }
-    
-    public var isOffseason: Bool {
-        let type = getValue(\Event.eventType!.intValue)
-        return type == EventType.offseason.rawValue;
-    }
-
-    /**
-     If the event is currently going, based on it's start and end dates.
-     */
-    public var isHappeningNow: Bool {
-        guard let startDate = getValue(\Event.startDate), let endDate = getValue(\Event.endDate) else {
-            return false
-        }
-        return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
-    }
-
-    public var month: String? {
-        guard let startDate = getValue(\Event.startDate) else {
-            return nil
-        }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM"
-        return dateFormatter.string(from: startDate)
+    public static func populatedEventsPredicate() -> NSPredicate {
+        var keys = [#keyPath(Event.endDateRaw),
+                    #keyPath(Event.eventCodeRaw),
+                    #keyPath(Event.eventTypeRaw),
+                    #keyPath(Event.keyRaw),
+                    #keyPath(Event.nameRaw),
+                    #keyPath(Event.startDateRaw),
+                    #keyPath(Event.yearRaw)]
+        let format = keys.map {
+            return String("\($0) != nil")
+        }.joined(separator: " && ")
+        return NSPredicate(format: format)
     }
 
     // An array of events that are used to represent their corresponding week in the Week selector
@@ -536,13 +1138,15 @@ extension Event: Locatable, Surfable, Managed {
     public static func weekEvents(for year: Int, in managedObjectContext: NSManagedObjectContext) -> [Event] {
         let events = Event.fetch(in: managedObjectContext) { (fetchRequest) in
             // Filter out CMP divisions - we don't want them below for our weeks calculation
-            fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K != %ld",
-                                                 #keyPath(Event.year), year,
-                                                 #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+            // Only fetch events with values for `eventType` so we can force-unwrap that value
+            let predicate = NSPredicate(format: "%K == %ld && %K != %ld",
+                                        #keyPath(Event.yearRaw), year,
+                                        #keyPath(Event.eventTypeRaw), EventType.championshipDivision.rawValue)
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, Event.populatedEventsPredicate()])
             fetchRequest.sortDescriptors = [
-                NSSortDescriptor(key: #keyPath(Event.week), ascending: true),
-                NSSortDescriptor(key: #keyPath(Event.eventType), ascending: true),
-                NSSortDescriptor(key: #keyPath(Event.endDate), ascending: true)
+                NSSortDescriptor(key: #keyPath(Event.weekRaw), ascending: true),
+                NSSortDescriptor(key: #keyPath(Event.eventTypeRaw), ascending: true),
+                NSSortDescriptor(key: #keyPath(Event.endDateRaw), ascending: true)
             ]
         }
 
@@ -550,21 +1154,21 @@ extension Event: Locatable, Surfable, Managed {
         // ex: one Preseason, one Week 1, one Week 2..., one CMP #1, one CMP #2, one Offseason for each month
         // Jesus, take the wheel
         var handledWeeks: Set<Int> = []
-        var handledTypes: Set<Int> = []
+        var handledTypes: Set<EventType> = []
         var handledOffseasonMonths: Set<String> = []
         return Array(events.compactMap({ (event) -> Event? in
-            let eventType = event.eventType!.intValue
+            let eventType = event.eventType!
             if let week = event.week {
                 // Make sure each week only shows up once
-                if handledWeeks.contains(week.intValue) {
+                if handledWeeks.contains(week) {
                     return nil
                 }
-                handledWeeks.insert(week.intValue)
+                handledWeeks.insert(week)
                 return event
-            } else if eventType == EventType.championshipFinals.rawValue {
+            } else if eventType == .championshipFinals {
                 // Always add all CMP finals
                 return event
-            } else if eventType == EventType.offseason.rawValue {
+            } else if eventType == .offseason {
                 // Split all off-season events in to individual month sections
                 guard let month = event.month else {
                     return nil
@@ -585,6 +1189,29 @@ extension Event: Locatable, Surfable, Managed {
         })).sorted()
     }
 
+    // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
+    // of event data to kinda "move around" events in our data model to get groups/order right
+    internal static func calculateHybridType(eventType: Int, startDate: Date?, district: TBADistrict?) -> String {
+        let isDistrictChampionshipEvent = (eventType == EventType.districtChampionshipDivision.rawValue || eventType == EventType.districtChampionship.rawValue)
+        // Group districts together, group district CMPs together
+        if isDistrictChampionshipEvent {
+            // Due to how DCMP divisions come *after* everything else if sorted by default
+            // This is a bit of a hack to get them to show up before DCMPs
+            // Future-proofing - group DCMP divisions together based on district
+            if eventType == EventType.districtChampionshipDivision.rawValue, let district = district {
+                return "\(eventType)..\(district.abbreviation).dcmpd"
+            }
+            return "\(eventType).dcmp"
+        } else if let district = district, !isDistrictChampionshipEvent {
+            return "\(eventType).\(district.abbreviation)"
+        } else if eventType == EventType.offseason.rawValue, let startDate = startDate {
+            // Group offseason events together by month
+            let month = Calendar.current.component(.month, from: startDate)
+            return "\(eventType).\(month)"
+        }
+        return "\(eventType)"
+    }
+
 }
 
 extension Event: Comparable {
@@ -597,47 +1224,46 @@ extension Event: Comparable {
 
     public static func <(lhs: Event, rhs: Event) -> Bool {
         if lhs.year != rhs.year {
-            return lhs.year!.intValue < rhs.year!.intValue
+            return lhs.year < rhs.year
         }
 
-        let lhsType = lhs.eventType!.intValue
-        let rhsType = rhs.eventType!.intValue
+        guard let lhsType = lhs.eventType, let rhsType = rhs.eventType else {
+            return lhs.key < rhs.key // Fallback to comparing key strings if we don't have the event type
+        }
 
         // Preseason events should always come first
-        if lhsType == EventType.preseason.rawValue || rhsType == EventType.preseason.rawValue {
+        if lhs.isPreseason || rhs.isPreseason {
             // Preseason, being 100, has the highest event type. So even though this seems backwards... it's not
             return lhsType > rhsType
         }
         // Unlabeled events go at the very end no matter what
-        if lhsType == EventType.unlabeled.rawValue || rhsType == EventType.unlabeled.rawValue {
+        if lhs.isUnlabeled || rhs.isUnlabeled {
             // Same as preseason - unlabeled events are the lowest possible number so even though this line seems backwards it's not
             return lhsType > rhsType
         }
         // Offseason events come after everything besides unlabeled
-        if lhsType == EventType.offseason.rawValue || rhsType == EventType.offseason.rawValue {
+        if lhs.isOffseason || rhs.isOffseason {
             // We've already handled preseason (100) so now we can assume offseason's (99) will always be the highest type
             return lhsType < rhsType
         }
+        // Throw Festival of Champions at the end, since it's the last event
+        if lhs.isFoC || rhs.isFoC {
+            return lhsType < rhsType
+        }
         // CMP finals come after everything besides offseason, unlabeled
-        if lhsType == EventType.championshipFinals.rawValue || rhsType == EventType.championshipFinals.rawValue {
+        if lhs.isChampionshipFinals || rhs.isChampionshipFinals {
             // Make sure we handle that districtCMPDivision case
-            if lhsType == EventType.districtChampionshipDivision.rawValue || rhsType == EventType.districtChampionshipDivision.rawValue {
+            if lhs.isDistrictChampionshipDivision || rhs.isDistrictChampionshipDivision {
                 return lhsType > rhsType
-            } else {
-                return lhsType < rhsType
             }
+            return lhsType < rhsType
         }
         // CMP divisions are next
-        if lhsType == EventType.championshipDivision.rawValue || rhsType == EventType.championshipDivision.rawValue {
+        if lhs.isChampionshipDivision || rhs.isChampionshipDivision {
             // Make sure we handle that districtCMPDivision case
-            if lhsType == EventType.districtChampionshipDivision.rawValue || rhsType == EventType.districtChampionshipDivision.rawValue {
+            if lhs.isDistrictChampionshipDivision || rhs.isDistrictChampionshipDivision {
                 return lhsType > rhsType
-            } else {
-                return lhsType < rhsType
             }
-        }
-        // Throw Festival of Champions at the end, since it's the last event
-        if lhsType == EventType.festivalOfChampions.rawValue || rhsType == EventType.festivalOfChampions.rawValue {
             return lhsType < rhsType
         }
         // EVERYTHING ELSE (districts, regionals, DCMPs, DCMP divisions) has weeks. This is just an easy sort... which event has a first week
@@ -646,26 +1272,22 @@ extension Event: Comparable {
         if let lhsWeek = lhs.week, let rhsWeek = rhs.week {
             if lhsWeek == rhsWeek {
                 // Make sure we handle the weird case of district championship divisions being a higher number than DCMPs
-                if (lhsType == EventType.districtChampionshipDivision.rawValue || rhsType == EventType.districtChampionshipDivision.rawValue) &&
-                    (lhsType == EventType.districtChampionship.rawValue || rhsType == EventType.districtChampionship.rawValue) {
+                if lhs.isDistrictChampionshipEvent && rhs.isDistrictChampionshipEvent {
                     return lhsType > rhsType
-                } else {
-                    return lhsType < rhsType
                 }
-            } else {
-                return lhsWeek.intValue < rhsWeek.intValue
+                return lhsType < rhsType
             }
+            return lhsWeek < rhsWeek
         }
         return false
     }
 
 }
 
-
 extension Event: MyTBASubscribable {
 
     public var modelKey: String {
-        return getValue(\Event.key!)
+        return key
     }
 
     public var modelType: MyTBAModelType {
