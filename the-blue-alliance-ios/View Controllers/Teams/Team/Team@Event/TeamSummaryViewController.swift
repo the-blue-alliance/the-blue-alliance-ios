@@ -6,11 +6,12 @@ import TBAKit
 import UIKit
 
 protocol TeamSummaryViewControllerDelegate: AnyObject {
-    func awardsSelected()
+    func teamInfoSelected(_ team: Team)
     func matchSelected(_ match: Match)
 }
 
 private enum TeamSummarySection: Int {
+    case teamInfo
     case eventInfo
     case nextMatch
     case playoffInfo
@@ -19,8 +20,8 @@ private enum TeamSummarySection: Int {
 }
 
 private enum TeamSummaryItem: Hashable {
+    case teamInfo(team: Team)
     case status(status: String)
-    case awards(count: Int)
     case rank(rank: Int, total: Int)
     case record(wlt: WLT, dqs: Int? = nil)
     case average(average: Double)
@@ -30,10 +31,10 @@ private enum TeamSummaryItem: Hashable {
 
     func hash(into hasher: inout Hasher) {
         switch self {
+        case .teamInfo(let team):
+            hasher.combine(team)
         case .status(let status):
             hasher.combine(status)
-        case .awards(let count):
-            hasher.combine(count)
         case .rank(let rank, let total):
             hasher.combine(rank)
             hasher.combine(total)
@@ -54,10 +55,10 @@ private enum TeamSummaryItem: Hashable {
 
     static func == (lhs: TeamSummaryItem, rhs: TeamSummaryItem) -> Bool {
         switch (lhs, rhs) {
+        case (.teamInfo(let lhsTeam), .teamInfo(let rhsTeam)):
+            return lhsTeam == rhsTeam
         case (.status(let lhsStatus), .status(let rhsStatus)):
             return lhsStatus == rhsStatus
-        case (.awards(let lhsCount), .awards(let rhsCount)):
-            return lhsCount == rhsCount
         case (.rank(let lhsRank, let lhsTotal), .rank(let rhsRank, let rhsTotal)):
             return lhsRank == rhsRank && lhsTotal == rhsTotal
         case (.record(let lhsWlt, let lhsDqs), .record(let rhsWlt, let rhsDqs)):
@@ -100,9 +101,6 @@ class TeamSummaryViewController: TBATableViewController {
             }
         }
     }
-    private var teamAwards: [Award] {
-        return event.awards(for: team.key)
-    }
 
     private func executeUpdate(_ update: @escaping () -> ()) {
         OperationQueue.main.addOperation {
@@ -137,6 +135,7 @@ class TeamSummaryViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
+        tableView.registerReusableCell(InfoTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
         setupDataSource()
@@ -145,10 +144,10 @@ class TeamSummaryViewController: TBATableViewController {
         // Since we leverage didSet, we need to do this *after* initilization
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
+        executeUpdate(updateTeamInfo)
         executeUpdate(updateEventStatusItems)
         executeUpdate(updateNextMatchItem)
         executeUpdate(updateLastMatchItem)
-        executeUpdate(updateAwardsItem)
     }
 
     // MARK: - Private Methods
@@ -156,8 +155,8 @@ class TeamSummaryViewController: TBATableViewController {
     private func setupDataSource() {
         dataSource = UITableViewDiffableDataSource<TeamSummarySection, TeamSummaryItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
             switch item {
-            case .awards(let count):
-                return TeamSummaryViewController.tableView(tableView, cellForAwardCount: count, at: indexPath)
+            case .teamInfo(let team):
+                return TeamSummaryViewController.tableView(tableView, cellForTeam: team, at: indexPath)
             case .status(let status):
                 return TeamSummaryViewController.tableView(tableView, reverseSubtitleCellWithTitle: "Status", subtitle: status, at: indexPath)
             case .rank(let rank, let total):
@@ -176,6 +175,18 @@ class TeamSummaryViewController: TBATableViewController {
         })
         _dataSource = TableViewDataSource(dataSource: dataSource)
         _dataSource.delegate = self
+    }
+
+    private func updateTeamInfo() {
+        var snapshot = dataSource.snapshot()
+
+        let teamInfoSummaryItem = TeamSummaryItem.teamInfo(team: team)
+
+        snapshot.deleteSections([.teamInfo])
+        snapshot.insertSection(.teamInfo, atIndex: TeamSummarySection.teamInfo.rawValue)
+        snapshot.appendItems([teamInfoSummaryItem], toSection: .teamInfo)
+
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func updateEventStatusItems() {
@@ -276,27 +287,6 @@ class TeamSummaryViewController: TBATableViewController {
         executeUpdate(updateLastMatchItem)
     }
 
-    private func updateAwardsItem() {
-        var snapshot = dataSource.snapshot()
-
-        let teamAwardsSummaryItem: TeamSummaryItem? = {
-            return teamAwards.count > 0 ? .awards(count: teamAwards.count) : nil
-        }()
-
-        let items = snapshot.itemIdentifiers(inSection: .eventInfo)
-        let existingTeamAwardsSummaryItems = items.filter({ switch $0 { case .awards(_): return true; default: return false } })
-        snapshot.deleteItems(existingTeamAwardsSummaryItems)
-
-        if let teamAwardsSummaryItem = teamAwardsSummaryItem {
-            snapshot.insertSection(.eventInfo, atIndex: TeamSummarySection.eventInfo.rawValue)
-            snapshot.insertItem(teamAwardsSummaryItem, inSection: .eventInfo, atIndex: 1)
-        } else if snapshot.itemIdentifiers(inSection: .eventInfo).isEmpty {
-            snapshot.deleteSections([.eventInfo])
-        }
-
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-
     private func updateNextMatchItem() {
         var snapshot = dataSource.snapshot()
 
@@ -356,7 +346,9 @@ class TeamSummaryViewController: TBATableViewController {
     override func title(forSection section: Int) -> String? {
         let snapshot = dataSource.snapshot()
         let section = snapshot.sectionIdentifiers[section]
-        if section == .nextMatch {
+        if section == .eventInfo {
+            return "Summary"
+        } else if section == .nextMatch {
             return "Next Match"
         } else if section == .playoffInfo {
             return "Playoffs"
@@ -370,12 +362,13 @@ class TeamSummaryViewController: TBATableViewController {
 
     // MARK: - Table View Cells
 
-    private static func tableView(_ tableView: UITableView, cellForAwardCount awardCount: Int, at indexPath: IndexPath) -> UITableViewCell {
-        let recordString = "Won \(awardCount) award\(awardCount > 1 ? "s" : "")"
-        let cell = self.tableView(tableView, reverseSubtitleCellWithTitle: "Awards", subtitle: recordString, at: indexPath)
-        // Allow us to push to what awards the team won
+    private static func tableView(_ tableView: UITableView, cellForTeam team: Team, at indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
+        cell.viewModel = InfoCellViewModel(team: team)
+
         cell.accessoryType = .disclosureIndicator
-        cell.selectionStyle = .default
+        cell.selectionStyle = .none
+
         return cell
     }
 
@@ -447,8 +440,8 @@ class TeamSummaryViewController: TBATableViewController {
         }
 
         switch item {
-        case .awards:
-            delegate?.awardsSelected()
+        case .teamInfo(let team):
+            delegate?.teamInfoSelected(team)
         case .match(let match, _):
             delegate?.matchSelected(match)
         default:
@@ -474,7 +467,7 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return event.name == nil || eventStatus == nil || teamAwards.count == 0
+        return event.name == nil || eventStatus == nil
     }
 
     @objc func refresh() {
@@ -525,22 +518,7 @@ extension TeamSummaryViewController: Refreshable {
             }
         }
 
-        // Refresh awards
-        var awardsOperation: TBAKitOperation!
-        awardsOperation = tbaKit.fetchTeamAwards(key: teamKey, eventKey: event.key) { (result, notModified) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                if !notModified, let awards = try? result.get() {
-                    let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(awards, teamKey: teamKey)
-                }
-            }, saved: {
-                self.tbaKit.storeCacheHeaders(awardsOperation)
-                self.executeUpdate(self.updateAwardsItem)
-            }, errorRecorder: Crashlytics.sharedInstance())
-        }
-
-        finalOperation = addRefreshOperations([eventOperation, teamStatusOperation, awardsOperation].compactMap({ $0 }))
+        finalOperation = addRefreshOperations([eventOperation, teamStatusOperation].compactMap({ $0 }))
     }
 
     func refreshStatusMatches(_ status: TBAEventStatus, _ dependentOperation: Operation) {

@@ -1313,30 +1313,6 @@ class EventTestCase: TBADataTestCase {
         XCTAssertEqual(event.weekString, "Week 2")
     }
 
-    func test_awards_forTeamKey() {
-        let event = insertDistrictEvent()
-
-        // Insert one award, with one award recipient
-        let frc1Model = TBAAwardRecipient(teamKey: "frc1")
-        let modelAwardOne = TBAAward(name: "The Fake Award",
-                                     awardType: 2,
-                                     eventKey: event.key,
-                                     recipients: [frc1Model],
-                                     year: 2018)
-        event.insert([modelAwardOne])
-
-        // Sanity check
-        XCTAssertEqual(event.awards.count, 1)
-
-        let frc1TeamKey = Team.insert("frc1", in: persistentContainer.viewContext)
-        let frc2TeamKey = Team.insert("frc2", in: persistentContainer.viewContext)
-
-        // Should be one award for frc1
-        XCTAssertEqual(event.awards(for: frc1TeamKey.key).count, 1)
-        // Should be no awards for frc2
-        XCTAssertEqual(event.awards(for: frc2TeamKey.key).count, 0)
-    }
-
     func test_safeShortName() {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.keyRaw = "2019miket"
