@@ -9,7 +9,11 @@ import UIKit
 class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable {
 
     let team: Team
+
     let event: Event
+    lazy var contextObserver: CoreDataContextObserver<Event> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
 
     let myTBA: MyTBA
     let statusService: StatusService
@@ -46,6 +50,11 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         summaryViewController.delegate = self
         matchesViewController.delegate = self
         awardsViewController.delegate = self
+
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
+            guard let self = self else { return }
+            self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

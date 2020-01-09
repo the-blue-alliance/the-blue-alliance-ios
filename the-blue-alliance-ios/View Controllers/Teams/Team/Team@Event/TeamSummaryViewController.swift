@@ -474,13 +474,30 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return eventStatus == nil || teamAwards.count == 0
+        return event.name == nil || eventStatus == nil || teamAwards.count == 0
     }
 
     @objc func refresh() {
         var finalOperation: Operation!
 
-        // TODO: Refresh Team? Refresh Event?
+        var eventOperation: TBAKitOperation?
+        if event.name == nil {
+            eventOperation = tbaKit.fetchEvent(key: event.key, completion: { (result, notModified) in
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    switch result {
+                    case .success(let event):
+                        if !notModified, let event = event {
+                            Event.insert(event, in: context)
+                        }
+                    default:
+                        break
+                    }
+                }, saved: {
+                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
+                }, errorRecorder: Crashlytics.sharedInstance())
+            })
+        }
 
         let teamKey = team.key
 
@@ -523,7 +540,7 @@ extension TeamSummaryViewController: Refreshable {
             }, errorRecorder: Crashlytics.sharedInstance())
         }
 
-        finalOperation = addRefreshOperations([teamStatusOperation, awardsOperation])
+        finalOperation = addRefreshOperations([eventOperation, teamStatusOperation, awardsOperation].compactMap({ $0 }))
     }
 
     func refreshStatusMatches(_ status: TBAEventStatus, _ dependentOperation: Operation) {
