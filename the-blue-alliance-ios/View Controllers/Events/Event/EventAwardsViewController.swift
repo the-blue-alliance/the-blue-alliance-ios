@@ -150,8 +150,6 @@ class EventAwardsViewController: TBATableViewController {
 extension EventAwardsViewController: Refreshable {
 
     var refreshKey: String? {
-        // let key = event.getValue(\Event.key)
-        // return "\(key)_awards"
         return "\(event.key)_awards"
     }
 

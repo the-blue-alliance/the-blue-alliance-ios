@@ -55,8 +55,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        // TODO: We need to update these navigation titles and whatnot
-        // once we fetch this data
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
             navigationTitle: team.teamNumberNickname,

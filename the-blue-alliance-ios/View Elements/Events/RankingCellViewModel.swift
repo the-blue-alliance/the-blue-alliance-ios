@@ -54,7 +54,6 @@ struct RankingCellViewModel {
         teamNumber = String(describing: eventTeamStat.team.teamNumber)
         teamName = eventTeamStat.team.nickname ?? eventTeamStat.team.teamNumberNickname
 
-        // TODO: Confirm these look okay
         detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr, eventTeamStat.dpr, eventTeamStat.ccwm)
         wltText = nil
     }

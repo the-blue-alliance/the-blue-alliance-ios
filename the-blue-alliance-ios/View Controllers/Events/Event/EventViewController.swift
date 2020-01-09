@@ -44,7 +44,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
                    userDefaults: userDefaults)
 
         title = event.friendlyNameWithYear
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.title = event.friendlyNameWithYear

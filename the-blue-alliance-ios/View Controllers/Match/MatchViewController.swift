@@ -50,7 +50,10 @@ class MatchViewController: MyTBAContainerViewController {
 
         infoViewController.matchSummaryDelegate = self
 
-        setupObservers()
+        contextObserver.observeObject(object: match.event, state: .updated) { [weak self] (event, _) in
+            guard let self = self else { return }
+            self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -63,24 +66,6 @@ class MatchViewController: MyTBAContainerViewController {
         super.viewWillAppear(animated)
 
         Analytics.logEvent("match", parameters: ["match": match.key])
-    }
-
-    // MARK: - Interface Methods
-
-    // TODO: Remove this in favor of the new big navigation headers and some new sub-header
-    private func updateInterface() {
-        navigationSubtitle = "@ \(match.event.friendlyNameWithYear)"
-    }
-
-    // MARK: - Private
-
-    private func setupObservers() {
-        contextObserver.observeObject(object: match.event, state: .updated) { [weak self] (_, _) in
-            guard let self = self else {
-                return
-            }
-            self.updateInterface()
-        }
     }
 
 }

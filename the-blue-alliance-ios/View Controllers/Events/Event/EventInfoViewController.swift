@@ -223,7 +223,6 @@ extension EventInfoViewController: Refreshable {
 
     var refreshKey: String? {
         return event.key
-        // return event.getValue(\Event.key)
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -236,7 +235,6 @@ extension EventInfoViewController: Refreshable {
 
     var isDataSourceEmpty: Bool {
         return event.name == nil
-        // return event.getValue(\Event.name) == nil
     }
 
     @objc func refresh() {
