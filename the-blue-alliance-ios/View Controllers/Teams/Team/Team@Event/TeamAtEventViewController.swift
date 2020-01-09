@@ -31,13 +31,14 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
         let summaryViewController = TeamSummaryViewController(team: team, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         matchesViewController = MatchesViewController(event: event, team: team, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let mediaViewController = TeamMediaCollectionViewController(team: team, year: event.year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let statsViewController = TeamStatsViewController(team: team, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
+        super.init(viewControllers: [summaryViewController, matchesViewController, mediaViewController, statsViewController, awardsViewController],
                    navigationTitle: team.teamNumberNickname,
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
+                   segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
@@ -48,6 +49,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
         summaryViewController.delegate = self
         matchesViewController.delegate = self
+        mediaViewController.delegate = self
         awardsViewController.delegate = self
 
         contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
@@ -86,6 +88,18 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
     func matchSelected(_ match: Match) {
         let matchViewController = MatchViewController(match: match, team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(matchViewController, animated: true)
+    }
+
+}
+
+extension TeamAtEventViewController: TeamMediaCollectionViewControllerDelegate {
+
+    func mediaSelected(_ media: TeamMedia) {
+        if let imageViewController = TeamMediaImageViewController.forMedia(media: media) {
+            DispatchQueue.main.async {
+                self.present(imageViewController, animated: true)
+            }
+        }
     }
 
 }
