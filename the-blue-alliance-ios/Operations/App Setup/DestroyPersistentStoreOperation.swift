@@ -23,7 +23,7 @@ class DestroyPersistentStoreOperation: TBAOperation {
     override func execute() {
         // See if we need to nuke our persistent store due to an upgrade
         let coreDataVersion = userDefaults.integer(forKey: DestroyPersistentStoreOperation.CoreDataVersionKey)
-        // if coreDataVersion < DestroyPersistentStoreOperation.CoreDataVersion {
+        if coreDataVersion < DestroyPersistentStoreOperation.CoreDataVersion {
             var success = false
             for url in FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask) {
                 let coreDataURL = url.appendingPathComponent("TBA.sqlite")
@@ -41,7 +41,7 @@ class DestroyPersistentStoreOperation: TBAOperation {
                 userDefaults.set(DestroyPersistentStoreOperation.CoreDataVersion, forKey: DestroyPersistentStoreOperation.CoreDataVersionKey)
                 userDefaults.synchronize()
             }
-        // }
+        }
         finish()
     }
     
