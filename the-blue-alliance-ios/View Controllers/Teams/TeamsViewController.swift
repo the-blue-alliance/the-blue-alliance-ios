@@ -26,13 +26,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     private var dataSource: TableViewDataSource<String, Team>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
 
-    lazy private var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        return searchController
-    }()
+    private var searchBar: UISearchBar!
 
     // MARK: - View Lifecycle
 
@@ -41,10 +35,20 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
         tableView.registerReusableCell(TeamTableViewCell.self)
 
-        setupDataSource()
-        tableView.dataSource = dataSource
+        // NOTE: We *must* init this here, in this terrible way, because of a UIKit bug with iOS 13 + dark mode
+        // Otherwise the background when pulling to refresh will be white
+        // https://feedbackassistant.apple.com/feedback/7528203
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.tintColor = UIColor.highlightColor
 
         tableView.tableHeaderView = searchController.searchBar
+        self.searchBar = searchController.searchBar
+
+        setupDataSource()
+        tableView.dataSource = dataSource
 
         // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
         definesPresentationContext = true
@@ -60,9 +64,12 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Commented out, since we can't hold a reference to our UISearchController without things breaking
+        /*
         if let text = searchController.searchBar.text, text.isEmpty, searchController.isActive {
             searchController.isActive = false
         }
+        */
     }
 
     // MARK: - Refreshable
@@ -161,7 +168,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
     private func setupFetchRequest(_ request: NSFetchRequest<Team>) {
         let searchPredicate: NSPredicate? = {
-            guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+            guard let searchText = searchBar.text, !searchText.isEmpty else {
                 return nil
             }
             return Team.searchPredicate(searchText: searchText)
