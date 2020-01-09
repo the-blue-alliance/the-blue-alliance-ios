@@ -1,9 +1,15 @@
+import CoreData
 import TBADataTesting
 import MyTBAKit
 import XCTest
 @testable import TBAData
 
 class FavoriteTestCase: TBADataTestCase {
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Favorite> = Favorite.fetchRequest()
+        XCTAssertEqual(fr.entityName, Favorite.entityName)
+    }
 
     func test_insert_array() {
         let modelFavoriteOne = MyTBAFavorite(modelKey: "2018miket", modelType: .event)
@@ -102,18 +108,6 @@ class FavoriteTestCase: TBADataTestCase {
         _ = Favorite.insert(favoriteTeamModel, in: persistentContainer.viewContext)
         favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
         XCTAssertEqual(favoriteTeamKeys, ["frc7332"])
-    }
-
-    func test_toRemoteModel() {
-        let model = MyTBAFavorite(modelKey: "2018miket", modelType: .event)
-        let favorite = Favorite.insert(model, in: persistentContainer.viewContext)
-        XCTAssertEqual(model, favorite.toRemoteModel())
-    }
-
-    func test_isOrphaned() {
-        let favorite = Favorite.init(entity: Favorite.entity(), insertInto: persistentContainer.viewContext)
-        // Favorite should never be orphaned
-        XCTAssertFalse(favorite.isOrphaned)
     }
 
 }

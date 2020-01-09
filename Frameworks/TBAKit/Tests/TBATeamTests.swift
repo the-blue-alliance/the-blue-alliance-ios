@@ -38,7 +38,7 @@ class TBATeamTests: TBAKitTestCase {
     }
 
     func test_media_init() {
-        let media = TBAMedia(type: "avatar")
+        let media = TBAMedia(type: "avatar", foreignKey: "key")
         XCTAssertEqual(media.type, "avatar")
     }
 

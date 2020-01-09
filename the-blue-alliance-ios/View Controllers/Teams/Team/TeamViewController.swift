@@ -57,7 +57,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
-            navigationTitle: "Team \(team.teamNumber!.stringValue)",
+            navigationTitle: team.teamNumberNickname,
             navigationSubtitle: ContainerViewController.yearSubtitle(year),
             segmentedControlTitles: ["Info", "Events", "Media"],
             myTBA: myTBA,
@@ -92,7 +92,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team", parameters: ["team": team.key!])
+        Analytics.logEvent("team", parameters: ["team": team.key])
     }
 
     // MARK: - Private
@@ -108,7 +108,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             if self.year == nil {
                 self.year = TeamViewController.latestYear(
                     currentSeason: self.statusService.currentSeason,
-                    years: team.getValue(\Team.yearsParticipated),
+                    years: team.yearsParticipated,
                     in: context
                 )
             } else {
@@ -201,7 +201,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

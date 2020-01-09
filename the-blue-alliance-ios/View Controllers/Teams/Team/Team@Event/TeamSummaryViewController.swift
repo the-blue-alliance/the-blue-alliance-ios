@@ -23,10 +23,10 @@ private enum TeamSummaryItem: Hashable {
     case awards(count: Int)
     case rank(rank: Int, total: Int)
     case record(wlt: WLT, dqs: Int? = nil)
-    case average(average: NSNumber)
+    case average(average: Double)
     case breakdown(rankingInfo: String)
     case alliance(allianceStatus: String)
-    case match(match: Match, teamKey: TeamKey? = nil)
+    case match(match: Match, team: Team? = nil)
 
     func hash(into hasher: inout Hasher) {
         switch self {
@@ -46,9 +46,9 @@ private enum TeamSummaryItem: Hashable {
             hasher.combine(rankingInfo)
         case .alliance(let allianceStatus):
             hasher.combine(allianceStatus)
-        case .match(let match, let teamKey):
+        case .match(let match, let team):
             hasher.combine(match)
-            hasher.combine(teamKey)
+            hasher.combine(team)
         }
     }
 
@@ -68,8 +68,8 @@ private enum TeamSummaryItem: Hashable {
             return lhsRankingInfo == rhsRankingInfo
         case (.alliance(let lhsAllianceStatus), .alliance(let rhsAllianceStatus)):
             return lhsAllianceStatus == rhsAllianceStatus
-        case (.match(let lhsMatch, let lhsTeamKey), .match(let rhsMatch, let rhsTeamKey)):
-            return lhsMatch == rhsMatch && lhsTeamKey == rhsTeamKey
+        case (.match(let lhsMatch, let lhsTeam), .match(let rhsMatch, let rhsTeam)):
+            return lhsMatch == rhsMatch && lhsTeam == rhsTeam
         default:
             return false
         }
@@ -80,7 +80,7 @@ class TeamSummaryViewController: TBATableViewController {
 
     weak var delegate: TeamSummaryViewControllerDelegate?
 
-    private let teamKey: TeamKey
+    private let team: Team
     private let event: Event
 
     private var dataSource: UITableViewDiffableDataSource<TeamSummarySection, TeamSummaryItem>!
@@ -101,7 +101,7 @@ class TeamSummaryViewController: TBATableViewController {
         }
     }
     private var teamAwards: [Award] {
-        return event.awards(for: teamKey)
+        return event.awards(for: team.key)
     }
 
     private func executeUpdate(_ update: @escaping () -> ()) {
@@ -117,13 +117,11 @@ class TeamSummaryViewController: TBATableViewController {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
     lazy var observerPredicate: NSPredicate = {
-        return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventStatus.event), event,
-                           #keyPath(EventStatus.teamKey), teamKey)
+        return EventStatus.predicate(eventKey: event.key, teamKey: team.key)
     }()
 
-    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.teamKey = teamKey
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.team = team
         self.event = event
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -172,8 +170,8 @@ class TeamSummaryViewController: TBATableViewController {
                 return TeamSummaryViewController.tableView(tableView, cellForBreakdown: breakdown, at: indexPath)
             case .alliance(let allianceStatus):
                 return TeamSummaryViewController.tableView(tableView, cellForAllianceStatus: allianceStatus, at: indexPath)
-            case .match(let match, let teamKey):
-                return TeamSummaryViewController.tableView(tableView, cellForMatch: match, teamKey: teamKey, at: indexPath)
+            case .match(let match, let team):
+                return TeamSummaryViewController.tableView(tableView, cellForMatch: match, team: team, at: indexPath)
             }
         })
         _dataSource = TableViewDataSource(dataSource: dataSource)
@@ -247,12 +245,12 @@ class TeamSummaryViewController: TBATableViewController {
 
         // Rank
         if let rank = eventStatus?.qual?.ranking?.rank, let total = eventStatus?.qual?.numTeams {
-            qualInfoItems.append(.rank(rank: rank.intValue, total: total.intValue))
+            qualInfoItems.append(.rank(rank: rank, total: total))
         }
 
         // Record
         if let record = eventStatus?.qual?.ranking?.record {
-            qualInfoItems.append(.record(wlt: record, dqs: eventStatus?.qual?.ranking?.dq?.intValue))
+            qualInfoItems.append(.record(wlt: record, dqs: eventStatus?.qual?.ranking?.dq))
         }
 
         // Average
@@ -311,7 +309,7 @@ class TeamSummaryViewController: TBATableViewController {
 
         let nextMatchItem: TeamSummaryItem? = {
             if let nextMatch = nextMatch, event.isHappeningNow {
-                return .match(match: nextMatch, teamKey: teamKey)
+                return .match(match: nextMatch, team: team)
             }
             return nil
         }()
@@ -338,7 +336,7 @@ class TeamSummaryViewController: TBATableViewController {
 
         let lastMatchItem: TeamSummaryItem? = {
             if let lastMatch = lastMatch, event.isHappeningNow {
-                return .match(match: lastMatch, teamKey: teamKey)
+                return .match(match: lastMatch, team: team)
             }
             return nil
         }()
@@ -405,11 +403,11 @@ class TeamSummaryViewController: TBATableViewController {
         )
     }
 
-    private static func tableView(_ tableView: UITableView, cellForAverage average: NSNumber, at indexPath: IndexPath) -> UITableViewCell {
+    private static func tableView(_ tableView: UITableView, cellForAverage average: Double, at indexPath: IndexPath) -> UITableViewCell {
         return self.tableView(
             tableView,
             reverseSubtitleCellWithTitle: "Average",
-            subtitle: average.stringValue,
+            subtitle: "\(average)",
             at: indexPath
         )
     }
@@ -435,9 +433,9 @@ class TeamSummaryViewController: TBATableViewController {
         return cell
     }
 
-    private static func tableView(_ tableView: UITableView, cellForMatch match: Match, teamKey: TeamKey?, at indexPath: IndexPath) -> MatchTableViewCell {
+    private static func tableView(_ tableView: UITableView, cellForMatch match: Match, team: Team?, at indexPath: IndexPath) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-        cell.viewModel = MatchViewModel(match: match, teamKey: teamKey)
+        cell.viewModel = MatchViewModel(match: match, team: team)
         return cell
     }
 
@@ -463,7 +461,7 @@ class TeamSummaryViewController: TBATableViewController {
 extension TeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(teamKey.getValue(\TeamKey.key!))@\(event.getValue(\Event.key!))_status"
+        return "\(team.key)@\(event.key)_status"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -472,19 +470,40 @@ extension TeamSummaryViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team summary until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
-        return eventStatus == nil || teamAwards.count == 0
+        return event.name == nil || eventStatus == nil || teamAwards.count == 0
     }
 
     @objc func refresh() {
         var finalOperation: Operation!
 
+        var eventOperation: TBAKitOperation?
+        if event.name == nil {
+            eventOperation = tbaKit.fetchEvent(key: event.key, completion: { (result, notModified) in
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    switch result {
+                    case .success(let event):
+                        if !notModified, let event = event {
+                            Event.insert(event, in: context)
+                        }
+                    default:
+                        break
+                    }
+                }, saved: {
+                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
+                }, errorRecorder: Crashlytics.sharedInstance())
+            })
+        }
+
+        let teamKey = team.key
+
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
-        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!) { (result, notModified) in
+        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey, eventKey: event.key) { (result, notModified) in
             switch result {
             case .success(let status):
                 if let status = status {
@@ -507,14 +526,13 @@ extension TeamSummaryViewController: Refreshable {
         }
 
         // Refresh awards
-        let teamKeyKey = teamKey.key!
         var awardsOperation: TBAKitOperation!
-        awardsOperation = tbaKit.fetchTeamAwards(key: teamKeyKey, eventKey: event.key!) { (result, notModified) in
+        awardsOperation = tbaKit.fetchTeamAwards(key: teamKey, eventKey: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {
                     let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(awards, teamKey: teamKeyKey)
+                    event.insert(awards, teamKey: teamKey)
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(awardsOperation)
@@ -522,7 +540,7 @@ extension TeamSummaryViewController: Refreshable {
             }, errorRecorder: Crashlytics.sharedInstance())
         }
 
-        finalOperation = addRefreshOperations([teamStatusOperation, awardsOperation])
+        finalOperation = addRefreshOperations([eventOperation, teamStatusOperation, awardsOperation].compactMap({ $0 }))
     }
 
     func refreshStatusMatches(_ status: TBAEventStatus, _ dependentOperation: Operation) {

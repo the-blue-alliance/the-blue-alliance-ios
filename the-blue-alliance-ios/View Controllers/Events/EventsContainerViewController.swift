@@ -55,8 +55,8 @@ class EventsContainerViewController: ContainerViewController {
     // MARK: - Private Methods
 
     private static func eventsTitle(_ event: Event?) -> String {
-        if let event = event {
-            return "\(event.weekString) Events"
+        if let event = event, let weekString = event.weekString {
+            return "\(weekString) Events"
         } else {
             return "---- Events"
         }
@@ -84,8 +84,8 @@ extension EventsContainerViewController: NavigationTitleDelegate {
 
 extension EventsContainerViewController: YearSelectViewControllerDelegate {
 
-    func weekEventSelected(_ weekEvent: Event) {
-        year = weekEvent.year!.intValue
+    func weekEventSelected(year: Int, weekEvent: Event) {
+        self.year = year
         eventsViewController.weekEvent = weekEvent
     }
 

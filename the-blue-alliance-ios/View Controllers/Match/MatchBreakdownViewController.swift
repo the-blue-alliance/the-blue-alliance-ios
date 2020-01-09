@@ -82,12 +82,12 @@ extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
             blueBreakdown["coopertition_points"] = coopertitionPoints
         }
 
-        return ["year": match.year,
+        return ["year": match.event.year,
                 "redTeams": match.redAllianceTeamNumbers,
                 "redBreakdown": redBreakdown,
                 "blueTeams": match.blueAllianceTeamNumbers,
                 "blueBreakdown": blueBreakdown,
-                "compLevel": match.compLevelString!]
+                "compLevel": match.compLevelString]
     }
 
 }
@@ -95,7 +95,7 @@ extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
 extension MatchBreakdownViewController: Refreshable {
 
     var refreshKey: String? {
-        return match.getValue(\Match.key)
+        return match.key
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -107,23 +107,18 @@ extension MatchBreakdownViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return match.getValue(\Match.breakdown) == nil
+        return match.breakdown == nil
     }
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
+        operation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
                 case .success(let match):
                     if let match = match {
-                        if let event = self.match.getValue(\Match.event) {
-                            let event = context.object(with: event.objectID) as! Event
-                            event.insert(match)
-                        } else {
-                            Match.insert(match, in: context)
-                        }
+                        Match.insert(match, in: context)
                     } else if !notModified {
                         // TODO: Delete match, move back up our hiearchy
                     }
@@ -143,7 +138,7 @@ extension MatchBreakdownViewController: Stateful {
 
     var noDataText: String {
         if matchBreakdownUnsupported {
-            return "\(match.year) Match Breakdown is not supported"
+            return "\(match.event.year) Match Breakdown is not supported"
         }
         return "No breakdown for match"
     }

@@ -2,7 +2,7 @@ import Foundation
 
 // If the model has a website, it's surfable on the world wide web
 public protocol Surfable {
-    var website: String? { get set }
+    var website: String? { get }
 }
 
 extension Surfable {

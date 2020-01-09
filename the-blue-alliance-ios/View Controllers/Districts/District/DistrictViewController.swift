@@ -34,7 +34,7 @@ class DistrictViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "\(district.year!.stringValue) \(district.name!) Districts"
+        title = "\(district.year) \(district.name) Districts"
 
         eventsViewController.delegate = self
         teamsViewController.delegate = self
@@ -56,7 +56,7 @@ class DistrictViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("district", parameters: ["district": district.key!])
+        Analytics.logEvent("district", parameters: ["district": district.key])
     }
 
 }
@@ -69,7 +69,11 @@ extension DistrictViewController: EventsViewControllerDelegate {
     }
 
     func title(for event: Event) -> String? {
-        return "\(event.weekString) Events"
+        if let weekString = event.weekString {
+            return "\(weekString) Events"
+        } else {
+            return "--- Events"
+        }
     }
 
 }

@@ -2,6 +2,67 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension Webcast {
+
+    public var channel: String {
+        guard let channel = getValue(\Webcast.channelRaw) else {
+            fatalError("Save Webcast before accessing channel")
+        }
+        return channel
+    }
+
+    public var file: String? {
+        return getValue(\Webcast.fileRaw)
+    }
+
+    public var type: String {
+        guard let type = getValue(\Webcast.typeRaw) else {
+            fatalError("Save Webcast before accessing type")
+        }
+        return type
+    }
+
+    public var events: [Event] {
+        guard let eventsRaw = getValue(\Webcast.eventsRaw),
+            let events = eventsRaw.allObjects as? [Event] else {
+                return []
+        }
+        return events
+    }
+
+}
+
+@objc(Webcast)
+public class Webcast: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Webcast> {
+        return NSFetchRequest<Webcast>(entityName: Webcast.entityName)
+    }
+
+    @NSManaged var channelRaw: String?
+    @NSManaged var fileRaw: String?
+    @NSManaged var typeRaw: String?
+    @NSManaged var eventsRaw: NSSet?
+
+}
+
+// MARK: Generated accessors for eventsRaw
+extension Webcast {
+
+    @objc(addEventsRawObject:)
+    @NSManaged func addToEventsRaw(_ value: Event)
+
+    @objc(removeEventsRawObject:)
+    @NSManaged func removeFromEventsRaw(_ value: Event)
+
+    @objc(addEventsRaw:)
+    @NSManaged func addToEventsRaw(_ values: NSSet)
+
+    @objc(removeEventsRaw:)
+    @NSManaged func removeFromEventsRaw(_ values: NSSet)
+
+}
+
 extension Webcast: Managed {
 
     /**
@@ -19,19 +80,23 @@ extension Webcast: Managed {
      */
     public static func insert(_ model: TBAWebcast, in context: NSManagedObjectContext) -> Webcast {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(Webcast.type), model.type,
-                                    #keyPath(Webcast.channel), model.channel)
+                                    #keyPath(Webcast.typeRaw), model.type,
+                                    #keyPath(Webcast.channelRaw), model.channel)
 
         return findOrCreate(in: context, matching: predicate, configure: { (webcast) in
             // Required: type, channel
-            webcast.type = model.type
-            webcast.channel = model.channel
-            webcast.file = model.file
+            webcast.typeRaw = model.type
+            webcast.channelRaw = model.channel
+            webcast.fileRaw = model.file
         })
     }
 
+}
+
+extension Webcast: Orphanable {
+
     public var isOrphaned: Bool {
-        return events?.count == 0
+        return events.count == 0
     }
 
 }

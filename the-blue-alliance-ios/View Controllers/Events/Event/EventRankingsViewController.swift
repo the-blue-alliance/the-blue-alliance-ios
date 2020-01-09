@@ -62,9 +62,10 @@ class EventRankingsViewController: TBATableViewController {
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(EventRanking.rank), ascending: true)]
-        fetchRequest.predicate = NSPredicate(format: "%K == %@",
-                                             #keyPath(EventRanking.event), event)
+        fetchRequest.sortDescriptors = [
+            EventRanking.rankSortDescriptor()
+        ]
+        fetchRequest.predicate = EventRanking.eventPredicate(eventKey: event.key)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
@@ -75,8 +76,7 @@ class EventRankingsViewController: TBATableViewController {
 extension EventRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
-        return "\(key)_rankings"
+        return "\(event.key)_rankings"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -85,7 +85,7 @@ extension EventRankingsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event rankings until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -94,7 +94,7 @@ extension EventRankingsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventRankings(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventRankings(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {

@@ -7,7 +7,7 @@ import UIKit
 
 class TeamStatsViewController: TBATableViewController, Observable {
 
-    private let teamKey: TeamKey
+    private let team: Team
     private let event: Event
 
     private var teamStat: EventTeamStat? {
@@ -36,15 +36,13 @@ class TeamStatsViewController: TBATableViewController, Observable {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
     lazy var observerPredicate: NSPredicate = {
-        return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventTeamStat.event), event,
-                           #keyPath(EventTeamStat.teamKey), teamKey)
+        return EventTeamStat.predicate(eventKey: event.key, teamKey: team.key)
     }()
 
     // MARK: - Init
 
-    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.teamKey = teamKey
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.team = team
         self.event = event
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -82,11 +80,11 @@ class TeamStatsViewController: TBATableViewController, Observable {
         let statName: String = {
             switch indexPath.row {
             case 0:
-                return "opr"
+                return EventTeamStat.oprKeyPath()
             case 1:
-                return "dpr"
+                return EventTeamStat.dprKeyPath()
             case 2:
-                return "ccwm"
+                return EventTeamStat.ccwmKeyPath()
             default:
                 return ""
             }
@@ -101,8 +99,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
 extension TeamStatsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
-        return "\(key)_team_stats"
+        return "\(event.key)_team_stats"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -111,7 +108,7 @@ extension TeamStatsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team stats until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -120,7 +117,7 @@ extension TeamStatsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventTeamStats(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventTeamStats(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let stats = try? result.get() {

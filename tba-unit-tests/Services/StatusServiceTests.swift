@@ -1,12 +1,12 @@
-import TBAData
 import XCTest
+@testable import TBAData
 @testable import The_Blue_Alliance
 
 class StatusServiceTests: TBATestCase {
 
     func test_status_fromMOC() {
         let status = insertStatus()
-        XCTAssertEqual(statusService.currentSeason, status.currentSeason!.intValue)
+        XCTAssertEqual(statusService.currentSeason, status.currentSeason)
     }
 
     func test_status_fromPlist() {
@@ -67,7 +67,7 @@ class StatusServiceTests: TBATestCase {
         statusSubscribable.statusChangedExpectation = updateExpectation
         statusSubscribable.registerForStatusChanges()
 
-        status.isDatafeedDown = NSNumber(value: true)
+        status.isDatafeedDownRaw = NSNumber(value: true)
         try! persistentContainer.viewContext.save()
         wait(for: [updateExpectation], timeout: 1.0)
     }
@@ -87,7 +87,7 @@ class StatusServiceTests: TBATestCase {
         let backgroundSaveExpectation = backgroundContextSaveExpectation()
         persistentContainer.performBackgroundTask { (backgroundContext) in
             let backgroundStatus = backgroundContext.object(with: status.objectID) as! Status
-            backgroundStatus.isDatafeedDown = NSNumber(value: true)
+            backgroundStatus.isDatafeedDownRaw = NSNumber(value: true)
             try! backgroundContext.save()
         }
         wait(for: [backgroundSaveExpectation], timeout: 1.0)
@@ -239,7 +239,7 @@ class EventStatusSubscribableTests: TBATestCase {
 
         let status = insertStatus()
         XCTAssertFalse(eventSubscribable.isEventDown(eventKey: testEventKey))
-        status.addToDownEvents(EventKey.insert(withKey: testEventKey, in: persistentContainer.viewContext))
+        status.downEventsRaw = NSSet(array: [Event.insert(testEventKey, in: persistentContainer.viewContext)])
         XCTAssert(eventSubscribable.isEventDown(eventKey: testEventKey))
     }
 

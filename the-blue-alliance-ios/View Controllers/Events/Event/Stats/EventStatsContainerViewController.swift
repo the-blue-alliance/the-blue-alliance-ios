@@ -28,7 +28,7 @@ class EventStatsContainerViewController: ContainerViewController {
         var eventStatsViewController: EventStatsViewController?
         // Only show event stats if year is 2016 or onward
         var titles = ["Team Stats"]
-        if event.year!.intValue >= 2016 {
+        if event.year >= 2016 {
             titles.append("Event Stats")
             eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
@@ -53,7 +53,7 @@ class EventStatsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_stats", parameters: ["event": event.key!])
+        Analytics.logEvent("event_stats", parameters: ["event": event.key])
     }
 
     // MARK: - Private Methods
@@ -99,7 +99,7 @@ extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
     }
 
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

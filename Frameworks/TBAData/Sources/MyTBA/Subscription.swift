@@ -2,22 +2,34 @@ import CoreData
 import Foundation
 import MyTBAKit
 
-extension Subscription: MyTBAManaged {
+extension Subscription {
 
     public var notifications: [NotificationType] {
         get {
-            return notificationsRaw?.compactMap({ NotificationType(rawValue: $0) }) ?? []
+            guard let notificationsRaw = getValue(\Subscription.notificationsRaw) else {
+                fatalError("Save Subscription before accessing notifications")
+            }
+            return notificationsRaw.compactMap({ NotificationType(rawValue: $0) })
         }
         set {
             notificationsRaw = newValue.map({ $0.rawValue })
         }
     }
 
-    private static func subscriptionPredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
-        return NSPredicate(format: "%K == %@ && %K == %ld",
-                           #keyPath(Subscription.modelKey), modelKey,
-                           #keyPath(Subscription.modelTypeRaw), modelType.rawValue)
+}
+
+@objc(Subscription)
+public class Subscription: MyTBAEntity {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Subscription> {
+        return NSFetchRequest<Subscription>(entityName: "Subscription")
     }
+
+    @NSManaged var notificationsRaw: [String]?
+
+}
+
+extension Subscription {
 
     /**
      Insert Subscriptions with values from myTBA Subscription models in to the managed object context.
@@ -68,10 +80,20 @@ extension Subscription: MyTBAManaged {
 
         return findOrCreate(in: context, matching: predicate) { (subscription) in
             // Required: key, type, notifications
-            subscription.modelKey = modelKey
-            subscription.modelType = modelType
+            subscription.modelKeyRaw = modelKey
+            subscription.modelTypeRaw = NSNumber(value: modelType.rawValue)
             subscription.notificationsRaw = notifications.map({ $0.rawValue })
         }
+    }
+
+}
+
+extension Subscription {
+
+    fileprivate static func subscriptionPredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ && %K == %ld",
+                           #keyPath(Subscription.modelKeyRaw), modelKey,
+                           #keyPath(Subscription.modelTypeRaw), modelType.rawValue)
     }
 
     public static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Subscription? {
@@ -79,8 +101,6 @@ extension Subscription: MyTBAManaged {
         return findOrFetch(in: context, matching: predicate)
     }
 
-    public func toRemoteModel() -> MyTBASubscription {
-        return MyTBASubscription(modelKey: modelKey!, modelType: modelType, notifications: notifications)
-    }
-
 }
+
+extension Subscription: MyTBAManaged {}

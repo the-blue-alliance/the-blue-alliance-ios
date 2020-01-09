@@ -9,7 +9,7 @@ import UIKit
 class MatchInfoViewController: TBAViewController, Observable {
 
     private let match: Match
-    private let teamKey: TeamKey?
+    private let team: Team?
 
     // MARK: - UI
 
@@ -90,9 +90,9 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
-        self.teamKey = teamKey
+        self.team = team
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
@@ -156,7 +156,7 @@ class MatchInfoViewController: TBAViewController, Observable {
     func updateMatchSummaryView() {
         matchSummaryView.resetView()
 
-        let viewModel = MatchViewModel(match: match, teamKey: teamKey)
+        let viewModel = MatchViewModel(match: match, team: team)
         matchSummaryView.viewModel = viewModel
 
         if !viewModel.hasScores {
@@ -172,11 +172,7 @@ class MatchInfoViewController: TBAViewController, Observable {
             view.removeFromSuperview()
         }
 
-        guard let videos = match.videos?.allObjects as? [MatchVideo] else {
-            return
-        }
-
-        for video in videos {
+        for video in match.videos {
             let playerView = MatchInfoViewController.playerView(for: video)
             videoStackView.addArrangedSubview(playerView)
         }
@@ -191,7 +187,7 @@ class MatchInfoViewController: TBAViewController, Observable {
 extension MatchInfoViewController: Refreshable {
 
     var refreshKey: String? {
-        return match.getValue(\Match.key)
+        return match.key
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -201,32 +197,46 @@ extension MatchInfoViewController: Refreshable {
     var automaticRefreshEndDate: Date? {
         // Automatically refresh the match info until a few days after the match has been played
         // (Mostly looking for new videos)
-        guard let event = match.getValue(\Match.event) else {
+        guard let endDate = match.event.endDate else {
             return nil
         }
-        return Calendar.current.date(byAdding: DateComponents(day: 7), to: event.getValue(\Event.endDate!))!
+        return Calendar.current.date(byAdding: DateComponents(day: 7), to: endDate)
     }
 
     var isDataSourceEmpty: Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
-        return (match.getValue(\Match.videos)?.count ?? 0) == 0
+        return match.videos.count == 0 || match.event.name == nil
     }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
+        var eventOperation: TBAKitOperation?
+        if match.event.name == nil {
+            eventOperation = tbaKit.fetchEvent(key: match.event.key, completion: { (result, notModified) in
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    switch result {
+                    case .success(let event):
+                        if !notModified, let event = event {
+                            Event.insert(event, in: context)
+                        }
+                    default:
+                        break
+                    }
+                }, saved: {
+                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
+                }, errorRecorder: Crashlytics.sharedInstance())
+            })
+        }
+
+        var matchOperation: TBAKitOperation!
+        matchOperation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
                 case .success(let match):
                     if let match = match {
-                        if let event = self.match.getValue(\Match.event) {
-                            let event = context.object(with: event.objectID) as! Event
-                            event.insert(match)
-                        } else {
-                            Match.insert(match, in: context)
-                        }
+                        Match.insert(match, in: context)
                     } else if !notModified {
                         // TODO: Delete match, bump back up navigation stack
                     }
@@ -235,10 +245,10 @@ extension MatchInfoViewController: Refreshable {
                 }
 
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: matchOperation)
             }, errorRecorder: Crashlytics.sharedInstance())
         })
-        addRefreshOperations([operation])
+        addRefreshOperations([eventOperation, matchOperation].compactMap({ $0 }))
     }
 
 }

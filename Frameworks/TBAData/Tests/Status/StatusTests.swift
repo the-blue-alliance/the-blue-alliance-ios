@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -5,10 +6,53 @@ import XCTest
 
 class StatusTestCase: TBADataTestCase {
 
+    func test_currentSeason() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        status.currentSeasonRaw = NSNumber(value: 2020)
+        XCTAssertEqual(status.currentSeason, 2020)
+    }
+
+    func test_isDatafeedDown() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        status.isDatafeedDownRaw = NSNumber(value: true)
+        XCTAssert(status.isDatafeedDown)
+    }
+
+    func test_latestAppVersion() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        status.latestAppVersionRaw = NSNumber(value: -1)
+        XCTAssertEqual(status.latestAppVersion, -1)
+    }
+
+    func test_maxSeason() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        status.maxSeasonRaw = NSNumber(value: 2020)
+        XCTAssertEqual(status.maxSeason, 2020)
+    }
+
+    func test_minAppVersion() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        status.minAppVersionRaw = NSNumber(value: -1)
+        XCTAssertEqual(status.minAppVersion, -1)
+    }
+
+    func test_downEvents() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(status.downEvents, [])
+        let event = insertEvent()
+        status.downEventsRaw = NSSet(array: [event])
+        XCTAssertEqual(status.downEvents, [event])
+    }
+
     func test_status() {
         XCTAssertNil(Status.status(in: persistentContainer.viewContext))
         let status = insertStatus()
         XCTAssertEqual(status, Status.status(in: persistentContainer.viewContext))
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Status> = Status.fetchRequest()
+        XCTAssertEqual(fr.entityName, Status.entityName)
     }
 
     func test_insert() {
@@ -21,9 +65,9 @@ class StatusTestCase: TBADataTestCase {
         let status = Status.insert(model, in: persistentContainer.viewContext)
 
         XCTAssertEqual(status.currentSeason, 2015)
-        XCTAssertEqual(status.downEvents!.count, 1)
+        XCTAssertEqual(status.downEvents.count, 1)
         XCTAssertEqual(status.maxSeason, 2016)
-        XCTAssert(status.isDatafeedDown!.boolValue)
+        XCTAssert(status.isDatafeedDown)
         XCTAssertEqual(status.minAppVersion, -1)
         XCTAssertEqual(status.latestAppVersion, 1)
 
@@ -47,30 +91,13 @@ class StatusTestCase: TBADataTestCase {
         let status = Status.fromPlist(bundle: StatusBundle.bundle, in: persistentContainer.viewContext)!
 
         XCTAssertEqual(status.currentSeason, 2015)
-        XCTAssertEqual(status.downEvents!.count, 0)
+        XCTAssertEqual(status.downEvents.count, 0)
         XCTAssertEqual(status.maxSeason, 2016)
-        XCTAssertFalse(status.isDatafeedDown!.boolValue)
+        XCTAssertFalse(status.isDatafeedDown)
         XCTAssertEqual(status.minAppVersion, -1)
         XCTAssertEqual(status.latestAppVersion, 3)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
-    }
-
-    func test_isOrphaned() {
-        let status = insertStatus()
-        XCTAssertFalse(status.isOrphaned)
-    }
-
-    func test_safeMinAppVersion_none() {
-        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
-        XCTAssertEqual(status.safeMinAppVersion, -1)
-    }
-
-    func test_safeMinAppVersion() {
-        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
-        status.minAppVersion = NSNumber(value: 3)
-
-        XCTAssertEqual(status.safeMinAppVersion, 3)
     }
 
 }

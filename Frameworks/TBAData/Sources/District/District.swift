@@ -5,20 +5,69 @@ import TBAUtils
 
 extension District {
 
+    public var abbreviation: String {
+        guard let abbreviation = getValue(\District.abbreviationRaw) else {
+            fatalError("Save District before accessing abbreviation")
+        }
+        return abbreviation
+    }
+
+    public var key: String {
+        guard let key = getValue(\District.keyRaw) else {
+            fatalError("Save District before accessing key")
+        }
+        return key
+    }
+
+    public var name: String {
+        guard let name = getValue(\District.nameRaw) else {
+            fatalError("Save District before accessing name")
+        }
+        return name
+    }
+
+    public var year: Int {
+        guard let year = getValue(\District.yearRaw)?.intValue else {
+            fatalError("Save District before accessing year")
+        }
+        return year
+    }
+
+    public var events: [Event] {
+        guard let eventsMany = getValue(\District.eventsRaw),
+            let events = eventsMany.allObjects as? [Event] else {
+                return []
+        }
+        return events
+    }
+
+    public var rankings: [DistrictRanking] {
+        guard let rankingsMany = getValue(\District.rankingsRaw),
+            let rankings = rankingsMany.allObjects as? [DistrictRanking] else {
+                return []
+        }
+        return rankings
+    }
+
+    public var teams: [Team] {
+        guard let teamsMany = getValue(\District.teamsRaw),
+            let teams = teamsMany.allObjects as? [Team] else {
+                return []
+        }
+        return teams
+    }
+
     /**
      A string concatenating the district's year and abbrevation.
      */
     public var abbreviationWithYear: String {
-        return "\(year!.stringValue) \(abbreviation!.uppercased())"
+        return "\(year) \(abbreviation.uppercased())"
     }
 
     /**
      The district championship for a district. A nil value means the DCMP hasn't been fetched yet.
      */
     private var districtChampionship: Event? {
-        guard let eventsSet = getValue(\District.events), let events = eventsSet.allObjects as? [Event] else {
-            return nil
-        }
         return events.first(where: { (event) -> Bool in
             return event.isDistrictChampionship
         })
@@ -28,10 +77,6 @@ extension District {
      If the district is currently "in season", meaning it's after stop build day, but before the district CMP is over
      */
     public var isHappeningNow: Bool {
-        let year = getValue(\District.year!.intValue)
-        if year != Calendar.current.year {
-            return false
-        }
         // If we can't find the district championship, we don't know if we're in season or not
         guard let dcmpEndDate = endDate else {
             return false
@@ -44,7 +89,76 @@ extension District {
      The 'end date' for the district - the end date of the district championship
      */
     public var endDate: Date? {
-        return districtChampionship?.getValue(\Event.endDate)
+        return districtChampionship?.endDate
+    }
+
+}
+
+@objc(District)
+public class District: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<District> {
+        return NSFetchRequest<District>(entityName: District.entityName)
+    }
+
+    @NSManaged var abbreviationRaw: String?
+    @NSManaged var keyRaw: String?
+    @NSManaged var nameRaw: String?
+    @NSManaged var yearRaw: NSNumber?
+    @NSManaged var eventsRaw: NSSet?
+    @NSManaged var rankingsRaw: NSSet?
+    @NSManaged var teamsRaw: NSSet?
+
+}
+
+// MARK: Generated accessors for eventsRaw
+extension District {
+
+    @objc(addEventsRawObject:)
+    @NSManaged func addToEventsRaw(_ value: Event)
+
+    @objc(removeEventsRawObject:)
+    @NSManaged func removeFromEventsRaw(_ value: Event)
+
+    @objc(addEventsRaw:)
+    @NSManaged func addToEventsRaw(_ values: NSSet)
+
+    @objc(removeEventsRaw:)
+    @NSManaged func removeFromEventsRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for rankingsRaw
+extension District {
+
+    @objc(addRankingsRawObject:)
+    @NSManaged func addToRankingsRaw(_ value: DistrictRanking)
+
+    @objc(removeRankingsRawObject:)
+    @NSManaged func removeFromRankingsRaw(_ value: DistrictRanking)
+
+    @objc(addRankingsRaw:)
+    @NSManaged func addToRankingsRaw(_ values: NSSet)
+
+    @objc(removeRankingsRaw:)
+    @NSManaged func removeFromRankingsRaw(_ values: NSSet)
+
+}
+
+extension District {
+
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(District.keyRaw), key)
+    }
+
+    public static func yearPredicate(year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld",
+                           #keyPath(District.yearRaw), year)
+    }
+
+    public static func nameSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(District.nameRaw), ascending: true)
     }
 
 }
@@ -66,20 +180,20 @@ extension District: Managed {
         // Fetch all of the previous Districts for this year
         let oldDistricts = District.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(District.year), year)
+                                       #keyPath(District.yearRaw), year)
         }
 
         // Insert new Districts for this year
-        let districts = districts.map({
+        let districts = districts.map {
             return District.insert($0, in: context)
-        })
+        }
 
         // Delete orphaned Districts for this year
-        Set(oldDistricts).subtracting(Set(districts)).forEach({
+        Set(oldDistricts).subtracting(Set(districts)).forEach {
             context.delete($0)
-        })
+        }
     }
-
+    
     /**
      Insert a District with values from a TBAKit District model in to the managed object context.
 
@@ -91,50 +205,14 @@ extension District: Managed {
      */
     @discardableResult
     public static func insert(_ model: TBADistrict, in context: NSManagedObjectContext) -> District {
-        let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(District.key), model.key)
-
+        let predicate = District.predicate(key: model.key)
         return findOrCreate(in: context, matching: predicate, configure: { (district) in
             // Required: abbreviation, name, key, year
-            district.abbreviation = model.abbreviation
-            district.name = model.name
-            district.key = model.key
-            district.year = model.year as NSNumber
+            district.abbreviationRaw = model.abbreviation
+            district.nameRaw = model.name
+            district.keyRaw = model.key
+            district.yearRaw = NSNumber(value: model.year)
         })
-    }
-
-    /**
-     Insert Events with values from TBAKit Event models in to the managed object context.
-
-     This method manages setting up an District's relationship to Events.
-
-     - Parameter events: The TBAKit Event representations to set values from.
-     */
-    public func insert(_ events: [TBAEvent]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        self.events = NSSet(array: events.map({
-            return Event.insert($0, in: managedObjectContext)
-        }))
-    }
-
-    /**
-     Insert Teams with values from TBAKit Team models in to the managed object context.
-
-     This method manages setting up an District's relationship to Teams.
-
-     - Parameter team: The TBAKit Team representations to set values from.
-     */
-    public func insert(_ teams: [TBATeam]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        self.teams = NSSet(array: teams.map({
-            return Team.insert($0, in: managedObjectContext)
-        }))
     }
 
     /**
@@ -153,14 +231,43 @@ extension District: Managed {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(District.rankings), newValues: rankings.map({
-            return DistrictRanking.insert($0, districtKey: key!, in: managedObjectContext)
+        updateToManyRelationship(relationship: #keyPath(District.rankingsRaw), newValues: rankings.map {
+            return DistrictRanking.insert($0, districtKey: key, in: managedObjectContext)
+        })
+    }
+
+    /**
+     Insert Events with values from TBAKit Event models in to the managed object context.
+
+     This method manages setting up an District's relationship to Events.
+
+     - Parameter events: The TBAKit Event representations to set values from.
+     */
+    public func insert(_ events: [TBAEvent]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        self.eventsRaw = NSSet(array: events.map({
+            return Event.insert($0, in: managedObjectContext)
         }))
     }
 
-    public var isOrphaned: Bool {
-        // District is a root object, so it should never be an orphan
-        return false
+    /**
+     Insert Teams with values from TBAKit Team models in to the managed object context.
+
+     This method manages setting up an District's relationship to Teams.
+
+     - Parameter team: The TBAKit Team representations to set values from.
+     */
+    public func insert(_ teams: [TBATeam]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        self.teamsRaw = NSSet(array: teams.map({
+            return Team.insert($0, in: managedObjectContext)
+        }))
     }
 
 }

@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -5,14 +6,105 @@ import XCTest
 
 class DistrictTestCase: TBADataTestCase {
 
+    func test_abbreviation() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.abbreviationRaw = "zor"
+        XCTAssertEqual(district.abbreviation, "zor")
+    }
+
+    func test_key() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.keyRaw = "2019zor"
+        XCTAssertEqual(district.key, "2019zor")
+    }
+
+    func test_name() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.nameRaw = "Zor District"
+        XCTAssertEqual(district.name, "Zor District")
+    }
+
+    func test_year() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.yearRaw = NSNumber(value: 2019)
+        XCTAssertEqual(district.year, 2019)
+    }
+
+    func test_events() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(district.events, [])
+
+        let event = insertEvent()
+        district.eventsRaw = NSSet(array: [event])
+        XCTAssertEqual(district.events, [event])
+    }
+
+    func test_rankings() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(district.rankings, [])
+
+        let ranking = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
+        district.rankingsRaw = NSSet(array: [ranking])
+        XCTAssertEqual(district.rankings, [ranking])
+    }
+
+    func test_teams() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(district.teams, [])
+
+        let team = insertTeam()
+        district.teamsRaw = NSSet(array: [team])
+        XCTAssertEqual(district.teams, [team])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<District> = District.fetchRequest()
+        XCTAssertEqual(fr.entityName, District.entityName)
+    }
+
+    func test_predicate() {
+        let predicate = District.predicate(key: "2019zor")
+        XCTAssertEqual(predicate.predicateFormat, "keyRaw == \"2019zor\"")
+
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.keyRaw = "2019zor"
+        let district2 = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district2.keyRaw = "2020zor"
+
+        let results = District.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [district])
+    }
+
+    func test_yearPredicate() {
+        let predicate = District.yearPredicate(year: 2019)
+        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2019")
+
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.yearRaw = NSNumber(value: 2019)
+        let district2 = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district2.yearRaw = NSNumber(value: 2020)
+
+        let results = District.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [district])
+    }
+
+    func test_nameSortDescriptor() {
+        let sd = District.nameSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(District.nameRaw))
+        XCTAssert(sd.ascending)
+    }
+
     func test_insert_year() {
         let modelDistrictOne = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let modelDistrictTwo = TBADistrict(abbreviation: "zor", name: "FIRST In Zor", key: "2018zor", year: 2018)
 
         District.insert([modelDistrictOne, modelDistrictTwo], year: 2018, in: persistentContainer.viewContext)
         let districtsFirst = District.fetch(in: persistentContainer.viewContext) {
-            $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(District.year), 2018)
+            $0.predicate = District.yearPredicate(year: 2018)
         }
 
         let districtOne = districtsFirst.first(where: { $0.key == "2018fim" })!
@@ -23,8 +115,7 @@ class DistrictTestCase: TBADataTestCase {
 
         District.insert([modelDistrictTwo], year: 2018, in: persistentContainer.viewContext)
         let districtsSecond = District.fetch(in: persistentContainer.viewContext) {
-            $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(District.year), 2018)
+            $0.predicate = District.yearPredicate(year: 2018)
         }
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
@@ -59,18 +150,18 @@ class DistrictTestCase: TBADataTestCase {
 
         district.insert([modelEventOne, modelEventTwo])
 
-        let events = district.events!.allObjects as! [Event]
+        let events = district.events
         let eventOne = events.first(where: { $0.key == "2018miket" })!
         let eventTwo = events.first(where: { $0.key == "2018mike2" })!
 
         // Sanity check
-        XCTAssertEqual(district.events?.count, 2)
+        XCTAssertEqual(district.events.count, 2)
         XCTAssertNotEqual(eventOne, eventTwo)
 
         district.insert([modelEventTwo])
 
         // Sanity check
-        XCTAssert(district.events!.onlyObject(eventTwo))
+        XCTAssert(district.events.onlyObject(eventTwo))
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
@@ -88,18 +179,18 @@ class DistrictTestCase: TBADataTestCase {
 
         district.insert([modelTeamOne, modelTeamTwo])
 
-        let teams = district.teams!.allObjects as! [Team]
+        let teams = district.teams
         let teamOne = teams.first(where: { $0.key == "frc1" })!
         let teamTwo = teams.first(where: { $0.key == "frc2" })!
 
         // Sanity check
-        XCTAssertEqual(district.teams?.count, 2)
+        XCTAssertEqual(district.teams.count, 2)
         XCTAssertNotEqual(teamOne, teamTwo)
 
         district.insert([modelTeamTwo])
 
         // Sanity check
-        XCTAssert(district.teams!.onlyObject(teamTwo))
+        XCTAssert(district.teams.onlyObject(teamTwo))
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
@@ -117,18 +208,18 @@ class DistrictTestCase: TBADataTestCase {
 
         district.insert([modelRankingOne, modelRankingTwo])
 
-        let rankings = district.rankings!.allObjects as! [DistrictRanking]
-        let rankingOne = rankings.first(where: { $0.teamKey?.key == "frc1" })!
-        let rankingTwo = rankings.first(where: { $0.teamKey?.key == "frc2" })!
+        let rankings = district.rankings
+        let rankingOne = rankings.first(where: { $0.team.key == "frc1" })!
+        let rankingTwo = rankings.first(where: { $0.team.key == "frc2" })!
 
         // Sanity check
-        XCTAssertEqual(district.rankings?.count, 2)
+        XCTAssertEqual(district.rankings.count, 2)
         XCTAssertNotEqual(rankingOne, rankingTwo)
 
         district.insert([modelRankingTwo])
 
         // Sanity check
-        XCTAssert(district.rankings!.onlyObject(rankingTwo))
+        XCTAssert(district.rankings.onlyObject(rankingTwo))
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
@@ -158,13 +249,13 @@ class DistrictTestCase: TBADataTestCase {
         let district = event.district!
 
         let ranking = DistrictRanking(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
-        ranking.district = event.district
+        ranking.districtRaw = event.district
 
         persistentContainer.viewContext.delete(district)
         try! persistentContainer.viewContext.save()
 
         // Check that our District handles its relationships properly
-        XCTAssertNil(ranking.district)
+        XCTAssertNil(ranking.districtRaw)
         XCTAssertNil(event.district)
 
         // Event should not be deleted
@@ -174,34 +265,28 @@ class DistrictTestCase: TBADataTestCase {
         XCTAssertNil(ranking.managedObjectContext)
     }
 
-    func test_isOrphaned() {
-        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        // Should always be false
-        XCTAssertFalse(district.isOrphaned)
-    }
-
     func test_abbreviationWithYear() {
         let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        district.year = 2009
-        district.abbreviation = "fim"
+        district.yearRaw = 2009
+        district.abbreviationRaw = "fim"
 
         XCTAssertEqual(district.abbreviationWithYear, "2009 FIM")
     }
 
     func test_isHappeningNow_notCurrentYear() {
         let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        district.year = 2011
+        district.yearRaw = 2011
 
         let dcmp = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        dcmp.eventType = EventType.districtChampionship.rawValue as NSNumber
-        district.addToEvents(dcmp)
+        dcmp.eventTypeRaw = EventType.districtChampionship.rawValue as NSNumber
+        district.addToEventsRaw(dcmp)
 
         XCTAssertFalse(district.isHappeningNow)
     }
 
     func test_isHappeningNow_noDCMP() {
         let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        district.year = Calendar.current.year as NSNumber
+        district.yearRaw = Calendar.current.year as NSNumber
         XCTAssertFalse(district.isHappeningNow)
     }
 
@@ -209,19 +294,19 @@ class DistrictTestCase: TBADataTestCase {
         let calendar = Calendar.current
 
         let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        district.year = calendar.year as NSNumber
+        district.yearRaw = calendar.year as NSNumber
 
         let stopBuildDay = calendar.stopBuildDay()
         let today = Date()
         // To get our test to pass, we're going to set our districtChampionship.endDate to make sure it inclues today
         let dcmp = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        dcmp.eventType = EventType.districtChampionship.rawValue as NSNumber
+        dcmp.eventTypeRaw = EventType.districtChampionship.rawValue as NSNumber
         if stopBuildDay > today {
-            dcmp.endDate = calendar.date(byAdding: DateComponents(day: -1), to: today)
+            dcmp.endDateRaw = calendar.date(byAdding: DateComponents(day: -1), to: today)
         } else {
-            dcmp.endDate = calendar.date(byAdding: DateComponents(day: 1), to: today)
+            dcmp.endDateRaw = calendar.date(byAdding: DateComponents(day: 1), to: today)
         }
-        district.addToEvents(dcmp)
+        district.addToEventsRaw(dcmp)
 
         XCTAssert(district.isHappeningNow)
     }

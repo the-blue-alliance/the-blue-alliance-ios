@@ -1,9 +1,42 @@
-import TBAData
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
+@testable import TBAData
 
 class WebcastTestCase: TBADataTestCase {
+
+    func test_channel() {
+        let webcast = Webcast.init(entity: Webcast.entity(), insertInto: persistentContainer.viewContext)
+        webcast.channelRaw = "channel"
+        XCTAssertEqual(webcast.channel, "channel")
+    }
+
+    func test_file() {
+        let webcast = Webcast.init(entity: Webcast.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(webcast.file)
+        webcast.fileRaw = "file"
+        XCTAssertEqual(webcast.file, "file")
+    }
+
+    func test_type() {
+        let webcast = Webcast.init(entity: Webcast.entity(), insertInto: persistentContainer.viewContext)
+        webcast.typeRaw = "type"
+        XCTAssertEqual(webcast.type, "type")
+    }
+
+    func test_events() {
+        let webcast = Webcast.init(entity: Webcast.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(webcast.events, [])
+        let event = insertEvent()
+        webcast.eventsRaw = NSSet(array: [event])
+        XCTAssertEqual(webcast.events, [event])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Webcast> = Webcast.fetchRequest()
+        XCTAssertEqual(fr.entityName, Webcast.entityName)
+    }
 
     func test_insert() {
         let model = TBAWebcast(type: "twitch", channel: "firstinmichigan", file: "filezor")
@@ -17,7 +50,7 @@ class WebcastTestCase: TBADataTestCase {
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
         let event = insertDistrictEvent()
-        event.addToWebcasts(webcast)
+        event.addToWebcastsRaw(webcast)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
@@ -41,12 +74,12 @@ class WebcastTestCase: TBADataTestCase {
         let webcast = Webcast.insert(model, in: persistentContainer.viewContext)
 
         let event = insertDistrictEvent()
-        event.addToWebcasts(webcast)
+        event.addToWebcastsRaw(webcast)
 
         persistentContainer.viewContext.delete(webcast)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
-        XCTAssertEqual(event.webcasts?.count, 0)
+        XCTAssertEqual(event.webcasts.count, 0)
 
         // Webcast should be deleted, Event should not
         XCTAssertNil(webcast.managedObjectContext)
@@ -63,17 +96,17 @@ class WebcastTestCase: TBADataTestCase {
         XCTAssertNotEqual(webcastOne, webcastTwo)
 
         let eventOne = insertDistrictEvent()
-        eventOne.addToWebcasts(Set([webcastOne, webcastTwo]) as NSSet)
+        eventOne.addToWebcastsRaw(Set([webcastOne, webcastTwo]) as NSSet)
 
         let eventTwo = insertDistrictEvent(eventKey: "2018mike2")
-        eventTwo.addToWebcasts(webcastTwo)
+        eventTwo.addToWebcastsRaw(webcastTwo)
 
         persistentContainer.viewContext.delete(eventOne)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
         // Ensure our models handled their relationships properly
-        XCTAssertEqual(eventTwo.webcasts?.count, 1)
-        XCTAssertEqual(webcastTwo.events?.count, 1)
+        XCTAssertEqual(eventTwo.webcasts.count, 1)
+        XCTAssertEqual(webcastTwo.events.count, 1)
 
         // Webcast One should be deleted
         XCTAssertNil(webcastOne.managedObjectContext)
@@ -87,11 +120,11 @@ class WebcastTestCase: TBADataTestCase {
         XCTAssert(webcast.isOrphaned)
 
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        event.addToWebcasts(webcast)
+        event.addToWebcastsRaw(webcast)
         // Attached to Event - should not be orphaned
         XCTAssertFalse(webcast.isOrphaned)
 
-        event.removeFromWebcasts(webcast)
+        event.removeFromWebcastsRaw(webcast)
         // Not attached to Event - should be orphaned
         XCTAssert(webcast.isOrphaned)
     }

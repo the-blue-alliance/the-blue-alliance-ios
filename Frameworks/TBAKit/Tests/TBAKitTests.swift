@@ -84,7 +84,7 @@ class TBAKitTests: TBAKitTestCase {
         let storeCacheHeadersExpectation = expectation(description: "store_cache_headers")
         var storeCacheHeadersOperation: TBAKitOperation?
         storeCacheHeadersOperation = kit.fetchStatus { (result, notModified) in
-            let status = try! result.get()
+            _ = try! result.get()
             XCTAssertFalse(notModified)
 
             self.kit.storeCacheHeaders(storeCacheHeadersOperation!)
@@ -126,7 +126,7 @@ class TBAKitTests: TBAKitTestCase {
     func testDoesNotStoreErrorLastModified() {
         let setCacheHeadersExpectation = expectation(description: "set_cache_headers")
         let setCacheHeadersOperation = kit.fetchStatus { (result, notModified) in
-            let status = try! result.get()
+            _ = try! result.get()
             XCTAssertFalse(notModified)
 
             setCacheHeadersExpectation.fulfill()
@@ -134,7 +134,7 @@ class TBAKitTests: TBAKitTestCase {
         kit.sendSuccessStub(for: setCacheHeadersOperation, with: 404)
         wait(for: [setCacheHeadersExpectation], timeout: 1.0)
 
-        let setIfModifiedSinceTask = kit.fetchStatus { (result, notModified) in
+        _ = kit.fetchStatus { (result, notModified) in
             XCTFail()
         }
         guard let headers = setCacheHeadersOperation.task.currentRequest?.allHTTPHeaderFields else {

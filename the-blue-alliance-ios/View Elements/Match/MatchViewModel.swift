@@ -8,10 +8,10 @@ struct MatchViewModel {
     let hasVideos: Bool
 
     let redAlliance: [String]
-    let redScore: String?
+    let redScore: Int?
 
     let blueAlliance: [String]
-    let blueScore: String?
+    let blueScore: Int?
 
     let dqs: [String]
 
@@ -25,10 +25,10 @@ struct MatchViewModel {
 
     let baseTeamKeys: [String]
 
-    init(match: Match, teamKey: TeamKey? = nil) {
+    init(match: Match, team: Team? = nil) {
         var baseTeamKeys: [String] = []
-        if let teamKey = teamKey {
-            baseTeamKeys.append(teamKey.key!)
+        if let team = team {
+            baseTeamKeys.append(team.key)
         }
         self.init(match: match, baseTeamKeys: baseTeamKeys)
     }
@@ -38,13 +38,13 @@ struct MatchViewModel {
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
         matchName = match.friendlyName
 
-        hasVideos = match.videos?.count == 0
+        hasVideos = match.videos.count == 0
 
         redAlliance = match.redAllianceTeamKeys
-        redScore = match.redAlliance?.score?.stringValue
+        redScore = match.redAlliance?.score
 
         blueAlliance = match.blueAllianceTeamKeys
-        blueScore = match.blueAlliance?.score?.stringValue
+        blueScore = match.blueAlliance?.score
 
         dqs = match.dqTeamKeys
 
@@ -55,7 +55,7 @@ struct MatchViewModel {
         // If we can't figure out a piece of information, default to yes, the match is a regular match,
         // where someone wins, and someone loses
         let hasWinnersAndLosers: Bool = {
-            if match.year == 2015 && match.compLevel != .final {
+            if match.event.year == 2015 && match.compLevel != .final {
                 return false
             }
             return true
@@ -74,7 +74,7 @@ struct MatchViewModel {
         var rpName1: String?
         var rpName2: String?
 
-        switch match.year {
+        switch match.event.year {
         case 2016:
             rpName1 = "teleopDefensesBreached"
             rpName2 = "teleopTowerCaptured"
