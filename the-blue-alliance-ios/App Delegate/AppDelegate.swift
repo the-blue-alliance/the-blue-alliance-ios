@@ -184,8 +184,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.statusService.registerRetryable(initiallyRetry: true)
 
                     // Check our minimum app version
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: Int(self.statusService.status.minAppVersion)) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: Int(self.statusService.status.latestAppVersion))
+                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
+                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
                         return
                     }
 
@@ -376,8 +376,8 @@ extension AppDelegate: GIDSignInDelegate {
 extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: Int(status.minAppVersion)) {
-            showMinimumAppVersionAlert(currentAppVersion: Int(self.statusService.status.latestAppVersion))
+        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
+            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
         }
     }
 
