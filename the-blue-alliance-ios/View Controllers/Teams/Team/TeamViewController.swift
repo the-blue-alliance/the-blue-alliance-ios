@@ -156,24 +156,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         navigationController?.dismiss(animated: true, completion: nil)
     }
 
-    private func imageViewController(media: TeamMedia, peek: Bool = false) -> TeamMediaImageViewController? {
-        // TODO: Support showing multiple images
-        var imageViewController: TeamMediaImageViewController?
-        if let image = media.image {
-            let images = [image]
-            // TODO: Inject these down from app delegate
-            imageViewController = peek ?
-                TeamMediaImageViewController(forPeekWithImageSource: images, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared()) :
-                TeamMediaImageViewController(imageSource: images, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared())
-        } else if let url = media.imageDirectURL {
-            let urls = [url]
-            imageViewController = peek ?
-                TeamMediaImageViewController(forPeekWithImageSource: urls, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared()) :
-                TeamMediaImageViewController(imageSource: urls, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared())
-        }
-        return imageViewController
-    }
-
 }
 
 extension TeamViewController: NavigationTitleDelegate {
@@ -210,7 +192,7 @@ extension TeamViewController: EventsViewControllerDelegate {
 extension TeamViewController: TeamMediaCollectionViewControllerDelegate {
 
     func mediaSelected(_ media: TeamMedia) {
-        if let imageViewController = self.imageViewController(media: media) {
+        if let imageViewController = TeamMediaImageViewController.forMedia(media: media) {
             DispatchQueue.main.async {
                 self.present(imageViewController, animated: true)
             }
@@ -233,7 +215,7 @@ extension TeamViewController: UIViewControllerPreviewingDelegate {
             return nil
         }
 
-        let imageViewController = self.imageViewController(media: media, peek: true)
+        let imageViewController = TeamMediaImageViewController.forMedia(media: media, peek: true)
         if let image = media.image {
             imageViewController?.preferredContentSize = image.size
         } else {
@@ -260,6 +242,24 @@ class TeamMediaImageViewController: BFRImageViewController {
     var images: [Any] = []
     var pasteboard: UIPasteboard? = nil
     var photoLibrary: PHPhotoLibrary? = nil
+
+    public static func forMedia(media: TeamMedia, peek: Bool = false) -> TeamMediaImageViewController? {
+        // TODO: Support showing multiple images
+        var imageViewController: TeamMediaImageViewController?
+        if let image = media.image {
+            let images = [image]
+            // TODO: Inject these down from app delegate
+            imageViewController = peek ?
+                TeamMediaImageViewController(forPeekWithImageSource: images, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared()) :
+                TeamMediaImageViewController(imageSource: images, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared())
+        } else if let url = media.imageDirectURL {
+            let urls = [url]
+            imageViewController = peek ?
+                TeamMediaImageViewController(forPeekWithImageSource: urls, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared()) :
+                TeamMediaImageViewController(imageSource: urls, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared())
+        }
+        return imageViewController
+    }
 
     init?(imageSource images: [Any], pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?) {
         super.init(imageSource: images)
