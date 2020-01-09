@@ -515,7 +515,6 @@ extension Team {
 extension Team: MyTBASubscribable {
 
     public var modelKey: String {
-        // TODO: Confirm these access are thread safe
         return key
     }
 
