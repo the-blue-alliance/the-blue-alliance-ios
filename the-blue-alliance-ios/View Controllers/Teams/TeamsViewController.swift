@@ -31,6 +31,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.tintColor = UIColor.tabBarTintColor
         return searchController
     }()
 
@@ -45,6 +46,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         tableView.dataSource = dataSource
 
         tableView.tableHeaderView = searchController.searchBar
+        tableView.backgroundView = UIView() // Hack to fix white background when refreshing in dark mode
 
         // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
         definesPresentationContext = true
