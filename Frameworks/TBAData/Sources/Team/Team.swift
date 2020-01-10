@@ -5,6 +5,16 @@ import TBAKit
 
 extension Team {
 
+    public func avatar(year: Int) -> TeamMedia? {
+        let avatars = media.filter {
+            guard let type = $0.type else {
+                return false
+            }
+            return $0.year == year && type == .avatar
+        }
+        return avatars.first
+    }
+
     public var address: String? {
         return getValue(\Team.addressRaw)
     }
