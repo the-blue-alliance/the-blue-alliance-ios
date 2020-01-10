@@ -117,7 +117,7 @@ open class TBAKit: NSObject {
     func callApi(method: String, completion: @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> TBAKitOperation {
         return TBAKitOperation(tbaKit: self, method: method, completion: completion)
     }
-    
+
     func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>, Bool) -> ()) -> TBAKitOperation {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
@@ -131,7 +131,7 @@ open class TBAKit: NSObject {
             }
         }
     }
-    
+
     func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>, Bool) -> ()) -> TBAKitOperation {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
@@ -148,7 +148,7 @@ open class TBAKit: NSObject {
             }
         }
     }
-    
+
     func callArray(method: String, completion: @escaping (Result<[Any], Error>, Bool) -> ()) -> TBAKitOperation {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
@@ -176,5 +176,5 @@ open class TBAKit: NSObject {
             }
         }
     }
-    
+
 }
