@@ -45,22 +45,22 @@ public struct TBATeam: TBAModel {
             return nil
         }
         self.key = key
-        
+
         guard let name = json["name"] as? String else {
             return nil
         }
         self.name = name
-        
+
         guard let teamNumber = json["team_number"] as? Int else {
             return nil
         }
         self.teamNumber = teamNumber
-        
+
         guard let rookieYear = json["rookie_year"] as? Int else {
             return nil
         }
         self.rookieYear = rookieYear
-        
+
         self.address = json["address"] as? String
         self.city = json["city"] as? String
         self.country = json["country"] as? String
@@ -117,18 +117,18 @@ public struct TBARobot: TBAModel {
 }
 
 public struct TBAEventStatus: TBAModel {
-    
+
     public var teamKey: String
     public var eventKey: String
-    
+
     public var qual: TBAEventStatusQual?
     public var alliance: TBAEventStatusAlliance?
     public var playoff: TBAAllianceStatus?
-    
+
     public var allianceStatusString: String?
     public var playoffStatusString: String?
     public var overallStatusString: String?
-    
+
     public var nextMatchKey: String?
     public var lastMatchKey: String?
 
@@ -159,15 +159,15 @@ public struct TBAEventStatus: TBAModel {
             return nil
         }
         self.eventKey = eventKey
-        
+
         if let qualJSON = json["qual"] as? [String: Any] {
             self.qual = TBAEventStatusQual(json: qualJSON)
         }
-        
+
         if let allianceJSON = json["alliance"] as? [String: Any] {
             self.alliance = TBAEventStatusAlliance(json: allianceJSON)
         }
-        
+
         if let playoffJSON = json["playoff"] as? [String: Any] {
             self.playoff = TBAAllianceStatus(json: playoffJSON)
         }
@@ -178,11 +178,11 @@ public struct TBAEventStatus: TBAModel {
         self.nextMatchKey = json["next_match_key"] as? String
         self.lastMatchKey = json["last_match_key"] as? String
     }
-    
+
 }
 
 public struct TBAEventStatusQual: TBAModel {
-    
+
     public var numTeams: Int?
     public var status: String?
     public var ranking: TBAEventRanking?
@@ -198,22 +198,22 @@ public struct TBAEventStatusQual: TBAModel {
     init?(json: [String: Any]) {
         self.numTeams = json["num_teams"] as? Int
         self.status = json["status"] as? String
-        
+
         if let rankingJSON = json["ranking"] as? [String: Any] {
             self.ranking = TBAEventRanking(json: rankingJSON)
         }
-        
+
         if let sortOrdersJSON = json["sort_order_info"] as? [[String: Any]] {
             self.sortOrder = sortOrdersJSON.compactMap({ (sortOrderJSON) -> TBAEventRankingSortOrder? in
                 return TBAEventRankingSortOrder(json: sortOrderJSON)
             })
         }
     }
-    
+
 }
 
 public struct TBAEventStatusAlliance: TBAModel {
-    
+
     public var number: Int
     public var pick: Int
     public var name: String?
@@ -232,14 +232,14 @@ public struct TBAEventStatusAlliance: TBAModel {
             return nil
         }
         self.number = number
-        
+
         guard let pick = json["pick"] as? Int else {
             return nil
         }
         self.pick = pick
-        
+
         self.name = json["name"] as? String
-        
+
         if let backupJSON = json["backup"] as? [String: Any] {
             self.backup = TBAAllianceBackup(json: backupJSON)
         }
@@ -282,7 +282,7 @@ public struct TBAMedia: TBAModel {
         self.directURL = json["direct_url"] as? String
         self.viewURL = json["view_url"] as? String
     }
-    
+
 }
 
 extension TBAKit {
