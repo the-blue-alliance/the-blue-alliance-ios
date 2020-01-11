@@ -144,7 +144,7 @@ class NotificationsViewController: TBATableViewController {
                     let status = self.myTBAPingNotificationStatus()
                     return NotificationStatusCellViewModel(title: "Ping Device", notificationStatus: status)
                 } else {
-                    return NotificationStatusCellViewModel(title: "Pinging Device...", notificationStatus: .unknown)
+                    return NotificationStatusCellViewModel(title: "Pinging Device...", notificationStatus: .loading)
                 }
             }
         }()
