@@ -60,6 +60,7 @@ class EventRankingsViewController: TBATableViewController {
         }
         self.dataSource = TableViewDataSource(dataSource: dataSource)
         self.dataSource.delegate = self
+        self.dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
         fetchRequest.sortDescriptors = [
