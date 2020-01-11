@@ -2,6 +2,7 @@ import CoreData
 import Firebase
 import Foundation
 import MyTBAKit
+import Photos
 import TBAData
 import TBAKit
 import UIKit
@@ -13,17 +14,21 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     }
 
     private(set) var ranking: DistrictRanking
-    let statusService: StatusService
     let myTBA: MyTBA
+    let pasteboard: UIPasteboard?
+    let photoLibrary: PHPhotoLibrary?
+    let statusService: StatusService
     let urlOpener: URLOpener
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(ranking: DistrictRanking, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.ranking = ranking
         self.myTBA = myTBA
+        self.pasteboard = pasteboard
+        self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -70,7 +75,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
     func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

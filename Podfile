@@ -44,8 +44,8 @@ target 'The Blue Alliance' do
   pod 'TBACallbackManager', :path => 'subtrees/the-blue-alliance-react/react-native-tba-callback-manager'
 
   # Deps
-  pod 'BFRImageViewer'
-  pod 'PINRemoteImage', '3.0.0-beta.13'
+  pod 'BFRImageViewer', :git => 'https://github.com/ZachOrr/buffer-ios-image-viewer.git'
+  pod 'PINRemoteImage', '3.0.0-beta.14'
   pod 'PureLayout'
   pod 'XCDYouTubeKit', '~> 2.8'
   pod 'Zip', '~> 1.1'

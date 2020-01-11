@@ -1,5 +1,6 @@
 import CoreData
 import Crashlytics
+import Photos
 import TBAData
 import TBAKit
 import UIKit
@@ -13,23 +14,31 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private let spacerSize: CGFloat = 3.0
 
     private let team: Team
-    private let fetchMediaOperationQueue = OperationQueue()
+    private let pasteboard: UIPasteboard?
+    private let photoLibrary: PHPhotoLibrary?
+    private let urlOpener: URLOpener?
 
-    weak var delegate: TeamMediaCollectionViewControllerDelegate?
     var year: Int? {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
+
+    private let fetchMediaOperationQueue = OperationQueue()
+
+    weak var delegate: TeamMediaCollectionViewControllerDelegate?
     private var dataSource: CollectionViewDataSource<String, TeamMedia>!
     var fetchedResultsController: CollectionViewDataSourceFetchedResultsController<TeamMedia>!
 
     // MARK: Init
 
-    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, year: Int? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, urlOpener: URLOpener? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.year = year
+        self.pasteboard = pasteboard
+        self.photoLibrary = photoLibrary
+        self.urlOpener = urlOpener
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
@@ -69,6 +78,53 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let media = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        delegate?.mediaSelected(media)
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let media = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return nil
+        }
+        let configuration = UIContextMenuConfiguration(identifier: media.objectID, previewProvider: nil) { _ in
+            let viewAction = UIAction(title: "View", image: UIImage(systemName: "eye.fill")) { _ in
+                self.delegate?.mediaSelected(media)
+            }
+            var actions: [UIMenuElement] = [viewAction]
+
+            if let viewURL = media.viewURL, let url = URL(string: viewURL), let urlOpener = self.urlOpener, urlOpener.canOpenURL(url) {
+                let viewOnlineAction = UIAction(title: "View Online", image: UIImage(systemName: "safari.fill")) { _ in
+                    urlOpener.open(url, options: [:], completionHandler: nil)
+                }
+                actions.append(viewOnlineAction)
+            }
+
+            if let image = media.image, let pasteboard = self.pasteboard {
+                let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc.fill")) { _ in
+                    pasteboard.image = image
+                }
+                actions.append(copyAction)
+            }
+
+            if let image = media.image, let photoLibrary = self.photoLibrary {
+                let saveAction = UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down.fill")) { _ in
+                    photoLibrary.performChanges({
+                        PHAssetChangeRequest.creationRequestForAsset(from: image)
+                    }, completionHandler: nil)
+                }
+                actions.append(saveAction)
+            }
+            return UIMenu(title: "", children: actions)
+        }
+        return configuration
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        guard let objectID = configuration.identifier as? NSManagedObjectID else {
+            return
+        }
+        guard let media = persistentContainer.viewContext.object(with: objectID) as? TeamMedia else {
             return
         }
         delegate?.mediaSelected(media)
