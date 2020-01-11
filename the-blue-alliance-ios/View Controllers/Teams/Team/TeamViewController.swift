@@ -10,6 +10,8 @@ import UIKit
 class TeamViewController: MyTBAContainerViewController, Observable {
 
     private(set) var team: Team
+    private let pasteboard: UIPasteboard?
+    private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -45,15 +47,17 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
+        self.pasteboard = pasteboard
+        self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
         self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: persistentContainer.viewContext)
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
@@ -83,10 +87,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         super.viewDidLoad()
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
-
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: mediaViewController.collectionView)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -183,7 +183,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -201,120 +201,25 @@ extension TeamViewController: TeamMediaCollectionViewControllerDelegate {
 
 }
 
-extension TeamViewController: UIViewControllerPreviewingDelegate {
-
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        guard let indexPath = mediaViewController.collectionView.indexPathForItem(at: location) else {
-            return nil
-        }
-        guard let cell = mediaViewController.collectionView.cellForItem(at: indexPath) else {
-            return nil
-        }
-
-        guard let media = mediaViewController.fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
-            return nil
-        }
-
-        let imageViewController = TeamMediaImageViewController.forMedia(media: media, peek: true)
-        if let image = media.image {
-            imageViewController?.preferredContentSize = image.size
-        } else {
-            imageViewController?.preferredContentSize = CGSize(width: 200, height: 200)
-        }
-        previewingContext.sourceRect = cell.frame
-
-        return imageViewController
-    }
-
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        present(viewControllerToCommit, animated: true)
-        // This, to me, seems like a bug in BFRImageViewController. These notifications should be fired
-        // by something else (maybe the system?) but they're not. So we're firing them manually.
-        // However, this could be an iOS 12 thing, so we should check
-        NotificationCenter.default.post(name: Notification.Name(NOTE_VC_POPPED), object: nil)
-    }
-
-}
-
 class TeamMediaImageViewController: BFRImageViewController {
-
-    // We're storing a second array of the images, which isn't great, but seems like the best we can do
-    var images: [Any] = []
-    var pasteboard: UIPasteboard? = nil
-    var photoLibrary: PHPhotoLibrary? = nil
 
     public static func forMedia(media: TeamMedia, peek: Bool = false) -> TeamMediaImageViewController? {
         // TODO: Support showing multiple images
         var imageViewController: TeamMediaImageViewController?
         if let image = media.image {
             let images = [image]
-            // TODO: Inject these down from app delegate
             imageViewController = peek ?
-                TeamMediaImageViewController(forPeekWithImageSource: images, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared()) :
-                TeamMediaImageViewController(imageSource: images, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared())
+                TeamMediaImageViewController(forPeekWithImageSource: images) :
+                TeamMediaImageViewController(imageSource: images)
         } else if let url = media.imageDirectURL {
             let urls = [url]
             imageViewController = peek ?
-                TeamMediaImageViewController(forPeekWithImageSource: urls, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared()) :
-                TeamMediaImageViewController(imageSource: urls, pasteboard: UIPasteboard.general, photoLibrary: PHPhotoLibrary.shared())
+                TeamMediaImageViewController(forPeekWithImageSource: urls) :
+                TeamMediaImageViewController(imageSource: urls)
         }
+        imageViewController?.modalPresentationStyle = .fullScreen
+        imageViewController?.showDoneButtonOnLeft = false
         return imageViewController
-    }
-
-    init?(imageSource images: [Any], pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?) {
-        super.init(imageSource: images)
-
-        self.images = images
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-    }
-
-    init?(forPeekWithImageSource images: [Any], pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?) {
-        super.init(forPeekWithImageSource: images)
-
-        self.images = images
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-    }
-
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    override func setImageSource(_ images: [Any]) {
-        self.images = images
-
-        super.setImageSource(images)
-    }
-
-    override var previewActionItems: [UIPreviewActionItem] {
-        let copyAction = UIPreviewAction(title: "Copy", style: .default, handler: { [weak self] (_, _) in
-            guard let index = self?.currentIndex else {
-                return
-            }
-            guard let image = self?.images[index] as? UIImage else {
-                return
-            }
-            self?.pasteboard?.image = image
-        })
-
-        let saveAction = UIPreviewAction(title: "Save", style: .default) { [weak self] (_, _) in
-            guard let index = self?.currentIndex else {
-                return
-            }
-            guard let image = self?.images[index] as? UIImage else {
-                return
-            }
-            self?.photoLibrary?.performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: image)
-            }, completionHandler: nil)
-        }
-
-        return [copyAction, saveAction]
     }
 
 }

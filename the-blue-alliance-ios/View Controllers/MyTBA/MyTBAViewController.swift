@@ -4,6 +4,7 @@ import FirebaseAnalytics
 import FirebaseAuth
 import GoogleSignIn
 import MyTBAKit
+import Photos
 import PureLayout
 import TBAData
 import TBAKit
@@ -13,6 +14,8 @@ import UserNotifications
 class MyTBAViewController: ContainerViewController {
 
     private let myTBA: MyTBA
+    private let pasteboard: UIPasteboard?
+    private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -39,8 +42,10 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
+        self.pasteboard = pasteboard
+        self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -172,19 +177,19 @@ class MyTBAViewController: ContainerViewController {
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func teamSelected(_ team: Team) {
-        let viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func matchSelected(_ match: Match) {
-        let viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }

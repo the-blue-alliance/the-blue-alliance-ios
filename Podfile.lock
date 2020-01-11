@@ -4,8 +4,8 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.3.0)
   - AppAuth/Core (1.3.0)
   - AppAuth/ExternalUserAgent (1.3.0)
-  - BFRImageViewer (1.2.3):
-    - PINRemoteImage (~> 3.0.0-beta.12)
+  - BFRImageViewer (1.2.7):
+    - PINRemoteImage (~> 3.0.0-beta.14)
   - boost-for-react-native (1.63.0)
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
@@ -107,7 +107,6 @@ PODS:
     - FirebaseAuthInterop (~> 1.0)
     - FirebaseCore (~> 6.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FLAnimatedImage (1.0.12)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -177,24 +176,20 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - PINCache (3.0.1-beta.6):
-    - PINCache/Arc-exception-safe (= 3.0.1-beta.6)
-    - PINCache/Core (= 3.0.1-beta.6)
-  - PINCache/Arc-exception-safe (3.0.1-beta.6):
+  - PINCache (3.0.1-beta.7):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.7)
+    - PINCache/Core (= 3.0.1-beta.7)
+  - PINCache/Arc-exception-safe (3.0.1-beta.7):
     - PINCache/Core
-  - PINCache/Core (3.0.1-beta.6):
-    - PINOperation (~> 1.1.0)
+  - PINCache/Core (3.0.1-beta.7):
+    - PINOperation (~> 1.1.1)
   - PINOperation (1.1.2)
-  - PINRemoteImage (3.0.0-beta.13):
-    - PINRemoteImage/FLAnimatedImage (= 3.0.0-beta.13)
-    - PINRemoteImage/PINCache (= 3.0.0-beta.13)
-  - PINRemoteImage/Core (3.0.0-beta.13):
+  - PINRemoteImage (3.0.0-beta.14):
+    - PINRemoteImage/PINCache (= 3.0.0-beta.14)
+  - PINRemoteImage/Core (3.0.0-beta.14):
     - PINOperation
-  - PINRemoteImage/FLAnimatedImage (3.0.0-beta.13):
-    - FLAnimatedImage (>= 1.0)
-    - PINRemoteImage/Core
-  - PINRemoteImage/PINCache (3.0.0-beta.13):
-    - PINCache (= 3.0.1-beta.6)
+  - PINRemoteImage/PINCache (3.0.0-beta.14):
+    - PINCache (= 3.0.1-beta.7)
     - PINRemoteImage/Core
   - Protobuf (3.11.2)
   - PureLayout (3.1.5)
@@ -432,7 +427,7 @@ PODS:
   - Zip (1.1.0)
 
 DEPENDENCIES:
-  - BFRImageViewer
+  - BFRImageViewer (from `https://github.com/ZachOrr/buffer-ios-image-viewer.git`)
   - Crashlytics
   - DoubleConversion (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Fabric
@@ -450,7 +445,7 @@ DEPENDENCIES:
   - MyTBAKit (from `Frameworks/MyTBAKit`)
   - MyTBAKit/Tests (from `Frameworks/MyTBAKit`)
   - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
-  - PINRemoteImage (= 3.0.0-beta.13)
+  - PINRemoteImage (= 3.0.0-beta.14)
   - PureLayout
   - RCTRequired (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/TypeSafety`)
@@ -494,7 +489,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AppAuth
-    - BFRImageViewer
     - boost-for-react-native
     - Crashlytics
     - Fabric
@@ -512,7 +506,6 @@ SPEC REPOS:
     - FirebasePerformance
     - FirebaseRemoteConfig
     - FirebaseStorage
-    - FLAnimatedImage
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -532,6 +525,8 @@ SPEC REPOS:
     - Zip
 
 EXTERNAL SOURCES:
+  BFRImageViewer:
+    :git: https://github.com/ZachOrr/buffer-ios-image-viewer.git
   DoubleConversion:
     :podspec: subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec
   FBLazyVector:
@@ -605,9 +600,14 @@ EXTERNAL SOURCES:
   Yoga:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga
 
+CHECKOUT OPTIONS:
+  BFRImageViewer:
+    :commit: 2ed1ba54d8d724f99f9624b6ef34462ce6a0ce70
+    :git: https://github.com/ZachOrr/buffer-ios-image-viewer.git
+
 SPEC CHECKSUMS:
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
-  BFRImageViewer: 647b91e4c9956d1ffc66245614aca22f10b0d370
+  BFRImageViewer: 10640d47bed5ef863e219522b5e395d95a8eacd2
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
@@ -628,7 +628,6 @@ SPEC CHECKSUMS:
   FirebasePerformance: 2e87ffeddb75169f5c86ffbcd86ea88636c532c7
   FirebaseRemoteConfig: c11d74d8b1ff8463b587fc8899d92ee089f9a691
   FirebaseStorage: 93fe2f8190a01bfb2b2c4932df7d679744c4ef1d
-  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: db118eb61a97dd8c4f7014e368d3c335cbbcf80a
@@ -642,9 +641,9 @@ SPEC CHECKSUMS:
   MyTBAKit: 4e8f384aaf97da0c961fcf1dc9f4d1d4def03f41
   MyTBAKitTesting: 18372d015ffbf4dae4e504227da76081a0fb9e46
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
+  PINCache: 7cb9ae068c8f655717f7c644ef1dff9fd573e979
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
-  PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
+  PINRemoteImage: 81bbff853acc71c6de9e106e9e489a791b8bbb08
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   PureLayout: 9b4ad47b2f0388c84ff534af23d96e720c1b875a
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
@@ -680,6 +679,6 @@ SPEC CHECKSUMS:
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 279cdf009034812d5449fa3b5825ad104dca8789
+PODFILE CHECKSUM: 0484679385e4b56c18026f9c9ed0ccfc58d33e69
 
 COCOAPODS: 1.8.4
