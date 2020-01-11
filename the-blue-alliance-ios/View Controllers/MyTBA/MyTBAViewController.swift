@@ -60,7 +60,6 @@ class MyTBAViewController: ContainerViewController {
         subscriptionsViewController.delegate = self
 
         GIDSignIn.sharedInstance()?.presentingViewController = self
-        myTBA.authenticationProvider.add(observer: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,6 +76,8 @@ class MyTBAViewController: ContainerViewController {
         // modalPresentationCapturesStatusBarAppearance = true
 
         styleInterface()
+
+        myTBA.authenticationProvider.add(observer: self)
     }
 
     override func viewWillAppear(_ animated: Bool) {
