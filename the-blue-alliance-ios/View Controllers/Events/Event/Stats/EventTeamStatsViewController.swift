@@ -99,6 +99,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
         }
         self.dataSource = TableViewDataSource(dataSource: dataSource)
         self.dataSource.delegate = self
+        self.dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
         setupFetchRequest(fetchRequest)

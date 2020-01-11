@@ -93,6 +93,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         }
         self.dataSource = TableViewDataSource(dataSource: dataSource)
         self.dataSource.delegate = self
+        self.dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         let sortDescriptors = [firstSortDescriptor] + Event.sortDescriptors()

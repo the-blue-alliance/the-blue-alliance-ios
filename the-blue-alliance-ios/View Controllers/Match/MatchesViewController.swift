@@ -85,6 +85,7 @@ class MatchesViewController: TBATableViewController {
         }
         self.dataSource = TableViewDataSource(dataSource: dataSource)
         self.dataSource.delegate = self
+        self.dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
         setupFetchRequest(fetchRequest)
