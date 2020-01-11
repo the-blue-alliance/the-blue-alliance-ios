@@ -537,10 +537,10 @@ class TeamTestCase: TBADataTestCase {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
 
         let teamMedia = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
-        teamMedia.year = NSNumber(value: 2018)
-        teamMedia.type = MediaType.avatar.rawValue
+        teamMedia.yearRaw = NSNumber(value: 2018)
+        teamMedia.typeStringRaw = MediaType.avatar.rawValue
 
-        team.addToMedia(teamMedia)
+        team.addToMediaRaw(teamMedia)
 
         XCTAssertNil(team.avatar(year: 2019))
         XCTAssertNotNil(team.avatar(year: 2018))
