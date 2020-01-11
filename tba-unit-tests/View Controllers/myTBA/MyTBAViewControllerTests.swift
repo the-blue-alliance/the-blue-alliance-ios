@@ -85,6 +85,16 @@ class MyTBAViewControllerTests: TBATestCase {
     func test_authenticated() {
         let ex = expectation(description: "Authenticated")
         let mock = MockMyTBAViewController(myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        mock.viewDidLoad()
+        mock.authenticatedExpectation = ex
+        myTBA.authToken = "abcd123"
+        wait(for: [ex], timeout: 1.0)
+    }
+
+    func test_authenticated_noLoad() {
+        let ex = expectation(description: "Authenticated")
+        ex.isInverted = true
+        let mock = MockMyTBAViewController(myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mock.authenticatedExpectation = ex
         myTBA.authToken = "abcd123"
         wait(for: [ex], timeout: 1.0)
@@ -93,6 +103,17 @@ class MyTBAViewControllerTests: TBATestCase {
     func test_unauthenticated() {
         myTBA.authToken = "abcd123"
         let ex = expectation(description: "Unauthenticated")
+        let mock = MockMyTBAViewController(myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        mock.viewDidLoad()
+        mock.unauthenticatedExpectation = ex
+        myTBA.authToken = nil
+        wait(for: [ex], timeout: 1.0)
+    }
+
+    func test_unauthenticated_noLoad() {
+        myTBA.authToken = "abcd123"
+        let ex = expectation(description: "Unauthenticated")
+        ex.isInverted = true
         let mock = MockMyTBAViewController(myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mock.unauthenticatedExpectation = ex
         myTBA.authToken = nil
