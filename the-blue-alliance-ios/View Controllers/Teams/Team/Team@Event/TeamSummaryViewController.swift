@@ -175,6 +175,7 @@ class TeamSummaryViewController: TBATableViewController {
         })
         _dataSource = TableViewDataSource(dataSource: dataSource)
         _dataSource.delegate = self
+        _dataSource.statefulDelegate = self
     }
 
     private func updateTeamInfo() {

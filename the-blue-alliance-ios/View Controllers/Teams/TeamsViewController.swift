@@ -145,6 +145,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         }
         self.dataSource = TableViewDataSource(dataSource: dataSource)
         self.dataSource.delegate = self
+        self.dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
         fetchRequest.sortDescriptors = [

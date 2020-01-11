@@ -60,6 +60,7 @@ class DistrictRankingsViewController: TBATableViewController {
         }
         self.dataSource = TableViewDataSource(dataSource: dataSource)
         self.dataSource.delegate = self
+        self.dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
         fetchRequest.sortDescriptors = [

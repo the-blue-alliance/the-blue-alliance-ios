@@ -10,7 +10,9 @@ protocol TableViewDataSourceDelegate: AnyObject {
 class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableViewDataSource {
 
     private weak var dataSource: UITableViewDiffableDataSource<Section, Item>?
-    weak var delegate: (TableViewDataSourceDelegate & Stateful & Refreshable)?
+
+    weak var delegate: TableViewDataSourceDelegate?
+    weak var statefulDelegate: (Stateful & Refreshable)?
 
     init(dataSource: UITableViewDiffableDataSource<Section, Item>) {
         self.dataSource = dataSource
@@ -23,7 +25,7 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableV
     func numberOfSections(in tableView: UITableView) -> Int {
         let sections = dataSource?.numberOfSections(in: tableView) ?? 0
         if sections == 0 {
-            delegate?.showNoDataView()
+            statefulDelegate?.showNoDataView()
         }
         return sections
     }
@@ -31,9 +33,9 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableV
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let rows = dataSource?.tableView(tableView, numberOfRowsInSection: section) ?? 0
         if rows == 0 {
-            delegate?.showNoDataView()
+            statefulDelegate?.showNoDataView()
         } else {
-            delegate?.removeNoDataView()
+            statefulDelegate?.removeNoDataView()
         }
         return rows
     }

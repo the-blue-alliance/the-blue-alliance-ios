@@ -100,6 +100,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         })
         _dataSource = TableViewDataSource(dataSource: dataSource)
         _dataSource.delegate = self
+        _dataSource.statefulDelegate = self
     }
 
     // MARK: NSFetchedResultsController
