@@ -1,5 +1,6 @@
 import Crashlytics
 import MyTBAKit
+import Photos
 import TBAData
 import UIKit
 
@@ -8,6 +9,8 @@ import UIKit
 protocol ContainerTeamPushable {
     var team: Team { get }
     var myTBA: MyTBA { get }
+    var pasteboard: UIPasteboard? { get }
+    var photoLibrary: PHPhotoLibrary? { get }
     var statusService: StatusService { get }
     var urlOpener: URLOpener { get }
 }
@@ -15,7 +18,7 @@ protocol ContainerTeamPushable {
 extension ContainerTeamPushable where Self: ContainerViewController {
 
     func pushTeam(team: Team) {
-        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

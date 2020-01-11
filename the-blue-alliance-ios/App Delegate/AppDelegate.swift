@@ -6,6 +6,7 @@ import FirebaseAuth
 import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
+import Photos
 import TBAData
 import TBAKit
 import UIKit
@@ -25,12 +26,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let splitViewController = UISplitViewController()
 
         let eventsViewController = EventsContainerViewController(myTBA: myTBA,
+                                                                 pasteboard: pasteboard,
+                                                                 photoLibrary: photoLibrary,
                                                                  statusService: statusService,
                                                                  urlOpener: urlOpener,
                                                                  persistentContainer: persistentContainer,
                                                                  tbaKit: tbaKit,
                                                                  userDefaults: userDefaults)
         let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
+                                                               pasteboard: pasteboard,
+                                                               photoLibrary: photoLibrary,
                                                                statusService: statusService,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
@@ -89,9 +94,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      deviceName: UIDevice.current.name,
                      fcmTokenProvider: messaging)
     }()
+    let pasteboard = UIPasteboard.general
     lazy var persistentContainer: TBAPersistenceContainer = {
         return TBAPersistenceContainer()
     }()
+    let photoLibrary = PHPhotoLibrary.shared()
     var tbaKit: TBAKit!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared

@@ -1,6 +1,7 @@
 import CoreData
 import Firebase
 import MyTBAKit
+import Photos
 import TBAData
 import TBAKit
 import UIKit
@@ -15,6 +16,8 @@ class MatchViewController: MyTBAContainerViewController {
     private(set) var infoViewController: MatchInfoViewController
     private(set) var breakdownViewController: MatchBreakdownViewController?
 
+    private let pasteboard: UIPasteboard?
+    private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -24,8 +27,10 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, team: Team? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, team: Team? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
+        self.pasteboard = pasteboard
+        self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
         infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -76,7 +81,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         // get team key that matches the target teamNumber
         guard let team = match.teams.first(where: { Int($0.teamNumber) == teamNumber }) else { return }
 
-        let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     
