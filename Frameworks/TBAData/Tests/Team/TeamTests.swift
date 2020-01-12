@@ -309,6 +309,17 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(predicate.predicateFormat, "nicknameRaw CONTAINS[cd] \"abc\" OR teamNumberRaw.stringValue BEGINSWITH[cd] \"abc\" OR cityRaw CONTAINS[cd] \"abc\"")
     }
 
+    func test_searchKeyPathPredicate() {
+        let predicate = Team.searchKeyPathPredicate(
+            nicknameKeyPath: #keyPath(Team.nicknameRaw),
+            teamNumberKeyPath: #keyPath(Team.teamNumberRaw.stringValue),
+            cityKeyPath: #keyPath(Team.cityRaw),
+            searchText: "abc"
+        )
+
+        XCTAssertEqual(predicate.predicateFormat, "nicknameRaw CONTAINS[cd] \"abc\" OR teamNumberRaw.stringValue BEGINSWITH[cd] \"abc\" OR cityRaw CONTAINS[cd] \"abc\"")
+    }
+
     func test_teamNumberSortDescriptor() {
         let sd = Team.teamNumberSortDescriptor()
         XCTAssertEqual(sd.key, #keyPath(Team.teamNumberRaw))

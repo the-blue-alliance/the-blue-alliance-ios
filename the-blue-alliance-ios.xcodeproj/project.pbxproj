@@ -44,6 +44,7 @@
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
 		92564C70216456800047917F /* Secrets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6F216456800047917F /* Secrets_Tests.swift */; };
 		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
+		92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */; };
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
@@ -228,6 +229,7 @@
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92564C6F216456800047917F /* Secrets_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets_Tests.swift; sourceTree = "<group>"; };
 		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
+		92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASearchableTableViewController.swift; sourceTree = "<group>"; };
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
 		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
@@ -720,6 +722,7 @@
 				929F571F2092B7D400E5313A /* TBAViewController.swift */,
 				9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */,
 				929F571B2092B77300E5313A /* TBATableViewController.swift */,
+				92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */,
 				929F571D2092B7A400E5313A /* TBACollectionViewController.swift */,
 				929F572D2092BBCB00E5313A /* Data Sources */,
 			);
@@ -1533,6 +1536,7 @@
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
 				92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */,
 				92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */,
+				92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */,
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
 				92FF10FA21A61AC2003BC5C4 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,

@@ -99,6 +99,15 @@ extension DistrictRanking {
                            #keyPath(DistrictRanking.districtRaw), #keyPath(District.keyRaw), districtKey)
     }
 
+    public static func teamSearchPredicate(searchText: String) -> NSPredicate {
+        return Team.searchKeyPathPredicate(
+            nicknameKeyPath: #keyPath(DistrictRanking.teamRaw.nicknameRaw),
+            teamNumberKeyPath: #keyPath(DistrictRanking.teamRaw.teamNumberRaw.stringValue),
+            cityKeyPath: #keyPath(DistrictRanking.teamRaw.cityRaw),
+            searchText: searchText
+        )
+    }
+
     public static func rankSortDescriptor() -> NSSortDescriptor {
         return NSSortDescriptor(key: #keyPath(DistrictRanking.rankRaw), ascending: true)
     }

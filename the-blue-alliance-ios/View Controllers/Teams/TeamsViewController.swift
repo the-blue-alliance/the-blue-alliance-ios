@@ -19,21 +19,12 @@ protocol TeamsViewControllerDataSourceConfiguration {
 
  See: EventTeamsViewController, DistrictTeamsViewController
  */
-class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsViewControllerDataSourceConfiguration {
+class TeamsViewController: TBASearchableTableViewController, Refreshable, Stateful, TeamsViewControllerDataSourceConfiguration {
 
     weak var delegate: TeamsViewControllerDelegate?
 
     private var dataSource: TableViewDataSource<String, Team>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
-
-    lazy private var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.tintColor = UIColor.tabBarTintColor
-        return searchController
-    }()
 
     // MARK: - View Lifecycle
 
@@ -44,12 +35,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
         setupDataSource()
         tableView.dataSource = dataSource
-
-        tableView.tableHeaderView = searchController.searchBar
-        tableView.backgroundView = UIView() // Hack to fix white background when refreshing in dark mode
-
-        // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
-        definesPresentationContext = true
     }
 
     // MARK: UITableView Delegate
@@ -59,12 +44,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
             return
         }
         delegate?.teamSelected(team)
-    }
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let text = searchController.searchBar.text, text.isEmpty, searchController.isActive {
-            searchController.isActive = false
-        }
     }
 
     // MARK: - Refreshable
@@ -158,7 +137,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
-    private func updateDataSource() {
+    override func updateDataSource() {
         fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
@@ -180,14 +159,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
     var fetchRequestPredicate: NSPredicate? {
         return nil
-    }
-
-}
-
-extension TeamsViewController: UISearchResultsUpdating {
-
-    public func updateSearchResults(for searchController: UISearchController) {
-        updateDataSource()
     }
 
 }
