@@ -106,6 +106,10 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
     func updateDataSource() {
         fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
+
+        if shouldRefresh() {
+            refresh()
+        }
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Event>) {

@@ -20,7 +20,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     var year: Int? {
         didSet {
-            cancelRefresh()
             updateDataSource()
         }
     }
@@ -158,6 +157,10 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private func updateDataSource() {
         fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
+
+        if shouldRefresh() {
+            refresh()
+        }
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<TeamMedia>) {
