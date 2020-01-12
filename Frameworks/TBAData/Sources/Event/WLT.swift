@@ -1,7 +1,12 @@
 import Foundation
 
 @objc(WLT)
-public class WLT: NSObject, NSCoding {
+public class WLT: NSObject, NSSecureCoding {
+
+    public static var supportsSecureCoding: Bool {
+        return true
+    }
+
     public var wins: Int
     public var losses: Int
     public var ties: Int
@@ -28,6 +33,15 @@ public class WLT: NSObject, NSCoding {
 
     public var stringValue: String {
         return "\(wins)-\(losses)-\(ties)"
+    }
+
+}
+
+@objc(WLTTransformer)
+class WLTTransformer: NSSecureUnarchiveFromDataTransformer {
+
+    override class var allowedTopLevelClasses: [AnyClass] {
+        return [WLT.self]
     }
 
 }
