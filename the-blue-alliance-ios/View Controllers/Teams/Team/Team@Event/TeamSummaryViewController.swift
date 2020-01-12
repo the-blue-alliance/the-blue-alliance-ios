@@ -468,7 +468,7 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return event.name == nil || eventStatus == nil
+        return _dataSource.isDataSourceEmpty
     }
 
     @objc func refresh() {

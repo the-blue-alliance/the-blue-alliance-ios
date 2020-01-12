@@ -20,6 +20,15 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableV
         super.init()
     }
 
+    // MARK: - Public Methods
+
+    var isDataSourceEmpty: Bool {
+        guard let snapshot = dataSource?.snapshot() else {
+            return false
+        }
+        return snapshot.itemIdentifiers.isEmpty
+    }
+
     // MARK: UITableViewDataSource
 
     func numberOfSections(in tableView: UITableView) -> Int {

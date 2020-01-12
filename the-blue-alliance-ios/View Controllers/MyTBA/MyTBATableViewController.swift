@@ -378,8 +378,7 @@ extension MyTBATableViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        let snapshot = dataSource.snapshot()
-        if myTBA.isAuthenticated, snapshot.itemIdentifiers.isEmpty {
+        if myTBA.isAuthenticated, _dataSource.isDataSourceEmpty {
             return true
         }
         return false
