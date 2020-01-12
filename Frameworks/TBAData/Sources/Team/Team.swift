@@ -481,10 +481,19 @@ extension Team {
     }
 
     public static func searchPredicate(searchText: String) -> NSPredicate {
+        return Team.searchKeyPathPredicate(
+            nicknameKeyPath: #keyPath(Team.nicknameRaw),
+            teamNumberKeyPath: #keyPath(Team.teamNumberRaw.stringValue),
+            cityKeyPath: #keyPath(Team.cityRaw),
+            searchText: searchText
+        )
+    }
+
+    public static func searchKeyPathPredicate(nicknameKeyPath: String, teamNumberKeyPath: String, cityKeyPath: String, searchText: String) -> NSPredicate {
         return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@ OR %K contains[cd] %@)",
-                           #keyPath(Team.nicknameRaw), searchText,
-                           #keyPath(Team.teamNumberRaw.stringValue), searchText,
-                           #keyPath(Team.cityRaw), searchText)
+                           nicknameKeyPath, searchText,
+                           teamNumberKeyPath, searchText,
+                           cityKeyPath, searchText)
     }
 
     public static func teamNumberSortDescriptor() -> NSSortDescriptor {

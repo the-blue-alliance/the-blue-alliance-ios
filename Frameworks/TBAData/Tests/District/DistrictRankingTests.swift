@@ -66,6 +66,11 @@ class DistrictRankingTestCase: TBADataTestCase {
         XCTAssertEqual(results, [ranking])
     }
 
+    func test_teamSearchPredicate() {
+        let predicate = DistrictRanking.teamSearchPredicate(searchText: "abc")
+        XCTAssertEqual(predicate.predicateFormat, "teamRaw.nicknameRaw CONTAINS[cd] \"abc\" OR teamRaw.teamNumberRaw.stringValue BEGINSWITH[cd] \"abc\" OR teamRaw.cityRaw CONTAINS[cd] \"abc\"")
+    }
+
     func test_rankSortDescriptor() {
         let sd = DistrictRanking.rankSortDescriptor()
         XCTAssertEqual(sd.key, #keyPath(DistrictRanking.rankRaw))

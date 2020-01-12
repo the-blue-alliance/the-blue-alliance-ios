@@ -9,7 +9,7 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ districtRanking: DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBATableViewController {
+class DistrictRankingsViewController: TBASearchableTableViewController {
 
     weak var delegate: DistrictRankingsViewControllerDelegate?
 
@@ -66,10 +66,28 @@ class DistrictRankingsViewController: TBATableViewController {
         fetchRequest.sortDescriptors = [
             DistrictRanking.rankSortDescriptor()
         ]
-        fetchRequest.predicate = DistrictRanking.districtPredicate(districtKey: district.key)
+        setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+    }
+
+    override func updateDataSource() {
+        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
+        let searchPredicate: NSPredicate? = {
+            guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+                return nil
+            }
+            return DistrictRanking.teamSearchPredicate(searchText: searchText)
+        }()
+        let predicate = DistrictRanking.districtPredicate(districtKey: district.key)
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            predicate,
+            searchPredicate
+        ].compactMap({ $0 }))
     }
 
 }
