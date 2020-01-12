@@ -14,7 +14,6 @@ class DistrictsViewController: TBATableViewController {
     weak var delegate: DistrictsViewControllerDelegate?
     var year: Int {
         didSet {
-            cancelRefresh()
             updateDataSource()
         }
     }
@@ -78,6 +77,10 @@ class DistrictsViewController: TBATableViewController {
 
     private func updateDataSource() {
         fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
+
+        if shouldRefresh() {
+            refresh()
+        }
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<District>) {

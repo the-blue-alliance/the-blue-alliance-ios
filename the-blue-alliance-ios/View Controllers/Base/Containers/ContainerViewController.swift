@@ -160,7 +160,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         rootStackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
     }
 
-    // TODO: This isn't being called in iOS 13 when dismissing modal view controllers
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
