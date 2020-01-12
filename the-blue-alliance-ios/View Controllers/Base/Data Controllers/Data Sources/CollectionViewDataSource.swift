@@ -14,6 +14,15 @@ class CollectionViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UIC
         super.init()
     }
 
+    // MARK: - Public Methods
+
+    var isDataSourceEmpty: Bool {
+        guard let snapshot = dataSource?.snapshot() else {
+            return true
+        }
+        return snapshot.numberOfSections == 0 && snapshot.numberOfItems == 0
+    }
+
     // MARK: UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
