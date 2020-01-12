@@ -235,3 +235,12 @@ extension TeamMedia: Playable {
     }
 
 }
+
+@objc(ErrorTransformer)
+class ErrorTransformer: NSSecureUnarchiveFromDataTransformer {
+
+    override class var allowedTopLevelClasses: [AnyClass] {
+        return [NSError.self]
+    }
+
+}
