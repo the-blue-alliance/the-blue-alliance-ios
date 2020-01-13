@@ -156,10 +156,77 @@ public struct TBAMatchAlliance: TBAModel {
     
 }
 
+public struct TBAMatchZebra: TBAModel {
+    public var key: String
+    public var times: [Double]
+    public var alliances: [String: [TBAMachZebraTeam]]
+
+    public init(key: String, times: [Double], alliances: [String: [TBAMachZebraTeam]]) {
+        self.key = key
+        self.times = times
+        self.alliances = alliances
+    }
+
+    init?(json: [String: Any]) {
+        // Required: key, times, alliances
+        guard let key = json["key"] as? String else {
+            return nil
+        }
+        self.key = key
+
+        guard let times = json["times"] as? [Double] else {
+            return nil
+        }
+        self.times = times
+
+        guard let alliancesJSON = json["alliances"] as? [String: [[String: Any]]] else {
+            return nil
+        }
+        self.alliances = alliancesJSON.compactMapValues({ $0.compactMap({ TBAMachZebraTeam(json: $0) }) })
+    }
+
+}
+
+public struct TBAMachZebraTeam: TBAModel {
+    public var teamKey: String
+    public var xs: [Double?]
+    public var ys: [Double?]
+
+    public init(teamKey: String, xs: [Double?], ys: [Double?]) {
+        self.teamKey = teamKey
+        self.xs = xs
+        self.ys = ys
+    }
+
+    init?(json: [String : Any]) {
+        // Required: teamKey, xs, xy
+        guard let teamKey = json["team_key"] as? String else {
+            return nil
+        }
+        self.teamKey = teamKey
+
+        guard let xs = json["xs"] as? [Double?] else {
+            return nil
+        }
+        self.xs = xs
+
+        guard let ys = json["ys"] as? [Double?] else {
+            return nil
+        }
+        self.ys = ys
+    }
+
+}
+
 extension TBAKit {
 
     public func fetchMatch(key: String, _ completion: @escaping (Result<TBAMatch?, Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "match/\(key)"
+        return callObject(method: method, completion: completion)
+    }
+
+    public func fetchMatchZebra(key: String, _ completion: @escaping (Result<TBAMatchZebra?, Error>, Bool) -> ()) -> TBAKitOperation {
+        let method = "match/\(key)/zebra_motionworks"
         return callObject(method: method, completion: completion)
     }
 
