@@ -54,17 +54,8 @@ public struct TBAMatch: TBAModel {
         }
         self.matchNumber = matchNumber
 
-        // TODO: Swift 5 - compactMapValues
-        // https://github.com/apple/swift-evolution/blob/master/proposals/0218-introduce-compact-map-values.md
         if let alliancesJSON = json["alliances"] as? [String: [String: Any]] {
-            var alliances: [String: TBAMatchAlliance] = [:]
-            for (key, allianceJSON) in alliancesJSON {
-                guard let alliance = TBAMatchAlliance(json: allianceJSON) else {
-                    continue
-                }
-                alliances[key] = alliance
-            }
-            self.alliances = alliances
+            self.alliances = alliancesJSON.compactMapValues({ TBAMatchAlliance(json: $0) })
         }
 
         self.winningAlliance = json["winning_alliance"] as? String
