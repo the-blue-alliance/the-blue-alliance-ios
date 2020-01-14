@@ -264,6 +264,14 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(team.surrogateAlliances, [a])
     }
 
+    func test_zebra() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.zebra, [])
+        let zebra = MatchZebraTeam.init(entity: MatchZebraTeam.entity(), insertInto: persistentContainer.viewContext)
+        team.zebraRaw = NSSet(array: [zebra])
+        XCTAssertEqual(team.zebra, [zebra])
+    }
+
     func test_fetchRequest() {
         let fr: NSFetchRequest<Team> = Team.fetchRequest()
         XCTAssertEqual(fr.entityName, Team.entityName)

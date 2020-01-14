@@ -127,6 +127,15 @@ class MatchTestCase: TBADataTestCase {
         XCTAssertEqual(match.videos, [video])
     }
 
+    func test_zebra() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(match.zebra)
+
+        let zebra = MatchZebra.init(entity: MatchZebra.entity(), insertInto: persistentContainer.viewContext)
+        match.zebraRaw = zebra
+        XCTAssertEqual(match.zebra, zebra)
+    }
+
     func test_fetchRequest() {
         let fr: NSFetchRequest<Match> = Match.fetchRequest()
         XCTAssertEqual(fr.entityName, Match.entityName)
@@ -384,6 +393,36 @@ class MatchTestCase: TBADataTestCase {
         XCTAssertNotNil(videoTwo.managedObjectContext)
     }
 
+    func test_insert_zebra() {
+        let match = insertMatch()
+        XCTAssertNil(match.zebra)
+
+        let modelZebra = TBAMatchZebra(key: match.key, times: [0.0, 0.1], alliances: [
+            "red": [
+                TBAMachZebraTeam(teamKey: "frc7332", xs: [nil, 0.1], ys: [0.2, nil])
+            ]
+        ])
+        match.insert(modelZebra)
+        XCTAssertNotNil(match.zebra)
+
+        let oldZebra = try! XCTUnwrap(match.zebra)
+        XCTAssertNotNil(oldZebra.managedObjectContext)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let newModelZebra = TBAMatchZebra(key: "\(match.key)_1", times: [0.0, 0.1], alliances: [
+            "red": [
+                TBAMachZebraTeam(teamKey: "frc1", xs: [nil, 0.1], ys: [0.2, nil])
+            ]
+        ])
+        match.insert(newModelZebra)
+        XCTAssertNotNil(match.zebra)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertNil(oldZebra.managedObjectContext)
+    }
+
     func test_delete() {
         // Test cascades
         let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc7332"])
@@ -404,6 +443,15 @@ class MatchTestCase: TBADataTestCase {
 
         let match = Match.insert(model, in: persistentContainer.viewContext)
 
+        let modelZebra = TBAMatchZebra(key: match.key, times: [0.0, 0.1], alliances: [
+            "red": [
+                TBAMachZebraTeam(teamKey: "frc7332", xs: [nil, 0.1], ys: [0.2, nil])
+            ]
+        ])
+        match.insert(modelZebra)
+        XCTAssertNotNil(match.zebra)
+        let zebra = try! XCTUnwrap(match.zebra)
+
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
         let blueAlliance = (match.alliances).first(where: { $0.allianceKey == "blue" })!
@@ -422,6 +470,9 @@ class MatchTestCase: TBADataTestCase {
 
         // Test that our video has been deleted
         XCTAssertNil(video.managedObjectContext)
+
+        // Test that our zebra data has been deleted
+        XCTAssertNil(zebra.managedObjectContext)
     }
 
     func test_delete_videoHasMatch() {

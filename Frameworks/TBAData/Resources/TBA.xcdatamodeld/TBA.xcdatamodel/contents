@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES">
         <attribute name="awardTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="nameRaw" attributeType="String"/>
@@ -187,6 +187,7 @@
         <relationship name="alliancesRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchAlliance" inverseName="matchRaw" inverseEntity="MatchAlliance"/>
         <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matchesRaw" inverseEntity="Event"/>
         <relationship name="videosRaw" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="MatchVideo" inverseName="matchesRaw" inverseEntity="MatchVideo"/>
+        <relationship name="zebraRaw" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="MatchZebra" inverseName="matchRaw" inverseEntity="MatchZebra"/>
     </entity>
     <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES">
         <attribute name="allianceKeyRaw" attributeType="String"/>
@@ -200,6 +201,23 @@
         <attribute name="keyRaw" attributeType="String"/>
         <attribute name="typeRaw" attributeType="String"/>
         <relationship name="matchesRaw" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videosRaw" inverseEntity="Match"/>
+    </entity>
+    <entity name="MatchZebra" representedClassName="MatchZebra" syncable="YES">
+        <attribute name="keyRaw" attributeType="String"/>
+        <attribute name="timesRaw" attributeType="Transformable" valueTransformerName="" customClassName="[Double]"/>
+        <relationship name="alliancesRaw" toMany="YES" deletionRule="Cascade" destinationEntity="MatchZebraAlliance" inverseName="zebraRaw" inverseEntity="MatchZebraAlliance"/>
+        <relationship name="matchRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="zebraRaw" inverseEntity="Match"/>
+    </entity>
+    <entity name="MatchZebraAlliance" representedClassName="MatchZebraAlliance" syncable="YES">
+        <attribute name="allianceKeyRaw" attributeType="String"/>
+        <relationship name="teamsRaw" toMany="YES" deletionRule="Cascade" destinationEntity="MatchZebraTeam" inverseName="allianceRaw" inverseEntity="MatchZebraTeam"/>
+        <relationship name="zebraRaw" maxCount="1" deletionRule="Nullify" destinationEntity="MatchZebra" inverseName="alliancesRaw" inverseEntity="MatchZebra"/>
+    </entity>
+    <entity name="MatchZebraTeam" representedClassName="MatchZebraTeam" syncable="YES">
+        <attribute name="xsRaw" attributeType="Transformable" valueTransformerName="" customClassName="[AnyObject]"/>
+        <attribute name="ysRaw" attributeType="Transformable" valueTransformerName="" customClassName="[AnyObject]"/>
+        <relationship name="allianceRaw" maxCount="1" deletionRule="Nullify" destinationEntity="MatchZebraAlliance" inverseName="teamsRaw" inverseEntity="MatchZebraAlliance"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="zebraRaw" inverseEntity="Team"/>
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES">
         <attribute name="modelKeyRaw" attributeType="String"/>
@@ -251,6 +269,7 @@
         <relationship name="pickedAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAlliance" inverseName="picksRaw" inverseEntity="EventAlliance"/>
         <relationship name="statsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="teamRaw" inverseEntity="EventTeamStat"/>
         <relationship name="surrogateAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="surrogateTeamsRaw" inverseEntity="MatchAlliance"/>
+        <relationship name="zebraRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchZebraTeam" inverseName="teamRaw" inverseEntity="MatchZebraTeam"/>
         <fetchIndex name="byKeyIndex">
             <fetchIndexElement property="keyRaw" type="Binary" order="ascending"/>
         </fetchIndex>
@@ -292,13 +311,16 @@
         <element name="EventStatusQual" positionX="54" positionY="144" width="128" height="103"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="118"/>
         <element name="Favorite" positionX="45" positionY="135" width="128" height="43"/>
-        <element name="Match" positionX="-54" positionY="135" width="128" height="253"/>
+        <element name="Match" positionX="-54" positionY="135" width="128" height="268"/>
         <element name="MatchAlliance" positionX="45" positionY="135" width="128" height="133"/>
         <element name="MatchVideo" positionX="45" positionY="135" width="128" height="88"/>
+        <element name="MatchZebra" positionX="45" positionY="135" width="128" height="103"/>
+        <element name="MatchZebraAlliance" positionX="54" positionY="144" width="128" height="88"/>
+        <element name="MatchZebraTeam" positionX="63" positionY="153" width="128" height="103"/>
         <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="73"/>
         <element name="Status" positionX="45" positionY="135" width="128" height="133"/>
         <element name="Subscription" positionX="54" positionY="144" width="128" height="58"/>
-        <element name="Team" positionX="-54" positionY="135" width="128" height="553"/>
+        <element name="Team" positionX="-54" positionY="135" width="128" height="568"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="193"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="103"/>
     </elements>

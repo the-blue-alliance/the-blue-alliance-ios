@@ -101,4 +101,71 @@ class TBAMatchTests: TBAKitTestCase {
         }
     }
 
+    func test_match_zebra_init() {
+        let alliance = TBAMachZebraTeam(teamKey: "frc1", xs: [1.1, nil, 1.3], ys: [nil, 3.3, 3.5])
+        let zebra = TBAMatchZebra(key: "2019cc_qm1", times: [0.0, 0.1, 0.2, 0.3], alliances: ["red": [alliance]])
+        XCTAssertEqual(zebra.key, "2019cc_qm1")
+        XCTAssertEqual(zebra.times, [0.0, 0.1, 0.2, 0.3])
+        XCTAssert(zebra.alliances.keys.contains("red"))
+        XCTAssertEqual(zebra.alliances["red"]?.count ?? 0, 1)
+    }
+
+    func testMatchZebra() {
+        let ex = expectation(description: "match_zebra")
+
+        let task = kit.fetchMatchZebra(key: "2019cc_qm1") { (result, notModified) in
+            let zebra = try! XCTUnwrap(result.get())
+            XCTAssertFalse(notModified)
+
+            XCTAssertEqual(zebra.key, "2019cc_qm1")
+
+            XCTAssertEqual(zebra.times.count, 1521)
+
+            XCTAssertEqual(zebra.alliances.keys.count, 2)
+            XCTAssert(zebra.alliances.keys.contains("red"))
+            XCTAssert(zebra.alliances.keys.contains("blue"))
+            print(zebra.alliances)
+
+            let redAlliance = try! XCTUnwrap(zebra.alliances["red"])
+            XCTAssertEqual(redAlliance.count, 3)
+            XCTAssert(redAlliance.map({ $0.teamKey }).elementsEqual(["frc649", "frc254", "frc1983"]))
+            XCTAssert(redAlliance.reduce(true, { $0 && $1.xs.count == zebra.times.count }))
+            XCTAssert(redAlliance.reduce(true, { $0 && $1.ys.count == zebra.times.count }))
+
+            let blueAlliance = try! XCTUnwrap(zebra.alliances["blue"])
+            XCTAssertEqual(blueAlliance.count, 3)
+            XCTAssert(blueAlliance.map({ $0.teamKey }).elementsEqual(["frc5026", "frc604", "frc2930"]))
+            XCTAssert(blueAlliance.reduce(true, { $0 && $1.xs.count == zebra.times.count }))
+            XCTAssert(blueAlliance.reduce(true, { $0 && $1.ys.count == zebra.times.count }))
+
+            ex.fulfill()
+        }
+        kit.sendSuccessStub(for: task)
+
+        waitForExpectations(timeout: 2) { (error) in
+            XCTAssertNil(error)
+        }
+    }
+
+    func testMatchZebraNull() {
+        let ex = expectation(description: "match_zebra_null")
+
+        let task = kit.fetchMatchZebra(key: "2015miket_qm1") { (result, notModified) in
+            do {
+                _ = try result.get()
+                XCTFail()
+            } catch {
+                XCTAssertNotNil(error)
+            }
+            XCTAssertFalse(notModified)
+
+            ex.fulfill()
+        }
+        kit.sendSuccessStub(for: task)
+
+        waitForExpectations(timeout: 2) { (error) in
+            XCTAssertNil(error)
+        }
+    }
+
 }

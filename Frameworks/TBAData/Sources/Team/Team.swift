@@ -205,6 +205,14 @@ extension Team {
         return surrogateAlliances
     }
 
+    public var zebra: [MatchZebraTeam] {
+        guard let zebraRaw = getValue(\Team.zebraRaw),
+            let zebra = zebraRaw.allObjects as? [MatchZebraTeam] else {
+                return []
+        }
+        return zebra
+    }
+
 }
 
 @objc(Team)
@@ -248,6 +256,7 @@ public class Team: NSManagedObject {
     @NSManaged var pickedAlliancesRaw: NSSet?
     @NSManaged var statsRaw: NSSet?
     @NSManaged var surrogateAlliancesRaw: NSSet?
+    @NSManaged var zebraRaw: NSSet?
 
 }
 
