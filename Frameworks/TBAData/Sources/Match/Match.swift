@@ -161,6 +161,10 @@ extension Match {
         return videos
     }
 
+    public var zebra: MatchZebra? {
+        return getValue(\Match.zebraRaw)
+    }
+
     /**
      Start time for the match, actual or a guess. In order
      - Returns actual start time for the match
@@ -282,6 +286,7 @@ public class Match: NSManagedObject {
     @NSManaged var alliancesRaw: NSSet?
     @NSManaged var eventRaw: Event?
     @NSManaged var videosRaw: NSSet?
+    @NSManaged var zebraRaw: MatchZebra?
 
 }
 
@@ -387,6 +392,23 @@ extension Match: Managed {
             match.updateToManyRelationship(relationship: #keyPath(Match.videosRaw), newValues: model.videos?.map({
                 return MatchVideo.insert($0, in: context)
             }))
+        }
+    }
+
+    /**
+     Insert a MatchZebra with values from TBAKit Match Zebra model in to the managed object context.
+
+     This method will manage setting up an MatchZebra's relationship to a Match.
+
+     - Parameter zebra: The TBAKit Match Zebra representations to set values from.
+     */
+    public func insert(_ zebra: TBAMatchZebra) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToOneRelationship(relationship: #keyPath(Match.zebraRaw), newValue: zebra) {
+            return MatchZebra.insert($0, in: managedObjectContext)
         }
     }
 
