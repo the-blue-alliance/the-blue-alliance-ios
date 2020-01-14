@@ -64,6 +64,8 @@
 		92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */; };
 		9287013E20CD72EC0077D6DA /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9287013D20CD72EC0077D6DA /* StatusDefaults.plist */; };
 		9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */; };
+		928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */; };
+		928AAC5C23C832BE001E6C11 /* ScrollReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */; };
 		928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928DE031222AF10A00C6234A /* UIImage+TBA.swift */; };
 		928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
@@ -147,6 +149,10 @@
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
+		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
+		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
+		92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */; };
+		92FA4D34228668F000030BA3 /* TeamHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */; };
 		92FCE587234839AA00DD284B /* ContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCE586234839AA00DD284B /* ContainerViewControllerTests.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
 		92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */; };
@@ -249,6 +255,8 @@
 		92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatTableViewCell.swift; sourceTree = "<group>"; };
 		9287013D20CD72EC0077D6DA /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation.swift; sourceTree = "<group>"; };
+		928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContainerViewController.swift; sourceTree = "<group>"; };
+		928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollReporter.swift; sourceTree = "<group>"; };
 		928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		928DE031222AF10A00C6234A /* UIImage+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBA.swift"; sourceTree = "<group>"; };
 		928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchQueryOptionsViewController.swift; sourceTree = "<group>"; };
@@ -337,6 +345,10 @@
 		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
+		92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderView.swift; sourceTree = "<group>"; };
+		92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
+		92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewModel.swift; sourceTree = "<group>"; };
+		92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewTests.swift; sourceTree = "<group>"; };
 		92FCE586234839AA00DD284B /* ContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamEventsViewController.swift; sourceTree = "<group>"; };
@@ -540,6 +552,7 @@
 		928030E12197802C0099CB65 /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
+				92FA4D32228668D700030BA3 /* Teams */,
 				A6544CEB21DC39FB00D423F2 /* Match */,
 				928030E22197803F0099CB65 /* Events */,
 			);
@@ -734,6 +747,7 @@
 			children = (
 				929F57212092B80B00E5313A /* ContainerViewController.swift */,
 				92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */,
+				928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */,
 			);
 			path = Containers;
 			sourceTree = "<group>";
@@ -771,6 +785,7 @@
 				921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */,
 				921D0B5E222B13480056578A /* ContainerViewController+Team.swift */,
 				925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */,
+				92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -934,6 +949,8 @@
 				92D855D81EC695CE00572F27 /* TeamTableViewCell.xib */,
 				92D855D61EC695C400572F27 /* TeamTableViewCell.swift */,
 				14796943215EAF7A0075AF4E /* TeamCellViewModel.swift */,
+				92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */,
+				92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */,
 			);
 			path = Teams;
 			sourceTree = "<group>";
@@ -941,6 +958,7 @@
 		92EA0CEF1E2C296300C12A4C /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */,
 				929F57252092BA1C00E5313A /* Persistable.swift */,
 				929F57292092BAFD00E5313A /* Refreshable.swift */,
 				929F572B2092BB1C00E5313A /* Alertable.swift */,
@@ -962,6 +980,14 @@
 				92564C6A21644AA30047917F /* Secrets.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		92FA4D32228668D700030BA3 /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */,
+			);
+			path = Teams;
 			sourceTree = "<group>";
 		};
 		92FF10E221A61A1B003BC5C4 /* Team */ = {
@@ -1160,7 +1186,7 @@
 		92942D8A1E2154DA008E79CA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
@@ -1490,12 +1516,15 @@
 				921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */,
 				92F8E356209AAE890094213F /* PushService.swift in Sources */,
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
+				928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */,
 				92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */,
 				14796940215E9A590075AF4E /* MatchViewModel.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
 				92FF10EF21A61A1B003BC5C4 /* TeamStatsViewController.swift in Sources */,
 				92FF110721A61AF6003BC5C4 /* EventRankingsViewController.swift in Sources */,
 				92B3873E21CAF6740041A049 /* IconTableViewCell.swift in Sources */,
+				92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */,
+				928AAC5C23C832BE001E6C11 /* ScrollReporter.swift in Sources */,
 				9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */,
@@ -1568,11 +1597,13 @@
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
 				92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */,
+				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
+				92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */,
 				92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */,
@@ -1619,6 +1650,7 @@
 				924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */,
 				924459C820CB797E0007570D /* RetryService_Tests.swift in Sources */,
 				9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */,
+				92FA4D34228668F000030BA3 /* TeamHeaderViewTests.swift in Sources */,
 				928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */,
 				92C8CE4E21ADCA8000683558 /* MyTBASignInViewControllerTests.swift in Sources */,
 				92C1F2E42169AA7200BD8445 /* TeamsContainerViewControllerTests.swift in Sources */,

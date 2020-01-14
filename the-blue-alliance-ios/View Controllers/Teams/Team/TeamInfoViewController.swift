@@ -4,17 +4,14 @@ import TBAData
 import TBAKit
 import UIKit
 
-private enum TeamInfoSection: Int, CaseIterable {
-    case title
+private enum TeamInfoSection: Int {
+    case info
     case link
 }
 
-private enum TeamTitleRow: Int, CaseIterable {
-    case nickname
+private enum TeamInfoItem {
+    case location
     case sponsors
-}
-
-private enum TeamLinkRow: Int, CaseIterable {
     case website
     case twitter
     case youtube
@@ -25,6 +22,9 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
     private var team: Team
     private let urlOpener: URLOpener
+
+    private var dataSource: UITableViewDiffableDataSource<TeamInfoSection, TeamInfoItem>!
+    private var _dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
 
     private var sponsorsExpanded: Bool = false
 
@@ -47,8 +47,9 @@ class TeamInfoViewController: TBATableViewController, Observable {
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
 
         contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                self?.tableView.reloadData()
+                self.updateTeamInfo()
             }
         }
     }
@@ -63,52 +64,86 @@ class TeamInfoViewController: TBATableViewController, Observable {
         super.viewDidLoad()
 
         tableView.sectionFooterHeight = 0
-        tableView.registerReusableCell(InfoTableViewCell.self)
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
+
+        setupDataSource()
+        updateTeamInfo()
     }
 
-    // MARK: - Table view data source
+    // MARK: - Private Methods
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return TeamInfoSection.allCases.count
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case TeamInfoSection.title.rawValue:
-            let max = TeamTitleRow.allCases.count
-            return team.name != nil ? max : max - 1
-        case TeamInfoSection.link.rawValue:
-            let max = TeamLinkRow.allCases.count
-            return team.hasWebsite ? max : max - 1
-        default:
-            return 0
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = {
-            switch indexPath.section {
-            case TeamInfoSection.title.rawValue:
-                switch indexPath.row {
-                case TeamTitleRow.nickname.rawValue:
-                    return self.tableView(tableView, titleCellForRowAt: indexPath)
-                case TeamTitleRow.sponsors.rawValue:
-                    return self.tableView(tableView, sponsorCellForRowAt: indexPath)
-                default:
-                    return UITableViewCell()
-                }
-            case TeamInfoSection.link.rawValue:
-                return self.tableView(tableView, linkCellForRowAt: indexPath)
-            default:
-                return UITableViewCell()
+    private func setupDataSource() {
+        dataSource = UITableViewDiffableDataSource<TeamInfoSection, TeamInfoItem>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+            guard let self = self else { return nil }
+            switch item {
+            case .location:
+                return self.tableView(tableView, locationCellForRowAt: indexPath)
+            case .sponsors:
+                return self.tableView(tableView, sponsorCellForRowAt: indexPath)
+            case .website:
+                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                cell.textLabel?.text = "View team's website"
+                return cell
+            case .twitter:
+                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                cell.textLabel?.text = "View #\(self.team.key) on Twitter"
+                return cell
+            case .youtube:
+                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                cell.textLabel?.text = "View \(self.team.key) on YouTube"
+                return cell
+            case .chiefDelphi:
+                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                cell.textLabel?.text = "View photos on Chief Delphi"
+                return cell
             }
-        }()
-        return cell
+        })
+        _dataSource = TableViewDataSource(dataSource: dataSource)
     }
 
-    private func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
-        cell.viewModel = InfoCellViewModel(team: team)
+    private func updateTeamInfo() {
+        var snapshot = dataSource.snapshot()
+
+        snapshot.deleteAllItems()
+
+        // Info
+        var infoItems: [TeamInfoItem] = []
+        if team.hasLocation {
+            infoItems.append(.location)
+        }
+        if team.name != nil {
+            infoItems.append(.sponsors)
+        }
+
+        if !infoItems.isEmpty {
+            snapshot.insertSection(.info, atIndex: TeamInfoSection.info.rawValue)
+            snapshot.appendItems(infoItems, toSection: .info)
+        }
+
+        // Links
+        var linkItems: [TeamInfoItem] = [.twitter, .youtube, .chiefDelphi]
+        if team.hasWebsite {
+            linkItems.insert(.website, at: 0)
+        }
+        snapshot.insertSection(.link, atIndex: TeamInfoSection.link.rawValue)
+        snapshot.appendItems(linkItems, toSection: .link)
+
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+    private func reloadSponsors() {
+        var snapshot = dataSource.snapshot()
+        snapshot.reloadItems([.sponsors])
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
+    // MARK: - Table View Methods
+
+    private func tableView(_ tableView: UITableView, locationCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+
+        cell.titleLabel?.text = "Location"
+        cell.subtitleLabel?.text = team.locationString
 
         cell.accessoryType = .none
         cell.selectionStyle = .none
@@ -137,61 +172,37 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
     private func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
-
-        var row = indexPath.row
-        if !team.hasWebsite, row >= TeamLinkRow.website.rawValue {
-            row += 1
-        }
-
-        switch row {
-        case TeamLinkRow.website.rawValue:
-            cell.textLabel?.text = "View team's website"
-        case TeamLinkRow.twitter.rawValue:
-            cell.textLabel?.text = "View #\(team.key) on Twitter"
-        case TeamLinkRow.youtube.rawValue:
-            cell.textLabel?.text = "View \(team.key) on YouTube"
-        case TeamLinkRow.chiefDelphi.rawValue:
-            cell.textLabel?.text = "View photos on Chief Delphi"
-        default:
-            break
-        }
-
         cell.accessoryType = .disclosureIndicator
-
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if indexPath.section == TeamInfoSection.title.rawValue, indexPath.row == TeamTitleRow.sponsors.rawValue, !sponsorsExpanded {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+
+        var urlString: String?
+        switch item {
+        case .sponsors:
             sponsorsExpanded = true
-            tableView.reloadRows(at: [indexPath], with: .fade)
-        } else if indexPath.section == TeamInfoSection.link.rawValue {
-            var row = indexPath.row
-            if !team.hasWebsite, row >= TeamLinkRow.website.rawValue {
-                row += 1
-            }
+            reloadSponsors()
+        case .website:
+            urlString = team.website
+        case .twitter:
+            urlString = "https://twitter.com/search?q=%23\(team.key)"
+        case .youtube:
+            urlString = "https://www.youtube.com/results?search_query=\(team.key)"
+        case .chiefDelphi:
+            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(team.key)"
+        default:
+            break
+        }
 
-            var urlString: String?
-            switch row {
-            case TeamLinkRow.website.rawValue:
-                urlString = team.website
-            case TeamLinkRow.twitter.rawValue:
-                urlString = "https://twitter.com/search?q=%23\(team.key)"
-            case TeamLinkRow.youtube.rawValue:
-                urlString = "https://www.youtube.com/results?search_query=\(team.key)"
-            case TeamLinkRow.chiefDelphi.rawValue:
-                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(team.key)"
-            default:
-                break
-            }
-
-            if let urlString = urlString {
-                if let url = URL(string: urlString), urlOpener.canOpenURL(url) {
-                    urlOpener.open(url, options: [:], completionHandler: nil)
-                }
-            }
+        if let urlString = urlString,
+            let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+                urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
 
@@ -249,7 +260,6 @@ extension TeamInfoViewController: Refreshable {
             }, errorRecorder: Crashlytics.sharedInstance())
         }
 
-        // TODO: Think about how we go about refreshing the years, and maybe also move it to the year selector as well?
         addRefreshOperations([infoOperation, yearsOperation])
     }
 

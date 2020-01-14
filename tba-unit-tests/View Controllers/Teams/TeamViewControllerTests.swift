@@ -30,15 +30,13 @@ class TeamViewControllerTests: TBATestCase {
     }
 
     func test_delegates() {
-        XCTAssertNotNil(teamViewController.navigationTitleDelegate)
-
         XCTAssertNotNil(teamViewController.eventsViewController.delegate)
         XCTAssertNotNil(teamViewController.mediaViewController.delegate)
     }
 
     func test_title() {
         XCTAssertEqual(teamViewController.navigationTitle, "Team 7332")
-        XCTAssertEqual(teamViewController.navigationSubtitle, "▾ ----") // TODO: Something here
+        XCTAssertEqual(teamViewController.navigationSubtitle, "----")
     }
 
     func test_showsInfo() {
