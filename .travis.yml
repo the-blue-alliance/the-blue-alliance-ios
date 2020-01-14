@@ -45,6 +45,11 @@ jobs:
     script:
     - bundle exec fastlane setup_secrets
     - bundle exec fastlane app_store
+
+after_failure:
+- gem install second_curtain
+- cat build/reports/tba-snapshot-tests-tba-unit-tests.log | second_curtain > /dev/null
+
 notifications:
   slack:
     secure: iNpsZadDEVp0CTeCqsNAbYtBincUOiTtGR0fTXEXeLl5ZhaxtG/HNNcNtX5DXZwCc/c1ie08wm41S9av6ivZfHQz9T+o2S8e0RIvdYwihmvmr2z27dhFvtJFg3yPNmqejBmraR2h/Wfv91OFVzGy9bl9GeoqvmGer8PlzKEA44I=

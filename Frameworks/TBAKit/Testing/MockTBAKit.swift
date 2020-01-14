@@ -6,6 +6,7 @@ public class MockTBAKit: TBAKit {
 
     public let session: MockURLSession
     private let bundle: Bundle
+    private var operations: [TBAKitOperation] = []
 
     public init(userDefaults: UserDefaults) {
         self.session = MockURLSession()
@@ -44,6 +45,21 @@ public class MockTBAKit: TBAKit {
         }
 
         return etag(for: url)
+    }
+
+     public func interceptOperations() {
+        callApiMethod = { (method, completion) -> TBAKitOperation in
+            let operation = self._callApi(method: method, completion: completion)
+            self.operations.append(operation)
+            return request
+        }
+    }
+
+    public func sendUnmodifiedStubForAllOperations() {
+        operations.forEach {
+            self.sendUnmodifiedStub(for: $0)
+        }
+        requests.removeAll()
     }
 
     public func sendUnauthorizedStub(for operation: TBAKitOperation) {

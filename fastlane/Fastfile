@@ -19,6 +19,15 @@ platform :ios do
     scan(project: "Pods/Pods.xcodeproj", scheme: "TBAData-Unit-Tests")
   end
 
+  desc "Run TBA snapshot tests"
+  lane :test_snapshot do
+    scan(
+      workspace: "the-blue-alliance-ios.xcworkspace",
+      scheme: "tba-snapshot-tests",
+      devices: ["iPhone X (12.2)", "iPhone 5s (12.2)", "iPad Pro (12.9-inch) (3rd generation) (12.2)"]
+    )
+  end
+
   desc "Run MyTBAKit unit tests"
   lane :test_mytbakit do
     scan(project: "Pods/Pods.xcodeproj", scheme: "MyTBAKit-Unit-Tests")
@@ -47,6 +56,7 @@ platform :ios do
     test_tbaoperation
     test_tbautils
     test_unit
+    test_snapshot
   end
 
   ## CI Lanes ##

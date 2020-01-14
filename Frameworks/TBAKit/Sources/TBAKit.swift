@@ -33,11 +33,16 @@ open class TBAKit: NSObject {
     internal let apiKey: String
     internal let urlSession: URLSession
     internal let userDefaults: UserDefaults
+    internal var callApiMethod: ((String, @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> TBAKitOperation)!
 
     public init(apiKey: String, urlSession: URLSession? = nil, userDefaults: UserDefaults) {
         self.apiKey = apiKey
         self.urlSession = urlSession ?? URLSession(configuration: .default)
         self.userDefaults = userDefaults
+
+        super.init()
+
+        self.callApiMethod = _callApi
     }
 
     public func storeCacheHeaders(_ operation: TBAKitOperation) {
@@ -115,6 +120,10 @@ open class TBAKit: NSObject {
     }
 
     func callApi(method: String, completion: @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> TBAKitOperation {
+        return callApiMethod(method, completion)
+    }
+
+    func _callApi(method: String, completion: @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> TBAKitOperation {
         return TBAKitOperation(tbaKit: self, method: method, completion: completion)
     }
 

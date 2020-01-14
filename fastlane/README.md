@@ -31,6 +31,12 @@ Run TBA unit tests
 fastlane ios test_tbadata
 ```
 Run TBAData unit tests
+
+### ios test_snapshot
+```
+fastlane ios test_snapshot
+```
+Run TBA snapshot tests
 ### ios test_mytbakit
 ```
 fastlane ios test_mytbakit

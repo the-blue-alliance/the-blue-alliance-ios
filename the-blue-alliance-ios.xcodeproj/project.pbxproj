@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1417274223CE6AF800DD957B /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417273323CE6AF800DD957B /* MockNavigationController.swift */; };
+		1417274323CE6AF800DD957B /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1417273423CE6AF800DD957B /* StatusDefaults.plist */; };
+		1417274423CE6AF800DD957B /* TBAViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417273623CE6AF800DD957B /* TBAViewControllerTester.swift */; };
+		1417274523CE6AF800DD957B /* TeamHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417273923CE6AF800DD957B /* TeamHeaderViewTests.swift */; };
+		1417274623CE6AF800DD957B /* TBAViewControllerSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417273B23CE6AF800DD957B /* TBAViewControllerSnapshotTestCase.swift */; };
+		1417274723CE6AF800DD957B /* TBASnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417273C23CE6AF800DD957B /* TBASnapshotTestCase.swift */; };
+		1417274823CE6AF800DD957B /* TeamViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417273F23CE6AF800DD957B /* TeamViewControllerTests.swift */; };
+		1417274923CE6AF800DD957B /* CoreDataTestFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417274023CE6AF800DD957B /* CoreDataTestFixture.swift */; };
+		1417274A23CE6AF800DD957B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1417274123CE6AF800DD957B /* Info.plist */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
 		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
@@ -21,6 +30,7 @@
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
+		501A5CC22CF0343D4987C4C2 /* Pods_tba_snapshot_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE68EF225E0096C5014C052D /* Pods_tba_snapshot_tests.framework */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
@@ -181,6 +191,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1417272C23CE6A5100DD957B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92942D911E2154DA008E79CA;
+			remoteInfo = "The Blue Alliance";
+		};
 		92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
@@ -192,6 +209,16 @@
 
 /* Begin PBXFileReference section */
 		0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_ui_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1417272723CE6A5100DD957B /* tba-snapshot-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-snapshot-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1417273323CE6AF800DD957B /* MockNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
+		1417273423CE6AF800DD957B /* StatusDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
+		1417273623CE6AF800DD957B /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
+		1417273923CE6AF800DD957B /* TeamHeaderViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewTests.swift; sourceTree = "<group>"; };
+		1417273B23CE6AF800DD957B /* TBAViewControllerSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAViewControllerSnapshotTestCase.swift; sourceTree = "<group>"; };
+		1417273C23CE6AF800DD957B /* TBASnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBASnapshotTestCase.swift; sourceTree = "<group>"; };
+		1417273F23CE6AF800DD957B /* TeamViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewControllerTests.swift; sourceTree = "<group>"; };
+		1417274023CE6AF800DD957B /* CoreDataTestFixture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTestFixture.swift; sourceTree = "<group>"; };
+		1417274123CE6AF800DD957B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
 		145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchTableViewCell.xib; sourceTree = "<group>"; };
 		145C57BC1ED3C3AA004955B2 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
@@ -370,11 +397,22 @@
 		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
 		A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewModelTests.swift; sourceTree = "<group>"; };
 		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		BC8B5E353BFAC6F142D430A8 /* Pods-tba-snapshot-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-snapshot-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		BE68EF225E0096C5014C052D /* Pods_tba_snapshot_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_snapshot_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E17E54ECCCD88AA087380FDC /* Pods-tba-snapshot-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-snapshot-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests.release.xcconfig"; sourceTree = "<group>"; };
 		E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
 		FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1417272423CE6A5100DD957B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				501A5CC22CF0343D4987C4C2 /* Pods_tba_snapshot_tests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D8F1E2154DA008E79CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -394,6 +432,78 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1417273123CE6AF800DD957B /* tba-snapshot-tests */ = {
+			isa = PBXGroup;
+			children = (
+				1417273223CE6AF800DD957B /* Mocks */,
+				1417273423CE6AF800DD957B /* StatusDefaults.plist */,
+				1417273523CE6AF800DD957B /* ReferenceImages */,
+				1417273623CE6AF800DD957B /* TBAViewControllerTester.swift */,
+				1417273723CE6AF800DD957B /* View Elements */,
+				1417273A23CE6AF800DD957B /* Cases */,
+				1417273D23CE6AF800DD957B /* View Controllers */,
+				1417274023CE6AF800DD957B /* CoreDataTestFixture.swift */,
+				1417274123CE6AF800DD957B /* Info.plist */,
+			);
+			path = "tba-snapshot-tests";
+			sourceTree = "<group>";
+		};
+		1417273223CE6AF800DD957B /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				1417273323CE6AF800DD957B /* MockNavigationController.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		1417273523CE6AF800DD957B /* ReferenceImages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ReferenceImages;
+			sourceTree = "<group>";
+		};
+		1417273723CE6AF800DD957B /* View Elements */ = {
+			isa = PBXGroup;
+			children = (
+				1417273823CE6AF800DD957B /* Teams */,
+			);
+			path = "View Elements";
+			sourceTree = "<group>";
+		};
+		1417273823CE6AF800DD957B /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				1417273923CE6AF800DD957B /* TeamHeaderViewTests.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
+		1417273A23CE6AF800DD957B /* Cases */ = {
+			isa = PBXGroup;
+			children = (
+				1417273B23CE6AF800DD957B /* TBAViewControllerSnapshotTestCase.swift */,
+				1417273C23CE6AF800DD957B /* TBASnapshotTestCase.swift */,
+			);
+			path = Cases;
+			sourceTree = "<group>";
+		};
+		1417273D23CE6AF800DD957B /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1417273E23CE6AF800DD957B /* Teams */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		1417273E23CE6AF800DD957B /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				1417273F23CE6AF800DD957B /* TeamViewControllerTests.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
 		145C57B31ED377DE004955B2 /* Match */ = {
 			isa = PBXGroup;
 			children = (
@@ -429,6 +539,8 @@
 				4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */,
 				AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */,
 				E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */,
+				BC8B5E353BFAC6F142D430A8 /* Pods-tba-snapshot-tests.debug.xcconfig */,
+				E17E54ECCCD88AA087380FDC /* Pods-tba-snapshot-tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -579,6 +691,7 @@
 				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
+				1417273123CE6AF800DD957B /* tba-snapshot-tests */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
 				92942D931E2154DA008E79CA /* Products */,
 				5EC6F9271347DB8630C82782 /* Pods */,
@@ -590,6 +703,7 @@
 			children = (
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
 				92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */,
+				1417272723CE6A5100DD957B /* tba-snapshot-tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1105,6 +1219,7 @@
 				FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */,
 				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
 				52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */,
+				BE68EF225E0096C5014C052D /* Pods_tba_snapshot_tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1112,6 +1227,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1417272623CE6A5100DD957B /* tba-snapshot-tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1417273023CE6A5100DD957B /* Build configuration list for PBXNativeTarget "tba-snapshot-tests" */;
+			buildPhases = (
+				707F91BB1001A95E120263EB /* [CP] Check Pods Manifest.lock */,
+				1417272323CE6A5100DD957B /* Sources */,
+				1417272423CE6A5100DD957B /* Frameworks */,
+				1417272523CE6A5100DD957B /* Resources */,
+				F2B0C66D11D6E03305F4E2DE /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1417272D23CE6A5100DD957B /* PBXTargetDependency */,
+			);
+			name = "tba-snapshot-tests";
+			productName = "tba-snapshot-tests";
+			productReference = 1417272723CE6A5100DD957B /* tba-snapshot-tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		92942D911E2154DA008E79CA /* The Blue Alliance */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
@@ -1160,10 +1295,15 @@
 		92942D8A1E2154DA008E79CA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
+					1417272623CE6A5100DD957B = {
+						CreatedOnToolsVersion = 11.3;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 92942D911E2154DA008E79CA;
+					};
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
 						LastSwiftMigration = 1020;
@@ -1200,11 +1340,21 @@
 			targets = (
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
 				92D6483920BE4CB8008F0DB3 /* tba-unit-tests */,
+				1417272623CE6A5100DD957B /* tba-snapshot-tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1417272523CE6A5100DD957B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1417274A23CE6AF800DD957B /* Info.plist in Resources */,
+				1417274323CE6AF800DD957B /* StatusDefaults.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D901E2154DA008E79CA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1367,6 +1517,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		707F91BB1001A95E120263EB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tba-snapshot-tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		924E826C208FE7D20053247C /* Run Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1432,6 +1604,36 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F2B0C66D11D6E03305F4E2DE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/MyTBAKit/MyTBAKit.framework",
+				"${BUILT_PRODUCTS_DIR}/MyTBAKitTesting/MyTBAKitTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAKitTesting/TBAKitTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAOperation/TBAOperation.framework",
+				"${BUILT_PRODUCTS_DIR}/TBATestingMocks/TBATestingMocks.framework",
+				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKitTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKitTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBATestingMocks.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F8CA407276FDEDCD342B403C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1471,6 +1673,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1417272323CE6A5100DD957B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1417274623CE6AF800DD957B /* TBAViewControllerSnapshotTestCase.swift in Sources */,
+				1417274223CE6AF800DD957B /* MockNavigationController.swift in Sources */,
+				1417274523CE6AF800DD957B /* TeamHeaderViewTests.swift in Sources */,
+				1417274823CE6AF800DD957B /* TeamViewControllerTests.swift in Sources */,
+				1417274423CE6AF800DD957B /* TBAViewControllerTester.swift in Sources */,
+				1417274723CE6AF800DD957B /* TBASnapshotTestCase.swift in Sources */,
+				1417274923CE6AF800DD957B /* CoreDataTestFixture.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D8E1E2154DA008E79CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1632,6 +1848,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1417272D23CE6A5100DD957B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
+			targetProxy = 1417272C23CE6A5100DD957B /* PBXContainerItemProxy */;
+		};
 		92D6484020BE4CB8008F0DB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
@@ -1652,6 +1873,54 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1417272E23CE6A5100DD957B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BC8B5E353BFAC6F142D430A8 /* Pods-tba-snapshot-tests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "tba-snapshot-tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "the-blue-alliance.tba-snapshot-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+			};
+			name = Debug;
+		};
+		1417272F23CE6A5100DD957B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E17E54ECCCD88AA087380FDC /* Pods-tba-snapshot-tests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "tba-snapshot-tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "the-blue-alliance.tba-snapshot-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+			};
+			name = Release;
+		};
 		92942DA41E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1881,6 +2150,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1417273023CE6A5100DD957B /* Build configuration list for PBXNativeTarget "tba-snapshot-tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1417272E23CE6A5100DD957B /* Debug */,
+				1417272F23CE6A5100DD957B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
