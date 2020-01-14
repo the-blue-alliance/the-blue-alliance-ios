@@ -40,8 +40,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         }
     }
 
-    // MARK: - Private Properties
-
     var persistentContainer: NSPersistentContainer
     private(set) var tbaKit: TBAKit
     private(set) var userDefaults: UserDefaults
@@ -68,7 +66,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     weak var navigationTitleDelegate: NavigationTitleDelegate?
 
     private let shouldShowSegmentedControl: Bool = false
-    private lazy var segmentedControlView: UIView = {
+    lazy var segmentedControlView: UIView = {
         let segmentedControlView = UIView(forAutoLayout: ())
         segmentedControlView.autoSetDimension(.height, toSize: 44.0)
         segmentedControlView.backgroundColor = UIColor.navigationBarTintColor
@@ -78,11 +76,11 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         segmentedControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16.0)
         return segmentedControlView
     }()
-    private(set) var segmentedControl: UISegmentedControl
+    private var segmentedControl: UISegmentedControl
 
     private let containerView: UIView = UIView()
     private let viewControllers: [ContainableViewController]
-    private var rootStackView: UIStackView!
+    var rootStackView: UIStackView!
 
     private lazy var offlineEventView: UIView = {
         let offlineEventLabel = UILabel(forAutoLayout: ())

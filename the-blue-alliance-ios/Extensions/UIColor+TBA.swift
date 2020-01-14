@@ -51,6 +51,10 @@ extension UIColor {
         return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.white, UIColor.white)
     }
 
+    public class var yearSelectColor: UIColor {
+        return dynamicColor(UIColor.white, UIColor.white, UIColor.systemGray5, UIColor.systemGray5)
+    }
+
     // NOTE: Match Summary Background Colors don't really follow "high contrast" guidelines - they're used to color block information,
     // so instead of creating a higher contrast with the text they're used with, they're higher value colors to create a better contrast
     // between each otehr.
@@ -85,6 +89,14 @@ extension UIColor {
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000088)
         let darkModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0x0000AA)
         return dynamicColor(lightModeColor, lightModeHighContrastColor, darkModeColor, darkModeHighContrastColor)
+    }
+
+    public class var avatarRed: UIColor {
+        return .colorWithRGB(rgbValue: 0xda3434)
+    }
+
+    public class var avatarBlue: UIColor {
+        return .colorWithRGB(rgbValue: 0x487fcc)
     }
 
     public class var dangerRed: UIColor {

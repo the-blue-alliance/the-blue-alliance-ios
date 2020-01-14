@@ -3,7 +3,7 @@ import Foundation
 import TBAKit
 import UIKit
 
-class TBACollectionViewController: UICollectionViewController, DataController, Navigatable {
+class TBACollectionViewController: UICollectionViewController, DataController, Navigatable, ScrollReporter {
 
     var persistentContainer: NSPersistentContainer
     let tbaKit: TBAKit
@@ -12,6 +12,10 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
 
     var refreshOperationQueue: OperationQueue = OperationQueue()
     var userDefaults: UserDefaults
+
+    // MARK: - Scroll Reporter
+
+    weak var scrollReporterDelegate: ScrollReporterDelegate?
 
     // MARK: - Stateful
 
@@ -45,6 +49,16 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
         collectionView.backgroundColor = UIColor.systemGroupedBackground
         collectionView.delegate = self
         collectionView.registerReusableCell(BasicCollectionViewCell.self)
+    }
+
+    // MARK: - Scroll Reporter
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollReporterDelegate?.scrollViewDidScroll(scrollView)
+    }
+
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        scrollReporterDelegate?.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
     }
 
 }

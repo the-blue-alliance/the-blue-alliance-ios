@@ -10,6 +10,13 @@ public protocol Locatable {
 
 extension Locatable {
 
+    public var hasLocation: Bool {
+        if let locationString = locationString, !locationString.isEmpty {
+            return true
+        }
+        return false
+    }
+
     public var locationString: String? {
         let location = [city, stateProv, country].reduce("", { (locationString, locationPart) -> String in
             guard let locationPart = locationPart, !locationPart.isEmpty else {

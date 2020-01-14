@@ -7,13 +7,25 @@ import TBAData
 import TBAKit
 import UIKit
 
-class TeamViewController: MyTBAContainerViewController, Observable {
+class TeamViewController: ScrollableHeaderContainerViewController, Observable {
 
     private(set) var team: Team
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
+
+    private let operationQueue = OperationQueue()
+
+    private let teamHeaderView: TeamHeaderView
+
+    override var headerView: UIView {
+        return teamHeaderView
+    }
+
+    override var headerContentView: UIView {
+        return teamHeaderView.rootStackView
+    }
 
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
@@ -26,12 +38,10 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     private var year: Int? {
         didSet {
             if let year = year {
-                if eventsViewController.year != year {
-                    eventsViewController.year = year
-                }
-                if mediaViewController.year != year {
-                    mediaViewController.year = year
-                }
+                eventsViewController.year = year
+                mediaViewController.year = year
+
+                fetchTeaMedia(year: year)
             }
 
             updateInterface()
@@ -53,7 +63,9 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
+
         self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: persistentContainer.viewContext)
+        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(team: team, year: year))
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -62,7 +74,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
             navigationTitle: team.teamNumberNickname,
-            navigationSubtitle: ContainerViewController.yearSubtitle(year),
+            navigationSubtitle: year?.description ?? "----",
             segmentedControlTitles: ["Info", "Events", "Media"],
             myTBA: myTBA,
             persistentContainer: persistentContainer,
@@ -70,9 +82,10 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             userDefaults: userDefaults
         )
 
-        navigationTitleDelegate = self
         eventsViewController.delegate = self
         mediaViewController.delegate = self
+
+        teamHeaderView.yearButton.addTarget(self, action: #selector(showSelectYear), for: .touchUpInside)
 
         setupObservers()
     }
@@ -93,6 +106,12 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         super.viewWillAppear(animated)
 
         Analytics.logEvent("team", parameters: ["team": team.key])
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        operationQueue.cancelAllOperations()
     }
 
     // MARK: - Private
@@ -133,10 +152,24 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     }
 
     private func updateInterface() {
-        navigationSubtitle = ContainerViewController.yearSubtitle(year)
+        teamHeaderView.viewModel = TeamHeaderViewModel(team: team, year: year)
+        navigationSubtitle = year?.description ?? "----"
     }
 
-    private func showSelectYear() {
+    private func fetchTeaMedia(year: Int) {
+        let mediaOperation = tbaKit.fetchTeamMedia(key: team.key, year: year, completion: { (result, notModified) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if !notModified, let media = try? result.get() {
+                    let team = context.object(with: self.team.objectID) as! Team
+                    team.insert(media, year: year)
+                }
+            }, errorRecorder: Crashlytics.sharedInstance())
+        })
+        operationQueue.addOperation(mediaOperation)
+    }
+
+    @objc private func showSelectYear() {
         guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty else {
             return
         }
@@ -154,14 +187,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     @objc private func dismissSelectYear() {
         navigationController?.dismiss(animated: true, completion: nil)
-    }
-
-}
-
-extension TeamViewController: NavigationTitleDelegate {
-
-    func navigationTitleTapped() {
-        showSelectYear()
     }
 
 }

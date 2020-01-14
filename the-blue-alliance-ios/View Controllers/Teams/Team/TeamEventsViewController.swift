@@ -10,6 +10,9 @@ class TeamEventsViewController: EventsViewController {
     private let team: Team
     var year: Int? {
         didSet {
+            if oldValue == year {
+                return
+            }
             updateDataSource()
         }
     }

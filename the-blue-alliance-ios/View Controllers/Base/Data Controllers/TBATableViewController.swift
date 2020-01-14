@@ -3,7 +3,7 @@ import Foundation
 import TBAKit
 import UIKit
 
-class TBATableViewController: UITableViewController, TableViewDataSourceDelegate, DataController, Navigatable {
+class TBATableViewController: UITableViewController, TableViewDataSourceDelegate, DataController, Navigatable, ScrollReporter {
 
     var persistentContainer: NSPersistentContainer
     let tbaKit: TBAKit
@@ -12,6 +12,10 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
 
     var refreshOperationQueue: OperationQueue = OperationQueue()
     var userDefaults: UserDefaults
+
+    // MARK: - Scroll Reporter
+
+    weak var scrollReporterDelegate: ScrollReporterDelegate?
 
     // MARK: - Stateful
 
@@ -65,10 +69,20 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
         }
     }
 
-    // MARK: TableViewDataSourceDelegate
+    // MARK: - TableViewDataSourceDelegate
 
     func title(forSection section: Int) -> String? {
         return nil
+    }
+
+    // MARK: - Scroll Reporter
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollReporterDelegate?.scrollViewDidScroll(scrollView)
+    }
+
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        scrollReporterDelegate?.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
     }
 
 }
