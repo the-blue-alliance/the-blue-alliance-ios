@@ -14,7 +14,6 @@ class TBATestCase: TBADataTestCase {
     var userDefaults: UserDefaults!
     var tbaKit: MockTBAKit!
     var urlOpener: MockURLOpener!
-    var reactNativeMetadata: ReactNativeMetadata!
     var pushService: PushService!
     var statusService: StatusService!
 

@@ -5,7 +5,6 @@ platform :ios do
   desc "Install project dependencies"
   lane :install_deps do
     bundle_install # Update bundle deps
-    sh("npm install --prefix ../subtrees/the-blue-alliance-react") # Install React Native deps
     cocoapods(repo_update: true, use_bundle_exec: true) # Install pods
   end
 

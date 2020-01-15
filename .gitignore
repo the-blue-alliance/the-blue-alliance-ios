@@ -28,13 +28,6 @@ Pods/
 
 the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 
-# Node
-node_modules
-*.log
-.nvm
-subtrees/the-blue-alliance-react/ios/*
-subtrees/the-blue-alliance-react/ios.zip
-
 Secrets.plist
 
 # fastlane specific
