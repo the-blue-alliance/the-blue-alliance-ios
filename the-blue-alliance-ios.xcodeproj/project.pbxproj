@@ -66,10 +66,11 @@
 		92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */; };
 		9287013E20CD72EC0077D6DA /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9287013D20CD72EC0077D6DA /* StatusDefaults.plist */; };
 		9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */; };
-		928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */; };
-		928AAC5C23C832BE001E6C11 /* ScrollReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */; };
 		9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */; };
 		9288BD1423CED19200157F74 /* MatchBreakdownConfigurator2018.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */; };
+		9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */; };
+		928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */; };
+		928AAC5C23C832BE001E6C11 /* ScrollReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */; };
 		928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928DE031222AF10A00C6234A /* UIImage+TBA.swift */; };
 		928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
@@ -260,10 +261,11 @@
 		92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatTableViewCell.swift; sourceTree = "<group>"; };
 		9287013D20CD72EC0077D6DA /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation.swift; sourceTree = "<group>"; };
-		928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContainerViewController.swift; sourceTree = "<group>"; };
-		928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollReporter.swift; sourceTree = "<group>"; };
 		9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2017.swift; sourceTree = "<group>"; };
 		9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2018.swift; sourceTree = "<group>"; };
+		9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2019.swift; sourceTree = "<group>"; };
+		928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContainerViewController.swift; sourceTree = "<group>"; };
+		928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollReporter.swift; sourceTree = "<group>"; };
 		928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		928DE031222AF10A00C6234A /* UIImage+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBA.swift"; sourceTree = "<group>"; };
 		928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchQueryOptionsViewController.swift; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 				9280B54823CEBFA00021FEBE /* MatchBreakdownConfigurator2016.swift */,
 				9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */,
 				9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */,
+				9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */,
 			);
 			path = Breakdown;
 			sourceTree = "<group>";
@@ -1536,6 +1539,7 @@
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
+				9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
 				92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */,

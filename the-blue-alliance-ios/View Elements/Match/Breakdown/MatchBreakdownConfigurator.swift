@@ -13,6 +13,18 @@ extension MatchBreakdownConfigurator {
         return red.keys.contains(key) && blue.keys.contains(key)
     }
 
+    // Values
+
+    static func values(key: String, red: [String: Any]?, blue: [String: Any]?) -> (Any?, Any?)? {
+        guard let red = red, let blue = blue else {
+            return nil
+        }
+        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
+            return nil
+        }
+        return (red[key], blue[key])
+    }
+
     // String
 
     static func row(title: String, key: String, formatString: String = "%@", red: [String: Any]?, blue: [String: Any]?, type: BreakdownRow.BreakdownRowType = .normal, offset: Int = 0) -> BreakdownRow? {
@@ -64,13 +76,11 @@ extension MatchBreakdownConfigurator {
     }
 
     static func boolImageRow<T>(title: String, key: String, comparator: (T) -> Bool?, redTrueImage: UIImage? = BreakdownStyle.checkImage, redFalseImage: UIImage? = BreakdownStyle.xImage, blueTrueImage: UIImage? = BreakdownStyle.checkImage, blueFalseImage: UIImage? = BreakdownStyle.xImage, red: [String: Any]?, blue: [String: Any]?, type: BreakdownRow.BreakdownRowType = .normal, offset: Int = 0) -> BreakdownRow? {
-        guard let red = red, let blue = blue else {
+        guard let values = values(key: key, red: red, blue: blue) else {
             return nil
         }
-        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
-            return nil
-        }
-        guard let redValue = red[key] as? T, let blueValue = blue[key] as? T else {
+        let (rv, bv) = values
+        guard let redValue = rv as? T, let blueValue = bv as? T else {
             return  nil
         }
         guard let redBool = comparator(redValue), let blueBool = comparator(blueValue) else {

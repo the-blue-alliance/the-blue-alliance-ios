@@ -53,17 +53,14 @@ struct MatchBreakdownConfigurator2016: MatchBreakdownConfigurator {
     }
 
     private static func defenseRow(title: String, key: String, defenseKey: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        guard let red = red, let blue = blue else {
+        guard let values = values(key: key, red: red, blue: blue) else {
             return nil
         }
-        // Defense names
-        guard breakdownValueSupported(key: defenseKey, red: red, blue: blue) else {
+        let (rv, bv) = values
+        guard let redDefenseKey = rv as? String, let redDefense = defense(redDefenseKey) else {
             return nil
         }
-        guard let redDefenseKey = red[defenseKey] as? String, let redDefense = defense(redDefenseKey) else {
-            return nil
-        }
-        guard let blueDefenseKey = blue[defenseKey] as? String, let blueDefense = defense(blueDefenseKey) else {
+        guard let blueDefenseKey = bv as? String, let blueDefense = defense(blueDefenseKey) else {
             return nil
         }
         return defenseRow(title: title, key: key, redDefense: redDefense, blueDefense: blueDefense, red: red, blue: blue)

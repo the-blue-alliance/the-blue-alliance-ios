@@ -32,15 +32,12 @@ struct MatchBreakdownConfigurator2015: MatchBreakdownConfigurator {
     }
 
     private static func boolRow(title: String, key: String, red: [String: Any]?, blue: [String: Any]?, value: Int) -> BreakdownRow? {
-        guard let red = red, let blue = blue else {
+        guard let values = values(key: key, red: red, blue: blue) else {
             return nil
         }
-        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
-            return nil
-        }
-
-        let redBool = red[key] as? Bool ?? false
-        let blueBool = blue[key] as? Bool ?? false
+        let (rv, bv) = values
+        let redBool = rv as? Bool ?? false
+        let blueBool = bv as? Bool ?? false
 
         return BreakdownRow(title: title, red: [redBool ? "\(value)" : "0"], blue: [blueBool ? "\(value)" : "0"])
     }
