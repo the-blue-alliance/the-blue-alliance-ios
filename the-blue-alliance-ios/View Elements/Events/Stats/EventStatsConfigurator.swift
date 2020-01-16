@@ -7,7 +7,11 @@ protocol EventStatsConfigurator {
 
 extension EventStatsConfigurator {
 
-    static func highScoreString(_ dict: [String: Any]?, _ key: String) -> String? {
+    static func highScoreRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
+        return InsightRow(title: title, qual: highScoreString(qual, key), playoff: highScoreString(playoff, key))
+    }
+
+    private static func highScoreString(_ dict: [String: Any]?, _ key: String) -> String? {
         guard let dict = dict else {
             return nil
         }
@@ -20,7 +24,11 @@ extension EventStatsConfigurator {
         return "\(highScoreData[0]) in \(highScoreData[2])"
     }
 
-    static func scoreFor(_ dict: [String: Any]?, _ key: String) -> String? {
+    static func scoreRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
+        return InsightRow(title: title, qual: scoreFor(qual, key), playoff: scoreFor(playoff, key))
+    }
+
+    private static func scoreFor(_ dict: [String: Any]?, _ key: String) -> String? {
         guard let dict = dict else {
             return nil
         }
@@ -30,7 +38,11 @@ extension EventStatsConfigurator {
         return String(format: "%.2f", val)
     }
 
-    static func bonusStat(_ dict: [String: Any]?, _ key: String) -> String? {
+    static func bonusRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
+        return InsightRow(title: title, qual: bonusStat(qual, key), playoff: bonusStat(playoff, key))
+    }
+
+    private static func bonusStat(_ dict: [String: Any]?, _ key: String) -> String? {
         guard let dict = dict else {
             return nil
         }

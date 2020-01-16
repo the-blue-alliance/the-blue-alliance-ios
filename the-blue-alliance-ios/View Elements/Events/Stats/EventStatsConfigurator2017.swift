@@ -7,18 +7,18 @@ class EventStatsConfigurator2017: EventStatsConfigurator {
         // Match Stats
         var matchStats: [InsightRow] = []
 
-        matchStats.append(InsightRow(title: "Highest Pressure (kPa)", qual: highScoreString(qual, "high_kpa"), playoff: highScoreString(playoff, "high_kpa")))
-        matchStats.append(InsightRow(title: "High Score", qual: highScoreString(qual, "high_score"), playoff: highScoreString(playoff, "high_score")))
-        matchStats.append(InsightRow(title: "Average Match Score", qual: scoreFor(qual, "average_score"), playoff: scoreFor(playoff, "average_score")))
-        matchStats.append(InsightRow(title: "Average Winning Score", qual: scoreFor(qual, "average_win_score"), playoff: scoreFor(playoff, "average_win_score")))
-        matchStats.append(InsightRow(title: "Average Win Margin", qual: scoreFor(qual, "average_win_margin"), playoff: scoreFor(playoff, "average_win_margin")))
-        matchStats.append(InsightRow(title: "Average Mobility Points", qual: scoreFor(qual, "average_mobility_points_auto"), playoff: scoreFor(playoff, "average_mobility_points_auto")))
-        matchStats.append(InsightRow(title: "Average Rotor Points", qual: scoreFor(qual, "average_rotor_points"), playoff: scoreFor(playoff, "average_rotor_points")))
-        matchStats.append(InsightRow(title: "Average Fuel Points", qual: scoreFor(qual, "average_fuel_points"), playoff: scoreFor(playoff, "average_fuel_points")))
-        matchStats.append(InsightRow(title: "Average High Goal", qual: scoreFor(qual, "average_high_goals"), playoff: scoreFor(playoff, "average_high_goals")))
-        matchStats.append(InsightRow(title: "Average Low Goal", qual: scoreFor(qual, "average_low_goals"), playoff: scoreFor(playoff, "average_low_goals")))
-        matchStats.append(InsightRow(title: "Average Takeoff (Climb) Points", qual: scoreFor(qual, "average_takeoff_points_teleop"), playoff: scoreFor(playoff, "average_takeoff_points_teleop")))
-        matchStats.append(InsightRow(title: "Average Foul Score", qual: scoreFor(qual, "average_foul_score"), playoff: scoreFor(playoff, "average_foul_score")))
+        matchStats.append(highScoreRow(title: "Highest Pressure (kPa)", key: "high_kpa", qual: qual, playoff: playoff))
+        matchStats.append(highScoreRow(title: "High Score", key: "high_score", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Match Score", key: "average_score", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Winning Score", key: "average_win_score", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Win Margin", key: "average_win_margin", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Mobility Points", key: "average_mobility_points_auto", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Rotor Points", key: "average_rotor_points", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Fuel Points", key: "average_fuel_points", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average High Goal", key: "average_high_goals", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Low Goal", key: "average_low_goals", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Takeoff (Climb) Points", key: "average_takeoff_points_teleop", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Foul Score", key: "average_foul_score", qual: qual, playoff: playoff))
 
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {
@@ -29,16 +29,16 @@ class EventStatsConfigurator2017: EventStatsConfigurator {
         // Bonus Stats
         var bonusStats: [InsightRow] = []
 
-        bonusStats.append(InsightRow(title: "Auto Mobility", qual: bonusStat(qual, "mobility_counts"), playoff: bonusStat(playoff, "mobility_counts")))
-        bonusStats.append(InsightRow(title: "Teleop Takeoff (Climb)", qual: bonusStat(qual, "takeoff_counts"), playoff: bonusStat(playoff, "takeoff_counts")))
-        bonusStats.append(InsightRow(title: "Pressure Bonus (kPa Achieved)", qual: bonusStat(qual, "kpa_achieved"), playoff: bonusStat(playoff, "kpa_achieved")))
-        bonusStats.append(InsightRow(title: "Rotor 1 Engaged (Auto)", qual: bonusStat(qual, "rotor_1_engaged_auto"), playoff: bonusStat(playoff, "rotor_1_engaged_auto")))
-        bonusStats.append(InsightRow(title: "Rotor 2 Engaged (Auto)", qual: bonusStat(qual, "rotor_2_engaged_auto"), playoff: bonusStat(playoff, "rotor_2_engaged_auto")))
-        bonusStats.append(InsightRow(title: "Rotor 1 Engaged", qual: bonusStat(qual, "rotor_1_engaged"), playoff: bonusStat(playoff, "rotor_1_engaged")))
-        bonusStats.append(InsightRow(title: "Rotor 2 Engaged", qual: bonusStat(qual, "rotor_2_engaged"), playoff: bonusStat(playoff, "rotor_2_engaged")))
-        bonusStats.append(InsightRow(title: "Rotor 3 Engaged", qual: bonusStat(qual, "rotor_3_engaged"), playoff: bonusStat(playoff, "rotor_3_engaged")))
-        bonusStats.append(InsightRow(title: "Rotor 4 Engaged", qual: bonusStat(qual, "rotor_4_engaged"), playoff: bonusStat(playoff, "rotor_4_engaged")))
-        bonusStats.append(InsightRow(title: "\"Unicorn Matches\" (Win + kPa & Rotor Bonuses)", qual: bonusStat(qual, "unicorn_matches"), playoff: bonusStat(playoff, "unicorn_matches")))
+        bonusStats.append(bonusRow(title: "Auto Mobility", key: "mobility_counts", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Teleop Takeoff (Climb)", key: "takeoff_counts", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Pressure Bonus (kPa Achieved)", key: "kpa_achieved", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Rotor 1 Engaged (Auto)", key: "rotor_1_engaged_auto", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Rotor 2 Engaged (Auto)", key: "rotor_2_engaged_auto", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Rotor 1 Engaged", key: "rotor_1_engaged", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Rotor 2 Engaged", key: "rotor_2_engaged", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Rotor 3 Engaged", key: "rotor_3_engaged", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Rotor 4 Engaged", key: "rotor_4_engaged", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "\"Unicorn Matches\" (Win + kPa & Rotor Bonuses)", key: "unicorn_matches", qual: qual, playoff: playoff))
 
         bonusStats = filterEmptyInsights(bonusStats)
         if !bonusStats.isEmpty {
