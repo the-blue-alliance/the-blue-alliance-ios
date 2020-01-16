@@ -14,6 +14,8 @@ class MatchViewController: MyTBAContainerViewController {
     }()
 
     private(set) var infoViewController: MatchInfoViewController
+    private(set) var breakdownViewController: MatchBreakdownViewController?
+    private(set) var zebraViewController: MatchZebraViewController?
 
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
@@ -46,8 +48,14 @@ class MatchViewController: MyTBAContainerViewController {
             titles.append("Breakdown")
         }
 
+        // Only show Zebra if year is 2019 or onward
+        if match.event.year >= 2019 {
+            titles.append("Zebra")
+            zebraViewController = MatchZebraViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        }
+
         super.init(
-            viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }),
+            viewControllers: [infoViewController, breakdownViewController, zebraViewController].compactMap({ $0 }),
             navigationTitle: "\(match.friendlyName)",
             navigationSubtitle: "@ \(match.event.friendlyNameWithYear)",
             segmentedControlTitles: titles,
@@ -84,7 +92,7 @@ class MatchViewController: MyTBAContainerViewController {
 }
 
 extension MatchViewController: MatchSummaryViewDelegate {
-    
+
     func teamPressed(teamNumber: Int) {
         // get team key that matches the target teamNumber
         guard let team = match.teams.first(where: { Int($0.teamNumber) == teamNumber }) else { return }
@@ -92,5 +100,5 @@ extension MatchViewController: MatchSummaryViewDelegate {
         let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
-    
+
 }

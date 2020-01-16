@@ -133,6 +133,32 @@ extension UIColor {
         return .colorWithRGB(rgbValue: 0xffa500)
     }
 
+    // MARK: - Zebra Colors
+
+    public class var zebraRed1: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0xFF0000)
+    }
+
+    public class var zebraRed2: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0x800000)
+    }
+
+    public class var zebraRed3: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0xFF8080)
+    }
+
+    public class var zebraBlue1: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0x0000FF)
+    }
+
+    public class var zebraBlue2: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0x000080)
+    }
+
+    public class var zebraBlue3: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0x8080FF)
+    }
+
     // MARK: - Private Methods
 
     private static func dynamicColor(_ lightMode: UIColor, _ lightModeHighContrast: UIColor, _ darkMode: UIColor, _ darkModeHighContrast: UIColor) -> UIColor {

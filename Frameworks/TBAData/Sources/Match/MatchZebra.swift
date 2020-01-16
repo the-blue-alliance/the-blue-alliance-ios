@@ -4,28 +4,28 @@ import TBAKit
 
 extension MatchZebra {
 
-    var key: String {
+    public var key: String {
         guard let key = getValue(\MatchZebra.keyRaw) else {
             fatalError("Save ZebraMatch before accessing key")
         }
         return key
     }
 
-    var times: [Double] {
+    public var times: [Double] {
         guard let times = getValue(\MatchZebra.timesRaw) else {
             fatalError("Save ZebraMatch before accessing times")
         }
         return times
     }
 
-    var match: Match {
+    public var match: Match {
         guard let match = getValue(\MatchZebra.matchRaw) else {
             fatalError("Save ZebraMatch before accessing match")
         }
         return match
     }
 
-    var alliances: [MatchZebraAlliance] {
+    public var alliances: [MatchZebraAlliance] {
         guard let alliancesRaw = getValue(\MatchZebra.alliancesRaw),
             let alliances = alliancesRaw.allObjects as? [MatchZebraAlliance] else {
                 fatalError("Save ZebraMatch before accessing alliances")
@@ -42,10 +42,10 @@ public class MatchZebra: NSManagedObject {
         return NSFetchRequest<MatchZebra>(entityName: MatchZebra.entityName)
     }
 
-    @NSManaged public var keyRaw: String?
-    @NSManaged public var timesRaw: [Double]?
-    @NSManaged public var matchRaw: Match?
-    @NSManaged public var alliancesRaw: NSSet?
+    @NSManaged var keyRaw: String?
+    @NSManaged var timesRaw: [Double]?
+    @NSManaged var matchRaw: Match?
+    @NSManaged var alliancesRaw: NSSet?
 
 }
 
