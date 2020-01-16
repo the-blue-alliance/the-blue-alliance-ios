@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,20 +12,20 @@
             <rect key="frame" x="0.0" y="0.0" width="428" height="109"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hcd-FR-JjY" id="4xI-lp-iaP">
-                <rect key="frame" x="0.0" y="0.0" width="428" height="108.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="428" height="109"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lKR-gx-yiv">
-                        <rect key="frame" x="16" y="8" width="404" height="92.5"/>
+                        <rect key="frame" x="15" y="11" width="398" height="87"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="46W-tr-BnT">
-                                <rect key="frame" x="0.0" y="0.0" width="404" height="20.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="398" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOK-oM-0zh">
-                                <rect key="frame" x="0.0" y="20.5" width="404" height="72"/>
+                                <rect key="frame" x="0.0" y="20.5" width="398" height="66.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -36,10 +34,10 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="lKR-gx-yiv" firstAttribute="leading" secondItem="4xI-lp-iaP" secondAttribute="leading" constant="16" id="AEd-JN-8ql"/>
-                    <constraint firstItem="lKR-gx-yiv" firstAttribute="top" secondItem="4xI-lp-iaP" secondAttribute="top" constant="8" id="Xdc-D8-bFh"/>
-                    <constraint firstAttribute="trailing" secondItem="lKR-gx-yiv" secondAttribute="trailing" constant="8" id="chz-vk-7vt"/>
-                    <constraint firstAttribute="bottom" secondItem="lKR-gx-yiv" secondAttribute="bottom" constant="8" id="upf-Wr-NLr"/>
+                    <constraint firstItem="lKR-gx-yiv" firstAttribute="leading" secondItem="4xI-lp-iaP" secondAttribute="leadingMargin" id="NBA-lN-gX0"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="lKR-gx-yiv" secondAttribute="trailing" id="fJh-Hu-sRL"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="lKR-gx-yiv" secondAttribute="bottom" id="pt0-Uw-Me3"/>
+                    <constraint firstItem="lKR-gx-yiv" firstAttribute="top" secondItem="4xI-lp-iaP" secondAttribute="topMargin" id="xhf-L0-F6z"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
