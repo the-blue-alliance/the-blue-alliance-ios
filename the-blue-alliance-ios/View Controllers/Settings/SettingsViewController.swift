@@ -23,22 +23,14 @@ private enum DebugRow: Int, CaseIterable {
 class SettingsViewController: TBATableViewController {
 
     private let fcmTokenProvider: FCMTokenProvider
-    private let metadata: ReactNativeMetadata
     private let myTBA: MyTBA
     private let pushService: PushService
     private let urlOpener: URLOpener
 
-    private let reactNativeDateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy HH:mm"
-        return dateFormatter
-    }()
-
     // MARK: - Init
 
-    init(fcmTokenProvider: FCMTokenProvider, metadata: ReactNativeMetadata, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.fcmTokenProvider = fcmTokenProvider
-        self.metadata = metadata
         self.myTBA = myTBA
         self.pushService = pushService
         self.urlOpener = urlOpener
@@ -48,8 +40,6 @@ class SettingsViewController: TBATableViewController {
         title = "Settings"
         tabBarItem.image = UIImage.settingsIcon
         hidesBottomBarWhenPushed = false
-
-        metadata.metadataProvider.add(observer: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -120,20 +110,10 @@ class SettingsViewController: TBATableViewController {
         guard let section = normalizedSection(section) else {
             return nil
         }
-        if section == .debug {
-            let reactNativeVersion: String = {
-                if let bundleCreated = metadata.bundleCreated {
-                    return "\(reactNativeDateFormatter.string(from: bundleCreated)) (\(metadata.bundleGeneration))"
-                } else {
-                    return "Local Version"
-                }
-            }()
-            return [
-                "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)",
-                "TBA RN - \(reactNativeVersion)"
-            ].joined(separator: "\n")
+        guard section == .debug else {
+            return nil
         }
-        return nil
+        return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -351,16 +331,6 @@ class SettingsViewController: TBATableViewController {
         let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: notificationsViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
-    }
-
-}
-
-extension SettingsViewController: ReactNativeMetadataObservable {
-
-    func metadataUpdated() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
     }
 
 }

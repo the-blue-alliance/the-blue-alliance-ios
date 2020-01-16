@@ -48,7 +48,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                        tbaKit: tbaKit,
                                                                        userDefaults: userDefaults)
         let settingsViewController = SettingsViewController(fcmTokenProvider: messaging,
-                                                            metadata: reactNativeMetadata,
                                                             myTBA: myTBA,
                                                             pushService: pushService,
                                                             urlOpener: urlOpener,
@@ -110,17 +109,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var statusService: StatusService = {
         return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }()
-    lazy var reactNativeService: ReactNativeService = {
-        return ReactNativeService(fileManager: FileManager.default,
-                                  firebaseStorage: Storage.storage(),
-                                  firebaseOptions: FirebaseOptions.defaultOptions(),
-                                  metadata: reactNativeMetadata,
-                                  retryService: RetryService(),
-                                  userDefaults: userDefaults)
-    }()
-    lazy var reactNativeMetadata: ReactNativeMetadata = {
-        return ReactNativeMetadata(userDefaults: userDefaults)
-    }()
 
     // A completion block for registering for remote notifications
     var registerForRemoteNotificationsCompletion: ((Error?) -> ())?
@@ -150,9 +138,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let secrets = Secrets()
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
-
-        // Setup our React Native service
-        reactNativeService.registerRetryable(initiallyRetry: true)
 
         // Listen for changes to FMS availability
         registerForFMSStatusChanges()

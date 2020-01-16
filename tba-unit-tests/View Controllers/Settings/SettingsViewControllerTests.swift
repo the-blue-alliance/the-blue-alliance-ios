@@ -9,7 +9,6 @@ class SettingsViewControllerTests: TBATestCase {
         super.setUp()
 
         settingsViewController = SettingsViewController(fcmTokenProvider: fcmTokenProvider,
-                                                        metadata: ReactNativeMetadata(userDefaults: userDefaults),
                                                         myTBA: myTBA,
                                                         pushService: pushService,
                                                         urlOpener: urlOpener,

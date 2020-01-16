@@ -16,11 +16,7 @@ stages:
 cache:
   bundler: true
   cocoapods: true
-  directories:
-  - subtrees/the-blue-alliance-react/node_modules
 install:
-- brew install watchman
-- cd subtrees/the-blue-alliance-react && npm install && cd ../..
 - bundle install
 - bundle exec pod install --repo-update
 before_script:

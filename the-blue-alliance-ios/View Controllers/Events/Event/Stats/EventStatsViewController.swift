@@ -1,12 +1,11 @@
 import CoreData
 import Crashlytics
 import Foundation
-import React
 import TBAData
 import TBAKit
 import UIKit
 
-class EventStatsViewController: TBAReactNativeViewController, Observable {
+class EventStatsViewController: TBAViewController, Observable {
 
     private let event: Event
     private var eventStatsUnsupported = false
@@ -23,34 +22,25 @@ class EventStatsViewController: TBAReactNativeViewController, Observable {
     init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
 
-        super.init(moduleName: "EventInsights", persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        delegate = self
-
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-            DispatchQueue.main.async {
-                self?.reloadData()
-            }
-        }
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-}
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
-
-    func showUnsupportedView() {
-        eventStatsUnsupported = true
-        showNoDataView(disableRefreshing: true)
+        contextObserver.observeObject(object: event, state: .updated) { _, _ in
+            DispatchQueue.main.async {
+                self.reloadData()
+            }
+        }
     }
 
-    var appProperties: [String : Any]? {
-        var insights = event.insights?.insightsDictionary
-        insights?["year"] = event.year
-        return insights
+    override func reloadData() {
+        // Pass
     }
 
 }
