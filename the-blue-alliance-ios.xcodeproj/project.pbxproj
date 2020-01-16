@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0584527FD463C75977C5FAC0 /* Pods_TBA_Spotlight_Index_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67630A8FA037CC2DB84E244D /* Pods_TBA_Spotlight_Index_Extension.framework */; };
+		1417274E23CF5FF800DD957B /* MatchZebraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417274D23CF5FF800DD957B /* MatchZebraViewController.swift */; };
+		1417275023CF629C00DD957B /* MatchZebraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417274F23CF629C00DD957B /* MatchZebraView.swift */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
 		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
@@ -243,6 +245,8 @@
 
 /* Begin PBXFileReference section */
 		0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_ui_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1417274D23CF5FF800DD957B /* MatchZebraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchZebraViewController.swift; sourceTree = "<group>"; };
+		1417274F23CF629C00DD957B /* MatchZebraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchZebraView.swift; sourceTree = "<group>"; };
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
 		145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchTableViewCell.xib; sourceTree = "<group>"; };
 		145C57BC1ED3C3AA004955B2 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
@@ -497,6 +501,7 @@
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
 				1479693F215E9A580075AF4E /* MatchViewModel.swift */,
 				921F609723CD4DE000FE633B /* Breakdown */,
+				1417274F23CF629C00DD957B /* MatchZebraView.swift */,
 			);
 			path = Match;
 			sourceTree = "<group>";
@@ -1185,6 +1190,7 @@
 				92FF10F521A61AC2003BC5C4 /* MatchViewController.swift */,
 				92FF10F321A61AC2003BC5C4 /* MatchInfoViewController.swift */,
 				92FF10F621A61AC2003BC5C4 /* MatchBreakdownViewController.swift */,
+				1417274D23CF5FF800DD957B /* MatchZebraViewController.swift */,
 			);
 			path = Match;
 			sourceTree = "<group>";
@@ -1688,6 +1694,7 @@
 				92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
 				9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */,
+				1417274E23CF5FF800DD957B /* MatchZebraViewController.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */,
 				92C079C723F99CA400AE2AFA /* EventStatsConfigurator2020.swift in Sources */,
 				1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */,
@@ -1768,6 +1775,7 @@
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
+				1417275023CF629C00DD957B /* MatchZebraView.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
 				9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,

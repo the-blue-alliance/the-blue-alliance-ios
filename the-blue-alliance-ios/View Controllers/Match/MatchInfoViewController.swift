@@ -133,7 +133,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         videoStackView.autoPinEdge(toSuperviewEdge: .bottom)
 
         // Override our default background color to be white
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
 
         updateInterface()
 

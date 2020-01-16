@@ -32,6 +32,14 @@ extension MatchZebraTeam {
         return team
     }
 
+    public var firstPosition: CGPoint? {
+        let pos = zip(xs, ys).first(where: { $0 != nil && $1 != nil })
+        guard let (xV, yV) = pos, let x = xV, let y = yV else {
+            return nil
+        }
+        return CGPoint(x: x, y: y)
+    }
+
 }
 
 @objc(MatchZebraTeam)
@@ -41,10 +49,10 @@ public class MatchZebraTeam: NSManagedObject {
         return NSFetchRequest<MatchZebraTeam>(entityName: MatchZebraTeam.entityName)
     }
 
-    @NSManaged public var xsRaw: [AnyObject]?
-    @NSManaged public var ysRaw: [AnyObject]?
-    @NSManaged public var allianceRaw: MatchZebraAlliance?
-    @NSManaged public var teamRaw: Team?
+    @NSManaged var xsRaw: [AnyObject]?
+    @NSManaged var ysRaw: [AnyObject]?
+    @NSManaged var allianceRaw: MatchZebraAlliance?
+    @NSManaged var teamRaw: Team?
 
 }
 

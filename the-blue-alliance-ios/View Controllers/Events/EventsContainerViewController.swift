@@ -47,10 +47,18 @@ class EventsContainerViewController: ContainerViewController {
         navigationTitleDelegate = self
         eventsViewController.delegate = self
         eventsViewController.weekEventsDelegate = self
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "CC", style: .plain, target: self, action: #selector(pushCC))
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc func pushCC() {
+        let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: "2019cc_qm1"))!
+        let cc = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        navigationController?.pushViewController(cc, animated: true)
     }
 
     // MARK: - View Methods

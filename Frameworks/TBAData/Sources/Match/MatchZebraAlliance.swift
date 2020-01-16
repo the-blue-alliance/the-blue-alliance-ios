@@ -35,9 +35,9 @@ public class MatchZebraAlliance: NSManagedObject {
         return NSFetchRequest<MatchZebraAlliance>(entityName: MatchZebraAlliance.entityName)
     }
 
-    @NSManaged public var allianceKeyRaw: String?
-    @NSManaged public var zebraRaw: MatchZebra?
-    @NSManaged public var teamsRaw: NSSet?
+    @NSManaged var allianceKeyRaw: String?
+    @NSManaged var zebraRaw: MatchZebra?
+    @NSManaged var teamsRaw: NSSet?
 
 }
 
