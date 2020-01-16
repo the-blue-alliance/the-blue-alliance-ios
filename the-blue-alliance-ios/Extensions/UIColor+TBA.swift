@@ -67,7 +67,7 @@ extension UIColor {
         return dynamicColor(lightModeColor, lightModeHighContrastColor, darkModeColor, darkModeHighContrastColor)
     }
 
-    public class var redAllianceScoreColor: UIColor {
+    public class var redAllianceScoreBackgroundColor: UIColor {
         let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xFFDDDD)
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xFFCCCC)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x770000)
@@ -83,7 +83,7 @@ extension UIColor {
         return dynamicColor(lightModeColor, lightModeHighContrastColor, darkModeColor, darkModeHighContrastColor)
     }
 
-    public class var blueAllianceScoreColor: UIColor {
+    public class var blueAllianceScoreBackgroundColor: UIColor {
         let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xDDDDFF)
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xCCCCFF)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000088)

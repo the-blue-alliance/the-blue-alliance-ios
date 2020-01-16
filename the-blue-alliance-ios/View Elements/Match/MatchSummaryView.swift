@@ -80,10 +80,10 @@ class MatchSummaryView: UIView {
 
     private func styleInterface() {
         redContainerView.backgroundColor = UIColor.redAllianceBackgroundColor
-        redScoreLabel.backgroundColor = UIColor.redAllianceScoreColor
+        redScoreLabel.backgroundColor = UIColor.redAllianceScoreBackgroundColor
 
         blueContainerView.backgroundColor = UIColor.blueAllianceBackgroundColor
-        blueScoreLabel.backgroundColor = UIColor.blueAllianceScoreColor
+        blueScoreLabel.backgroundColor = UIColor.blueAllianceScoreBackgroundColor
     }
 
     // MARK: - Public Methods
