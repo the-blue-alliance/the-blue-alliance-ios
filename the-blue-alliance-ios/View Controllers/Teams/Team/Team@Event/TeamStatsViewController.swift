@@ -77,19 +77,19 @@ class TeamStatsViewController: TBATableViewController, Observable {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
         cell.selectionStyle = .none
 
-        let statName: String = {
+        let (statName, statKey): (String, String) = {
             switch indexPath.row {
             case 0:
-                return EventTeamStat.oprKeyPath()
+                return ("OPR", EventTeamStat.oprKeyPath())
             case 1:
-                return EventTeamStat.dprKeyPath()
+                return ("DPR", EventTeamStat.dprKeyPath())
             case 2:
-                return EventTeamStat.ccwmKeyPath()
+                return ("CCWM", EventTeamStat.ccwmKeyPath())
             default:
-                return ""
+                return ("", "")
             }
         }()
-        cell.viewModel = EventTeamStatCellViewModel(eventTeamStat: teamStat, statName: statName)
+        cell.viewModel = EventTeamStatCellViewModel(eventTeamStat: teamStat, statName: statName, statKey: statKey)
 
         return cell
     }
