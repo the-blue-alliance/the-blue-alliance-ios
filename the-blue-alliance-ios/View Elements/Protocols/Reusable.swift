@@ -26,7 +26,6 @@ extension UITableView {
         return self.dequeueReusableCell(withIdentifier: T.reuseIdentifier, for: indexPath) as! T
     }
 
-    /*
     func registerReusableHeaderFooterView<T: UITableViewHeaderFooterView>(_: T.Type) where T: Reusable {
         if let nib = T.nib {
             self.register(nib, forHeaderFooterViewReuseIdentifier: T.reuseIdentifier)
@@ -38,7 +37,6 @@ extension UITableView {
     func dequeueReusableHeaderFooterView<T: UITableViewHeaderFooterView>() -> T? where T: Reusable {
         return self.dequeueReusableHeaderFooterView(withIdentifier: T.reuseIdentifier) as! T?
     }
-    */
 
 }
 
