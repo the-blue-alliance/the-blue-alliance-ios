@@ -28,6 +28,7 @@
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */; };
 		921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5E222B13480056578A /* ContainerViewController+Team.swift */; };
+		921F609923CD4DFD00FE633B /* MatchBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921F609823CD4DFD00FE633B /* MatchBreakdownView.swift */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
 		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
 		92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */; };
@@ -57,6 +58,9 @@
 		928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F32096431200693447 /* MyTBASignInViewController.swift */; };
 		928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */; };
 		928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */; };
+		9280B54523CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280B54423CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift */; };
+		9280B54723CEBF220021FEBE /* MatchBreakdownConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280B54623CEBF220021FEBE /* MatchBreakdownConfigurator.swift */; };
+		9280B54923CEBFA00021FEBE /* MatchBreakdownConfigurator2016.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280B54823CEBFA00021FEBE /* MatchBreakdownConfigurator2016.swift */; };
 		9280EAED21685F310016621D /* RefreshableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280EAEC21685F310016621D /* RefreshableTests.swift */; };
 		92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */; };
 		92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */; };
@@ -64,6 +68,8 @@
 		9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */; };
 		928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */; };
 		928AAC5C23C832BE001E6C11 /* ScrollReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */; };
+		9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */; };
+		9288BD1423CED19200157F74 /* MatchBreakdownConfigurator2018.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */; };
 		928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928DE031222AF10A00C6234A /* UIImage+TBA.swift */; };
 		928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
@@ -216,6 +222,7 @@
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
 		921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B5E222B13480056578A /* ContainerViewController+Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContainerViewController+Team.swift"; sourceTree = "<group>"; };
+		921F609823CD4DFD00FE633B /* MatchBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownView.swift; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
 		92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictViewControllerTests.swift; sourceTree = "<group>"; };
@@ -245,6 +252,9 @@
 		928018F32096431200693447 /* MyTBASignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewController.swift; sourceTree = "<group>"; };
 		928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCellTests.swift; sourceTree = "<group>"; };
 		928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModelTests.swift; sourceTree = "<group>"; };
+		9280B54423CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2015.swift; sourceTree = "<group>"; };
+		9280B54623CEBF220021FEBE /* MatchBreakdownConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator.swift; sourceTree = "<group>"; };
+		9280B54823CEBFA00021FEBE /* MatchBreakdownConfigurator2016.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2016.swift; sourceTree = "<group>"; };
 		9280EAEC21685F310016621D /* RefreshableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableTests.swift; sourceTree = "<group>"; };
 		92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventTeamStatTableViewCell.xib; sourceTree = "<group>"; };
 		92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatTableViewCell.swift; sourceTree = "<group>"; };
@@ -252,6 +262,8 @@
 		9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation.swift; sourceTree = "<group>"; };
 		928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContainerViewController.swift; sourceTree = "<group>"; };
 		928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollReporter.swift; sourceTree = "<group>"; };
+		9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2017.swift; sourceTree = "<group>"; };
+		9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2018.swift; sourceTree = "<group>"; };
 		928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		928DE031222AF10A00C6234A /* UIImage+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBA.swift"; sourceTree = "<group>"; };
 		928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchQueryOptionsViewController.swift; sourceTree = "<group>"; };
@@ -408,6 +420,7 @@
 				145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */,
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
 				1479693F215E9A580075AF4E /* MatchViewModel.swift */,
+				921F609723CD4DE000FE633B /* Breakdown */,
 			);
 			path = Match;
 			sourceTree = "<group>";
@@ -454,6 +467,19 @@
 				92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */,
 			);
 			path = 2019DeepSpaceIcon;
+			sourceTree = "<group>";
+		};
+		921F609723CD4DE000FE633B /* Breakdown */ = {
+			isa = PBXGroup;
+			children = (
+				921F609823CD4DFD00FE633B /* MatchBreakdownView.swift */,
+				9280B54623CEBF220021FEBE /* MatchBreakdownConfigurator.swift */,
+				9280B54423CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift */,
+				9280B54823CEBFA00021FEBE /* MatchBreakdownConfigurator2016.swift */,
+				9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */,
+				9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */,
+			);
+			path = Breakdown;
 			sourceTree = "<group>";
 		};
 		923A0D7620D21D3800BF5E31 /* Launch Views */ = {
@@ -1435,6 +1461,7 @@
 				92FF110E21A61AF6003BC5C4 /* EventStatsViewController.swift in Sources */,
 				92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
+				9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */,
 				1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */,
 				9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */,
@@ -1461,14 +1488,17 @@
 				929F571C2092B77300E5313A /* TBATableViewController.swift in Sources */,
 				92761F79228E47E900CEDF68 /* FetchMediaOperation.swift in Sources */,
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
+				921F609923CD4DFD00FE633B /* MatchBreakdownView.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
 				92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */,
 				921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */,
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
 				92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */,
 				929F572C2092BB1C00E5313A /* Alertable.swift in Sources */,
+				9280B54523CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
 				92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */,
+				9280B54923CEBFA00021FEBE /* MatchBreakdownConfigurator2016.swift in Sources */,
 				92FF111821A61B37003BC5C4 /* DistrictBreakdownViewController.swift in Sources */,
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
 				92FF10F921A61AC2003BC5C4 /* MatchViewController.swift in Sources */,
@@ -1480,6 +1510,7 @@
 				14796942215EA5AE0075AF4E /* AwardCellViewModel.swift in Sources */,
 				92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */,
 				92B3874021CAF67F0041A049 /* IconCellViewModel.swift in Sources */,
+				9280B54723CEBF220021FEBE /* MatchBreakdownConfigurator.swift in Sources */,
 				92FF110621A61AF6003BC5C4 /* EventViewController.swift in Sources */,
 				9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */,
 				928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */,
@@ -1538,6 +1569,7 @@
 				92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */,
 				928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */,
+				9288BD1423CED19200157F74 /* MatchBreakdownConfigurator2018.swift in Sources */,
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,
 				929F571E2092B7A400E5313A /* TBACollectionViewController.swift in Sources */,
 				92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */,

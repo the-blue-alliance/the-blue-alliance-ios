@@ -5,10 +5,36 @@ import TBAData
 import TBAKit
 import UIKit
 
-class MatchBreakdownViewController: TBAViewController, Observable {
+struct BreakdownRow: Hashable {
 
-    private let match: Match
-    private var matchBreakdownUnsupported = false
+    enum BreakdownRowType {
+        case normal
+        case subtotal
+        case total
+    }
+
+    var title: String
+    var red: [AnyHashable?] = []
+    var blue: [AnyHashable?] = []
+    var type: BreakdownRowType = .normal
+    var offset: Int = 0 // Used so we can have rows with duplicate titles
+
+    var redElements: [BreakdownElement] {
+        return red.compactMap({ $0 }) as? [BreakdownElement] ?? []
+    }
+    var blueElements: [BreakdownElement] {
+        return blue.compactMap({ $0 }) as? [BreakdownElement] ?? []
+    }
+
+}
+
+class MatchBreakdownViewController: TBATableViewController, Refreshable, Observable {
+
+    let match: Match
+    let breakdownConfigurator: MatchBreakdownConfigurator.Type?
+
+    var dataSource: UITableViewDiffableDataSource<String?, BreakdownRow>!
+    var _dataSource: TableViewDataSource<String?, BreakdownRow>!
 
     // MARK: - Observable
 
@@ -22,6 +48,20 @@ class MatchBreakdownViewController: TBAViewController, Observable {
     init(match: Match, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
 
+        if match.event.year == 2015 {
+            breakdownConfigurator = MatchBreakdownConfigurator2015.self
+        } else if match.event.year == 2016 {
+            breakdownConfigurator = MatchBreakdownConfigurator2016.self
+        } else if match.event.year == 2017 {
+            breakdownConfigurator = MatchBreakdownConfigurator2017.self
+        } else if match.event.year == 2018 {
+            breakdownConfigurator = MatchBreakdownConfigurator2018.self
+        } else if match.event.year == 2019 {
+            breakdownConfigurator = nil
+        } else {
+            breakdownConfigurator = nil
+        }
+
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
@@ -34,31 +74,64 @@ class MatchBreakdownViewController: TBAViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        styleInterface()
+        tableView.registerReusableCell(MatchBreakdownTableViewCell.self)
+        tableView.insetsContentViewsToSafeArea = false
 
-        contextObserver.observeObject(object: match, state: .updated) { _, _ in
+        setupDataSource()
+        tableView.dataSource = _dataSource
+
+        let breakdownSupported = (breakdownConfigurator != nil)
+        if breakdownSupported {
+            configureDataSource(match.breakdown)
+
+            contextObserver.observeObject(object: match, state: .updated) { (match, _) in
+                DispatchQueue.main.async {
+                    self.configureDataSource(match.breakdown)
+                }
+            }
+        } else {
             DispatchQueue.main.async {
-                self.reloadData()
+                self.disableRefreshing()
             }
         }
     }
 
-    // MARK: Interface Methods
+    // MARK: - Methods
 
-    func styleInterface() {
-        // Override our default background color to match the match breakdown background color
-        // TODO: Figure out what we want here
+    func setupDataSource() {
+        dataSource = UITableViewDiffableDataSource<String?, BreakdownRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchBreakdownTableViewCell
+            cell.titleText = row.title
+            cell.redElements = row.redElements
+            cell.blueElements = row.blueElements
+            cell.type = row.type
+            return cell
+        }
+        _dataSource = TableViewDataSource(dataSource: dataSource)
+        _dataSource.delegate = self
+        _dataSource.statefulDelegate = self
     }
 
-    override func reloadData() {
-        // Pass
+    func configureDataSource(_ breakdown: [String: Any]?) {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+
+        let red = breakdown?["red"] as? [String: Any]
+        let blue = breakdown?["blue"] as? [String: Any]
+
+        if let breakdownConfigurator = breakdownConfigurator {
+            breakdownConfigurator.configureDataSource(&snapshot, breakdown, red, blue)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-}
-
-extension MatchBreakdownViewController: Refreshable {
+    // MARK: - Refreshable
 
     var refreshKey: String? {
+        if breakdownConfigurator == nil {
+            return nil
+        }
         return match.key
     }
 
@@ -71,7 +144,7 @@ extension MatchBreakdownViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return match.breakdown == nil
+        return _dataSource.isDataSourceEmpty
     }
 
     @objc func refresh() {
@@ -101,10 +174,10 @@ extension MatchBreakdownViewController: Refreshable {
 extension MatchBreakdownViewController: Stateful {
 
     var noDataText: String {
-        if matchBreakdownUnsupported {
-            return "\(match.event.year) Match Breakdown is not supported"
+        guard breakdownConfigurator == nil else {
+            return "No breakdown for match"
         }
-        return "No breakdown for match"
+        return "\(match.event.year) Match Breakdowns are not supported - try updating your app via the App Store."
     }
 
 }
