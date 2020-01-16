@@ -65,14 +65,14 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
+        setupDataSource()
+        tableView.dataSource = _dataSource
+
         // Disable subscriptions
         if T.self == Favorite.self {
-            setupDataSource()
-            tableView.dataSource = _dataSource
             setupFetchedResultsController()
         } else if T.self == Subscription.self {
             DispatchQueue.main.async {
-                self.showNoDataView()
                 self.disableRefreshing()
             }
         }
@@ -210,11 +210,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     @objc func refresh() {
         if !myTBA.isAuthenticated {
-            return
-        }
-
-        // Disable subscription refresh
-        if T.self == Subscription.self {
             return
         }
 
@@ -366,6 +361,10 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 extension MyTBATableViewController: Refreshable {
 
     var refreshKey: String? {
+        // Disable subscription refresh
+        if T.self == Subscription.self {
+            return nil
+        }
         return J.arrayKey
     }
 

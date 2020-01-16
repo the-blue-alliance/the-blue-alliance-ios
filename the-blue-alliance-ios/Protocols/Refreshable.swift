@@ -83,6 +83,11 @@ extension Refreshable {
     }
 
     func shouldRefresh() -> Bool {
+        // If there's no refresh key we should never refresh
+        if refreshKey == nil {
+            return false
+        }
+
         var isDataStale = false
         if let lastRefresh = lastRefresh, let automaticRefreshInterval = automaticRefreshInterval {
             let now = Date()

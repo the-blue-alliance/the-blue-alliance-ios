@@ -159,7 +159,7 @@ class MyTBATableViewControllerTests: TBATestCase {
         XCTAssertEqual(favorites.refreshKey, "favorites")
 
         let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        XCTAssertEqual(subscriptions.refreshKey, "subscriptions")
+        XCTAssertNil(subscriptions.refreshKey) // Should be nil while subscriptions are disabled
     }
 
     func test_automaticRefreshInterval() {
