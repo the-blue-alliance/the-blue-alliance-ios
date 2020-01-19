@@ -14,7 +14,6 @@ class MatchViewController: MyTBAContainerViewController {
     }()
 
     private(set) var infoViewController: MatchInfoViewController
-    private(set) var breakdownViewController: MatchBreakdownViewController?
 
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
@@ -37,13 +36,18 @@ class MatchViewController: MyTBAContainerViewController {
 
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
-        if match.event.year >= 2015 {
+        let breakdownViewController: ContainableViewController? = {
+            if match.event.year < 2015 {
+                return nil
+            }
+            return MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        }()
+        if let _ = breakdownViewController {
             titles.append("Breakdown")
-            breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
 
         super.init(
-            viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
+            viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }),
             navigationTitle: "\(match.friendlyName)",
             navigationSubtitle: "@ \(match.event.friendlyNameWithYear)",
             segmentedControlTitles: titles,
