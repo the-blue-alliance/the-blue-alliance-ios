@@ -15,8 +15,12 @@ extension NSDiffableDataSourceSnapshot {
                 return
             }
             if sectionIdentifiers.count <= index {
+                // Move items previously in section
+                let section = sectionIdentifiers[oldIndex]
+                let items = itemIdentifiers(inSection: section)
                 deleteSections([identifier])
                 appendSections([identifier])
+                appendItems(items, toSection: identifier)
             } else {
                 let section = sectionIdentifiers[index]
                 moveSection(identifier, beforeSection: section)
