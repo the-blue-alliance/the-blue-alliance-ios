@@ -11,20 +11,18 @@ protocol EventInfoViewControllerDelegate: AnyObject {
     func showStats()
 }
 
-private enum EventInfoSection: Int, CaseIterable {
+private enum EventInfoSection: Int {
     case title
     case detail
     case link
 }
 
-private enum EventDetailRow: Int, CaseIterable {
+private enum EventInfoItem {
+    case title
     case alliances
     case districtPoints
     case stats
     case awards
-}
-
-private enum EventLinkRow: Int, CaseIterable {
     case website
     case twitter
     case youtube
@@ -35,6 +33,9 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     private let event: Event
     private let urlOpener: URLOpener
+
+    private var dataSource: UITableViewDiffableDataSource<EventInfoSection, EventInfoItem>!
+    private var _dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
     weak var delegate: EventInfoViewControllerDelegate?
 
@@ -66,45 +67,87 @@ class EventInfoViewController: TBATableViewController, Observable {
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(InfoTableViewCell.self)
 
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
+        setupDataSource()
+        updateEventInfo()
+
+        contextObserver.observeObject(object: event, state: .updated) { (_, _) in
             DispatchQueue.main.async {
-                self?.tableView.reloadData()
+                self.updateEventInfo()
             }
         }
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return EventInfoSection.allCases.count
+    private func setupDataSource() {
+        dataSource = UITableViewDiffableDataSource<EventInfoSection, EventInfoItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
+            switch item {
+            case .title:
+                return self.tableView(tableView, titleCellForRowAt: indexPath)
+            case .alliances:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "Alliances"
+                return cell
+            case .districtPoints:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "District Points"
+                return cell
+            case .stats:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "Stats"
+                return cell
+            case .awards:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "Awards"
+                return cell
+            case .website:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "View event's website"
+                return cell
+            case .twitter:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "View #\(self.event.key) on Twitter"
+                return cell
+            case .youtube:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "View \(self.event.key) on YouTube"
+                return cell
+            case .chiefDelphi:
+                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                cell.textLabel?.text = "View photos on Chief Delphi"
+                return cell
+            }
+        })
+        _dataSource = TableViewDataSource(dataSource: dataSource)
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let section = EventInfoSection.allCases[section]
-        switch section {
-        case .title:
-            return 1
-        case .detail:
-            // Only show Alliances, Stats, and Awards if event isn't a district
-            let max = EventDetailRow.allCases.count
-            return event.district != nil ? max : max - 1
-        case .link:
-            let max = EventLinkRow.allCases.count
-            return event.hasWebsite ? max : max - 1
+    private func updateEventInfo() {
+        var snapshot = dataSource.snapshot()
+
+        snapshot.deleteAllItems()
+
+        // Info
+        snapshot.appendSections([.title])
+        snapshot.appendItems([.title], toSection: .title)
+
+        // Details
+        var detailItems: [EventInfoItem] = [.alliances, .stats, .awards]
+        if event.district != nil {
+            detailItems.insert(.districtPoints, at: 1)
         }
+        snapshot.appendSections([.detail])
+        snapshot.appendItems(detailItems, toSection: .detail)
+
+        // Links
+        var linkItems: [EventInfoItem] = [.twitter, .youtube, .chiefDelphi]
+        if event.hasWebsite {
+            linkItems.insert(.website, at: 0)
+        }
+        snapshot.appendSections([.link])
+        snapshot.appendItems(linkItems, toSection: .link)
+
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let section = EventInfoSection.allCases[indexPath.section]
-        switch section {
-        case .title:
-            return self.tableView(tableView, titleCellForRowAt: indexPath)
-        case .detail:
-            return self.tableView(tableView, detailCellForRowAt: indexPath)
-        case .link:
-            return self.tableView(tableView, linkCellForRowAt: indexPath)
-        }
-    }
+    // MARK: - Table View Methods
 
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
@@ -116,104 +159,45 @@ class EventInfoViewController: TBATableViewController, Observable {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, detailCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, detailCellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
-
-        var row = indexPath.row
-
-        if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
-            row += 1
-        }
-
-        switch row {
-        case EventDetailRow.alliances.rawValue:
-            cell.textLabel?.text = "Alliances"
-        case EventDetailRow.districtPoints.rawValue:
-            cell.textLabel?.text = "District Points"
-        case EventDetailRow.stats.rawValue:
-            cell.textLabel?.text = "Stats"
-        case EventDetailRow.awards.rawValue:
-            cell.textLabel?.text = "Awards"
-        default:
-            break
-        }
-
         cell.accessoryType = .disclosureIndicator
-
         return cell
     }
 
-    func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
-
-        var row = indexPath.row
-        if !event.hasWebsite, row >= EventLinkRow.website.rawValue {
-            row += 1
-        }
-
-        switch row {
-        case EventLinkRow.website.rawValue:
-            cell.textLabel?.text = "View event's website"
-        case EventLinkRow.twitter.rawValue:
-            cell.textLabel?.text = "View #\(event.key) on Twitter"
-        case EventLinkRow.youtube.rawValue:
-            cell.textLabel?.text = "View \(event.key) on YouTube"
-        case EventLinkRow.chiefDelphi.rawValue:
-            cell.textLabel?.text = "View photos on Chief Delphi"
-        default:
-            break
-        }
-
-        cell.accessoryType = .disclosureIndicator
-
-        return cell
-    }
+    // MARK: - Table View Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == EventInfoSection.detail.rawValue {
-            var row = indexPath.row
+        tableView.deselectRow(at: indexPath, animated: true)
 
-            if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
-                row += 1
-            }
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
 
-            switch row {
-            case EventDetailRow.alliances.rawValue:
-                delegate?.showAlliances()
-            case EventDetailRow.districtPoints.rawValue:
-                delegate?.showDistrictPoints()
-            case EventDetailRow.stats.rawValue:
-                delegate?.showStats()
-            case EventDetailRow.awards.rawValue:
-                delegate?.showAwards()
-            default:
-                break
-            }
-        } else if indexPath.section == EventInfoSection.link.rawValue {
-            var row = indexPath.row
-            if !event.hasWebsite, row >= EventLinkRow.website.rawValue {
-                row += 1
-            }
+        var urlString: String?
+        switch item {
+        case .alliances:
+            delegate?.showAlliances()
+        case .districtPoints:
+            delegate?.showDistrictPoints()
+        case .stats:
+            delegate?.showStats()
+        case .awards:
+            delegate?.showAwards()
+        case .website:
+            urlString = event.website
+        case .twitter:
+            urlString = "https://twitter.com/search?q=%23\(event.key)"
+        case .youtube:
+            urlString = "https://www.youtube.com/results?search_query=\(event.key)"
+        case .chiefDelphi:
+            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(event.key)"
+        default:
+            break
+        }
 
-            var urlString: String?
-            switch row {
-            case EventLinkRow.website.rawValue:
-                urlString = event.website
-            case EventLinkRow.twitter.rawValue:
-                urlString = "https://twitter.com/search?q=%23\(event.key)"
-            case EventLinkRow.youtube.rawValue:
-                urlString = "https://www.youtube.com/results?search_query=\(event.key)"
-            case EventLinkRow.chiefDelphi.rawValue:
-                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(event.key)"
-            default:
-                break
-            }
-
-            if let urlString = urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
-                urlOpener.open(url, options: [:], completionHandler: nil)
-            }
-
-            tableView.deselectRow(at: indexPath, animated: true)
+        if let urlString = urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+            urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
 
