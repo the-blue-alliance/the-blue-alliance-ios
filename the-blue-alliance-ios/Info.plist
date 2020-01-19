@@ -14,11 +14,11 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>DESTINATION: DEEP SPACE</key>
+			<key>INFINITE RECHARGE</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>2019DeepSpaceIcon</string>
+					<string>2020InfiniteRechargeIcon</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -36,11 +36,11 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>DESTINATION: DEEP SPACE</key>
+			<key>INFINITE RECHARGE</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>2019DeepSpaceIcon</string>
+					<string>2020InfiniteRechargeIcon</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -48,11 +48,11 @@
 		</dict>
 		<key>CFBundleIcons~ipad</key>
 		<dict>
-			<key>DESTINATION: DEEP SPACE</key>
+			<key>INFINITE RECHARGE</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>2019DeepSpaceIcon</string>
+					<string>2020InfiniteRechargeIcon</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
