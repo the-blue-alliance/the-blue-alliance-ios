@@ -20,10 +20,10 @@ struct BreakdownRow: Hashable {
     var offset: Int = 0 // Used so we can have rows with duplicate titles
 
     var redElements: [BreakdownElement] {
-        return red.compactMap({ $0 }) as? [BreakdownElement] ?? []
+        return red.compactMap({ $0 as? BreakdownElement })
     }
     var blueElements: [BreakdownElement] {
-        return blue.compactMap({ $0 }) as? [BreakdownElement] ?? []
+        return blue.compactMap({ $0 as? BreakdownElement })
     }
 
 }

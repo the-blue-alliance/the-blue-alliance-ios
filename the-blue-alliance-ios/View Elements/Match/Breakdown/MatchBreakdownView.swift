@@ -14,6 +14,7 @@ class BreakdownStyle {
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }
 
@@ -43,6 +44,12 @@ extension UIImage: BreakdownElement {
         imageView.tintColor = UIColor.label
         imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
         return imageView
+    }
+}
+
+extension UIImageView: BreakdownElement {
+    func toView() -> UIView {
+        return self
     }
 }
 

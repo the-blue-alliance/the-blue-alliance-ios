@@ -119,6 +119,20 @@ extension UIColor {
         return dynamicColor(lightModeColor, lightModeColor, darkModeColor, darkModeColor)
     }
 
+    // MARK: - Match Breakdown Colors
+
+    public class var nullHatchPanelColor: UIColor {
+        return .colorWithRGB(rgbValue: 0x555555)
+    }
+
+    public class var hatchPanelColor: UIColor {
+        return .colorWithRGB(rgbValue: 0xf4d941)
+    }
+
+    public class var cargoColor: UIColor {
+        return .colorWithRGB(rgbValue: 0xffa500)
+    }
+
     // MARK: - Private Methods
 
     private static func dynamicColor(_ lightMode: UIColor, _ lightModeHighContrast: UIColor, _ darkMode: UIColor, _ darkModeHighContrast: UIColor) -> UIColor {
