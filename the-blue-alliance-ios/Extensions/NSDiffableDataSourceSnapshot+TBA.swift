@@ -8,13 +8,14 @@ extension NSDiffableDataSourceSnapshot {
         }
 
         if sectionIdentifiers.contains(identifier) {
-            guard let oldInex = indexOfSection(identifier) else {
+            guard let oldIndex = indexOfSection(identifier) else {
                 fatalError("Section exists but doesn't have an index")
             }
-            if oldInex == index {
+            if oldIndex == index {
                 return
             }
             if sectionIdentifiers.count <= index {
+                deleteSections([identifier])
                 appendSections([identifier])
             } else {
                 let section = sectionIdentifiers[index]
@@ -42,6 +43,7 @@ extension NSDiffableDataSourceSnapshot {
                 return
             }
             if items.count <= index {
+                deleteItems([identifier])
                 appendItems([identifier], toSection: section)
             } else {
                 let item = items[index]
