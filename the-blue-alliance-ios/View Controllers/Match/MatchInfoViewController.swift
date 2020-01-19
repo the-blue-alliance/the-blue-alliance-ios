@@ -143,7 +143,7 @@ class MatchInfoViewController: TBAViewController, Observable {
                 scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.redScoreLabel)
             } else {
                 // Match the 'Time' label to the size of the time
-                scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.timeView)
+                scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.timeLabel)
             }
         }
     }
