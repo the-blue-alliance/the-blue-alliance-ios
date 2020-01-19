@@ -55,11 +55,6 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         matchesViewController.delegate = self
         mediaViewController.delegate = self
         awardsViewController.delegate = self
-
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
-            guard let self = self else { return }
-            self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -72,6 +67,11 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         super.viewWillAppear(animated)
 
         Analytics.logEvent("team_at_event", parameters: ["event": event.key, "team": team.key])
+
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
+            guard let self = self else { return }
+            self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+        }
     }
 
     // MARK: - Private Methods

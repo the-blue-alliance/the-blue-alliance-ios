@@ -42,16 +42,6 @@ class TeamInfoViewController: TBATableViewController, Observable {
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        // TODO: Add support for Pits
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
-
-        contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.updateTeamInfo()
-            }
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -68,6 +58,16 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
         setupDataSource()
         updateTeamInfo()
+
+        // TODO: Add support for Pits
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
+
+        contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.updateTeamInfo()
+            }
+        }
     }
 
     // MARK: - Private Methods

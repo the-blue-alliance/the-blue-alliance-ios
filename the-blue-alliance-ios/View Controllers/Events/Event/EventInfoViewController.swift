@@ -52,12 +52,6 @@ class EventInfoViewController: TBATableViewController, Observable {
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -71,6 +65,12 @@ class EventInfoViewController: TBATableViewController, Observable {
 
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(InfoTableViewCell.self)
+
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     // MARK: - Table view data source
