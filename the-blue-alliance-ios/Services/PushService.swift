@@ -25,6 +25,13 @@ class PushService: NSObject {
             // Not authenticated to myTBA - we'll try again when we're auth'd
             return
         }
+        guard operationQueue.operationCount == 0 else {
+            // Hack-y fix for register being called twice during app startup -
+            // Once from MyTBAAuthenticationObservable.authenticated and once from
+            // MessagingDelegate.didReceiveRegistrationToken
+            // We should look to fix this properly some other time
+            return
+        }
         let registerOperation = myTBA.register { (_, error) in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
