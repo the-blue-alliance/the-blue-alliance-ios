@@ -49,12 +49,6 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
                    userDefaults: userDefaults)
 
         title = event.friendlyNameWithYear
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.title = event.friendlyNameWithYear
-            }
-        }
 
         infoViewController.delegate = self
         teamsViewController.delegate = self
@@ -77,6 +71,13 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
             showOfflineEventMessage(shouldShow: true, animated: false)
         }
         registerForEventStatusChanges(eventKey: event.key)
+
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.title = event.friendlyNameWithYear
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

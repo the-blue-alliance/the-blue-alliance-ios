@@ -54,11 +54,6 @@ class MatchViewController: MyTBAContainerViewController {
         )
 
         infoViewController.matchSummaryDelegate = self
-
-        contextObserver.observeObject(object: match.event, state: .updated) { [weak self] (event, _) in
-            guard let self = self else { return }
-            self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,6 +61,15 @@ class MatchViewController: MyTBAContainerViewController {
     }
 
     // MARK: - View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        contextObserver.observeObject(object: match.event, state: .updated) { [weak self] (event, _) in
+            guard let self = self else { return }
+            self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+        }
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

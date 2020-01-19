@@ -86,8 +86,6 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
         mediaViewController.delegate = self
 
         teamHeaderView.yearButton.addTarget(self, action: #selector(showSelectYear), for: .touchUpInside)
-
-        setupObservers()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,6 +98,8 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
         super.viewDidLoad()
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
+
+        setupObservers()
     }
 
     override func viewWillAppear(_ animated: Bool) {

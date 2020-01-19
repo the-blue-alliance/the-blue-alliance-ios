@@ -87,12 +87,6 @@ private class EventAlliancesViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -108,6 +102,12 @@ private class EventAlliancesViewController: TBATableViewController {
 
         // Override automatic rowHeight - these will be smaller than 44 by default, and we want to open them up
         tableView.rowHeight = 44
+
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     // MARK: Table View Data Source

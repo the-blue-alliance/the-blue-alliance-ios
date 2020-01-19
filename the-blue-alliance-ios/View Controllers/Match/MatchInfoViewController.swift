@@ -95,12 +95,6 @@ class MatchInfoViewController: TBAViewController, Observable {
         self.team = team
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
-            DispatchQueue.main.async {
-                self?.updateInterface()
-            }
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -113,6 +107,12 @@ class MatchInfoViewController: TBAViewController, Observable {
         super.viewDidLoad()
 
         styleInterface()
+
+        contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
+            DispatchQueue.main.async {
+                self?.updateInterface()
+            }
+        }
     }
 
     // MARK: Interface Methods
