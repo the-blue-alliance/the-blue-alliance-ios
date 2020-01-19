@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/**/*.swift'
 
   s.dependency 'TBAOperation'
+  s.dependency 'TBAUtils' # For Provider
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests/**/*.swift'

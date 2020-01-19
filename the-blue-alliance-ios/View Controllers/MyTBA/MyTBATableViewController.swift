@@ -37,6 +37,7 @@ protocol MyTBATableViewControllerDelegate: AnyObject {
  */
 class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
+    let subscriptionsEnabled: Bool
     let myTBA: MyTBA
     weak var delegate: MyTBATableViewControllerDelegate?
 
@@ -46,7 +47,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: Init
 
-    init(myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(subscriptionsEnabled: Bool, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.subscriptionsEnabled = subscriptionsEnabled
         self.myTBA = myTBA
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -69,9 +71,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.dataSource = _dataSource
 
         // Disable subscriptions
-        if T.self == Favorite.self {
+        if T.self == Favorite.self || subscriptionsEnabled {
             setupFetchedResultsController()
-        } else if T.self == Subscription.self {
+        } else {
             DispatchQueue.main.async {
                 self.disableRefreshing()
             }
@@ -362,7 +364,7 @@ extension MyTBATableViewController: Refreshable {
 
     var refreshKey: String? {
         // Disable subscription refresh
-        if T.self == Subscription.self {
+        if T.self == Subscription.self && !subscriptionsEnabled {
             return nil
         }
         return J.arrayKey
@@ -388,7 +390,7 @@ extension MyTBATableViewController: Refreshable {
 extension MyTBATableViewController: Stateful {
 
     var noDataText: String {
-        if T.self == Favorite.self {
+        if T.self == Favorite.self || subscriptionsEnabled {
             return "No \(J.arrayKey)"
         } else {
             return "Subscriptions are not yet supported"

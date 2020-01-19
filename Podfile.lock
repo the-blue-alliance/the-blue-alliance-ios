@@ -25,6 +25,9 @@ PODS:
   - Firebase/Performance (6.15.0):
     - Firebase/CoreOnly
     - FirebasePerformance (~> 3.1.9)
+  - Firebase/RemoteConfig (6.15.0):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 4.4.6)
   - Firebase/Storage (6.15.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 3.5.0)
@@ -150,9 +153,11 @@ PODS:
     - GTMSessionFetcher/Core (= 1.3.1)
   - MyTBAKit (1.0.0-LOCAL):
     - TBAOperation
+    - TBAUtils
   - MyTBAKit/Tests (1.0.0-LOCAL):
     - MyTBAKitTesting
     - TBAOperation
+    - TBAUtils
   - MyTBAKitTesting (1.0.0-LOCAL):
     - MyTBAKit
     - TBATestingMocks
@@ -220,6 +225,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Messaging
   - Firebase/Performance
+  - Firebase/RemoteConfig
   - Firebase/Storage
   - GoogleSignIn (~> 5)
   - MyTBAKit (from `Frameworks/MyTBAKit`)
@@ -339,7 +345,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: f8de7ddf8c706f58e9b405d53e38bbdaa2731e5a
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
-  MyTBAKit: 4e8f384aaf97da0c961fcf1dc9f4d1d4def03f41
+  MyTBAKit: 5edcbf81243e8a4313f80d7613dea76c20ba61b5
   MyTBAKitTesting: 18372d015ffbf4dae4e504227da76081a0fb9e46
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PINCache: 7cb9ae068c8f655717f7c644ef1dff9fd573e979
@@ -360,6 +366,6 @@ SPEC CHECKSUMS:
   XCDYouTubeKit: 79baadb0560673a67c771eba45f83e353fd12c1f
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: ab5a7aadfde80e3895bc7eeed9a8ad2bacccb278
+PODFILE CHECKSUM: b52891754fd48db3dc0f0ba54d8c8c4a6d809e77
 
 COCOAPODS: 1.8.4
