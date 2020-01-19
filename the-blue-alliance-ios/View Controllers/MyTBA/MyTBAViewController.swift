@@ -16,6 +16,7 @@ class MyTBAViewController: ContainerViewController {
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
+    private let remoteConfigService: RemoteConfigService
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -42,15 +43,16 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
+        self.remoteConfigService = remoteConfigService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(subscriptionsEnabled: remoteConfigService.remoteConfig.subscriptionsEnabled, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(subscriptionsEnabled: remoteConfigService.remoteConfig.subscriptionsEnabled, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],

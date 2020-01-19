@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseRemoteConfig
 import MyTBAKitTesting
 import TBAData
 import TBADataTesting
@@ -16,6 +17,7 @@ class TBATestCase: TBADataTestCase {
     var urlOpener: MockURLOpener!
     var pushService: PushService!
     var statusService: StatusService!
+    var remoteConfigService: RemoteConfigService!
 
     override func setUp() {
         super.setUp()
@@ -28,6 +30,7 @@ class TBATestCase: TBADataTestCase {
         urlOpener = MockURLOpener()
         pushService = PushService(myTBA: myTBA, retryService: RetryService())
         statusService = StatusService(bundle: StatusBundle.bundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
+        remoteConfigService = RemoteConfigService(remoteConfig: RemoteConfig.remoteConfig(), retryService: RetryService())
     }
 
     override func tearDown() {

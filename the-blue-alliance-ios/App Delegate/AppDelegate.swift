@@ -55,6 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
         let myTBAViewController = MyTBAViewController(myTBA: myTBA,
+                                                      remoteConfigService: remoteConfigService,
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
@@ -98,6 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return TBAPersistenceContainer()
     }()
     let photoLibrary = PHPhotoLibrary.shared()
+    lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
     var tbaKit: TBAKit!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
@@ -106,8 +108,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return PushService(myTBA: myTBA,
                            retryService: RetryService())
     }()
+    lazy var remoteConfigService: RemoteConfigService = {
+        return RemoteConfigService(remoteConfig: remoteConfig,
+                                   retryService: RetryService())
+    }()
     lazy var statusService: StatusService = {
-        return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
+        return StatusService(persistentContainer: persistentContainer,
+                             retryService: RetryService(),
+                             tbaKit: tbaKit)
     }()
 
     // A completion block for registering for remote notifications
@@ -173,6 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
+                    self.remoteConfigService.registerRetryable(initiallyRetry: true)
                     self.statusService.registerRetryable(initiallyRetry: true)
 
                     // Check our minimum app version

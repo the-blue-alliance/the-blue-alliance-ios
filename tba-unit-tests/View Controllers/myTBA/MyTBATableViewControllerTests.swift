@@ -12,7 +12,7 @@ class MyTBATableViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(subscriptionsEnabled: false, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         myTBATableViewController.viewDidLoad()
     }
 
@@ -29,7 +29,7 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     func test_refresh() {
         myTBA.authToken = "abcd123"
-        let mockMyTBATableViewController = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let mockMyTBATableViewController = MockMyTBATableViewController<Favorite, MyTBAFavorite>(subscriptionsEnabled: false, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         let fetchEventExpectation = expectation(description: "Fetch event called")
         mockMyTBATableViewController.fetchEventExpectation = fetchEventExpectation
@@ -155,11 +155,14 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_refreshKey() {
-        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(subscriptionsEnabled: false, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         XCTAssertEqual(favorites.refreshKey, "favorites")
 
-        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(subscriptionsEnabled: false, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         XCTAssertNil(subscriptions.refreshKey) // Should be nil while subscriptions are disabled
+
+        let subscriptionsEnabled = MockMyTBATableViewController<Subscription, MyTBASubscription>(subscriptionsEnabled: true, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        XCTAssertEqual(subscriptionsEnabled.refreshKey, "subscriptions")
     }
 
     func test_automaticRefreshInterval() {
@@ -193,11 +196,14 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_noDataText() {
-        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(subscriptionsEnabled: false, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         XCTAssertEqual(favorites.noDataText, "No favorites")
 
-        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(subscriptionsEnabled: false, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         XCTAssertEqual(subscriptions.noDataText, "Subscriptions are not yet supported")
+
+        let subscriptionsEnabled = MockMyTBATableViewController<Subscription, MyTBASubscription>(subscriptionsEnabled: true, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        XCTAssertEqual(subscriptionsEnabled.noDataText, "No subscriptions")
     }
 
 }
