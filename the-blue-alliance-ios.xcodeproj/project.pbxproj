@@ -90,6 +90,8 @@
 		92943B0A222E1E0600EA35B2 /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92943B09222E1E0600EA35B2 /* SwitchTableViewCell.xib */; };
 		929820CD216966890080C1C8 /* EventsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929820CC216966890080C1C8 /* EventsContainerViewControllerTests.swift */; };
 		929820CF216968020080C1C8 /* TBATestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929820CE216968020080C1C8 /* TBATestCase.swift */; };
+		929B91F723D4EC030029257E /* 2020InfiniteRechargeIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 929B91F523D4EC020029257E /* 2020InfiniteRechargeIcon@2x.png */; };
+		929B91F823D4EC030029257E /* 2020InfiniteRechargeIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 929B91F623D4EC020029257E /* 2020InfiniteRechargeIcon@3x.png */; };
 		929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BBB041EC55742006D3854 /* InfoTableViewCell.swift */; };
 		929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */; };
 		929DB38C2095640000FB575F /* ReverseSubtitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929DB38B2095640000FB575F /* ReverseSubtitleTableViewCell.swift */; };
@@ -297,6 +299,8 @@
 		92943B09222E1E0600EA35B2 /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		929820CC216966890080C1C8 /* EventsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		929820CE216968020080C1C8 /* TBATestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBATestCase.swift; sourceTree = "<group>"; };
+		929B91F523D4EC020029257E /* 2020InfiniteRechargeIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2020InfiniteRechargeIcon@2x.png"; sourceTree = "<group>"; };
+		929B91F623D4EC020029257E /* 2020InfiniteRechargeIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2020InfiniteRechargeIcon@3x.png"; sourceTree = "<group>"; };
 		929BBB041EC55742006D3854 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
 		929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoTableViewCell.xib; sourceTree = "<group>"; };
 		929DB38B2095640000FB575F /* ReverseSubtitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseSubtitleTableViewCell.swift; sourceTree = "<group>"; };
@@ -476,6 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				92004C6721C21C8B00A858C8 /* 2019DeepSpaceIcon */,
+				929B91F423D4EB210029257E /* 2020InfiniteRechargeIcon */,
 			);
 			path = "App Icons";
 			sourceTree = "<group>";
@@ -759,6 +764,15 @@
 				92C8CE5321AEE64B00683558 /* EventViewControllerTests.swift */,
 			);
 			path = Events;
+			sourceTree = "<group>";
+		};
+		929B91F423D4EB210029257E /* 2020InfiniteRechargeIcon */ = {
+			isa = PBXGroup;
+			children = (
+				929B91F523D4EC020029257E /* 2020InfiniteRechargeIcon@2x.png */,
+				929B91F623D4EC020029257E /* 2020InfiniteRechargeIcon@3x.png */,
+			);
+			path = 2020InfiniteRechargeIcon;
 			sourceTree = "<group>";
 		};
 		929BBB061EC55745006D3854 /* Info */ = {
@@ -1306,9 +1320,11 @@
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
+				929B91F723D4EC030029257E /* 2020InfiniteRechargeIcon@2x.png in Resources */,
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
+				929B91F823D4EC030029257E /* 2020InfiniteRechargeIcon@3x.png in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */,
 				92B3874221CAF7190041A049 /* IconTableViewCell.xib in Resources */,
