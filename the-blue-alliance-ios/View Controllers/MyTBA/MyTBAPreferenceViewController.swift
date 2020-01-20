@@ -38,6 +38,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     var preferencesOperation: MyTBAOperation?
     let operationQueue = OperationQueue()
 
+    let subscriptionsEnabled: Bool
     var hasChanges: Bool {
         return (notifications != notificationsInitial) || (isFavorite != isFavoriteInitially)
     }
@@ -60,7 +61,8 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                                                           action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+    init(subscriptionsEnabled: Bool, subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+        self.subscriptionsEnabled = subscriptionsEnabled
         self.subscribableModel = subscribableModel
         self.myTBA = myTBA
         self.persistentContainer = persistentContainer
@@ -249,8 +251,10 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // Disable Subscriptions
-        return 1
+        if !subscriptionsEnabled {
+            return 1
+        }
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

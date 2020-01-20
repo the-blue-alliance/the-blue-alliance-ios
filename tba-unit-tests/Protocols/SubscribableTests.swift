@@ -9,13 +9,15 @@ class MockSubscribableViewController: UIViewController, Persistable, Subscribabl
         return UIBarButtonItem(title: "Button", style: .plain, target: nil, action: nil)
     }
     var myTBA: MyTBA
+    var remoteConfigService: RemoteConfigService
     var subscribableModel: MyTBASubscribable
     var persistentContainer: NSPersistentContainer
 
     var presentCalled: ((UIViewController) -> ())?
 
-    init(myTBA: MyTBA, subscribableModel: MyTBASubscribable, persistentContainer: NSPersistentContainer) {
+    init(myTBA: MyTBA, remoteConfigService: RemoteConfigService, subscribableModel: MyTBASubscribable, persistentContainer: NSPersistentContainer) {
         self.myTBA = myTBA
+        self.remoteConfigService = remoteConfigService
         self.subscribableModel = subscribableModel
         self.persistentContainer = persistentContainer
 
@@ -41,7 +43,7 @@ class SubscribableTests: TBATestCase {
         super.setUp()
 
         subscribableModel = insertDistrictEvent()
-        subscribableViewController = MockSubscribableViewController(myTBA: myTBA, subscribableModel: subscribableModel, persistentContainer: persistentContainer)
+        subscribableViewController = MockSubscribableViewController(myTBA: myTBA, remoteConfigService: remoteConfigService, subscribableModel: subscribableModel, persistentContainer: persistentContainer)
     }
 
     override func tearDown() {
