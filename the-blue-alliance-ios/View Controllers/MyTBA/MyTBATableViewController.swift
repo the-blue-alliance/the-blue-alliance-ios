@@ -41,8 +41,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     let myTBA: MyTBA
     weak var delegate: MyTBATableViewControllerDelegate?
 
-    private var dataSource: UITableViewDiffableDataSource<MyTBASection, NSManagedObject>!
-    private var _dataSource: TableViewDataSource<MyTBASection, NSManagedObject>!
+    private var tableViewDataSource: TableViewDataSource<MyTBASection, NSManagedObject>!
     private var fetchedResultsController: NSFetchedResultsController<T>!
 
     // MARK: Init
@@ -68,7 +67,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.registerReusableCell(MatchTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = _dataSource
+        tableView.dataSource = tableViewDataSource
 
         // Disable subscriptions
         if T.self == Favorite.self || subscriptionsEnabled {
@@ -83,7 +82,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<MyTBASection, NSManagedObject>(tableView: tableView, cellProvider: { (tableView, indexPath, obj) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<MyTBASection, NSManagedObject>(tableView: tableView, cellProvider: { (tableView, indexPath, obj) -> UITableViewCell? in
             let fallbackCell = UITableViewCell()
             fallbackCell.textLabel?.text = obj.description
 
@@ -100,9 +99,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 return fallbackCell
             }
         })
-        _dataSource = TableViewDataSource(dataSource: dataSource)
-        _dataSource.delegate = self
-        _dataSource.statefulDelegate = self
+        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        tableViewDataSource.delegate = self
+        tableViewDataSource.statefulDelegate = self
     }
 
     // MARK: NSFetchedResultsController
@@ -159,7 +158,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             s.appendSections([sectionType])
             s.appendItems(items, toSection: sectionType)
         }
-        dataSource.apply(s, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(s, animatingDifferences: false)
     }
 
     // MARK: Table View Cells
@@ -186,7 +185,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     override func title(forSection sectionIndex: Int) -> String? {
         let indexPath = IndexPath(item: 0, section: sectionIndex)
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+        guard let item = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return nil
         }
         if item is Event {
@@ -203,7 +202,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let obj = dataSource.itemIdentifier(for: indexPath) else {
+        guard let obj = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         if let event = obj as? Event {
@@ -344,7 +343,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return nil
         }
         return BlockOperation {
-            var snapshot = self.dataSource.snapshot()
+            var snapshot = self.tableViewDataSource.dataSource.snapshot()
 
             if !snapshot.sectionIdentifiers.contains(section) {
                 if snapshot.numberOfSections <= model.modelType.rawValue {
@@ -371,7 +370,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             snapshot.deleteItems(items)
             snapshot.appendItems(items, toSection: section)
 
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+            self.tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: true)
         }
     }
 
@@ -396,7 +395,7 @@ extension MyTBATableViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if myTBA.isAuthenticated, _dataSource.isDataSourceEmpty {
+        if myTBA.isAuthenticated, tableViewDataSource.isDataSourceEmpty {
             return true
         }
         return false

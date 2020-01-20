@@ -18,7 +18,7 @@ class DistrictsViewController: TBATableViewController {
         }
     }
 
-    private var dataSource: TableViewDataSource<String, District>!
+    private var tableViewDataSource: TableViewDataSource<String, District>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<District>!
 
     // MARK: - Init
@@ -39,7 +39,7 @@ class DistrictsViewController: TBATableViewController {
         super.viewDidLoad()
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: UITableView Delegate
@@ -61,9 +61,9 @@ class DistrictsViewController: TBATableViewController {
             // TODO: Convert to some custom cell... show # of events if non-zero
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
         fetchRequest.sortDescriptors = [

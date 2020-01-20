@@ -32,7 +32,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
     weak var delegate: EventsViewControllerDelegate?
 
-    private var dataSource: TableViewDataSource<String, Event>!
+    private var tableViewDataSource: TableViewDataSource<String, Event>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Event>!
 
     // MARK: - View Lifecycle
@@ -43,7 +43,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         tableView.registerReusableCell(EventTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: - Refreshable
@@ -91,9 +91,9 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
             cell.viewModel = EventCellViewModel(event: event)
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         let sortDescriptors = [firstSortDescriptor] + Event.sortDescriptors()

@@ -73,7 +73,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
     private let event: Event
 
-    private var dataSource: TableViewDataSource<String, DistrictEventPoints>!
+    private var tableViewDataSource: TableViewDataSource<String, DistrictEventPoints>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<DistrictEventPoints>!
 
     // MARK: - Init
@@ -96,7 +96,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
         tableView.registerReusableCell(RankingTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: UITableView Delegate
@@ -116,9 +116,9 @@ private class EventDistrictPointsViewController: TBATableViewController {
             cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: districtEventPoints)
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
         fetchRequest.sortDescriptors = [DistrictEventPoints.totalSortDescriptor()]

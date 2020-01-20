@@ -27,7 +27,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private let fetchMediaOperationQueue = OperationQueue()
 
     weak var delegate: TeamMediaCollectionViewControllerDelegate?
-    private var dataSource: CollectionViewDataSource<String, TeamMedia>!
+
+    private var collectionViewDataSource: CollectionViewDataSource<String, TeamMedia>!
     var fetchedResultsController: CollectionViewDataSourceFetchedResultsController<TeamMedia>!
 
     // MARK: Init
@@ -54,7 +55,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
 
         setupDataSource()
-        collectionView.dataSource = dataSource
+        collectionView.dataSource = collectionViewDataSource
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -145,8 +146,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             }
             return cell
         }
-        self.dataSource = CollectionViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
+        self.collectionViewDataSource = CollectionViewDataSource(dataSource: dataSource)
+        self.collectionViewDataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
         setupFetchRequest(fetchRequest)

@@ -15,7 +15,7 @@ class EventRankingsViewController: TBATableViewController {
 
     private let event: Event
 
-    private var dataSource: TableViewDataSource<String, EventRanking>!
+    private var tableViewDataSource: TableViewDataSource<String, EventRanking>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<EventRanking>!
 
     // MARK: - Init
@@ -38,7 +38,7 @@ class EventRankingsViewController: TBATableViewController {
         tableView.registerReusableCell(RankingTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: UITableView Delegate
@@ -58,9 +58,9 @@ class EventRankingsViewController: TBATableViewController {
             cell.viewModel = RankingCellViewModel(eventRanking: eventRanking)
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
         fetchRequest.sortDescriptors = [

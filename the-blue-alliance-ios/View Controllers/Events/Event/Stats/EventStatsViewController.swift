@@ -16,8 +16,7 @@ class EventStatsViewController: TBATableViewController, Observable {
     private let event: Event
     private let eventStatsConfigurator: EventStatsConfigurator.Type?
 
-    private var dataSource: UITableViewDiffableDataSource<String, InsightRow>!
-    private var _dataSource: TableViewDataSource<String, InsightRow>!
+    private var tableViewDataSource: TableViewDataSource<String, InsightRow>!
 
     // MARK: - Observable
 
@@ -60,7 +59,7 @@ class EventStatsViewController: TBATableViewController, Observable {
         tableView.insetsContentViewsToSafeArea = false
 
         setupDataSource()
-        tableView.dataSource = _dataSource
+        tableView.dataSource = tableViewDataSource
 
         let eventStatsSupported = (eventStatsConfigurator != nil)
         if eventStatsSupported {
@@ -88,7 +87,7 @@ class EventStatsViewController: TBATableViewController, Observable {
             return nil
         }
 
-        let snapshot = dataSource.snapshot()
+        let snapshot = tableViewDataSource.dataSource.snapshot()
         let section = snapshot.sectionIdentifiers[section]
 
         headerView.title = section
@@ -104,7 +103,7 @@ class EventStatsViewController: TBATableViewController, Observable {
         if section == 0 {
             return nil
         }
-        let snapshot = dataSource.snapshot()
+        let snapshot = tableViewDataSource.dataSource.snapshot()
         let title = snapshot.sectionIdentifiers[section]
         return title
     }
@@ -112,7 +111,7 @@ class EventStatsViewController: TBATableViewController, Observable {
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<String, InsightRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<String, InsightRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
             if indexPath.section == 0 {
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventStatsTableViewCell
                 cell.title = row.title
@@ -131,13 +130,13 @@ class EventStatsViewController: TBATableViewController, Observable {
                 return cell
             }
         }
-        _dataSource = TableViewDataSource(dataSource: dataSource)
-        _dataSource.delegate = self
-        _dataSource.statefulDelegate = self
+        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        tableViewDataSource.delegate = self
+        tableViewDataSource.statefulDelegate = self
     }
 
     private func configureDataSource(_ insights: EventInsights?) {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
         snapshot.deleteAllItems()
 
         let qual = insights?.qual
@@ -147,7 +146,7 @@ class EventStatsViewController: TBATableViewController, Observable {
             eventStatsConfigurator.configureDataSource(&snapshot, qual, playoff)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
 }
@@ -171,7 +170,7 @@ extension EventStatsViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return _dataSource.isDataSourceEmpty
+        return tableViewDataSource.isDataSourceEmpty
     }
 
     @objc func refresh() {

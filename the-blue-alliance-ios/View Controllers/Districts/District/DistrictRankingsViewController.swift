@@ -15,7 +15,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
 
     private let district: District
 
-    private var dataSource: TableViewDataSource<String, DistrictRanking>!
+    private var tableViewDataSource: TableViewDataSource<String, DistrictRanking>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<DistrictRanking>!
 
     // MARK: - Init
@@ -38,7 +38,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
         tableView.registerReusableCell(RankingTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: UITableView Delegate
@@ -58,9 +58,9 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
             cell.viewModel = RankingCellViewModel(districtRanking: districtRanking)
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
         fetchRequest.sortDescriptors = [

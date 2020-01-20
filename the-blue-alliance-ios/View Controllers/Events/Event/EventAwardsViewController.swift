@@ -92,7 +92,7 @@ class EventAwardsViewController: TBATableViewController {
     private let event: Event
     private let team: Team?
 
-    private var dataSource: TableViewDataSource<String, Award>!
+    private var tableViewDataSource: TableViewDataSource<String, Award>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Award>!
 
     // MARK: - Init
@@ -116,7 +116,7 @@ class EventAwardsViewController: TBATableViewController {
         tableView.registerReusableCell(AwardTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: Table View Data Source
@@ -135,9 +135,9 @@ class EventAwardsViewController: TBATableViewController {
             }
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
         fetchRequest.sortDescriptors = [

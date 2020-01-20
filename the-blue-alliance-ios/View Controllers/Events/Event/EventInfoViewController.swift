@@ -34,8 +34,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     private let event: Event
     private let urlOpener: URLOpener
 
-    private var dataSource: UITableViewDiffableDataSource<EventInfoSection, EventInfoItem>!
-    private var _dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
+    private var tableViewDataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
     weak var delegate: EventInfoViewControllerDelegate?
 
@@ -68,6 +67,8 @@ class EventInfoViewController: TBATableViewController, Observable {
         tableView.registerReusableCell(InfoTableViewCell.self)
 
         setupDataSource()
+        tableView.dataSource = tableViewDataSource
+
         updateEventInfo()
 
         contextObserver.observeObject(object: event, state: .updated) { (_, _) in
@@ -78,7 +79,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     }
 
     private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<EventInfoSection, EventInfoItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<EventInfoSection, EventInfoItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
             switch item {
             case .title:
                 return self.tableView(tableView, titleCellForRowAt: indexPath)
@@ -116,11 +117,11 @@ class EventInfoViewController: TBATableViewController, Observable {
                 return cell
             }
         })
-        _dataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
     }
 
     private func updateEventInfo() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
 
         snapshot.deleteAllItems()
 
@@ -144,7 +145,7 @@ class EventInfoViewController: TBATableViewController, Observable {
         snapshot.appendSections([.link])
         snapshot.appendItems(linkItems, toSection: .link)
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     // MARK: - Table View Methods
@@ -170,7 +171,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+        guard let item = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 
