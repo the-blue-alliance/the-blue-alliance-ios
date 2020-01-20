@@ -13,9 +13,10 @@ Pod::Spec.new do |s|
   s.resources = 'Resources/TBA.xcdatamodeld'
   s.resource_bundle = { 'TBAData-Resources' => ['Resources/**/*.plist'] }
 
-  s.dependency 'MyTBAKit' # Needed for API models
-  s.dependency 'TBAKit' # Needed for API models
-  s.dependency 'TBAUtils' # For NSSet, Calendar, etc. extensions
+  s.dependency 'MyTBAKit' # For API models
+  s.dependency 'TBAKit' # For API models
+  s.dependency 'TBAProtocols' # For Locatable, Surfable, etc.
+  s.dependency 'TBAUtils' # For NSSet, Calendar, etc. extensions and ErrorRecorder
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests/**/*.swift'

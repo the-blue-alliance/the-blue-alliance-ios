@@ -193,7 +193,7 @@ extension District: Managed {
             context.delete($0)
         }
     }
-    
+
     /**
      Insert a District with values from a TBAKit District model in to the managed object context.
 

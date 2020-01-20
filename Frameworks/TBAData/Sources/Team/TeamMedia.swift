@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import TBAKit
+import TBAProtocols
 
 public enum MediaError: Error {
     case error(String)

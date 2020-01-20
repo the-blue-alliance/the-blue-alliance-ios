@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import TBAKit
+import TBAProtocols
 
 extension MatchVideo {
 

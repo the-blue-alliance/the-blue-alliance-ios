@@ -30,6 +30,7 @@ target 'The Blue Alliance' do
   pod 'TBAData', :path => 'Frameworks/TBAData', :testspecs => ['Tests']
   pod 'TBAKit', :path => 'Frameworks/TBAKit', :testspecs => ['Tests']
   pod 'TBAOperation', :path => 'Frameworks/TBAOperation', :testspecs => ['Tests']
+  pod 'TBAProtocols', :path => 'Frameworks/TBAProtocols', :testspecs => ['Tests']
   pod 'TBAUtils', :path => 'Frameworks/TBAUtils', :testspecs => ['Tests']
 
   # myTBA
