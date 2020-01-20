@@ -1189,34 +1189,34 @@ class EventTestCase: TBADataTestCase {
 
     func test_dateString_noDates() {
         let noDates = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        XCTAssertNil(noDates.dateString())
+        XCTAssertNil(noDates.dateString)
 
         noDates.startDateRaw = Event.dateFormatter.date(from: "2018-03-05")!
-        XCTAssertNil(noDates.dateString())
+        XCTAssertNil(noDates.dateString)
         noDates.startDateRaw = nil
 
         noDates.endDateRaw = Event.dateFormatter.date(from: "2018-03-05")!
-        XCTAssertNil(noDates.dateString())
+        XCTAssertNil(noDates.dateString)
 
         noDates.startDateRaw = Event.dateFormatter.date(from: "2018-03-05")!
-        XCTAssertNotNil(noDates.dateString())
+        XCTAssertNotNil(noDates.dateString)
     }
 
     func test_dateString() {
         let sameDay = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         sameDay.startDateRaw = Event.dateFormatter.date(from: "2018-03-05")!
         sameDay.endDateRaw = Event.dateFormatter.date(from: "2018-03-05")!
-        XCTAssertEqual(sameDay.dateString(), "Mar 05")
+        XCTAssertEqual(sameDay.dateString, "Mar 05")
 
         let sameYear = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         sameYear.startDateRaw = Event.dateFormatter.date(from: "2018-03-01")!
         sameYear.endDateRaw = Event.dateFormatter.date(from: "2018-03-03")!
-        XCTAssertEqual(sameYear.dateString(), "Mar 01 to Mar 03")
+        XCTAssertEqual(sameYear.dateString, "Mar 01 to Mar 03")
 
         let differentYear = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         differentYear.startDateRaw = Event.dateFormatter.date(from: "2018-12-31")!
         differentYear.endDateRaw = Event.dateFormatter.date(from: "2019-01-01")!
-        XCTAssertEqual(differentYear.dateString(), "Dec 31 to Jan 01, 2019")
+        XCTAssertEqual(differentYear.dateString, "Dec 31 to Jan 01, 2019")
     }
 
     func test_dateString_timezone() {
@@ -1228,7 +1228,7 @@ class EventTestCase: TBADataTestCase {
         sameYear.endDateRaw = Event.dateFormatter.date(from: "2018-03-03")!
         sameYear.timezoneRaw = "America/New_York"
 
-        XCTAssertEqual(sameYear.dateString(), "Mar 01 to Mar 03")
+        XCTAssertEqual(sameYear.dateString, "Mar 01 to Mar 03")
 
         addTeardownBlock {
             NSTimeZone.resetSystemTimeZone()
