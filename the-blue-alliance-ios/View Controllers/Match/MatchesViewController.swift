@@ -20,8 +20,9 @@ class MatchesViewController: TBATableViewController {
     private let team: Team?
     private var myTBA: MyTBA
 
-    private var dataSource: TableViewDataSource<String, Match>!
+    private var tableViewDataSource: TableViewDataSource<String, Match>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Match>!
+
     private var favoriteTeamKeys: [String] = []
 
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
@@ -53,7 +54,7 @@ class MatchesViewController: TBATableViewController {
         tableView.registerReusableCell(MatchTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
 
         updateInterface()
     }
@@ -83,9 +84,9 @@ class MatchesViewController: TBATableViewController {
 
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
         setupFetchRequest(fetchRequest)

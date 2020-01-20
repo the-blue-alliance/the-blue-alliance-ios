@@ -23,7 +23,7 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 
     weak var delegate: TeamsViewControllerDelegate?
 
-    private var dataSource: TableViewDataSource<String, Team>!
+    private var tableViewDataSource: TableViewDataSource<String, Team>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
 
     // MARK: - View Lifecycle
@@ -34,7 +34,7 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
         tableView.registerReusableCell(TeamTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: UITableView Delegate
@@ -122,9 +122,9 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
             cell.viewModel = TeamCellViewModel(team: team)
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
         fetchRequest.sortDescriptors = [

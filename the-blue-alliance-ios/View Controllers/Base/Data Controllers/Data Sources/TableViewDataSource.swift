@@ -9,7 +9,7 @@ protocol TableViewDataSourceDelegate: AnyObject {
 /// UITableViewDataSource for TBA where we manage no data states and whatnot for table views
 class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableViewDataSource {
 
-    private weak var dataSource: UITableViewDiffableDataSource<Section, Item>?
+    let dataSource: UITableViewDiffableDataSource<Section, Item>
 
     weak var delegate: TableViewDataSourceDelegate?
     weak var statefulDelegate: (Stateful & Refreshable)?
@@ -23,16 +23,14 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableV
     // MARK: - Public Methods
 
     var isDataSourceEmpty: Bool {
-        guard let snapshot = dataSource?.snapshot() else {
-            return false
-        }
+        let snapshot = dataSource.snapshot()
         return snapshot.itemIdentifiers.isEmpty
     }
 
     // MARK: UITableViewDataSource
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        let sections = dataSource?.numberOfSections(in: tableView) ?? 0
+        let sections = dataSource.numberOfSections(in: tableView)
         if sections == 0 {
             statefulDelegate?.showNoDataView()
         }
@@ -40,7 +38,7 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableV
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let rows = dataSource?.tableView(tableView, numberOfRowsInSection: section) ?? 0
+        let rows = dataSource.tableView(tableView, numberOfRowsInSection: section)
         if rows == 0 {
             statefulDelegate?.showNoDataView()
         } else {
@@ -54,10 +52,7 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableV
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = dataSource?.tableView(tableView, cellForRowAt: indexPath) else {
-            fatalError("dataSource must not be nil")
-        }
-        return cell
+        return dataSource.tableView(tableView, cellForRowAt: indexPath)
     }
 
 }

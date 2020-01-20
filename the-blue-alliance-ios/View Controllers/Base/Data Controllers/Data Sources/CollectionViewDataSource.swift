@@ -5,7 +5,8 @@ import UIKit
 /// UICollectionViewDataSource for TBA where we manage no data states and whatnot for table views
 class CollectionViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UICollectionViewDataSource {
 
-    private weak var dataSource: UICollectionViewDiffableDataSource<Section, Item>?
+    let dataSource: UICollectionViewDiffableDataSource<Section, Item>
+
     weak var delegate: (Stateful & Refreshable)?
 
     init(dataSource: UICollectionViewDiffableDataSource<Section, Item>) {
@@ -17,16 +18,14 @@ class CollectionViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UIC
     // MARK: - Public Methods
 
     var isDataSourceEmpty: Bool {
-        guard let snapshot = dataSource?.snapshot() else {
-            return true
-        }
+        let snapshot = dataSource.snapshot()
         return snapshot.numberOfSections == 0 && snapshot.numberOfItems == 0
     }
 
     // MARK: UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let sections = dataSource?.numberOfSections(in: collectionView) ?? 0
+        let sections = dataSource.numberOfSections(in: collectionView)
         if sections == 0 {
             delegate?.showNoDataView()
         }
@@ -34,7 +33,7 @@ class CollectionViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UIC
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let items = dataSource?.collectionView(collectionView, numberOfItemsInSection: section) ?? 0
+        let items = dataSource.collectionView(collectionView, numberOfItemsInSection: section)
         if items == 0 {
             delegate?.showNoDataView()
         } else {
@@ -44,10 +43,7 @@ class CollectionViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UIC
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = dataSource?.collectionView(collectionView, cellForItemAt: indexPath) else {
-            fatalError("dataSource must not be nil")
-        }
-        return cell
+        return dataSource.collectionView(collectionView, cellForItemAt: indexPath)
     }
 
 }

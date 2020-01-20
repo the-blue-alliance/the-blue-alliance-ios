@@ -23,8 +23,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
     private var team: Team
     private let urlOpener: URLOpener
 
-    private var dataSource: UITableViewDiffableDataSource<TeamInfoSection, TeamInfoItem>!
-    private var _dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
+    private var tableViewDataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
 
     private var sponsorsExpanded: Bool = false
 
@@ -57,6 +56,8 @@ class TeamInfoViewController: TBATableViewController, Observable {
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
 
         setupDataSource()
+        tableView.dataSource = tableViewDataSource
+
         updateTeamInfo()
 
         // TODO: Add support for Pits
@@ -73,7 +74,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<TeamInfoSection, TeamInfoItem>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<TeamInfoSection, TeamInfoItem>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else { return nil }
             switch item {
             case .location:
@@ -98,11 +99,11 @@ class TeamInfoViewController: TBATableViewController, Observable {
                 return cell
             }
         })
-        _dataSource = TableViewDataSource(dataSource: dataSource)
+        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
     }
 
     private func updateTeamInfo() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
 
         snapshot.deleteAllItems()
 
@@ -128,13 +129,13 @@ class TeamInfoViewController: TBATableViewController, Observable {
         snapshot.appendSections([.link])
         snapshot.appendItems(linkItems, toSection: .link)
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func reloadSponsors() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
         snapshot.reloadItems([.sponsors])
-        dataSource.apply(snapshot, animatingDifferences: true)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     // MARK: - Table View Methods
@@ -179,7 +180,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+        guard let item = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 

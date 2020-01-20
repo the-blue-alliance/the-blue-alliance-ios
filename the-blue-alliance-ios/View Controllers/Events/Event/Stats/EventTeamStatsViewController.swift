@@ -27,7 +27,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     private let event: Event
 
-    private var dataSource: TableViewDataSource<String, EventTeamStat>!
+    private var tableViewDataSource: TableViewDataSource<String, EventTeamStat>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<EventTeamStat>!
 
     var filter: EventTeamStatFilter {
@@ -76,7 +76,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
         tableView.registerReusableCell(RankingTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = dataSource
+        tableView.dataSource = tableViewDataSource
     }
 
     // MARK: UITableView Delegate
@@ -97,9 +97,9 @@ class EventTeamStatsTableViewController: TBATableViewController {
             cell.viewModel = RankingCellViewModel(eventTeamStat: eventTeamStat)
             return cell
         }
-        self.dataSource = TableViewDataSource(dataSource: dataSource)
-        self.dataSource.delegate = self
-        self.dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
         setupFetchRequest(fetchRequest)
