@@ -540,6 +540,14 @@ extension Team {
 
 }
 
+extension Team: Comparable {
+
+    public static func <(lhs: Team, rhs: Team) -> Bool {
+        return lhs.teamNumber < rhs.teamNumber
+    }
+
+}
+
 extension Team: MyTBASubscribable {
 
     public var modelKey: String {

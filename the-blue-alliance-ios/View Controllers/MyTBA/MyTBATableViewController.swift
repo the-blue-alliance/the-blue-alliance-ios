@@ -127,7 +127,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
         var s = NSDiffableDataSourceSnapshot<MyTBASection, NSManagedObject>()
         for section in snapshot.sectionIdentifiers.compactMap({ $0 as? String }) {
-            let items = snapshot.itemIdentifiersInSection(withIdentifier: section)
+            var items = snapshot.itemIdentifiersInSection(withIdentifier: section)
                 .compactMap { $0 as? NSManagedObjectID }
                 .compactMap { fetchedResultsController.managedObjectContext.object(with: $0) }
                 .compactMap { $0 as? T }
@@ -145,6 +145,15 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             }
             guard let sectionType = MyTBASection.section(for: modelType) else {
                 continue
+            }
+
+            // Sort our items before inserting
+            if let events = items as? [Event] {
+                items = events.sorted()
+            } else if let teams = items as? [Team] {
+                items = teams.sorted()
+            } else if let matches = items as? [Match] {
+                items = matches.sorted()
             }
 
             s.appendSections([sectionType])
@@ -343,16 +352,30 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         return BlockOperation {
             var snapshot = self.dataSource.snapshot()
 
-            snapshot.insertSection(section, atIndex: model.modelType.rawValue)
-            // Insert the object so it's in the same order as it's MyTBAEntity
-            guard let obj = self.fetchedResultsController.fetchedObjects?.first(where: { (o) -> Bool in
-                return o.modelType == model.modelType && o.modelKey == model.modelKey
-            }) else { return }
-            if let indexPath = self.fetchedResultsController.indexPath(forObject: obj) {
-                snapshot.insertItem(object, inSection: section, atIndex: indexPath.row)
-            } else {
+            if !snapshot.sectionIdentifiers.contains(section) {
+                if snapshot.numberOfSections <= model.modelType.rawValue {
+                    snapshot.appendSections([section])
+                } else {
+                    let s = snapshot.sectionIdentifiers[model.modelType.rawValue]
+                    snapshot.insertSections([section], beforeSection: s)
+                }
+            }
+
+            if !snapshot.itemIdentifiers(inSection: section).contains(object) {
                 snapshot.appendItems([object], toSection: section)
             }
+
+            var items = snapshot.itemIdentifiers(inSection: section)
+            // Sort our items before inserting
+            if let events = items as? [Event] {
+                items = events.sorted()
+            } else if let teams = items as? [Team] {
+                items = teams.sorted()
+            } else if let matches = items as? [Match] {
+                items = matches.sorted()
+            }
+            snapshot.deleteItems(items)
+            snapshot.appendItems(items, toSection: section)
 
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }

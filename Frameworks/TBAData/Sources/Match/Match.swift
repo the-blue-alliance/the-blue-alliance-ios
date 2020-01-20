@@ -482,6 +482,25 @@ extension Match: Orphanable {
 
 }
 
+extension Match: Comparable {
+
+    public static func <(lhs: Match, rhs: Match) -> Bool {
+        if lhs.event.key != rhs.event.key {
+            return lhs.event < rhs.event
+        }
+        if let lhsSortOrder = lhs.compLevelSortOrder, let rhsSortOrder = rhs.compLevelSortOrder {
+            return lhsSortOrder < rhsSortOrder
+        }
+        if lhs.setNumber != rhs.setNumber {
+            return lhs.setNumber < rhs.setNumber
+        }
+        if lhs.matchNumber != rhs.matchNumber {
+            return rhs.matchNumber < rhs.matchNumber
+        }
+        return false
+    }
+
+}
 
 extension Match: MyTBASubscribable {
 
