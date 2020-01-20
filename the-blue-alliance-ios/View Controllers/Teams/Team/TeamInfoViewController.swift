@@ -116,7 +116,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
         }
 
         if !infoItems.isEmpty {
-            snapshot.insertSection(.info, atIndex: TeamInfoSection.info.rawValue)
+            snapshot.appendSections([.info])
             snapshot.appendItems(infoItems, toSection: .info)
         }
 
@@ -125,7 +125,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
         if team.hasWebsite {
             linkItems.insert(.website, at: 0)
         }
-        snapshot.insertSection(.link, atIndex: TeamInfoSection.link.rawValue)
+        snapshot.appendSections([.link])
         snapshot.appendItems(linkItems, toSection: .link)
 
         dataSource.apply(snapshot, animatingDifferences: false)
