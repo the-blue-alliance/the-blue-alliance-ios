@@ -274,9 +274,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                DispatchQueue.main.async {
-                    self.executeUpdate(myTBAModel)
-                }
+                self.executeUpdate(myTBAModel)
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
@@ -292,9 +290,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                DispatchQueue.main.async {
-                    self.executeUpdate(myTBAModel)
-                }
+                self.executeUpdate(myTBAModel)
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
@@ -310,9 +306,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                DispatchQueue.main.async {
-                    self.executeUpdate(myTBAModel)
-                }
+                self.executeUpdate(myTBAModel)
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
