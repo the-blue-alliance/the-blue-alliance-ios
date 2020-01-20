@@ -8,6 +8,7 @@ import UIKit
 
 protocol Subscribable {
     var myTBA: MyTBA { get }
+    var remoteConfigService: RemoteConfigService { get }
     var favoriteBarButtonItem: UIBarButtonItem { get }
     var subscribableModel: MyTBASubscribable { get }
 }
@@ -15,7 +16,8 @@ protocol Subscribable {
 extension Subscribable where Self: UIViewController, Self: Persistable {
 
     func presentMyTBAPreferences() {
-        let myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel,
+        let myTBAPreferencesViewController = MyTBAPreferenceViewController(subscriptionsEnabled: remoteConfigService.remoteConfig.subscriptionsEnabled,
+                                                                           subscribableModel: subscribableModel,
                                                                            myTBA: myTBA,
                                                                            persistentContainer: persistentContainer)
         let navigationController = UINavigationController(rootViewController: myTBAPreferencesViewController)

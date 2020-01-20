@@ -179,19 +179,19 @@ class MyTBAViewController: ContainerViewController {
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func teamSelected(_ team: Team) {
-        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func matchSelected(_ match: Match) {
-        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }

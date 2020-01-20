@@ -11,6 +11,7 @@ protocol ContainerTeamPushable {
     var myTBA: MyTBA { get }
     var pasteboard: UIPasteboard? { get }
     var photoLibrary: PHPhotoLibrary? { get }
+    var remoteConfigService: RemoteConfigService { get }
     var statusService: StatusService { get }
     var urlOpener: URLOpener { get }
 }
@@ -18,7 +19,7 @@ protocol ContainerTeamPushable {
 extension ContainerTeamPushable where Self: ContainerViewController {
 
     func pushTeam(team: Team) {
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

@@ -11,6 +11,7 @@ class TeamsContainerViewController: ContainerViewController {
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
+    private let remoteConfigService: RemoteConfigService
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -18,10 +19,11 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
+        self.remoteConfigService = remoteConfigService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -56,7 +58,7 @@ extension TeamsContainerViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: teamViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }
