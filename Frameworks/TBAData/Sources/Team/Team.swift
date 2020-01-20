@@ -74,6 +74,10 @@ extension Team {
         return getValue(\Team.rookieYearRaw)?.intValue
     }
 
+    public var schoolName: String? {
+        return getValue(\Team.schoolNameRaw)
+    }
+
     public var stateProv: String? {
         return getValue(\Team.stateProvRaw)
     }
@@ -236,6 +240,7 @@ public class Team: NSManagedObject {
     @NSManaged var nicknameRaw: String?
     @NSManaged var postalCodeRaw: String?
     @NSManaged var rookieYearRaw: NSNumber?
+    @NSManaged var schoolNameRaw: String?
     @NSManaged var stateProvRaw: String?
     @NSManaged var teamNumberRaw: NSNumber?
     @NSManaged var websiteRaw: String?
@@ -399,6 +404,7 @@ extension Team: Managed {
             team.nicknameRaw = model.nickname
             team.postalCodeRaw = model.postalCode
             team.rookieYearRaw = NSNumber(value: model.rookieYear)
+            team.schoolNameRaw = model.schoolName
             team.stateProvRaw = model.stateProv
             team.teamNumberRaw = NSNumber(value: model.teamNumber)
             team.websiteRaw = model.website

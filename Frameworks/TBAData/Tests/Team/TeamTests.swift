@@ -103,6 +103,13 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(team.rookieYear, 2008)
     }
 
+    func test_schoolName() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(team.schoolName)
+        team.schoolNameRaw = "schoolName"
+        XCTAssertEqual(team.schoolName, "schoolName")
+    }
+
     func test_stateProv() {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(team.stateProv)
@@ -401,6 +408,7 @@ class TeamTestCase: TBADataTestCase {
                             teamNumber: 7332,
                             nickname: "The Rawrbotz",
                             name: "The first ever FRC team sponsored by small donors",
+                            schoolName: "Blue Alliance High School",
                             city: "Anytown",
                             stateProv: "MI",
                             country: "USA",
@@ -420,6 +428,7 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(team.teamNumber, 7332)
         XCTAssertEqual(team.nickname, "The Rawrbotz")
         XCTAssertEqual(team.name, "The first ever FRC team sponsored by small donors")
+        XCTAssertEqual(team.schoolName, "Blue Alliance High School")
         XCTAssertEqual(team.city, "Anytown")
         XCTAssertEqual(team.stateProv, "MI")
         XCTAssertEqual(team.country, "USA")
