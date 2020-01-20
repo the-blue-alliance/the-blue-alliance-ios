@@ -1394,6 +1394,7 @@
 				"${BUILT_PRODUCTS_DIR}/TBAData/TBAData.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAOperation/TBAOperation.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAProtocols/TBAProtocols.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAUtils/TBAUtils.framework",
 				"${BUILT_PRODUCTS_DIR}/XCDYouTubeKit/XCDYouTubeKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
@@ -1418,6 +1419,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAData.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAProtocols.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAUtils.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XCDYouTubeKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
@@ -1494,6 +1496,7 @@
 				"${BUILT_PRODUCTS_DIR}/TBAKitTesting/TBAKitTesting.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAOperation/TBAOperation.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAOperationTesting/TBAOperationTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAProtocols/TBAProtocols.framework",
 				"${BUILT_PRODUCTS_DIR}/TBATestingMocks/TBATestingMocks.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAUtils/TBAUtils.framework",
 			);
@@ -1507,6 +1510,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKitTesting.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAOperation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAOperationTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAProtocols.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBATestingMocks.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAUtils.framework",
 			);

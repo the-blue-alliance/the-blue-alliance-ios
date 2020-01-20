@@ -2,6 +2,7 @@ import CoreData
 import Foundation
 import MyTBAKit
 import TBAKit
+import TBAProtocols
 
 extension Team {
 

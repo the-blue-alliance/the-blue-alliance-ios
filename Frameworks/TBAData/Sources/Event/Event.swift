@@ -2,6 +2,7 @@ import CoreData
 import Foundation
 import MyTBAKit
 import TBAKit
+import TBAProtocols
 import TBAUtils
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
@@ -237,27 +238,6 @@ extension Event {
                 return []
         }
         return webcasts
-    }
-
-    public func dateString() -> String? {
-        guard let startDate = startDate, let endDate = endDate else {
-            return nil
-        }
-
-        let calendar = Calendar.current
-
-        let shortDateFormatter = DateFormatter()
-        shortDateFormatter.dateFormat = "MMM dd"
-
-        let longDateFormatter = DateFormatter()
-        longDateFormatter.dateFormat = "MMM dd, y"
-
-        if startDate == endDate {
-            return shortDateFormatter.string(from: endDate)
-        } else if calendar.component(.year, from: startDate) == calendar.component(.year, from: endDate) {
-            return "\(shortDateFormatter.string(from: startDate)) to \(shortDateFormatter.string(from: endDate))"
-        }
-        return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
     }
 
     public var weekString: String? {
@@ -987,7 +967,7 @@ extension Event: Managed {
 
 }
 
-extension Event: Locatable, Surfable {}
+extension Event: Dateable, Locatable, Surfable {}
 
 extension Event {
 

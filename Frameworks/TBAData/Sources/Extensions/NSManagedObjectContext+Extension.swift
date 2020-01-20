@@ -1,9 +1,6 @@
-import Foundation
 import CoreData
-
-public protocol ErrorRecorder {
-    func recordError(_ error: Error)
-}
+import Foundation
+import TBAUtils
 
 extension NSManagedObject {
 

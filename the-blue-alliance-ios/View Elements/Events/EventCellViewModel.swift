@@ -1,5 +1,6 @@
 import Foundation
 import TBAData
+import TBAProtocols
 
 struct EventCellViewModel {
 
@@ -10,7 +11,7 @@ struct EventCellViewModel {
     init(event: Event) {
         eventShortname = event.safeShortName
         eventLocation = event.locationString
-        eventDate = event.dateString()
+        eventDate = event.dateString
     }
 
 }

@@ -188,11 +188,13 @@ PODS:
   - TBAData (1.0.0-LOCAL):
     - MyTBAKit
     - TBAKit
+    - TBAProtocols
     - TBAUtils
   - TBAData/Tests (1.0.0-LOCAL):
     - MyTBAKit
     - TBADataTesting
     - TBAKit
+    - TBAProtocols
     - TBAUtils
   - TBADataTesting (1.0.0-LOCAL):
     - TBAData
@@ -210,6 +212,8 @@ PODS:
     - TBAOperationTesting
   - TBAOperationTesting (1.0.0-LOCAL):
     - TBAOperation
+  - TBAProtocols (1.0.0-LOCAL)
+  - TBAProtocols/Tests (1.0.0-LOCAL)
   - TBATestingMocks (1.0.0-LOCAL)
   - TBAUtils (1.0.0-LOCAL)
   - TBAUtils/Tests (1.0.0-LOCAL)
@@ -243,6 +247,8 @@ DEPENDENCIES:
   - TBAOperation (from `Frameworks/TBAOperation`)
   - TBAOperation/Tests (from `Frameworks/TBAOperation`)
   - TBAOperationTesting (from `Frameworks/TBAOperation`)
+  - TBAProtocols (from `Frameworks/TBAProtocols`)
+  - TBAProtocols/Tests (from `Frameworks/TBAProtocols`)
   - TBATestingMocks (from `Frameworks/TBATestingMocks`)
   - TBAUtils (from `Frameworks/TBAUtils`)
   - TBAUtils/Tests (from `Frameworks/TBAUtils`)
@@ -307,6 +313,8 @@ EXTERNAL SOURCES:
     :path: Frameworks/TBAOperation
   TBAOperationTesting:
     :path: Frameworks/TBAOperation
+  TBAProtocols:
+    :path: Frameworks/TBAProtocols
   TBATestingMocks:
     :path: Frameworks/TBATestingMocks
   TBAUtils:
@@ -355,17 +363,18 @@ SPEC CHECKSUMS:
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   PureLayout: 9b4ad47b2f0388c84ff534af23d96e720c1b875a
   Reveal-SDK: 5d7e56b8f018c0a88b3a2c10bf68d598bbd3b071
-  TBAData: d3fbf18509b94d89a11c94cab13d9a94c4f323ca
+  TBAData: 1fbbff20877356e446e1d2d47d817836583f64b0
   TBADataTesting: 6b3ecfbbb224274aeb85b7f3a1069f3d73bbd1fa
   TBAKit: dd89e24f8748a3597fd1f4ca2ca71d78f5c06153
   TBAKitTesting: 600746936dc27a9186499dfba8d7112d7393b2d3
   TBAOperation: 4fc7e208e6c48d02d98f3fa4f34eb291a9ae68e8
   TBAOperationTesting: f6be36759c419928770d7aaa9ae1c61b0a312ca1
+  TBAProtocols: 7e6ef10cddb9dd79e15cd756d77062d5da93d8e2
   TBATestingMocks: 004d7f4bab4999d78da0609d6bcb58a01acca78d
   TBAUtils: a259341ea3f098a8e727e734ada7af71a3aaeaf1
   XCDYouTubeKit: 79baadb0560673a67c771eba45f83e353fd12c1f
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: b52891754fd48db3dc0f0ba54d8c8c4a6d809e77
+PODFILE CHECKSUM: 4680a91d82fdc2bf14e5d84da74e5597324c0b1c
 
 COCOAPODS: 1.8.4
