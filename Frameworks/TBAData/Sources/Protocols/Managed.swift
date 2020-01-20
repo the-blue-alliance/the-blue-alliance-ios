@@ -37,21 +37,27 @@ extension Managed where Self: NSManagedObject {
     public static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> Void = { _ in }) -> [Self] {
         let request = NSFetchRequest<Self>(entityName: Self.entityName)
         configurationBlock(request)
-        return try! context.fetch(request)
+        return context.performAndWait {
+            try! context.fetch(request)
+        }
     }
 
     static func count(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void = { _ in }) -> Int {
         let request = NSFetchRequest<Self>(entityName: entityName)
         configure(request)
-        return try! context.count(for: request)
+        return context.performAndWait {
+            try! context.count(for: request)
+        }
     }
 
     static func materializedObject(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
-        for object in context.registeredObjects where !object.isFault {
-            guard let result = object as? Self, predicate.evaluate(with: result) else { continue }
-            return result
+        return context.performAndWait {
+            for object in context.registeredObjects where !object.isFault {
+                guard let result = object as? Self, predicate.evaluate(with: result) else { continue }
+                return result
+            }
+            return nil
         }
-        return nil
     }
 
     public static func fetchSingleObject(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void) -> Self? {

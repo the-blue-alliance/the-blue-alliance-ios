@@ -61,6 +61,14 @@ extension NSManagedObjectContext {
         }
     }
 
+    public func performAndWait<T>(_ block: () -> T) -> T {
+        var result: T!
+        performAndWait {
+            result = block()
+        }
+        return result
+    }
+
     public func performAndWait<T>(_ block: () -> T?) -> T? {
         var result: T? = nil
         performAndWait {
