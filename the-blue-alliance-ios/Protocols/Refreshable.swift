@@ -158,11 +158,9 @@ extension Refreshable {
     }
 
     func cancelRefresh() {
-        if refreshOperationQueue.operations.isEmpty {
-            return
+        if !refreshOperationQueue.operations.isEmpty {
+            refreshOperationQueue.cancelAllOperations()
         }
-
-        refreshOperationQueue.cancelAllOperations()
         updateRefresh()
     }
 
