@@ -172,7 +172,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
 
 extension MatchBreakdownViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         guard breakdownConfigurator == nil else {
             return "No breakdown for match"
         }

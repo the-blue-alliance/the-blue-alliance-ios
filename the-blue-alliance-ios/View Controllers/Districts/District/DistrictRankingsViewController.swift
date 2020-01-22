@@ -131,7 +131,7 @@ extension DistrictRankingsViewController: Refreshable {
 
 extension DistrictRankingsViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No rankings for district"
     }
 

@@ -113,7 +113,7 @@ extension EventRankingsViewController: Refreshable {
 
 extension EventRankingsViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No rankings for event"
     }
 

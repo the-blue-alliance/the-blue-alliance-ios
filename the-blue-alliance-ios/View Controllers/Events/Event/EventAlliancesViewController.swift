@@ -178,7 +178,7 @@ extension EventAlliancesViewController: Refreshable {
 
 extension EventAlliancesViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No alliances for event"
     }
 

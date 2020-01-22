@@ -53,7 +53,7 @@ class EventTeamsViewController: TeamsViewController {
 
     // MARK: - Stateful
 
-    override var noDataText: String {
+    override var noDataText: String? {
         return "No teams for event"
     }
 

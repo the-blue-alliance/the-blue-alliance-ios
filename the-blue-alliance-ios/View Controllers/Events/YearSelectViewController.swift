@@ -213,7 +213,7 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
 extension WeeksSelectTableViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No weeks for year"
     }
 

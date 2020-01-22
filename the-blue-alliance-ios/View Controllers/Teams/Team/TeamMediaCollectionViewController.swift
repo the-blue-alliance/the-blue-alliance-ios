@@ -319,7 +319,7 @@ extension TeamMediaCollectionViewController: Refreshable {
 
 extension TeamMediaCollectionViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No media for team"
     }
 

@@ -139,7 +139,7 @@ extension DistrictBreakdownViewController: Refreshable {
 
 extension DistrictBreakdownViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No district points for team"
     }
 

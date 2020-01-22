@@ -552,7 +552,7 @@ extension TeamSummaryViewController: Refreshable {
 
 extension TeamSummaryViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No status for team at event"
     }
 
