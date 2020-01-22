@@ -169,7 +169,6 @@ class RefreshableTests: TBATestCase {
 
     func test_cancelRefresh_noRequests() {
         let updateRefreshExpectation = XCTestExpectation(description: "updateRefresh not called")
-        updateRefreshExpectation.isInverted = true
         refreshable.updateRefreshExpectation = updateRefreshExpectation
 
         XCTAssert(refreshable.refreshOperationQueue.operations.isEmpty)
