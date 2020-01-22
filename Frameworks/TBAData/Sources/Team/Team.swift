@@ -308,6 +308,30 @@ extension Team: Managed {
     }
 
     /**
+     Insert Teams with values from TBAKit Team models in to the managed object context.
+
+     This method manages deleting orphaned Teams.
+
+     - Parameter teams: The TBAKit Team representations to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+     */
+    public static func insert(_ teams: [TBATeam], in context: NSManagedObjectContext) {
+        // Fetch all of the previous Teams
+        let oldTeams = Team.fetch(in: context)
+
+        // Insert new Teams for this page
+        let teams = teams.map {
+            return Team.insert($0, in: context)
+        }
+
+        // Delete orphaned Teams for this year
+        Set(oldTeams).subtracting(Set(teams)).forEach({
+            context.delete($0)
+        })
+    }
+
+    /**
      Insert Teams for a page with values from TBAKit Team models in to the managed object context.
 
      This method manages deleting orphaned Teams for a page.

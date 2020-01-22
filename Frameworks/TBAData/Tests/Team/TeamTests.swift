@@ -360,6 +360,40 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(Team.trimFRCPrefix("frc2337b"), "2337B")
     }
 
+    func test_insert_all() {
+        let modelOne = TBATeam(key: "frc1", teamNumber: 1, name: "1", rookieYear: 2008)
+        let modelTwo = TBATeam(key: "frc2", teamNumber: 2, name: "2", rookieYear: 2008)
+
+        Team.insert([modelOne, modelTwo], in: persistentContainer.viewContext)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let teamsFirst = Team.fetch(in: persistentContainer.viewContext)
+
+        let teamOne = teamsFirst.first(where: { $0.key == "frc1" })!
+        let teamTwo = teamsFirst.first(where: { $0.key == "frc2" })!
+
+        // Sanity check
+        XCTAssertNotEqual(teamOne, teamTwo)
+        XCTAssertEqual(teamsFirst.count, 2)
+
+        // Make sure both previous teams are deleted
+        let modelThree = TBATeam(key: "frc500", teamNumber: 500, name: "500", rookieYear: 2008)
+        Team.insert([modelThree], in: persistentContainer.viewContext)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let teamsSecond = Team.fetch(in: persistentContainer.viewContext)
+
+        XCTAssertEqual(teamsSecond.count, 1)
+        XCTAssertEqual(teamsSecond.first!.key, "frc500")
+
+        Team.insert([], in: persistentContainer.viewContext)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let teamsThird = Team.fetch(in: persistentContainer.viewContext)
+
+        XCTAssertEqual(teamsThird.count, 0)
+    }
+
     func test_insert_page() {
         let modelOne = TBATeam(key: "frc1", teamNumber: 1, name: "1", rookieYear: 2008)
         let modelTwo = TBATeam(key: "frc2", teamNumber: 2, name: "2", rookieYear: 2008)

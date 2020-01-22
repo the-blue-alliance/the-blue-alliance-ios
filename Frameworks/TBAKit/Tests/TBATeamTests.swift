@@ -42,6 +42,24 @@ class TBATeamTests: TBAKitTestCase {
         XCTAssertEqual(media.type, "avatar")
     }
 
+    func testTeams() {
+        let ex = expectation(description: "teams_all")
+
+        let task = kit.fetchTeams() { (result, notModified) in
+            let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(teams.count, 0)
+
+            ex.fulfill()
+        }
+        kit.sendSuccessStub(for: task)
+
+        waitForExpectations(timeout: 2) { (error) in
+            XCTAssertNil(error)
+        }
+    }
+
     func testTeamsPage() {
         let ex = expectation(description: "teams_page")
 

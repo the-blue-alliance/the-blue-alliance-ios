@@ -1,0 +1,25 @@
+[
+    {
+        "address": null,
+        "city": "Pontiac",
+        "country": "USA",
+        "gmaps_place_id": null,
+        "gmaps_url": null,
+        "home_championship": {
+            "2020": "Detroit"
+        },
+        "key": "frc1",
+        "lat": null,
+        "lng": null,
+        "location_name": null,
+        "motto": null,
+        "name": "FCA Foundation/Hirotec America/Molex&Oakland Schools Technical Campus Northeast",
+        "nickname": "The Juggernauts",
+        "postal_code": "48340",
+        "rookie_year": 1997,
+        "school_name": "Oakland Schools Technical Campus Northeast",
+        "state_prov": "Michigan",
+        "team_number": 1,
+        "website": "http://www.juggernautsteam1.com"
+    }
+]
