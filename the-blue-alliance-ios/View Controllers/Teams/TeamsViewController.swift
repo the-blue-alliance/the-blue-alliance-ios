@@ -110,7 +110,7 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 
     // MARK: - Stateful
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No teams"
     }
 

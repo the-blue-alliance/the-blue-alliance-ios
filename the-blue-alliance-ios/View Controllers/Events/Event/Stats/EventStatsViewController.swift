@@ -193,7 +193,7 @@ extension EventStatsViewController: Refreshable {
 
 extension EventStatsViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         guard eventStatsConfigurator == nil else {
             return "No stats for event"
         }

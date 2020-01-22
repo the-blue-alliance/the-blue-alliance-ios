@@ -128,7 +128,7 @@ extension DistrictsViewController: Refreshable {
 
 extension DistrictsViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No districts for year"
     }
 

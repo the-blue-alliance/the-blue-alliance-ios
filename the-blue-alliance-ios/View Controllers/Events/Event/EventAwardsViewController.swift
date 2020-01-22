@@ -193,7 +193,7 @@ extension EventAwardsViewController: Refreshable {
 
 extension EventAwardsViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No awards for \(team != nil ? "team at event" : "event")"
     }
 

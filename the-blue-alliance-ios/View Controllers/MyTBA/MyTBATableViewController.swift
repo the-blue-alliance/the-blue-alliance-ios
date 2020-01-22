@@ -405,7 +405,7 @@ extension MyTBATableViewController: Refreshable {
 
 extension MyTBATableViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         if T.self == Favorite.self || subscriptionsEnabled {
             return "No \(J.arrayKey)"
         } else {

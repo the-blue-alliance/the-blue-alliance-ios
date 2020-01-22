@@ -208,7 +208,7 @@ extension MatchesViewController: Refreshable {
 
 extension MatchesViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         if query.isDefault {
             return "No matches for event"
         } else {

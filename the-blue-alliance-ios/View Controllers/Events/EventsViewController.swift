@@ -70,7 +70,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
     // MARK: - Stateful
 
-    var noDataText: String {
+    var noDataText: String? {
         fatalError("Implement in a subclass")
     }
 

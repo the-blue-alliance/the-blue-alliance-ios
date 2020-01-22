@@ -174,7 +174,7 @@ extension EventDistrictPointsViewController: Refreshable {
 
 extension EventDistrictPointsViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No district points for event"
     }
 

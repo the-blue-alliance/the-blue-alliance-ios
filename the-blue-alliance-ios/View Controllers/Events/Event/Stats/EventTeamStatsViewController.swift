@@ -181,7 +181,7 @@ extension EventTeamStatsTableViewController: Refreshable {
 
 extension EventTeamStatsTableViewController: Stateful {
 
-    var noDataText: String {
+    var noDataText: String? {
         return "No team stats for event"
     }
 

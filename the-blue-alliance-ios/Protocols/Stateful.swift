@@ -7,7 +7,7 @@ protocol Stateful: AnyObject {
     /**
      The string to dispaly in the no data view.
     */
-    var noDataText: String { get }
+    var noDataText: String? { get }
 
     /**
      Add the no data view to the view hiearchy. This method should not be called directly - you probably want showNoDataView.
