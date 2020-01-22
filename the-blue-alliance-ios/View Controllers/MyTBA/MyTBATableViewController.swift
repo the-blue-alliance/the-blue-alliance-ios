@@ -165,7 +165,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     private static func tableView(_ tableView: UITableView, cellForEvent event: Event, at indexPath: IndexPath) -> EventTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-        cell.viewModel = EventCellViewModel(event: event)
+        cell.viewModel = EventCellViewModel(name: event.safeNameYear, location: event.locationString, dateString: event.dateString)
         return cell
     }
 

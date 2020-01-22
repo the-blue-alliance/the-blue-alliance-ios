@@ -4,13 +4,19 @@ import TBAData
 struct TeamCellViewModel {
 
     let teamNumber: String
-    let teamNickname: String
-    let teamLocation: String?
+    let nickname: String
+    let location: String?
 
     init(team: Team) {
         teamNumber = "\(team.teamNumber)"
-        teamNickname = team.nickname ?? team.teamNumberNickname
-        teamLocation = team.locationString
+        nickname = team.nickname ?? team.teamNumberNickname
+        location = team.locationString
+    }
+
+    init(teamNumber: String, nickname: String, location: String?) {
+        self.teamNumber = teamNumber
+        self.nickname = nickname
+        self.location = location
     }
 
 }

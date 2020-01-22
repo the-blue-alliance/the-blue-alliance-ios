@@ -27,9 +27,9 @@ class EventTableViewCell: UITableViewCell, Reusable {
             return
         }
 
-        nameLabel.text = viewModel.eventShortname
-        locationLabel.text = viewModel.eventLocation
-        dateLabel.text = viewModel.eventDate
+        nameLabel.text = viewModel.name
+        locationLabel.text = viewModel.location
+        dateLabel.text = viewModel.dateString
     }
 
 }
