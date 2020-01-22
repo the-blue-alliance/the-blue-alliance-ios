@@ -2,6 +2,10 @@ import Foundation
 
 extension Date {
 
+    public var year: Int {
+        return Calendar.current.component(.year, from: self)
+    }
+
     /**
      Determines if the reciver is between two given dates.
      */

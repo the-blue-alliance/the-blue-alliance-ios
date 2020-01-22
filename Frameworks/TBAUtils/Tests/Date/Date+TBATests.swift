@@ -5,6 +5,16 @@ class DateTBATestCase: XCTestCase {
 
     let calendar: Calendar = Calendar.current
 
+    func test_year() {
+        var components = DateComponents()
+        components.month = 2
+        components.day = 24
+        components.year = 2012
+
+        let date = Calendar.current.date(from: components)!
+        XCTAssertEqual(date.year, 2012)
+    }
+
     func test_isBetween_inclusive() {
         let now = Date()
         let oneHourAgo = calendar.date(byAdding: DateComponents(hour: -1), to: now)!
