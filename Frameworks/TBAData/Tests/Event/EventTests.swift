@@ -1313,6 +1313,20 @@ class EventTestCase: TBADataTestCase {
         XCTAssertEqual(event.weekString, "Week 2")
     }
 
+    func test_safeNameYear() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.yearRaw = NSNumber(value: 2019)
+        event.keyRaw = "2019miket"
+        // No name - use key
+        XCTAssertEqual(event.safeNameYear, "2019miket")
+        // Empty name - use key
+        event.nameRaw = ""
+        XCTAssertEqual(event.safeNameYear, "2019miket")
+        // Name - use name
+        event.nameRaw = "FIM District Kettering University Event #1"
+        XCTAssertEqual(event.safeNameYear, "2019 FIM District Kettering University Event #1")
+    }
+
     func test_safeShortName() {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.keyRaw = "2019miket"

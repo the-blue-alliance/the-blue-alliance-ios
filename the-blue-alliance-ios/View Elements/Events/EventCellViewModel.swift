@@ -4,14 +4,20 @@ import TBAProtocols
 
 struct EventCellViewModel {
 
-    let eventShortname: String
-    let eventLocation: String?
-    let eventDate: String?
+    let name: String
+    let location: String?
+    let dateString: String?
 
     init(event: Event) {
-        eventShortname = event.safeShortName
-        eventLocation = event.locationString
-        eventDate = event.dateString
+        name = event.safeShortName
+        location = event.locationString
+        dateString = event.dateString
+    }
+
+    init(name: String, location: String?, dateString: String?) {
+        self.name = name
+        self.location = location
+        self.dateString = dateString
     }
 
 }

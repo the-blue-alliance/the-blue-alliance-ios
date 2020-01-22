@@ -294,6 +294,13 @@ extension Event {
         return shortName.isEmpty ? name : shortName
     }
 
+    public var safeNameYear: String {
+        guard let name = name else {
+            return key
+        }
+        return name.isEmpty ? key : "\(year) \(name)"
+    }
+
     public var friendlyNameWithYear: String {
         guard let name = name else {
             return key

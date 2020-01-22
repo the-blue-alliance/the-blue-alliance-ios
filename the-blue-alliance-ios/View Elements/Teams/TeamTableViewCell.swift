@@ -29,7 +29,7 @@ class TeamTableViewCell: UITableViewCell, Reusable {
         }
 
         numberLabel.text = viewModel.teamNumber
-        nameLabel.text = viewModel.teamNickname
-        locationLabel.text = viewModel.teamLocation
+        nameLabel.text = viewModel.nickname
+        locationLabel.text = viewModel.location
     }
 }
