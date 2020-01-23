@@ -109,8 +109,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.segmentedControlSelectedColor], for: .selected)
 
         super.init(nibName: nil, bundle: nil)
 
