@@ -1172,7 +1172,24 @@ class EventTestCase: TBADataTestCase {
         let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2022fim", year: 2022)
         XCTAssertEqual(Event.calculateHybridType(eventType: EventType.districtChampionshipDivision.rawValue,
                                                  startDate: nil,
-                                                 district: district), "5..fim.dcmpd")
+                                                 district: district), "2..fim.dcmpd")
+    }
+
+    func test_hybridType_districtChampionshipDivision_sort() {
+        let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2022fim", year: 2022)
+        let dcmpd = Event.calculateHybridType(eventType: EventType.districtChampionshipDivision.rawValue,
+                                              startDate: nil,
+                                              district: district)
+        let dcmp = Event.calculateHybridType(eventType: EventType.districtChampionship.rawValue,
+                                             startDate: nil,
+                                             district: district)
+        let cmpd = Event.calculateHybridType(eventType: EventType.championshipDivision.rawValue,
+                                             startDate: nil,
+                                             district: nil)
+        let cmp = Event.calculateHybridType(eventType: EventType.championshipFinals.rawValue,
+                                            startDate: nil,
+                                            district: nil)
+        XCTAssertEqual([cmp, dcmp, dcmpd, cmpd].sorted(), [dcmpd, dcmp, cmpd, cmp])
     }
 
     func test_hybridType_festivalOfChampions() {
@@ -1187,10 +1204,10 @@ class EventTestCase: TBADataTestCase {
                                                  district: nil), "99.11")
         XCTAssertEqual(Event.calculateHybridType(eventType: EventType.offseason.rawValue,
                                                  startDate: Calendar.current.date(from: DateComponents(year: 2015, month: 9, day: 1)),
-                                                 district: nil), "99.9")
+                                                 district: nil), "99.09")
 
         // Ensure single-digit month offseason events show up before double-digit month offseason events
-        XCTAssert("99.9" > "99.11")
+        XCTAssert("99.09" < "99.11")
     }
 
     func test_hybridType_preseason() {
@@ -1491,33 +1508,63 @@ class EventTestCase: TBADataTestCase {
     func test_comparable() {
         let future = _test_event(type: .preseason, week: nil, year: 2020)
         let preseason = _test_event(type: .preseason, week: nil, year: 2017)
+        preseason.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 2, day: 24))!
+        let preseasonLater = _test_event(type: .preseason, week: nil, year: 2017)
+        preseasonLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 2, day: 25))!
         let zero = _test_event(type: .regional, week: 0, year: 2017)
         let one = _test_event(type: .regional, week: 1, year: 2017)
+        one.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 3, day: 1))!
+        let oneLater = _test_event(type: .regional, week: 1, year: 2017)
+        oneLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 3, day: 3))!
         let two = _test_event(type: .district, week: 2, year: 2017)
         let three = _test_event(type: .regional, week: 3, year: 2017)
         let four = _test_event(type: .regional, week: 4, year: 2017)
         let five = _test_event(type: .district, week: 5, year: 2017)
         let fiveDCMP = _test_event(type: .districtChampionship, week: 5, year: 2017)
+        fiveDCMP.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 1))!
+        let fiveDCMPLater = _test_event(type: .districtChampionship, week: 5, year: 2017)
+        fiveDCMPLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 2))!
         let six = _test_event(type: .regional, week: 6, year: 2017)
         let sixDistrict = _test_event(type: .district, week: 6, year: 2017)
         let sixDCMP = _test_event(type: .districtChampionship, week: 6, year: 2017)
         let sixDCMPDivision = _test_event(type: .districtChampionshipDivision, week: 6, year: 2017)
+        sixDCMPDivision.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 20))!
+        let sixDCMPDivisionLater = _test_event(type: .districtChampionshipDivision, week: 6, year: 2017)
+        sixDCMPDivisionLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 21))!
         let cmp = _test_event(type: .championshipFinals, week: nil, year: 2017)
+        cmp.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 22))!
+        let cmpLater = _test_event(type: .championshipFinals, week: nil, year: 2017)
+        cmpLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 29))!
         let cmpDivision = _test_event(type: .championshipDivision, week: nil, year: 2017)
+        cmpDivision.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 22))!
+        let cmpDivisionLater = _test_event(type: .championshipDivision, week: nil, year: 2017)
+        cmpDivisionLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 23))!
         let foc = _test_event(type: .festivalOfChampions, week: nil, year: 2017)
+        foc.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 7, day: 29))!
+        let focLater = _test_event(type: .festivalOfChampions, week: nil, year: 2017)
+        focLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 7, day: 30))!
         let offseason = _test_event(type: .offseason, week: 0, year: 2017)
+        offseason.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 6, day: 1))!
+        let offseasonLater = _test_event(type: .offseason, week: 0, year: 2017)
+        offseasonLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 7, day: 1))!
         let unlabeled = _test_event(type: .unlabeled, week: nil, year: 2017)
+        unlabeled.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 10, day: 1))!
+        let unlabeledLater = _test_event(type: .unlabeled, week: nil, year: 2017)
+        unlabeledLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 10, day: 3))!
 
         XCTAssert(preseason < future)
         XCTAssert(preseason < offseason)
+        XCTAssert(preseason < preseasonLater)
         XCTAssert(preseason < zero)
         XCTAssert(zero < one)
+        XCTAssert(one < oneLater)
         XCTAssert(one < two)
         XCTAssert(two < three)
         XCTAssert(three < four)
         XCTAssert(four < five)
         XCTAssert(five < six)
         XCTAssert(five < fiveDCMP)
+        XCTAssert(fiveDCMP < fiveDCMPLater)
         XCTAssert(six < sixDCMP)
         XCTAssert(six < sixDistrict)
         XCTAssert(sixDistrict < sixDCMPDivision)
@@ -1525,17 +1572,26 @@ class EventTestCase: TBADataTestCase {
         XCTAssert(sixDCMPDivision < sixDCMP)
         XCTAssert(fiveDCMP < sixDCMP)
         XCTAssert(fiveDCMP < cmp)
+        XCTAssert(sixDCMPDivision < sixDCMPDivisionLater)
         XCTAssert(sixDCMPDivision < cmpDivision)
         XCTAssert(sixDCMP < cmpDivision)
+        XCTAssert(cmpDivision < cmpDivisionLater)
         XCTAssert(sixDCMPDivision < cmp)
         XCTAssert(sixDCMP < cmp)
         XCTAssert(cmpDivision < cmp)
+        XCTAssert(cmp < cmpLater)
         XCTAssert(cmp < foc)
+        XCTAssert(foc < focLater)
         XCTAssert(cmp < unlabeled)
         XCTAssert(foc < offseason)
+        XCTAssert(offseason < offseasonLater)
         XCTAssert(offseason < unlabeled)
         XCTAssert(two < unlabeled)
         XCTAssert(two < offseason)
+        XCTAssert(unlabeled < unlabeledLater)
+
+        let allEvents = [future, preseason, preseasonLater, zero, one, oneLater, two, three, four, five, fiveDCMP, fiveDCMPLater, six, sixDistrict, sixDCMP, sixDCMPDivision, sixDCMPDivisionLater, cmp, cmpLater, cmpDivision, cmpDivisionLater, foc, focLater, offseason, offseasonLater, unlabeled, unlabeledLater]
+        XCTAssertEqual(allEvents.sorted(), [preseason, preseasonLater, zero, one, oneLater, two, three, four, five, fiveDCMP, fiveDCMPLater, six, sixDistrict, sixDCMPDivision, sixDCMPDivisionLater, sixDCMP, cmpDivision, cmpDivisionLater, cmp, cmpLater, foc, focLater, offseason, offseasonLater, unlabeled, unlabeledLater, future])
     }
 
 }

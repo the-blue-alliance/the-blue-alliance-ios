@@ -1194,7 +1194,9 @@ extension Event {
     }
 
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
-    // of event data to kinda "move around" events in our data model to get groups/order right
+    // of event data to kinda "move around" events in our data model to get groups/order right. Note - hybrid type
+    // is ONLY safe to sort by for events within the same year. Sorting by hybrid type for events across years will
+    // put events together roughly by their types, but not necessairly their true sorts (see Comparable for a true sort)
     internal static func calculateHybridType(eventType: Int, startDate: Date?, district: TBADistrict?) -> String {
         let isDistrictChampionshipEvent = (eventType == EventType.districtChampionshipDivision.rawValue || eventType == EventType.districtChampionship.rawValue)
         // Group districts together, group district CMPs together
@@ -1203,15 +1205,19 @@ extension Event {
             // This is a bit of a hack to get them to show up before DCMPs
             // Future-proofing - group DCMP divisions together based on district
             if eventType == EventType.districtChampionshipDivision.rawValue, let district = district {
-                return "\(eventType)..\(district.abbreviation).dcmpd"
+                return "\(EventType.districtChampionship.rawValue)..\(district.abbreviation).dcmpd"
             }
             return "\(eventType).dcmp"
         } else if let district = district, !isDistrictChampionshipEvent {
             return "\(eventType).\(district.abbreviation)"
         } else if eventType == EventType.offseason.rawValue, let startDate = startDate {
             // Group offseason events together by month
-            let month = Calendar.current.component(.month, from: startDate)
-            return "\(eventType).\(month)"
+            let month = UInt8(Calendar.current.component(.month, from: startDate))
+            // Pad our month with a leading `0` - this is so we can have "99.9" < "99.11"
+            // (September Offseason to be sorted before November Offseason). Swift will compare
+            // each character's hex value one-by-one, which means we'll fail at "9" < "1".
+            let monthString = String(format: "%02d", month)
+            return "\(eventType).\(monthString)"
         }
         return "\(eventType)"
     }
@@ -1238,24 +1244,39 @@ extension Event: Comparable {
         // Preseason events should always come first
         if lhs.isPreseason || rhs.isPreseason {
             // Preseason, being 100, has the highest event type. So even though this seems backwards... it's not
+            if lhs.isPreseason && rhs.isPreseason, let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                return lhsStartDate < rhsStartDate
+            }
             return lhsType > rhsType
         }
         // Unlabeled events go at the very end no matter what
         if lhs.isUnlabeled || rhs.isUnlabeled {
             // Same as preseason - unlabeled events are the lowest possible number so even though this line seems backwards it's not
+            if lhs.isUnlabeled && rhs.isUnlabeled, let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                return lhsStartDate < rhsStartDate
+            }
             return lhsType > rhsType
         }
         // Offseason events come after everything besides unlabeled
         if lhs.isOffseason || rhs.isOffseason {
             // We've already handled preseason (100) so now we can assume offseason's (99) will always be the highest type
+            if lhs.isOffseason && rhs.isOffseason, let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                return lhsStartDate < rhsStartDate
+            }
             return lhsType < rhsType
         }
         // Throw Festival of Champions at the end, since it's the last event
         if lhs.isFoC || rhs.isFoC {
+            if lhs.isFoC && rhs.isFoC, let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                return lhsStartDate < rhsStartDate
+            }
             return lhsType < rhsType
         }
         // CMP finals come after everything besides offseason, unlabeled
         if lhs.isChampionshipFinals || rhs.isChampionshipFinals {
+            if lhs.isChampionshipFinals && rhs.isChampionshipFinals, let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                return lhsStartDate < rhsStartDate
+            }
             // Make sure we handle that districtCMPDivision case
             if lhs.isDistrictChampionshipDivision || rhs.isDistrictChampionshipDivision {
                 return lhsType > rhsType
@@ -1264,6 +1285,9 @@ extension Event: Comparable {
         }
         // CMP divisions are next
         if lhs.isChampionshipDivision || rhs.isChampionshipDivision {
+            if lhs.isChampionshipDivision && rhs.isChampionshipDivision, let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                return lhsStartDate < rhsStartDate
+            }
             // Make sure we handle that districtCMPDivision case
             if lhs.isDistrictChampionshipDivision || rhs.isDistrictChampionshipDivision {
                 return lhsType > rhsType
@@ -1277,7 +1301,13 @@ extension Event: Comparable {
             if lhsWeek == rhsWeek {
                 // Make sure we handle the weird case of district championship divisions being a higher number than DCMPs
                 if lhs.isDistrictChampionshipEvent && rhs.isDistrictChampionshipEvent {
+                    if let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                        return lhsStartDate < rhsStartDate
+                    }
                     return lhsType > rhsType
+                }
+                if let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate {
+                    return lhsStartDate < rhsStartDate
                 }
                 return lhsType < rhsType
             }

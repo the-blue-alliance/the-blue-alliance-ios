@@ -148,7 +148,10 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
             // Sort our items before inserting
             if let events = items as? [Event] {
-                items = events.sorted()
+                items = events.sorted().sorted(by: { (lhs, rhs) -> Bool in
+                    // Second pass - sort by years in reverse order
+                    return lhs.year > rhs.year
+                })
             } else if let teams = items as? [Team] {
                 items = teams.sorted()
             } else if let matches = items as? [Match] {
@@ -361,7 +364,10 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             var items = snapshot.itemIdentifiers(inSection: section)
             // Sort our items before inserting
             if let events = items as? [Event] {
-                items = events.sorted()
+                items = events.sorted().sorted(by: { (lhs, rhs) -> Bool in
+                    // Second pass - sort by years in reverse order
+                    return lhs.year > rhs.year
+                })
             } else if let teams = items as? [Team] {
                 items = teams.sorted()
             } else if let matches = items as? [Match] {
