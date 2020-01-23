@@ -1172,7 +1172,24 @@ class EventTestCase: TBADataTestCase {
         let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2022fim", year: 2022)
         XCTAssertEqual(Event.calculateHybridType(eventType: EventType.districtChampionshipDivision.rawValue,
                                                  startDate: nil,
-                                                 district: district), "5..fim.dcmpd")
+                                                 district: district), "2..fim.dcmpd")
+    }
+
+    func test_hybridType_districtChampionshipDivision_sort() {
+        let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2022fim", year: 2022)
+        let dcmpd = Event.calculateHybridType(eventType: EventType.districtChampionshipDivision.rawValue,
+                                              startDate: nil,
+                                              district: district)
+        let dcmp = Event.calculateHybridType(eventType: EventType.districtChampionship.rawValue,
+                                             startDate: nil,
+                                             district: district)
+        let cmpd = Event.calculateHybridType(eventType: EventType.championshipDivision.rawValue,
+                                             startDate: nil,
+                                             district: nil)
+        let cmp = Event.calculateHybridType(eventType: EventType.championshipFinals.rawValue,
+                                            startDate: nil,
+                                            district: nil)
+        XCTAssertEqual([cmp, dcmp, dcmpd, cmpd].sorted(), [dcmpd, dcmp, cmpd, cmp])
     }
 
     func test_hybridType_festivalOfChampions() {

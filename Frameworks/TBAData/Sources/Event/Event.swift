@@ -1194,7 +1194,9 @@ extension Event {
     }
 
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
-    // of event data to kinda "move around" events in our data model to get groups/order right
+    // of event data to kinda "move around" events in our data model to get groups/order right. Note - hybrid type
+    // is ONLY safe to sort by for events within the same year. Sorting by hybrid type for events across years will
+    // put events together roughly by their types, but not necessairly their true sorts (see Comparable for a true sort)
     internal static func calculateHybridType(eventType: Int, startDate: Date?, district: TBADistrict?) -> String {
         let isDistrictChampionshipEvent = (eventType == EventType.districtChampionshipDivision.rawValue || eventType == EventType.districtChampionship.rawValue)
         // Group districts together, group district CMPs together
@@ -1203,7 +1205,7 @@ extension Event {
             // This is a bit of a hack to get them to show up before DCMPs
             // Future-proofing - group DCMP divisions together based on district
             if eventType == EventType.districtChampionshipDivision.rawValue, let district = district {
-                return "\(eventType)..\(district.abbreviation).dcmpd"
+                return "\(EventType.districtChampionship.rawValue)..\(district.abbreviation).dcmpd"
             }
             return "\(eventType).dcmp"
         } else if let district = district, !isDistrictChampionshipEvent {
