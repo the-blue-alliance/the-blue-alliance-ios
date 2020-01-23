@@ -539,6 +539,33 @@ class EventTestCase: TBADataTestCase {
         XCTAssertEqual(p.predicateFormat, "endDateRaw != nil AND eventCodeRaw != nil AND eventTypeRaw != nil AND keyRaw != nil AND nameRaw != nil AND startDateRaw != nil AND yearRaw != nil")
     }
 
+    func test_insert_all() {
+        let modelEventOne = TBAEvent(key: "2018miket", name: "name", eventCode: "code", eventType: 1, startDate: Event.dateFormatter.date(from: "2018-03-01")!, endDate: Event.dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+        let modelEventTwo = TBAEvent(key: "2017miket", name: "name", eventCode: "code", eventType: 1, startDate: Event.dateFormatter.date(from: "2017-03-01")!, endDate: Event.dateFormatter.date(from: "2017-03-03")!, year: 2017, eventTypeString: "District", divisionKeys: [])
+
+        Event.insert([modelEventOne, modelEventTwo], in: persistentContainer.viewContext)
+        let eventsFirst = Event.fetch(in: persistentContainer.viewContext)
+
+        let eventOne = eventsFirst.first(where: { $0.key == "2018miket" })!
+        let eventTwo = eventsFirst.first(where: { $0.key == "2017miket" })!
+
+        // Sanity check
+        XCTAssertNotEqual(eventOne, eventTwo)
+
+        Event.insert([modelEventTwo], in: persistentContainer.viewContext)
+        let eventsSecond = Event.fetch(in: persistentContainer.viewContext)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertEqual(eventsSecond, [eventTwo])
+
+        // EventOne should be deleted
+        XCTAssertNil(eventOne.managedObjectContext)
+
+        // EventTwo should not be deleted
+        XCTAssertNotNil(eventTwo.managedObjectContext)
+    }
+
     func test_insert_year() {
         let modelEventOne = TBAEvent(key: "2018miket", name: "name", eventCode: "code", eventType: 1, startDate: Event.dateFormatter.date(from: "2018-03-01")!, endDate: Event.dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
         let modelEventTwo = TBAEvent(key: "2018mike2", name: "name", eventCode: "code", eventType: 1, startDate: Event.dateFormatter.date(from: "2018-03-01")!, endDate: Event.dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])

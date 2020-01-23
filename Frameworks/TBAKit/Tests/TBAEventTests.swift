@@ -96,6 +96,24 @@ class TBAEventTests: TBAKitTestCase {
         XCTAssertEqual(webcast.channel, "channel")
     }
 
+    func testEvents() {
+        let ex = expectation(description: "events_all")
+
+        let task = kit.fetchEvents() { (result, notModified) in
+            let events = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(events.count, 0)
+
+            ex.fulfill()
+        }
+        kit.sendSuccessStub(for: task)
+
+        waitForExpectations(timeout: 2) { (error) in
+            XCTAssertNil(error)
+        }
+    }
+
     func testEventsYear() {
         let ex = expectation(description: "events_year")
 

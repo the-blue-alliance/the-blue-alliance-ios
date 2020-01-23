@@ -626,6 +626,30 @@ extension Event: Managed {
     }
 
     /**
+     Insert ALL Events with values from TBAKit Event models in to the managed object context.
+
+     This method manages deleting orphaned Events.
+
+     - Parameter events: The TBAKit Event representations to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+     */
+    public static func insert(_ events: [TBAEvent], in context: NSManagedObjectContext) {
+        // Fetch all of the previous Events for this year
+        let oldEvents = Event.fetch(in: context)
+
+        // Insert new Events
+        let events = events.map({
+            return Event.insert($0, in: context)
+        })
+
+        // Delete orphaned Events for this year
+        Set(oldEvents).subtracting(Set(events)).forEach({
+            context.delete($0)
+        })
+    }
+
+    /**
      Insert Events for a year with values from TBAKit Event models in to the managed object context.
 
      This method manages deleting orphaned Events for a year.

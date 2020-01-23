@@ -521,6 +521,11 @@ public struct TBAWebcast: TBAModel {
 
 extension TBAKit {
 
+    public func fetchEvents(completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> TBAKitOperation {
+        let method = "events/all"
+        return callArray(method: method, completion: completion)
+    }
+
     public func fetchEvents(year: Int, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "events/\(year)"
         return callArray(method: method, completion: completion)

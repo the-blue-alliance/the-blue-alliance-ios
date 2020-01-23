@@ -290,6 +290,11 @@ public struct TBAMedia: TBAModel {
 
 extension TBAKit {
 
+    public func fetchTeams(completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
+        let method = "teams/all"
+        return callArray(method: method, completion: completion)
+    }
+
     public func fetchTeams(page: Int, year: Int? = nil, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
         var method = "teams"
         if let year = year {
