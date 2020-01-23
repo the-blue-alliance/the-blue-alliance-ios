@@ -29,11 +29,7 @@ class PlayerView: UIView {
         return activityIndicator
     }()
 
-    lazy var noDataViewController: NoDataViewController = {
-        let noDataViewController = NoDataViewController()
-        noDataViewController.textLabel.textColor = UIColor.systemGray6
-        return noDataViewController
-    }()
+    lazy var noDataViewController = NoDataViewController()
 
     private var youtubeVideoOperation: XCDYouTubeOperation?
 
