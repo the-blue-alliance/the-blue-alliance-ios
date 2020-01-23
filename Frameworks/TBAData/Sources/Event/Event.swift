@@ -1213,14 +1213,11 @@ extension Event {
         } else if eventType == EventType.offseason.rawValue, let startDate = startDate {
             // Group offseason events together by month
             let month = UInt8(Calendar.current.component(.month, from: startDate))
-            // Note: THIS is a MAJOR hack, because of the way Swift string sorting works. Basically - we want
-            // "99.9" < "99.11" (September Offseason to be sorted before November Offseason). Swift will compare
-            // each character's hex value one-by-one, which means we'll fail at "9" < "1". So, as a hack, for
-            // all months 10+, we'll change them in to the corresponding ASCII character that's 0 (0x30) + month.
-            // As a quick reference, 10 = :, 11 = ;, 12 = <
-            let zero = Character("0").asciiValue!
-            let monthChar = Character(UnicodeScalar(zero + month))
-            return "\(eventType).\(monthChar)"
+            // Pad our month with a leading `0` - this is so we can have "99.9" < "99.11"
+            // (September Offseason to be sorted before November Offseason). Swift will compare
+            // each character's hex value one-by-one, which means we'll fail at "9" < "1".
+            let monthString = String(format: "%02d", month)
+            return "\(eventType).\(monthString)"
         }
         return "\(eventType)"
     }
