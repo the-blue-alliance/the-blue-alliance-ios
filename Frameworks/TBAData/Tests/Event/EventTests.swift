@@ -1184,13 +1184,13 @@ class EventTestCase: TBADataTestCase {
     func test_hybridType_offseason() {
         XCTAssertEqual(Event.calculateHybridType(eventType: EventType.offseason.rawValue,
                                                  startDate: Calendar.current.date(from: DateComponents(year: 2015, month: 11, day: 1)),
-                                                 district: nil), "99.11")
+                                                 district: nil), "99.;")
         XCTAssertEqual(Event.calculateHybridType(eventType: EventType.offseason.rawValue,
                                                  startDate: Calendar.current.date(from: DateComponents(year: 2015, month: 9, day: 1)),
                                                  district: nil), "99.9")
 
         // Ensure single-digit month offseason events show up before double-digit month offseason events
-        XCTAssert("99.9" > "99.11")
+        XCTAssert("99.9" < "99.;")
     }
 
     func test_hybridType_preseason() {
