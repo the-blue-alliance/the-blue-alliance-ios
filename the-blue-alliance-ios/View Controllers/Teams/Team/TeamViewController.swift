@@ -7,7 +7,7 @@ import TBAData
 import TBAKit
 import UIKit
 
-class TeamViewController: ScrollableHeaderContainerViewController, Observable {
+class TeamViewController: HeaderContainerViewController, Observable {
 
     private(set) var team: Team
     private let pasteboard: UIPasteboard?
@@ -22,10 +22,6 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
 
     override var headerView: UIView {
         return teamHeaderView
-    }
-
-    override var headerContentView: UIView {
-        return teamHeaderView.rootStackView
     }
 
     private(set) var infoViewController: TeamInfoViewController
