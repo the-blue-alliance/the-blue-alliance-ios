@@ -26,16 +26,21 @@ Install project dependencies
 fastlane ios test_unit
 ```
 Run TBA unit tests
-### ios test_tbadata
-```
-fastlane ios test_tbadata
-```
-Run TBAData unit tests
 ### ios test_mytbakit
 ```
 fastlane ios test_mytbakit
 ```
 Run MyTBAKit unit tests
+### ios test_search
+```
+fastlane ios test_search
+```
+Run Search unit tests
+### ios test_tbadata
+```
+fastlane ios test_tbadata
+```
+Run TBAData unit tests
 ### ios test_tbakit
 ```
 fastlane ios test_tbakit
