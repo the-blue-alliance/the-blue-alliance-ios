@@ -8,6 +8,18 @@ class TeamHeaderView: UIView {
             configureView()
         }
     }
+    private var baseAvatarColor: UIColor {
+        // Some teams look better in Red, some teams look better in Blue.
+        // One team looks better in Black.
+        if viewModel.teamNumber == 148 {
+            return UIColor.black
+        }
+        let redTeams = [1114, 2337]
+        if redTeams.contains(viewModel.teamNumber) {
+            return UIColor.avatarRed
+        }
+        return UIColor.avatarBlue
+    }
 
     lazy var rootStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [avatarImageView, teamInfoStackView, yearStackView])
@@ -17,7 +29,7 @@ class TeamHeaderView: UIView {
         return stackView
     }()
 
-    private let avatarImageView = AvatarImageView()
+    private lazy var avatarImageView = AvatarImageView(baseColor: baseAvatarColor)
 
     private lazy var teamNumberLabel: UILabel = {
         let label = TeamHeaderView.teamHeaderLabel()
@@ -128,16 +140,16 @@ private class AvatarImageView: UIView {
         }
     }
 
-    init() {
+    init(baseColor: UIColor) {
         super.init(frame: .zero)
 
-        backgroundColor = UIColor.avatarBlue
+        backgroundColor = baseColor
         isUserInteractionEnabled = true
 
         addSubview(imageView)
         imageView.autoPinEdgesToSuperviewEdges(with: .init(top: 5, left: 5, bottom: 5, right: 5))
 
-        layer.borderColor = UIColor.avatarBlue.cgColor
+        layer.borderColor = baseColor.cgColor
         layer.borderWidth = 5
         layer.masksToBounds = true
         layer.cornerRadius = 5
