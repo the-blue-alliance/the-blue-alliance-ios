@@ -128,7 +128,11 @@ platform :ios do
   desc "Perform pre-TestFlight tasks"
   private_lane :prebeta do
     # Bump our build number for TestFlight
-    testflight_build_number = latest_testflight_build_number(version: get_version_number(target: "The Blue Alliance"), initial_build_number: 0)
+    testflight_build_number = latest_testflight_build_number(
+      app_identifier: "com.the-blue-alliance.tba",
+      version: get_version_number(target: "The Blue Alliance"),
+      initial_build_number: 0
+    )
     increment_build_number(build_number: testflight_build_number + 1)
   end
 
