@@ -1,18 +1,25 @@
 import CoreData
 import Foundation
+import Search
 import TBAOperation
 
 class PersistentContainerOperation: TBAOperation {
 
-    var persistentContainer: NSPersistentContainer
+    let indexDelegate: TBACoreDataCoreSpotlightDelegate
+    let persistentContainer: NSPersistentContainer
 
-    init(persistentContainer: NSPersistentContainer) {
+    init(indexDelegate: TBACoreDataCoreSpotlightDelegate, persistentContainer: NSPersistentContainer) {
+        self.indexDelegate = indexDelegate
         self.persistentContainer = persistentContainer
 
         super.init()
     }
 
     override func execute() {
+        // Setup our Core Data + Spotlight export
+        persistentContainer.persistentStoreDescriptions.forEach {
+            $0.setOption(indexDelegate, forKey: NSCoreDataCoreSpotlightExporter)
+        }
         persistentContainer.loadPersistentStores(completionHandler: { (_, error) in
             /*
              Typical reasons for an error here include:

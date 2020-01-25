@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.resource_bundle = { 'TBAData-Resources' => ['Resources/**/*.plist'] }
 
   s.dependency 'MyTBAKit' # For API models
+  s.dependency 'Search' # For Searchable protocol
   s.dependency 'TBAKit' # For API models
   s.dependency 'TBAProtocols' # For Locatable, Surfable, etc.
   s.dependency 'TBAUtils' # For NSSet, Calendar, etc. extensions and ErrorRecorder

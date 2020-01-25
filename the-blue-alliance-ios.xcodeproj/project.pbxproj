@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0584527FD463C75977C5FAC0 /* Pods_TBA_Spotlight_Index_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67630A8FA037CC2DB84E244D /* Pods_TBA_Spotlight_Index_Extension.framework */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
 		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
@@ -18,6 +19,7 @@
 		1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */; };
 		1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */; };
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
+		14F51704239AA70A00D9240F /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F51703239AA70A00D9240F /* SearchService.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
@@ -49,6 +51,8 @@
 		92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */; };
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */; };
+		927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */; };
 		9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */; };
 		9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */; };
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
@@ -115,6 +119,7 @@
 		92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */; };
 		92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */; };
 		92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectTableViewController.swift */; };
+		92AF73D821EB9E1E006A338D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF73D721EB9E1E006A338D /* SearchViewController.swift */; };
 		92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B07370235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift */; };
 		92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */; };
 		92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0AA3A20CB837A0074FDF1 /* main.swift */; };
@@ -163,6 +168,7 @@
 		92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF54E021B1B65A0082C58C /* StatusService.swift */; };
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
+		92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F79A7523D6536A0026E9E8 /* SearchContainer.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
 		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
@@ -202,6 +208,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		927309A123DC0F26006145E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9273099B23DC0F26006145E0;
+			remoteInfo = "TBA Spotlight Index Extension";
+		};
 		92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
@@ -210,6 +223,20 @@
 			remoteInfo = "The Blue Alliance";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		927309A323DC0F26006145E0 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_ui_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,10 +251,14 @@
 		14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModel.swift; sourceTree = "<group>"; };
 		1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatCellViewModel.swift; sourceTree = "<group>"; };
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
+		14F51703239AA70A00D9240F /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
+		33B371C298C347B696EE56F8 /* Pods-TBA Spotlight Index Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBA Spotlight Index Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-TBA Spotlight Index Extension/Pods-TBA Spotlight Index Extension.release.xcconfig"; sourceTree = "<group>"; };
+		40CCF3469BDAF2BE1A6C262B /* Pods-TBA Spotlight Index Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBA Spotlight Index Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TBA Spotlight Index Extension/Pods-TBA Spotlight Index Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		67630A8FA037CC2DB84E244D /* Pods_TBA_Spotlight_Index_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TBA_Spotlight_Index_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
 		92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@3x.png"; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
@@ -255,6 +286,10 @@
 		92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASearchableTableViewController.swift; sourceTree = "<group>"; };
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
 		926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA.swift"; sourceTree = "<group>"; };
+		9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TBA Spotlight Index Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		927309A823DC0F5F006145E0 /* spotlight-index.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "spotlight-index.entitlements"; sourceTree = "<group>"; };
+		927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
+		927309AB23DC0F68006145E0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
@@ -324,6 +359,7 @@
 		92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix.swift"; sourceTree = "<group>"; };
 		92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestroyPersistentStoreOperation.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTableViewController.swift; sourceTree = "<group>"; };
+		92AF73D721EB9E1E006A338D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		92B07370235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSourceFetchedResultsController.swift; sourceTree = "<group>"; };
 		92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
 		92B0AA3A20CB837A0074FDF1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -374,6 +410,7 @@
 		92DF54E021B1B65A0082C58C /* StatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusService.swift; sourceTree = "<group>"; };
 		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
+		92F79A7523D6536A0026E9E8 /* SearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContainer.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
 		92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderView.swift; sourceTree = "<group>"; };
 		92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
@@ -417,6 +454,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9273099923DC0F26006145E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0584527FD463C75977C5FAC0 /* Pods_TBA_Spotlight_Index_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D8F1E2154DA008E79CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -472,6 +517,8 @@
 				4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */,
 				AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */,
 				E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */,
+				40CCF3469BDAF2BE1A6C262B /* Pods-TBA Spotlight Index Extension.debug.xcconfig */,
+				33B371C298C347B696EE56F8 /* Pods-TBA Spotlight Index Extension.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -583,6 +630,15 @@
 			path = Media;
 			sourceTree = "<group>";
 		};
+		927309A923DC0F68006145E0 /* spotlight-index */ = {
+			isa = PBXGroup;
+			children = (
+				927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */,
+				927309AB23DC0F68006145E0 /* Info.plist */,
+			);
+			path = "spotlight-index";
+			sourceTree = SOURCE_ROOT;
+		};
 		9274E14221B1027100F5D5D0 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -649,7 +705,9 @@
 			isa = PBXGroup;
 			children = (
 				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
+				927309A823DC0F5F006145E0 /* spotlight-index.entitlements */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
+				927309A923DC0F68006145E0 /* spotlight-index */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
 				92942D931E2154DA008E79CA /* Products */,
@@ -662,6 +720,7 @@
 			children = (
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
 				92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */,
+				9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -692,6 +751,7 @@
 		92942DAD1E215722008E79CA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				92AF73D621EB9E10006A338D /* Search */,
 				92942E311E230340008E79CA /* Base */,
 				92942DB21E215B08008E79CA /* Events */,
 				92942DB31E215B0E008E79CA /* Teams */,
@@ -857,6 +917,14 @@
 				92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		92AF73D621EB9E10006A338D /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				92AF73D721EB9E1E006A338D /* SearchViewController.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		92B076EF20FF8DDC00F9B2D7 /* myTBA */ = {
@@ -1042,6 +1110,7 @@
 				929F57272092BA6500E5313A /* Observable.swift */,
 				92BB8B63214F17440035AF28 /* URLOpener.swift */,
 				92C8CE4321ACB03300683558 /* Subscribable.swift */,
+				92F79A7523D6536A0026E9E8 /* SearchContainer.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1050,6 +1119,7 @@
 			isa = PBXGroup;
 			children = (
 				92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */,
+				14F51703239AA70A00D9240F /* SearchService.swift */,
 				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
@@ -1208,6 +1278,7 @@
 				FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */,
 				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
 				52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */,
+				67630A8FA037CC2DB84E244D /* Pods_TBA_Spotlight_Index_Extension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1215,6 +1286,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9273099B23DC0F26006145E0 /* TBA Spotlight Index Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 927309A523DC0F26006145E0 /* Build configuration list for PBXNativeTarget "TBA Spotlight Index Extension" */;
+			buildPhases = (
+				720DD78C4D135F21294A3A93 /* [CP] Check Pods Manifest.lock */,
+				9273099823DC0F26006145E0 /* Sources */,
+				9273099923DC0F26006145E0 /* Frameworks */,
+				9273099A23DC0F26006145E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TBA Spotlight Index Extension";
+			productName = "TBA Spotlight Index Extension";
+			productReference = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		92942D911E2154DA008E79CA /* The Blue Alliance */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
@@ -1226,10 +1315,12 @@
 				6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */,
 				E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */,
 				924E826C208FE7D20053247C /* Run Fabric */,
+				927309A323DC0F26006145E0 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				927309A223DC0F26006145E0 /* PBXTargetDependency */,
 			);
 			name = "The Blue Alliance";
 			productName = "the-blue-alliance";
@@ -1262,10 +1353,14 @@
 		92942D8A1E2154DA008E79CA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1020;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
+					9273099B23DC0F26006145E0 = {
+						CreatedOnToolsVersion = 11.3.1;
+						ProvisioningStyle = Manual;
+					};
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
 						LastSwiftMigration = 1020;
@@ -1301,12 +1396,20 @@
 			projectRoot = "";
 			targets = (
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
+				9273099B23DC0F26006145E0 /* TBA Spotlight Index Extension */,
 				92D6483920BE4CB8008F0DB3 /* tba-unit-tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9273099A23DC0F26006145E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D901E2154DA008E79CA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1391,6 +1494,7 @@
 				"${BUILT_PRODUCTS_DIR}/Protobuf/protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
 				"${PODS_ROOT}/Reveal-SDK/RevealServer/iOS/RevealServer.framework",
+				"${BUILT_PRODUCTS_DIR}/Search/Search.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAData/TBAData.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAOperation/TBAOperation.framework",
@@ -1416,6 +1520,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RevealServer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Search.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAData.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAOperation.framework",
@@ -1428,6 +1533,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		720DD78C4D135F21294A3A93 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TBA Spotlight Index Extension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		924E826C208FE7D20053247C /* Run Fabric */ = {
@@ -1490,6 +1617,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/MyTBAKit/MyTBAKit.framework",
 				"${BUILT_PRODUCTS_DIR}/MyTBAKitTesting/MyTBAKitTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/Search/Search.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAData/TBAData.framework",
 				"${BUILT_PRODUCTS_DIR}/TBADataTesting/TBADataTesting.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
@@ -1504,6 +1632,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKitTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Search.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAData.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBADataTesting.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
@@ -1522,6 +1651,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9273099823DC0F26006145E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D8E1E2154DA008E79CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1537,6 +1674,7 @@
 				92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */,
 				92FF10F021A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
+				92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */,
 				92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */,
 				9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */,
 				921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */,
@@ -1571,6 +1709,7 @@
 				92FF111821A61B37003BC5C4 /* DistrictBreakdownViewController.swift in Sources */,
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
 				92FF10F921A61AC2003BC5C4 /* MatchViewController.swift in Sources */,
+				92AF73D821EB9E1E006A338D /* SearchViewController.swift in Sources */,
 				92FF10EE21A61A1B003BC5C4 /* TeamSummaryViewController.swift in Sources */,
 				92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */,
 				92A5E5DC21A22D550025CC85 /* URL+Reachable.swift in Sources */,
@@ -1586,6 +1725,7 @@
 				9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */,
 				928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */,
 				304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */,
+				14F51704239AA70A00D9240F /* SearchService.swift in Sources */,
 				92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
 				92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */,
@@ -1701,6 +1841,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		927309A223DC0F26006145E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9273099B23DC0F26006145E0 /* TBA Spotlight Index Extension */;
+			targetProxy = 927309A123DC0F26006145E0 /* PBXContainerItemProxy */;
+		};
 		92D6484020BE4CB8008F0DB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
@@ -1721,6 +1866,60 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		927309A623DC0F26006145E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40CCF3469BDAF2BE1A6C262B /* Pods-TBA Spotlight Index Extension.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "spotlight-index.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "spotlight-index/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.spotlight-index";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		927309A723DC0F26006145E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33B371C298C347B696EE56F8 /* Pods-TBA Spotlight Index Extension.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "spotlight-index.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "spotlight-index/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.spotlight-index";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		92942DA41E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1838,9 +2037,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -1859,9 +2059,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -1950,6 +2151,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		927309A523DC0F26006145E0 /* Build configuration list for PBXNativeTarget "TBA Spotlight Index Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				927309A623DC0F26006145E0 /* Debug */,
+				927309A723DC0F26006145E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

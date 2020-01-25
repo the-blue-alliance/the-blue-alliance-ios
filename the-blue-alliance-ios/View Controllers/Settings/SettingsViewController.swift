@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import MyTBAKit
+import Search
 import TBAKit
 import UIKit
 
@@ -17,6 +19,7 @@ private enum InfoRow: String, CaseIterable {
 
 private enum DebugRow: Int, CaseIterable {
     case deleteNetworkCache
+    case deleteSearchIndex
     case troubleshootNotifications
 }
 
@@ -25,14 +28,16 @@ class SettingsViewController: TBATableViewController {
     private let fcmTokenProvider: FCMTokenProvider
     private let myTBA: MyTBA
     private let pushService: PushService
+    private let searchService: SearchService
     private let urlOpener: URLOpener
 
     // MARK: - Init
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, searchService: SearchService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pushService = pushService
+        self.searchService = searchService
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -174,6 +179,8 @@ class SettingsViewController: TBATableViewController {
                 switch debugRow {
                 case .deleteNetworkCache:
                     return "Delete network cache"
+                case .deleteSearchIndex:
+                    return "Delete search index"
                 case .troubleshootNotifications:
                     return "Troubleshoot notifications"
                 }
@@ -216,6 +223,8 @@ class SettingsViewController: TBATableViewController {
             switch debugRow {
             case .deleteNetworkCache:
                 showDeleteNetworkCache()
+            case .deleteSearchIndex:
+                showDeleteSearchIndex()
             case .troubleshootNotifications:
                 pushTroubleshootNotifications()
             }
@@ -312,7 +321,8 @@ class SettingsViewController: TBATableViewController {
         let alertController = UIAlertController(title: "Delete Network Cache", message: "Are you sure you want to delete all the network cache data?", preferredStyle: .alert)
 
         let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [unowned self] (deleteAction) in
-            self.deleteNetworkCache()
+            self.tbaKit.clearCacheHeaders()
+            self.userDefaults.clearSuccessfulRefreshes()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
@@ -322,9 +332,18 @@ class SettingsViewController: TBATableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
 
-    internal func deleteNetworkCache() {
-        tbaKit.clearCacheHeaders()
-        userDefaults.clearSuccessfulRefreshes()
+    private func showDeleteSearchIndex() {
+        let alertController = UIAlertController(title: "Delete Search Index", message: "Are you sure you want to delete the local search index? Search may not work properly.", preferredStyle: .alert)
+
+        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [unowned self] (deleteAction) in
+            self.searchService.deleteSearchIndex(errorRecorder: Crashlytics.sharedInstance())
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        alertController.addAction(deleteCacheAction)
+        alertController.addAction(cancelAction)
+
+        self.present(alertController, animated: true, completion: nil)
     }
 
     private func pushTroubleshootNotifications() {

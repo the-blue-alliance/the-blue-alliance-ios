@@ -1,5 +1,5 @@
+import TBAProtocols
 import XCTest
-import TBAData
 
 private class MockSurfable: Surfable {
     var website: String?

@@ -8,26 +8,30 @@ import UIKit
 
 class TeamsContainerViewController: ContainerViewController {
 
-    private let myTBA: MyTBA
-    private let pasteboard: UIPasteboard?
-    private let photoLibrary: PHPhotoLibrary?
-    private let remoteConfigService: RemoteConfigService
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
+    private(set) var myTBA: MyTBA
+    private(set) var pasteboard: UIPasteboard?
+    private(set) var photoLibrary: PHPhotoLibrary?
+    private(set) var remoteConfigService: RemoteConfigService
+    private(set) var searchService: SearchService
+    private(set) var statusService: StatusService
+    private(set) var urlOpener: URLOpener
+
+    var searchController: UISearchController!
 
     private(set) var teamsViewController: TeamsViewController!
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.remoteConfigService = remoteConfigService
+        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamsViewController = TeamsViewController(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        teamsViewController = TeamsViewController(showSearch: false, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [teamsViewController],
                    persistentContainer: persistentContainer,
@@ -46,6 +50,12 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - View Lifecycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupSearchController()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -54,13 +64,4 @@ class TeamsContainerViewController: ContainerViewController {
 
 }
 
-extension TeamsContainerViewController: TeamsViewControllerDelegate {
-
-    func teamSelected(_ team: Team) {
-        // Show detail wrapped in a UINavigationController for our split view controller
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let nav = UINavigationController(rootViewController: teamViewController)
-        navigationController?.showDetailViewController(nav, sender: nil)
-    }
-
-}
+extension TeamsContainerViewController: TeamsViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}

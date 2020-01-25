@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18G103" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES">
         <attribute name="awardTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="nameRaw" attributeType="String"/>
@@ -53,7 +53,7 @@
         <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
         <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
         <attribute name="hybridType" optional="YES" attributeType="String"/>
-        <attribute name="keyRaw" attributeType="String"/>
+        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
         <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationNameRaw" optional="YES" attributeType="String"/>
@@ -241,7 +241,7 @@
         <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
         <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
         <attribute name="homeChampionshipRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: String]"/>
-        <attribute name="keyRaw" attributeType="String"/>
+        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
         <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationNameRaw" optional="YES" attributeType="String"/>

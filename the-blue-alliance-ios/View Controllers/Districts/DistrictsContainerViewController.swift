@@ -10,6 +10,7 @@ class DistrictsContainerViewController: ContainerViewController {
 
     private let myTBA: MyTBA
     private let remoteConfigService: RemoteConfigService
+    private let searchService: SearchService
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -24,9 +25,10 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, remoteConfigService: RemoteConfigService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, remoteConfigService: RemoteConfigService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.remoteConfigService = remoteConfigService
+        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -105,7 +107,7 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, remoteConfigService: remoteConfigService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, remoteConfigService: remoteConfigService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: districtViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

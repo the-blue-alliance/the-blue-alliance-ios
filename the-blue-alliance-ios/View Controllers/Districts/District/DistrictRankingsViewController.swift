@@ -35,6 +35,8 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupSearch()
+
         tableView.registerReusableCell(RankingTableViewCell.self)
 
         setupDataSource()

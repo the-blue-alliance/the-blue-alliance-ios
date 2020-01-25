@@ -1,6 +1,8 @@
 import CoreData
+import CoreSpotlight
 import Foundation
 import MyTBAKit
+import Search
 import TBAKit
 import TBAProtocols
 import TBAUtils
@@ -623,30 +625,6 @@ extension Event: Managed {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter
-    }
-
-    /**
-     Insert ALL Events with values from TBAKit Event models in to the managed object context.
-
-     This method manages deleting orphaned Events.
-
-     - Parameter events: The TBAKit Event representations to set values from.
-
-     - Parameter context: The NSManagedContext to insert the Event in to.
-     */
-    public static func insert(_ events: [TBAEvent], in context: NSManagedObjectContext) {
-        // Fetch all of the previous Events for this year
-        let oldEvents = Event.fetch(in: context)
-
-        // Insert new Events
-        let events = events.map({
-            return Event.insert($0, in: context)
-        })
-
-        // Delete orphaned Events for this year
-        Set(oldEvents).subtracting(Set(events)).forEach({
-            context.delete($0)
-        })
     }
 
     /**
@@ -1338,6 +1316,44 @@ extension Event: MyTBASubscribable {
             NotificationType.scheduleUpdated,
             NotificationType.matchVideo
         ]
+    }
+
+}
+
+extension Event: Searchable {
+
+    public var searchAttributes: CSSearchableItemAttributeSet {
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: Event.entityName)
+
+        // Keys to de-dupe in Search
+        attributeSet.contentURL = webURL
+        attributeSet.relatedUniqueIdentifier = uniqueIdentifier
+
+        attributeSet.displayName = safeNameYear
+        attributeSet.alternateNames = [key, shortName, name].compactMap({ $0 }) // Queryable by short name or name
+
+        // Date-related event stuff
+        attributeSet.startDate = startDate
+        attributeSet.endDate = endDate
+        attributeSet.allDay = NSNumber(value: 1)
+
+        // Location-related event stuff
+        attributeSet.city = city
+        attributeSet.country = country
+        attributeSet.latitude = getValue(\Event.latRaw)
+        attributeSet.longitude = getValue(\Event.lngRaw)
+        attributeSet.namedLocation = locationName
+        attributeSet.stateOrProvince = stateProv
+        attributeSet.fullyFormattedAddress = address
+        attributeSet.postalCode = postalCode
+
+        attributeSet.userCurated = userCurated ? NSNumber(value: 1) : nil
+
+        return attributeSet
+    }
+
+    public var webURL: URL {
+        return URL(string: "https://www.thebluealliance.com/event/\(key)")!
     }
 
 }

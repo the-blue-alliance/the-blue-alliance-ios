@@ -16,9 +16,9 @@ class TBASearchableTableViewController: TBATableViewController, SearchableContro
         return searchController
     }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // MARK: - Public Methods
 
+    public func setupSearch() {
         tableView.tableHeaderView = searchController.searchBar
         tableView.backgroundView = UIView() // Hack to fix white background when refreshing in dark mode
 

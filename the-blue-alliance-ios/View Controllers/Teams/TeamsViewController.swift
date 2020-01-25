@@ -21,15 +21,30 @@ protocol TeamsViewControllerDataSourceConfiguration {
  */
 class TeamsViewController: TBASearchableTableViewController, Refreshable, Stateful, TeamsViewControllerDataSourceConfiguration {
 
+    private let showSearch: Bool
     weak var delegate: TeamsViewControllerDelegate?
 
     private var tableViewDataSource: TableViewDataSource<String, Team>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
 
+    init(showSearch: Bool = true, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.showSearch = showSearch
+
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if showSearch {
+            setupSearch()
+        }
 
         tableView.registerReusableCell(TeamTableViewCell.self)
 
