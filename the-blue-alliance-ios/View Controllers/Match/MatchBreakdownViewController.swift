@@ -156,7 +156,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
                     if let match = match {
                         Match.insert(match, in: context)
                     } else if !notModified {
-                        // TODO: Delete match, move back up our hiearchy
+                        // TODO: Delete match, move back up our hierarchy
                     }
                 default:
                     break

@@ -144,7 +144,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         rootStackView.axis = .vertical
         view.addSubview(rootStackView)
 
-        // Add subviews to view hiearchy in reverse order, so first one is showing automatically
+        // Add subviews to view hierarchy in reverse order, so first one is showing automatically
         for viewController in viewControllers.reversed() {
             addChild(viewController)
             containerView.addSubview(viewController.view)
@@ -168,7 +168,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
         // TODO: Consider... if a view is presented over top of the current view but no action is taken
         // We don't want to cancel refreshes in that situation
-        // TODO: Consider only canceling if we're moving backwards or sideways in the view hiearchy, if we have
+        // TODO: Consider only canceling if we're moving backwards or sideways in the view hierarchy, if we have
         // access to that information. Ex: Teams -> Team, we don't need to cancel the teams refresh
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/176
         if isMovingFromParent {

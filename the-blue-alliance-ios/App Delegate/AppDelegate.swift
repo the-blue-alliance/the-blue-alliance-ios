@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    // MARK: - View Hiearchy
+    // MARK: - View Hierarchy
 
     // Root VC is a split view controller, with the left side being a tab bar,
     // and the right side being a navigation controller
