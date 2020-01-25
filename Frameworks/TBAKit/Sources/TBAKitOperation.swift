@@ -9,7 +9,9 @@ public class TBAKitOperation: TBAOperation {
         super.init()
 
         let request = tbaKit.createRequest(method)
-        task = tbaKit.urlSession.dataTask(with: request) { [weak self] (data: Data?, response: URLResponse?, error: Error?) in
+
+        let urlSession = tbaKit.sessionProvider()
+        task = urlSession.dataTask(with: request) { [weak self] (data: Data?, response: URLResponse?, error: Error?) in
             let httpResponse = response as? HTTPURLResponse
             guard let statusCode = httpResponse?.statusCode else {
                 completion(httpResponse, nil, APIError.error("No status code for response"))

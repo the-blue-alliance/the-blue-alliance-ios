@@ -19,5 +19,6 @@ Pod::Spec.new do |s|
     test_spec.framework = 'XCTest'
 
     test_spec.dependency 'TBAKitTesting'
+    test_spec.dependency 'TBATestingMocks'
   end
 end
