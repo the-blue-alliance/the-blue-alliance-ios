@@ -6,6 +6,11 @@ import TBAData
 import TBAKit
 import TBAUtils
 
+let TBAActivityTypeEvent = "com.the-blue-alliance.tba.Event"
+let TBAActivityTypeTeam = "com.the-blue-alliance.tba.Team"
+let TBAActivityIdentifier = "kTBAActivityIdentifier"
+let TBAActivityURL = "kTBAActivityURL"
+
 private struct SearchConstants {
     static let lastRefreshEventsAllKey = "kLastRefreshAllEvents"
     static let lastRefreshTeamsAllKey = "kLastRefreshAllTeams"
@@ -165,8 +170,8 @@ public class SearchService: NSObject {
     public func searchableUserActivity(_ searchable: Searchable) -> NSUserActivity {
         let searchAttributes = searchable.searchAttributes
         let userInfo: [String: Any] = [
-            "uniqueIdentifier": searchable.uniqueIdentifier,
-            "webURL": searchable.webURL
+            TBAActivityIdentifier: searchable.uniqueIdentifier,
+            TBAActivityURL: searchable.webURL,
         ]
 
         // When adding new searchable activities, make sure to add the activity type to Info.plist
@@ -180,7 +185,7 @@ public class SearchService: NSObject {
 
         activity.isEligibleForPublicIndexing = true
         activity.isEligibleForSearch = true
-        // TODO: Support handoff, eventually
+        activity.isEligibleForHandoff = true
 
         return activity
     }
