@@ -290,6 +290,7 @@
 		927309A823DC0F5F006145E0 /* spotlight-index.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "spotlight-index.entitlements"; sourceTree = "<group>"; };
 		927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
 		927309AB23DC0F68006145E0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		927309B023DCD69D006145E0 /* miket.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = miket.gpx; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
@@ -639,6 +640,14 @@
 			path = "spotlight-index";
 			sourceTree = SOURCE_ROOT;
 		};
+		927309AF23DCD69D006145E0 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				927309B023DCD69D006145E0 /* miket.gpx */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		9274E14221B1027100F5D5D0 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -709,6 +718,7 @@
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				927309A923DC0F68006145E0 /* spotlight-index */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
+				927309AF23DCD69D006145E0 /* Debug */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
 				92942D931E2154DA008E79CA /* Products */,
 				5EC6F9271347DB8630C82782 /* Pods */,

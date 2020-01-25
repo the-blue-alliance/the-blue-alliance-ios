@@ -1,6 +1,7 @@
 import CoreData
 import CoreSpotlight
 import Foundation
+import Intents
 import Search
 import TBAData
 import TBAKit
@@ -167,7 +168,7 @@ public class SearchService: NSObject {
         return refreshOperation
     }
 
-    public func searchableUserActivity(_ searchable: Searchable) -> NSUserActivity {
+    public static func searchableUserActivity(_ searchable: Searchable) -> NSUserActivity {
         let searchAttributes = searchable.searchAttributes
         let userInfo: [String: Any] = [
             TBAActivityIdentifier: searchable.uniqueIdentifier,
@@ -178,7 +179,6 @@ public class SearchService: NSObject {
         let activity = NSUserActivity(activityType: "com.the-blue-alliance.tba.\(type(of: searchable).entityName)")
         activity.title = searchAttributes.displayName
         activity.contentAttributeSet = searchAttributes
-        // Forgive me father for I cannot use keyPaths
         activity.userInfo = userInfo
         activity.webpageURL = searchable.webURL
         activity.requiredUserInfoKeys = Set(userInfo.keys)
@@ -186,8 +186,34 @@ public class SearchService: NSObject {
         activity.isEligibleForPublicIndexing = true
         activity.isEligibleForSearch = true
         activity.isEligibleForHandoff = true
+        activity.isEligibleForPrediction = true
+        activity.persistentIdentifier = searchable.uniqueIdentifier
 
         return activity
+    }
+
+    // Note: We could pass some Team or Event here
+    public static func relevantShortcut(_ activity: NSUserActivity) -> INRelevantShortcut {
+        let shortcut = INShortcut(userActivity: activity)
+        let relevantShortcut = INRelevantShortcut(shortcut: shortcut)
+
+        if let attribuites = activity.contentAttributeSet {
+            // When viewing an Event, the shortcut is relevant during the Event, or if the user is at the Event location.
+            var relevanceProviders: [INRelevanceProvider] = []
+            if let startDate = attribuites.startDate, let endDate = attribuites.endDate {
+                relevanceProviders.append(INDateRelevanceProvider(start: startDate, end: endDate))
+            }
+            if let lat = attribuites.latitude, let lng = attribuites.longitude {
+                // Show the name of the Event location
+                let identifier = attribuites.namedLocation ?? attribuites.locationString ?? attribuites.displayName ?? "---"
+                relevanceProviders.append(INLocationRelevanceProvider(region: CLCircularRegion(center: CLLocationCoordinate2D(latitude: lat.doubleValue,
+                                                                                                                              longitude: lng.doubleValue),
+                                                                                               radius: 1000,
+                                                                                               identifier: identifier)))
+            }
+            relevantShortcut.relevanceProviders = relevanceProviders
+        }
+        return relevantShortcut
     }
 
     public func deleteSearchIndex(errorRecorder: ErrorRecorder) {

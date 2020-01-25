@@ -12,7 +12,6 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
     private(set) var team: Team
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
-    private let searchService: SearchService
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -60,11 +59,10 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -106,7 +104,7 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
 
         setupObservers()
 
-        activity = searchService.searchableUserActivity(team)
+        activity = SearchService.searchableUserActivity(team)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -227,7 +225,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, remoteConfigService: remoteConfigService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, remoteConfigService: remoteConfigService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

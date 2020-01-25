@@ -1331,6 +1331,7 @@ extension Event: Searchable {
 
         attributeSet.displayName = safeNameYear
         attributeSet.alternateNames = [key, shortName, name].compactMap({ $0 }) // Queryable by short name or name
+        // attributeSet.contentDescription = dateString
 
         // Date-related event stuff
         attributeSet.startDate = startDate

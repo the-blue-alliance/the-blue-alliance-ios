@@ -17,7 +17,6 @@ class MatchViewController: MyTBAContainerViewController {
 
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
-    private let searchService: SearchService
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -27,11 +26,10 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, team: Team? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, team: Team? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
         infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -92,7 +90,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         // get team key that matches the target teamNumber
         guard let team = match.teams.first(where: { Int($0.teamNumber) == teamNumber }) else { return }
 
-        let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, remoteConfigService: remoteConfigService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, remoteConfigService: remoteConfigService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     

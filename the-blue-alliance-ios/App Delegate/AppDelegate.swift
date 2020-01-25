@@ -55,7 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                userDefaults: userDefaults)
         let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
                                                                        remoteConfigService: remoteConfigService,
-                                                                       searchService: searchService,
                                                                        statusService: statusService,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
@@ -71,7 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             userDefaults: userDefaults)
         let myTBAViewController = MyTBAViewController(myTBA: myTBA,
                                                       remoteConfigService: remoteConfigService,
-                                                      searchService: searchService,
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,

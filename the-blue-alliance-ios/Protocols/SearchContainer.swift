@@ -49,7 +49,6 @@ protocol SearchContainerDelegate {
     var pasteboard: UIPasteboard? { get }
     var photoLibrary: PHPhotoLibrary? { get }
     var remoteConfigService: RemoteConfigService { get }
-    var searchService: SearchService { get }
     var statusService: StatusService { get }
     var urlOpener: URLOpener { get }
 }
@@ -58,14 +57,14 @@ extension SearchContainerDelegate where Self: ContainerViewController {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: eventViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }
 
     func teamSelected(_ team: Team) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: teamViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }
