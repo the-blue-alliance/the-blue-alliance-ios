@@ -21,17 +21,15 @@ class TBAKitTests: TBAKitTestCase {
         let testKit = TBAKit(apiKey: apiKey, userDefaults: ud)
         XCTAssertEqual(testKit.apiKey, apiKey)
         XCTAssertEqual(testKit.userDefaults, ud)
-        XCTAssertNotNil(testKit.urlSession)
+        XCTAssertNotNil(testKit.sessionProvider)
     }
 
     func test_init_session() {
         let ud = UserDefaults(suiteName: "dummy")!
         let apiKey = "abcdefg"
-        let session = MockURLSession()
-        let testKit = TBAKit(apiKey: apiKey, urlSession: session, userDefaults: ud)
+        let testKit = TBAKit(apiKey: apiKey, userDefaults: ud)
         XCTAssertEqual(testKit.apiKey, apiKey)
         XCTAssertEqual(testKit.userDefaults, ud)
-        XCTAssertEqual(testKit.urlSession, session)
     }
 
     func testAPIKeyInAuthorizationHeaders() {

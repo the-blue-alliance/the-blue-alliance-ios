@@ -31,12 +31,18 @@ internal protocol TBAModel {
 open class TBAKit: NSObject {
 
     internal let apiKey: String
-    internal let urlSession: URLSession
+    internal let sessionProvider: (() -> URLSession)
     internal let userDefaults: UserDefaults
 
-    public init(apiKey: String, urlSession: URLSession? = nil, userDefaults: UserDefaults) {
+    public init(apiKey: String, sessionProvider: (() -> URLSession)? = nil, userDefaults: UserDefaults) {
         self.apiKey = apiKey
-        self.urlSession = urlSession ?? URLSession(configuration: .default)
+        if let sessionProvider = sessionProvider {
+            self.sessionProvider = sessionProvider
+        } else {
+            self.sessionProvider = {
+                return URLSession.init(configuration: .default)
+            }
+        }
         self.userDefaults = userDefaults
     }
 

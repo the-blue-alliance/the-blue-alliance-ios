@@ -4,12 +4,10 @@ import XCTest
 
 public class MockTBAKit: TBAKit {
 
-    public let session: MockURLSession
+    public var session: MockURLSession!
     private let bundle: Bundle
 
     public init(userDefaults: UserDefaults) {
-        self.session = MockURLSession()
-
         let selfBundle = Bundle(for: type(of: self))
         guard let resourceURL = selfBundle.resourceURL?.appendingPathComponent("TBAKitTesting.bundle"),
             let bundle = Bundle(url: resourceURL) else {
@@ -17,7 +15,12 @@ public class MockTBAKit: TBAKit {
         }
         self.bundle = bundle
 
-        super.init(apiKey: "abcd123", urlSession: session, userDefaults: userDefaults)
+        let session = MockURLSession()
+        super.init(apiKey: "abcd123", sessionProvider: {
+            return session
+        }, userDefaults: userDefaults)
+
+        self.session = session
     }
 
     public func lastModified(_ task: URLSessionDataTask) -> String? {

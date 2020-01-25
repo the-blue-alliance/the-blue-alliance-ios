@@ -204,6 +204,7 @@ PODS:
   - TBAKit/Tests (1.0.0-LOCAL):
     - TBAKitTesting
     - TBAOperation
+    - TBATestingMocks
   - TBAKitTesting (1.0.0-LOCAL):
     - TBAKit
     - TBATestingMocks
@@ -365,7 +366,7 @@ SPEC CHECKSUMS:
   Reveal-SDK: 5d7e56b8f018c0a88b3a2c10bf68d598bbd3b071
   TBAData: 1fbbff20877356e446e1d2d47d817836583f64b0
   TBADataTesting: 6b3ecfbbb224274aeb85b7f3a1069f3d73bbd1fa
-  TBAKit: dd89e24f8748a3597fd1f4ca2ca71d78f5c06153
+  TBAKit: c7fe7f2d48fed7cf5ef41080333a4b5a5475ba8a
   TBAKitTesting: 600746936dc27a9186499dfba8d7112d7393b2d3
   TBAOperation: 4fc7e208e6c48d02d98f3fa4f34eb291a9ae68e8
   TBAOperationTesting: f6be36759c419928770d7aaa9ae1c61b0a312ca1
