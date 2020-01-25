@@ -66,10 +66,13 @@ platform :ios do
     if is_ci?
       match(
         git_url: "https://#{ENV["GITHUB_TOKEN"]}@github.com/ZachOrr/tba-ios-certificates.git",
-        keychain_name: "fastlane_tmp_keychain"
+        keychain_name: "fastlane_tmp_keychain",
+        app_identifier: ["com.the-blue-alliance.tba", "com.the-blue-alliance.tba.spotlight-index"]
       )
     else
-      match
+      match(
+        app_identifier: ["com.the-blue-alliance.tba", "com.the-blue-alliance.tba.spotlight-index"]
+      )
     end
   end
 
