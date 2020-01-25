@@ -81,7 +81,6 @@
 		9288BD1423CED19200157F74 /* MatchBreakdownConfigurator2018.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */; };
 		9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */; };
 		928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */; };
-		928AAC5C23C832BE001E6C11 /* ScrollReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */; };
 		928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928DE031222AF10A00C6234A /* UIImage+TBA.swift */; };
 		928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
@@ -318,7 +317,6 @@
 		9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2018.swift; sourceTree = "<group>"; };
 		9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2019.swift; sourceTree = "<group>"; };
 		928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContainerViewController.swift; sourceTree = "<group>"; };
-		928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollReporter.swift; sourceTree = "<group>"; };
 		928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		928DE031222AF10A00C6234A /* UIImage+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBA.swift"; sourceTree = "<group>"; };
 		928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchQueryOptionsViewController.swift; sourceTree = "<group>"; };
@@ -1102,7 +1100,6 @@
 		92EA0CEF1E2C296300C12A4C /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				928AAC5B23C832BE001E6C11 /* ScrollReporter.swift */,
 				929F57252092BA1C00E5313A /* Persistable.swift */,
 				929F57292092BAFD00E5313A /* Refreshable.swift */,
 				929F572B2092BB1C00E5313A /* Alertable.swift */,
@@ -1688,7 +1685,6 @@
 				92FF110721A61AF6003BC5C4 /* EventRankingsViewController.swift in Sources */,
 				92B3873E21CAF6740041A049 /* IconTableViewCell.swift in Sources */,
 				92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */,
-				928AAC5C23C832BE001E6C11 /* ScrollReporter.swift in Sources */,
 				9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */,

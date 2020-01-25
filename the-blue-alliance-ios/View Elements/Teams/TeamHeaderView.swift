@@ -9,7 +9,7 @@ class TeamHeaderView: UIView {
         }
     }
 
-    lazy var rootStackView: UIStackView = {
+    private lazy var rootStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [avatarImageView, teamInfoStackView, yearStackView])
         stackView.axis = .horizontal
         stackView.spacing = 8
