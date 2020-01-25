@@ -238,7 +238,7 @@ extension TeamInfoViewController: Refreshable {
                     if let team = team {
                         Team.insert(team, in: context)
                     } else if !notModified {
-                        // TODO: Delete team, move back up our hiearchy
+                        // TODO: Delete team, move back up our hierarchy
                     }
                 default:
                     break

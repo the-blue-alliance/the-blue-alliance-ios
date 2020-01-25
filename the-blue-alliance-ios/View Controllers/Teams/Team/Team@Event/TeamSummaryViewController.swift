@@ -511,7 +511,7 @@ extension TeamSummaryViewController: Refreshable {
                         self.markTBARefreshSuccessful(self.tbaKit, operation: teamStatusOperation)
                     }, errorRecorder: Crashlytics.sharedInstance())
                 } else if !notModified {
-                    // TODO: Delete status, move back up our hiearchy
+                    // TODO: Delete status, move back up our hierarchy
                 }
             default:
                 break

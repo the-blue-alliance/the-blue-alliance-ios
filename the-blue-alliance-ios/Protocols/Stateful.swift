@@ -10,12 +10,12 @@ protocol Stateful: AnyObject {
     var noDataText: String? { get }
 
     /**
-     Add the no data view to the view hiearchy. This method should not be called directly - you probably want showNoDataView.
+     Add the no data view to the view hierarchy. This method should not be called directly - you probably want showNoDataView.
      */
     func addNoDataView(_ noDataView: UIView)
 
     /**
-     Remove the no data view from the view hiearchy. This method should not be called directly - you probably want removeNoDataView.
+     Remove the no data view from the view hierarchy. This method should not be called directly - you probably want removeNoDataView.
      */
     func removeNoDataView(_ noDataView: UIView)
 }
@@ -23,7 +23,7 @@ protocol Stateful: AnyObject {
 extension Stateful {
 
     /**
-     Remove the no data view from the view hiearchy.
+     Remove the no data view from the view hierarchy.
      */
     func removeNoDataView() {
         removeNoDataView(noDataViewController.view)
@@ -34,7 +34,7 @@ extension Stateful {
 extension Stateful where Self: Refreshable {
 
     /**
-     Show the no data view in the view hiearchy.
+     Show the no data view in the view hierarchy.
      */
     func showNoDataView() {
         if isRefreshing {
@@ -45,7 +45,7 @@ extension Stateful where Self: Refreshable {
 
         let noDataView = noDataViewController.view as UIView
 
-        // If the no data view is already in our view hiearchy, don't animate in
+        // If the no data view is already in our view hierarchy, don't animate in
         if noDataView.superview != nil {
             return
         }
