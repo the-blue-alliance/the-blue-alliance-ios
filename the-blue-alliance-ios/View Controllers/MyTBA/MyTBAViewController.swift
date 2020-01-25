@@ -17,6 +17,7 @@ class MyTBAViewController: ContainerViewController {
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let remoteConfigService: RemoteConfigService
+    private let searchService: SearchService
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -43,11 +44,12 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.remoteConfigService = remoteConfigService
+        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -179,19 +181,19 @@ class MyTBAViewController: ContainerViewController {
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func teamSelected(_ team: Team) {
-        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func matchSelected(_ match: Match) {
-        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }

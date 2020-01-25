@@ -71,7 +71,7 @@ extension Favorite {
 
 extension Favorite {
 
-    fileprivate static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
+    static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
         return NSPredicate(format: "%K == %@ && %K == %ld",
                            #keyPath(Favorite.modelKeyRaw), modelKey,
                            #keyPath(Favorite.modelTypeRaw), modelType.rawValue)

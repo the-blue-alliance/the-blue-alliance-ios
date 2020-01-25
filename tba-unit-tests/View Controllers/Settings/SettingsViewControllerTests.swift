@@ -11,6 +11,7 @@ class SettingsViewControllerTests: TBATestCase {
         settingsViewController = SettingsViewController(fcmTokenProvider: fcmTokenProvider,
                                                         myTBA: myTBA,
                                                         pushService: pushService,
+                                                        searchService: searchService,
                                                         urlOpener: urlOpener,
                                                         persistentContainer: persistentContainer,
                                                         tbaKit: tbaKit,

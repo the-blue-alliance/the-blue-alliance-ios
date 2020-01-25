@@ -185,13 +185,21 @@ PODS:
   - Protobuf (3.11.2)
   - PureLayout (3.1.5)
   - Reveal-SDK (24)
+  - Search (1.0.0-LOCAL):
+    - TBAProtocols
+  - Search/Tests (1.0.0-LOCAL):
+    - TBAData
+    - TBADataTesting
+    - TBAProtocols
   - TBAData (1.0.0-LOCAL):
     - MyTBAKit
+    - Search
     - TBAKit
     - TBAProtocols
     - TBAUtils
   - TBAData/Tests (1.0.0-LOCAL):
     - MyTBAKit
+    - Search
     - TBADataTesting
     - TBAKit
     - TBAProtocols
@@ -239,6 +247,8 @@ DEPENDENCIES:
   - PINRemoteImage (= 3.0.0-beta.14)
   - PureLayout
   - Reveal-SDK
+  - Search (from `Frameworks/Search`)
+  - Search/Tests (from `Frameworks/Search`)
   - TBAData (from `Frameworks/TBAData`)
   - TBAData/Tests (from `Frameworks/TBAData`)
   - TBADataTesting (from `Frameworks/TBAData`)
@@ -302,6 +312,8 @@ EXTERNAL SOURCES:
     :path: Frameworks/MyTBAKit
   MyTBAKitTesting:
     :path: Frameworks/MyTBAKit
+  Search:
+    :path: Frameworks/Search
   TBAData:
     :path: Frameworks/TBAData
   TBADataTesting:
@@ -364,7 +376,8 @@ SPEC CHECKSUMS:
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   PureLayout: 9b4ad47b2f0388c84ff534af23d96e720c1b875a
   Reveal-SDK: 5d7e56b8f018c0a88b3a2c10bf68d598bbd3b071
-  TBAData: 1fbbff20877356e446e1d2d47d817836583f64b0
+  Search: fe128ff4f6006a6e97b87347949b90933a6a7d4d
+  TBAData: dde68a37f85de7aaff12475b4939d02c4a42e01b
   TBADataTesting: 6b3ecfbbb224274aeb85b7f3a1069f3d73bbd1fa
   TBAKit: c7fe7f2d48fed7cf5ef41080333a4b5a5475ba8a
   TBAKitTesting: 600746936dc27a9186499dfba8d7112d7393b2d3
@@ -376,6 +389,6 @@ SPEC CHECKSUMS:
   XCDYouTubeKit: 79baadb0560673a67c771eba45f83e353fd12c1f
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 4680a91d82fdc2bf14e5d84da74e5597324c0b1c
+PODFILE CHECKSUM: 851dacf8e2cacc01bccd4ff090e7514a8bae6daf
 
 COCOAPODS: 1.8.4

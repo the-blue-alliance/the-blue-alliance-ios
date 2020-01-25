@@ -20,6 +20,7 @@ class DistrictViewControllerTests: TBATestCase {
         districtViewController = DistrictViewController(district: district,
                                                         myTBA: myTBA,
                                                         remoteConfigService: remoteConfigService,
+                                                        searchService: searchService,
                                                         statusService: statusService,
                                                         urlOpener: urlOpener,
                                                         persistentContainer: persistentContainer,

@@ -7,7 +7,7 @@ import Foundation
 /**
  Service to periodically fetch from the /status endpoint
  */
-class StatusService: NSObject {
+public class StatusService: NSObject {
 
     var retryService: RetryService
 

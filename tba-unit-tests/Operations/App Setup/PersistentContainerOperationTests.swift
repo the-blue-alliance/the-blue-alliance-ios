@@ -1,5 +1,6 @@
 import XCTest
 import CoreData
+import Search
 @testable import The_Blue_Alliance
 
 class PersistentContainerOperationTests: XCTestCase {
@@ -11,7 +12,7 @@ class PersistentContainerOperationTests: XCTestCase {
         super.setUp()
 
         persistentContainer = PrivateMockPersistentContainer(name: "Test")
-        persistentContainerOperation = MockPersistentContainerOperation(persistentContainer: persistentContainer)
+        persistentContainerOperation = MockPersistentContainerOperation(indexDelegate: TBACoreDataCoreSpotlightDelegate(), persistentContainer: persistentContainer)
     }
 
     override func tearDown() {

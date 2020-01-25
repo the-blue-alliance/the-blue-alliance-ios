@@ -27,7 +27,7 @@ class MyTBATests: MyTBATestCase {
         let deviceName = "My Device"
         let fcmToken = "abc"
 
-        var mfcm = MockFCMTokenProvider(fcmToken: fcmToken)
+        let mfcm = MockFCMTokenProvider(fcmToken: fcmToken)
         let zz = MyTBA(uuid: uuid, deviceName: deviceName, fcmTokenProvider: mfcm)
         XCTAssertEqual(zz.uuid, uuid)
         XCTAssertEqual(zz.deviceName, deviceName)

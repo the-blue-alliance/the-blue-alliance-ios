@@ -16,7 +16,7 @@ class MatchViewControllerTests: TBATestCase {
 
         let match = insertMatch()
 
-        matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        matchViewController = MatchViewController(match: match, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     override func tearDown() {
@@ -33,7 +33,7 @@ class MatchViewControllerTests: TBATestCase {
     func test_title_event() {
         let event = insertDistrictEvent()
         match.eventRaw = event
-        let vc = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let vc = MatchViewController(match: match, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         XCTAssertEqual(vc.navigationTitle, "Quals 1")
         XCTAssertEqual(vc.navigationSubtitle, "@ 2018 Kettering University #1 District")
@@ -55,7 +55,7 @@ class MatchViewControllerTests: TBATestCase {
 
     func test_doesNotShowBreakdown() {
         let match = insertMatch(eventKey: "2014miket_qm1")
-        let vc = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let vc = MatchViewController(match: match, searchService: searchService, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         XCTAssertFalse(vc.children.contains(where: { (viewController) -> Bool in
             return viewController is MatchBreakdownViewController
         }))

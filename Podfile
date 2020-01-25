@@ -27,6 +27,7 @@ target 'The Blue Alliance' do
 
   # Local Deps
   pod 'MyTBAKit', :path => 'Frameworks/MyTBAKit', :testspecs => ['Tests']
+  pod 'Search', :path => 'Frameworks/Search', :testspecs => ['Tests']
   pod 'TBAData', :path => 'Frameworks/TBAData', :testspecs => ['Tests']
   pod 'TBAKit', :path => 'Frameworks/TBAKit', :testspecs => ['Tests']
   pod 'TBAOperation', :path => 'Frameworks/TBAOperation', :testspecs => ['Tests']
@@ -52,6 +53,13 @@ target 'The Blue Alliance' do
     pod 'TBATestingMocks', :path => 'Frameworks/TBATestingMocks'
     pod 'TBAOperationTesting', :path => 'Frameworks/TBAOperation'
   end
+end
+
+target 'TBA Spotlight Index Extension' do
+  use_frameworks!
+
+  pod 'Search', :path => 'Frameworks/Search'
+  pod 'TBAData', :path => 'Frameworks/TBAData'
 end
 
 post_install do | installer |

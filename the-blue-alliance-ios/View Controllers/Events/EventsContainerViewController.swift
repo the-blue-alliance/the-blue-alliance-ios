@@ -9,23 +9,27 @@ import UIKit
 
 class EventsContainerViewController: ContainerViewController {
 
-    private let myTBA: MyTBA
-    private let pasteboard: UIPasteboard?
-    private let photoLibrary: PHPhotoLibrary?
-    private let remoteConfigService: RemoteConfigService
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
+    private(set) var myTBA: MyTBA
+    private(set) var pasteboard: UIPasteboard?
+    private(set) var photoLibrary: PHPhotoLibrary?
+    private(set) var remoteConfigService: RemoteConfigService
+    private(set) var searchService: SearchService
+    private(set) var statusService: StatusService
+    private(set) var urlOpener: URLOpener
 
     private(set) var year: Int
     private(set) var eventsViewController: WeekEventsViewController
 
+    var searchController: UISearchController!
+
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.remoteConfigService = remoteConfigService
+        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -52,6 +56,12 @@ class EventsContainerViewController: ContainerViewController {
     }
 
     // MARK: - View Methods
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupSearchController()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -106,13 +116,4 @@ extension EventsContainerViewController: WeekEventsDelegate {
 
 }
 
-extension EventsContainerViewController: EventsViewControllerDelegate {
-
-    func eventSelected(_ event: Event) {
-        // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let nav = UINavigationController(rootViewController: eventViewController)
-        navigationController?.showDetailViewController(nav, sender: nil)
-    }
-
-}
+extension EventsContainerViewController: EventsViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}

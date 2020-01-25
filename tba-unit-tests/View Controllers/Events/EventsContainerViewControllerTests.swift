@@ -11,6 +11,7 @@ class EventsContainerViewControllerTests: TBATestCase {
 
         eventsContainerViewController = EventsContainerViewController(myTBA: myTBA,
                                                                       remoteConfigService: remoteConfigService,
+                                                                      searchService: searchService,
                                                                       statusService: statusService,
                                                                       urlOpener: urlOpener,
                                                                       persistentContainer: persistentContainer,

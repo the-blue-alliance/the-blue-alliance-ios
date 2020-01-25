@@ -12,6 +12,7 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
     private(set) var team: Team
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
+    private let searchService: SearchService
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -30,6 +31,8 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
+
+    private var activity: NSUserActivity?
 
     override var subscribableModel: MyTBASubscribable {
         return team
@@ -57,10 +60,11 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
+        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -101,6 +105,8 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
         setupObservers()
+
+        activity = searchService.searchableUserActivity(team)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -109,10 +115,22 @@ class TeamViewController: ScrollableHeaderContainerViewController, Observable {
         Analytics.logEvent("team", parameters: ["team": team.key])
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        activity?.becomeCurrent()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         operationQueue.cancelAllOperations()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        activity?.resignCurrent()
     }
 
     // MARK: - Private
@@ -209,7 +227,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, remoteConfigService: remoteConfigService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, remoteConfigService: remoteConfigService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

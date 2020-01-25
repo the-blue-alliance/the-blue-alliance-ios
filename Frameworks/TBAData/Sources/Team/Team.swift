@@ -1,6 +1,8 @@
 import CoreData
+import CoreSpotlight
 import Foundation
 import MyTBAKit
+import Search
 import TBAKit
 import TBAProtocols
 
@@ -308,30 +310,6 @@ extension Team: Managed {
     }
 
     /**
-     Insert Teams with values from TBAKit Team models in to the managed object context.
-
-     This method manages deleting orphaned Teams.
-
-     - Parameter teams: The TBAKit Team representations to set values from.
-
-     - Parameter context: The NSManagedContext to insert the Event in to.
-     */
-    public static func insert(_ teams: [TBATeam], in context: NSManagedObjectContext) {
-        // Fetch all of the previous Teams
-        let oldTeams = Team.fetch(in: context)
-
-        // Insert new Teams for this page
-        let teams = teams.map {
-            return Team.insert($0, in: context)
-        }
-
-        // Delete orphaned Teams for this year
-        Set(oldTeams).subtracting(Set(teams)).forEach({
-            context.delete($0)
-        })
-    }
-
-    /**
      Insert Teams for a page with values from TBAKit Team models in to the managed object context.
 
      This method manages deleting orphaned Teams for a page.
@@ -602,3 +580,84 @@ extension Team: MyTBASubscribable {
 }
 
 extension Team: Locatable, Surfable {}
+
+extension Team: Searchable {
+
+    public var searchAttributes: CSSearchableItemAttributeSet {
+        let attributeSet = CSSearchableItemAttributeSet(itemContentType: Team.entityName)
+
+        // Keys to de-dupe in Search
+        attributeSet.relatedUniqueIdentifier = uniqueIdentifier
+        attributeSet.contentURL = webURL
+
+        attributeSet.relatedUniqueIdentifier = uniqueIdentifier
+        attributeSet.displayName = [String(teamNumber), nickname ?? teamNumberNickname].joined(separator: " | ")
+        // Queryable by 'frcXXXX', 'Team XXXX', or 'XXXX', or nickname
+        attributeSet.alternateNames = [key, teamNumberNickname, String(teamNumber), nickname].compactMap({ $0 })
+        attributeSet.contentDescription = locationString
+
+        // Location-related Team stuff
+        attributeSet.city = city
+        attributeSet.country = country
+        attributeSet.namedLocation = locationName ?? schoolName
+        attributeSet.stateOrProvince = stateProv
+        attributeSet.fullyFormattedAddress = address
+        attributeSet.postalCode = postalCode
+
+        // Custom keys
+        attributeSet.teamNumber = String(teamNumber)
+        attributeSet.nickname = nickname ?? teamNumberNickname
+
+        attributeSet.userCurated = userCurated ? NSNumber(value: 1) : nil
+
+        return attributeSet
+    }
+
+    public var webURL: URL {
+        return URL(string: "https://www.thebluealliance.com/team/\(teamNumber)")!
+    }
+
+}
+
+public extension CSSearchableItemAttributeSet {
+
+    private enum SearchableTeamKeys: String {
+        case teamNumber = "teamNumber"
+        case nickname = "nickname"
+    }
+
+    private var teamNumberKey: CSCustomAttributeKey {
+        return CSCustomAttributeKey(keyName: SearchableTeamKeys.teamNumber.rawValue)!
+    }
+
+    @objc public var teamNumber: String? {
+        get {
+            value(forCustomKey: teamNumberKey) as? String
+        }
+        set {
+            if let newValue = newValue {
+                setValue(NSString(string: newValue), forCustomKey: teamNumberKey)
+            } else {
+                setValue(nil, forCustomKey: teamNumberKey)
+            }
+        }
+    }
+
+    private var nicknameKey: CSCustomAttributeKey {
+        return CSCustomAttributeKey(keyName: SearchableTeamKeys.nickname.rawValue)!
+    }
+
+    @objc public var nickname: String? {
+        get {
+            value(forCustomKey: nicknameKey) as? String
+        }
+        set {
+            if let newValue = newValue {
+                setValue(NSString(string: newValue), forCustomKey: nicknameKey)
+            } else {
+                setValue(nil, forCustomKey: nicknameKey)
+            }
+        }
+    }
+
+}

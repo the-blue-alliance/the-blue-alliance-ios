@@ -1,4 +1,5 @@
 import CoreData
+import CoreSpotlight
 import Crashlytics
 import Fabric
 import Firebase
@@ -7,6 +8,7 @@ import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
 import Photos
+import Search
 import TBAData
 import TBAKit
 import TBAUtils
@@ -30,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                  pasteboard: pasteboard,
                                                                  photoLibrary: photoLibrary,
                                                                  remoteConfigService: remoteConfigService,
+                                                                 searchService: searchService,
                                                                  statusService: statusService,
                                                                  urlOpener: urlOpener,
                                                                  persistentContainer: persistentContainer,
@@ -39,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                pasteboard: pasteboard,
                                                                photoLibrary: photoLibrary,
                                                                remoteConfigService: remoteConfigService,
+                                                               searchService: searchService,
                                                                statusService: statusService,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
@@ -46,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                userDefaults: userDefaults)
         let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
                                                                        remoteConfigService: remoteConfigService,
+                                                                       searchService: searchService,
                                                                        statusService: statusService,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
@@ -54,12 +59,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settingsViewController = SettingsViewController(fcmTokenProvider: messaging,
                                                             myTBA: myTBA,
                                                             pushService: pushService,
+                                                            searchService: searchService,
                                                             urlOpener: urlOpener,
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
         let myTBAViewController = MyTBAViewController(myTBA: myTBA,
                                                       remoteConfigService: remoteConfigService,
+                                                      searchService: searchService,
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
@@ -91,7 +98,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     // MARK: - Services
-
+    lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
+        let description = persistentContainer.persistentStoreDescriptions.first!
+        return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
+                                                model: persistentContainer.managedObjectModel)
+    }()
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
         return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
@@ -115,6 +126,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var remoteConfigService: RemoteConfigService = {
         return RemoteConfigService(remoteConfig: remoteConfig,
                                    retryService: RetryService())
+    }()
+    lazy var searchService: SearchService = {
+        return SearchService(errorRecorder: Crashlytics.sharedInstance(),
+                             indexDelegate: indexDelegate,
+                             persistentContainer: persistentContainer,
+                             searchIndex: CSSearchableIndex.default(),
+                             statusService: statusService,
+                             tbaKit: tbaKit,
+                             userDefaults: userDefaults)
     }()
     lazy var statusService: StatusService = {
         return StatusService(persistentContainer: persistentContainer,
@@ -174,7 +194,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupGoogleAuthentication()
 
         // Our app setup operation will load our persistent stores, propogate persistance container
-        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let appSetupOperation = AppSetupOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
@@ -183,6 +203,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     AppDelegate.showFatalError(error, in: window)
                 }
             } else {
+                self.searchService.refresh()
+
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
                     self.remoteConfigService.registerRetryable(initiallyRetry: true)
@@ -241,6 +263,72 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         GIDSignIn.sharedInstance().handle(url)
+    }
+
+    // MARK: Search Delegate Methods
+
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if userActivity.activityType == CSSearchableItemActionType {
+            guard let identifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String, let uri = URL(string: identifier) else {
+                return false
+            }
+            guard let objectID = persistentContainer.persistentStoreCoordinator.managedObjectID(forURIRepresentation: uri) else {
+                return false
+            }
+
+            // Dismiss existing modal view controller
+            if let presentedViewController = tabBarController.presentedViewController {
+                presentedViewController.dismiss(animated: false)
+            }
+
+            let object = persistentContainer.viewContext.object(with: objectID)
+            // We only get the identifier - so we'll need to figure out if it's a team or an event
+            if let event = object as? Event {
+                tabBarController.selectedIndex = 0 // TODO: Hard coded value - we should fix this
+                guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
+                    return false
+                }
+                navigationController.popToRootViewController(animated: false)
+
+                guard let searchContainerViewController = navigationController.viewControllers.first as? SearchViewControllerDelegate else {
+                    return false
+                }
+                searchContainerViewController.eventSelected(event)
+                return true
+            } else if let team = object as? Team {
+                tabBarController.selectedIndex = 1 // TODO: Hard coded value - we should fix this
+                guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
+                    return false
+                }
+                navigationController.popToRootViewController(animated: false)
+
+                guard let searchContainerViewController = navigationController.viewControllers.first as? SearchViewControllerDelegate else {
+                    return false
+                }
+                searchContainerViewController.teamSelected(team)
+                return true
+            }
+        } else if userActivity.activityType == CSQueryContinuationActionType {
+            // Pop to root of Events tab, show search
+            // Dismiss existing modal view controller
+            if let presentedViewController = tabBarController.presentedViewController {
+                presentedViewController.dismiss(animated: false)
+            }
+            tabBarController.selectedIndex = 0 // TODO: Hard coded value - we should fix this
+            guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
+                return false
+            }
+            navigationController.popToRootViewController(animated: false)
+            guard let searchContainerViewController = navigationController.viewControllers.first as? SearchContainer else {
+                return false
+            }
+            if let searchText = userActivity.userInfo?[CSSearchQueryString] as? String {
+                searchContainerViewController.searchController.searchBar.text = searchText
+            }
+            searchContainerViewController.searchController.isActive = true
+            return true
+        }
+        return false
     }
 
     // MARK: Push Delegate Methods

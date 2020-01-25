@@ -24,6 +24,7 @@ extension NSManagedObjectContext {
         return obj
     }
 
+    @discardableResult
     public func saveOrRollback(errorRecorder: ErrorRecorder) -> Bool {
         do {
             try save()
