@@ -4,12 +4,14 @@ import UIKit
 
 struct TeamHeaderViewModel {
 
+    let teamNumber: Int
     let avatar: UIImage?
     let nickname: String?
     let teamNumberNickname: String
     let year: Int?
 
     init(team: Team, year: Int?) {
+        teamNumber = team.teamNumber
         nickname = team.nickname
         teamNumberNickname = team.teamNumberNickname
         self.year = year ?? nil
