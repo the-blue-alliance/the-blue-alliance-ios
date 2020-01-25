@@ -23,6 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - View Hierarchy
 
+    // Some temp variables we use to setup our view hiearchy
+    // on initial launch from continuing a user activity
+    private var continueSearchText: String?
+    private var continueURI: URL?
+
     // Root VC is a split view controller, with the left side being a tab bar,
     // and the right side being a navigation controller
     lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
@@ -230,6 +235,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         snapshot.layer.opacity = 0;
                     }, completion: { (status) in
                         snapshot.removeFromSuperview()
+
+                        if let searchText = self.continueSearchText {
+                            self.continueSearch(searchText)
+                        } else if let uri = self.continueURI {
+                            self.continueURI(uri)
+                        }
                     })
                 }
             }
@@ -268,64 +279,117 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Search Delegate Methods
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if userActivity.activityType == CSSearchableItemActionType {
+        if userActivity.activityType == TBAActivityTypeEvent || userActivity.activityType == TBAActivityTypeTeam {
+            guard let identifier = userActivity.userInfo?[TBAActivityIdentifier] as? String, let uri = URL(string: identifier) else {
+                return false
+            }
+
+            guard let window = window else {
+                return false
+            }
+
+            // If our VC isn't setup already, save our search query to setup later
+            guard window.rootViewController == self.rootSplitViewController else {
+                continueURI = uri
+                return true
+            }
+            return continueURI(uri)
+        } else if userActivity.activityType == CSSearchableItemActionType {
             guard let identifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String, let uri = URL(string: identifier) else {
                 return false
             }
-            guard let objectID = persistentContainer.persistentStoreCoordinator.managedObjectID(forURIRepresentation: uri) else {
+
+            guard let window = window else {
                 return false
             }
 
-            // Dismiss existing modal view controller
-            if let presentedViewController = tabBarController.presentedViewController {
-                presentedViewController.dismiss(animated: false)
-            }
-
-            let object = persistentContainer.viewContext.object(with: objectID)
-            // We only get the identifier - so we'll need to figure out if it's a team or an event
-            if let event = object as? Event {
-                tabBarController.selectedIndex = 0 // TODO: Hard coded value - we should fix this
-                guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
-                    return false
-                }
-                navigationController.popToRootViewController(animated: false)
-
-                guard let searchContainerViewController = navigationController.viewControllers.first as? SearchViewControllerDelegate else {
-                    return false
-                }
-                searchContainerViewController.eventSelected(event)
-                return true
-            } else if let team = object as? Team {
-                tabBarController.selectedIndex = 1 // TODO: Hard coded value - we should fix this
-                guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
-                    return false
-                }
-                navigationController.popToRootViewController(animated: false)
-
-                guard let searchContainerViewController = navigationController.viewControllers.first as? SearchViewControllerDelegate else {
-                    return false
-                }
-                searchContainerViewController.teamSelected(team)
+            // If our VC isn't setup already, save our search query to setup later
+            guard window.rootViewController == self.rootSplitViewController else {
+                continueURI = uri
                 return true
             }
+            return continueURI(uri)
         } else if userActivity.activityType == CSQueryContinuationActionType {
-            // Pop to root of Events tab, show search
-            // Dismiss existing modal view controller
-            if let presentedViewController = tabBarController.presentedViewController {
-                presentedViewController.dismiss(animated: false)
+            guard let searchText = userActivity.userInfo?[CSSearchQueryString] as? String else {
+                return false
             }
+
+            guard let window = window else {
+                return false
+            }
+
+            // If our VC isn't setup already, save our search query to setup later
+            guard window.rootViewController == self.rootSplitViewController else {
+                continueSearchText = searchText
+                return true
+            }
+            return continueSearch(searchText)
+        }
+        return false
+    }
+
+    // MARK: Private Continue Methods
+
+    @discardableResult
+    private func continueSearch(_ searchText: String) -> Bool {
+        // Pop to root of Events tab, show search
+        // Dismiss existing modal view controller
+        if let presentedViewController = tabBarController.presentedViewController {
+            presentedViewController.dismiss(animated: false)
+        }
+
+        tabBarController.selectedIndex = 0 // TODO: Hard coded value - we should fix this
+
+        guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
+            return false
+        }
+        navigationController.popToRootViewController(animated: false)
+
+        guard let searchContainerViewController = navigationController.viewControllers.first as? SearchContainer else {
+            return false
+        }
+        searchContainerViewController.searchController.searchBar.text = searchText
+        searchContainerViewController.searchController.isActive = true
+
+        return true
+    }
+
+    @discardableResult
+    private func continueURI(_ uri: URL) -> Bool {
+        guard let objectID = persistentContainer.persistentStoreCoordinator.managedObjectID(forURIRepresentation: uri) else {
+            return false
+        }
+
+        // Dismiss existing modal view controller
+        if let presentedViewController = tabBarController.presentedViewController {
+            presentedViewController.dismiss(animated: false)
+        }
+
+        let object = persistentContainer.viewContext.object(with: objectID)
+        // We only get the identifier - so we'll need to figure out if it's a team or an event
+        if let event = object as? Event {
             tabBarController.selectedIndex = 0 // TODO: Hard coded value - we should fix this
             guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
                 return false
             }
             navigationController.popToRootViewController(animated: false)
-            guard let searchContainerViewController = navigationController.viewControllers.first as? SearchContainer else {
+
+            guard let searchContainerViewController = navigationController.viewControllers.first as? SearchViewControllerDelegate else {
                 return false
             }
-            if let searchText = userActivity.userInfo?[CSSearchQueryString] as? String {
-                searchContainerViewController.searchController.searchBar.text = searchText
+            searchContainerViewController.eventSelected(event)
+            return true
+        } else if let team = object as? Team {
+            tabBarController.selectedIndex = 1 // TODO: Hard coded value - we should fix this
+            guard let navigationController = tabBarController.selectedViewController as? UINavigationController else {
+                return false
             }
-            searchContainerViewController.searchController.isActive = true
+            navigationController.popToRootViewController(animated: false)
+
+            guard let searchContainerViewController = navigationController.viewControllers.first as? SearchViewControllerDelegate else {
+                return false
+            }
+            searchContainerViewController.teamSelected(team)
             return true
         }
         return false
