@@ -19,23 +19,26 @@ class HandoffService {
             }
         }
     }
-    private var continueSearchText: String?
-    private var continueURI: URL?
+    private(set) var continueSearchText: String?
+    private(set) var continueURI: URL?
 
     init(persistentContainer: NSPersistentContainer, rootViewController: UITabBarController) {
         self.persistentContainer = persistentContainer
         self.rootViewController = rootViewController
     }
 
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    func application(continue userActivity: NSUserActivity) -> Bool {
         if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
             guard let url = userActivity.webpageURL else {
                 return false
             }
-            guard let type = url.pathComponents.first else {
+            // Remove / from our path components
+            let pathComponents = url.pathComponents.filter { $0 != "/" }
+            guard let type = pathComponents.first else {
                 return false
             }
-            guard let key = url.pathComponents.first(where: { $0 != type }) else { // Get "second" basically
+            // Get "second" basically
+            guard let key = pathComponents.first(where: { $0 != type }) else {
                 return false
             }
             if type == "event" {
@@ -68,20 +71,13 @@ class HandoffService {
             guard let key = userActivity.userInfo?[TBAActivityKey] as? String else {
                 return false
             }
-
-            let object: NSManagedObject? = {
+            let object: NSManagedObject = {
                 if userActivity.activityType == TBAActivityTypeEvent {
                     return Event.insert(key, in: persistentContainer.viewContext)
-                } else if userActivity.activityType == TBAActivityTypeTeam {
-                    return Team.insert(key, in: persistentContainer.viewContext)
                 }
-                return nil
+                return Team.insert(key, in: persistentContainer.viewContext)
             }()
-
-            guard let uri = object?.objectID.uriRepresentation() else {
-                return false
-            }
-            return continueURI(uri)
+            return continueURI(object.objectID.uriRepresentation())
         } else if userActivity.activityType == CSSearchableItemActionType {
             guard let identifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String, let uri = URL(string: identifier) else {
                 return false

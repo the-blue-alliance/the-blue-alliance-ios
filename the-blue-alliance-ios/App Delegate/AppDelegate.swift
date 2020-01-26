@@ -271,7 +271,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Search Delegate Methods
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return handoffService.application(application, continue: userActivity, restorationHandler: restorationHandler)
+        return handoffService.application(continue: userActivity)
     }
 
     // MARK: Push Delegate Methods
