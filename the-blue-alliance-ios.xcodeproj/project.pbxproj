@@ -26,6 +26,7 @@
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
+		92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92009B5623DD49A60058E567 /* HandoffServiceTests.swift */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */; };
@@ -261,6 +262,7 @@
 		67630A8FA037CC2DB84E244D /* Pods_TBA_Spotlight_Index_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TBA_Spotlight_Index_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
 		92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@3x.png"; sourceTree = "<group>"; };
+		92009B5623DD49A60058E567 /* HandoffServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffServiceTests.swift; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
 		921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBATests.swift"; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 				924459C720CB797E0007570D /* RetryService_Tests.swift */,
 				92564C6F216456800047917F /* Secrets_Tests.swift */,
 				9275956921B442AA00560D81 /* StatusServiceTests.swift */,
+				92009B5623DD49A60058E567 /* HandoffServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1828,6 +1831,7 @@
 				92CC6D36234588810085867D /* Test.xcdatamodeld in Sources */,
 				92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */,
 				921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */,
+				92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */,
 				9280EAED21685F310016621D /* RefreshableTests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				929820CF216968020080C1C8 /* TBATestCase.swift in Sources */,
