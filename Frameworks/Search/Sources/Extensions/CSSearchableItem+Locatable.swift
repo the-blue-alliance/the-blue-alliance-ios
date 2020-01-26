@@ -21,3 +21,15 @@ extension CSSearchableItem: Locatable {
     }
 
 }
+
+extension CSSearchableItemAttributeSet: Locatable {
+
+    public var stateProv: String? {
+        return stateOrProvince
+    }
+
+    public var locationName: String? {
+        return namedLocation
+    }
+
+}
