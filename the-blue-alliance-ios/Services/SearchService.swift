@@ -9,7 +9,7 @@ import TBAUtils
 
 let TBAActivityTypeEvent = "com.the-blue-alliance.tba.Event"
 let TBAActivityTypeTeam = "com.the-blue-alliance.tba.Team"
-let TBAActivityIdentifier = "kTBAActivityIdentifier"
+let TBAActivityKey = "kTBAActivityKey"
 let TBAActivityURL = "kTBAActivityURL"
 
 private struct SearchConstants {
@@ -171,7 +171,7 @@ public class SearchService: NSObject {
     public static func searchableUserActivity(_ searchable: Searchable) -> NSUserActivity {
         let searchAttributes = searchable.searchAttributes
         let userInfo: [String: Any] = [
-            TBAActivityIdentifier: searchable.uniqueIdentifier,
+            TBAActivityKey: searchable.key,
             TBAActivityURL: searchable.webURL,
         ]
 
