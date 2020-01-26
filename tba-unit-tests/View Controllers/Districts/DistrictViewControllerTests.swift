@@ -19,7 +19,6 @@ class DistrictViewControllerTests: TBATestCase {
 
         districtViewController = DistrictViewController(district: district,
                                                         myTBA: myTBA,
-                                                        remoteConfigService: remoteConfigService,
                                                         statusService: statusService,
                                                         urlOpener: urlOpener,
                                                         persistentContainer: persistentContainer,

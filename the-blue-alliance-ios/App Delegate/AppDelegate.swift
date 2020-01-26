@@ -31,7 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let eventsViewController = EventsContainerViewController(myTBA: myTBA,
                                                                  pasteboard: pasteboard,
                                                                  photoLibrary: photoLibrary,
-                                                                 remoteConfigService: remoteConfigService,
                                                                  searchService: searchService,
                                                                  statusService: statusService,
                                                                  urlOpener: urlOpener,
@@ -41,7 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
                                                                pasteboard: pasteboard,
                                                                photoLibrary: photoLibrary,
-                                                               remoteConfigService: remoteConfigService,
                                                                searchService: searchService,
                                                                statusService: statusService,
                                                                urlOpener: urlOpener,
@@ -49,7 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                tbaKit: tbaKit,
                                                                userDefaults: userDefaults)
         let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
-                                                                       remoteConfigService: remoteConfigService,
                                                                        statusService: statusService,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
@@ -64,7 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
         let myTBAViewController = MyTBAViewController(myTBA: myTBA,
-                                                      remoteConfigService: remoteConfigService,
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
