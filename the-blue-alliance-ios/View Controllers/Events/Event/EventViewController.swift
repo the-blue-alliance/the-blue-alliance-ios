@@ -81,7 +81,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
             }
         }
 
-        activity = SearchService.searchableUserActivity(event)
+        activity = event.userActivity
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -8,7 +8,11 @@ public class TBACoreDataCoreSpotlightDelegate: NSCoreDataCoreSpotlightDelegate {
         guard let object = object as? Searchable else {
             return nil
         }
-        return object.searchAttributes
+        let attributes = object.searchAttributes
+        attributes.contentURL = object.webURL
+        attributes.relatedUniqueIdentifier = object.uniqueIdentifier
+        attributes.userCurated = object.userCurated ? NSNumber(value: 1) : nil
+        return attributes
     }
 
 }

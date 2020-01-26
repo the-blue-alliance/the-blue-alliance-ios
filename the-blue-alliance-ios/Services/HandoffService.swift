@@ -1,5 +1,6 @@
 import CoreData
 import CoreSpotlight
+import Search
 import TBAData
 import Foundation
 import UIKit
@@ -28,10 +29,18 @@ class HandoffService {
     }
 
     func application(continue userActivity: NSUserActivity) -> Bool {
-        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
-            guard let url = userActivity.webpageURL else {
+        if userActivity.activityType == NSUserActivityTypeBrowsingWeb || userActivity.activityType == TBAActivityTypeEvent || userActivity.activityType == TBAActivityTypeTeam {
+            let rawURL: URL? = {
+                if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
+                    return userActivity.webpageURL
+                }
+                return userActivity.userInfo?[TBAActivityURL] as? URL
+            }()
+
+            guard let url = rawURL else {
                 return false
             }
+
             // Remove / from our path components
             let pathComponents = url.pathComponents.filter { $0 != "/" }
             guard let type = pathComponents.first else {
@@ -67,17 +76,6 @@ class HandoffService {
                 return continueURI(uri)
             }
             return false
-        } else if userActivity.activityType == TBAActivityTypeEvent || userActivity.activityType == TBAActivityTypeTeam {
-            guard let key = userActivity.userInfo?[TBAActivityKey] as? String else {
-                return false
-            }
-            let object: NSManagedObject = {
-                if userActivity.activityType == TBAActivityTypeEvent {
-                    return Event.insert(key, in: persistentContainer.viewContext)
-                }
-                return Team.insert(key, in: persistentContainer.viewContext)
-            }()
-            return continueURI(object.objectID.uriRepresentation())
         } else if userActivity.activityType == CSSearchableItemActionType {
             guard let identifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String, let uri = URL(string: identifier) else {
                 return false
