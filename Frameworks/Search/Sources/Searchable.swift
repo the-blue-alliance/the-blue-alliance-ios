@@ -9,6 +9,9 @@ public protocol Searchable {
 
     static var entityName: String { get }
 
+    // Key for the model - used to query for local model during Handoff
+    var key: String { get }
+
     /// Unique identifier to use for this object - since we index Core Data models, this will be the objectID URIRepresentation
     var uniqueIdentifier: String { get }
 

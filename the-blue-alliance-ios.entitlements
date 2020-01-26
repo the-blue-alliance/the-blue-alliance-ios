@@ -4,6 +4,11 @@
 <dict>
 	<key>aps-environment</key>
 	<string>production</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>activitycontinuation:thebluealliance.com</string>
+		<string>applinks:thebluealliance.com</string>
+	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.com.the-blue-alliance.tba.tbadata</string>
