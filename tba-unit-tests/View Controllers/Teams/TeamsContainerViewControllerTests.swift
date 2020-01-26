@@ -10,7 +10,6 @@ class TeamsContainerViewControllerTests: TBATestCase {
         super.setUp()
 
         teamsContainerViewController = TeamsContainerViewController(myTBA: myTBA,
-                                                                    remoteConfigService: remoteConfigService,
                                                                     searchService: searchService,
                                                                     statusService: statusService,
                                                                     urlOpener: urlOpener,

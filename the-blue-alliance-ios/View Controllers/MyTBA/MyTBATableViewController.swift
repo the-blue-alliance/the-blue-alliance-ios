@@ -37,7 +37,6 @@ protocol MyTBATableViewControllerDelegate: AnyObject {
  */
 class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
-    let subscriptionsEnabled: Bool
     let myTBA: MyTBA
     weak var delegate: MyTBATableViewControllerDelegate?
 
@@ -46,8 +45,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: Init
 
-    init(subscriptionsEnabled: Bool, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.subscriptionsEnabled = subscriptionsEnabled
+    init(myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -70,13 +68,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.dataSource = tableViewDataSource
 
         // Disable subscriptions
-        if T.self == Favorite.self || subscriptionsEnabled {
-            setupFetchedResultsController()
-        } else {
-            DispatchQueue.main.async {
-                self.disableRefreshing()
-            }
-        }
+        setupFetchedResultsController()
     }
 
     // MARK: Data Source
@@ -385,10 +377,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 extension MyTBATableViewController: Refreshable {
 
     var refreshKey: String? {
-        // Disable subscription refresh
-        if T.self == Subscription.self && !subscriptionsEnabled {
-            return nil
-        }
         return J.arrayKey
     }
 
@@ -412,11 +400,7 @@ extension MyTBATableViewController: Refreshable {
 extension MyTBATableViewController: Stateful {
 
     var noDataText: String? {
-        if T.self == Favorite.self || subscriptionsEnabled {
-            return "No \(J.arrayKey)"
-        } else {
-            return "Subscriptions are not yet supported"
-        }
+        return "No \(J.arrayKey)"
     }
 
 }

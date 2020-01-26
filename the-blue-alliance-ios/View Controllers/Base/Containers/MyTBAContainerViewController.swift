@@ -7,7 +7,6 @@ import UIKit
 class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     let myTBA: MyTBA
-    let remoteConfigService: RemoteConfigService
 
     lazy var favoriteBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(image: UIImage.starIcon, style: .plain, target: self, action: #selector(myTBAPreferencesTapped))
@@ -19,9 +18,8 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     // MARK: - Init
 
-    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
-        self.remoteConfigService = remoteConfigService
 
         super.init(viewControllers: viewControllers, navigationTitle: navigationTitle, navigationSubtitle: navigationSubtitle, segmentedControlTitles: segmentedControlTitles, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 

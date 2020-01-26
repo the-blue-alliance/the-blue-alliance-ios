@@ -10,7 +10,6 @@ class DistrictsContainerViewControllerTests: TBATestCase {
         super.setUp()
 
         districtsContainerViewController = DistrictsContainerViewController(myTBA: myTBA,
-                                                                            remoteConfigService: remoteConfigService,
                                                                             statusService: statusService,
                                                                             urlOpener: urlOpener,
                                                                             persistentContainer: persistentContainer,

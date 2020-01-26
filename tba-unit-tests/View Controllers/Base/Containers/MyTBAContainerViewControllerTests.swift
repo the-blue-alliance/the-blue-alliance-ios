@@ -13,10 +13,10 @@ class MockMyTBAContainerViewController: MyTBAContainerViewController {
 
     var updateFavoriteButtonExpectation: XCTestExpectation?
 
-    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, remoteConfigService: RemoteConfigService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         _subscribableModel = subscribableModel
 
-        super.init(viewControllers: [], myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(viewControllers: [], myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,7 +41,7 @@ class MyTBAContainerViewControllerTests: TBATestCase {
 
         subscribableModel = insertDistrictEvent()
 
-        tbaContainerViewController = MockMyTBAContainerViewController(subscribableModel: subscribableModel, myTBA: myTBA, remoteConfigService: remoteConfigService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        tbaContainerViewController = MockMyTBAContainerViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     override func tearDown() {

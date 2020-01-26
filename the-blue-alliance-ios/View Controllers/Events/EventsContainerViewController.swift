@@ -12,7 +12,6 @@ class EventsContainerViewController: ContainerViewController {
     private(set) var myTBA: MyTBA
     private(set) var pasteboard: UIPasteboard?
     private(set) var photoLibrary: PHPhotoLibrary?
-    private(set) var remoteConfigService: RemoteConfigService
     private(set) var searchService: SearchService
     private(set) var statusService: StatusService
     private(set) var urlOpener: URLOpener
@@ -24,11 +23,10 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfigService: RemoteConfigService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
-        self.remoteConfigService = remoteConfigService
         self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
