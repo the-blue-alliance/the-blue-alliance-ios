@@ -7,11 +7,6 @@ import TBAData
 import TBAKit
 import TBAUtils
 
-let TBAActivityTypeEvent = "com.the-blue-alliance.tba.Event"
-let TBAActivityTypeTeam = "com.the-blue-alliance.tba.Team"
-let TBAActivityKey = "kTBAActivityKey"
-let TBAActivityURL = "kTBAActivityURL"
-
 private struct SearchConstants {
     static let lastRefreshEventsAllKey = "kLastRefreshAllEvents"
     static let lastRefreshTeamsAllKey = "kLastRefreshAllTeams"
@@ -168,55 +163,11 @@ public class SearchService: NSObject {
         return refreshOperation
     }
 
-    public static func searchableUserActivity(_ searchable: Searchable) -> NSUserActivity {
-        let searchAttributes = searchable.searchAttributes
-        let userInfo: [String: Any] = [
-            TBAActivityKey: searchable.key,
-            TBAActivityURL: searchable.webURL,
-        ]
-
-        // When adding new searchable activities, make sure to add the activity type to Info.plist
-        let activity = NSUserActivity(activityType: "com.the-blue-alliance.tba.\(type(of: searchable).entityName)")
-        activity.title = searchAttributes.displayName
-        activity.contentAttributeSet = searchAttributes
-        activity.userInfo = userInfo
-        activity.webpageURL = searchable.webURL
-        activity.requiredUserInfoKeys = Set(userInfo.keys)
-
-        activity.isEligibleForPublicIndexing = true
-        activity.isEligibleForSearch = true
-        activity.isEligibleForHandoff = true
-        activity.isEligibleForPrediction = true
-        activity.persistentIdentifier = searchable.uniqueIdentifier
-
-        return activity
-    }
-
-    // Note: We could pass some Team or Event here
-    public static func relevantShortcut(_ activity: NSUserActivity) -> INRelevantShortcut {
-        let shortcut = INShortcut(userActivity: activity)
-        let relevantShortcut = INRelevantShortcut(shortcut: shortcut)
-
-        if let attribuites = activity.contentAttributeSet {
-            // When viewing an Event, the shortcut is relevant during the Event, or if the user is at the Event location.
-            var relevanceProviders: [INRelevanceProvider] = []
-            if let startDate = attribuites.startDate, let endDate = attribuites.endDate {
-                relevanceProviders.append(INDateRelevanceProvider(start: startDate, end: endDate))
-            }
-            if let lat = attribuites.latitude, let lng = attribuites.longitude {
-                // Show the name of the Event location
-                let identifier = attribuites.namedLocation ?? attribuites.locationString ?? attribuites.displayName ?? "---"
-                relevanceProviders.append(INLocationRelevanceProvider(region: CLCircularRegion(center: CLLocationCoordinate2D(latitude: lat.doubleValue,
-                                                                                                                              longitude: lng.doubleValue),
-                                                                                               radius: 1000,
-                                                                                               identifier: identifier)))
-            }
-            relevantShortcut.relevanceProviders = relevanceProviders
-        }
-        return relevantShortcut
-    }
-
     public func deleteSearchIndex(errorRecorder: ErrorRecorder) {
+        self.userDefaults.removeObject(forKey: SearchConstants.lastRefreshEventsAllKey)
+        self.userDefaults.removeObject(forKey: SearchConstants.lastRefreshTeamsAllKey)
+        self.userDefaults.synchronize()
+
         searchIndex.deleteAllSearchableItems { [unowned self] (error) in
             if let error = error {
                 print(error)

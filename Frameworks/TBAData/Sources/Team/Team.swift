@@ -586,10 +586,6 @@ extension Team: Searchable {
     public var searchAttributes: CSSearchableItemAttributeSet {
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: Team.entityName)
 
-        // Keys to de-dupe in Search
-        attributeSet.relatedUniqueIdentifier = uniqueIdentifier
-        attributeSet.contentURL = webURL
-
         attributeSet.relatedUniqueIdentifier = uniqueIdentifier
         attributeSet.displayName = [String(teamNumber), nickname ?? teamNumberNickname].joined(separator: " | ")
         // Queryable by 'frcXXXX', 'Team XXXX', or 'XXXX', or nickname
@@ -607,8 +603,6 @@ extension Team: Searchable {
         // Custom keys
         attributeSet.teamNumber = String(teamNumber)
         attributeSet.nickname = nickname ?? teamNumberNickname
-
-        attributeSet.userCurated = userCurated ? NSNumber(value: 1) : nil
 
         return attributeSet
     }

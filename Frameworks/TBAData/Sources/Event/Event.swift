@@ -1325,10 +1325,6 @@ extension Event: Searchable {
     public var searchAttributes: CSSearchableItemAttributeSet {
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: Event.entityName)
 
-        // Keys to de-dupe in Search
-        attributeSet.contentURL = webURL
-        attributeSet.relatedUniqueIdentifier = uniqueIdentifier
-
         attributeSet.displayName = safeNameYear
         attributeSet.alternateNames = [key, shortName, name].compactMap({ $0 }) // Queryable by short name or name
         // attributeSet.contentDescription = dateString
@@ -1347,8 +1343,6 @@ extension Event: Searchable {
         attributeSet.stateOrProvince = stateProv
         attributeSet.fullyFormattedAddress = address
         attributeSet.postalCode = postalCode
-
-        attributeSet.userCurated = userCurated ? NSNumber(value: 1) : nil
 
         return attributeSet
     }

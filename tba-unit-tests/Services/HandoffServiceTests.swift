@@ -1,4 +1,5 @@
 import CoreSpotlight
+import Search
 import UIKit
 import XCTest
 @testable import TBAData
@@ -191,7 +192,7 @@ class HandoffServiceTests: TBATestCase {
         XCTAssertNil(handoffService.continueURI)
     }
 
-    func test_handoff_client_noKey() {
+    func test_handoff_client_noURL() {
         let activity = NSUserActivity(activityType: TBAActivityTypeEvent)
         XCTAssertFalse(handoffService.application(continue: activity))
 
@@ -205,9 +206,10 @@ class HandoffServiceTests: TBATestCase {
 
     func test_handoff_client_event_new() {
         let eventKey = "2020miket"
+        let url = URL(string: "https://www.thebluealliance.com/event/\(eventKey)")!
 
         let activity = NSUserActivity(activityType: TBAActivityTypeEvent)
-        activity.userInfo = [TBAActivityKey: eventKey]
+        activity.userInfo = [TBAActivityURL: url]
         XCTAssertTrue(handoffService.application(continue: activity))
 
         let events = Event.fetch(in: persistentContainer.viewContext)
@@ -223,6 +225,8 @@ class HandoffServiceTests: TBATestCase {
 
     func test_handoff_client_event_existing() {
         let eventKey = "2020miket"
+        let url = URL(string: "https://www.thebluealliance.com/event/\(eventKey)")!
+
         let eventName = "Test Event"
         let event = Event.findOrCreate(in: persistentContainer.viewContext, matching: Event.predicate(key: eventKey)) {
             $0.keyRaw = eventKey
@@ -230,7 +234,7 @@ class HandoffServiceTests: TBATestCase {
         }
 
         let activity = NSUserActivity(activityType: TBAActivityTypeEvent)
-        activity.userInfo = [TBAActivityKey: eventKey]
+        activity.userInfo = [TBAActivityURL: url]
         XCTAssertTrue(handoffService.application(continue: activity))
 
         let events = Event.fetch(in: persistentContainer.viewContext)
@@ -246,9 +250,10 @@ class HandoffServiceTests: TBATestCase {
 
     func test_handoff_client_team_new() {
         let teamKey = "frc7332"
+        let url = URL(string: "https://www.thebluealliance.com/team/\(teamKey)")!
 
         let activity = NSUserActivity(activityType: TBAActivityTypeTeam)
-        activity.userInfo = [TBAActivityKey: teamKey]
+        activity.userInfo = [TBAActivityURL: url]
         XCTAssertTrue(handoffService.application(continue: activity))
 
         let teams = Team.fetch(in: persistentContainer.viewContext)
@@ -264,6 +269,8 @@ class HandoffServiceTests: TBATestCase {
 
     func test_handoff_client_team_existing() {
         let teamKey = "frc7332"
+        let url = URL(string: "https://www.thebluealliance.com/team/\(teamKey)")!
+
         let teamName = "The Rawrbotz"
         let team = Team.findOrCreate(in: persistentContainer.viewContext, matching: Team.predicate(key: teamKey)) {
             $0.keyRaw = teamKey
@@ -271,7 +278,7 @@ class HandoffServiceTests: TBATestCase {
         }
 
         let activity = NSUserActivity(activityType: TBAActivityTypeTeam)
-        activity.userInfo = [TBAActivityKey: teamKey]
+        activity.userInfo = [TBAActivityURL: url]
         XCTAssertTrue(handoffService.application(continue: activity))
 
         let teams = Team.fetch(in: persistentContainer.viewContext)

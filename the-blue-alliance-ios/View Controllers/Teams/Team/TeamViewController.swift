@@ -99,7 +99,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
         setupObservers()
 
-        activity = SearchService.searchableUserActivity(team)
+        activity = team.userActivity
     }
 
     override func viewWillAppear(_ animated: Bool) {
