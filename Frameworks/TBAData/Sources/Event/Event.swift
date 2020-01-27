@@ -437,6 +437,20 @@ extension Event {
         return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
     }
 
+    /**
+     If the event is happening within the coming week, based on it's start and end dates.
+     */
+    public var isHappeningThisWeek: Bool {
+        guard let startDate = startDate, let endDate = endDate else {
+            return false
+        }
+        let minusWeek = DateComponents(day: -7)
+        guard let startOfWeek = Calendar.current.date(byAdding: minusWeek, to: startDate) else {
+            return false
+        }
+        return Date().isBetween(date: startOfWeek, andDate: endDate.endOfDay())
+    }
+
     public var month: String? {
         guard let startDate = startDate else {
             return nil
