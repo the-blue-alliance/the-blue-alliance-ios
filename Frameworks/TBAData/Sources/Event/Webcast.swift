@@ -4,6 +4,24 @@ import TBAKit
 
 extension Webcast {
 
+    public var displayName: String {
+        if type == "youtube" {
+            return "YouTube"
+        } else if type == "twitch" {
+            return "Twitch"
+        }
+        return type
+    }
+
+    public var urlString: String? {
+        if type == "twitch" {
+            return "https://twitch.tv/\(channel)"
+        } else if type == "youtube" {
+            return "https://youtube.com/\(channel)"
+        }
+        return nil
+    }
+
     public var channel: String {
         guard let channel = getValue(\Webcast.channelRaw) else {
             fatalError("Save Webcast before accessing channel")

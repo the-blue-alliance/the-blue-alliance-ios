@@ -14,6 +14,7 @@ protocol EventInfoViewControllerDelegate: AnyObject {
 private enum EventInfoSection: Int {
     case title
     case detail
+    case webcast
     case link
 }
 
@@ -23,6 +24,7 @@ private enum EventInfoItem {
     case districtPoints
     case stats
     case awards
+    case webcast
     case website
     case twitter
     case youtube
@@ -99,6 +101,13 @@ class EventInfoViewController: TBATableViewController, Observable {
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                 cell.textLabel?.text = "Awards"
                 return cell
+            case .webcast:
+                let webcast = self.event.webcasts[indexPath.row]
+                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+                cell.textLabel?.text = "Watch on \(webcast.displayName)"
+                cell.detailTextLabel?.text = webcast.channel
+                cell.accessoryType = .disclosureIndicator
+                return cell
             case .website:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                 cell.textLabel?.text = "View event's website"
@@ -136,6 +145,13 @@ class EventInfoViewController: TBATableViewController, Observable {
         }
         snapshot.appendSections([.detail])
         snapshot.appendItems(detailItems, toSection: .detail)
+
+        // Webcasts
+        let webcasts = event.webcasts.compactMap { $0.urlString }.map { _ in EventInfoItem.webcast }
+        if !webcasts.isEmpty, event.isHappeningThisWeek {
+            snapshot.appendSections([.webcast])
+            snapshot.appendItems(webcasts, toSection: .webcast)
+        }
 
         // Links
         var linkItems: [EventInfoItem] = [.twitter, .youtube, .chiefDelphi]
@@ -185,6 +201,9 @@ class EventInfoViewController: TBATableViewController, Observable {
             delegate?.showStats()
         case .awards:
             delegate?.showAwards()
+        case .webcast:
+            let webcast = event.webcasts[indexPath.row]
+            urlString = webcast.urlString
         case .website:
             urlString = event.website
         case .twitter:
