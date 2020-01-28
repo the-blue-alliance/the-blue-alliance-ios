@@ -70,6 +70,7 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
         }
 
         cell.textLabel?.text = delegate?.titleForOption(option)
+        cell.tintColor = UIColor.tabBarTintColor
 
         return cell
     }
