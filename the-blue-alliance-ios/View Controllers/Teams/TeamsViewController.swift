@@ -5,6 +5,10 @@ import TBAData
 import TBAKit
 import UIKit
 
+protocol TeamsRefreshProvider {
+    func refreshTeams(userInitiated: Bool) -> Operation?
+}
+
 protocol TeamsViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
@@ -21,16 +25,20 @@ protocol TeamsViewControllerDataSourceConfiguration {
  */
 class TeamsViewController: TBASearchableTableViewController, Refreshable, Stateful, TeamsViewControllerDataSourceConfiguration {
 
+    private var refreshProvider: TeamsRefreshProvider!
     private let showSearch: Bool
+
     weak var delegate: TeamsViewControllerDelegate?
 
     private var tableViewDataSource: TableViewDataSource<String, Team>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
 
-    init(showSearch: Bool = true, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(refreshProvider: TeamsRefreshProvider? = nil, showSearch: Bool = true, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.showSearch = showSearch
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+
+        self.refreshProvider = refreshProvider ?? self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -80,47 +88,18 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
     }
 
     @objc func refresh() {
-        var finalOperation: Operation!
-
-        var op: TBAKitOperation!
-        op = fetchAllTeams(operationChanged: { [unowned self] (operation, page, teams) in
-            finalOperation.addDependency(operation)
-            self.refreshOperationQueue.addOperations([operation], waitUntilFinished: false)
-
-            let previousOperation = op
-            op = operation
-
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Team.insert(teams, page: page, in: context)
-            }, saved: {
-                self.tbaKit.storeCacheHeaders(previousOperation!)
-            }, errorRecorder: Crashlytics.sharedInstance())
-        }) { (error) in
-            if error == nil {
-                self.markRefreshSuccessful()
-            }
+        guard let refreshOperation = refreshProvider.refreshTeams(userInitiated: true) else {
+            #if DEBUG
+            fatalError("refreshProvider.refreshTeams is not returning a refresh operation")
+            #else
+            return
+            #endif
         }
-        finalOperation = addRefreshOperations([op])
-    }
 
-    func fetchAllTeams(operationChanged: @escaping (TBAKitOperation, Int, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> TBAKitOperation {
-        return fetchAllTeams(operationChanged: operationChanged, page: 0, completion: completion)
-    }
+        let operation = Operation()
+        operation.addDependency(refreshOperation)
 
-    private func fetchAllTeams(operationChanged: @escaping (TBAKitOperation, Int, [TBATeam]) -> Void, page: Int, completion: @escaping (Error?) -> Void) -> TBAKitOperation {
-        return tbaKit.fetchTeams(page: page) { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let teams):
-                if teams.isEmpty {
-                    completion(nil)
-                } else {
-                    operationChanged(self.fetchAllTeams(operationChanged: operationChanged, page: page + 1, completion: completion), page, teams)
-                }
-            }
-        }
+        addRefreshOperations([operation])
     }
 
     // MARK: - Stateful
@@ -174,6 +153,25 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 
     var fetchRequestPredicate: NSPredicate? {
         return nil
+    }
+
+}
+
+extension TBASearchableTableViewController: TeamsRefreshProvider {
+
+    func refreshTeams(userInitiated: Bool) -> Operation? {
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchTeams() { [unowned self] (result, notModified) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if !notModified, let teams = try? result.get() {
+                    Team.insert(teams, in: context)
+                }
+            }, saved: {
+                self.tbaKit.storeCacheHeaders(operation)
+            }, errorRecorder: Crashlytics.sharedInstance())
+        }
+        return operation
     }
 
 }

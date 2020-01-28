@@ -126,7 +126,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                    retryService: RetryService())
     }()
     lazy var searchService: SearchService = {
-        return SearchService(errorRecorder: Crashlytics.sharedInstance(),
+        return SearchService(application: UIApplication.shared,
+                             errorRecorder: Crashlytics.sharedInstance(),
                              indexDelegate: indexDelegate,
                              persistentContainer: persistentContainer,
                              searchIndex: CSSearchableIndex.default(),
