@@ -12,10 +12,11 @@ private struct SearchConstants {
     static let lastRefreshTeamsAllKey = "kLastRefreshAllTeams"
 }
 
-public class SearchService: NSObject {
+public class SearchService: NSObject, TeamsRefreshProvider {
 
-    let batchSize = 100
+    let batchSize = 1000
 
+    private let application: UIApplication
     private let errorRecorder: ErrorRecorder
     private let indexDelegate: TBACoreDataCoreSpotlightDelegate
     private let persistentContainer: NSPersistentContainer
@@ -25,9 +26,13 @@ public class SearchService: NSObject {
     private let userDefaults: UserDefaults
 
     private(set) var refreshOperation: Operation?
+    private var eventsRefreshOperation: Operation?
+    private var teamsRefreshOperation: Operation?
+
     private let operationQueue = OperationQueue()
 
-    public init(errorRecorder: ErrorRecorder, indexDelegate: TBACoreDataCoreSpotlightDelegate, persistentContainer: NSPersistentContainer, searchIndex: CSSearchableIndex, statusService: StatusService, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    public init(application: UIApplication, errorRecorder: ErrorRecorder, indexDelegate: TBACoreDataCoreSpotlightDelegate, persistentContainer: NSPersistentContainer, searchIndex: CSSearchableIndex, statusService: StatusService, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.application = application
         self.errorRecorder = errorRecorder
         self.indexDelegate = indexDelegate
         self.persistentContainer = persistentContainer
@@ -49,13 +54,8 @@ public class SearchService: NSObject {
             return refreshOperation
         }
 
-        let refreshOperation = Operation()
-
-        // Only automatically refresh all Events once - otherwise, fetch only the current season events
-        let lastRefreshAllEvents = userDefaults.value(forKey: SearchConstants.lastRefreshEventsAllKey) as? Date
-
         var eventsOperation: TBAKitOperation!
-        if lastRefreshAllEvents == nil || userInitiated {
+        if shouldRefreshAllEvents || userInitiated {
             eventsOperation = tbaKit.fetchEvents() { [unowned self] (result, notModified) in
                 let managedObjectContext = self.persistentContainer.newBackgroundContext()
                 managedObjectContext.performChangesAndWait({
@@ -102,7 +102,54 @@ public class SearchService: NSObject {
                 }, errorRecorder: self.errorRecorder)
             }
         }
+        eventsOperation.completionBlock = {
+            self.eventsRefreshOperation = nil
+        }
+        self.eventsRefreshOperation = eventsOperation
 
+        let teamsOperation = refreshTeams(userInitiated: userInitiated)
+        teamsOperation?.completionBlock = {
+            self.teamsRefreshOperation = nil
+        }
+        self.teamsRefreshOperation = teamsOperation
+
+        // If our refresh is system-initiated, setup a background task which will be
+        // to ensure all tasks finish before the app is killed in the background
+        var backgroundTaskIdentifier: UIBackgroundTaskIdentifier?
+        if userInitiated {
+            backgroundTaskIdentifier = self.application.beginBackgroundTask {
+                self.operationQueue.cancelAllOperations()
+                if let backgroundTaskIdentifier = backgroundTaskIdentifier {
+                    self.application.endBackgroundTask(backgroundTaskIdentifier)
+                }
+            }
+        }
+
+        let refreshOperation = Operation()
+        refreshOperation.completionBlock = {
+            self.refreshOperation = nil
+            if let backgroundTaskIdentifier = backgroundTaskIdentifier {
+                self.application.endBackgroundTask(backgroundTaskIdentifier)
+            }
+        }
+
+        [eventsOperation, teamsOperation].compactMap({ $0 }).forEach { (op: Operation) in
+            refreshOperation.addDependency(op)
+        }
+
+        operationQueue.addOperations([eventsOperation, teamsOperation, refreshOperation].compactMap({ $0 }), waitUntilFinished: false)
+        self.refreshOperation = refreshOperation
+
+        return refreshOperation
+    }
+
+    public var shouldRefreshAllEvents: Bool {
+        // Only automatically refresh all Events once - otherwise, fetch only the current season events
+        let lastRefreshAllEvents = userDefaults.value(forKey: SearchConstants.lastRefreshEventsAllKey) as? Date
+        return lastRefreshAllEvents == nil
+    }
+
+    public var shouldRefreshTeams: Bool {
         // Only automatically refresh all Teams once-per-day
         let lastRefreshAllTeams = userDefaults.value(forKey: SearchConstants.lastRefreshTeamsAllKey) as? Date
 
@@ -111,8 +158,16 @@ public class SearchService: NSObject {
             diffInDays = days
         }
 
+        return lastRefreshAllTeams == nil || diffInDays >= 1
+    }
+
+    public func refreshTeams(userInitiated: Bool) -> Operation? {
+        if let teamsRefreshOperation = teamsRefreshOperation {
+            return teamsRefreshOperation
+        }
+
         var teamsOperation: TBAKitOperation?
-        if lastRefreshAllTeams == nil || userInitiated || diffInDays >= 1 {
+        if shouldRefreshTeams || userInitiated {
             teamsOperation = tbaKit.fetchTeams() { [unowned self] (result, notModified) in
                 let managedObjectContext = self.persistentContainer.newBackgroundContext()
                 managedObjectContext.performChangesAndWait({
@@ -147,26 +202,11 @@ public class SearchService: NSObject {
                 }, errorRecorder: self.errorRecorder)
             }
         }
-
-        let clearRefreshOperation = BlockOperation {
-            self.refreshOperation = nil
-        }
-
-        [eventsOperation, teamsOperation].compactMap({ $0 }).forEach { (op: Operation) in
-            clearRefreshOperation.addDependency(op)
-            refreshOperation.addDependency(op)
-        }
-
-        operationQueue.addOperations([eventsOperation, teamsOperation, clearRefreshOperation].compactMap({ $0 }), waitUntilFinished: false)
-        self.refreshOperation = refreshOperation
-
-        return refreshOperation
+        return teamsOperation
     }
 
     public func deleteSearchIndex(errorRecorder: ErrorRecorder) {
-        self.userDefaults.removeObject(forKey: SearchConstants.lastRefreshEventsAllKey)
-        self.userDefaults.removeObject(forKey: SearchConstants.lastRefreshTeamsAllKey)
-        self.userDefaults.synchronize()
+        deleteLastRefresh()
 
         searchIndex.deleteAllSearchableItems { [unowned self] (error) in
             if let error = error {
@@ -174,6 +214,14 @@ public class SearchService: NSObject {
                 self.errorRecorder.recordError(error)
             }
         }
+    }
+
+    // MARK: - Private Methods
+
+    private func deleteLastRefresh() {
+        self.userDefaults.removeObject(forKey: SearchConstants.lastRefreshEventsAllKey)
+        self.userDefaults.removeObject(forKey: SearchConstants.lastRefreshTeamsAllKey)
+        self.userDefaults.synchronize()
     }
 
 }

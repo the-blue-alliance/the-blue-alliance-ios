@@ -99,8 +99,10 @@ class SearchViewController: TBATableViewController {
         super.viewWillAppear(animated)
 
         // If our search service is refreshing, show our refresh indicator
-        if let operation = searchService.refreshOperation {
-            if !refreshOperationQueue.operations.contains(operation) {
+        if let refreshOperation = searchService.refreshOperation {
+            if refreshOperationQueue.operations.isEmpty {
+                let operation = Operation()
+                operation.addDependency(refreshOperation)
                 addRefreshOperations([operation])
             } else {
                 // Manually update our refresh control
@@ -361,10 +363,12 @@ extension SearchViewController: Refreshable {
     }
 
     @objc func refresh() {
-        let operation = searchService.refresh(userInitiated: true)
-        if !refreshOperationQueue.operations.contains(operation) {
-            addRefreshOperations([operation])
-        }
+        let refreshOperation = searchService.refresh(userInitiated: true)
+
+        let operation = Operation()
+        operation.addDependency(refreshOperation)
+
+        addRefreshOperations([operation])
     }
 
 }

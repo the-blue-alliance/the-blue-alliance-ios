@@ -168,7 +168,7 @@ extension Refreshable {
      WARNING: This method should not be called directly - exposed for testing, used internally
      */
     func updateRefresh() {
-        DispatchQueue.main.async {
+        OperationQueue.main.addOperation {
             if self.isRefreshing {
                 self.hideNoData()
 

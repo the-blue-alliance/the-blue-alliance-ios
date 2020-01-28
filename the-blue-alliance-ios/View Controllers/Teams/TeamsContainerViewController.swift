@@ -29,7 +29,7 @@ class TeamsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamsViewController = TeamsViewController(showSearch: false, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        teamsViewController = TeamsViewController(refreshProvider: searchService, showSearch: false, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [teamsViewController],
                    persistentContainer: persistentContainer,

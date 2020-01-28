@@ -36,7 +36,7 @@ class TBATestCase: TBADataTestCase {
         pushService = PushService(myTBA: myTBA, retryService: RetryService())
         indexDelegate = TBACoreDataCoreSpotlightDelegate()
         statusService = StatusService(bundle: StatusBundle.bundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
-        searchService = SearchService(errorRecorder: errorRecorder, indexDelegate: indexDelegate, persistentContainer: persistentContainer, searchIndex: CSSearchableIndex.default(), statusService: statusService, tbaKit: tbaKit, userDefaults: userDefaults)
+        searchService = SearchService(application: UIApplication.shared, errorRecorder: errorRecorder, indexDelegate: indexDelegate, persistentContainer: persistentContainer, searchIndex: CSSearchableIndex.default(), statusService: statusService, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     override func tearDown() {
