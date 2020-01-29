@@ -1,3 +1,16 @@
-Hey y’all - this update fixes a bug that prevented users from signing out of myTBA.
+Hey y’all - say "hey y'all" to The Blue Alliance for iOS v2!
+
+NEW: Dark Mode - When system dark mode is enabled The Blue Alliance will change to a new dark mode theme that's easy on the eyes. Or, as we like to call it, #AllBlackEverything mode.
+NEW: Search - Quickly navigate to an Event or Team with full, local search. No more digging around in the year selector trying to remember what week the 2016 Arizona North Regional was (Week 2 - of course).
+NEW: myTBA Notifications - Stay up to date with your favorite teams with push notifications for match results and more. Sign in to myTBA and look for the star in the Team or Event views.
+NEW: INFINITE RECHARGE Icon - Goodbye, DESTINATION: DEEP SPACE, hello INFINITE RECHARGE! Commemorate this year's game with a new INFINITE RECHARGE themed icon, available in the Settings tab.
+NEW: Team Avatars - The new Team view puts Team avatars on full display! See previous years avatars for teams by switching years in the Team view.
+NEW: Match List Sort + Filter - Sort the match list in reverse order to show playoff matches at the top, or filter a match list to only show matches with Teams in your myTBA favorites!
+NEW: Redesigned Team@Event View - The Team@Event view has been redesigned to surface details like team name, city, and team media, and has been reorganized to quickly convey all the high-level information of how a team is doing at an event.
+NEW: District Rankings Search - Search for a team by team number or team name in the District Rankings view to quickly find where your team is ranked.
+NEW: Event Webcasts - See a list of webcasts for an Event right in the Event info view. Tap a webcast to start watching in a web browser.
+FIXED: "Bug Fixes and Performance Improvements" - This update fixes all of the biggest crashes from TBA for iOS v1 - far too many to list individually.
+
+Stay tuned for more great updates over the season!
 
 The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
