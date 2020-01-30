@@ -6,6 +6,7 @@ import TBAKit
 import UIKit
 
 protocol TeamsRefreshProvider {
+    var operationQueue: OperationQueue { get }
     func refreshTeams(userInitiated: Bool) -> Operation?
 }
 
@@ -96,10 +97,17 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
             #endif
         }
 
-        let operation = Operation()
+        let operation = BlockOperation {
+            self.markRefreshSuccessful()
+        }
         operation.addDependency(refreshOperation)
 
-        addRefreshOperations([operation])
+        var operations: [Operation] = [operation]
+        if !refreshProvider.operationQueue.operations.contains(refreshOperation) {
+            operations.append(refreshOperation)
+        }
+
+        addRefreshOperations(operations)
     }
 
     // MARK: - Stateful
@@ -158,6 +166,10 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 }
 
 extension TBASearchableTableViewController: TeamsRefreshProvider {
+
+    var operationQueue: OperationQueue {
+        return refreshOperationQueue
+    }
 
     func refreshTeams(userInitiated: Bool) -> Operation? {
         var operation: TBAKitOperation!
