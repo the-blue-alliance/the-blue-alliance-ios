@@ -6,8 +6,8 @@
 	<string>production</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>activitycontinuation:thebluealliance.com</string>
-		<string>applinks:thebluealliance.com</string>
+		<string>activitycontinuation:www.thebluealliance.com</string>
+		<string>applinks:www.thebluealliance.com</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
