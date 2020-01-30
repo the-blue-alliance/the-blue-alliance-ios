@@ -476,16 +476,13 @@ extension TeamSummaryViewController: Refreshable {
         var eventOperation: TBAKitOperation?
         if event.name == nil {
             eventOperation = tbaKit.fetchEvent(key: event.key, completion: { (result, notModified) in
+                guard case .success(let object) = result, let event = object, !notModified else {
+                    return
+                }
+
                 let context = self.persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
-                    switch result {
-                    case .success(let event):
-                        if !notModified, let event = event {
-                            Event.insert(event, in: context)
-                        }
-                    default:
-                        break
-                    }
+                    Event.insert(event, in: context)
                 }, saved: {
                     self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
                 }, errorRecorder: Crashlytics.sharedInstance())
@@ -497,25 +494,20 @@ extension TeamSummaryViewController: Refreshable {
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
         teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey, eventKey: event.key) { (result, notModified) in
-            switch result {
-            case .success(let status):
-                if let status = status {
-                    // Kickoff refreshes for our Match objects, add them as dependents for reloading data
-                    self.refreshStatusMatches(status, finalOperation)
-
-                    let context = self.persistentContainer.newBackgroundContext()
-                    context.performChangesAndWait({
-                        let event = context.object(with: self.event.objectID) as! Event
-                        event.insert(status)
-                    }, saved: {
-                        self.markTBARefreshSuccessful(self.tbaKit, operation: teamStatusOperation)
-                    }, errorRecorder: Crashlytics.sharedInstance())
-                } else if !notModified {
-                    // TODO: Delete status, move back up our hierarchy
-                }
-            default:
-                break
+            guard case .success(let object) = result, let status = object, !notModified else {
+                return
             }
+
+            // Kickoff refreshes for our Match objects, add them as dependents for reloading data
+            self.refreshStatusMatches(status, finalOperation)
+
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                let event = context.object(with: self.event.objectID) as! Event
+                event.insert(status)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, operation: teamStatusOperation)
+            }, errorRecorder: Crashlytics.sharedInstance())
         }
 
         finalOperation = addRefreshOperations([eventOperation, teamStatusOperation].compactMap({ $0 }))
@@ -535,11 +527,13 @@ extension TeamSummaryViewController: Refreshable {
     func fetchMatch(_ key: String, _ update: @escaping () -> ()) -> TBAKitOperation? {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchMatch(key: key) { (result, notModified) in
+            guard case .success(let object) = result, let match = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let match = try? result.get() {
-                    Match.insert(match, in: context)
-                }
+                Match.insert(match, in: context)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(update)

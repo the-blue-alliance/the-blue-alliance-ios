@@ -244,18 +244,13 @@ extension EventInfoViewController: Refreshable {
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEvent(key: event.key) { (result, notModified) in
+            guard case .success(let object) = result, let event = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                switch result {
-                case .success(let event):
-                    if let event = event {
-                        Event.insert(event, in: context)
-                    } else if !notModified {
-                        // TODO: Delete event, bump back up navigation stack
-                    }
-                default:
-                    break
-                }
+                Event.insert(event, in: context)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

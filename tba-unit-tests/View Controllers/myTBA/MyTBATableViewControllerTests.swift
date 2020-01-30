@@ -97,29 +97,14 @@ class MyTBATableViewControllerTests: TBATestCase {
         testRefresh(Event.self, model: model, fetch: myTBATableViewController.fetchEvent)
     }
 
-    func test_fetchEvent_nil() {
-        let model = MyTBAFavorite(modelKey: "2017micmp", modelType: .event)
-        testRefresh(Event.self, model: model, fetch: myTBATableViewController.fetchEvent, unmodified: true)
-    }
-
     func test_fetchTeam() {
         let model = MyTBAFavorite(modelKey: "frc2337", modelType: .team)
         testRefresh(Team.self, model: model, fetch: myTBATableViewController.fetchTeam)
     }
 
-    func test_fetchTeam_nil() {
-        let model = MyTBAFavorite(modelKey: "frc2337", modelType: .team)
-        testRefresh(Team.self, model: model, fetch: myTBATableViewController.fetchTeam, unmodified: true)
-    }
-
     func test_fetchMatch() {
         let model = MyTBAFavorite(modelKey: "2017mike2_qm1", modelType: .match)
         testRefresh(Match.self, model: model, fetch: myTBATableViewController.fetchMatch)
-    }
-
-    func test_fetchMatch_nil() {
-        let model = MyTBAFavorite(modelKey: "2017mike2_qm1", modelType: .match)
-        testRefresh(Match.self, model: model, fetch: myTBATableViewController.fetchMatch, unmodified: true)
     }
 
     // MARK: - Private testing methods

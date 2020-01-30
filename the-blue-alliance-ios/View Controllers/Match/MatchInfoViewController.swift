@@ -213,16 +213,13 @@ extension MatchInfoViewController: Refreshable {
         var eventOperation: TBAKitOperation?
         if match.event.name == nil {
             eventOperation = tbaKit.fetchEvent(key: match.event.key, completion: { (result, notModified) in
+                guard case .success(let object) = result, let event = object, !notModified else {
+                    return
+                }
+
                 let context = self.persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
-                    switch result {
-                    case .success(let event):
-                        if !notModified, let event = event {
-                            Event.insert(event, in: context)
-                        }
-                    default:
-                        break
-                    }
+                    Event.insert(event, in: context)
                 }, saved: {
                     self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
                 }, errorRecorder: Crashlytics.sharedInstance())

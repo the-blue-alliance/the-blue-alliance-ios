@@ -149,18 +149,13 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
+            guard case .success(let object) = result, let match = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                switch result {
-                case .success(let match):
-                    if let match = match {
-                        Match.insert(match, in: context)
-                    } else if !notModified {
-                        // TODO: Delete match, move back up our hierarchy
-                    }
-                default:
-                    break
-                }
+                Match.insert(match, in: context)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

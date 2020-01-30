@@ -174,12 +174,14 @@ extension EventAwardsViewController: Refreshable {
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventAwards(key: event.key) { (result, notModified) in
+            guard case .success(let awards) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let awards = try? result.get() {
-                    let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(awards)
-                }
+                let event = context.object(with: self.event.objectID) as! Event
+                event.insert(awards)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

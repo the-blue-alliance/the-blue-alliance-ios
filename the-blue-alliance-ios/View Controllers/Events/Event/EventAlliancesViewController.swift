@@ -159,12 +159,14 @@ extension EventAlliancesViewController: Refreshable {
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventAlliances(key: event.key) { (result, notModified) in
+            guard case .success(let alliances) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let alliances = try? result.get() {
-                    let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(alliances)
-                }
+                let event = context.object(with: self.event.objectID) as! Event
+                event.insert(alliances)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

@@ -96,12 +96,14 @@ extension EventRankingsViewController: Refreshable {
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventRankings(key: event.key) { (result, notModified) in
+            guard case .success(let rankings, let sortOrder, let extraStats) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {
-                    let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
-                }
+                let event = context.object(with: self.event.objectID) as! Event
+                event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

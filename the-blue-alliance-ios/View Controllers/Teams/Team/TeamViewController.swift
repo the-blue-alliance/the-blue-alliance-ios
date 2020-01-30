@@ -169,13 +169,18 @@ class TeamViewController: HeaderContainerViewController, Observable {
     }
 
     private func fetchTeaMedia(year: Int) {
-        let mediaOperation = tbaKit.fetchTeamMedia(key: team.key, year: year, completion: { (result, notModified) in
+        var mediaOperation: TBAKitOperation!
+        mediaOperation = tbaKit.fetchTeamMedia(key: team.key, year: year, completion: { (result, notModified) in
+            guard case .success(let media) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let media = try? result.get() {
-                    let team = context.object(with: self.team.objectID) as! Team
-                    team.insert(media, year: year)
-                }
+                let team = context.object(with: self.team.objectID) as! Team
+                team.insert(media, year: year)
+            }, saved: {
+                self.tbaKit.storeCacheHeaders(mediaOperation)
             }, errorRecorder: Crashlytics.sharedInstance())
         })
         operationQueue.addOperation(mediaOperation)

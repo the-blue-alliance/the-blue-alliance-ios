@@ -155,12 +155,13 @@ extension EventDistrictPointsViewController: Refreshable {
 
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventDistrictPoints(key: eventKey) { (result, notModified) in
+            guard case .success(let eventPoints, _) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let (eventPoints, _) = try? result.get() {
-                    // This is a fucking PROBLEM
-                    DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
-                }
+                DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

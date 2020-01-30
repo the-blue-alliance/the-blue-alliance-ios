@@ -50,12 +50,14 @@ class TeamEventsViewController: EventsViewController {
     @objc override func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchTeamEvents(key: team.key) { (result, notModified) in
+            guard case .success(let events) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let events = try? result.get() {
-                    let team = context.object(with: self.team.objectID) as! Team
-                    team.insert(events)
-                }
+                let team = context.object(with: self.team.objectID) as! Team
+                team.insert(events)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
