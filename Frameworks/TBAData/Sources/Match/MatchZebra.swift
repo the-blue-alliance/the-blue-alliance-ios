@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import TBAKit
+import SwiftUI
 
 extension MatchZebra {
 
@@ -31,6 +32,19 @@ extension MatchZebra {
                 fatalError("Save ZebraMatch before accessing alliances")
         }
         return alliances
+    }
+
+    public var teams: [MatchZebraTeam] {
+        // Red alliance comes before Blue alliance
+        var allianceKeys = ["red", "blue"]
+        alliances.forEach {
+            if !allianceKeys.contains($0.allianceKey) {
+                allianceKeys.append($0.allianceKey)
+            }
+        }
+        return allianceKeys.flatMap { (allianceKey: String) -> [MatchZebraTeam] in
+            return alliances.first(where: { $0.allianceKey == allianceKey })?.teams ?? []
+        }
     }
 
 }

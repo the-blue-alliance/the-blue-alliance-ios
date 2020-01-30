@@ -210,7 +210,7 @@
     </entity>
     <entity name="MatchZebraAlliance" representedClassName="MatchZebraAlliance" syncable="YES">
         <attribute name="allianceKeyRaw" attributeType="String"/>
-        <relationship name="teamsRaw" toMany="YES" deletionRule="Cascade" destinationEntity="MatchZebraTeam" inverseName="allianceRaw" inverseEntity="MatchZebraTeam"/>
+        <relationship name="teamsRaw" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MatchZebraTeam" inverseName="allianceRaw" inverseEntity="MatchZebraTeam"/>
         <relationship name="zebraRaw" maxCount="1" deletionRule="Nullify" destinationEntity="MatchZebra" inverseName="alliancesRaw" inverseEntity="MatchZebra"/>
     </entity>
     <entity name="MatchZebraTeam" representedClassName="MatchZebraTeam" syncable="YES">

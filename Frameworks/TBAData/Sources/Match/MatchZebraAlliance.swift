@@ -20,7 +20,7 @@ extension MatchZebraAlliance {
 
     public var teams: [MatchZebraTeam] {
         guard let teamsRaw = getValue(\MatchZebraAlliance.teamsRaw),
-            let teams = teamsRaw.allObjects as? [MatchZebraTeam] else {
+            let teams = teamsRaw.array as? [MatchZebraTeam] else {
             fatalError("Save MatchZebraAlliance before accessing teams")
         }
         return teams
@@ -37,7 +37,7 @@ public class MatchZebraAlliance: NSManagedObject {
 
     @NSManaged var allianceKeyRaw: String?
     @NSManaged var zebraRaw: MatchZebra?
-    @NSManaged var teamsRaw: NSSet?
+    @NSManaged var teamsRaw: NSOrderedSet?
 
 }
 
@@ -65,7 +65,7 @@ extension MatchZebraAlliance: Managed {
         return findOrCreate(in: context, matching: predicate) { (zebraAlliance) in
             // Required: allianceKey, teams
             zebraAlliance.allianceKeyRaw = allianceKey
-            zebraAlliance.updateToManyRelationship(relationship: #keyPath(MatchZebraAlliance.teamsRaw), newValues: teams.map {
+            zebraAlliance.teamsRaw = NSOrderedSet(array: teams.map {
                 return MatchZebraTeam.insert(key, $0, in: context)
             })
         }

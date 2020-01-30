@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import UIKit
 
 extension UIColor {
@@ -133,32 +134,6 @@ extension UIColor {
         return .colorWithRGB(rgbValue: 0xffa500)
     }
 
-    // MARK: - Zebra Colors
-
-    public class var zebraRed1: UIColor {
-        return UIColor.colorWithRGB(rgbValue: 0xFF0000)
-    }
-
-    public class var zebraRed2: UIColor {
-        return UIColor.colorWithRGB(rgbValue: 0x800000)
-    }
-
-    public class var zebraRed3: UIColor {
-        return UIColor.colorWithRGB(rgbValue: 0xFF8080)
-    }
-
-    public class var zebraBlue1: UIColor {
-        return UIColor.colorWithRGB(rgbValue: 0x0000FF)
-    }
-
-    public class var zebraBlue2: UIColor {
-        return UIColor.colorWithRGB(rgbValue: 0x000080)
-    }
-
-    public class var zebraBlue3: UIColor {
-        return UIColor.colorWithRGB(rgbValue: 0x8080FF)
-    }
-
     // MARK: - Private Methods
 
     private static func dynamicColor(_ lightMode: UIColor, _ lightModeHighContrast: UIColor, _ darkMode: UIColor, _ darkModeHighContrast: UIColor) -> UIColor {
@@ -184,6 +159,46 @@ extension UIColor {
         let blue = CGFloat(rgbValue & 0xFF) / 255
 
         return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+    }
+
+}
+
+extension Color {
+
+    private static func colorWithRGB(rgbValue: UInt) -> Color {
+        let red = Double((rgbValue & 0xFF0000) >> 16) / 255
+        let green = Double((rgbValue & 0xFF00) >> 8) / 255
+        let blue = Double(rgbValue & 0xFF) / 255
+
+        return Color(red: red, green: green, blue: blue)
+    }
+
+    public static var zebraRed1: Color {
+        return .colorWithRGB(rgbValue: 0xFF0000)
+    }
+
+    public static var zebraRed2: Color {
+        return .colorWithRGB(rgbValue: 0x800000)
+    }
+
+    public static var zebraRed3: Color {
+        return .colorWithRGB(rgbValue: 0xFF8080)
+    }
+
+    public static var zebraBlue1: Color {
+        return .colorWithRGB(rgbValue: 0x0000FF)
+    }
+
+    public static var zebraBlue2: Color {
+        return .colorWithRGB(rgbValue: 0x000080)
+    }
+
+    public static var zebraBlue3: Color {
+        return .colorWithRGB(rgbValue: 0x8080FF)
+    }
+
+    public static var random: Color {
+        return .init(hue: .random(in: 0...1), saturation: 1, brightness: 1)
     }
 
 }
