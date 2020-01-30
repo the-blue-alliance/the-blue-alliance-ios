@@ -231,18 +231,13 @@ extension TeamInfoViewController: Refreshable {
     @objc func refresh() {
         var infoOperation: TBAKitOperation!
         infoOperation = tbaKit.fetchTeam(key: team.key) { (result, notModified) in
+            guard case .success(let object) = result, let team = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                switch result {
-                case .success(let team):
-                    if let team = team {
-                        Team.insert(team, in: context)
-                    } else if !notModified {
-                        // TODO: Delete team, move back up our hierarchy
-                    }
-                default:
-                    break
-                }
+                Team.insert(team, in: context)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: infoOperation)
             }, errorRecorder: Crashlytics.sharedInstance())
@@ -250,12 +245,14 @@ extension TeamInfoViewController: Refreshable {
 
         var yearsOperation: TBAKitOperation!
         yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key) { (result, notModified) in
+            guard case .success(let years) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let years = try? result.get() {
-                    let team = context.object(with: self.team.objectID) as! Team
-                    team.setYearsParticipated(years)
-                }
+                let team = context.object(with: self.team.objectID) as! Team
+                team.setYearsParticipated(years)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(yearsOperation)
             }, errorRecorder: Crashlytics.sharedInstance())

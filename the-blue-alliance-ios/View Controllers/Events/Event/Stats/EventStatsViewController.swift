@@ -176,12 +176,14 @@ extension EventStatsViewController: Refreshable {
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventInsights(key: event.key) { (result, notModified) in
+            guard case .success(let object) = result, let insights = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let insights = try? result.get() {
-                    let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(insights)
-                }
+                let event = context.object(with: self.event.objectID) as! Event
+                event.insert(insights)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

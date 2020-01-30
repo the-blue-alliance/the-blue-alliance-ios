@@ -274,12 +274,14 @@ extension TeamMediaCollectionViewController: Refreshable {
 
         var operation: TBAKitOperation!
         operation = tbaKit.fetchTeamMedia(key: team.key, year: year) { (result, notModified) in
+            guard case .success(let media) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let media = try? result.get() {
-                    let team = context.object(with: self.team.objectID) as! Team
-                    team.insert(media, year: year)
-                }
+                let team = context.object(with: self.team.objectID) as! Team
+                team.insert(media, year: year)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

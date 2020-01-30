@@ -112,11 +112,13 @@ extension DistrictsViewController: Refreshable {
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistricts(year: year) { (result, notModified) in
+            guard case .success(let districts) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let districts = try? result.get() {
-                    District.insert(districts, year: self.year, in: context)
-                }
+                District.insert(districts, year: self.year, in: context)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())

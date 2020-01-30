@@ -174,11 +174,13 @@ extension TBASearchableTableViewController: TeamsRefreshProvider {
     func refreshTeams(userInitiated: Bool) -> Operation? {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchTeams() { [unowned self] (result, notModified) in
+            guard case .success(let teams) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let teams = try? result.get() {
-                    Team.insert(teams, in: context)
-                }
+                Team.insert(teams, in: context)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
             }, errorRecorder: Crashlytics.sharedInstance())

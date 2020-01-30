@@ -261,11 +261,13 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     func fetchEvent(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEvent(key: myTBAModel.modelKey) { (result, notModified) in
+            guard case .success(let object) = result, let event = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let event = try? result.get() {
-                    Event.insert(event, in: context)
-                }
+                Event.insert(event, in: context)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(myTBAModel)
@@ -277,11 +279,13 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     func fetchTeam(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchTeam(key: myTBAModel.modelKey) { (result, notModified) in
+            guard case .success(let object) = result, let team = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let team = try? result.get() {
-                    Team.insert(team, in: context)
-                }
+                Team.insert(team, in: context)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(myTBAModel)
@@ -293,11 +297,13 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     func fetchMatch(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchMatch(key: myTBAModel.modelKey) { (result, notModified) in
+            guard case .success(let object) = result, let match = object, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let match = try? result.get() {
-                    Match.insert(match, in: context)
-                }
+                Match.insert(match, in: context)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(myTBAModel)

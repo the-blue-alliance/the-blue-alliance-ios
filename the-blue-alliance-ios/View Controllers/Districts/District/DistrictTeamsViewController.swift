@@ -39,12 +39,14 @@ class DistrictTeamsViewController: TeamsViewController {
     @objc override func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistrictTeams(key: district.key) { (result, notModified) in
+            guard case .success(let teams) = result, !notModified else {
+                return
+            }
+
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let teams = try? result.get() {
-                    let district = context.object(with: self.district.objectID) as! District
-                    district.insert(teams)
-                }
+                let district = context.object(with: self.district.objectID) as! District
+                district.insert(teams)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
