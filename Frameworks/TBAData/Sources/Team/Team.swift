@@ -403,7 +403,7 @@ extension Team: Managed {
         let predicate = Team.predicate(key: model.key)
 
         return findOrCreate(in: context, matching: predicate) { (team) in
-            // Required: key, name, teamNumber, rookieYear
+            // Required: key, name, teamNumber
             team.addressRaw = model.address
             team.cityRaw = model.city
             team.countryRaw = model.country
@@ -427,7 +427,12 @@ extension Team: Managed {
             team.nameRaw = model.name
             team.nicknameRaw = model.nickname
             team.postalCodeRaw = model.postalCode
-            team.rookieYearRaw = NSNumber(value: model.rookieYear)
+            team.rookieYearRaw = {
+                if let rookieYear = model.rookieYear {
+                    return NSNumber(value: rookieYear)
+                }
+                return nil
+            }()
             team.schoolNameRaw = model.schoolName
             team.stateProvRaw = model.stateProv
             team.teamNumberRaw = NSNumber(value: model.teamNumber)
@@ -548,12 +553,11 @@ extension Team {
 
     /**
      Returns an NSPredicate for full Team objects - aka, they have all required API fields.
-     This includes key, name, teamNumber, rookieYear
+     This includes key, name, teamNumber
      */
     public static func populatedTeamsPredicate() -> NSPredicate {
         var keys = [#keyPath(Team.keyRaw),
-                    #keyPath(Team.nameRaw),
-                    #keyPath(Team.rookieYearRaw)]
+                    #keyPath(Team.nameRaw)]
         let format = keys.map {
             return String("\($0) != nil")
         }.joined(separator: " && ")
@@ -607,7 +611,6 @@ extension Team: Searchable {
     public var searchAttributes: CSSearchableItemAttributeSet {
         let attributeSet = CSSearchableItemAttributeSet(itemContentType: Team.entityName)
 
-        attributeSet.relatedUniqueIdentifier = uniqueIdentifier
         attributeSet.displayName = [String(teamNumber), nickname ?? teamNumberNickname].joined(separator: " | ")
         // Queryable by 'frcXXXX', 'Team XXXX', or 'XXXX', or nickname
         attributeSet.alternateNames = [key, teamNumberNickname, String(teamNumber), nickname].compactMap({ $0 })

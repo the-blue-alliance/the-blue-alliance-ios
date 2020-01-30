@@ -17,10 +17,10 @@ public struct TBATeam: TBAModel {
     public var lng: Double?
     public var locationName: String?
     public var website: String?
-    public var rookieYear: Int
+    public var rookieYear: Int?
     public var homeChampionship: [String: String]?
 
-    public init(key: String, teamNumber: Int, nickname: String? = nil, name: String, schoolName: String? = nil, city: String? = nil, stateProv: String? = nil, country: String? = nil, address: String? = nil, postalCode: String? = nil, gmapsPlaceID: String? = nil, gmapsURL: String? = nil, lat: Double? = nil, lng: Double? = nil, locationName: String? = nil, website: String? = nil, rookieYear: Int, homeChampionship: [String: String]? = nil) {
+    public init(key: String, teamNumber: Int, nickname: String? = nil, name: String, schoolName: String? = nil, city: String? = nil, stateProv: String? = nil, country: String? = nil, address: String? = nil, postalCode: String? = nil, gmapsPlaceID: String? = nil, gmapsURL: String? = nil, lat: Double? = nil, lng: Double? = nil, locationName: String? = nil, website: String? = nil, rookieYear: Int?, homeChampionship: [String: String]? = nil) {
         self.key = key
         self.teamNumber = teamNumber
         self.nickname = nickname
@@ -42,7 +42,7 @@ public struct TBATeam: TBAModel {
     }
 
     init?(json: [String: Any]) {
-        // Required: key, name, teamNumber, rookieYear
+        // Required: key, name, teamNumber
         guard let key = json["key"] as? String else {
             return nil
         }
@@ -58,11 +58,6 @@ public struct TBATeam: TBAModel {
         }
         self.teamNumber = teamNumber
 
-        guard let rookieYear = json["rookie_year"] as? Int else {
-            return nil
-        }
-        self.rookieYear = rookieYear
-
         self.address = json["address"] as? String
         self.city = json["city"] as? String
         self.country = json["country"] as? String
@@ -74,6 +69,7 @@ public struct TBATeam: TBAModel {
         self.locationName = json["location_name"] as? String
         self.nickname = json["nickname"] as? String
         self.postalCode = json["postal_code"] as? String
+        self.rookieYear = json["rookie_year"] as? Int
         self.schoolName = json["school_name"] as? String
         self.stateProv = json["state_prov"] as? String
         self.website = json["website"] as? String
@@ -290,8 +286,8 @@ public struct TBAMedia: TBAModel {
 
 extension TBAKit {
 
-    public func fetchTeams(completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
-        let method = "teams/all"
+    public func fetchTeams(simple: Bool = false, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
+        let method = simple ? "teams/all/simple" : "teams/all"
         return callArray(method: method, completion: completion)
     }
 
