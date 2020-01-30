@@ -29,7 +29,7 @@ public class SearchService: NSObject, TeamsRefreshProvider {
     private var eventsRefreshOperation: Operation?
     private var teamsRefreshOperation: Operation?
 
-    private let operationQueue = OperationQueue()
+    private(set) var operationQueue = OperationQueue()
 
     public init(application: UIApplication, errorRecorder: ErrorRecorder, indexDelegate: TBACoreDataCoreSpotlightDelegate, persistentContainer: NSPersistentContainer, searchIndex: CSSearchableIndex, statusService: StatusService, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.application = application
