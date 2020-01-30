@@ -343,9 +343,9 @@ class TeamTestCase: TBADataTestCase {
 
     func test_populatedTeamsPredicate() {
         let predicate = Team.populatedTeamsPredicate()
-        XCTAssertEqual(predicate.predicateFormat, "keyRaw != nil AND nameRaw != nil AND rookieYearRaw != nil")
+        XCTAssertEqual(predicate.predicateFormat, "keyRaw != nil AND nameRaw != nil")
 
-        let model = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
+        let model = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz")
         let team = Team.insert(model, in: persistentContainer.viewContext)
         _ = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
 
