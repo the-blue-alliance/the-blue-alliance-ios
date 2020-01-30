@@ -2,25 +2,20 @@ import CoreData
 import Crashlytics
 import Foundation
 import SpriteKit
+import SwiftUI
 import TBAData
 import TBAKit
 import UIKit
 
-class MatchZebraViewController: TBAViewController, Observable {
+class MatchZebraViewController: TBAViewController {
 
     private let match: Match
 
-
     // MARK: - UI
 
-    private lazy var zebraView = MatchZebraView()
-
-    // MARK: - Observable
-
-    typealias ManagedType = Match
-    lazy var contextObserver: CoreDataContextObserver<Match> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    private lazy var zebraHostingController = UIHostingController(
+        rootView: MatchZebraView(match: match)
+    )
 
     // MARK: Init
 
@@ -48,37 +43,22 @@ class MatchZebraViewController: TBAViewController, Observable {
                 self.showNoDataView()
             }
         }
-
-        contextObserver.observeObject(object: match, state: .updated) { _,_  in
-            DispatchQueue.main.async {
-                self.updateInterface()
-            }
-        }
     }
 
     // MARK: Interface Methods
 
     func styleInterface() {
-        scrollView.addSubview(zebraView)
-        zebraView.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
-        zebraView.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: -8)
-        zebraView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
-        zebraView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
-        zebraView.autoMatch(.height, to: .height, of: view, withOffset: 0.0, relation: .lessThanOrEqual)
-
-        updateInterface()
-    }
-
-    func updateInterface() {
-        guard let zebra = match.zebra else {
-            return
-        }
-        zebraView.redrawZebra(zebra)
+        scrollView.addSubview(zebraHostingController.view)
+        zebraHostingController.view.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
+        zebraHostingController.view.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: -8)
+        zebraHostingController.view.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
+        zebraHostingController.view.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
+        // TODO: This is broken but we should try to make it fit in the frame?
+        // zebraHostingController.view.autoMatch(.height, to: .height, of: view, withOffset: 0.0, relation: .lessThanOrEqual)
     }
 
     override func reloadData() {
-        // TODO: Probalby just call update interface yeah?
-        updateInterface()
+        // Pass
     }
 
 }
