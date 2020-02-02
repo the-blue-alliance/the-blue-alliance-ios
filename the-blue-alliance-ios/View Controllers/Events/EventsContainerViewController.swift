@@ -47,6 +47,16 @@ class EventsContainerViewController: ContainerViewController {
         navigationTitleDelegate = self
         eventsViewController.delegate = self
         eventsViewController.weekEventsDelegate = self
+
+        // TODO: REMOVE
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "CC", style: .plain, target: self, action: #selector(pushCC))
+    }
+
+    // TODO: REMOVE
+    @objc func pushCC() {
+        let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: "2019qcmo_qm1"))!
+        let cc = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        navigationController?.pushViewController(cc, animated: true)
     }
 
     required init?(coder aDecoder: NSCoder) {
