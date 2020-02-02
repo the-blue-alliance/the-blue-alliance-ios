@@ -15,7 +15,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             "initLineRobot1": "Unknown",
             "initLineRobot2": "None",
             "initLineRobot3": "Exited",
-            
+            "autoInitLinePoints": "20",
             "rp": "9"
         ]
         
@@ -25,8 +25,8 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         // Auto
         rows.append(initLine(red: temp, blue: temp))
-        
 //        rows.append(row(title: "Total Sandstorm Bonus", key: "sandStormBonusPoints", red: red, blue: blue, type: .total))
+        
 //        // Teleop
 //        rows.append(bayRow(title: "Cargo Ship", red: red, blue: blue))
 //        rows.append(rocketRow(title: "Rocekt 1", rocket: "RocketNear", red: red, blue: blue))
@@ -84,7 +84,18 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             }
         }
         
-        let (redElements, blueElements) = (elements[0], elements[1])
+        var (redElements, blueElements) = (elements[0], elements[1])
+
+        // Add the point totals for the init line
+        guard let initLinePoints = values(key: "autoInitLinePoints", red: red, blue: blue) else {
+            return nil
+        }
+        let (rv, bv) = initLinePoints
+        guard let redLinePoints = rv as? String, let blueLinePoints = bv as? String else {
+            return nil
+        }
+        redElements.append("(+\(redLinePoints))")
+        blueElements.append("(+\(blueLinePoints))")
 
         return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
     }
