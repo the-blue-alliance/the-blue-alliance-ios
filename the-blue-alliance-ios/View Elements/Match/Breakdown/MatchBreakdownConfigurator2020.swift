@@ -116,7 +116,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         print(blueElements)
         print(elements)
         
-        return BreakdownRow(title: "Initiation Line exited", red: elements.first, blue: elements.last)
+        return BreakdownRow(title: "Initiation Line exited", red: [elements.first], blue: [elements.last])
 //        return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
     }
 
