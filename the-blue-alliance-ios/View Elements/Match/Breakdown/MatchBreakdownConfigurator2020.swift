@@ -11,9 +11,12 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>, _ breakdown: [String: Any]?, _ red: [String: Any]?, _ blue: [String: Any]?) {
         
-        var temp = [
-            "rp": "999",
-            "test": "1234"
+        let temp = [
+            "initLineRobot1": "Unknown",
+            "initLineRobot2": "None",
+            "initLineRobot3": "Exited",
+            
+            "rp": "9"
         ]
         
         print(temp)
@@ -21,9 +24,8 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         var rows: [BreakdownRow?] = []
 
         // Auto
-        for i in [1, 2, 3] {
-            rows.append(sandstormRow(i: i, red: temp, blue: temp))
-        }
+        rows.append(initLine(red: temp, blue: temp))
+        
 //        rows.append(row(title: "Total Sandstorm Bonus", key: "sandStormBonusPoints", red: red, blue: blue, type: .total))
 //        // Teleop
 //        rows.append(bayRow(title: "Cargo Ship", red: red, blue: blue))
@@ -43,7 +45,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 //        rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
 //        rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
         // RP
-        rows.append(row(title: "Ranking Points", key: "rp", red: red, blue: blue))
+        rows.append(row(title: "Ranking Points", key: "rp", red: temp, blue: temp))
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
@@ -53,29 +55,69 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
     }
 
-    private static func sandstormRow(i: Int, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        guard let habValues = values(key: "habLineRobot\(i)", red: red, blue: blue) else {
-            return nil
+    private static func initLine(red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+        var redLineStrings: [String] = []
+        var blueLineStrings: [String] = []
+        
+        for i in [1, 2, 3] {
+            guard let initValues = values(key: "initLineRobot\(i)", red: red, blue: blue) else {
+                return nil
+            }
+            let (rv, bv) = initValues
+            guard let redInit = rv as? String, let blueInit = bv as? String else {
+                return nil
+            }
+            redLineStrings.append(redInit)
+            blueLineStrings.append(blueInit)
         }
-        let (rv, bv) = habValues
-        guard let redHab = rv as? String, let blueHab = bv as? String else {
-            return nil
-        }
-        let elements = [(redHab, red), (blueHab, blue)].map { (hab, dict) -> AnyHashable in
-            if hab == "CrossedHabLineInSandstorm" {
-                guard let preMatchLevel = dict?["preMatchLevelRobot\(i)"] as? String else {
+        
+//        print(redLineStrings)
+//        print(blueLineStrings)
+        
+        let elements = [(redLineStrings), (blueLineStrings)].map { (lineStrings) -> AnyHashable in
+            return lineStrings.map { (line) -> AnyHashable in
+                switch line {
+                case "None":
+                    return BreakdownStyle.xImage
+                case "Exited":
+                    return BreakdownStyle.checkImage
+                default:
                     return "?"
                 }
-                if preMatchLevel == "HabLevel1" {
-                    return "Level 1 (+3)"
-                } else if preMatchLevel == "HabLevel2" {
-                    return "Level 2 (+6)"
-                }
+            }
+        }
+        
+        let redElements = redLineStrings.map { (line) -> AnyHashable in
+            switch line {
+            case "Unknown":
+                return "?"
+            case "None":
+                return BreakdownStyle.xImage
+            case "Exited":
+                return BreakdownStyle.checkImage
+            default:
                 return "?"
             }
-            return BreakdownStyle.xImage
         }
-        return BreakdownRow(title: "Robot \(i) Sandstorm Bonus", red: [elements.first], blue: [elements.last])
+        let blueElements = blueLineStrings.map { (line) -> AnyHashable in
+            switch line {
+            case "Unknown":
+                return "?"
+            case "None":
+                return BreakdownStyle.xImage
+            case "Exited":
+                return BreakdownStyle.checkImage
+            default:
+                return "?"
+            }
+        }
+        
+        print(redElements)
+        print(blueElements)
+        print(elements)
+        
+        return BreakdownRow(title: "Initiation Line exited", red: elements.first, blue: elements.last)
+//        return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
     }
 
     private static func bayRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
