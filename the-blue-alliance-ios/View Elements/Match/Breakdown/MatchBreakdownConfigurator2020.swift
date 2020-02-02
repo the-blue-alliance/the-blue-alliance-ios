@@ -71,10 +71,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             blueLineStrings.append(blueInit)
         }
         
-//        print(redLineStrings)
-//        print(blueLineStrings)
-        
-        let elements = [(redLineStrings), (blueLineStrings)].map { (lineStrings) -> AnyHashable in
+        let elements = [redLineStrings, blueLineStrings].map { (lineStrings) -> [AnyHashable] in
             return lineStrings.map { (line) -> AnyHashable in
                 switch line {
                 case "None":
@@ -87,37 +84,9 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             }
         }
         
-        let redElements = redLineStrings.map { (line) -> AnyHashable in
-            switch line {
-            case "Unknown":
-                return "?"
-            case "None":
-                return BreakdownStyle.xImage
-            case "Exited":
-                return BreakdownStyle.checkImage
-            default:
-                return "?"
-            }
-        }
-        let blueElements = blueLineStrings.map { (line) -> AnyHashable in
-            switch line {
-            case "Unknown":
-                return "?"
-            case "None":
-                return BreakdownStyle.xImage
-            case "Exited":
-                return BreakdownStyle.checkImage
-            default:
-                return "?"
-            }
-        }
-        
-        print(redElements)
-        print(blueElements)
-        print(elements)
-        
-        return BreakdownRow(title: "Initiation Line exited", red: [elements.first], blue: [elements.last])
-//        return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
+        let (redElements, blueElements) = (elements[0], elements[1])
+
+        return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
     }
 
     private static func bayRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
