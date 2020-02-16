@@ -40,7 +40,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
         
         rows.append(row(title: "Stage Activations", key: "", red: red, blue: blue))
-        rows.append(row(title: "Shield Generator Operational", key: "", red: red, blue: blue))
+        rows.append(shieldOperationalRow(title: "Shield Generator Operational", red: red, blue: blue))
         
         // Match totals
         rows.append(foulRow(title: "Fouls / Tech Fouls", red: red, blue: blue))
@@ -188,14 +188,6 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
     }
     
     private static func shieldSwitchLevelRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        func makeImageView(image: UIImage) -> UIImageView {
-            let imageView = UIImageView(image: image)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = UIColor.label
-            return imageView
-        }
-        
         guard let endgameIsLevelValues = values(key: "endgameRungIsLevel", red: red, blue: blue) else {
             return nil
         }
@@ -213,6 +205,34 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             return result
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
+    }
+    
+    private static func shieldOperationalRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+        guard let shieldOperationalValues = values(key: "shieldOperationalRankingPoint", red: red, blue: blue) else {
+            return nil
+        }
+        let (rw, bw) = shieldOperationalValues
+        guard let redShieldOperational = rw as? Int, let blueShieldOperational = bw as? Int else {
+            return nil
+        }
+
+        let elements = [redShieldOperational, blueShieldOperational].map { (shieldOperational) -> [AnyHashable] in
+            if shieldOperational == 1 {
+                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage!), "(+1 RP)"]
+                return result
+            }
+            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage!)]
+            return result
+        }
+        return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
+    }
+    
+    private static func makeImageView(image: UIImage) -> UIImageView {
+        let imageView = UIImageView(image: image)
+        imageView.autoMatch(.width, to: .height, of: imageView)
+        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
+        imageView.tintColor = UIColor.label
+        return imageView
     }
 
 }
