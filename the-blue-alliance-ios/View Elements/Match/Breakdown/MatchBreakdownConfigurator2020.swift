@@ -27,7 +27,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         rows.append(row(title: "Total Auto", key: "autoPoints", red: red, blue: blue, type: .total))
         
         // Teleop
-        rows.append(row(title: "Teleop Power Cells", key: "", red: red, blue: blue))
+        rows.append(powerCellRow(title: "Teleop Power Cells", period: "teleop", red: red, blue: blue))
         rows.append(row(title: "Teleop Power Cell Points", key: "", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Control Panel Points", key: "", red: red, blue: blue, type: .subtotal))
         for i in [1, 2, 3] {
@@ -39,23 +39,6 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         
         rows.append(row(title: "Stage Activations", key: "", red: red, blue: blue))
         rows.append(row(title: "Shield Generator Operational", key: "", red: red, blue: blue))
-        
-//        rows.append(bayRow(title: "Cargo Ship", red: red, blue: blue))
-//        rows.append(rocketRow(title: "Rocekt 1", rocket: "RocketNear", red: red, blue: blue))
-//        rows.append(rocketRow(title: "Rocket 2", rocket: "RocketFar", red: red, blue: blue))
-//        rows.append(totalPointsRow(title: "Total Hatch Panels", key: "hatchPanelPoints", scale: 2, image: BreakdownStyle2019.hatchPanelImage, color: UIColor.hatchPanelColor, red: red, blue: blue))
-//        rows.append(totalPointsRow(title: "Total Points Cargo", key: "cargoPoints", scale: 3, image: BreakdownStyle2019.cargoImage, color: UIColor.cargoColor, red: red, blue: blue))
-//        for i in [1, 2, 3] {
-//            rows.append(habRow(i: i, red: red, blue: blue))
-//        }
-//        rows.append(row(title: "HAB Climb Points", key: "habClimbPoints", red: red, blue: blue, type: .subtotal))
-//        rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
-//        // TODO: Complete rocket - double check mark?
-//        rows.append(boolImageRow(title: "Complete Rocket", key: "completeRocketRankingPoint", red: red, blue: blue))
-//        rows.append(boolImageRow(title: "HAB Docking", key: "habDockingRankingPoint", red: red, blue: blue))
-//        rows.append(row(title: "Fouls", key: "foulPoints", formatString: "+%@", red: red, blue: blue))
-//        rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
-//        rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
         
         // Match totals
         rows.append(row(title: "Fouls / Tech Fouls", key: "foulPoints", formatString: "+%@", red: red, blue: blue))
