@@ -39,7 +39,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         rows.append(row(title: "Endgame Points", key: "endgamePoints", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
         
-        rows.append(row(title: "Stage Activations", key: "", red: red, blue: blue))
+        rows.append(stageActivationRow(title: "Stage Activations", red: red, blue: blue))
         rows.append(shieldOperationalRow(title: "Shield Generator Operational", red: red, blue: blue))
         
         // Match totals
@@ -170,7 +170,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         guard let redFouls = rf as? Int, let blueFouls = bf as? Int else {
             return nil
         }
-        
+
         guard let techFoulValues = values(key: "techFoulCount", red: red, blue: blue) else {
             return nil
         }
@@ -227,6 +227,35 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
     
+    private static func stageActivationRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+        var redActivation: [Int] = [];
+        var blueActivation: [Int] = [];
+
+        for i in [3,2,1] {
+            guard let stageActivatedValues = values(key: "stage\(i)Activated", red: red, blue: blue) else {
+                return nil
+            }
+            let (rw, bw) = stageActivatedValues
+            guard let redStage = rw as? Int, let blueStage = bw as? Int else {
+                return nil
+            }
+            redActivation.append(redStage);
+            blueActivation.append(blueStage);
+        }
+
+        let elements = [redActivation, blueActivation].map { (stage) -> String in
+            if stage[0] == 1 {
+                return "3 (+1 RP)"
+            } else if stage[1] == 1 {
+                return "2"
+            } else if stage[2] == 1 {
+                return "1"
+            }
+            return ""
+        }
+        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
+    }
+
     private static func makeImageView(image: UIImage) -> UIImageView {
         let imageView = UIImageView(image: image)
         imageView.autoMatch(.width, to: .height, of: imageView)
