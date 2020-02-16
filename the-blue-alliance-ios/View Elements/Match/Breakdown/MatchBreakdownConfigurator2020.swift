@@ -17,9 +17,6 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             return
         }
         
-        print(red)
-        print(blue)
-        
         var rows: [BreakdownRow?] = []
 
         // Auto
