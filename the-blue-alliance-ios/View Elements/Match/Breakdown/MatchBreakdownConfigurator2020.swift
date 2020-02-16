@@ -36,14 +36,14 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             rows.append(endgameRow(i: i, red: red, blue: blue))
         }
         rows.append(shieldSwitchLevelRow(title: "Shield Generator Switch Level", red: red, blue: blue))
-        rows.append(row(title: "Endgame Points", key: "", red: red, blue: blue, type: .subtotal))
-        rows.append(row(title: "Total Teleop", key: "", red: red, blue: blue, type: .total))
+        rows.append(row(title: "Endgame Points", key: "endgamePoints", red: red, blue: blue, type: .subtotal))
+        rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
         
         rows.append(row(title: "Stage Activations", key: "", red: red, blue: blue))
         rows.append(row(title: "Shield Generator Operational", key: "", red: red, blue: blue))
         
         // Match totals
-        rows.append(row(title: "Fouls / Tech Fouls", key: "foulPoints", formatString: "+%@", red: red, blue: blue))
+        rows.append(foulRow(title: "Fouls / Tech Fouls", red: red, blue: blue))
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
         rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
         
@@ -142,26 +142,6 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
     }
 
-    private static func totalPointsRow(title: String, key: String, scale: Int, image: UIImage?, color: UIColor, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        // Total Points
-        func makeImageView() -> UIImageView {
-            let imageView = UIImageView(image: image)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = color
-            return imageView
-        }
-
-        guard let totals = values(key: key, red: red, blue: blue) else {
-            return nil
-        }
-        guard let redTotal = totals.0 as? Int, let blueTotal = totals.1 as? Int else {
-            return nil
-        }
-
-        return BreakdownRow(title: title, red: [makeImageView(), String(Int(redTotal / scale)), "(+\(String(redTotal)))"], blue: [makeImageView(), String(Int(blueTotal / scale)), "(+\(String(blueTotal)))"], type: .subtotal)
-    }
-
     private static func endgameRow(i: Int, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         guard let endgameValues = values(key: "endgameRobot\(i)", red: red, blue: blue) else {
             return nil
@@ -180,6 +160,31 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             return BreakdownStyle.xImage
         }
         return BreakdownRow(title: "Robot \(i) Endgame", red: [elements.first], blue: [elements.last])
+    }
+    
+    private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+        guard let foulValues = values(key: "foulCount", red: red, blue: blue) else {
+            return nil
+        }
+        let (rf, bf) = foulValues
+        guard let redFouls = rf as? Int, let blueFouls = bf as? Int else {
+            return nil
+        }
+        
+        guard let techFoulValues = values(key: "techFoulCount", red: red, blue: blue) else {
+            return nil
+        }
+        let (rtf, btf) = techFoulValues
+        guard let redTechFouls = rtf as? Int, let blueTechFouls = btf as? Int else {
+            return nil
+        }
+
+        // NOTE: red and blue are passed in backwards here intentionally, because
+        // the fouls returned are what the opposite alliance received
+        let elements = [(blueFouls, blueTechFouls), (redFouls, redTechFouls)].map { (fouls, techFouls) -> AnyHashable in
+            return "+\(fouls * 3) / +\(techFouls * 15)"
+        }
+        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
     
     private static func shieldSwitchLevelRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
