@@ -5,6 +5,8 @@ private class BreakdownStyle2020 {
     public static let bottomImage = UIImage(systemName: "rectangle")
     public static let outerImage = UIImage(systemName: "hexagon")
     public static let innerImage = UIImage(systemName: "circle")
+    public static let checkImage = UIImage(systemName: "checkmark")
+    public static let xImage = UIImage(systemName: "xmark")
 }
 
 struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
@@ -33,7 +35,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         for i in [1, 2, 3] {
             rows.append(endgameRow(i: i, red: red, blue: blue))
         }
-        rows.append(row(title: "Shield Generator Switch Level", key: "", red: red, blue: blue))
+        rows.append(shieldSwitchLevelRow(title: "Shield Generator Switch Level", red: red, blue: blue))
         rows.append(row(title: "Endgame Points", key: "", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Total Teleop", key: "", red: red, blue: blue, type: .total))
         
@@ -178,6 +180,34 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             return BreakdownStyle.xImage
         }
         return BreakdownRow(title: "Robot \(i) Endgame", red: [elements.first], blue: [elements.last])
+    }
+    
+    private static func shieldSwitchLevelRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+        func makeImageView(image: UIImage) -> UIImageView {
+            let imageView = UIImageView(image: image)
+            imageView.autoMatch(.width, to: .height, of: imageView)
+            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
+            imageView.tintColor = UIColor.label
+            return imageView
+        }
+        
+        guard let endgameIsLevelValues = values(key: "endgameRungIsLevel", red: red, blue: blue) else {
+            return nil
+        }
+        let (rw, bw) = endgameIsLevelValues
+        guard let redEndgame = rw as? String, let blueEndgame = bw as? String else {
+            return nil
+        }
+
+        let elements = [redEndgame, blueEndgame].map { (endgame) -> [AnyHashable] in
+            if endgame == "IsLevel" {
+                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage!), "(+15)"]
+                return result
+            }
+            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage!)]
+            return result
+        }
+        return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
 
 }
