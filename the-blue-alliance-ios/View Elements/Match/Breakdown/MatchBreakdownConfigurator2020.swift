@@ -186,11 +186,12 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
 
         let elements = [redEndgame, blueEndgame].map { (endgame) -> [AnyHashable] in
+            let mode = UIView.ContentMode.center
             if endgame == "IsLevel" {
-                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage), "(+15)"]
+                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage, contentMode: mode), "(+15)"]
                 return result
             }
-            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage)]
+            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage, contentMode: mode)]
             return result
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
@@ -245,9 +246,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
 
-    private static func makeImageView(image: UIImage?) -> UIImageView {
+    private static func makeImageView(image: UIImage?, contentMode: UIView.ContentMode = UIView.ContentMode.scaleToFill) -> UIImageView {
         let imageView = UIImageView(image: image)
         imageView.autoMatch(.width, to: .height, of: imageView)
+        imageView.contentMode = contentMode
         imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
         imageView.tintColor = UIColor.label
         return imageView
