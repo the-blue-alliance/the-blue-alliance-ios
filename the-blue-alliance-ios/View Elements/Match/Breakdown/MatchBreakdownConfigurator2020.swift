@@ -125,7 +125,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             let imageView = UIImageView(image: $0)
             imageView.autoMatch(.width, to: .height, of: imageView)
             imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = UIColor.black
+            imageView.tintColor = UIColor.label
             return imageView
         }, redCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         
@@ -133,7 +133,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             let imageView = UIImageView(image: $0)
             imageView.autoMatch(.width, to: .height, of: imageView)
             imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = UIColor.black
+            imageView.tintColor = UIColor.label
             return imageView
         }, blueCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         
