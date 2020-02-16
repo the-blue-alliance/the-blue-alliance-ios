@@ -335,7 +335,7 @@ class TeamSummaryViewController: TBATableViewController {
 
         if let lastMatchItem = lastMatchItem {
             snapshot.insertSection(.lastMatch, atIndex: TeamSummarySection.lastMatch.rawValue)
-            snapshot.appendItems([lastMatchItem], toSection: .nextMatch)
+            snapshot.appendItems([lastMatchItem], toSection: .lastMatch)
         }
 
         tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
