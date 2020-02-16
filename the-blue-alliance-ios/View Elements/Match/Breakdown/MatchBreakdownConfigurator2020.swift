@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
 
-private class BreakdownStyle2019 {
-    public static let nullHatchPanelImage = UIImage(systemName: "circle")
-    public static let hatchPanelImage = UIImage(systemName: "circle")
-    public static let cargoImage = UIImage(systemName: "circle.fill")
+private class BreakdownStyle2020 {
+    public static let bottomImage = UIImage(systemName: "rectangle")
+    public static let outerImage = UIImage(systemName: "hexagon")
+    public static let innerImage = UIImage(systemName: "circle")
 }
 
 struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
@@ -22,7 +22,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         // Auto
         rows.append(initLine(red: red, blue: blue))
-        rows.append(row(title: "Auto Power Cells", key: "", red: red, blue: blue))
+        rows.append(powerCellRow(title: "Auto Power Cells", period: "auto", red: red, blue: blue))
         rows.append(row(title: "Auto Power Cell Points", key: "autoCellPoints", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Total Auto", key: "autoPoints", red: red, blue: blue, type: .total))
         
@@ -116,97 +116,44 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
     }
 
-    private static func bayRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        let images = [BreakdownStyle2019.nullHatchPanelImage, BreakdownStyle2019.hatchPanelImage, BreakdownStyle2019.cargoImage]
-        let bays = [1, 2, 3, 4, 5, 6, 7, 8]
-        let preMatchBayKeys = bays.map { "preMatchBay\($0)" }
-        let bayKeys = bays.map { "bay\($0)" }
+    private static func powerCellRow(title: String, period: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+        let keys = ["CellsBottom", "CellsOuter", "CellsInner"]
+        let images = [BreakdownStyle2020.bottomImage, BreakdownStyle2020.outerImage, BreakdownStyle2020.innerImage]
+        let locations = keys.map { "\(period)\($0)" }
+        
+        var redCells: [Int] = []
+        var blueCells: [Int] = []
+        
+        for location in locations {
+            guard let cellValues = values(key: location, red: red, blue: blue) else {
+                return nil
+            }
 
-        // Null Hatch Panels
-        let nullHatchValues = [red, blue].map { (preMatchBayKeys, $0) }.map { (arg: ([String], [String : Any]?)) -> Int in
-            let (keys, dict) = arg
-            return keys.map {
-                return dict?[$0] as? String
-            }.reduce(0) { $0 + ($1 == "Panel" ? 1 : 0) }
+            let (rv, bv) = cellValues
+
+            guard let redCellValue = rv as? Int, let blueCellValue = bv as? Int else {
+                return nil
+            }
+            redCells.append(redCellValue)
+            blueCells.append(blueCellValue)
         }
-        let (nullHatchRed, nullHatchBlueBlue) = (nullHatchValues[0], nullHatchValues[1])
-
-        // Hatch Panels
-        let hatchValues = [red, blue].map { (bayKeys, $0) }.map { (arg: ([String], [String : Any]?)) -> Int in
-            let (keys, dict) = arg
-            return keys.map {
-                return dict?[$0] as? String
-            }.reduce(0) { $0 + (($1?.contains("Panel") ?? false) ? 1 : 0) }
-        }
-        let (hatchRed, hatchBlue) = (max(hatchValues[0] - nullHatchRed, 0), max(hatchValues[1] - nullHatchBlueBlue, 0))
-
-        // Cargo
-        let cargoValues = [red, blue].map { (bayKeys, $0) }.map { (arg: ([String], [String : Any]?)) -> Int in
-            let (keys, dict) = arg
-            return keys.map {
-                return dict?[$0] as? String
-            }.reduce(0) { $0 + (($1?.contains("Cargo")) ?? false ? 1 : 0) }
-        }
-        let (cargoRed, cargoBlue) = (cargoValues[0], cargoValues[1])
-
-        let colors = [UIColor.nullHatchPanelColor, UIColor.hatchPanelColor, UIColor.cargoColor]
-
-        let redValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
+        
+        let redValues = zip((images).map {
+            let imageView = UIImageView(image: $0)
             imageView.autoMatch(.width, to: .height, of: imageView)
             imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
+            imageView.tintColor = UIColor.black
             return imageView
-        }, [nullHatchRed, hatchRed, cargoRed]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
-        let blueValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
+        }, redCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
+        
+        let blueValues = zip((images).map {
+            let imageView = UIImageView(image: $0)
             imageView.autoMatch(.width, to: .height, of: imageView)
             imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
+            imageView.tintColor = UIColor.black
             return imageView
-        }, [nullHatchBlueBlue, hatchBlue, cargoBlue]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
-        return BreakdownRow(title: title, red: redValues, blue: blueValues)
-    }
-
-    private static func rocketRow(title: String, rocket: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        let locations = ["topLeft", "topRight", "midLeft", "midRight", "lowLeft", "lowRight"]
-        let images = [BreakdownStyle2019.hatchPanelImage, BreakdownStyle2019.cargoImage]
-        let keys = locations.map { "\($0)\(rocket)" }
-
-        // Hatch Panels
-        let hatchValues = [red, blue].map { (keys, $0) }.map { (arg: ([String], [String : Any]?)) -> Int in
-            let (keys, dict) = arg
-            return keys.map {
-                return dict?[$0] as? String
-            }.reduce(0) { $0 + (($1?.contains("Panel") ?? false) ? 1 : 0) }
-        }
-        let (hatchRed, hatchBlue) = (hatchValues[0], hatchValues[1])
-
-        // Cargo
-        let cargoValues = [red, blue].map { (keys, $0) }.map { (arg: ([String], [String : Any]?)) -> Int in
-            let (keys, dict) = arg
-            return keys.map {
-                return dict?[$0] as? String
-            }.reduce(0) { $0 + (($1?.contains("Cargo") ?? false) ? 1 : 0) }
-        }
-        let (cargoRed, cargoBlue) = (cargoValues[0], cargoValues[1])
-
-        let colors = [UIColor.hatchPanelColor, UIColor.cargoColor]
-
-        let redValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
-            return imageView
-        }, [hatchRed, cargoRed]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
-        let blueValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
-            return imageView
-        }, [hatchBlue, cargoBlue]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
+        }, blueCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
+        
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
     }
 
