@@ -11,20 +11,17 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>, _ breakdown: [String: Any]?, _ red: [String: Any]?, _ blue: [String: Any]?) {
         
-        let temp = [
-            "initLineRobot1": "Unknown",
-            "initLineRobot2": "None",
-            "initLineRobot3": "Exited",
-            "autoInitLinePoints": "20",
-            "rp": "9"
-        ]
+        guard let red = red, let blue = blue else {
+            return
+        }
         
-        print(temp)
+        print(red)
+        print(blue)
         
         var rows: [BreakdownRow?] = []
 
         // Auto
-        rows.append(initLine(red: temp, blue: temp))
+        rows.append(initLine(red: red, blue: blue))
 //        rows.append(row(title: "Total Sandstorm Bonus", key: "sandStormBonusPoints", red: red, blue: blue, type: .total))
         
 //        // Teleop
@@ -45,7 +42,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 //        rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
 //        rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
         // RP
-        rows.append(row(title: "Ranking Points", key: "rp", red: temp, blue: temp))
+        rows.append(row(title: "Ranking Points", key: "rp", red: red, blue: blue))
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
@@ -90,12 +87,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         guard let initLinePoints = values(key: "autoInitLinePoints", red: red, blue: blue) else {
             return nil
         }
-        let (rv, bv) = initLinePoints
-        guard let redLinePoints = rv as? String, let blueLinePoints = bv as? String else {
-            return nil
-        }
-        redElements.append("(+\(redLinePoints))")
-        blueElements.append("(+\(blueLinePoints))")
+        
+        let (redLinePoints, blueLinePoints) = initLinePoints
+        redElements.append("(+\(redLinePoints ?? 0))")
+        blueElements.append("(+\(blueLinePoints ?? 0))")
 
         return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
     }
