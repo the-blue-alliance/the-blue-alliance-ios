@@ -22,9 +22,24 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         // Auto
         rows.append(initLine(red: red, blue: blue))
-//        rows.append(row(title: "Total Sandstorm Bonus", key: "sandStormBonusPoints", red: red, blue: blue, type: .total))
+        rows.append(row(title: "Auto Power Cells", key: "", red: red, blue: blue))
+        rows.append(row(title: "Auto Power Cell Points", key: "autoCellPoints", red: red, blue: blue, type: .subtotal))
+        rows.append(row(title: "Total Auto", key: "autoPoints", red: red, blue: blue, type: .total))
         
-//        // Teleop
+        // Teleop
+        rows.append(row(title: "Teleop Power Cells", key: "", red: red, blue: blue))
+        rows.append(row(title: "Teleop Power Cell Points", key: "", red: red, blue: blue, type: .subtotal))
+        rows.append(row(title: "Control Panel Points", key: "", red: red, blue: blue, type: .subtotal))
+        for i in [1, 2, 3] {
+            rows.append(endgameRow(i: i, red: red, blue: blue))
+        }
+        rows.append(row(title: "Shield Generator Switch Level", key: "", red: red, blue: blue))
+        rows.append(row(title: "Endgame Points", key: "", red: red, blue: blue, type: .subtotal))
+        rows.append(row(title: "Total Teleop", key: "", red: red, blue: blue, type: .total))
+        
+        rows.append(row(title: "Stage Activations", key: "", red: red, blue: blue))
+        rows.append(row(title: "Shield Generator Operational", key: "", red: red, blue: blue))
+        
 //        rows.append(bayRow(title: "Cargo Ship", red: red, blue: blue))
 //        rows.append(rocketRow(title: "Rocekt 1", rocket: "RocketNear", red: red, blue: blue))
 //        rows.append(rocketRow(title: "Rocket 2", rocket: "RocketFar", red: red, blue: blue))
@@ -41,8 +56,14 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 //        rows.append(row(title: "Fouls", key: "foulPoints", formatString: "+%@", red: red, blue: blue))
 //        rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
 //        rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
+        
+        // Match totals
+        rows.append(row(title: "Fouls / Tech Fouls", key: "foulPoints", formatString: "+%@", red: red, blue: blue))
+        rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
+        rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
+        
         // RP
-        rows.append(row(title: "Ranking Points", key: "rp", red: red, blue: blue))
+        rows.append(row(title: "Ranking Points", key: "rp", formatString: "+%@ RP", red: red, blue: blue))
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
@@ -209,15 +230,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         return BreakdownRow(title: title, red: [makeImageView(), String(Int(redTotal / scale)), "(+\(String(redTotal)))"], blue: [makeImageView(), String(Int(blueTotal / scale)), "(+\(String(blueTotal)))"], type: .subtotal)
     }
 
-    private static func habRow(i: Int, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        guard let habValues = values(key: "habLineRobot\(i)", red: red, blue: blue) else {
-            return nil
-        }
-        let (rv, bv) = habValues
-        guard let redHab = rv as? String, let blueHab = bv as? String else {
-            return nil
-        }
-
+    private static func endgameRow(i: Int, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         guard let endgameValues = values(key: "endgameRobot\(i)", red: red, blue: blue) else {
             return nil
         }
@@ -226,32 +239,15 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             return nil
         }
 
-        let elements = [(redEndgame, redHab), (blueEndgame, blueHab)].map { (endgame, hab) -> AnyHashable in
-            if hab == "None" {
-                return BreakdownStyle.xImage
-            }
-            if endgame == "HabLevel1" {
-                return "Level 1 (+3)"
-            } else if endgame == "HabLevel2" {
-                return "Level 2 (+6)"
-            } else if endgame == "HabLevel3" {
-                return "Level 3 (+12)"
+        let elements = [redEndgame, blueEndgame].map { (endgame) -> AnyHashable in
+            if endgame == "Park" {
+                return "Park (+5)"
+            } else if endgame == "Hang" {
+                return "Hang (+25)"
             }
             return BreakdownStyle.xImage
         }
-        return BreakdownRow(title: "Robot \(i) HAB Climb", red: [elements.first], blue: [elements.last])
-    }
-
-    private static func sum(keys: [String], eval: (String) -> Bool, dict: [String: Any]?) -> Int {
-        guard let dict = dict else {
-            return 0
-        }
-        return keys.map({ dict[$0] as? String }).reduce(0, {
-            guard let s = $1 else {
-                return $0
-            }
-            return $0 + (eval(s) ? 1 : 0)
-        })
+        return BreakdownRow(title: "Robot \(i) Endgame", red: [elements.first], blue: [elements.last])
     }
 
 }
