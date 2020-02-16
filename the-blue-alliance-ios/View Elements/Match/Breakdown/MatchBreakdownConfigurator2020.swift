@@ -121,19 +121,11 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
         
         let redValues = zip((images).map {
-            let imageView = UIImageView(image: $0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = UIColor.label
-            return imageView
+            return makeImageView(image: $0)
         }, redCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         
         let blueValues = zip((images).map {
-            let imageView = UIImageView(image: $0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = UIColor.label
-            return imageView
+            return makeImageView(image: $0)
         }, blueCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
@@ -195,10 +187,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         let elements = [redEndgame, blueEndgame].map { (endgame) -> [AnyHashable] in
             if endgame == "IsLevel" {
-                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage!), "(+15)"]
+                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage), "(+15)"]
                 return result
             }
-            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage!)]
+            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage)]
             return result
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
@@ -215,10 +207,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         let elements = [redShieldOperational, blueShieldOperational].map { (shieldOperational) -> [AnyHashable] in
             if shieldOperational == 1 {
-                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage!), "(+1 RP)"]
+                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage), "(+1 RP)"]
                 return result
             }
-            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage!)]
+            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage)]
             return result
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
@@ -253,7 +245,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
 
-    private static func makeImageView(image: UIImage) -> UIImageView {
+    private static func makeImageView(image: UIImage?) -> UIImageView {
         let imageView = UIImageView(image: image)
         imageView.autoMatch(.width, to: .height, of: imageView)
         imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
