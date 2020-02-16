@@ -87,6 +87,9 @@ struct MatchViewModel {
         case 2019:
             rpName1 = "completeRocketRankingPoint"
             rpName2 = "habDockingRankingPoint"
+        case 2020:
+            rpName1 = "shieldEnergizedRankingPoint"
+            rpName2 = "shieldOperationalRankingPoint"
         default:
             break
         }
