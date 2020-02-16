@@ -28,8 +28,8 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         
         // Teleop
         rows.append(powerCellRow(title: "Teleop Power Cells", period: "teleop", red: red, blue: blue))
-        rows.append(row(title: "Teleop Power Cell Points", key: "", red: red, blue: blue, type: .subtotal))
-        rows.append(row(title: "Control Panel Points", key: "", red: red, blue: blue, type: .subtotal))
+        rows.append(row(title: "Teleop Power Cell Points", key: "teleopCellPoints", red: red, blue: blue, type: .subtotal))
+        rows.append(row(title: "Control Panel Points", key: "controlPanelPoints", red: red, blue: blue, type: .subtotal))
         for i in [1, 2, 3] {
             rows.append(endgameRow(i: i, red: red, blue: blue))
         }
