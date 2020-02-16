@@ -54,7 +54,7 @@ class EventsContainerViewController: ContainerViewController {
 
     // TODO: REMOVE
     @objc func pushCC() {
-        let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: "2019qcmo_qm1"))!
+        let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: "2020week0_qm1"))!
         let cc = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(cc, animated: true)
     }
