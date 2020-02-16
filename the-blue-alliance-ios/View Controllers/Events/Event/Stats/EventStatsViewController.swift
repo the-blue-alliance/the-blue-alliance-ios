@@ -28,7 +28,7 @@ class EventStatsViewController: TBATableViewController, Observable {
     init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
 
-        // Supported event insights is 2016 to 2019
+        // Supported event insights is 2016 to 2020
         if event.year == 2016 {
             eventStatsConfigurator = EventStatsConfigurator2016.self
         } else if event.year == 2017 {
