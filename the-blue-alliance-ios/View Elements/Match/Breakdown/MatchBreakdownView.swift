@@ -18,6 +18,15 @@ class BreakdownStyle {
         return label
     }
 
+    static public func imageView(image: UIImage?, tintColor: UIColor = UIColor.label, contentMode: UIView.ContentMode = UIView.ContentMode.scaleToFill) -> UIImageView {
+        let imageView = UIImageView(image: image)
+        imageView.autoMatch(.width, to: .height, of: imageView)
+        imageView.contentMode = contentMode
+        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
+        imageView.tintColor = tintColor
+        return imageView
+    }
+
 }
 
 protocol BreakdownElement: Any {
