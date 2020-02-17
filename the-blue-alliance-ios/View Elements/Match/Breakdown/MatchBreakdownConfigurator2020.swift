@@ -65,13 +65,15 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             blueLineStrings.append(blueInit)
         }
 
+        let mode = UIView.ContentMode.scaleAspectFit
+
         let elements = [redLineStrings, blueLineStrings].map { (lineStrings) -> [AnyHashable] in
             return lineStrings.map { (line) -> AnyHashable in
                 switch line {
                 case "None":
-                    return BreakdownStyle.xImage
+                    return BreakdownStyle.imageView(image: BreakdownStyle.xImage, contentMode: mode)
                 case "Exited":
-                    return BreakdownStyle.checkImage
+                    return BreakdownStyle.imageView(image: BreakdownStyle.checkImage, contentMode: mode)
                 default:
                     return "?"
                 }
