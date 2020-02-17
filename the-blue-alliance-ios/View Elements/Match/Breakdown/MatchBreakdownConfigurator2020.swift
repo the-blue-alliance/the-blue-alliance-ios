@@ -114,7 +114,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             blueCells.append(blueCellValue)
         }
         
-        let mode = UIView.ContentMode.scaleAspectFit;
+        let mode = UIView.ContentMode.scaleAspectFit
         let redValues = zip((images).map {
             return BreakdownStyle.imageView(image: $0, contentMode: mode)
         }, redCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
@@ -216,7 +216,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         var redActivation: [Int] = [];
         var blueActivation: [Int] = [];
 
-        for i in [3,2,1] {
+        for i in [3, 2, 1] {
             guard let stageActivatedValues = values(key: "stage\(i)Activated", red: red, blue: blue) else {
                 return nil
             }
