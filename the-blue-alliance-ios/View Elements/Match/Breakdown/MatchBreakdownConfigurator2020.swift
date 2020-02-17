@@ -10,7 +10,7 @@ private class BreakdownStyle2020 {
 struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>, _ breakdown: [String: Any]?, _ red: [String: Any]?, _ blue: [String: Any]?) {
-        
+
         var rows: [BreakdownRow?] = []
 
         // Auto
@@ -18,7 +18,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         rows.append(powerCellRow(title: "Auto Power Cells", period: "auto", red: red, blue: blue))
         rows.append(row(title: "Auto Power Cell Points", key: "autoCellPoints", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Total Auto", key: "autoPoints", red: red, blue: blue, type: .total))
-        
+
         // Teleop
         rows.append(powerCellRow(title: "Teleop Power Cells", period: "teleop", red: red, blue: blue))
         rows.append(row(title: "Teleop Power Cell Points", key: "teleopCellPoints", red: red, blue: blue, type: .subtotal))
@@ -29,15 +29,15 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         rows.append(shieldSwitchLevelRow(title: "Shield Generator Switch Level", red: red, blue: blue))
         rows.append(row(title: "Endgame Points", key: "endgamePoints", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
-        
+
         rows.append(stageActivationRow(title: "Stage Activations", red: red, blue: blue))
         rows.append(shieldOperationalRow(title: "Shield Generator Operational", red: red, blue: blue))
-        
+
         // Match totals
         rows.append(foulRow(title: "Fouls / Tech Fouls", red: red, blue: blue))
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
         rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
-        
+
         // RP
         rows.append(row(title: "Ranking Points", key: "rp", formatString: "+%@ RP", red: red, blue: blue))
 
@@ -52,7 +52,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
     private static func initLine(red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         var redLineStrings: [String] = []
         var blueLineStrings: [String] = []
-        
+
         for i in [1, 2, 3] {
             guard let initValues = values(key: "initLineRobot\(i)", red: red, blue: blue) else {
                 return nil
@@ -64,7 +64,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             redLineStrings.append(redInit)
             blueLineStrings.append(blueInit)
         }
-        
+
         let elements = [redLineStrings, blueLineStrings].map { (lineStrings) -> [AnyHashable] in
             return lineStrings.map { (line) -> AnyHashable in
                 switch line {
@@ -77,14 +77,14 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
                 }
             }
         }
-        
+
         var (redElements, blueElements) = (elements[0], elements[1])
 
         // Add the point totals for the init line
         guard let initLinePoints = values(key: "autoInitLinePoints", red: red, blue: blue) else {
             return nil
         }
-        
+
         let (redLinePoints, blueLinePoints) = initLinePoints
         redElements.append("(+\(redLinePoints ?? 0))")
         blueElements.append("(+\(blueLinePoints ?? 0))")
@@ -96,10 +96,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         let keys = ["CellsBottom", "CellsOuter", "CellsInner"]
         let images = [BreakdownStyle2020.bottomImage, BreakdownStyle2020.outerImage, BreakdownStyle2020.innerImage]
         let locations = keys.map { "\(period)\($0)" }
-        
+
         var redCells: [Int] = []
         var blueCells: [Int] = []
-        
+
         for location in locations {
             guard let cellValues = values(key: location, red: red, blue: blue) else {
                 return nil
@@ -113,16 +113,16 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             redCells.append(redCellValue)
             blueCells.append(blueCellValue)
         }
-        
+
         let mode = UIView.ContentMode.scaleAspectFit
         let redValues = zip((images).map {
             return BreakdownStyle.imageView(image: $0, contentMode: mode)
         }, redCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
-        
+
         let blueValues = zip((images).map {
             return BreakdownStyle.imageView(image: $0, contentMode: mode)
         }, blueCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
-        
+
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
     }
 
@@ -145,7 +145,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: "Robot \(i) Endgame", red: [elements.first], blue: [elements.last])
     }
-    
+
     private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         guard let foulValues = values(key: "foulCount", red: red, blue: blue) else {
             return nil
@@ -170,7 +170,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
-    
+
     private static func shieldSwitchLevelRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         guard let endgameIsLevelValues = values(key: "endgameRungIsLevel", red: red, blue: blue) else {
             return nil
@@ -191,7 +191,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
-    
+
     private static func shieldOperationalRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         guard let shieldOperationalValues = values(key: "shieldOperationalRankingPoint", red: red, blue: blue) else {
             return nil
@@ -211,7 +211,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
-    
+
     private static func stageActivationRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         var redActivation: [Int] = [];
         var blueActivation: [Int] = [];
