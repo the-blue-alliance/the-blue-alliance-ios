@@ -65,7 +65,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             blueLineStrings.append(blueInit)
         }
 
-        let mode = UIView.ContentMode.scaleAspectFit
+        let mode = UIView.ContentMode.center
 
         let elements = [redLineStrings, blueLineStrings].map { (lineStrings) -> [AnyHashable] in
             return lineStrings.map { (line) -> AnyHashable in
