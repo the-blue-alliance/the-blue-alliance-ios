@@ -114,12 +114,13 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             blueCells.append(blueCellValue)
         }
         
+        let mode = UIView.ContentMode.scaleAspectFit;
         let redValues = zip((images).map {
-            return BreakdownStyle.imageView(image: $0)
+            return BreakdownStyle.imageView(image: $0, contentMode: mode)
         }, redCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         
         let blueValues = zip((images).map {
-            return BreakdownStyle.imageView(image: $0)
+            return BreakdownStyle.imageView(image: $0, contentMode: mode)
         }, blueCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
