@@ -71,9 +71,9 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             return lineStrings.map { (line) -> AnyHashable in
                 switch line {
                 case "None":
-                    return BreakdownStyle.imageView(image: BreakdownStyle.xImage, contentMode: mode)
+                    return BreakdownStyle.imageView(image: BreakdownStyle.xImage, contentMode: mode, forceSquare: false)
                 case "Exited":
-                    return BreakdownStyle.imageView(image: BreakdownStyle.checkImage, contentMode: mode)
+                    return BreakdownStyle.imageView(image: BreakdownStyle.checkImage, contentMode: mode, forceSquare: false)
                 default:
                     return "?"
                 }
