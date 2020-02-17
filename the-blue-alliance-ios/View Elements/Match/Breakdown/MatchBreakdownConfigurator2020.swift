@@ -11,10 +11,6 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>, _ breakdown: [String: Any]?, _ red: [String: Any]?, _ blue: [String: Any]?) {
         
-        guard let red = red, let blue = blue else {
-            return
-        }
-        
         var rows: [BreakdownRow?] = []
 
         // Auto
