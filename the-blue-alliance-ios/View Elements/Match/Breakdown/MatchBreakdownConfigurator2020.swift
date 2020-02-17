@@ -5,8 +5,6 @@ private class BreakdownStyle2020 {
     public static let bottomImage = UIImage(systemName: "rectangle")
     public static let outerImage = UIImage(systemName: "hexagon")
     public static let innerImage = UIImage(systemName: "circle")
-    public static let checkImage = UIImage(systemName: "checkmark")
-    public static let xImage = UIImage(systemName: "xmark")
 }
 
 struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
@@ -188,10 +186,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         let elements = [redEndgame, blueEndgame].map { (endgame) -> [AnyHashable] in
             let mode = UIView.ContentMode.center
             if endgame == "IsLevel" {
-                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage, contentMode: mode), "(+15)"]
+                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle.checkImage, contentMode: mode), "(+15)"]
                 return result
             }
-            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage, contentMode: mode)]
+            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle.xImage, contentMode: mode)]
             return result
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
@@ -208,10 +206,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         let elements = [redShieldOperational, blueShieldOperational].map { (shieldOperational) -> [AnyHashable] in
             if shieldOperational == 1 {
-                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.checkImage), "(+1 RP)"]
+                let result: [AnyHashable] = [makeImageView(image: BreakdownStyle.checkImage), "(+1 RP)"]
                 return result
             }
-            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle2020.xImage)]
+            let result: [AnyHashable] = [makeImageView(image: BreakdownStyle.xImage)]
             return result
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
