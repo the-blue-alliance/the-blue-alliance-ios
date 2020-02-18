@@ -1,4 +1,4 @@
-Hey y'all - this update fixes a bug with refreshing Teams.
+Hey y'all - this update adds 2020-specific views like Event Stats and Match Breakdowns. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
 
 ---
 
@@ -16,5 +16,3 @@ NEW: Event Webcasts - See a list of webcasts for an Event right in the Event inf
 FIXED: "Bug Fixes and Performance Improvements" - This update fixes all of the biggest crashes from TBA for iOS v1 - far too many to list individually.
 
 Stay tuned for more great updates over the season!
-
-The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
