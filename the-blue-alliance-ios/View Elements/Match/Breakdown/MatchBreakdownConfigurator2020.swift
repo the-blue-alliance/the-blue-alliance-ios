@@ -65,8 +65,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             blueLineStrings.append(blueInit)
         }
 
-        let mode = UIView.ContentMode.center
-
+        let mode = UIView.ContentMode.scaleAspectFit
         let elements = [redLineStrings, blueLineStrings].map { (lineStrings) -> [AnyHashable] in
             return lineStrings.map { (line) -> AnyHashable in
                 switch line {
@@ -80,7 +79,15 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             }
         }
 
-        var (redElements, blueElements) = (elements[0], elements[1])
+        let (redElements, blueElements) = (elements[0], elements[1])
+        guard let redBreakdownElements = redElements as? [BreakdownElement], let blueBreakdownElements = blueElements as? [BreakdownElement] else {
+            return nil
+        }
+
+        let redStackView = UIStackView(arrangedSubviews: redBreakdownElements.map { $0.toView() })
+        redStackView.distribution = .fillEqually
+        let blueStackView = UIStackView(arrangedSubviews: blueBreakdownElements.map { $0.toView() })
+        blueStackView.distribution = .fillEqually
 
         // Add the point totals for the init line
         guard let initLinePoints = values(key: "autoInitLinePoints", red: red, blue: blue) else {
@@ -88,10 +95,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         }
 
         let (redLinePoints, blueLinePoints) = initLinePoints
-        redElements.append("(+\(redLinePoints ?? 0))")
-        blueElements.append("(+\(blueLinePoints ?? 0))")
+        let redLinePointsString = "(+\(redLinePoints ?? 0))"
+        let blueLinePointsString = "(+\(blueLinePoints ?? 0))"
 
-        return BreakdownRow(title: "Initiation Line exited", red: redElements, blue: blueElements)
+        return BreakdownRow(title: "Initiation Line exited", red: [redStackView, redLinePointsString], blue: [blueStackView, blueLinePointsString])
     }
 
     private static func powerCellRow(title: String, period: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
