@@ -165,6 +165,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.sharedSDK().debug = true
         #else
         Fabric.with([Crashlytics.self])
+        Analytics.setAnalyticsCollectionEnabled(true)
         #endif
 
         let secrets = Secrets()
