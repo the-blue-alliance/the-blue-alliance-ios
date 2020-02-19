@@ -59,6 +59,7 @@ struct Robot: View {
 struct FieldSize {
     static let width: CGFloat = 54.0
     static let height: CGFloat = 27.0
+    // pathTimeLength = 50
 }
 
 struct RobotSize {
@@ -73,10 +74,18 @@ struct RobotSize {
     }
 }
 
+enum PlaybackSpeed: Int, CaseIterable {
+    case one = 1
+    case five = 5
+    case ten = 10
+}
+
 struct ZebraView: View {
 
+    let times: [Double]
     let teams: [MatchZebraTeam]
     let colors: [Color]
+    let timestamp: Double
 
     var body: some View {
         GeometryReader { geometry in
@@ -84,15 +93,58 @@ struct ZebraView: View {
                 Robot(team: self.teams[teamIndex],
                       index: teamIndex,
                       color: self.colors[teamIndex])
-                    .position(self.intervalPosition(team: self.teams[teamIndex],
+                    .position(self.intervalPosition(times: self.times,
+                                                    team: self.teams[teamIndex],
+                                                    timestamp: self.timestamp,
                                                     geometry: geometry))
+                    .animation(.linear)
                     .frame(width: self.robotSize(geometry: geometry),
                            height: self.robotSize(geometry: geometry))
             }
         }
     }
 
-    private func intervalPosition(team: MatchZebraTeam, geometry: GeometryProxy) -> CGPoint {
+    // TODO: DRY this out like we do on Web
+    private func intervalPosition(times: [Double], team: MatchZebraTeam, timestamp: Double, geometry: GeometryProxy) -> CGPoint {
+        // TODO: Use `firstPosition` when we init
+        /*
+        guard let position = team.firstPosition else {
+            return .zero
+        }
+        */
+        // Get our interpolated position for our timestamp
+        // Round our values up/down and to the nearest tenth
+        let timestampFloor = floor(timestamp * 10.0) / 10.0
+        let timestampCeiling = ceil(timestamp * 10.0) / 10.0
+
+        // Find where our team is starting at and where our team is going to next in points
+        guard let lastPositionIndex = times.firstIndex(of: timestampFloor),
+            let lastPositionX = team.xs[lastPositionIndex],
+            let lastPositionY = team.ys[lastPositionIndex] else {
+                // TODO: Return whatever position we're currently in
+                return .zero
+        }
+        guard let nextPositionIndex = times.firstIndex(of: timestampCeiling),
+            let nextPositionX = team.xs[nextPositionIndex],
+            let nextPositionY = team.ys[nextPositionIndex] else {
+                // TODO: Return whatever position we're currently in
+                return .zero
+        }
+
+        let slopeX = (nextPositionX - lastPositionX)
+        let slopeY = (nextPositionY - lastPositionY)
+
+        let deltaX = (timestamp - timestampFloor) * slopeX
+        let deltaY = (timestamp - timestampFloor) * slopeY
+
+        // return CGPoint(x: lastPositionX + deltaX, y: lastPositionY + deltaY)
+
+        let x = CGFloat(lastPositionX + deltaX)
+        let y = FieldSize.height - CGFloat(lastPositionY + deltaY)
+        let scale = geometry.size.width / FieldSize.width
+        return CGPoint(x: x * scale, y: y * scale)
+
+        /*
         guard let position = team.firstPosition else {
             return .zero
         }
@@ -100,6 +152,7 @@ struct ZebraView: View {
         let y = FieldSize.height - position.y
         let scale = geometry.size.width / FieldSize.width
         return CGPoint(x: position.x * scale, y: y * scale)
+        */
     }
 
     private func robotSize(geometry: GeometryProxy) -> CGFloat {
@@ -120,13 +173,19 @@ struct MatchZebraView: View {
     @ObservedObject var match: Match
 
     @State var playing = false
+    @State var playbackSpeed = PlaybackSpeed.five
 
-    @State private var time: Double = 0
-
-    @State private var interval: Int = 0
+    @State private var timestamp: Double = 0.0
     private var timer: Timer {
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {_ in
-            // self.interval = (self.interval + 1) % self.zebraData.times.count
+        // 60fps
+        Timer.scheduledTimer(withTimeInterval: (1.0/60.0), repeats: true) { timer in
+            guard self.playing else {
+                return
+            }
+            // TODO: Is `times` ordered?
+            self.timestamp += timer.timeInterval
+            // Round our timestamp to repeat when we hit our last timestamp - default to 2:30
+            self.timestamp = self.timestamp.truncatingRemainder(dividingBy: self.match.zebra?.times.last ?? 150.0)
         }
     }
 
@@ -145,8 +204,10 @@ struct MatchZebraView: View {
                     .aspectRatio(contentMode: .fill)
                 match.zebra.map {
                     ZebraView(
+                        times: $0.times,
                         teams: $0.teams,
-                        colors: colors
+                        colors: colors,
+                        timestamp: timestamp
                     )
                     .clipped()
                 }
@@ -154,17 +215,32 @@ struct MatchZebraView: View {
             HStack {
                 Image(systemName: "eye.fill")
                 Button(action: {
-
+                    self.playing = !self.playing
                 }) {
-                    playing ? Image(systemName: "play.fill") : Image(systemName: "pause.fill")
+                    playing ? Image(systemName: "pause.fill") : Image(systemName: "play.fill")
                 }
-                Image(systemName: "eye.fill")
-                Image(systemName: "backward.end.alt.fill")
-                Image(systemName: "backward.fill")
-                Text("5x")
-                Image(systemName: "forward.fill")
+                Button(action: {
+                    // TODO: Disable if at start
+                    self.timestamp = 0.0
+                }) {
+                    Image(systemName: "backward.end.alt.fill")
+                }
+                .disabled(timestamp == 0.0 && !playing)
+                Button(action: {
+                    self.playbackSpeed = PlaybackSpeed(rawValue: self.playbackSpeed.rawValue - 1) ?? PlaybackSpeed.allCases.first!
+                }) {
+                    Image(systemName: "backward.fill")
+                }
+                .disabled(playbackSpeed == PlaybackSpeed.allCases.first)
+                Text("\(playbackSpeed.rawValue)x")
+                Button(action: {
+                    self.playbackSpeed = PlaybackSpeed(rawValue: self.playbackSpeed.rawValue + 1) ?? PlaybackSpeed.allCases.last!
+                }) {
+                    Image(systemName: "forward.fill")
+                }
+                .disabled(playbackSpeed == PlaybackSpeed.allCases.last)
                 // Slider(value: $time, in: 0.0...Double($0.times.count), step: 1.0)
-                Text("0:00")
+                Text("\(floor(timestamp / 60)):\(floor(timestamp.truncatingRemainder(dividingBy: 60)))")
             }
         }
         .onAppear(perform: {
