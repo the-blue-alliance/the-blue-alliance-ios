@@ -3,7 +3,7 @@ import SwiftUI
 
 struct ZebraToolbar: View {
 
-    @State var playing = false
+    @Binding var playing: Bool
 
     var body: some View {
         HStack {
@@ -12,10 +12,8 @@ struct ZebraToolbar: View {
             Button(action: {
                 self.playing = !self.playing
             }) {
-                playing ? Image(systemName: "play.fill") : Image(systemName: "pause.fill")
+                playing ? Image(systemName: "pause.fill") : Image(systemName: "play.fill")
             }
-            .frame(width: 44, height: 44, alignment: .center)
-            .background(Color.gray)
 
             Image(systemName: "backward.end.alt.fill")
             Image(systemName: "backward.fill")
