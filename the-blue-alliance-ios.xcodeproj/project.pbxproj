@@ -21,6 +21,9 @@
 		1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */; };
 		1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */; };
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
+		14A9C17D23FD9DCB00A20080 /* TrajectoryToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9C17C23FD9DCB00A20080 /* TrajectoryToolbar.swift */; };
+		14A9C17F23FDA8EF00A20080 /* TrajectoryAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9C17E23FDA8EF00A20080 /* TrajectoryAlliance.swift */; };
+		14A9C18123FDAE9400A20080 /* ZebraRobot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9C18023FDAE9400A20080 /* ZebraRobot.swift */; };
 		14F51704239AA70A00D9240F /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F51703239AA70A00D9240F /* SearchService.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
@@ -256,6 +259,9 @@
 		14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModel.swift; sourceTree = "<group>"; };
 		1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatCellViewModel.swift; sourceTree = "<group>"; };
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
+		14A9C17C23FD9DCB00A20080 /* TrajectoryToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectoryToolbar.swift; sourceTree = "<group>"; };
+		14A9C17E23FDA8EF00A20080 /* TrajectoryAlliance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectoryAlliance.swift; sourceTree = "<group>"; };
+		14A9C18023FDAE9400A20080 /* ZebraRobot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZebraRobot.swift; sourceTree = "<group>"; };
 		14F51703239AA70A00D9240F /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
@@ -497,9 +503,20 @@
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
 				1479693F215E9A580075AF4E /* MatchViewModel.swift */,
 				921F609723CD4DE000FE633B /* Breakdown */,
-				1417274F23CF629C00DD957B /* MatchZebraView.swift */,
+				14A9C17B23FD9D6000A20080 /* Zebra */,
 			);
 			path = Match;
+			sourceTree = "<group>";
+		};
+		14A9C17B23FD9D6000A20080 /* Zebra */ = {
+			isa = PBXGroup;
+			children = (
+				1417274F23CF629C00DD957B /* MatchZebraView.swift */,
+				14A9C17E23FDA8EF00A20080 /* TrajectoryAlliance.swift */,
+				14A9C17C23FD9DCB00A20080 /* TrajectoryToolbar.swift */,
+				14A9C18023FDAE9400A20080 /* ZebraRobot.swift */,
+			);
+			path = Zebra;
 			sourceTree = "<group>";
 		};
 		14B6726D21529D6B00FDDAB2 /* Mocks */ = {
@@ -1770,10 +1787,12 @@
 				1417275023CF629C00DD957B /* MatchZebraView.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
 				9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */,
+				14A9C17D23FD9DCB00A20080 /* TrajectoryToolbar.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
 				92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */,
 				92BA25C0238F4E9000EC796D /* RemoteConfigService.swift in Sources */,
+				14A9C18123FDAE9400A20080 /* ZebraRobot.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
 				9279737B23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift in Sources */,
@@ -1796,6 +1815,7 @@
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
 				92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */,
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
+				14A9C17F23FDA8EF00A20080 /* TrajectoryAlliance.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */,
