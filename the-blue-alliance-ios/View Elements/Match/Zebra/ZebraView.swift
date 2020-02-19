@@ -2,15 +2,12 @@ import Combine
 import SwiftUI
 import TBAData
 
-// public let imagePublisher = PassthroughSubject<Image, Never>()
-
 struct ZebraView: View {
 
-    // TODO: We probably need times?
     let times: [Double]
     let teams: [MatchZebraTeam]
     let colors: [Color]
-    let timerPublisher: Publishers.Autoconnect<Timer.TimerPublisher>
+    let timerPublisher: PassthroughSubject<Double, Never>
 
     @State private var time: Double = 0
     @State private var initialPosition: Bool = true
@@ -18,20 +15,23 @@ struct ZebraView: View {
     var body: some View {
         GeometryReader { geometry in
             ForEach(0..<self.teams.count) { teamIndex in
-                Robot(team: self.teams[teamIndex],
-                      index: teamIndex,
-                      color: self.colors[teamIndex])
-                    .position(self.interpolatedPosition(team: self.teams[teamIndex],
-                                                        geometry: geometry))
-                    .frame(width: self.robotSize(geometry: geometry),
-                           height: self.robotSize(geometry: geometry))
-                    .onReceive(self.timerPublisher) { (time) in
-                        print(time)
-                        self.initialPosition = false
-                        // self.time = time
-                }
+                ZebraRobot(team: self.teams[teamIndex], index: teamIndex, color: self.colors[teamIndex])
+                    .frame(width: self.robotSize(geometry: geometry), height: self.robotSize(geometry: geometry))
+                    .position(self.position(team: self.teams[teamIndex], geometry: geometry))
             }
         }
+    }
+
+    private func position(team: MatchZebraTeam, geometry: GeometryProxy) -> CGPoint {
+        if initialPosition {
+            return normalizedInitialPosition(team: team, geometry: geometry)
+        }
+        return interpolatedPosition(team: team, geometry: geometry)
+    }
+
+    private func normalizedInitialPosition(team: MatchZebraTeam, geometry: GeometryProxy) -> CGPoint {
+        let position = team.firstPosition ?? .zero
+        return normalizePoint(point: position, geometry: geometry)
     }
 
     private func interpolatedPosition(team: MatchZebraTeam, geometry: GeometryProxy) -> CGPoint {
@@ -55,25 +55,14 @@ struct ZebraView: View {
         let deltaX = (time - timeFloor) * slopeX
         let deltaY = (time - timeFloor) * slopeY
 
-        let x = CGFloat(floorX + deltaX)
-        // Invert our Y - positions are from bottom-left, UIKit is from top-right
-        let y = FieldSize.height - CGFloat(floorY + deltaY)
-        let scale = geometry.size.width / FieldSize.width
-        return CGPoint(x: x * scale, y: y * scale)
+        return normalizePoint(point: CGPoint(x: floorX + deltaX, y: floorY + deltaY), geometry: geometry)
+    }
 
-        /*
-        // TODO: Allow this to be nil to keep existing position
-        let position: CGPoint = {
-            if initialPosition {
-                return team.firstPosition ?? .zero
-            } else {
-                guard let x = team.xs[interval], let y = team.ys[interval] else {
-                    return .zero
-                }
-                return CGPoint(x: x, y: y)
-            }
-        }()
-        */
+    private func normalizePoint(point: CGPoint, geometry: GeometryProxy) -> CGPoint {
+        // Invert our Y - positions are from bottom-left, UIKit is from top-right
+        let y = FieldSize.height - point.y
+        let scale = geometry.size.width / FieldSize.width
+        return CGPoint(x: point.x * scale, y: y * scale)
     }
 
     private func robotSize(geometry: GeometryProxy) -> CGFloat {
