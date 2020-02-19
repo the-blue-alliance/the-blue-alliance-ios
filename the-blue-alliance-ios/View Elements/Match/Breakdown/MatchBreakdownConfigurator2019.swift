@@ -106,18 +106,10 @@ struct MatchBreakdownConfigurator2019: MatchBreakdownConfigurator {
         let colors = [UIColor.nullHatchPanelColor, UIColor.hatchPanelColor, UIColor.cargoColor]
 
         let redValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
-            return imageView
+            return BreakdownStyle.imageView(image: $0.0, tintColor: $0.1)
         }, [nullHatchRed, hatchRed, cargoRed]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         let blueValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
-            return imageView
+            return BreakdownStyle.imageView(image: $0.0, tintColor: $0.1)
         }, [nullHatchBlueBlue, hatchBlue, cargoBlue]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
     }
@@ -148,32 +140,16 @@ struct MatchBreakdownConfigurator2019: MatchBreakdownConfigurator {
         let colors = [UIColor.hatchPanelColor, UIColor.cargoColor]
 
         let redValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
-            return imageView
+            return BreakdownStyle.imageView(image: $0.0, tintColor: $0.1)
         }, [hatchRed, cargoRed]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         let blueValues = zip(zip(images, colors).map {
-            let imageView = UIImageView(image: $0.0)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = $0.1
-            return imageView
+            return BreakdownStyle.imageView(image: $0.0, tintColor: $0.1)
         }, [hatchBlue, cargoBlue]).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
     }
 
     private static func totalPointsRow(title: String, key: String, scale: Int, image: UIImage?, color: UIColor, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         // Total Points
-        func makeImageView() -> UIImageView {
-            let imageView = UIImageView(image: image)
-            imageView.autoMatch(.width, to: .height, of: imageView)
-            imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
-            imageView.tintColor = color
-            return imageView
-        }
-
         guard let totals = values(key: key, red: red, blue: blue) else {
             return nil
         }
@@ -181,7 +157,13 @@ struct MatchBreakdownConfigurator2019: MatchBreakdownConfigurator {
             return nil
         }
 
-        return BreakdownRow(title: title, red: [makeImageView(), String(Int(redTotal / scale)), "(+\(String(redTotal)))"], blue: [makeImageView(), String(Int(blueTotal / scale)), "(+\(String(blueTotal)))"], type: .subtotal)
+        let redImageView = BreakdownStyle.imageView(image: image, tintColor: color, contentMode: .center)
+        redImageView.setContentHuggingPriority(.required, for: .horizontal)
+
+        let blueImageView = BreakdownStyle.imageView(image: image, tintColor: color, contentMode: .center)
+        blueImageView.setContentHuggingPriority(.required, for: .horizontal)
+
+        return BreakdownRow(title: title, red: [redImageView, String(Int(redTotal / scale)), "(+\(String(redTotal)))"], blue: [blueImageView, String(Int(blueTotal / scale)), "(+\(String(blueTotal)))"], type: .subtotal)
     }
 
     private static func habRow(i: Int, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {

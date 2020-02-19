@@ -202,7 +202,6 @@ class MatchBreakdownView: UIView {
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [redView, titleView, blueView])
         stackView.axis = .horizontal
-        // stackView.distribution = .fillEqually
         return stackView
     }()
 
