@@ -12,8 +12,12 @@ class EventStatsConfigurator2020: EventStatsConfigurator {
         matchStats.append(scoreRow(title: "Average Winning Score", key: "average_win_score", qual: qual, playoff: playoff))
         matchStats.append(scoreRow(title: "Average Win Margin", key: "average_win_margin", qual: qual, playoff: playoff))
         matchStats.append(scoreRow(title: "Average Initiation Line Points", key: "average_init_line_points_auto", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Cell Count (Bottom)", key: "average_cell_count_bottom", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Cell Count (Outer)", key: "average_cell_count_outer", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Cell Count (Inner)", key: "average_cell_count_inner", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Cell Count", key: "average_cell_count", qual: qual, playoff: playoff))
         matchStats.append(scoreRow(title: "Average Cell Points", key: "average_cell_score", qual: qual, playoff: playoff))
-        matchStats.append(scoreRow(title: "Control Panel Points", key: "average_control_panel_points", qual: qual, playoff: playoff))
+        matchStats.append(scoreRow(title: "Average Control Panel Points", key: "average_control_panel_points", qual: qual, playoff: playoff))
         matchStats.append(scoreRow(title: "Average Foul Points", key: "average_foul_score", qual: qual, playoff: playoff))
         matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
 
