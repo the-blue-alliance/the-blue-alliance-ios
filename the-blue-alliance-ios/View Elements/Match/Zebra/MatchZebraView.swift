@@ -1,3 +1,4 @@
+import Combine
 import TBAData
 import SwiftUI
 
@@ -73,56 +74,6 @@ struct RobotSize {
     }
 }
 
-struct ZebraView: View {
-
-    let teams: [MatchZebraTeam]
-    let colors: [Color]
-
-    @State var interval: Int = 0
-    @State private var initialPosition: Bool = true
-
-    var body: some View {
-        GeometryReader { geometry in
-            ForEach(0..<self.teams.count) { teamIndex in
-                Robot(team: self.teams[teamIndex],
-                      index: teamIndex,
-                      color: self.colors[teamIndex])
-                    .position(self.intervalPosition(team: self.teams[teamIndex],
-                                                    geometry: geometry))
-                    .frame(width: self.robotSize(geometry: geometry),
-                           height: self.robotSize(geometry: geometry))
-            }
-        }
-    }
-
-    private func intervalPosition(team: MatchZebraTeam, geometry: GeometryProxy) -> CGPoint {
-        // TODO: Allow this to be nil to keep existing position
-        let position: CGPoint = {
-            if initialPosition {
-                return team.firstPosition ?? .zero
-            } else {
-                guard let x = team.xs[interval], let y = team.ys[interval] else {
-                    return .zero
-                }
-                let p = CGPoint(x: x, y: y)
-                print("New position: \(p)")
-                return p
-            }
-        }()
-        // Invert our Y - positions are from bottom-left, UIKit is from top-right
-        let y = FieldSize.height - position.y
-        let scale = geometry.size.width / FieldSize.width
-        return CGPoint(x: position.x * scale, y: y * scale)
-    }
-
-    private func robotSize(geometry: GeometryProxy) -> CGFloat {
-        // Robots should be a 1.3-radius circle with a 0.2 stroke
-        let scale = geometry.size.width / FieldSize.width
-        return scale * RobotSize.total
-    }
-
-}
-
 struct MatchZebraView: View {
 
     private let colors = [
@@ -131,20 +82,18 @@ struct MatchZebraView: View {
     ]
 
     @ObservedObject var match: Match
+    // TODO: Pass `year`
 
     @State private var playing: Bool = false
 
-    @State private var interval: Int = 0
+    private let timePublisher = PassthroughSubject<Double, Never>()
+
     private var timer: Timer {
-        // TODO: We could update this at 60fps and round down
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: (1.0/60.0), repeats: true) { timer in
             guard self.playing else {
                 return
             }
-            guard let times = self.match.zebra?.times else {
-                return
-            }
-            self.interval = (self.interval + 1) % times.count
+            self.timePublisher.send(timer.timeInterval)
         }
     }
 
@@ -156,8 +105,10 @@ struct MatchZebraView: View {
                     .aspectRatio(contentMode: .fill)
                 match.zebra.map {
                     ZebraView(
+                        times: $0.times,
                         teams: $0.teams,
-                        colors: colors
+                        colors: colors,
+                        timePublisher: timePublisher
                     )
                     .clipped()
                 }

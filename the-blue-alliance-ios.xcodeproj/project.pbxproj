@@ -165,6 +165,7 @@
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CC6D36234588810085867D /* Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92CC6D34234588810085867D /* Test.xcdatamodeld */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
+		92D65E1C23FCC829009DC702 /* ZebraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D65E1B23FCC829009DC702 /* ZebraView.swift */; };
 		92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */; };
 		92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D31EC68F4200572F27 /* TeamsViewController.swift */; };
 		92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D61EC695C400572F27 /* TeamTableViewCell.swift */; };
@@ -414,6 +415,7 @@
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-unit-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D6483E20BE4CB8008F0DB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92D65E1B23FCC829009DC702 /* ZebraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZebraView.swift; sourceTree = "<group>"; };
 		92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewController.swift; sourceTree = "<group>"; };
 		92D855D31EC68F4200572F27 /* TeamsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsViewController.swift; sourceTree = "<group>"; };
 		92D855D61EC695C400572F27 /* TeamTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamTableViewCell.swift; sourceTree = "<group>"; };
@@ -1040,6 +1042,7 @@
 			isa = PBXGroup;
 			children = (
 				1417274F23CF629C00DD957B /* MatchZebraView.swift */,
+				92D65E1B23FCC829009DC702 /* ZebraView.swift */,
 				92C079C923FCB07000AE2AFA /* ZebraToolbar.swift */,
 			);
 			path = Zebra;
@@ -1788,6 +1791,7 @@
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
 				1417275023CF629C00DD957B /* MatchZebraView.swift in Sources */,
+				92D65E1C23FCC829009DC702 /* ZebraView.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
 				9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
