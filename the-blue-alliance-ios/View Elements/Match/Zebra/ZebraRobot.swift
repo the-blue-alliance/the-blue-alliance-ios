@@ -30,6 +30,7 @@ struct Robot: View {
                     .foregroundColor(.white)
             }
             .position(self.position)
+            .animation(.linear)
             .onReceive(self.initialPositionPublisher, perform: { (initialPosition) in
                 guard initialPosition else {
                     return

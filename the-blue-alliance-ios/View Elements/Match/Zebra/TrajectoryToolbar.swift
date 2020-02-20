@@ -50,7 +50,7 @@ struct TrajectoryToolbar: View {
             // Slider(value: $time, in: 0.0...Double($0.times.count), step: 1.0)
 
             // Timestamp - in the 0:00 format
-            Text("\(String(format: "%01.0f", timestamp / 60)):\(String(format: "%02.0f", timestamp.truncatingRemainder(dividingBy: 60)))")
+            Text("\(String(format: "%01.0f", (timestamp / 60).rounded(.down))):\(String(format: "%02.0f", timestamp.truncatingRemainder(dividingBy: 60)))")
         }
     }
 
