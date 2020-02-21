@@ -23,7 +23,7 @@
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
 		14A9C17D23FD9DCB00A20080 /* TrajectoryToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9C17C23FD9DCB00A20080 /* TrajectoryToolbar.swift */; };
 		14A9C17F23FDA8EF00A20080 /* TrajectoryAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9C17E23FDA8EF00A20080 /* TrajectoryAlliance.swift */; };
-		14A9C18123FDAE9400A20080 /* ZebraRobot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9C18023FDAE9400A20080 /* ZebraRobot.swift */; };
+		14A9C18123FDAE9400A20080 /* TrajectoryRobot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A9C18023FDAE9400A20080 /* TrajectoryRobot.swift */; };
 		14F51704239AA70A00D9240F /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F51703239AA70A00D9240F /* SearchService.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
@@ -261,7 +261,7 @@
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
 		14A9C17C23FD9DCB00A20080 /* TrajectoryToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectoryToolbar.swift; sourceTree = "<group>"; };
 		14A9C17E23FDA8EF00A20080 /* TrajectoryAlliance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectoryAlliance.swift; sourceTree = "<group>"; };
-		14A9C18023FDAE9400A20080 /* ZebraRobot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZebraRobot.swift; sourceTree = "<group>"; };
+		14A9C18023FDAE9400A20080 /* TrajectoryRobot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectoryRobot.swift; sourceTree = "<group>"; };
 		14F51703239AA70A00D9240F /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
@@ -512,9 +512,9 @@
 			isa = PBXGroup;
 			children = (
 				1417274F23CF629C00DD957B /* MatchZebraView.swift */,
+				14A9C18023FDAE9400A20080 /* TrajectoryRobot.swift */,
 				14A9C17E23FDA8EF00A20080 /* TrajectoryAlliance.swift */,
 				14A9C17C23FD9DCB00A20080 /* TrajectoryToolbar.swift */,
-				14A9C18023FDAE9400A20080 /* ZebraRobot.swift */,
 			);
 			path = Zebra;
 			sourceTree = "<group>";
@@ -1792,7 +1792,7 @@
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
 				92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */,
 				92BA25C0238F4E9000EC796D /* RemoteConfigService.swift in Sources */,
-				14A9C18123FDAE9400A20080 /* ZebraRobot.swift in Sources */,
+				14A9C18123FDAE9400A20080 /* TrajectoryRobot.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
 				9279737B23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift in Sources */,

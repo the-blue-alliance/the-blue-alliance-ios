@@ -5,23 +5,18 @@ import SwiftUI
 
 struct TrajectoryView: View {
 
-    let times: [Double]
-    let teams: [MatchZebraTeam]
     let colors: [Color]
-
-    let timestampPublisher: PassthroughSubject<Double, Never>
-    let initialPositionPublisher: PassthroughSubject<Bool, Never>
+    let teams: [MatchZebraTeam]
+    let times: [Double]
 
     var body: some View {
         GeometryReader { geometry in
             ForEach(0..<self.teams.count) { teamIndex in
-                Robot(times: self.times,
-                      team: self.teams[teamIndex],
-                      index: teamIndex,
-                      color: self.colors[teamIndex],
-                      fieldGeometry: geometry,
-                      timestampPublisher: self.timestampPublisher,
-                      initialPositionPublisher: self.initialPositionPublisher)
+                TrajectoryRobot(color: self.colors[teamIndex],
+                                fieldGeometry: geometry,
+                                index: teamIndex,
+                                team: self.teams[teamIndex],
+                                times: self.times)
                     .frame(width: self.robotSize(geometry: geometry),
                            height: self.robotSize(geometry: geometry))
             }

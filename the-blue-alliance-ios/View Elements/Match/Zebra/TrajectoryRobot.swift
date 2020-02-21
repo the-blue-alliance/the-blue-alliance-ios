@@ -6,18 +6,15 @@ import SwiftUI
 // TODO: If we're on a phone, show the digits/table
 // If we're on an iPad, show the numbers
 
-struct Robot: View {
+struct TrajectoryRobot: View {
 
-    let times: [Double]
-    let team: MatchZebraTeam
-    let index: Int
     let color: Color
+    let fieldGeometry: GeometryProxy // TODO: Aaaaaaa - we need to make sure we update from this
+    let index: Int
+    let team: MatchZebraTeam
+    let times: [Double]
 
     @State var position: CGPoint = .zero
-    @State var fieldGeometry: GeometryProxy
-
-    let timestampPublisher: PassthroughSubject<Double, Never>
-    let initialPositionPublisher: PassthroughSubject<Bool, Never>
 
     var body: some View {
         GeometryReader { geometry in
@@ -31,13 +28,10 @@ struct Robot: View {
             }
             .position(self.position)
             .animation(.linear)
-            .onReceive(self.initialPositionPublisher, perform: { (initialPosition) in
-                guard initialPosition else {
-                    return
-                }
+            .onReceive(MatchZebraView.initialPositionPublisher, perform: { _ in 
                 self.setInitialPosition()
             })
-            .onReceive(self.timestampPublisher, perform: { (timestamp) in
+            .onReceive(MatchZebraView.timestampPublisher, perform: { (timestamp) in
                 self.setTimestampPosition(timestamp: timestamp)
             })
             .onAppear {
@@ -48,7 +42,7 @@ struct Robot: View {
 
     private func setInitialPosition() {
         if let position = team.firstPosition {
-            self.position = Robot.normalizePoint(position, geometry: fieldGeometry)
+            self.position = TrajectoryRobot.normalizePoint(position, geometry: fieldGeometry)
         } else {
             self.position = .zero
         }
@@ -81,7 +75,7 @@ struct Robot: View {
         let x = CGFloat(lastPositionX + deltaX)
         let y = CGFloat(lastPositionY + deltaY)
 
-        self.position = Robot.normalizePoint(CGPoint(x: x, y: y), geometry: fieldGeometry)
+        self.position = TrajectoryRobot.normalizePoint(CGPoint(x: x, y: y), geometry: fieldGeometry)
     }
 
     private static func normalizePoint(_ point: CGPoint, geometry: GeometryProxy) -> CGPoint {

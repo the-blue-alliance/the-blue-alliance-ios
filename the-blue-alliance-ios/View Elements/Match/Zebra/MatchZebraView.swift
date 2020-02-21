@@ -28,15 +28,15 @@ enum PlaybackSpeed: Int, CaseIterable {
 
 struct MatchZebraView: View {
 
+    public static let timestampSubject = PassthroughSubject<Double, Never>()
+    public static let initialPositionSubject = PassthroughSubject<Bool, Never>()
+
     private let colors = [
         Color.zebraRed1, Color.zebraRed2, Color.zebraRed3,
         Color.zebraBlue1, Color.zebraBlue2, Color.zebraBlue3
     ]
 
     @ObservedObject var match: Match
-
-    private let timestampPublisher = PassthroughSubject<Double, Never>()
-    private let initialPositionPublisher = PassthroughSubject<Bool, Never>()
 
     @State var playing = false
     @State var playbackSpeed = PlaybackSpeed.five
@@ -51,7 +51,7 @@ struct MatchZebraView: View {
             self.timestamp += (timer.timeInterval * Double(self.playbackSpeed.rawValue))
             // Round our timestamp to repeat when we hit our last timestamp - default to 2:30
             self.timestamp = self.timestamp.truncatingRemainder(dividingBy: self.match.zebra?.times.last ?? 150.0)
-            self.timestampPublisher.send(self.timestamp)
+            MatchZebraView.timestampPublisher.send(self.timestamp)
         }
     }
 
@@ -63,11 +63,9 @@ struct MatchZebraView: View {
                     .aspectRatio(contentMode: .fill)
                 match.zebra.map {
                     TrajectoryView(
-                        times: $0.times,
-                        teams: $0.teams,
                         colors: colors,
-                        timestampPublisher: timestampPublisher,
-                        initialPositionPublisher: initialPositionPublisher
+                        teams: $0.teams,
+                        times: $0.times
                     )
                     .clipped()
                 }
@@ -75,7 +73,8 @@ struct MatchZebraView: View {
             TrajectoryToolbar(
                 playbackSpeed: $playbackSpeed,
                 playing: $playing,
-                timestamp: $timestamp
+                timestamp: $timestamp,
+                timestampMax: match.zebra?.times.last ?? 150.0
             )
         }
         .onAppear(perform: {

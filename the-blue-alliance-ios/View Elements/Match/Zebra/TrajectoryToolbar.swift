@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 import SwiftUI
 
@@ -6,6 +7,7 @@ struct TrajectoryToolbar: View {
     @Binding var playbackSpeed: PlaybackSpeed
     @Binding var playing: Bool
     @Binding var timestamp: Double
+    let timestampMax: Double
 
     var body: some View {
         HStack {
@@ -14,14 +16,14 @@ struct TrajectoryToolbar: View {
 
             // Pause/play
             Button(action: {
-                self.playing = !self.playing
+                withAnimation { self.playing.toggle() }
             }) {
-                playing ? Image(systemName: "pause.fill") : Image(systemName: "play.fill")
+                Image(systemName: playing ? "pause.fill" : "play.fill")
             }
 
             // Restart
             Button(action: {
-                // TODO: Disable if at start
+                MatchZebraView.initialPosition.send()
                 self.timestamp = 0.0
             }) {
                 Image(systemName: "backward.end.alt.fill")
@@ -30,7 +32,14 @@ struct TrajectoryToolbar: View {
 
             // Slow down
             Button(action: {
-                self.playbackSpeed = PlaybackSpeed(rawValue: self.playbackSpeed.rawValue - 1) ?? PlaybackSpeed.allCases.first!
+                guard let index = PlaybackSpeed.allCases.firstIndex(of: self.playbackSpeed) else {
+                    return
+                }
+                let nextIndex = index - 1
+                guard nextIndex >= 0 else {
+                    return
+                }
+                self.playbackSpeed = PlaybackSpeed.allCases[nextIndex]
             }) {
                 Image(systemName: "backward.fill")
             }
@@ -41,16 +50,27 @@ struct TrajectoryToolbar: View {
 
             // Speed up
             Button(action: {
-                self.playbackSpeed = PlaybackSpeed(rawValue: self.playbackSpeed.rawValue + 1) ?? PlaybackSpeed.allCases.last!
+                guard let index = PlaybackSpeed.allCases.firstIndex(of: self.playbackSpeed) else {
+                    return
+                }
+                let nextIndex = index + 1
+                guard nextIndex < PlaybackSpeed.allCases.count else {
+                    return
+                }
+                self.playbackSpeed = PlaybackSpeed.allCases[nextIndex]
             }) {
                 Image(systemName: "forward.fill")
             }
             .disabled(playbackSpeed == PlaybackSpeed.allCases.last)
 
-            // Slider(value: $time, in: 0.0...Double($0.times.count), step: 1.0)
+            Slider(value: $timestamp, in: 0.0...timestampMax, step: 0.1, onEditingChanged: { (changed) in
+                // TODO: Our positions aren't updating properly... why
+                self.playing = !changed
+            })
 
             // Timestamp - in the 0:00 format
             Text("\(String(format: "%01.0f", (timestamp / 60).rounded(.down))):\(String(format: "%02.0f", timestamp.truncatingRemainder(dividingBy: 60)))")
+                .frame(width: 44, height: nil, alignment: .center)
         }
     }
 
