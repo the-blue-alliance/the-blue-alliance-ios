@@ -18,13 +18,13 @@ private enum EventInfoSection: Int {
     case link
 }
 
-private enum EventInfoItem {
+private enum EventInfoItem: Hashable {
     case title
     case alliances
     case districtPoints
     case stats
     case awards
-    case webcast
+    case webcast(Webcast)
     case website
     case twitter
     case youtube
@@ -147,7 +147,7 @@ class EventInfoViewController: TBATableViewController, Observable {
         snapshot.appendItems(detailItems, toSection: .detail)
 
         // Webcasts
-        let webcasts = event.webcasts.compactMap { $0.urlString }.map { _ in EventInfoItem.webcast }
+        let webcasts = event.webcasts.map { EventInfoItem.webcast($0) }
         if !webcasts.isEmpty, event.isHappeningThisWeek {
             snapshot.appendSections([.webcast])
             snapshot.appendItems(webcasts, toSection: .webcast)
@@ -201,8 +201,7 @@ class EventInfoViewController: TBATableViewController, Observable {
             delegate?.showStats()
         case .awards:
             delegate?.showAwards()
-        case .webcast:
-            let webcast = event.webcasts[indexPath.row]
+        case .webcast(let webcast):
             urlString = webcast.urlString
         case .website:
             urlString = event.website
