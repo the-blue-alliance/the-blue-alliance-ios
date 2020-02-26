@@ -91,6 +91,7 @@ class HandoffServiceTests: TBATestCase {
         // Make sure Event was inserted
         let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: Event.predicate(key: eventKey))!
         XCTAssertEqual(event.key, eventKey)
+        XCTAssertFalse(event.objectID.isTemporaryID)
 
         let teams = Team.fetch(in: persistentContainer.viewContext)
         XCTAssertEqual(teams.count, 0)
@@ -148,6 +149,7 @@ class HandoffServiceTests: TBATestCase {
         // Make sure Team was inserted
         let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: Team.predicate(key: teamKey))!
         XCTAssertEqual(team.key, teamKey)
+        XCTAssertFalse(team.objectID.isTemporaryID)
 
         let events = Event.fetch(in: persistentContainer.viewContext)
         XCTAssertEqual(events.count, 0)
