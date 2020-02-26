@@ -1,4 +1,4 @@
-Hey y'all - this update adds 2020-specific views like Event Stats and Match Breakdowns. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes a bug when deep linking from the TBA website in to the iOS app. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
 
 ---
 
