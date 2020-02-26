@@ -1,5 +1,6 @@
 import CoreData
 import CoreSpotlight
+import Crashlytics
 import Search
 import TBAData
 import Foundation
@@ -57,6 +58,7 @@ class HandoffService {
                 // If the Event doesn't exist, but our key matches what we consider a "safe" regex, insert the Event and push
                 if event == nil, let eventKeyRegex = eventKeyRegex, eventKeyRegex.numberOfMatches(in: key, options: [], range: NSRange(location: 0, length: key.count)) == 1 {
                     event = Event.insert(key, in: persistentContainer.viewContext)
+                    persistentContainer.viewContext.saveOrRollback(errorRecorder: Crashlytics.sharedInstance())
                 }
                 guard let uri = event?.objectID.uriRepresentation() else {
                     return false
