@@ -348,8 +348,12 @@ class SettingsViewController: TBATableViewController {
 
     private func pushTroubleshootNotifications() {
         let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let nav = UINavigationController(rootViewController: notificationsViewController)
-        navigationController?.showDetailViewController(nav, sender: nil)
+        if let splitViewController = splitViewController {
+            let navigationController = UINavigationController(rootViewController: notificationsViewController)
+            splitViewController.showDetailViewController(navigationController, sender: nil)
+        } else if let navigationController = navigationController {
+            navigationController.pushViewController(notificationsViewController, animated: true)
+        }
     }
 
 }
