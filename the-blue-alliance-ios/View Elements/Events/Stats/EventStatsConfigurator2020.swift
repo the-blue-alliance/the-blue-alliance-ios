@@ -38,7 +38,7 @@ class EventStatsConfigurator2020: EventStatsConfigurator {
         bonusStats.append(bonusRow(title: "Endgame Hanging", key: "hang_count", qual: qual, playoff: playoff))
         bonusStats.append(bonusRow(title: "Generator Level + Hang", key: "generator_level_count", qual: qual, playoff: playoff))
         bonusStats.append(bonusRow(title: "Shield Generator Operational RP Achieved", key: "generator_operational_rp_achieved", qual: qual, playoff: playoff))
-        bonusStats.append(bonusRow(title: "Shield Generator Energzied RP Achieved", key: "generator_energized_rp_achieved", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "Shield Generator Energized RP Achieved", key: "generator_energized_rp_achieved", qual: qual, playoff: playoff))
         bonusStats.append(bonusRow(title: "\"Unicorn Matches\" (Win + Generator Operational + Generator Energized)", key: "unicorn_matches", qual: qual, playoff: playoff))
 
         bonusStats = filterEmptyInsights(bonusStats)
