@@ -58,7 +58,7 @@ class EventInsightsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_stats", parameters: ["event": event.key])
+        CLSLogv("Event Stats: %@", getVaList([event.key]))
     }
 
     // MARK: - Private Methods

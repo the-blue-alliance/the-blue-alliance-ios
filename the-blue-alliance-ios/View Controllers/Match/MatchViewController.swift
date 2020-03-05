@@ -78,7 +78,7 @@ class MatchViewController: MyTBAContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("match", parameters: ["match": match.key])
+        CLSLogv("Match: %@", getVaList([match.key]))
     }
 
 }

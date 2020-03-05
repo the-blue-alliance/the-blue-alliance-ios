@@ -85,12 +85,6 @@ class MyTBAViewController: ContainerViewController {
         myTBA.authenticationProvider.add(observer: self)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("mytba", parameters: nil)
-    }
-
     // MARK: - Private Methods
 
     private func styleInterface() {

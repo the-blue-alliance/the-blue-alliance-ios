@@ -47,7 +47,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_district_points", parameters: ["event": event.key])
+        CLSLogv("Event District Points: %@", getVaList([event.key]))
     }
 
 }

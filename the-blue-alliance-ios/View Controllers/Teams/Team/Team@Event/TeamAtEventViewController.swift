@@ -66,7 +66,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team_at_event", parameters: ["event": event.key, "team": team.key])
+        CLSLogv("Team@Event: Event %@ | Team %@", getVaList([event.key, team.key]))
 
         contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
             guard let self = self else { return }

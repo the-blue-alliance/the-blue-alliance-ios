@@ -61,7 +61,7 @@ class DistrictViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("district", parameters: ["district": district.key])
+        CLSLogv("District: %@", getVaList([district.key]))
     }
 
 }

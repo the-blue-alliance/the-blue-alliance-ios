@@ -61,7 +61,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team_at_district", parameters: ["district": ranking.district.key, "team": team.key])
+        CLSLogv("Team@District: District %@ | Team %@", getVaList([ranking.district.key, team.key]))
     }
 
     // MARK: - Private Methods
