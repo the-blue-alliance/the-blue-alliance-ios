@@ -29,6 +29,10 @@ extension Webcast {
         return channel
     }
 
+    public var date: Date? {
+        return getValue(\Webcast.dateRaw)
+    }
+
     public var file: String? {
         return getValue(\Webcast.fileRaw)
     }
@@ -58,6 +62,7 @@ public class Webcast: NSManagedObject {
     }
 
     @NSManaged var channelRaw: String?
+    @NSManaged var dateRaw: Date?
     @NSManaged var fileRaw: String?
     @NSManaged var typeRaw: String?
     @NSManaged var eventsRaw: NSSet?
@@ -105,6 +110,7 @@ extension Webcast: Managed {
             // Required: type, channel
             webcast.typeRaw = model.type
             webcast.channelRaw = model.channel
+            webcast.dateRaw = model.date
             webcast.fileRaw = model.file
         })
     }

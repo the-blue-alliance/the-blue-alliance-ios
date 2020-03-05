@@ -495,11 +495,13 @@ public struct TBAWebcast: TBAModel {
     public var type: String
     public var channel: String
     public var file: String?
+    public var date: Date?
 
-    public init(type: String, channel: String, file: String? = nil) {
+    public init(type: String, channel: String, file: String? = nil, date: Date? = nil) {
         self.type = type
         self.channel = channel
         self.file = file
+        self.date = date
     }
 
     init?(json: [String: Any]) {
@@ -513,7 +515,14 @@ public struct TBAWebcast: TBAModel {
             return nil
         }
         self.channel = channel
-        
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        if let dateString = json["date"] as? String, let date = dateFormatter.date(from: dateString) {
+            self.date = date
+        }
+
         self.file = json["file"] as? String
     }
 

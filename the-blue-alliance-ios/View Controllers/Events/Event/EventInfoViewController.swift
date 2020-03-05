@@ -20,11 +20,11 @@ private enum EventInfoSection: Int {
 
 private enum EventInfoItem: Hashable {
     case title
+    case webcast(Webcast)
     case alliances
     case districtPoints
     case stats
     case awards
-    case webcast(Webcast)
     case website
     case twitter
     case youtube
@@ -85,6 +85,13 @@ class EventInfoViewController: TBATableViewController, Observable {
             switch item {
             case .title:
                 return self.tableView(tableView, titleCellForRowAt: indexPath)
+            case .webcast:
+                let webcast = self.event.webcasts[indexPath.row]
+                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+                cell.textLabel?.text = "Watch on \(webcast.displayName)"
+                cell.detailTextLabel?.text = webcast.channel
+                cell.accessoryType = .disclosureIndicator
+                return cell
             case .alliances:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                 cell.textLabel?.text = "Alliances"
@@ -100,13 +107,6 @@ class EventInfoViewController: TBATableViewController, Observable {
             case .awards:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                 cell.textLabel?.text = "Awards"
-                return cell
-            case .webcast:
-                let webcast = self.event.webcasts[indexPath.row]
-                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-                cell.textLabel?.text = "Watch on \(webcast.displayName)"
-                cell.detailTextLabel?.text = webcast.channel
-                cell.accessoryType = .disclosureIndicator
                 return cell
             case .website:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
@@ -138,6 +138,24 @@ class EventInfoViewController: TBATableViewController, Observable {
         snapshot.appendSections([.title])
         snapshot.appendItems([.title], toSection: .title)
 
+        // Webcasts
+        let webcasts = event.webcasts
+            .sorted { $0.channel > $1.channel } // Sort by name lexicographically
+            .filter { $0.urlString != nil } // Only show linkable webcasts
+            // Only show webcasts with dates on the specified day
+            .filter { (webcast) -> Bool in
+                // If webcast is date-less, we can display it
+                guard let date = webcast.date else {
+                    return true
+                }
+                return Calendar.current.isDateInToday(date)
+            }
+            .map { EventInfoItem.webcast($0) }
+        if !webcasts.isEmpty, event.isHappeningThisWeek {
+            snapshot.appendSections([.webcast])
+            snapshot.appendItems(webcasts, toSection: .webcast)
+        }
+
         // Details
         var detailItems: [EventInfoItem] = [.alliances, .stats, .awards]
         if event.district != nil {
@@ -145,13 +163,6 @@ class EventInfoViewController: TBATableViewController, Observable {
         }
         snapshot.appendSections([.detail])
         snapshot.appendItems(detailItems, toSection: .detail)
-
-        // Webcasts
-        let webcasts = event.webcasts.map { EventInfoItem.webcast($0) }
-        if !webcasts.isEmpty, event.isHappeningThisWeek {
-            snapshot.appendSections([.webcast])
-            snapshot.appendItems(webcasts, toSection: .webcast)
-        }
 
         // Links
         var linkItems: [EventInfoItem] = [.twitter, .youtube, .chiefDelphi]
