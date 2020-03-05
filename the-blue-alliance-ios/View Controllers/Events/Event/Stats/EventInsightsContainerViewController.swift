@@ -7,7 +7,7 @@ import TBAData
 import TBAKit
 import UIKit
 
-class EventStatsContainerViewController: ContainerViewController {
+class EventInsightsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
     private let myTBA: MyTBA
@@ -30,12 +30,12 @@ class EventStatsContainerViewController: ContainerViewController {
 
         teamStatsViewController = EventTeamStatsTableViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        var eventStatsViewController: EventStatsViewController?
-        // Only show event stats if year is 2016 or onward
+        var eventStatsViewController: EventInsightsViewController?
+        // Only show event insights if year is 2016 or onward
         var titles = ["Team Stats"]
         if event.year >= 2016 {
-            titles.append("Event Stats")
-            eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+            titles.append("Event Insights")
+            eventStatsViewController = EventInsightsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
 
         super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
@@ -64,7 +64,7 @@ class EventStatsContainerViewController: ContainerViewController {
     // MARK: - Private Methods
 
     private func showFilter() {
-        let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let selectTableViewController = SelectTableViewController<EventInsightsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         selectTableViewController.title = "Sort stats by"
         selectTableViewController.delegate = self
 
@@ -83,7 +83,7 @@ class EventStatsContainerViewController: ContainerViewController {
 
 }
 
-extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
+extension EventInsightsContainerViewController: SelectTableViewControllerDelegate {
 
     typealias OptionType = EventTeamStatFilter
 
@@ -97,7 +97,7 @@ extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
 
 }
 
-extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
+extension EventInsightsContainerViewController: EventTeamStatsSelectionDelegate {
 
     func filterSelected() {
         showFilter()

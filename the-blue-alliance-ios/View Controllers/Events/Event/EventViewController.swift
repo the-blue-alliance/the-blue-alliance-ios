@@ -129,9 +129,9 @@ extension EventViewController: EventInfoViewControllerDelegate {
         self.navigationController?.pushViewController(eventDistrictPointsViewController, animated: true)
     }
 
-    func showStats() {
-        let eventStatsContainerViewController = EventStatsContainerViewController(event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        self.navigationController?.pushViewController(eventStatsContainerViewController, animated: true)
+    func showInsights() {
+        let eventInsightsContainerViewController = EventInsightsContainerViewController(event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        self.navigationController?.pushViewController(eventInsightsContainerViewController, animated: true)
     }
 
 }

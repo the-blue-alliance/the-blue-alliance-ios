@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 
-protocol EventStatsConfigurator {
+protocol EventInsightsConfigurator {
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String, InsightRow>, _ qual: [String: Any]?, _ playoff: [String: Any]?)
 }
 
-extension EventStatsConfigurator {
+extension EventInsightsConfigurator {
 
     static func highScoreRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
         return InsightRow(title: title, qual: highScoreString(qual, key), playoff: highScoreString(playoff, key))
