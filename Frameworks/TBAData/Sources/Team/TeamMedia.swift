@@ -197,6 +197,13 @@ extension TeamMedia {
                            #keyPath(TeamMedia.yearRaw), year)
     }
 
+    public static func avatarYearPrediate(teamKey: String, year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == %ld AND %K == %@",
+                           #keyPath(TeamMedia.teamRaw.keyRaw), teamKey,
+                           #keyPath(TeamMedia.yearRaw), year,
+                           #keyPath(TeamMedia.typeStringRaw), MediaType.avatar.rawValue)
+    }
+
     public static func teamYearImagesPrediate(teamKey: String, year: Int) -> NSPredicate {
         return NSPredicate(format: "%K == %@ AND %K == %ld AND %K in %@",
                            #keyPath(TeamMedia.teamRaw.keyRaw), teamKey,

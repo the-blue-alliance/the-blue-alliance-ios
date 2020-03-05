@@ -39,6 +39,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
                 eventsViewController.year = year
                 mediaViewController.year = year
 
+                // TODO: Clear previous Avatar
                 fetchTeaMedia(year: year)
             }
 
@@ -171,14 +172,22 @@ class TeamViewController: HeaderContainerViewController, Observable {
     private func fetchTeaMedia(year: Int) {
         var mediaOperation: TBAKitOperation!
         mediaOperation = tbaKit.fetchTeamMedia(key: team.key, year: year, completion: { (result, notModified) in
-            guard case .success(let media) = result, !notModified else {
+            guard case .success(var media) = result, !notModified else {
                 return
+            }
+
+            // Only save team avatar from this request
+            media = media.filter {
+                guard let type = MediaType(rawValue: $0.type) else {
+                    return false
+                }
+                return type == .avatar
             }
 
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
-                team.insert(media, year: year)
+                team.insertAvatar(media.first, year: year)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(mediaOperation)
             }, errorRecorder: Crashlytics.sharedInstance())

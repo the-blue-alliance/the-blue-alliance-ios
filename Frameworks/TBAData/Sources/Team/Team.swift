@@ -482,19 +482,42 @@ extension Team: Managed {
             $0.predicate = TeamMedia.teamYearPrediate(teamKey: key, year: year)
         }
 
-
         // Insert new TeamMedia for this year
         let media = media.map {
             return TeamMedia.insert($0, year: year, in: managedObjectContext)
         }
         addToMediaRaw(NSSet(array: media))
 
-        // Delete orphaned TeamMedia for this Event
+        // Delete orphaned TeamMedia for this Team
         Set(oldMedia).subtracting(Set(media)).forEach({
             managedObjectContext.delete($0)
         })
 
         return media
+    }
+
+    @discardableResult
+    public func insertAvatar(_ media: TBAMedia?, year: Int) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        // Fetch previous Avatar for this Team and year
+        let oldAvatar = TeamMedia.fetchSingleObject(in: managedObjectContext) {
+            $0.predicate = TeamMedia.avatarYearPrediate(teamKey: key, year: year)
+        }
+
+        // Insert new Avatar for this year
+        if let media = media {
+            let avatar = TeamMedia.insert(media, year: year, in: managedObjectContext)
+            // TODO: This is problematic, and not working
+            addToMediaRaw(NSSet(object: avatar))
+        }
+
+        // Delete the old Avatar this year
+        if let oldAvatar = oldAvatar {
+            managedObjectContext.delete(oldAvatar)
+        }
     }
 
     /**
