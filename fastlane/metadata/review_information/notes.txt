@@ -1,0 +1,1 @@
+This app does not include Siri Shortcuts.

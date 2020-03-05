@@ -48,6 +48,7 @@ tba-unit-tests/FailureDiffs
 # Ignore some Metadata from Fastlane with sensitive information
 fastlane/metadata/trade_representative_contact_information
 fastlane/metadata/review_information
+!fastlane/metadata/review_information/notes.txt
 
 # pod gen
 gen/
