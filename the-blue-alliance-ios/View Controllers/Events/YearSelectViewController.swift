@@ -63,11 +63,13 @@ class YearSelectViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        var parameters = ["year": NSNumber(value: year), "years": NSArray(array: years)]
+        var logString = "Years: Year: %ld | Years: %@"
+        var parameters: [CVarArg] = [year, years]
         if let week = week {
-            parameters["week"] = NSString(string: week.key)
+            logString.append(" | Week: %@")
+            parameters.append(week.key)
         }
-        Analytics.logEvent("year_select", parameters: parameters)
+        CLSLogv(logString, getVaList(parameters))
     }
 
     // MARK: - Private Methods

@@ -87,7 +87,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event", parameters: ["event": event.key])
+        CLSLogv("Event: %@", getVaList([event.key]))
     }
 
     override func viewDidAppear(_ animated: Bool) {

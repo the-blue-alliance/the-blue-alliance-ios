@@ -54,12 +54,6 @@ class TeamsContainerViewController: ContainerViewController {
         setupSearchController()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("teams", parameters: nil)
-    }
-
 }
 
 extension TeamsContainerViewController: TeamsViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}

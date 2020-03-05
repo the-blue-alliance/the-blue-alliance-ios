@@ -64,7 +64,7 @@ class EventsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("events", parameters: ["year": NSNumber(value: year)])
+        CLSLogv("Events: %ld", getVaList([year]))
     }
 
     // MARK: - Private Methods

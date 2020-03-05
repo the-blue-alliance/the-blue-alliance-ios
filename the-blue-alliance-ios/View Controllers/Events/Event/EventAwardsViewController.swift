@@ -9,7 +9,6 @@ import UIKit
 class EventAwardsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
-    private(set) var team: Team?
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
@@ -20,7 +19,6 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     init(event: Event, team: Team? = nil, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.team = team
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
@@ -29,17 +27,9 @@ class EventAwardsContainerViewController: ContainerViewController {
 
         let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        let navigationSubtitle: String = {
-            if let team = team {
-                return "\(team.teamNumberNickname) @ \(event.friendlyNameWithYear)"
-            } else {
-                return "@ \(event.friendlyNameWithYear)"
-            }
-        }()
-
         super.init(viewControllers: [awardsViewController],
                    navigationTitle: "Awards",
-                   navigationSubtitle: navigationSubtitle,
+                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
@@ -56,13 +46,7 @@ class EventAwardsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        var parameters = [
-            "event": event.key,
-        ]
-        if let team = team {
-            parameters["team"] = team.key
-        }
-        Analytics.logEvent("event_awards", parameters: parameters)
+        CLSLogv("Event Awards: %@", getVaList([event.key]))
     }
 
 }
@@ -70,9 +54,6 @@ class EventAwardsContainerViewController: ContainerViewController {
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        if team == self.team {
-            return
-        }
         let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }

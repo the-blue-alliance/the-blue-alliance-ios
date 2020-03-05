@@ -105,7 +105,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team", parameters: ["team": team.key])
+        CLSLogv("Team: %@", getVaList([team.key]))
     }
 
     override func viewDidAppear(_ animated: Bool) {

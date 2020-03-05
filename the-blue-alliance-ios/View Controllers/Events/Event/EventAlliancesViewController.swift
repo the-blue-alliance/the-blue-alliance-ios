@@ -50,7 +50,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_alliances", parameters: ["event": event.key])
+        CLSLogv("Event Alliances: %@", getVaList([event.key]))
     }
 
 }

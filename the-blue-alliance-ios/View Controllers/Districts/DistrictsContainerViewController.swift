@@ -51,12 +51,6 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - View Lifecycle
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("districts", parameters: nil)
-    }
-
     // MARK: - Private Methods
 
     private func updateInterface() {
