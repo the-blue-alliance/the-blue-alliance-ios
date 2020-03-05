@@ -1,5 +1,6 @@
 import CoreData
 import Crashlytics
+import FirebaseAnalytics
 import TBAData
 import TBAKit
 import UIKit
@@ -216,6 +217,16 @@ class EventInfoViewController: TBATableViewController, Observable {
         }
 
         if let urlString = urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+            switch item {
+            case .webcast(let webcast):
+                Analytics.logEvent("watch_webcast", parameters: [
+                    "event": event.key,
+                    "webcast_channel": webcast.channel,
+                    "webcast_type": webcast.type
+                ])
+            default:
+                break
+            }
             urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
