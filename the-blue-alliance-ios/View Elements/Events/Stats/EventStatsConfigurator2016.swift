@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class EventStatsConfigurator2016: EventStatsConfigurator {
+class EventInsightsConfigurator2016: EventInsightsConfigurator {
 
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String, InsightRow>, _ qual: [String : Any]?, _ playoff: [String : Any]?) {
         // Match Stats

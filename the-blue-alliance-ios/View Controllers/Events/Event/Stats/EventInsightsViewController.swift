@@ -11,10 +11,10 @@ struct InsightRow: Hashable {
     var playoff: String?
 }
 
-class EventStatsViewController: TBATableViewController, Observable {
+class EventInsightsViewController: TBATableViewController, Observable {
 
     private let event: Event
-    private let eventStatsConfigurator: EventStatsConfigurator.Type?
+    private let eventStatsConfigurator: EventInsightsConfigurator.Type?
 
     private var tableViewDataSource: TableViewDataSource<String, InsightRow>!
 
@@ -30,15 +30,15 @@ class EventStatsViewController: TBATableViewController, Observable {
 
         // Supported event insights is 2016 to 2020
         if event.year == 2016 {
-            eventStatsConfigurator = EventStatsConfigurator2016.self
+            eventStatsConfigurator = EventInsightsConfigurator2016.self
         } else if event.year == 2017 {
-            eventStatsConfigurator = EventStatsConfigurator2017.self
+            eventStatsConfigurator = EventInsightsConfigurator2017.self
         } else if event.year == 2018 {
-            eventStatsConfigurator = EventStatsConfigurator2018.self
+            eventStatsConfigurator = EventInsightsConfigurator2018.self
         } else if event.year == 2019 {
-            eventStatsConfigurator = EventStatsConfigurator2019.self
+            eventStatsConfigurator = EventInsightsConfigurator2019.self
         } else if event.year == 2020 {
-            eventStatsConfigurator = EventStatsConfigurator2020.self
+            eventStatsConfigurator = EventInsightsConfigurator2020.self
         } else {
             eventStatsConfigurator = nil
         }
@@ -55,8 +55,8 @@ class EventStatsViewController: TBATableViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerReusableCell(EventStatsTableViewCell.self)
-        tableView.registerReusableHeaderFooterView(EventStatsHeaderView.self)
+        tableView.registerReusableCell(EventInsightsTableViewCell.self)
+        tableView.registerReusableHeaderFooterView(EventInsightsHeaderView.self)
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
         tableView.insetsContentViewsToSafeArea = false
 
@@ -85,7 +85,7 @@ class EventStatsViewController: TBATableViewController, Observable {
         guard section == 0 else {
             return UITableViewHeaderFooterView()
         }
-        guard let headerView: EventStatsHeaderView = tableView.dequeueReusableHeaderFooterView() else {
+        guard let headerView: EventInsightsHeaderView = tableView.dequeueReusableHeaderFooterView() else {
             return nil
         }
 
@@ -115,7 +115,7 @@ class EventStatsViewController: TBATableViewController, Observable {
     private func setupDataSource() {
         let dataSource = UITableViewDiffableDataSource<String, InsightRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
             if indexPath.section == 0 {
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventStatsTableViewCell
+                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventInsightsTableViewCell
                 cell.title = row.title
                 cell.leftTitle = row.qual ?? "----"
                 cell.rightTitle = row.playoff ?? "----"
@@ -153,7 +153,7 @@ class EventStatsViewController: TBATableViewController, Observable {
 
 }
 
-extension EventStatsViewController: Refreshable {
+extension EventInsightsViewController: Refreshable {
 
     var refreshKey: String? {
         if eventStatsConfigurator == nil {
@@ -167,7 +167,7 @@ extension EventStatsViewController: Refreshable {
     }
 
     var automaticRefreshEndDate: Date? {
-        // Automatically refresh event stats until the event is over
+        // Automatically refresh event insights until the event is over
         return event.endDate?.endOfDay()
     }
 
@@ -195,13 +195,13 @@ extension EventStatsViewController: Refreshable {
 
 }
 
-extension EventStatsViewController: Stateful {
+extension EventInsightsViewController: Stateful {
 
     var noDataText: String? {
         guard eventStatsConfigurator == nil else {
-            return "No stats for event"
+            return "No insights for event"
         }
-        return "\(event.year) Event Stats are not supported - try updating your app via the App Store."
+        return "\(event.year) Event Insights are not supported - try updating your app via the App Store."
     }
 
 }

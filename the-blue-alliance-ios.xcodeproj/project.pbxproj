@@ -36,7 +36,7 @@
 		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
 		92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */; };
 		923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */; };
-		92435E2E23CBC2ED00CDD2D4 /* EventStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435E2D23CBC2ED00CDD2D4 /* EventStatsView.swift */; };
+		92435E2E23CBC2ED00CDD2D4 /* EventInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */; };
 		924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */; };
 		924459C820CB797E0007570D /* RetryService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459C720CB797E0007570D /* RetryService_Tests.swift */; };
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
@@ -63,7 +63,7 @@
 		9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957221B7514700560D81 /* DistrictTeamsViewController.swift */; };
 		9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957421B7519C00560D81 /* EventTeamsViewController.swift */; };
 		92761F79228E47E900CEDF68 /* FetchMediaOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */; };
-		9279737723CFF06A00FF9B86 /* EventStatsConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737623CFF06A00FF9B86 /* EventStatsConfigurator.swift */; };
+		9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737623CFF06A00FF9B86 /* EventInsightsConfigurator.swift */; };
 		9279737923CFF38D00FF9B86 /* EventStatsConfigurator2016.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737823CFF38D00FF9B86 /* EventStatsConfigurator2016.swift */; };
 		9279737B23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737A23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift */; };
 		9279737D23CFF3A700FF9B86 /* EventStatsConfigurator2018.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737C23CFF3A600FF9B86 /* EventStatsConfigurator2018.swift */; };
@@ -194,9 +194,9 @@
 		92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */; };
 		92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */; };
 		92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110121A61AF6003BC5C4 /* EventAwardsViewController.swift */; };
-		92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110321A61AF6003BC5C4 /* EventStatsContainerViewController.swift */; };
+		92FF110C21A61AF6003BC5C4 /* EventInsightsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110321A61AF6003BC5C4 /* EventInsightsContainerViewController.swift */; };
 		92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */; };
-		92FF110E21A61AF6003BC5C4 /* EventStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110521A61AF6003BC5C4 /* EventStatsViewController.swift */; };
+		92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110521A61AF6003BC5C4 /* EventInsightsViewController.swift */; };
 		92FF111721A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111121A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift */; };
 		92FF111821A61B37003BC5C4 /* DistrictBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111221A61B37003BC5C4 /* DistrictBreakdownViewController.swift */; };
 		92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111321A61B37003BC5C4 /* TeamAtDistrictViewController.swift */; };
@@ -274,7 +274,7 @@
 		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
 		92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictViewControllerTests.swift; sourceTree = "<group>"; };
 		923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version_Tests.swift"; sourceTree = "<group>"; };
-		92435E2D23CBC2ED00CDD2D4 /* EventStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsView.swift; sourceTree = "<group>"; };
+		92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsView.swift; sourceTree = "<group>"; };
 		924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix_Tests.swift"; sourceTree = "<group>"; };
 		924459C720CB797E0007570D /* RetryService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryService_Tests.swift; sourceTree = "<group>"; };
 		924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwardTableViewCell.swift; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 		9275957221B7514700560D81 /* DistrictTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamsViewController.swift; sourceTree = "<group>"; };
 		9275957421B7519C00560D81 /* EventTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamsViewController.swift; sourceTree = "<group>"; };
 		92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMediaOperation.swift; sourceTree = "<group>"; };
-		9279737623CFF06A00FF9B86 /* EventStatsConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator.swift; sourceTree = "<group>"; };
+		9279737623CFF06A00FF9B86 /* EventInsightsConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator.swift; sourceTree = "<group>"; };
 		9279737823CFF38D00FF9B86 /* EventStatsConfigurator2016.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2016.swift; sourceTree = "<group>"; };
 		9279737A23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2017.swift; sourceTree = "<group>"; };
 		9279737C23CFF3A600FF9B86 /* EventStatsConfigurator2018.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2018.swift; sourceTree = "<group>"; };
@@ -440,9 +440,9 @@
 		92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAlliancesViewController.swift; sourceTree = "<group>"; };
 		92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoViewController.swift; sourceTree = "<group>"; };
 		92FF110121A61AF6003BC5C4 /* EventAwardsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAwardsViewController.swift; sourceTree = "<group>"; };
-		92FF110321A61AF6003BC5C4 /* EventStatsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsContainerViewController.swift; sourceTree = "<group>"; };
+		92FF110321A61AF6003BC5C4 /* EventInsightsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInsightsContainerViewController.swift; sourceTree = "<group>"; };
 		92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStatsViewController.swift; sourceTree = "<group>"; };
-		92FF110521A61AF6003BC5C4 /* EventStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsViewController.swift; sourceTree = "<group>"; };
+		92FF110521A61AF6003BC5C4 /* EventInsightsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInsightsViewController.swift; sourceTree = "<group>"; };
 		92FF111121A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictTeamSummaryViewController.swift; sourceTree = "<group>"; };
 		92FF111221A61B37003BC5C4 /* DistrictBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownViewController.swift; sourceTree = "<group>"; };
 		92FF111321A61B37003BC5C4 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
@@ -588,8 +588,8 @@
 		92435E2A23CBC21300CDD2D4 /* Stats */ = {
 			isa = PBXGroup;
 			children = (
-				92435E2D23CBC2ED00CDD2D4 /* EventStatsView.swift */,
-				9279737623CFF06A00FF9B86 /* EventStatsConfigurator.swift */,
+				92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */,
+				9279737623CFF06A00FF9B86 /* EventInsightsConfigurator.swift */,
 				9279737823CFF38D00FF9B86 /* EventStatsConfigurator2016.swift */,
 				9279737A23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift */,
 				9279737C23CFF3A600FF9B86 /* EventStatsConfigurator2018.swift */,
@@ -1207,9 +1207,9 @@
 		92FF110221A61AF6003BC5C4 /* Stats */ = {
 			isa = PBXGroup;
 			children = (
-				92FF110321A61AF6003BC5C4 /* EventStatsContainerViewController.swift */,
+				92FF110321A61AF6003BC5C4 /* EventInsightsContainerViewController.swift */,
 				92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */,
-				92FF110521A61AF6003BC5C4 /* EventStatsViewController.swift */,
+				92FF110521A61AF6003BC5C4 /* EventInsightsViewController.swift */,
 			);
 			path = Stats;
 			sourceTree = "<group>";
@@ -1684,7 +1684,7 @@
 			files = (
 				927309B223DD1E66006145E0 /* HandoffService.swift in Sources */,
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
-				92FF110E21A61AF6003BC5C4 /* EventStatsViewController.swift in Sources */,
+				92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */,
 				92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
 				9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */,
@@ -1734,7 +1734,7 @@
 				92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */,
 				92A5E5DC21A22D550025CC85 /* URL+Reachable.swift in Sources */,
 				92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */,
-				92435E2E23CBC2ED00CDD2D4 /* EventStatsView.swift in Sources */,
+				92435E2E23CBC2ED00CDD2D4 /* EventInsightsView.swift in Sources */,
 				145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */,
 				14796942215EA5AE0075AF4E /* AwardCellViewModel.swift in Sources */,
 				92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */,
@@ -1762,7 +1762,7 @@
 				92FF10FA21A61AC2003BC5C4 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
 				92FF10F121A61A1B003BC5C4 /* TeamInfoViewController.swift in Sources */,
-				9279737723CFF06A00FF9B86 /* EventStatsConfigurator.swift in Sources */,
+				9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
@@ -1798,7 +1798,7 @@
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
-				92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */,
+				92FF110C21A61AF6003BC5C4 /* EventInsightsContainerViewController.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
 				9279737F23CFF3B100FF9B86 /* EventStatsConfigurator2019.swift in Sources */,

@@ -96,11 +96,11 @@ class EventViewControllerTests: TBATestCase {
         XCTAssertEqual(districtPointsViewController.event, event)
     }
 
-    func test_info_pushesStats() {
-        eventViewController.showStats()
+    func test_info_pushesInsights() {
+        eventViewController.showInsights()
 
-        XCTAssert(navigationController.pushedViewController is EventStatsContainerViewController)
-        let statsViewController = navigationController.pushedViewController as! EventStatsContainerViewController
+        XCTAssert(navigationController.pushedViewController is EventInsightsContainerViewController)
+        let statsViewController = navigationController.pushedViewController as! EventInsightsContainerViewController
         XCTAssertEqual(statsViewController.event, event)
     }
 

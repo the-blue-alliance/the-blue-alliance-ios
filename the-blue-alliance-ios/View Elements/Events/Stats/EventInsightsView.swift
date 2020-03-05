@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class EventStatsView: UIView, Reusable {
+class EventInsightsView: UIView, Reusable {
 
     var title: String? {
         didSet {
@@ -20,7 +20,7 @@ class EventStatsView: UIView, Reusable {
     }
 
     fileprivate lazy var titleLabel: UILabel = {
-        let label = EventStatsView.label()
+        let label = EventInsightsView.label()
         label.textAlignment = .center
         label.textColor = UIColor.secondaryLabel
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -28,7 +28,7 @@ class EventStatsView: UIView, Reusable {
         return label
     }()
     fileprivate lazy var leftLabel: UILabel = {
-        let label = EventStatsView.label()
+        let label = EventInsightsView.label()
         label.textAlignment = .left
         label.textColor = UIColor.label
         label.font = UIFont.preferredFont(forTextStyle: .body)
@@ -36,7 +36,7 @@ class EventStatsView: UIView, Reusable {
         return label
     }()
     fileprivate lazy var rightLabel: UILabel = {
-        let label = EventStatsView.label()
+        let label = EventInsightsView.label()
         label.textAlignment = .right
         label.textColor = UIColor.label
         label.font = UIFont.preferredFont(forTextStyle: .body)
@@ -72,42 +72,42 @@ class EventStatsView: UIView, Reusable {
 
 }
 
-class EventStatsHeaderView: UITableViewHeaderFooterView, Reusable {
+class EventInsightsHeaderView: UITableViewHeaderFooterView, Reusable {
 
-    private lazy var eventStatsView = EventStatsView()
+    private lazy var eventInsightsView = EventInsightsView()
 
     var title: String? {
         didSet {
-            eventStatsView.title = title
+            eventInsightsView.title = title
         }
     }
     var leftTitle: String? {
         didSet {
-            eventStatsView.leftTitle = leftTitle
+            eventInsightsView.leftTitle = leftTitle
         }
     }
     var rightTitle: String? {
         didSet {
-            eventStatsView.rightTitle = rightTitle
+            eventInsightsView.rightTitle = rightTitle
         }
     }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        eventStatsView.titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        eventStatsView.titleLabel.font = UIFont.systemFont(ofSize: eventStatsView.titleLabel.font.pointSize, weight: .semibold)
-        eventStatsView.leftLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        eventStatsView.rightLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        eventInsightsView.titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        eventInsightsView.titleLabel.font = UIFont.systemFont(ofSize: eventInsightsView.titleLabel.font.pointSize, weight: .semibold)
+        eventInsightsView.leftLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        eventInsightsView.rightLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
 
-        eventStatsView.titleLabel.textColor = UIColor.white
-        eventStatsView.leftLabel.textColor = UIColor.white
-        eventStatsView.rightLabel.textColor = UIColor.white
+        eventInsightsView.titleLabel.textColor = UIColor.white
+        eventInsightsView.leftLabel.textColor = UIColor.white
+        eventInsightsView.rightLabel.textColor = UIColor.white
 
-        contentView.addSubview(eventStatsView)
+        contentView.addSubview(eventInsightsView)
         contentView.backgroundColor = UIColor.tableViewHeaderColor
 
-        eventStatsView.autoPinEdgesToSuperviewSafeArea()
+        eventInsightsView.autoPinEdgesToSuperviewSafeArea()
     }
 
     required init?(coder: NSCoder) {
@@ -116,32 +116,32 @@ class EventStatsHeaderView: UITableViewHeaderFooterView, Reusable {
 
 }
 
-class EventStatsTableViewCell: UITableViewCell, Reusable {
+class EventInsightsTableViewCell: UITableViewCell, Reusable {
 
-    private lazy var eventStatsView = EventStatsView()
+    private lazy var eventInsightsView = EventInsightsView()
 
     var title: String? {
         didSet {
-            eventStatsView.title = title
+            eventInsightsView.title = title
         }
     }
     var leftTitle: String? {
         didSet {
-            eventStatsView.leftTitle = leftTitle
+            eventInsightsView.leftTitle = leftTitle
         }
     }
     var rightTitle: String? {
         didSet {
-            eventStatsView.rightTitle = rightTitle
+            eventInsightsView.rightTitle = rightTitle
         }
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        contentView.addSubview(eventStatsView)
-        eventStatsView.autoPinEdgesToSuperviewEdges()
-        eventStatsView.autoSetDimension(.height, toSize: 44, relation: .greaterThanOrEqual)
+        contentView.addSubview(eventInsightsView)
+        eventInsightsView.autoPinEdgesToSuperviewEdges()
+        eventInsightsView.autoSetDimension(.height, toSize: 44, relation: .greaterThanOrEqual)
 
         // separatorInset = .zero
     }

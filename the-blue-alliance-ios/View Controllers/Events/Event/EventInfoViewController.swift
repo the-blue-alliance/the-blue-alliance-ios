@@ -9,7 +9,7 @@ protocol EventInfoViewControllerDelegate: AnyObject {
     func showAlliances()
     func showAwards()
     func showDistrictPoints()
-    func showStats()
+    func showInsights()
 }
 
 private enum EventInfoSection: Int {
@@ -24,7 +24,7 @@ private enum EventInfoItem: Hashable {
     case webcast(Webcast)
     case alliances
     case districtPoints
-    case stats
+    case insights
     case awards
     case website
     case twitter
@@ -101,9 +101,9 @@ class EventInfoViewController: TBATableViewController, Observable {
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                 cell.textLabel?.text = "District Points"
                 return cell
-            case .stats:
+            case .insights:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "Stats"
+                cell.textLabel?.text = "Insights"
                 return cell
             case .awards:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
@@ -158,7 +158,7 @@ class EventInfoViewController: TBATableViewController, Observable {
         }
 
         // Details
-        var detailItems: [EventInfoItem] = [.alliances, .stats, .awards]
+        var detailItems: [EventInfoItem] = [.alliances, .insights, .awards]
         if event.district != nil {
             detailItems.insert(.districtPoints, at: 1)
         }
@@ -209,8 +209,8 @@ class EventInfoViewController: TBATableViewController, Observable {
             delegate?.showAlliances()
         case .districtPoints:
             delegate?.showDistrictPoints()
-        case .stats:
-            delegate?.showStats()
+        case .insights:
+            delegate?.showInsights()
         case .awards:
             delegate?.showAwards()
         case .webcast(let webcast):

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class EventStatsConfigurator2018: EventStatsConfigurator {
+class EventInsightsConfigurator2018: EventInsightsConfigurator {
 
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String, InsightRow>, _ qual: [String : Any]?, _ playoff: [String : Any]?) {
         // Match Stats
@@ -23,7 +23,10 @@ class EventStatsConfigurator2018: EventStatsConfigurator {
         matchStats.append(scoreRow(title: "Average Vault Points", key: "average_vault_points", qual: qual, playoff: playoff))
         matchStats.append(scoreRow(title: "Average Endgame Points", key: "average_endgame_points", qual: qual, playoff: playoff))
         matchStats.append(scoreRow(title: "Average Foul Points", key: "average_foul_score", qual: qual, playoff: playoff))
-        matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
+        // Note - this is not helpful, since we already show "Average Match Score"
+        // If we can show breakdowns by Auto/Teleop/Overall like on web, we can add this back
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/744
+        // matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
 
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {
