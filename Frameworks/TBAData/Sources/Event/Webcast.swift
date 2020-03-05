@@ -17,7 +17,7 @@ extension Webcast {
         if type == "twitch" {
             return "https://twitch.tv/\(channel)"
         } else if type == "youtube" {
-            return "https://youtube.com/\(channel)"
+            return "https://www.youtube.com/watch?v=\(channel)"
         }
         return nil
     }
