@@ -60,6 +60,28 @@ class TBATeamTests: TBAKitTestCase {
         }
     }
 
+    func testTeamsSimple() {
+        let ex = expectation(description: "teams_all_simple")
+
+        let task = kit.fetchTeams(simple: true) { (result, notModified) in
+            let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(teams.count, 0)
+            let team = teams.first!
+
+            XCTAssertNotNil(team.name)
+            XCTAssertNil(team.website)
+
+            ex.fulfill()
+        }
+        kit.sendSuccessStub(for: task)
+
+        waitForExpectations(timeout: 2) { (error) in
+            XCTAssertNil(error)
+        }
+    }
+
     func testTeamsPage() {
         let ex = expectation(description: "teams_page")
 

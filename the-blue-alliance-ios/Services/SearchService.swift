@@ -173,7 +173,7 @@ public class SearchService: NSObject, TeamsRefreshProvider {
 
         var teamsOperation: TBAKitOperation?
         if shouldRefreshTeams || userInitiated {
-            teamsOperation = tbaKit.fetchTeams() { [unowned self] (result, notModified) in
+            teamsOperation = tbaKit.fetchTeams(simple: !userInitiated) { [unowned self] (result, notModified) in
                 guard case .success(let teams) = result, !notModified else {
                     return
                 }
