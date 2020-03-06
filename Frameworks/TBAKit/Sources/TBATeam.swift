@@ -20,7 +20,7 @@ public struct TBATeam: TBAModel {
     public var rookieYear: Int?
     public var homeChampionship: [String: String]?
 
-    public init(key: String, teamNumber: Int, nickname: String? = nil, name: String, schoolName: String? = nil, city: String? = nil, stateProv: String? = nil, country: String? = nil, address: String? = nil, postalCode: String? = nil, gmapsPlaceID: String? = nil, gmapsURL: String? = nil, lat: Double? = nil, lng: Double? = nil, locationName: String? = nil, website: String? = nil, rookieYear: Int?, homeChampionship: [String: String]? = nil) {
+    public init(key: String, teamNumber: Int, nickname: String? = nil, name: String, schoolName: String? = nil, city: String? = nil, stateProv: String? = nil, country: String? = nil, address: String? = nil, postalCode: String? = nil, gmapsPlaceID: String? = nil, gmapsURL: String? = nil, lat: Double? = nil, lng: Double? = nil, locationName: String? = nil, website: String? = nil, rookieYear: Int? = nil, homeChampionship: [String: String]? = nil) {
         self.key = key
         self.teamNumber = teamNumber
         self.nickname = nickname
