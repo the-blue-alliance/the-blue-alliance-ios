@@ -9,6 +9,15 @@ extension Webcast {
             return "YouTube"
         } else if type == "twitch" {
             return "Twitch"
+        } else if type == "direct_link" {
+            // Convert our direct link string in to just the domain
+            // Ex: espn.com
+            guard let url = URL(string: channel), let host = url.host else {
+                return "website"
+            }
+            let parts = host.split(separator: ".")
+            // Only return last two components "etc.com"
+            return parts.dropFirst(max(parts.count - 2, 0)).joined(separator: ".")
         }
         return type
     }
@@ -18,6 +27,8 @@ extension Webcast {
             return "https://twitch.tv/\(channel)"
         } else if type == "youtube" {
             return "https://www.youtube.com/watch?v=\(channel)"
+        } else if type == "direct_link" {
+            return channel
         }
         return nil
     }
