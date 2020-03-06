@@ -71,7 +71,6 @@ class HandoffService {
                 // If the Team doesn't exist, but our key matches what we consider a "safe" regex, insert the Team and push
                 if team == nil, let teamKeyRegex = teamKeyRegex, teamKeyRegex.numberOfMatches(in: key, options: [], range: NSRange(location: 0, length: key.count)) == 1 {
                     team = Team.insert(key, in: persistentContainer.viewContext)
-                    persistentContainer.viewContext.saveOrRollback(errorRecorder: Crashlytics.sharedInstance())
                 }
                 guard let uri = team?.objectID.uriRepresentation() else {
                     return false
