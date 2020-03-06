@@ -63,7 +63,7 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamsSimple() {
         let ex = expectation(description: "teams_all_simple")
 
-        let task = kit.fetchTeams() { (result, notModified) in
+        let task = kit.fetchTeams(simple: true) { (result, notModified) in
             let teams = try! result.get()
             XCTAssertFalse(notModified)
 
