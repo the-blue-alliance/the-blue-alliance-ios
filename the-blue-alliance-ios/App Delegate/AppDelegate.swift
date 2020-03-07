@@ -103,6 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      deviceName: UIDevice.current.name,
                      fcmTokenProvider: messaging)
     }()
+    private var myTBAService: MyTBAService!
     let pasteboard = UIPasteboard.general
     lazy var persistentContainer: TBAPersistenceContainer = {
         return TBAPersistenceContainer()
@@ -160,6 +161,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Setup our Firebase app - make sure this is called before other Firebase setup
         FirebaseApp.configure()
 
+        // Setup myTBA Service after Firebase config
+        self.myTBAService = MyTBAService(myTBA: myTBA,
+                                         retryService: RetryService(),
+                                         errorRecorder: Crashlytics.sharedInstance())
+        self.myTBAService.registerRetryable()
+
         // Disable Crashlytics during debug
         #if DEBUG
         Fabric.sharedSDK().debug = true
@@ -179,16 +186,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupPushServiceDelegates()
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
-
-        Auth.auth().addIDTokenDidChangeListener { (_, user) in
-            if let user = user {
-                user.getIDToken { (token, _) in
-                    self.myTBA.authToken = token
-                }
-            } else {
-                self.myTBA.authToken = nil
-            }
-        }
 
         // Kickoff background myTBA/Google sign in, along with setting up delegates
         setupGoogleAuthentication()

@@ -19,6 +19,7 @@
 		1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */; };
 		1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */; };
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
+		14B5DF122413295A00BAE07D /* MyTBAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B5DF112413295A00BAE07D /* MyTBAService.swift */; };
 		14F51704239AA70A00D9240F /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F51703239AA70A00D9240F /* SearchService.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
@@ -254,6 +255,7 @@
 		14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModel.swift; sourceTree = "<group>"; };
 		1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatCellViewModel.swift; sourceTree = "<group>"; };
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
+		14B5DF112413295A00BAE07D /* MyTBAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAService.swift; sourceTree = "<group>"; };
 		14F51703239AA70A00D9240F /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
@@ -1143,6 +1145,7 @@
 				92F8E355209AAE890094213F /* PushService.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
 				92564C6A21644AA30047917F /* Secrets.swift */,
+				14B5DF112413295A00BAE07D /* MyTBAService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1802,6 +1805,7 @@
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
 				9279737F23CFF3B100FF9B86 /* EventStatsConfigurator2019.swift in Sources */,
+				14B5DF122413295A00BAE07D /* MyTBAService.swift in Sources */,
 				92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */,
