@@ -86,8 +86,7 @@ class EventInfoViewController: TBATableViewController, Observable {
             switch item {
             case .title:
                 return self.tableView(tableView, titleCellForRowAt: indexPath)
-            case .webcast:
-                let webcast = self.event.webcasts[indexPath.row]
+            case .webcast(let webcast):
                 let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
                 cell.textLabel?.text = "Watch on \(webcast.displayName)"
                 cell.detailTextLabel?.text = webcast.channel
