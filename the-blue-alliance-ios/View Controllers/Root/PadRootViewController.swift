@@ -63,15 +63,13 @@ class PadRootViewController: UISplitViewController, RootController {
         let masterNavigationController = UINavigationController(rootViewController: masterViewController)
         viewControllers = [masterNavigationController, emptyNavigationController]
 
-        // splitViewController.preferredDisplayMode = .allVisible
-        // splitViewController.delegate = self
+        preferredDisplayMode = .allVisible
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // TODO: Remove these
     // MARK: - RootController
 
     func continueSearch(_ searchText: String) -> Bool {
@@ -154,17 +152,25 @@ extension PadMasterViewController: SearchContainer, SearchContainerDelegate, Sea
 extension PadMasterViewController: PadRootTableViewControllerDelegate {
 
     func rootTypeSelected(_ rootType: RootType) {
-        switch rootType {
-        case .events:
-            navigationController?.pushViewController(eventsViewController, animated: true)
-        case .teams:
-            navigationController?.pushViewController(teamsViewController, animated: true)
-        case .districts:
-            navigationController?.pushViewController(districtsViewController, animated: true)
-        case .myTBA:
-            navigationController?.pushViewController(myTBAViewController, animated: true)
-        case .settings:
-            let navigationController = UINavigationController(rootViewController: settingsViewController)
+        let viewController: UIViewController = {
+            switch rootType {
+            case .events:
+                return eventsViewController
+            case .teams:
+                return teamsViewController
+            case .districts:
+                return districtsViewController
+            case .myTBA:
+                return myTBAViewController
+            case .settings:
+                return settingsViewController
+            }
+        }()
+
+        if rootType.supportsPush {
+            navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            let navigationController = UINavigationController(rootViewController: viewController)
             showDetailViewController(navigationController, sender: nil)
         }
     }
@@ -244,69 +250,3 @@ private class PadRootTableViewController: TBATableViewController, Refreshable, S
     }
 
 }
-
-/*
-extension PadRootViewController: UISplitViewControllerDelegate {
-
-    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
-        // If our split view controller is collapsed and we're trying to show a detail view,
-        // push it on the master navigation stack
-        if splitViewController.isCollapsed,
-            // Need to get the VC for the currently selected tab...
-            let masterNavigationController = tabBarController.selectedViewController as? UINavigationController {
-            // We want to push the view controller, but make sure we're not pushing something in a nav controller
-            guard let detailNavigationController = vc as? UINavigationController else {
-                return false
-            }
-
-            guard let detailViewController = detailNavigationController.viewControllers.first else {
-                return false
-            }
-
-            masterNavigationController.show(detailViewController, sender: nil)
-
-            return true
-        }
-
-        return false
-    }
-
-    func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
-        // If collapsing and detail view controller is not a no selection navigation view controller,
-        // push the first view controller on to primary navigation view controller and return
-        // the primary tab bar controller
-        if let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController,
-            detailNavigationController.restorationIdentifier != kNoSelectionNavigationController {
-            // This is a view controller we want to push
-            if let masterNavigationController = tabBarController.selectedViewController as? UINavigationController {
-                // Add the detail navigation controller stack to our root navigation controller
-                masterNavigationController.viewControllers += detailNavigationController.viewControllers
-                return tabBarController
-            }
-        }
-
-        return splitViewController.viewControllers.first
-    }
-
-    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
-        // If our primary view controller is not a no selection view controller, pop the old one, return the tab bar,
-        // and setup the detail view controller to be the primary view controller
-        //
-        // Otherwise, return our detail
-        if let masterNavigationController = tabBarController.selectedViewController as? UINavigationController,
-            masterNavigationController.topViewController?.restorationIdentifier != kNoSelectionNavigationController {
-            // We want to seperate this event view controller in to the detail view controller
-            if let detailViewControllers = masterNavigationController.popToRootViewController(animated: true) {
-                let detailNavigationController = UINavigationController()
-                detailNavigationController.viewControllers = detailViewControllers
-                splitViewController.viewControllers = [tabBarController, detailNavigationController]
-
-                return detailNavigationController
-            }
-        }
-
-        return emptyNavigationController
-    }
-
-}
-*/
