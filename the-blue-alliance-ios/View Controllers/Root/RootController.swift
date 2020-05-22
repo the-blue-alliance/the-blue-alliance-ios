@@ -46,6 +46,11 @@ enum RootType: CaseIterable {
         }
     }
 
+    var supportsPush: Bool {
+        // Settings is currently the only VC that doesn't support a sub-menu push
+        return self != .settings
+    }
+
 }
 
 protocol RootController {

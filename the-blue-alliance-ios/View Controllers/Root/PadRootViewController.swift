@@ -164,8 +164,8 @@ extension PadMasterViewController: PadRootTableViewControllerDelegate {
         case .myTBA:
             navigationController?.pushViewController(myTBAViewController, animated: true)
         case .settings:
-            // TODO: Fix
-            break
+            let navigationController = UINavigationController(rootViewController: settingsViewController)
+            showDetailViewController(navigationController, sender: nil)
         }
     }
 
@@ -198,10 +198,12 @@ private class PadRootTableViewController: TBATableViewController, Refreshable, S
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
-        cell.textLabel?.text = RootType.allCases[indexPath.row].title
-        cell.imageView?.image = RootType.allCases[indexPath.row].icon
+        let type = RootType.allCases[indexPath.row]
+
+        cell.textLabel?.text = type.title
+        cell.imageView?.image = type.icon
         cell.imageView?.tintColor = UIColor.tabBarTintColor
-        cell.accessoryType = .disclosureIndicator
+        cell.accessoryType =  type.supportsPush ? .disclosureIndicator : .none
 
         return cell
     }
