@@ -36,8 +36,8 @@ class TeamsContainerViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "Teams"
-        tabBarItem.image = UIImage.teamIcon
+        title = RootType.teams.title
+        tabBarItem.image = RootType.teams.icon
 
         teamsViewController.delegate = self
     }

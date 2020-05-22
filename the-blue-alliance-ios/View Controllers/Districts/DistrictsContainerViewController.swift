@@ -38,8 +38,8 @@ class DistrictsContainerViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "Districts"
-        tabBarItem.image = UIImage.districtIcon
+        title = RootType.districts.title
+        tabBarItem.image = RootType.districts.icon
 
         navigationTitleDelegate = self
         districtsViewController.delegate = self

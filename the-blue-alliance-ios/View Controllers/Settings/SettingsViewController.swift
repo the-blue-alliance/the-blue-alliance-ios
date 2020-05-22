@@ -42,8 +42,9 @@ class SettingsViewController: TBATableViewController {
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        title = "Settings"
-        tabBarItem.image = UIImage.settingsIcon
+        title = RootType.settings.title
+        tabBarItem.image = RootType.settings.icon
+
         hidesBottomBarWhenPushed = false
     }
 

@@ -5,6 +5,49 @@ import Photos
 import TBAData
 import TBAKit
 
+protocol RootChildController {
+    var rootType: RootType { get }
+}
+
+enum RootType: CaseIterable {
+    case events
+    case teams
+    case districts
+    case myTBA
+    case settings
+
+    var title: String {
+        switch self {
+        case .events:
+            return "Events"
+        case .teams:
+            return "Teams"
+        case .districts:
+            return "Districts"
+        case .myTBA:
+            return "myTBA"
+        case .settings:
+            return "Settings"
+        }
+    }
+
+    var icon: UIImage? {
+        switch self {
+        case .events:
+            return UIImage.eventIcon
+        case .teams:
+            return UIImage.teamIcon
+        case .districts:
+            return UIImage.districtIcon
+        case .myTBA:
+            return UIImage.starIcon
+        case .settings:
+            return UIImage.settingsIcon
+        }
+    }
+
+}
+
 protocol RootController {
     var fcmTokenProvider: FCMTokenProvider { get }
     var myTBA: MyTBA { get }
