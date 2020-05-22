@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - View Hierarchy
 
-    // Root VC on iPhone is a tab bar controller
+    // Root VC on iPhone: a tab bar controller, iPad: a split view controller
     lazy private var rootViewController: UIViewController & RootController = {
         if UIDevice.isPhone {
             return rootViewControllerPhone

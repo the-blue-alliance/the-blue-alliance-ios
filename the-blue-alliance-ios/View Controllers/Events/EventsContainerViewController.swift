@@ -59,7 +59,10 @@ class EventsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearchController()
+        // Only show Search in container view on iPhone
+        if UIDevice.isPhone {
+            setupSearchController()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
