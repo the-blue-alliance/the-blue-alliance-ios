@@ -26,14 +26,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // Root VC on iPhone is a tab bar controller
     lazy private var rootViewController: UIViewController & RootController = {
-        switch UIDevice.current.userInterfaceIdiom {
-        case .phone:
+        if UIDevice.isPhone {
             return rootViewControllerPhone
-        case .pad:
+        } else if UIDevice.isPad {
             return rootViewControllerPad
-        default:
-            fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
         }
+        fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
     }()
     lazy private var rootViewControllerPhone: PhoneRootViewController = {
         return PhoneRootViewController(fcmTokenProvider: messaging,
