@@ -10,7 +10,7 @@ import UIKit
 class HandoffService {
 
     private let persistentContainer: NSPersistentContainer
-    private let rootViewController: RootController & UIViewController
+    private let rootController: RootController
 
     var appSetup: Bool = false {
         didSet {
@@ -24,9 +24,9 @@ class HandoffService {
     private(set) var continueSearchText: String?
     private(set) var continueURI: URL?
 
-    init(persistentContainer: NSPersistentContainer, rootViewController: RootController & UIViewController) {
+    init(persistentContainer: NSPersistentContainer, rootController: RootController) {
         self.persistentContainer = persistentContainer
-        self.rootViewController = rootViewController
+        self.rootController = rootController
     }
 
     func application(continue userActivity: NSUserActivity) -> Bool {
@@ -100,7 +100,7 @@ class HandoffService {
             continueSearchText = searchText
             return true
         }
-        return rootViewController.continueSearch(searchText)
+        return rootController.continueSearch(searchText)
     }
 
     @discardableResult
@@ -116,9 +116,9 @@ class HandoffService {
 
         let object = persistentContainer.viewContext.object(with: objectID)
         if let event = object as? Event {
-            return rootViewController.show(event: event)
+            return rootController.show(event: event)
         } else if let team = object as? Team {
-            return rootViewController.show(team: team)
+            return rootController.show(team: team)
         }
         return false
     }

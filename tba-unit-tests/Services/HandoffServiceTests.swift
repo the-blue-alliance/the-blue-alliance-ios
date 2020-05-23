@@ -1,9 +1,53 @@
+import CoreData
 import CoreSpotlight
+import Photos
+import MyTBAKit
 import Search
+import TBAKit
 import UIKit
 import XCTest
 @testable import TBAData
 @testable import The_Blue_Alliance
+
+struct FakeRootController: RootController {
+
+    let fcmTokenProvider: FCMTokenProvider
+    let myTBA: MyTBA
+    let pasteboard: UIPasteboard? = nil
+    let photoLibrary: PHPhotoLibrary? = nil
+    let pushService: PushService
+    let searchService: SearchService
+    let statusService: StatusService
+    let urlOpener: URLOpener
+    let persistentContainer: NSPersistentContainer
+    let tbaKit: TBAKit
+    let userDefaults: UserDefaults
+
+    var continueSearchExpectation: XCTestExpectation?
+    var continueSearchResult: Bool = true
+
+    var showEventExpectation: XCTestExpectation?
+    var showEventResult: Bool = true
+
+    var showTeamExpectation: XCTestExpectation?
+    var showTeamResult: Bool = true
+
+    func continueSearch(_ searchText: String) -> Bool {
+        continueSearchExpectation?.fulfill()
+        return continueSearchResult
+    }
+
+    func show(event: Event) -> Bool {
+        showEventExpectation?.fulfill()
+        return showEventResult
+    }
+
+    func show(team: Team) -> Bool {
+        showTeamExpectation?.fulfill()
+        return showTeamResult
+    }
+
+}
 
 class HandoffServiceTests: TBATestCase {
 
@@ -13,7 +57,8 @@ class HandoffServiceTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        self.handoffService = HandoffService(persistentContainer: persistentContainer, rootViewController: tabBarController)
+        let rootController = FakeRootController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        self.handoffService = HandoffService(persistentContainer: persistentContainer, rootController: rootController)
     }
 
     func test_handoff_unsupported() {

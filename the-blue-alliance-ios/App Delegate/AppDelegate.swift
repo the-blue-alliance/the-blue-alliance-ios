@@ -83,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var handoffService: HandoffService = {
         return HandoffService(persistentContainer: persistentContainer,
-                              rootViewController: rootViewController)
+                              rootController: rootViewController)
     }()
     lazy var pushService: PushService = {
         return PushService(myTBA: myTBA,
