@@ -5,7 +5,6 @@ import Fabric
 import Firebase
 import FirebaseAuth
 import FirebaseMessaging
-import FirebaseRemoteConfig
 import GoogleSignIn
 import MyTBAKit
 import Photos
