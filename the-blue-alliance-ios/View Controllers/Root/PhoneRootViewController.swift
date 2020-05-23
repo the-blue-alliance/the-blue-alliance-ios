@@ -57,13 +57,21 @@ class PhoneRootViewController: UITabBarController, RootController {
         guard let navigationController = selectedViewController as? UINavigationController else {
             return false
         }
-        navigationController.popToRootViewController(animated: false)
 
         guard let searchContainerViewController = navigationController.viewControllers.first as? SearchContainer else {
             return false
         }
+
+        // Fix `popToRootViewController` clobbering our `isActive` animation
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/878
+        CATransaction.setCompletionBlock {
+            searchContainerViewController.searchController.isActive = true
+        }
+        CATransaction.begin()
+        navigationController.popToRootViewController(animated: true)
+        CATransaction.commit()
+
         searchContainerViewController.searchController.searchBar.text = searchText
-        searchContainerViewController.searchController.isActive = true
 
         return true
     }
