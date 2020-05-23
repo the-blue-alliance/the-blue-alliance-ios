@@ -57,29 +57,32 @@ class MyTBAViewControllerTests: TBATestCase {
 
     func test_eventSelected() {
         let event = insertDistrictEvent()
-        myTBAViewController.eventSelected(event)
 
-        XCTAssert(navigationController.detailViewController is UINavigationController)
-        let nav = navigationController.detailViewController as! UINavigationController
-        XCTAssert(nav.viewControllers.first is EventViewController)
+        myTBAViewController.eventSelected(event)
+        XCTAssert(navigationController.pushedViewController is EventViewController)
+
+        let eventViewController = navigationController.pushedViewController as! EventViewController
+        XCTAssertEqual(eventViewController.event, event)
     }
 
     func test_teamSelected() {
         let team = insertTeam()
-        myTBAViewController.teamSelected(team)
 
-        XCTAssert(navigationController.detailViewController is UINavigationController)
-        let nav = navigationController.detailViewController as! UINavigationController
-        XCTAssert(nav.viewControllers.first is TeamViewController)
+        myTBAViewController.teamSelected(team)
+        XCTAssert(navigationController.pushedViewController is TeamViewController)
+
+        let teamViewController = navigationController.pushedViewController as! TeamViewController
+        XCTAssertEqual(teamViewController.team, team)
     }
 
     func test_myTBAObjectSelected_match() {
         let match = insertMatch()
-        myTBAViewController.matchSelected(match)
 
-        XCTAssert(navigationController.detailViewController is UINavigationController)
-        let nav = navigationController.detailViewController as! UINavigationController
-        XCTAssert(nav.viewControllers.first is MatchViewController)
+        myTBAViewController.matchSelected(match)
+        XCTAssert(navigationController.pushedViewController is MatchViewController)
+
+        let matchViewController = navigationController.pushedViewController as! MatchViewController
+        XCTAssertEqual(matchViewController.match, match)
     }
     
     func test_authenticated() {
