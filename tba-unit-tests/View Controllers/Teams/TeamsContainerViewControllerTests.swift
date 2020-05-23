@@ -49,11 +49,9 @@ class TeamsContainerViewControllerTests: TBATestCase {
         let team = insertTeam()
 
         teamsContainerViewController.teamSelected(team)
+        XCTAssert(navigationController.pushedViewController is TeamViewController)
 
-        XCTAssert(navigationController.detailViewController is UINavigationController)
-        let nav = navigationController.detailViewController as! UINavigationController
-        XCTAssert(nav.viewControllers.first is TeamViewController)
-        let teamViewController = nav.viewControllers.first as! TeamViewController
+        let teamViewController = navigationController.pushedViewController as! TeamViewController
         XCTAssertEqual(teamViewController.team, team)
     }
 

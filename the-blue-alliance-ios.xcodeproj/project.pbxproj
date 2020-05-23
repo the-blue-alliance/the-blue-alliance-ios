@@ -31,6 +31,7 @@
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */; };
 		921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5E222B13480056578A /* ContainerViewController+Team.swift */; };
+		921DD67D241D3D6C00403192 /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921DD67C241D3D6C00403192 /* RootController.swift */; };
 		921F609923CD4DFD00FE633B /* MatchBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921F609823CD4DFD00FE633B /* MatchBreakdownView.swift */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
 		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
@@ -59,6 +60,7 @@
 		9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */; };
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
 		9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */; };
+		92755D942478778D0035C78A /* UIDevice+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92755D932478778D0035C78A /* UIDevice+TBA.swift */; };
 		9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956921B442AA00560D81 /* StatusServiceTests.swift */; };
 		9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957221B7514700560D81 /* DistrictTeamsViewController.swift */; };
 		9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957421B7519C00560D81 /* EventTeamsViewController.swift */; };
@@ -160,6 +162,8 @@
 		92C8CE5921AEF4C600683558 /* MatchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */; };
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
+		92CAF54E240774B90078CA0A /* PadRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAF54D240774B90078CA0A /* PadRootViewController.swift */; };
+		92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAF54F240775180078CA0A /* PhoneRootViewController.swift */; };
 		92CC6D36234588810085867D /* Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92CC6D34234588810085867D /* Test.xcdatamodeld */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */; };
@@ -269,6 +273,7 @@
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
 		921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B5E222B13480056578A /* ContainerViewController+Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContainerViewController+Team.swift"; sourceTree = "<group>"; };
+		921DD67C241D3D6C00403192 /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
 		921F609823CD4DFD00FE633B /* MatchBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownView.swift; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -300,6 +305,7 @@
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
 		9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationStatusTableViewCell.xib; sourceTree = "<group>"; };
+		92755D932478778D0035C78A /* UIDevice+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+TBA.swift"; sourceTree = "<group>"; };
 		9275956921B442AA00560D81 /* StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceTests.swift; sourceTree = "<group>"; };
 		9275957221B7514700560D81 /* DistrictTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamsViewController.swift; sourceTree = "<group>"; };
 		9275957421B7519C00560D81 /* EventTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamsViewController.swift; sourceTree = "<group>"; };
@@ -404,6 +410,8 @@
 		92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewControllerTests.swift; sourceTree = "<group>"; };
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
+		92CAF54D240774B90078CA0A /* PadRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadRootViewController.swift; sourceTree = "<group>"; };
+		92CAF54F240775180078CA0A /* PhoneRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRootViewController.swift; sourceTree = "<group>"; };
 		92CC6D35234588810085867D /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-unit-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -770,6 +778,7 @@
 		92942DAD1E215722008E79CA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				92CAF54C240774A80078CA0A /* Root */,
 				92AF73D621EB9E10006A338D /* Search */,
 				92942E311E230340008E79CA /* Base */,
 				92942DB21E215B08008E79CA /* Events */,
@@ -934,6 +943,7 @@
 				921D0B5E222B13480056578A /* ContainerViewController+Team.swift */,
 				925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */,
 				92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */,
+				92755D932478778D0035C78A /* UIDevice+TBA.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1078,6 +1088,16 @@
 				92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */,
 			);
 			path = Match;
+			sourceTree = "<group>";
+		};
+		92CAF54C240774A80078CA0A /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				921DD67C241D3D6C00403192 /* RootController.swift */,
+				92CAF54D240774B90078CA0A /* PadRootViewController.swift */,
+				92CAF54F240775180078CA0A /* PhoneRootViewController.swift */,
+			);
+			path = Root;
 			sourceTree = "<group>";
 		};
 		92CC6D33234588810085867D /* Resources */ = {
@@ -1692,12 +1712,14 @@
 				92C079C723F99CA400AE2AFA /* EventStatsConfigurator2020.swift in Sources */,
 				1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */,
 				9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */,
+				92CAF54E240774B90078CA0A /* PadRootViewController.swift in Sources */,
 				92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */,
 				92FF10F021A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
 				92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */,
 				92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */,
 				9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */,
+				92755D942478778D0035C78A /* UIDevice+TBA.swift in Sources */,
 				921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */,
 				92F8E356209AAE890094213F /* PushService.swift in Sources */,
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
@@ -1796,6 +1818,7 @@
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
 				92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */,
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
+				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventInsightsContainerViewController.swift in Sources */,
@@ -1817,6 +1840,7 @@
 				1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */,
 				9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */,
 				92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */,
+				921DD67D241D3D6C00403192 /* RootController.swift in Sources */,
 				9255EB6D209AC9760006A745 /* RetryService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

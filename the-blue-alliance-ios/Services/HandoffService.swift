@@ -10,7 +10,7 @@ import UIKit
 class HandoffService {
 
     private let persistentContainer: NSPersistentContainer
-    private let rootViewController: UITabBarController
+    private let rootController: RootController
 
     var appSetup: Bool = false {
         didSet {
@@ -24,9 +24,9 @@ class HandoffService {
     private(set) var continueSearchText: String?
     private(set) var continueURI: URL?
 
-    init(persistentContainer: NSPersistentContainer, rootViewController: UITabBarController) {
+    init(persistentContainer: NSPersistentContainer, rootController: RootController) {
         self.persistentContainer = persistentContainer
-        self.rootViewController = rootViewController
+        self.rootController = rootController
     }
 
     func application(continue userActivity: NSUserActivity) -> Bool {
@@ -100,26 +100,7 @@ class HandoffService {
             continueSearchText = searchText
             return true
         }
-
-        // Pop to root of Events tab, show search
-        // Dismiss existing modal view controller
-        if let presentedViewController = rootViewController.presentedViewController {
-            presentedViewController.dismiss(animated: false)
-        }
-
-        rootViewController.selectedIndex = 0
-        guard let navigationController = rootViewController.selectedViewController as? UINavigationController else {
-            return false
-        }
-        navigationController.popToRootViewController(animated: false)
-
-        guard let searchContainerViewController = navigationController.viewControllers.first as? SearchContainer else {
-            return false
-        }
-        searchContainerViewController.searchController.searchBar.text = searchText
-        searchContainerViewController.searchController.isActive = true
-
-        return true
+        return rootController.continueSearch(searchText)
     }
 
     @discardableResult
@@ -133,28 +114,11 @@ class HandoffService {
             return false
         }
 
-        // Dismiss existing modal view controller
-        if let presentedViewController = rootViewController.presentedViewController {
-            presentedViewController.dismiss(animated: false)
-        }
-
-        rootViewController.selectedIndex = 0
-        guard let navigationController = rootViewController.selectedViewController as? UINavigationController else {
-            return false
-        }
-        navigationController.popToRootViewController(animated: false)
-
-        guard let searchContainerViewController = navigationController.viewControllers.first as? SearchViewControllerDelegate else {
-            return false
-        }
-
         let object = persistentContainer.viewContext.object(with: objectID)
         if let event = object as? Event {
-            searchContainerViewController.eventSelected(event)
-            return true
+            return rootController.show(event: event)
         } else if let team = object as? Team {
-            searchContainerViewController.teamSelected(team)
-            return true
+            return rootController.show(team: team)
         }
         return false
     }

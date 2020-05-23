@@ -77,11 +77,9 @@ class DistrictsContainerViewControllerTests: TBATestCase {
         let district = insertDistrict()
 
         districtsContainerViewController.districtSelected(district)
+        XCTAssert(navigationController.pushedViewController is DistrictViewController)
 
-        XCTAssert(navigationController.detailViewController is UINavigationController)
-        let nav = navigationController.detailViewController as! UINavigationController
-        XCTAssert(nav.viewControllers.first is DistrictViewController)
-        let districtViewController = nav.viewControllers.first as! DistrictViewController
+        let districtViewController = navigationController.pushedViewController as! DistrictViewController
         XCTAssertEqual(districtViewController.district, district)
     }
 

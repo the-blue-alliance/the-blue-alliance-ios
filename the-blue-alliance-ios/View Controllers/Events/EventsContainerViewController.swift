@@ -41,8 +41,9 @@ class EventsContainerViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "Events"
-        tabBarItem.image = UIImage.eventIcon
+        // TODO: We should be able to move this somewhere else and DRY this code
+        title = RootType.events.title
+        tabBarItem.image = RootType.events.icon
 
         navigationTitleDelegate = self
         eventsViewController.delegate = self
@@ -58,7 +59,10 @@ class EventsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearchController()
+        // Only show Search in container view on iPhone
+        if UIDevice.isPhone {
+            setupSearchController()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

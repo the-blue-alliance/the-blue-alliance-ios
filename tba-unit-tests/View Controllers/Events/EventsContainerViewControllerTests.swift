@@ -88,11 +88,9 @@ class EventsContainerViewControllerTests: TBATestCase {
         let event = insertEvent()
 
         eventsContainerViewController.eventSelected(event)
+        XCTAssert(navigationController.pushedViewController is EventViewController)
 
-        XCTAssert(navigationController.detailViewController is UINavigationController)
-        let nav = navigationController.detailViewController as! UINavigationController
-        XCTAssert(nav.viewControllers.first is EventViewController)
-        let eventViewController = nav.viewControllers.first as! EventViewController
+        let eventViewController = navigationController.pushedViewController as! EventViewController
         XCTAssertEqual(eventViewController.event, event)
     }
 

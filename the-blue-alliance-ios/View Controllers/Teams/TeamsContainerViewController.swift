@@ -36,8 +36,8 @@ class TeamsContainerViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "Teams"
-        tabBarItem.image = UIImage.teamIcon
+        title = RootType.teams.title
+        tabBarItem.image = RootType.teams.icon
 
         teamsViewController.delegate = self
     }
@@ -51,7 +51,10 @@ class TeamsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearchController()
+        // Only show Search in container view on iPhone
+        if UIDevice.isPhone {
+            setupSearchController()
+        }
     }
 
 }

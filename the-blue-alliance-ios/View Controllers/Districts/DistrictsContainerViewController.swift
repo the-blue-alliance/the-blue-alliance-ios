@@ -38,8 +38,8 @@ class DistrictsContainerViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "Districts"
-        tabBarItem.image = UIImage.districtIcon
+        title = RootType.districts.title
+        tabBarItem.image = RootType.districts.icon
 
         navigationTitleDelegate = self
         districtsViewController.delegate = self
@@ -98,8 +98,12 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
     func districtSelected(_ district: District) {
         // Show detail wrapped in a UINavigationController for our split view controller
         let districtViewController = DistrictViewController(district: district, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let nav = UINavigationController(rootViewController: districtViewController)
-        navigationController?.showDetailViewController(nav, sender: nil)
+        if let splitViewController = splitViewController {
+            let navigationController = UINavigationController(rootViewController: districtViewController)
+            splitViewController.showDetailViewController(navigationController, sender: nil)
+        } else if let navigationController = navigationController {
+            navigationController.pushViewController(districtViewController, animated: true)
+        }
     }
 
 }

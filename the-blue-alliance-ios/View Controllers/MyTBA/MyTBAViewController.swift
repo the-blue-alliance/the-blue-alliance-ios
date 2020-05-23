@@ -58,8 +58,8 @@ class MyTBAViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "myTBA"
-        tabBarItem.image = UIImage.starIcon
+        title = RootType.myTBA.title
+        tabBarItem.image = RootType.myTBA.icon
 
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
@@ -172,20 +172,32 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let navigationController = UINavigationController(rootViewController: viewController)
-        self.navigationController?.showDetailViewController(navigationController, sender: nil)
+        if let splitViewController = splitViewController {
+            let navigationController = UINavigationController(rootViewController: viewController)
+            splitViewController.showDetailViewController(navigationController, sender: nil)
+        } else if let navigationController = navigationController {
+            navigationController.pushViewController(viewController, animated: true)
+        }
     }
 
     func teamSelected(_ team: Team) {
         let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let navigationController = UINavigationController(rootViewController: viewController)
-        self.navigationController?.showDetailViewController(navigationController, sender: nil)
+        if let splitViewController = splitViewController {
+            let navigationController = UINavigationController(rootViewController: viewController)
+            splitViewController.showDetailViewController(navigationController, sender: nil)
+        } else if let navigationController = navigationController {
+            navigationController.pushViewController(viewController, animated: true)
+        }
     }
 
     func matchSelected(_ match: Match) {
         let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let navigationController = UINavigationController(rootViewController: viewController)
-        self.navigationController?.showDetailViewController(navigationController, sender: nil)
+        if let splitViewController = splitViewController {
+            let navigationController = UINavigationController(rootViewController: viewController)
+            splitViewController.showDetailViewController(navigationController, sender: nil)
+        } else if let navigationController = navigationController {
+            navigationController.pushViewController(viewController, animated: true)
+        }
     }
 
 }

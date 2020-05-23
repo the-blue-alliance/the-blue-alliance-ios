@@ -23,72 +23,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - View Hierarchy
 
-    // Root VC is a split view controller, with the left side being a tab bar,
-    // and the right side being a navigation controller
-    lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
-        let splitViewController = UISplitViewController()
-
-        let eventsViewController = EventsContainerViewController(myTBA: myTBA,
-                                                                 pasteboard: pasteboard,
-                                                                 photoLibrary: photoLibrary,
-                                                                 searchService: searchService,
-                                                                 statusService: statusService,
-                                                                 urlOpener: urlOpener,
-                                                                 persistentContainer: persistentContainer,
-                                                                 tbaKit: tbaKit,
-                                                                 userDefaults: userDefaults)
-        let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
-                                                               pasteboard: pasteboard,
-                                                               photoLibrary: photoLibrary,
-                                                               searchService: searchService,
-                                                               statusService: statusService,
-                                                               urlOpener: urlOpener,
-                                                               persistentContainer: persistentContainer,
-                                                               tbaKit: tbaKit,
-                                                               userDefaults: userDefaults)
-        let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
-                                                                       statusService: statusService,
-                                                                       urlOpener: urlOpener,
-                                                                       persistentContainer: persistentContainer,
-                                                                       tbaKit: tbaKit,
-                                                                       userDefaults: userDefaults)
-        let settingsViewController = SettingsViewController(fcmTokenProvider: messaging,
-                                                            myTBA: myTBA,
-                                                            pushService: pushService,
-                                                            searchService: searchService,
-                                                            urlOpener: urlOpener,
-                                                            persistentContainer: persistentContainer,
-                                                            tbaKit: tbaKit,
-                                                            userDefaults: userDefaults)
-        let myTBAViewController = MyTBAViewController(myTBA: myTBA,
-                                                      statusService: statusService,
-                                                      urlOpener: urlOpener,
-                                                      persistentContainer: persistentContainer,
-                                                      tbaKit: tbaKit,
-                                                      userDefaults: userDefaults)
-        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController]
-        tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
-            let navigationController = UINavigationController(rootViewController: viewController)
-            return navigationController
-        })
-
-        splitViewController.viewControllers = [tabBarController, emptyNavigationController]
-
-        splitViewController.preferredDisplayMode = .allVisible
-        splitViewController.delegate = self
-
-        return splitViewController
-    }()
-    private let tabBarController = UITabBarController()
-    lazy var emptyNavigationController: UINavigationController = {
-        guard let emptyViewController = Bundle.main.loadNibNamed("EmptyViewController", owner: nil, options: nil)?.first as? UIViewController else {
-            fatalError("Unable to load empty view controller")
+    // Root VC on iPhone: a tab bar controller, iPad: a split view controller
+    lazy private var rootViewController: UIViewController & RootController = {
+        if UIDevice.isPhone {
+            return rootViewControllerPhone
+        } else if UIDevice.isPad {
+            return rootViewControllerPad
         }
-
-        let navigationController = UINavigationController(rootViewController: emptyViewController)
-        navigationController.restorationIdentifier = kNoSelectionNavigationController
-
-        return navigationController
+        fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
+    }()
+    lazy private var rootViewControllerPhone: PhoneRootViewController = {
+        return PhoneRootViewController(fcmTokenProvider: messaging,
+                                       myTBA: myTBA,
+                                       pasteboard: pasteboard,
+                                       photoLibrary: photoLibrary,
+                                       pushService: pushService,
+                                       searchService: searchService,
+                                       statusService: statusService,
+                                       urlOpener: urlOpener,
+                                       persistentContainer: persistentContainer,
+                                       tbaKit: tbaKit,
+                                       userDefaults: userDefaults)
+    }()
+    lazy private var rootViewControllerPad: PadRootViewController = {
+        return PadRootViewController(fcmTokenProvider: messaging,
+                                       myTBA: myTBA,
+                                       pasteboard: pasteboard,
+                                       photoLibrary: photoLibrary,
+                                       pushService: pushService,
+                                       searchService: searchService,
+                                       statusService: statusService,
+                                       urlOpener: urlOpener,
+                                       persistentContainer: persistentContainer,
+                                       tbaKit: tbaKit,
+                                       userDefaults: userDefaults)
     }()
 
     // MARK: - Services
@@ -115,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var handoffService: HandoffService = {
         return HandoffService(persistentContainer: persistentContainer,
-                              rootViewController: tabBarController)
+                              rootController: rootViewController)
     }()
     lazy var pushService: PushService = {
         return PushService(myTBA: myTBA,
@@ -222,8 +190,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
                         fatalError("Unable to snapshot root view controller")
                     }
-                    self.rootSplitViewController.view.addSubview(snapshot)
-                    window.rootViewController = self.rootSplitViewController
+                    self.rootViewController.view.addSubview(snapshot)
+                    window.rootViewController = self.rootViewController
 
                     // 0.35 is an iOS animation magic number... for now
                     UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
@@ -434,70 +402,6 @@ extension AppDelegate: FMSStatusSubscribable {
                                                 message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
                                                 preferredStyle: .alert)
         window?.rootViewController?.present(alertController, animated: true, completion: nil)
-    }
-
-}
-
-extension AppDelegate: UISplitViewControllerDelegate {
-
-    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
-        // If our split view controller is collapsed and we're trying to show a detail view,
-        // push it on the master navigation stack
-        if splitViewController.isCollapsed,
-            // Need to get the VC for the currently selected tab...
-            let masterNavigationController = tabBarController.selectedViewController as? UINavigationController {
-            // We want to push the view controller, but make sure we're not pushing something in a nav controller
-            guard let detailNavigationController = vc as? UINavigationController else {
-                return false
-            }
-
-            guard let detailViewController = detailNavigationController.viewControllers.first else {
-                return false
-            }
-
-            masterNavigationController.show(detailViewController, sender: nil)
-
-            return true
-        }
-
-        return false
-    }
-
-    func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
-        // If collapsing and detail view controller is not a no selection navigation view controller,
-        // push the first view controller on to primary navigation view controller and return
-        // the primary tab bar controller
-        if let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController,
-            detailNavigationController.restorationIdentifier != kNoSelectionNavigationController {
-            // This is a view controller we want to push
-            if let masterNavigationController = tabBarController.selectedViewController as? UINavigationController {
-                // Add the detail navigation controller stack to our root navigation controller
-                masterNavigationController.viewControllers += detailNavigationController.viewControllers
-                return tabBarController
-            }
-        }
-
-        return splitViewController.viewControllers.first
-    }
-
-    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
-        // If our primary view controller is not a no selection view controller, pop the old one, return the tab bar,
-        // and setup the detail view controller to be the primary view controller
-        //
-        // Otherwise, return our detail
-        if let masterNavigationController = tabBarController.selectedViewController as? UINavigationController,
-            masterNavigationController.topViewController?.restorationIdentifier != kNoSelectionNavigationController {
-            // We want to seperate this event view controller in to the detail view controller
-            if let detailViewControllers = masterNavigationController.popToRootViewController(animated: true) {
-                let detailNavigationController = UINavigationController()
-                detailNavigationController.viewControllers = detailViewControllers
-                splitViewController.viewControllers = [tabBarController, detailNavigationController]
-
-                return detailNavigationController
-            }
-        }
-
-        return emptyNavigationController
     }
 
 }

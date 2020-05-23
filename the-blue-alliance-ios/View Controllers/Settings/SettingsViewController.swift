@@ -42,8 +42,9 @@ class SettingsViewController: TBATableViewController {
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        title = "Settings"
-        tabBarItem.image = UIImage.settingsIcon
+        title = RootType.settings.title
+        tabBarItem.image = RootType.settings.icon
+
         hidesBottomBarWhenPushed = false
     }
 
@@ -348,8 +349,7 @@ class SettingsViewController: TBATableViewController {
 
     private func pushTroubleshootNotifications() {
         let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let nav = UINavigationController(rootViewController: notificationsViewController)
-        navigationController?.showDetailViewController(nav, sender: nil)
+        navigationController?.pushViewController(notificationsViewController, animated: true)
     }
 
 }
