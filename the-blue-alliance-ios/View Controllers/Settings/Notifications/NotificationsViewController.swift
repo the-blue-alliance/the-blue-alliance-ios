@@ -54,13 +54,13 @@ class NotificationsViewController: TBATableViewController {
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: Error?
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pushService = pushService
         self.urlOpener = urlOpener
 
-        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(style: .grouped, dependencies: dependencies)
 
         title = "Troubleshoot Notifications"
         hidesBottomBarWhenPushed = true

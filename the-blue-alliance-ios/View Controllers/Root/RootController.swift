@@ -62,9 +62,7 @@ protocol RootController {
     var searchService: SearchService { get }
     var urlOpener: URLOpener { get }
     var statusService: StatusService { get }
-    var persistentContainer: NSPersistentContainer { get }
-    var tbaKit: TBAKit { get }
-    var userDefaults: UserDefaults { get }
+    var dependencies: Dependencies { get }
 
     // MARK: - Handoff Methods
     func continueSearch(_ searchText: String) -> Bool
@@ -82,9 +80,7 @@ extension RootController {
                                              searchService: searchService,
                                              statusService: statusService,
                                              urlOpener: urlOpener,
-                                             persistentContainer: persistentContainer,
-                                             tbaKit: tbaKit,
-                                             userDefaults: userDefaults)
+                                             dependencies: dependencies)
     }
 
     var teamsViewController: TeamsContainerViewController {
@@ -94,18 +90,14 @@ extension RootController {
                                             searchService: searchService,
                                             statusService: statusService,
                                             urlOpener: urlOpener,
-                                            persistentContainer: persistentContainer,
-                                            tbaKit: tbaKit,
-                                            userDefaults: userDefaults)
+                                            dependencies: dependencies)
     }
 
     var districtsViewController: DistrictsContainerViewController {
         return DistrictsContainerViewController(myTBA: myTBA,
                                                 statusService: statusService,
                                                 urlOpener: urlOpener,
-                                                persistentContainer: persistentContainer,
-                                                tbaKit: tbaKit,
-                                                userDefaults: userDefaults)
+                                                dependencies: dependencies)
     }
 
     var settingsViewController: SettingsViewController {
@@ -114,18 +106,16 @@ extension RootController {
                                       pushService: pushService,
                                       searchService: searchService,
                                       urlOpener: urlOpener,
-                                      persistentContainer: persistentContainer,
-                                      tbaKit: tbaKit,
-                                      userDefaults: userDefaults)
+                                      dependencies: dependencies)
     }
 
     var myTBAViewController: MyTBAViewController {
         return MyTBAViewController(myTBA: myTBA,
+                                   pasteboard: pasteboard,
+                                   photoLibrary: photoLibrary,
                                    statusService: statusService,
                                    urlOpener: urlOpener,
-                                   persistentContainer: persistentContainer,
-                                   tbaKit: tbaKit,
-                                   userDefaults: userDefaults)
+                                   dependencies: dependencies)
     }
 
 }

@@ -12,7 +12,7 @@ class ContainerViewControllerTestCase: TBATestCase {
         super.setUp()
 
         let mockContainableViewController = MockContainableViewController(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        containerViewController = ContainerViewController(viewControllers: [mockContainableViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        containerViewController = ContainerViewController(viewControllers: [mockContainableViewController], dependencies: dependencies)
     }
 
     override func tearDown() {

@@ -12,7 +12,7 @@ protocol SearchContainer: ContainerViewController {
 extension SearchContainer where Self: SearchViewControllerDelegate {
 
     func setupSearchController() {
-        let searchViewController = SearchViewController(searchService: searchService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let searchViewController = SearchViewController(searchService: searchService, dependencies: dependencies)
         searchViewController.delegate = self
 
         searchController = UISearchController(searchResultsController: searchViewController)
@@ -56,7 +56,7 @@ extension SearchContainerDelegate where Self: ContainerViewController {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: eventViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)
@@ -67,7 +67,7 @@ extension SearchContainerDelegate where Self: ContainerViewController {
 
     func teamSelected(_ team: Team) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: teamViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

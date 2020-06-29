@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import TBAData
 import Foundation
 import TBAKit
@@ -10,10 +9,10 @@ class EventTeamsViewController: TeamsViewController {
 
     // MARK: Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, dependencies: Dependencies) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -37,18 +36,18 @@ class EventTeamsViewController: TeamsViewController {
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventTeams(key: event.key) { (result, notModified) in
+        operation = tbaKit.fetchEventTeams(key: event.key) { [self] (result, notModified) in
             guard case .success(let teams) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(teams)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

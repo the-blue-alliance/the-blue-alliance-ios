@@ -1,4 +1,3 @@
-import Crashlytics
 import MyTBAKit
 import Photos
 import TBAData
@@ -18,7 +17,7 @@ protocol ContainerTeamPushable {
 extension ContainerTeamPushable where Self: ContainerViewController {
 
     func pushTeam(team: Team) {
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

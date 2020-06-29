@@ -19,9 +19,7 @@ struct FakeRootController: RootController {
     let searchService: SearchService
     let statusService: StatusService
     let urlOpener: URLOpener
-    let persistentContainer: NSPersistentContainer
-    let tbaKit: TBAKit
-    let userDefaults: UserDefaults
+    let dependencies: Dependencies
 
     var continueSearchExpectation: XCTestExpectation?
     var continueSearchResult: Bool = true
@@ -57,8 +55,8 @@ class HandoffServiceTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        let rootController = FakeRootController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        self.handoffService = HandoffService(persistentContainer: persistentContainer, rootController: rootController)
+        let rootController = FakeRootController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        self.handoffService = HandoffService(errorRecorder: errorRecorder, persistentContainer: persistentContainer, rootController: rootController)
     }
 
     func test_handoff_unsupported() {

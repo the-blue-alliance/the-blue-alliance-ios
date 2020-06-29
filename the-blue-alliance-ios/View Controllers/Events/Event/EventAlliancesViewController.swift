@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Firebase
 import Foundation
 import MyTBAKit
@@ -21,7 +20,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -29,14 +28,12 @@ class EventAlliancesContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let alliancesViewController = EventAlliancesViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let alliancesViewController = EventAlliancesViewController(event: event, dependencies: dependencies)
 
         super.init(viewControllers: [alliancesViewController],
                    navigationTitle: "Alliances",
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
+                   dependencies: dependencies)
 
         alliancesViewController.delegate = self
     }
@@ -50,7 +47,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("Event Alliances: %@", getVaList([event.key]))
+        errorRecorder.log("Event Alliances: %@", [event.key])
     }
 
 }
@@ -58,7 +55,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -83,10 +80,10 @@ private class EventAlliancesViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, dependencies: Dependencies) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -158,18 +155,18 @@ extension EventAlliancesViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventAlliances(key: event.key) { (result, notModified) in
+        operation = tbaKit.fetchEventAlliances(key: event.key) { [self] (result, notModified) in
             guard case .success(let alliances) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(alliances)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

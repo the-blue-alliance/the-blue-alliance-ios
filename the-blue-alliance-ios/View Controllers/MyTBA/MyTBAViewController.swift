@@ -1,6 +1,4 @@
 import CoreData
-import Crashlytics
-import FirebaseAnalytics
 import FirebaseAuth
 import GoogleSignIn
 import MyTBAKit
@@ -42,21 +40,19 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, dependencies: dependencies)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, dependencies: dependencies)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
+                   dependencies: dependencies)
 
         title = RootType.myTBA.title
         tabBarItem.image = RootType.myTBA.icon
@@ -119,7 +115,7 @@ class MyTBAViewController: ContainerViewController {
             self?.isLoggingOut = false
 
             if let error = error as? MyTBAError, error.code != 404 {
-                Crashlytics.sharedInstance().recordError(error)
+                self?.errorRecorder.recordError(error)
                 self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
                 // Run on main thread, since we delete our Core Data objects on the main thread.
@@ -152,7 +148,7 @@ class MyTBAViewController: ContainerViewController {
         persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Subscription.entity())
 
         // Clear notifications
-        persistentContainer.viewContext.performSaveOrRollback(errorRecorder: Crashlytics.sharedInstance())
+        persistentContainer.viewContext.performSaveOrRollback(errorRecorder: errorRecorder)
     }
 
     // MARK: - Interface Methods
@@ -171,7 +167,7 @@ class MyTBAViewController: ContainerViewController {
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: viewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)
@@ -181,7 +177,7 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
     }
 
     func teamSelected(_ team: Team) {
-        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: viewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)
@@ -191,7 +187,7 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
     }
 
     func matchSelected(_ match: Match) {
-        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: viewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

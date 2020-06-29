@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -34,12 +33,12 @@ class MatchesViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, team: Team? = nil, myTBA: MyTBA, dependencies: Dependencies) {
         self.event = event
         self.team = team
         self.myTBA = myTBA
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -190,18 +189,18 @@ extension MatchesViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventMatches(key: event.key) { (result, notModified) in
+        operation = tbaKit.fetchEventMatches(key: event.key) { [self] (result, notModified) in
             guard case .success(let matches) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(matches)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }
@@ -230,7 +229,7 @@ protocol MatchesViewControllerQueryable: ContainerViewController, MatchQueryOpti
 extension MatchesViewControllerQueryable {
 
     func showFilter() {
-        let queryViewController = MatchQueryOptionsViewController(query: matchesViewController.query, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let queryViewController = MatchQueryOptionsViewController(query: matchesViewController.query, myTBA: myTBA, dependencies: dependencies)
         queryViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: queryViewController)

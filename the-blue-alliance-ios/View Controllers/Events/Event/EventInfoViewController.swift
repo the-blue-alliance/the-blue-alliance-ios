@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import FirebaseAnalytics
 import TBAData
 import TBAKit
@@ -50,11 +49,11 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(event: Event, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.urlOpener = urlOpener
 
-        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(style: .grouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -263,17 +262,17 @@ extension EventInfoViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvent(key: event.key) { (result, notModified) in
+        operation = tbaKit.fetchEvent(key: event.key) { [self] (result, notModified) in
             guard case .success(let object) = result, let event = object, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Event.insert(event, in: context)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

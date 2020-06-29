@@ -20,7 +20,7 @@ class EventInsightsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -28,23 +28,21 @@ class EventInsightsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamStatsViewController = EventTeamStatsTableViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        teamStatsViewController = EventTeamStatsTableViewController(event: event, dependencies: dependencies)
 
         var eventStatsViewController: EventInsightsViewController?
         // Only show event insights if year is 2016 or onward
         var titles = ["Team Stats"]
         if event.year >= 2016 {
             titles.append("Event Insights")
-            eventStatsViewController = EventInsightsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+            eventStatsViewController = EventInsightsViewController(event: event, dependencies: dependencies)
         }
 
         super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
                    navigationTitle: "Stats",
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    segmentedControlTitles: titles,
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
+                   dependencies: dependencies)
 
         teamStatsViewController.delegate = self
     }
@@ -58,13 +56,13 @@ class EventInsightsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("Event Stats: %@", getVaList([event.key]))
+        errorRecorder.log("Event Stats: %@", [event.key])
     }
 
     // MARK: - Private Methods
 
     private func showFilter() {
-        let selectTableViewController = SelectTableViewController<EventInsightsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let selectTableViewController = SelectTableViewController<EventInsightsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, dependencies: dependencies)
         selectTableViewController.title = "Sort stats by"
         selectTableViewController.delegate = self
 
@@ -104,7 +102,7 @@ extension EventInsightsContainerViewController: EventTeamStatsSelectionDelegate 
     }
 
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

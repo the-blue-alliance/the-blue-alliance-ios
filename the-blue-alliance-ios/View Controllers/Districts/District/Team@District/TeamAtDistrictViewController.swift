@@ -24,7 +24,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(ranking: DistrictRanking, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.ranking = ranking
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -32,17 +32,15 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, dependencies: dependencies)
+        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, dependencies: dependencies)
 
         super.init(
             viewControllers: [summaryViewController, breakdownViewController],
             navigationTitle: ranking.team.teamNumberNickname,
             navigationSubtitle: "@ \(ranking.district.abbreviationWithYear)",
             segmentedControlTitles: ["Summary", "Breakdown"],
-            persistentContainer: persistentContainer,
-            tbaKit: tbaKit,
-            userDefaults: userDefaults
+            dependencies: dependencies
         )
 
         rightBarButtonItems = [
@@ -61,7 +59,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("Team@District: District %@ | Team %@", getVaList([ranking.district.key, team.key]))
+        errorRecorder.log("Team@District: District %@ | Team %@", [ranking.district.key, team.key])
     }
 
     // MARK: - Private Methods
@@ -75,7 +73,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
     func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

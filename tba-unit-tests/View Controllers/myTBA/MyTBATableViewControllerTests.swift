@@ -12,7 +12,7 @@ class MyTBATableViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, dependencies: dependencies)
         myTBATableViewController.viewDidLoad()
     }
 
@@ -29,7 +29,7 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     func test_refresh() {
         myTBA.authToken = "abcd123"
-        let mockMyTBATableViewController = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let mockMyTBATableViewController = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, dependencies: dependencies)
 
         let fetchEventExpectation = expectation(description: "Fetch event called")
         mockMyTBATableViewController.fetchEventExpectation = fetchEventExpectation
@@ -140,10 +140,10 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_refreshKey() {
-        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, dependencies: dependencies)
         XCTAssertEqual(favorites.refreshKey, "favorites")
 
-        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, dependencies: dependencies)
         XCTAssertEqual(subscriptions.refreshKey, "subscriptions")
     }
 
@@ -178,10 +178,10 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_noDataText() {
-        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, dependencies: dependencies)
         XCTAssertEqual(favorites.noDataText, "No favorites")
 
-        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, dependencies: dependencies)
         XCTAssertEqual(subscriptions.noDataText, "No subscriptions")
     }
 

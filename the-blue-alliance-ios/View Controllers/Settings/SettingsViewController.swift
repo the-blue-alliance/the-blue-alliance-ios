@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import MyTBAKit
 import Search
 import TBAKit
@@ -33,14 +32,14 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, searchService: SearchService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, searchService: SearchService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pushService = pushService
         self.searchService = searchService
         self.urlOpener = urlOpener
 
-        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(style: .grouped, dependencies: dependencies)
 
         title = RootType.settings.title
         tabBarItem.image = RootType.settings.icon
@@ -337,7 +336,7 @@ class SettingsViewController: TBATableViewController {
         let alertController = UIAlertController(title: "Delete Search Index", message: "Are you sure you want to delete the local search index? Search may not work properly.", preferredStyle: .alert)
 
         let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [unowned self] (deleteAction) in
-            self.searchService.deleteSearchIndex(errorRecorder: Crashlytics.sharedInstance())
+            self.searchService.deleteSearchIndex(errorRecorder: errorRecorder)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
@@ -348,7 +347,7 @@ class SettingsViewController: TBATableViewController {
     }
 
     private func pushTroubleshootNotifications() {
-        let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, dependencies: dependencies)
         navigationController?.pushViewController(notificationsViewController, animated: true)
     }
 

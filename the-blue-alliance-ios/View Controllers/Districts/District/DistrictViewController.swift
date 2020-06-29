@@ -21,7 +21,7 @@ class DistrictViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(district: District, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(district: District, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.district = district
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -29,15 +29,13 @@ class DistrictViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        teamsViewController = DistrictTeamsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        rankingsViewController = DistrictRankingsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        eventsViewController = DistrictEventsViewController(district: district, dependencies: dependencies)
+        teamsViewController = DistrictTeamsViewController(district: district, dependencies: dependencies)
+        rankingsViewController = DistrictRankingsViewController(district: district, dependencies: dependencies)
 
         super.init(viewControllers: [eventsViewController, teamsViewController, rankingsViewController],
                    segmentedControlTitles: ["Events", "Teams", "Rankings"],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
+                   dependencies: dependencies)
 
         title = "\(district.year) \(district.name) Districts"
 
@@ -61,7 +59,7 @@ class DistrictViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("District: %@", getVaList([district.key]))
+        errorRecorder.log("District: %@", [district.key])
     }
 
 }
@@ -69,7 +67,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -86,7 +84,7 @@ extension DistrictViewController: EventsViewControllerDelegate {
 extension DistrictViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 
@@ -95,7 +93,7 @@ extension DistrictViewController: TeamsViewControllerDelegate {
 extension DistrictViewController: DistrictRankingsViewControllerDelegate {
 
     func districtRankingSelected(_ districtRanking: DistrictRanking) {
-        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
     }
 

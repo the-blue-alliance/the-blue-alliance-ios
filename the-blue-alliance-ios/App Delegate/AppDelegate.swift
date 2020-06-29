@@ -41,9 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                        searchService: searchService,
                                        statusService: statusService,
                                        urlOpener: urlOpener,
-                                       persistentContainer: persistentContainer,
-                                       tbaKit: tbaKit,
-                                       userDefaults: userDefaults)
+                                       dependencies: dependencies)
     }()
     lazy private var rootViewControllerPad: PadRootViewController = {
         return PadRootViewController(fcmTokenProvider: messaging,
@@ -54,12 +52,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                        searchService: searchService,
                                        statusService: statusService,
                                        urlOpener: urlOpener,
-                                       persistentContainer: persistentContainer,
-                                       tbaKit: tbaKit,
-                                       userDefaults: userDefaults)
+                                       dependencies: dependencies)
     }()
 
     // MARK: - Services
+    private lazy var dependencies = Dependencies(errorRecorder: errorRecorder,
+                                                 persistentContainer: persistentContainer,
+                                                 tbaKit: tbaKit,
+                                                 userDefaults: userDefaults)
+    private let errorRecorder = TBAErrorRecorder()
     lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
         let description = persistentContainer.persistentStoreDescriptions.first!
         return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
@@ -82,20 +83,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let urlOpener: URLOpener = UIApplication.shared
 
     lazy var handoffService: HandoffService = {
-        return HandoffService(persistentContainer: persistentContainer,
+        return HandoffService(errorRecorder: errorRecorder,
+                              persistentContainer: persistentContainer,
                               rootController: rootViewController)
     }()
     lazy var pushService: PushService = {
-        return PushService(myTBA: myTBA,
+        return PushService(errorRecorder: errorRecorder,
+                           myTBA: myTBA,
                            retryService: RetryService())
     }()
     lazy var remoteConfigService: RemoteConfigService = {
-        return RemoteConfigService(remoteConfig: remoteConfig,
+        return RemoteConfigService(errorRecorder: errorRecorder,
+                                   remoteConfig: remoteConfig,
                                    retryService: RetryService())
     }()
     lazy var searchService: SearchService = {
         return SearchService(application: UIApplication.shared,
-                             errorRecorder: Crashlytics.sharedInstance(),
+                             errorRecorder: errorRecorder,
                              indexDelegate: indexDelegate,
                              persistentContainer: persistentContainer,
                              searchIndex: CSSearchableIndex.default(),
@@ -104,7 +108,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                              userDefaults: userDefaults)
     }()
     lazy var statusService: StatusService = {
-        return StatusService(persistentContainer: persistentContainer,
+        return StatusService(errorRecorder: errorRecorder,
+                             persistentContainer: persistentContainer,
                              retryService: RetryService(),
                              tbaKit: tbaKit)
     }()
@@ -166,7 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
-                Crashlytics.sharedInstance().recordError(error)
+                errorRecorder.recordError(error)
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
                 }
@@ -332,7 +337,7 @@ extension AppDelegate: GIDSignInDelegate {
         if let error = error as NSError?, error.code == GIDSignInErrorCode.canceled.rawValue {
             return
         } else if let error = error {
-            Crashlytics.sharedInstance().recordError(error)
+            errorRecorder.recordError(error)
             if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
                 signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
             }
@@ -343,16 +348,16 @@ extension AppDelegate: GIDSignInDelegate {
 
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                        accessToken: authentication.accessToken)
-        Auth.auth().signIn(with: credential) { (_, error) in
+        Auth.auth().signIn(with: credential) { [self] (_, error) in
             if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
+                errorRecorder.recordError(error)
                 if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
                     signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {
                 PushService.requestAuthorizationForNotifications { (_, error) in
                     if let error = error {
-                        Crashlytics.sharedInstance().recordError(error)
+                        errorRecorder.recordError(error)
                     }
                 }
             }
@@ -407,6 +412,26 @@ extension AppDelegate: FMSStatusSubscribable {
 }
 
 // Make Crashlytics conform to ErrorRecorder for TBAData
-extension Crashlytics: ErrorRecorder {}
+// extension Crashlytics: ErrorRecorder {}
 // Make Messaging conform to FCMTokenProvider for MyTBAKit
 extension Messaging: FCMTokenProvider {}
+
+private class TBAErrorRecorder: ErrorRecorder {
+
+    func log(_ log: String, _ args: [CVarArg]) {
+        #if DEBUG
+        print(log)
+        #else
+        CLSLogv(log, getVaList(args))
+        #endif
+    }
+
+    func recordError(_ error: Error) {
+        #if DEBUG
+        print(error)
+        #else
+        Crashlytics.sharedInstance().recordError(error)
+        #endif
+    }
+
+}

@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -10,10 +9,10 @@ class DistrictTeamsViewController: TeamsViewController {
 
     // MARK: Init
 
-    init(district: District, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(district: District, dependencies: Dependencies) {
         self.district = district
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -49,7 +48,7 @@ class DistrictTeamsViewController: TeamsViewController {
                 district.insert(teams)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+            }, errorRecorder: self.errorRecorder)
         }
         addRefreshOperations([operation])
     }

@@ -1,7 +1,7 @@
 import CoreData
-import Crashlytics
 import MyTBAKit
 import TBAData
+import TBAUtils
 import UIKit
 
 // Two sections are a single no-title section for "Favorite" cell,
@@ -32,6 +32,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         }
     }
 
+    private let errorRecorder: ErrorRecorder
     let myTBA: MyTBA
     let persistentContainer: NSPersistentContainer
 
@@ -60,7 +61,8 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                                                           action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+    init(errorRecorder: ErrorRecorder, subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+        self.errorRecorder = errorRecorder
         self.subscribableModel = subscribableModel
         self.myTBA = myTBA
         self.persistentContainer = persistentContainer
@@ -155,7 +157,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                         }
                     }
                 }
-            }, errorRecorder: Crashlytics.sharedInstance())
+            }, errorRecorder: self.errorRecorder)
         }
 
         let dismissOperation = BlockOperation(block: { [weak self] in

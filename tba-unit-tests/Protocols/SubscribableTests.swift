@@ -1,5 +1,6 @@
 import CoreData
 import MyTBAKit
+import TBAUtils
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -8,13 +9,15 @@ class MockSubscribableViewController: UIViewController, Persistable, Subscribabl
     var favoriteBarButtonItem: UIBarButtonItem {
         return UIBarButtonItem(title: "Button", style: .plain, target: nil, action: nil)
     }
+    var errorRecorder: ErrorRecorder
     var myTBA: MyTBA
     var subscribableModel: MyTBASubscribable
     var persistentContainer: NSPersistentContainer
 
     var presentCalled: ((UIViewController) -> ())?
 
-    init(myTBA: MyTBA, subscribableModel: MyTBASubscribable, persistentContainer: NSPersistentContainer) {
+    init(errorRecorder: ErrorRecorder, myTBA: MyTBA, subscribableModel: MyTBASubscribable, persistentContainer: NSPersistentContainer) {
+        self.errorRecorder = errorRecorder
         self.myTBA = myTBA
         self.subscribableModel = subscribableModel
         self.persistentContainer = persistentContainer
@@ -41,7 +44,7 @@ class SubscribableTests: TBATestCase {
         super.setUp()
 
         subscribableModel = insertDistrictEvent()
-        subscribableViewController = MockSubscribableViewController(myTBA: myTBA, subscribableModel: subscribableModel, persistentContainer: persistentContainer)
+        subscribableViewController = MockSubscribableViewController(errorRecorder: errorRecorder, myTBA: myTBA, subscribableModel: subscribableModel, persistentContainer: persistentContainer)
     }
 
     override func tearDown() {

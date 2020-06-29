@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Firebase
 import Foundation
 import TBAData
@@ -27,14 +26,14 @@ class YearSelectViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(year: Int, years: [Int], week: Event?, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(year: Int, years: [Int], week: Event?, dependencies: Dependencies) {
         self.year = year
         self.years = years
         self.week = week
 
-        selectViewController = SelectTableViewController<YearSelectViewController>(current: year, options: years, willPush: true, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        selectViewController = SelectTableViewController<YearSelectViewController>(current: year, options: years, willPush: true, dependencies: dependencies)
 
-        super.init(viewControllers: [selectViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(viewControllers: [selectViewController], dependencies: dependencies)
 
         title = "Years"
 
@@ -54,7 +53,7 @@ class YearSelectViewController: ContainerViewController {
 
         selectViewController.disableRefreshing()
 
-        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, dependencies: dependencies)
         eventWeekSelectViewController?.delegate = delegate
 
         navigationController?.viewControllers = [self, eventWeekSelectViewController!]
@@ -69,7 +68,7 @@ class YearSelectViewController: ContainerViewController {
             logString.append(" | Week: %@")
             parameters.append(week.key)
         }
-        CLSLogv(logString, getVaList(parameters))
+        errorRecorder.log(logString, parameters)
     }
 
     // MARK: - Private Methods
@@ -79,7 +78,7 @@ class YearSelectViewController: ContainerViewController {
     }
 
     private func pushToEventWeekSelect(year: Int) {
-        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, dependencies: dependencies)
         eventWeekSelectViewController?.delegate = delegate
         navigationController?.pushViewController(eventWeekSelectViewController!, animated: true)
     }
@@ -107,19 +106,17 @@ private class EventWeekSelectViewController: ContainerViewController {
 
     weak var delegate: YearSelectViewControllerDelegate?
 
-    init(year: Int, week: Event?, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(year: Int, week: Event?, dependencies: Dependencies) {
         self.year = year
 
-        let weeks = Event.weekEvents(for: year, in: persistentContainer.viewContext)
+        let weeks = Event.weekEvents(for: year, in: dependencies.persistentContainer.viewContext)
 
         selectViewController = WeeksSelectTableViewController(year: year,
                                                               current: week,
                                                               options: weeks,
-                                                              persistentContainer: persistentContainer,
-                                                              tbaKit: tbaKit,
-                                                              userDefaults: userDefaults)
+                                                              dependencies: dependencies)
 
-        super.init(viewControllers: [selectViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(viewControllers: [selectViewController], dependencies: dependencies)
 
         title = "\(year) Weeks"
 
@@ -164,10 +161,10 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     fileprivate var hasRefreshed: Bool = false
 
-    init(year: Int, current: Event?, options: [Event], persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(year: Int, current: Event?, options: [Event], dependencies: Dependencies) {
         self.year = year
 
-        super.init(current: current, options: options, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(current: current, options: options, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -186,21 +183,21 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvents(year: year) { (result, notModified) in
+        operation = tbaKit.fetchEvents(year: year) { [self] (result, notModified) in
             guard case .success(let events) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                Event.insert(events, year: self.year, in: context)
+                Event.insert(events, year: year, in: context)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-                self.hasRefreshed = true
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+                hasRefreshed = true
                 OperationQueue.main.addOperation {
-                    self.updateWeeks(in: self.persistentContainer.viewContext)
+                    updateWeeks(in: persistentContainer.viewContext)
                 }
-            }, errorRecorder: Crashlytics.sharedInstance())
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

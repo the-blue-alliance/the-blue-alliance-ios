@@ -21,7 +21,7 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
@@ -29,12 +29,9 @@ class TeamsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamsViewController = TeamsViewController(refreshProvider: searchService, showSearch: false, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        teamsViewController = TeamsViewController(refreshProvider: searchService, showSearch: false, dependencies: dependencies)
 
-        super.init(viewControllers: [teamsViewController],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
+        super.init(viewControllers: [teamsViewController], dependencies: dependencies)
 
         title = RootType.teams.title
         tabBarItem.image = RootType.teams.icon

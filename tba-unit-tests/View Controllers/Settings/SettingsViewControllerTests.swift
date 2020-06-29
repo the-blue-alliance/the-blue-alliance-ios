@@ -13,9 +13,7 @@ class SettingsViewControllerTests: TBATestCase {
                                                         pushService: pushService,
                                                         searchService: searchService,
                                                         urlOpener: urlOpener,
-                                                        persistentContainer: persistentContainer,
-                                                        tbaKit: tbaKit,
-                                                        userDefaults: userDefaults)
+                                                        dependencies: dependencies)
     }
 
     override func tearDown() {
