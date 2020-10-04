@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_12.0.app/Contents/Developer
 
 jobs:
   test:
@@ -39,8 +39,16 @@ jobs:
         run: bundle exec fastlane beta_ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
       - name: fastlane app_store
         if: ${{ contains(github.event.head_commit.message, '[app_store]') }}
         run: bundle exec fastlane app_store
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}

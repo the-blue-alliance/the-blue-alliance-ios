@@ -5,33 +5,12 @@ on:
   schedule:
     - cron:  '0 4 * * *'
 
-env:
-  DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
-
 jobs:
   refresh-dsyms:
     runs-on: macos-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
-      - uses: actions/cache@v2
-        with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: ${{ runner.os }}-pods-
-      - name: Install
-        run: |
-          cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
-          bundle install
-          bundle exec pod install --repo-update
-          bundle exec fastlane run setup_ci
-          bundle exec fastlane setup_secrets
-        env:
-          TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane refresh_dsyms
         run: bundle exec fastlane refresh_dsyms
+        env:
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
