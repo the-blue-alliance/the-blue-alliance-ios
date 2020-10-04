@@ -20,6 +20,7 @@ target 'The Blue Alliance' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Core'
+  pod 'Firebase/Crashlytics'
   pod 'Firebase/Messaging'
   pod 'Firebase/Performance'
   pod 'Firebase/RemoteConfig'
@@ -36,10 +37,6 @@ target 'The Blue Alliance' do
 
   # myTBA
   pod 'GoogleSignIn', '~> 5'
-
-  # Crash reporting
-  pod 'Fabric'
-  pod 'Crashlytics'
 
   # Debugging
   pod 'Reveal-SDK', :configurations => ['Debug']

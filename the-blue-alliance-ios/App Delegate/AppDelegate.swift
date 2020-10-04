@@ -1,9 +1,8 @@
 import CoreData
 import CoreSpotlight
-import Crashlytics
-import Fabric
 import Firebase
 import FirebaseAuth
+import FirebaseCrashlytics
 import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
@@ -74,7 +73,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     let pasteboard = UIPasteboard.general
     lazy var persistentContainer: TBAPersistenceContainer = {
-        return TBAPersistenceContainer()
+        let persistentContainer = TBAPersistenceContainer()
+        persistentContainer.persistentStoreDescriptions.forEach {
+            $0.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        }
+        return persistentContainer
     }()
     let photoLibrary = PHPhotoLibrary.shared()
     lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
@@ -135,10 +138,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Disable Crashlytics during debug
         #if DEBUG
-        Fabric.sharedSDK().debug = true
+        Analytics.setAnalyticsCollectionEnabled(false)
+        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
         #else
-        Fabric.with([Crashlytics.self])
         Analytics.setAnalyticsCollectionEnabled(true)
+        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
         #endif
 
         let secrets = Secrets()
