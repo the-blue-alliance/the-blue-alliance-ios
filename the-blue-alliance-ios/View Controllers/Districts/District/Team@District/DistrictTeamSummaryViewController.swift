@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -24,10 +23,10 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(ranking: DistrictRanking, dependencies: Dependencies) {
         self.ranking = ranking
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -120,18 +119,18 @@ extension DistrictTeamSummaryViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictRankings(key: ranking.district.key) { (result, notModified) in
+        operation = tbaKit.fetchDistrictRankings(key: ranking.district.key) { [self] (result, notModified) in
             guard case .success(let rankings) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let district = context.object(with: self.ranking.district.objectID) as! District
                 district.insert(rankings)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

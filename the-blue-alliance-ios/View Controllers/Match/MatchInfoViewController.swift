@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import PureLayout
 import TBAData
@@ -90,11 +89,11 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     // MARK: Init
 
-    init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, team: Team? = nil, dependencies: Dependencies) {
         self.match = match
         self.team = team
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -212,23 +211,23 @@ extension MatchInfoViewController: Refreshable {
     @objc func refresh() {
         var eventOperation: TBAKitOperation?
         if match.event.name == nil {
-            eventOperation = tbaKit.fetchEvent(key: match.event.key, completion: { (result, notModified) in
+            eventOperation = tbaKit.fetchEvent(key: match.event.key, completion: { [self] (result, notModified) in
                 guard case .success(let object) = result, let event = object, !notModified else {
                     return
                 }
 
-                let context = self.persistentContainer.newBackgroundContext()
+                let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     Event.insert(event, in: context)
                 }, saved: {
-                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
-                }, errorRecorder: Crashlytics.sharedInstance())
+                    markTBARefreshSuccessful(tbaKit, operation: eventOperation!)
+                }, errorRecorder: errorRecorder)
             })
         }
 
         var matchOperation: TBAKitOperation!
-        matchOperation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
-            let context = self.persistentContainer.newBackgroundContext()
+        matchOperation = tbaKit.fetchMatch(key: match.key, { [self] (result, notModified) in
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
                 case .success(let match):
@@ -242,8 +241,8 @@ extension MatchInfoViewController: Refreshable {
                 }
 
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: matchOperation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: matchOperation)
+            }, errorRecorder: errorRecorder)
         })
         addRefreshOperations([eventOperation, matchOperation].compactMap({ $0 }))
     }

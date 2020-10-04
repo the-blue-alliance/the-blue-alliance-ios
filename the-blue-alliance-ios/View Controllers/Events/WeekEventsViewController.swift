@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -31,11 +30,11 @@ class WeekEventsViewController: EventsViewController {
     }
     var weeks: [Event] = []
 
-    init(year: Int, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(year: Int, dependencies: Dependencies) {
         self.year = year
-        self.weekEvent = WeekEventsViewController.weekEvent(for: year, in: persistentContainer.viewContext)
+        self.weekEvent = WeekEventsViewController.weekEvent(for: year, in: dependencies.persistentContainer.viewContext)
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,7 +76,7 @@ class WeekEventsViewController: EventsViewController {
                 Event.insert(events, year: year, in: context)
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+            }, errorRecorder: errorRecorder)
 
             // Only setup weeks if we don't have a currently selected week
             if self.weekEvent == nil {

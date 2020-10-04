@@ -71,10 +71,10 @@ class SearchViewController: TBATableViewController {
     }()
     private var tableViewDataSource: TableViewDataSource<SearchSection, CSSearchableItem>!
 
-    init(searchService: SearchService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(searchService: SearchService, dependencies: Dependencies) {
         self.searchService = searchService
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {

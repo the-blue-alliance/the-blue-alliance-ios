@@ -16,9 +16,7 @@ class PadRootViewController: UISplitViewController, RootController {
     let searchService: SearchService
     let urlOpener: URLOpener
     let statusService: StatusService
-    let persistentContainer: NSPersistentContainer
-    let tbaKit: TBAKit
-    let userDefaults: UserDefaults
+    let dependencies: Dependencies
 
     lazy fileprivate var masterViewController: PadMasterViewController = {
         return PadMasterViewController(fcmTokenProvider: fcmTokenProvider,
@@ -29,9 +27,7 @@ class PadRootViewController: UISplitViewController, RootController {
                                        searchService: searchService,
                                        statusService: statusService,
                                        urlOpener: urlOpener,
-                                       persistentContainer: persistentContainer,
-                                       tbaKit: tbaKit,
-                                       userDefaults: userDefaults)
+                                       dependencies: dependencies)
     }()
 
     lazy var emptyNavigationController: UINavigationController = {
@@ -45,7 +41,7 @@ class PadRootViewController: UISplitViewController, RootController {
         return navigationController
     }()
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -54,9 +50,7 @@ class PadRootViewController: UISplitViewController, RootController {
         self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
-        self.persistentContainer = persistentContainer
-        self.tbaKit = tbaKit
-        self.userDefaults = userDefaults
+        self.dependencies = dependencies
 
         super.init(nibName: nil, bundle: nil)
 
@@ -99,7 +93,7 @@ private class PadMasterViewController: ContainerViewController, RootController {
 
     var searchController: UISearchController!
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -109,9 +103,9 @@ private class PadMasterViewController: ContainerViewController, RootController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let rootTableViewController = PadRootTableViewController(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let rootTableViewController = PadRootTableViewController(dependencies: dependencies)
 
-        super.init(viewControllers: [rootTableViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(viewControllers: [rootTableViewController], dependencies: dependencies)
 
         rootTableViewController.delegate = self
     }
@@ -162,9 +156,7 @@ private class PadMasterViewController: ContainerViewController, RootController {
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       myTBA: myTBA,
-                                                      persistentContainer: persistentContainer,
-                                                      tbaKit: tbaKit,
-                                                      userDefaults: userDefaults)
+                                                      dependencies: dependencies)
         _push(eventViewController)
         return true
     }
@@ -176,9 +168,7 @@ private class PadMasterViewController: ContainerViewController, RootController {
                                                     statusService: statusService,
                                                     urlOpener: urlOpener,
                                                     myTBA: myTBA,
-                                                    persistentContainer: persistentContainer,
-                                                    tbaKit: tbaKit,
-                                                    userDefaults: userDefaults)
+                                                    dependencies: dependencies)
         _push(teamViewController)
         return true
     }

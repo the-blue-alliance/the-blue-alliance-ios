@@ -1,14 +1,15 @@
 import CoreData
 import CoreSpotlight
-import Crashlytics
+import Foundation
 import Search
 import TBAData
-import Foundation
+import TBAUtils
 import UIKit
 
 // Handles launching the app/setting up the view hiearchy from some handoff event
 class HandoffService {
 
+    private let errorRecorder: ErrorRecorder
     private let persistentContainer: NSPersistentContainer
     private let rootController: RootController
 
@@ -24,7 +25,8 @@ class HandoffService {
     private(set) var continueSearchText: String?
     private(set) var continueURI: URL?
 
-    init(persistentContainer: NSPersistentContainer, rootController: RootController) {
+    init(errorRecorder: ErrorRecorder, persistentContainer: NSPersistentContainer, rootController: RootController) {
+        self.errorRecorder = errorRecorder
         self.persistentContainer = persistentContainer
         self.rootController = rootController
     }
@@ -58,7 +60,7 @@ class HandoffService {
                 // If the Event doesn't exist, but our key matches what we consider a "safe" regex, insert the Event and push
                 if event == nil, let eventKeyRegex = eventKeyRegex, eventKeyRegex.numberOfMatches(in: key, options: [], range: NSRange(location: 0, length: key.count)) == 1 {
                     event = Event.insert(key, in: persistentContainer.viewContext)
-                    persistentContainer.viewContext.saveOrRollback(errorRecorder: Crashlytics.sharedInstance())
+                    persistentContainer.viewContext.saveOrRollback(errorRecorder: errorRecorder)
                 }
                 guard let uri = event?.objectID.uriRepresentation() else {
                     return false

@@ -2,6 +2,7 @@ import CoreData
 import Foundation
 import TBAData
 import TBAKit
+import TBAUtils
 import UIKit
 
 protocol NavigationTitleDelegate: AnyObject {
@@ -41,9 +42,20 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         }
     }
 
-    var persistentContainer: NSPersistentContainer
-    private(set) var tbaKit: TBAKit
-    private(set) var userDefaults: UserDefaults
+    let dependencies: Dependencies
+
+    var errorRecorder: ErrorRecorder {
+        return dependencies.errorRecorder
+    }
+    var persistentContainer: NSPersistentContainer {
+        return dependencies.persistentContainer
+    }
+    var tbaKit: TBAKit {
+        return dependencies.tbaKit
+    }
+    var userDefaults: UserDefaults {
+        return dependencies.userDefaults
+    }
 
     // MARK: - Private View Elements
 
@@ -98,11 +110,9 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         return offlineEventView
     }()
 
-    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, dependencies: Dependencies) {
         self.viewControllers = viewControllers
-        self.persistentContainer = persistentContainer
-        self.tbaKit = tbaKit
-        self.userDefaults = userDefaults
+        self.dependencies = dependencies
 
         self.navigationTitle = navigationTitle
         self.navigationSubtitle = navigationSubtitle

@@ -1,17 +1,19 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAOperation
+import TBAUtils
 
 class FetchMediaOperation: TBAOperation {
 
+    let errorRecorder: ErrorRecorder
     let media: TeamMedia
     let persistentContainer: NSPersistentContainer
 
     var task: URLSessionTask?
 
-    public init(media: TeamMedia, persistentContainer: NSPersistentContainer) {
+    public init(errorRecorder: ErrorRecorder, media: TeamMedia, persistentContainer: NSPersistentContainer) {
+        self.errorRecorder = errorRecorder
         self.media = media
         self.persistentContainer = persistentContainer
 
@@ -24,16 +26,16 @@ class FetchMediaOperation: TBAOperation {
             if let managedObjectContext = media.managedObjectContext {
                 managedObjectContext.performChangesAndWait({ [weak self] in
                     self?.media.imageError = MediaError.error("No url for media")
-                }, errorRecorder: Crashlytics.sharedInstance())
+                }, errorRecorder: errorRecorder)
             }
-            self.finish()
+            finish()
             return
         }
 
-        task = URLSession.shared.dataTask(with: url, completionHandler: { (data, _, error) in
-            let backgroundContext = self.persistentContainer.newBackgroundContext()
+        task = URLSession.shared.dataTask(with: url, completionHandler: { [self] (data, _, error) in
+            let backgroundContext = persistentContainer.newBackgroundContext()
             backgroundContext.performChangesAndWait({
-                let backgroundMedia = backgroundContext.object(with: self.media.objectID) as! TeamMedia
+                let backgroundMedia = backgroundContext.object(with: media.objectID) as! TeamMedia
                 if let error = error {
                     backgroundMedia.imageError = MediaError.error(error.localizedDescription)
                 } else if let data = data {
@@ -45,8 +47,8 @@ class FetchMediaOperation: TBAOperation {
                 } else {
                     backgroundMedia.imageError = MediaError.error("No data for request")
                 }
-            }, errorRecorder: Crashlytics.sharedInstance())
-            self.finish()
+            }, errorRecorder: errorRecorder)
+            finish()
         })
         task?.resume()
     }

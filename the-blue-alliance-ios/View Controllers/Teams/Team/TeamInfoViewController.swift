@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import TBAData
 import TBAKit
 import UIKit
@@ -36,11 +35,11 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, urlOpener: URLOpener, dependencies: Dependencies) {
         self.team = team
         self.urlOpener = urlOpener
 
-        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(style: .grouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -230,32 +229,32 @@ extension TeamInfoViewController: Refreshable {
 
     @objc func refresh() {
         var infoOperation: TBAKitOperation!
-        infoOperation = tbaKit.fetchTeam(key: team.key) { (result, notModified) in
+        infoOperation = tbaKit.fetchTeam(key: team.key) { [self] (result, notModified) in
             guard case .success(let object) = result, let team = object, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(team, in: context)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: infoOperation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: infoOperation)
+            }, errorRecorder: errorRecorder)
         }
 
         var yearsOperation: TBAKitOperation!
-        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key) { (result, notModified) in
+        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key) { [self] (result, notModified) in
             guard case .success(let years) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.setYearsParticipated(years)
             }, saved: {
-                self.tbaKit.storeCacheHeaders(yearsOperation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                tbaKit.storeCacheHeaders(yearsOperation)
+            }, errorRecorder: errorRecorder)
         }
 
         addRefreshOperations([infoOperation, yearsOperation])

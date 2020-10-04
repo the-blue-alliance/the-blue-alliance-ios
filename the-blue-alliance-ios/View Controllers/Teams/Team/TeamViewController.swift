@@ -55,19 +55,19 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
         self.team = team
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: persistentContainer.viewContext)
+        self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: dependencies.persistentContainer.viewContext)
         self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(team: team, year: year))
 
-        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, dependencies: dependencies)
+        eventsViewController = TeamEventsViewController(team: team, year: year, dependencies: dependencies)
+        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
@@ -75,9 +75,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
             navigationSubtitle: year?.description ?? "----",
             segmentedControlTitles: ["Info", "Events", "Media"],
             myTBA: myTBA,
-            persistentContainer: persistentContainer,
-            tbaKit: tbaKit,
-            userDefaults: userDefaults
+            dependencies: dependencies
         )
 
         eventsViewController.delegate = self
@@ -105,7 +103,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("Team: %@", getVaList([team.key]))
+        errorRecorder.log("Team: %@", [team.key])
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -170,18 +168,18 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
     private func fetchTeaMedia(year: Int) {
         var mediaOperation: TBAKitOperation!
-        mediaOperation = tbaKit.fetchTeamMedia(key: team.key, year: year, completion: { (result, notModified) in
+        mediaOperation = tbaKit.fetchTeamMedia(key: team.key, year: year, completion: { [self] (result, notModified) in
             guard case .success(let media) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(media, year: year)
             }, saved: {
-                self.tbaKit.storeCacheHeaders(mediaOperation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                tbaKit.storeCacheHeaders(mediaOperation)
+            }, errorRecorder: errorRecorder)
         })
         operationQueue.addOperation(mediaOperation)
     }
@@ -191,7 +189,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
             return
         }
 
-        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, dependencies: dependencies)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
@@ -225,7 +223,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

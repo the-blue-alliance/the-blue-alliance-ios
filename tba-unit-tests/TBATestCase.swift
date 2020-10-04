@@ -24,6 +24,8 @@ class TBATestCase: TBADataTestCase {
     var statusService: StatusService!
     var indexDelegate: TBACoreDataCoreSpotlightDelegate!
 
+    var dependencies: Dependencies!
+
     override func setUp() {
         super.setUp()
 
@@ -33,10 +35,16 @@ class TBATestCase: TBADataTestCase {
         userDefaults = UserDefaults(suiteName: "TBATests")
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
-        pushService = PushService(myTBA: myTBA, retryService: RetryService())
-        indexDelegate = TBACoreDataCoreSpotlightDelegate()
-        statusService = StatusService(bundle: StatusBundle.bundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
+        pushService = PushService(errorRecorder: errorRecorder, myTBA: myTBA, retryService: RetryService())
+        indexDelegate = {
+            let description = persistentContainer.persistentStoreDescriptions.first!
+            return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
+                                                    model: persistentContainer.managedObjectModel)
+        }()
+        statusService = StatusService(bundle: StatusBundle.bundle, errorRecorder: errorRecorder, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
         searchService = SearchService(application: UIApplication.shared, errorRecorder: errorRecorder, indexDelegate: indexDelegate, persistentContainer: persistentContainer, searchIndex: CSSearchableIndex.default(), statusService: statusService, tbaKit: tbaKit, userDefaults: userDefaults)
+
+        dependencies = Dependencies(errorRecorder: errorRecorder, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     override func tearDown() {
@@ -54,7 +62,13 @@ class TBATestCase: TBADataTestCase {
 }
 
 class MockErrorRecorder: ErrorRecorder {
+
+    func log(_ log: String, _ args: [CVarArg]) {
+        // Pass
+    }
+
     func recordError(_ error: Error) {
         // Pass
     }
+
 }

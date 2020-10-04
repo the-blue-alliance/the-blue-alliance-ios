@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -117,11 +116,11 @@ class TeamSummaryViewController: TBATableViewController {
         return EventStatus.predicate(eventKey: event.key, teamKey: team.key)
     }()
 
-    init(team: Team, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, event: Event, dependencies: Dependencies) {
         self.team = team
         self.event = event
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -475,17 +474,17 @@ extension TeamSummaryViewController: Refreshable {
 
         var eventOperation: TBAKitOperation?
         if event.name == nil {
-            eventOperation = tbaKit.fetchEvent(key: event.key, completion: { (result, notModified) in
+            eventOperation = tbaKit.fetchEvent(key: event.key, completion: { [self] (result, notModified) in
                 guard case .success(let object) = result, let event = object, !notModified else {
                     return
                 }
 
-                let context = self.persistentContainer.newBackgroundContext()
+                let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     Event.insert(event, in: context)
                 }, saved: {
-                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
-                }, errorRecorder: Crashlytics.sharedInstance())
+                    markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
+                }, errorRecorder: errorRecorder)
             })
         }
 
@@ -493,21 +492,21 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
-        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey, eventKey: event.key) { (result, notModified) in
+        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey, eventKey: event.key) { [self] (result, notModified) in
             guard case .success(let object) = result, let status = object, !notModified else {
                 return
             }
 
             // Kickoff refreshes for our Match objects, add them as dependents for reloading data
-            self.refreshStatusMatches(status, finalOperation)
+            refreshStatusMatches(status, finalOperation)
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(status)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: teamStatusOperation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: teamStatusOperation)
+            }, errorRecorder: errorRecorder)
         }
 
         finalOperation = addRefreshOperations([eventOperation, teamStatusOperation].compactMap({ $0 }))
@@ -526,18 +525,18 @@ extension TeamSummaryViewController: Refreshable {
 
     func fetchMatch(_ key: String, _ update: @escaping () -> ()) -> TBAKitOperation? {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: key) { (result, notModified) in
+        operation = tbaKit.fetchMatch(key: key) { [self] (result, notModified) in
             guard case .success(let object) = result, let match = object, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
             }, saved: {
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(update)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(update)
+            }, errorRecorder: errorRecorder)
         }
         return operation
     }

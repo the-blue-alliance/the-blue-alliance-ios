@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import MyTBAKit
 import TBAData
@@ -45,10 +44,10 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: Init
 
-    init(myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, dependencies: Dependencies) {
         self.myTBA = myTBA
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -236,7 +235,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.markRefreshSuccessful()
-            }, errorRecorder: Crashlytics.sharedInstance())
+            }, errorRecorder: errorRecorder)
         }
         finalOperation = addRefreshOperations([operation])
     }
@@ -260,75 +259,75 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     func fetchEvent(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvent(key: myTBAModel.modelKey) { (result, notModified) in
+        operation = tbaKit.fetchEvent(key: myTBAModel.modelKey) { [self] (result, notModified) in
             guard case .success(let object) = result, let event = object, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Event.insert(event, in: context)
             }, saved: {
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(myTBAModel)
+            }, errorRecorder: errorRecorder)
         }
         return operation
     }
 
     func fetchTeam(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchTeam(key: myTBAModel.modelKey) { (result, notModified) in
+        operation = tbaKit.fetchTeam(key: myTBAModel.modelKey) { [self] (result, notModified) in
             guard case .success(let object) = result, let team = object, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(team, in: context)
             }, saved: {
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(myTBAModel)
+            }, errorRecorder: errorRecorder)
         }
         return operation
     }
 
     func fetchMatch(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: myTBAModel.modelKey) { (result, notModified) in
+        operation = tbaKit.fetchMatch(key: myTBAModel.modelKey) { [self] (result, notModified) in
             guard case .success(let object) = result, let match = object, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
             }, saved: {
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(myTBAModel)
+            }, errorRecorder: errorRecorder)
         }
         return operation
     }
 
     internal func executeUpdate(_ myTBAModel: MyTBAModel) {
         let key = myTBAModel.modelKey
-        guard let op: Operation = {
+        guard let op: Operation = { [self] in
             switch myTBAModel.modelType {
             case .event:
                 if let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: Event.predicate(key: key)) {
-                    return self.updateObject(event, for: myTBAModel)
+                    return updateObject(event, for: myTBAModel)
                 }
                 return nil
             case .team:
                 if let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: Team.predicate(key: key)) {
-                    return self.updateObject(team, for: myTBAModel)
+                    return updateObject(team, for: myTBAModel)
                 }
                 return nil
             case .match:
                 if let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: key)) {
-                    return self.updateObject(match, for: myTBAModel)
+                    return updateObject(match, for: myTBAModel)
                 }
                 return nil
             default:

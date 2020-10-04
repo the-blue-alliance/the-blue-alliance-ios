@@ -21,9 +21,7 @@ class DistrictViewControllerTests: TBATestCase {
                                                         myTBA: myTBA,
                                                         statusService: statusService,
                                                         urlOpener: urlOpener,
-                                                        persistentContainer: persistentContainer,
-                                                        tbaKit: tbaKit,
-                                                        userDefaults: userDefaults)
+                                                        dependencies: dependencies)
         navigationController = MockNavigationController(rootViewController: districtViewController)
     }
 

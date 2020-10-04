@@ -1,7 +1,7 @@
 import CoreData
-import Crashlytics
 import TBAData
 import TBAKit
+import TBAUtils
 import Foundation
 
 /**
@@ -14,6 +14,7 @@ public class StatusService: NSObject {
     private let operationQueue = OperationQueue()
 
     private let bundle: Bundle
+    private let errorRecorder: ErrorRecorder
     private let persistentContainer: NSPersistentContainer
     private let tbaKit: TBAKit
 
@@ -24,7 +25,7 @@ public class StatusService: NSObject {
             guard let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) else {
                 fatalError("Cannot setup Status for StatusService")
             }
-            _ = persistentContainer.viewContext.saveOrRollback(errorRecorder: Crashlytics.sharedInstance())
+            _ = persistentContainer.viewContext.saveOrRollback(errorRecorder: errorRecorder)
             return status
         }
     }()
@@ -49,8 +50,9 @@ public class StatusService: NSObject {
         return status.maxSeason
     }
 
-    init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
+    init(bundle: Bundle = Bundle.main, errorRecorder: ErrorRecorder, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
         self.bundle = bundle
+        self.errorRecorder = errorRecorder
         self.persistentContainer = persistentContainer
         self.retryService = retryService
         self.tbaKit = tbaKit
@@ -67,17 +69,17 @@ public class StatusService: NSObject {
     }
 
     internal func fetchStatus(completion: ((_ error: Error?) -> Void)? = nil) -> TBAKitOperation {
-        return tbaKit.fetchStatus { (result, notModified) in
+        return tbaKit.fetchStatus { [self] (result, notModified) in
             switch result {
             case .failure(let error):
                 completion?(error)
             case .success(let status):
-                let context = self.persistentContainer.newBackgroundContext()
+                let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     if !notModified, let status = status {
                         Status.insert(status, in: context)
                     }
-                }, errorRecorder: Crashlytics.sharedInstance())
+                }, errorRecorder: errorRecorder)
                 completion?(nil)
             }
         }

@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Photos
 import TBAData
 import TBAKit
@@ -33,14 +32,14 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Init
 
-    init(team: Team, year: Int? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, urlOpener: URLOpener? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, year: Int? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, urlOpener: URLOpener? = nil, dependencies: Dependencies) {
         self.team = team
         self.year = year
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.urlOpener = urlOpener
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -273,18 +272,18 @@ extension TeamMediaCollectionViewController: Refreshable {
         var finalOperation: Operation!
 
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchTeamMedia(key: team.key, year: year) { (result, notModified) in
+        operation = tbaKit.fetchTeamMedia(key: team.key, year: year) { [self] (result, notModified) in
             guard case .success(let media) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(media, year: year)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         let fetchMediaOperation = BlockOperation {
             for media in self.team.media {
@@ -307,7 +306,7 @@ extension TeamMediaCollectionViewController: Refreshable {
             }
         }
 
-        let fetchMediaOperation = FetchMediaOperation(media: media, persistentContainer: persistentContainer)
+        let fetchMediaOperation = FetchMediaOperation(errorRecorder: errorRecorder, media: media, persistentContainer: persistentContainer)
         refreshOperation.addDependency(fetchMediaOperation)
         [fetchMediaOperation, refreshOperation].forEach {
             dependentOperation.addDependency($0)
