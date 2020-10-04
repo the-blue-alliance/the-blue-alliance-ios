@@ -2,7 +2,7 @@ platform :ios, '14.0'
 
 inhibit_all_warnings!
 
-if ENV['TRAVIS']
+if ENV['CI']
   install! 'cocoapods', :share_schemes_for_development_pods => true
 end
 
