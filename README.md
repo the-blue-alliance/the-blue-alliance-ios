@@ -1,6 +1,6 @@
 The Blue Alliance - iOS App
 ===
-[![Build Status](https://travis-ci.org/the-blue-alliance/the-blue-alliance-ios.svg?branch=master)](https://travis-ci.org/the-blue-alliance/the-blue-alliance-ios)
+[![Build Status](https://travis-ci.com/the-blue-alliance/the-blue-alliance-ios.svg?branch=master)](https://travis-ci.com/the-blue-alliance/the-blue-alliance-ios)
 
 An iOS app for accessing information about the FIRST Robotics Competition. This is a native mobile version of [The Blue Alliance](http://www.thebluealliance.com).
 
