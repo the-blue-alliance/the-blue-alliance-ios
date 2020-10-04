@@ -19,9 +19,10 @@ open class TBADataTestCase: XCTestCase {
         persistentContainer = TBAPersistenceContainer(name: "TBA", managedObjectModel: TBADataTestCase.managedObjectModel)
 
         let description = NSPersistentStoreDescription()
-        description.type = NSInMemoryStoreType
+        description.type = NSSQLiteStoreType
         description.shouldAddStoreAsynchronously = false
         description.configuration = "Default"
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         persistentContainer.persistentStoreDescriptions = [description]
 
         let persistentContainerSetupExpectation = XCTestExpectation()

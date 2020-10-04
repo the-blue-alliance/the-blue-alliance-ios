@@ -12,6 +12,10 @@ class PersistentContainerOperationTests: XCTestCase {
         super.setUp()
 
         persistentContainer = PrivateMockPersistentContainer(name: "Test")
+        persistentContainer.persistentStoreDescriptions.forEach {
+            $0.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        }
+
         let indexDelegate: TBACoreDataCoreSpotlightDelegate = {
             let description = persistentContainer.persistentStoreDescriptions.first!
             return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
