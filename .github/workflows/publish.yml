@@ -32,6 +32,8 @@ jobs:
           bundle exec pod install --repo-update
           bundle exec fastlane run setup_ci
           bundle exec fastlane setup_secrets
+        env:
+          TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane beta_ci
         if: ${{ contains(github.event.head_commit.message, '[beta]') }}
         run: bundle exec fastlane beta_ci

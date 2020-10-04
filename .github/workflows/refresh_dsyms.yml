@@ -31,5 +31,7 @@ jobs:
           bundle exec pod install --repo-update
           bundle exec fastlane run setup_ci
           bundle exec fastlane setup_secrets
+        env:
+          TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane refresh_dsyms
         run: bundle exec fastlane refresh_dsyms
