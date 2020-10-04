@@ -1,0 +1,44 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+
+jobs:
+  test:
+    runs-on: macos-latest
+    if: ${{ contains(github.event.head_commit.message, '[app_store]') || contains(github.event.head_commit.message, '[beta]') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
+      - uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: ${{ runner.os }}-pods-
+      - name: Install
+        run: |
+          cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
+          bundle install
+          bundle exec pod install --repo-update
+          bundle exec fastlane run setup_ci
+          bundle exec fastlane setup_secrets
+      - name: fastlane beta_ci
+        if: ${{ contains(github.event.head_commit.message, '[beta]') }}
+        run: bundle exec fastlane beta_ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: fastlane app_store
+        if: ${{ contains(github.event.head_commit.message, '[app_store]') }}
+        run: bundle exec fastlane app_store
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
