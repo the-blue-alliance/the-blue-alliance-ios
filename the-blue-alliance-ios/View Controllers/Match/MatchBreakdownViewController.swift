@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -44,7 +43,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
 
     // MARK: - Init
 
-    init(match: Match, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, dependencies: Dependencies) {
         self.match = match
 
         if match.event.year == 2015 {
@@ -63,7 +62,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
             breakdownConfigurator = nil
         }
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -150,17 +149,17 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
+        operation = tbaKit.fetchMatch(key: match.key, { [self] (result, notModified) in
             guard case .success(let object) = result, let match = object, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         })
         addRefreshOperations([operation])
     }

@@ -26,13 +26,13 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, team: Team? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, team: Team? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
         self.match = match
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
-        infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        infoViewController = MatchInfoViewController(match: match, team: team, dependencies: dependencies)
 
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
@@ -40,7 +40,7 @@ class MatchViewController: MyTBAContainerViewController {
             if match.event.year < 2015 {
                 return nil
             }
-            return MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+            return MatchBreakdownViewController(match: match, dependencies: dependencies)
         }()
         if let _ = breakdownViewController {
             titles.append("Breakdown")
@@ -52,9 +52,7 @@ class MatchViewController: MyTBAContainerViewController {
             navigationSubtitle: "@ \(match.event.friendlyNameWithYear)",
             segmentedControlTitles: titles,
             myTBA: myTBA,
-            persistentContainer: persistentContainer,
-            tbaKit: tbaKit,
-            userDefaults: userDefaults
+            dependencies: dependencies
         )
 
         infoViewController.matchSummaryDelegate = self
@@ -78,7 +76,7 @@ class MatchViewController: MyTBAContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("Match: %@", getVaList([match.key]))
+        errorRecorder.log("Match: %@", [match.key])
     }
 
 }
@@ -89,7 +87,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         // get team key that matches the target teamNumber
         guard let team = match.teams.first(where: { Int($0.teamNumber) == teamNumber }) else { return }
 
-        let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     

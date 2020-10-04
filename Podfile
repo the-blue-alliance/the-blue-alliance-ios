@@ -1,4 +1,4 @@
-platform :ios, '13.0'
+platform :ios, '14.0'
 
 inhibit_all_warnings!
 
@@ -10,8 +10,8 @@ target 'The Blue Alliance' do
   use_frameworks!
 
   # Deps
-  pod 'BFRImageViewer', :git => 'https://github.com/ZachOrr/buffer-ios-image-viewer.git'
-  pod 'PINRemoteImage', '3.0.0-beta.14'
+  pod 'BFRImageViewer'
+  pod 'PINRemoteImage'
   pod 'PureLayout'
   pod 'XCDYouTubeKit', '~> 2.8'
   pod 'Zip', '~> 1.1'

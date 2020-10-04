@@ -1,14 +1,27 @@
 import CoreData
 import Foundation
 import TBAKit
+import TBAUtils
 import UIKit
 
 typealias DataController = Persistable & Alertable
 
 class TBAViewController: UIViewController, DataController, Navigatable {
 
-    var persistentContainer: NSPersistentContainer
-    let tbaKit: TBAKit
+    private let dependencies: Dependencies
+
+    var errorRecorder: ErrorRecorder {
+        return dependencies.errorRecorder
+    }
+    var persistentContainer: NSPersistentContainer {
+        return dependencies.persistentContainer
+    }
+    var tbaKit: TBAKit {
+        return dependencies.tbaKit
+    }
+    var userDefaults: UserDefaults {
+        return dependencies.userDefaults
+    }
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
@@ -20,7 +33,6 @@ class TBAViewController: UIViewController, DataController, Navigatable {
     // MARK: - Refreshable
 
     var refreshOperationQueue: OperationQueue = OperationQueue()
-    var userDefaults: UserDefaults
 
     // MARK: - Stateful
 
@@ -34,10 +46,8 @@ class TBAViewController: UIViewController, DataController, Navigatable {
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.persistentContainer = persistentContainer
-        self.tbaKit = tbaKit
-        self.userDefaults = userDefaults
+    init(dependencies: Dependencies) {
+        self.dependencies = dependencies
 
         super.init(nibName: nil, bundle: nil)
     }

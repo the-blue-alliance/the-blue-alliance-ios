@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -20,10 +19,10 @@ class EventRankingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, dependencies: Dependencies) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -95,18 +94,18 @@ extension EventRankingsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventRankings(key: event.key) { (result, notModified) in
+        operation = tbaKit.fetchEventRankings(key: event.key) { [self] (result, notModified) in
             guard case .success(let rankings, let sortOrder, let extraStats) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

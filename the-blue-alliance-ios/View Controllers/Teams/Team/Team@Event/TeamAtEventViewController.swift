@@ -24,7 +24,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
     // MARK: - Init
 
-    init(team: Team, event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.team = team
         self.event = event
         self.myTBA = myTBA
@@ -33,19 +33,17 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let summaryViewController = TeamSummaryViewController(team: team, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        matchesViewController = MatchesViewController(event: event, team: team, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let mediaViewController = TeamMediaCollectionViewController(team: team, year: event.year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let statsViewController = TeamStatsViewController(team: team, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let summaryViewController = TeamSummaryViewController(team: team, event: event, dependencies: dependencies)
+        matchesViewController = MatchesViewController(event: event, team: team, myTBA: myTBA, dependencies: dependencies)
+        let mediaViewController = TeamMediaCollectionViewController(team: team, year: event.year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
+        let statsViewController = TeamStatsViewController(team: team, event: event, dependencies: dependencies)
+        let awardsViewController = EventAwardsViewController(event: event, team: team, dependencies: dependencies)
 
         super.init(viewControllers: [summaryViewController, matchesViewController, mediaViewController, statsViewController, awardsViewController],
                    navigationTitle: team.teamNumberNickname,
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
+                   dependencies: dependencies)
 
         rightBarButtonItems = [
             UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent))
@@ -66,7 +64,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("Team@Event: Event %@ | Team %@", getVaList([event.key, team.key]))
+        errorRecorder.log("Team@Event: Event %@ | Team %@", [event.key, team.key])
 
         contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
             guard let self = self else { return }
@@ -77,7 +75,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     // MARK: - Private Methods
 
     @objc private func pushEvent() {
-        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -90,7 +88,7 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
     }
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let matchViewController = MatchViewController(match: match, team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 
@@ -115,7 +113,7 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
         if self.team == team {
             return
         }
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

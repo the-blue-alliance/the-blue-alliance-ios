@@ -16,11 +16,9 @@ class PhoneRootViewController: UITabBarController, RootController {
     let searchService: SearchService
     let statusService: StatusService
     let urlOpener: URLOpener
-    let persistentContainer: NSPersistentContainer
-    let tbaKit: TBAKit
-    let userDefaults: UserDefaults
+    let dependencies: Dependencies
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -29,9 +27,7 @@ class PhoneRootViewController: UITabBarController, RootController {
         self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
-        self.persistentContainer = persistentContainer
-        self.tbaKit = tbaKit
-        self.userDefaults = userDefaults
+        self.dependencies = dependencies
 
         super.init(nibName: nil, bundle: nil)
 

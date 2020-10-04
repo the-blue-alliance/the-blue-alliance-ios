@@ -13,9 +13,7 @@ class EventsContainerViewControllerTests: TBATestCase {
                                                                       searchService: searchService,
                                                                       statusService: statusService,
                                                                       urlOpener: urlOpener,
-                                                                      persistentContainer: persistentContainer,
-                                                                      tbaKit: tbaKit,
-                                                                      userDefaults: userDefaults)
+                                                                      dependencies: dependencies)
         eventsContainerViewController.viewDidLoad()
 
         navigationController = MockNavigationController(rootViewController: eventsContainerViewController)

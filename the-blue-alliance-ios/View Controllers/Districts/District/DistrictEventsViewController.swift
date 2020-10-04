@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -8,10 +7,10 @@ class DistrictEventsViewController: EventsViewController {
 
     private let district: District
 
-    init(district: District, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(district: District, dependencies: Dependencies) {
         self.district = district
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -36,18 +35,18 @@ class DistrictEventsViewController: EventsViewController {
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictEvents(key: district.key) { (result, notModified) in
+        operation = tbaKit.fetchDistrictEvents(key: district.key) { [self] (result, notModified) in
             guard case .success(let events) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let district = context.object(with: self.district.objectID) as! District
                 district.insert(events)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

@@ -12,7 +12,12 @@ class PersistentContainerOperationTests: XCTestCase {
         super.setUp()
 
         persistentContainer = PrivateMockPersistentContainer(name: "Test")
-        persistentContainerOperation = MockPersistentContainerOperation(indexDelegate: TBACoreDataCoreSpotlightDelegate(), persistentContainer: persistentContainer)
+        let indexDelegate: TBACoreDataCoreSpotlightDelegate = {
+            let description = persistentContainer.persistentStoreDescriptions.first!
+            return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
+                                                    model: persistentContainer.managedObjectModel)
+        }()
+        persistentContainerOperation = MockPersistentContainerOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer)
     }
 
     override func tearDown() {

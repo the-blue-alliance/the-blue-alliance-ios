@@ -1,5 +1,6 @@
 import Foundation
 import MyTBAKit
+import TBAUtils
 import UIKit
 
 // Subscribable is a protocol view controllers can conform to if they want to have
@@ -7,6 +8,7 @@ import UIKit
 // Ex: The 'Event' view controller conforms to Subscribable, which shows the subscribe UI
 
 protocol Subscribable {
+    var errorRecorder: ErrorRecorder { get }
     var myTBA: MyTBA { get }
     var favoriteBarButtonItem: UIBarButtonItem { get }
     var subscribableModel: MyTBASubscribable { get }
@@ -15,7 +17,8 @@ protocol Subscribable {
 extension Subscribable where Self: UIViewController, Self: Persistable {
 
     func presentMyTBAPreferences() {
-        let myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel,
+        let myTBAPreferencesViewController = MyTBAPreferenceViewController(errorRecorder: errorRecorder,
+                                                                           subscribableModel: subscribableModel,
                                                                            myTBA: myTBA,
                                                                            persistentContainer: persistentContainer)
         let navigationController = UINavigationController(rootViewController: myTBAPreferencesViewController)

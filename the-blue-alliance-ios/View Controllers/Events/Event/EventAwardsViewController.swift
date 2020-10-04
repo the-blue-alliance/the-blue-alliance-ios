@@ -17,7 +17,7 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, team: Team? = nil, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -25,14 +25,12 @@ class EventAwardsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let awardsViewController = EventAwardsViewController(event: event, team: team, dependencies: dependencies)
 
         super.init(viewControllers: [awardsViewController],
                    navigationTitle: "Awards",
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
+                   dependencies: dependencies)
 
         awardsViewController.delegate = self
     }
@@ -46,7 +44,7 @@ class EventAwardsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CLSLogv("Event Awards: %@", getVaList([event.key]))
+        errorRecorder.log("Event Awards: %@", [event.key])
     }
 
 }
@@ -54,7 +52,7 @@ class EventAwardsContainerViewController: ContainerViewController {
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -76,11 +74,11 @@ class EventAwardsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, team: Team? = nil, dependencies: Dependencies) {
         self.event = event
         self.team = team
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -154,18 +152,18 @@ extension EventAwardsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventAwards(key: event.key) { (result, notModified) in
+        operation = tbaKit.fetchEventAwards(key: event.key) { [self] (result, notModified) in
             guard case .success(let awards) = result, !notModified else {
                 return
             }
 
-            let context = self.persistentContainer.newBackgroundContext()
+            let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(awards)
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
     }

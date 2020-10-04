@@ -74,11 +74,11 @@ class MatchQueryOptionsViewController: TBATableViewController {
 
     weak var delegate: MatchQueryOptionsDelegate?
 
-    init(query: MatchQueryOptions, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(query: MatchQueryOptions, myTBA: MyTBA, dependencies: Dependencies) {
         self.query = query
         self.myTBA = myTBA
 
-        super.init(style: .plain, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(style: .plain, dependencies: dependencies)
 
         title = "Match Sort/Filter"
 

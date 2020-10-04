@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
-	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -91,6 +89,8 @@
 	<string>1</string>
 	<key>CoreSpotlightContinuation</key>
 	<true/>
+	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -104,17 +104,17 @@
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.the-blue-alliance.tba.Team</string>
+		<string>com.the-blue-alliance.tba.Event</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>com.the-blue-alliance.tba.Team</string>
-		<string>com.the-blue-alliance.tba.Event</string>
-	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

@@ -1,19 +1,21 @@
-import Crashlytics
 import FirebaseMessaging
 import Foundation
 import MyTBAKit
+import TBAUtils
 import UserNotifications
 
 // PushService handles registering push notification tokens with TBA and handling APNS messages
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
 class PushService: NSObject {
 
+    private let errorRecorder: ErrorRecorder
     private var myTBA: MyTBA
     internal var retryService: RetryService
 
     private let operationQueue = OperationQueue()
 
-    init(myTBA: MyTBA, retryService: RetryService) {
+    init(errorRecorder: ErrorRecorder, myTBA: MyTBA, retryService: RetryService) {
+        self.errorRecorder = errorRecorder
         self.myTBA = myTBA
         self.retryService = retryService
 
@@ -34,7 +36,7 @@ class PushService: NSObject {
         }
         let registerOperation = myTBA.register { (_, error) in
             if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
+                self.errorRecorder.recordError(error)
                 if !self.retryService.isRetryRegistered {
                     DispatchQueue.main.async {
                         self.registerRetryable()

@@ -51,6 +51,7 @@
 		92564C70216456800047917F /* Secrets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6F216456800047917F /* Secrets_Tests.swift */; };
 		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
 		92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */; };
+		92598CC724A92AFE007E08CB /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92598CC624A92AFE007E08CB /* Dependencies.swift */; };
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */; };
 		927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -293,6 +294,7 @@
 		92564C6F216456800047917F /* Secrets_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets_Tests.swift; sourceTree = "<group>"; };
 		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
 		92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASearchableTableViewController.swift; sourceTree = "<group>"; };
+		92598CC624A92AFE007E08CB /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
 		926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA.swift"; sourceTree = "<group>"; };
 		9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TBA Spotlight Index Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -588,7 +590,7 @@
 				92B0AA3A20CB837A0074FDF1 /* main.swift */,
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
 				92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */,
-				92BA25B8238EEA4500EC796D /* Delegates */,
+				92598CC624A92AFE007E08CB /* Dependencies.swift */,
 			);
 			path = "App Delegate";
 			sourceTree = "<group>";
@@ -989,13 +991,6 @@
 				92B55629215FCB1300C1D9A3 /* Reusable.swift */,
 			);
 			path = Protocols;
-			sourceTree = "<group>";
-		};
-		92BA25B8238EEA4500EC796D /* Delegates */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Delegates;
 			sourceTree = "<group>";
 		};
 		92BB717920CE05770081F4E5 /* App Setup */ = {
@@ -1810,6 +1805,7 @@
 				929DB38C2095640000FB575F /* ReverseSubtitleTableViewCell.swift in Sources */,
 				9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */,
 				1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */,
+				92598CC724A92AFE007E08CB /* Dependencies.swift in Sources */,
 				92FF10F721A61AC2003BC5C4 /* MatchInfoViewController.swift in Sources */,
 				9279737D23CFF3A700FF9B86 /* EventStatsConfigurator2018.swift in Sources */,
 				92564C6B21644AA30047917F /* Secrets.swift in Sources */,
@@ -1928,7 +1924,7 @@
 				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "spotlight-index/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1957,7 +1953,7 @@
 				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "spotlight-index/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.spotlight-index";
@@ -2019,7 +2015,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2073,7 +2069,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2095,7 +2091,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2117,7 +2113,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2152,7 +2148,7 @@
 					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
 				);
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-unit-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2187,7 +2183,7 @@
 					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
 				);
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-unit-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

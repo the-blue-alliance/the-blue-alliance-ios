@@ -1,4 +1,3 @@
-import Crashlytics
 import FirebaseRemoteConfig
 import Foundation
 import TBAUtils
@@ -9,12 +8,14 @@ protocol RemoteConfigObservable {
 
 class RemoteConfigService {
 
+    private let errorRecorder: ErrorRecorder
     var remoteConfig: RemoteConfig
     var retryService: RetryService
 
     public var remoteConfigProvider = Provider<RemoteConfigObservable>()
 
-    init(remoteConfig: RemoteConfig, retryService: RetryService) {
+    init(errorRecorder: ErrorRecorder, remoteConfig: RemoteConfig, retryService: RetryService) {
+        self.errorRecorder = errorRecorder
         self.remoteConfig = remoteConfig
         self.retryService = retryService
 
@@ -29,11 +30,11 @@ class RemoteConfigService {
     }
 
     internal func fetchRemoteConfig(completion: ((_ error: Error?) -> Void)? = nil) {
-        remoteConfig.fetchAndActivate { (remoteConfigStatus, error) in
+        remoteConfig.fetchAndActivate { [self] (remoteConfigStatus, error) in
             if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
+                errorRecorder.recordError(error)
             } else {
-                self.remoteConfigProvider.post {
+                remoteConfigProvider.post {
                     $0.remoteConfigUpdated()
                 }
             }

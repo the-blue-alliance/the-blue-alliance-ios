@@ -1,5 +1,4 @@
 import CoreData
-import Crashlytics
 import Foundation
 import TBAData
 import TBAKit
@@ -34,10 +33,10 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
     private var tableViewDataSource: TableViewDataSource<String, Team>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
 
-    init(refreshProvider: TeamsRefreshProvider? = nil, showSearch: Bool = true, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(refreshProvider: TeamsRefreshProvider? = nil, showSearch: Bool = true, dependencies: Dependencies) {
         self.showSearch = showSearch
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(dependencies: dependencies)
 
         self.refreshProvider = refreshProvider ?? self
     }
@@ -183,7 +182,7 @@ extension TBASearchableTableViewController: TeamsRefreshProvider {
                 Team.insert(teams, in: context)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-            }, errorRecorder: Crashlytics.sharedInstance())
+            }, errorRecorder: errorRecorder)
         }
         return operation
     }
