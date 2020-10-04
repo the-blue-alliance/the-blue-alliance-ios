@@ -8,7 +8,11 @@ import XCTest
 
 class TBACoreDataCoreSpotlightDelegateTestCase: TBADataTestCase {
 
-    let delegate = TBACoreDataCoreSpotlightDelegate()
+    lazy var delegate: TBACoreDataCoreSpotlightDelegate = {
+        let description = persistentContainer.persistentStoreDescriptions.first!
+        return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
+                                                model: persistentContainer.managedObjectModel)
+    }()
 
     func test_attributeSet() {
         let object = NSManagedObject()

@@ -5,9 +5,15 @@ import XCTest
 @testable import TBAData
 
 class MockErrorRecorder: ErrorRecorder {
+
+    func log(_ log: String, _ args: [CVarArg]) {
+        // Pass
+    }
+
     func recordError(_ error: Error) {
         // Pass
     }
+
 }
 
 class MockManagedObjectContext: NSManagedObjectContext {
