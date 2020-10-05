@@ -65,7 +65,7 @@ platform :ios do
   private_lane :configure_code_signing do
     if is_ci?
       match(
-        git_url: "https://#{ENV["MATCH_PERSONAL_ACCESS_TOKEN"]}@github.com/ZachOrr/tba-ios-certificates.git",
+        git_url: "#{ENV["MATCH_GIT_REPO"]}",
         keychain_name: "fastlane_tmp_keychain",
         app_identifier: ["com.the-blue-alliance.tba", "com.the-blue-alliance.tba.spotlight-index"]
       )

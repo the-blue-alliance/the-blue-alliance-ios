@@ -63,11 +63,11 @@ class TBATestCase: TBADataTestCase {
 
 class MockErrorRecorder: ErrorRecorder {
 
-    func log(_ log: String, _ args: [CVarArg]) {
+    func log(_ format: String, _ args: [CVarArg]) {
         // Pass
     }
 
-    func recordError(_ error: Error) {
+    func record(_ error: Error) {
         // Pass
     }
 

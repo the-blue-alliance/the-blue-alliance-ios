@@ -218,8 +218,7 @@ public class SearchService: NSObject, TeamsRefreshProvider {
 
         searchIndex.deleteAllSearchableItems { [unowned self] (error) in
             if let error = error {
-                print(error)
-                self.errorRecorder.recordError(error)
+                self.errorRecorder.record(error)
             }
         }
     }

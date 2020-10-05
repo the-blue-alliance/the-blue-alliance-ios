@@ -32,7 +32,7 @@ class RemoteConfigService {
     internal func fetchRemoteConfig(completion: ((_ error: Error?) -> Void)? = nil) {
         remoteConfig.fetchAndActivate { [self] (remoteConfigStatus, error) in
             if let error = error {
-                errorRecorder.recordError(error)
+                errorRecorder.record(error)
             } else {
                 remoteConfigProvider.post {
                     $0.remoteConfigUpdated()

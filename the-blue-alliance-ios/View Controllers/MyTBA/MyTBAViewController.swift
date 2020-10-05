@@ -115,7 +115,7 @@ class MyTBAViewController: ContainerViewController {
             self?.isLoggingOut = false
 
             if let error = error as? MyTBAError, error.code != 404 {
-                self?.errorRecorder.recordError(error)
+                self?.errorRecorder.record(error)
                 self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
                 // Run on main thread, since we delete our Core Data objects on the main thread.

@@ -36,7 +36,7 @@ class PushService: NSObject {
         }
         let registerOperation = myTBA.register { (_, error) in
             if let error = error {
-                self.errorRecorder.recordError(error)
+                self.errorRecorder.record(error)
                 if !self.retryService.isRetryRegistered {
                     DispatchQueue.main.async {
                         self.registerRetryable()

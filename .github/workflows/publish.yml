@@ -41,8 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_GIT_REPO: ${{ secrets.MATCH_GIT_REPO }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_PERSONAL_ACCESS_TOKEN: ${{ secrets.MATCH_PERSONAL_ACCESS_TOKEN }}
           SLACK_URL: ${{ secrets.SLACK_URL }}
       - name: fastlane app_store
         if: ${{ contains(github.event.head_commit.message, '[app_store]') }}

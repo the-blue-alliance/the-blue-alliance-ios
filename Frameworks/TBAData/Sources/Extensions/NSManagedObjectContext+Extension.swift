@@ -31,7 +31,7 @@ extension NSManagedObjectContext {
             return true
         } catch {
             print(error)
-            errorRecorder.recordError(error)
+            errorRecorder.record(error)
             rollback()
             return false
         }

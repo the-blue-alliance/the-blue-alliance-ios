@@ -175,7 +175,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
-                errorRecorder.recordError(error)
+                errorRecorder.record(error)
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
                 }
@@ -341,7 +341,7 @@ extension AppDelegate: GIDSignInDelegate {
         if let error = error as NSError?, error.code == GIDSignInErrorCode.canceled.rawValue {
             return
         } else if let error = error {
-            errorRecorder.recordError(error)
+            errorRecorder.record(error)
             if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
                 signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
             }
@@ -354,14 +354,14 @@ extension AppDelegate: GIDSignInDelegate {
                                                        accessToken: authentication.accessToken)
         Auth.auth().signIn(with: credential) { [self] (_, error) in
             if let error = error {
-                errorRecorder.recordError(error)
+                errorRecorder.record(error)
                 if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
                     signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {
                 PushService.requestAuthorizationForNotifications { (_, error) in
                     if let error = error {
-                        errorRecorder.recordError(error)
+                        errorRecorder.record(error)
                     }
                 }
             }
@@ -422,19 +422,19 @@ extension Messaging: FCMTokenProvider {}
 
 private class TBAErrorRecorder: ErrorRecorder {
 
-    func log(_ log: String, _ args: [CVarArg]) {
+    func log(_ format: String, _ args: [CVarArg]) {
         #if DEBUG
-        print(log)
+        print(String(format: format, arguments: args))
         #else
-        CLSLogv(log, getVaList(args))
+        Crashlytics.crashlytics().log(format: format, arguments: getVaList(args))
         #endif
     }
 
-    func recordError(_ error: Error) {
+    func record(_ error: Error) {
         #if DEBUG
         print(error)
         #else
-        Crashlytics.sharedInstance().recordError(error)
+        Crashlytics.crashlytics().record(error: error)
         #endif
     }
 
