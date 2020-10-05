@@ -62,7 +62,7 @@ platform :ios do
   end
 
   desc "Configure code signing"
-  lane :configure_code_signing do
+  private_lane :configure_code_signing do
     if is_ci?
       match(
         git_url: "https://#{ENV["GITHUB_TOKEN"]}@github.com/ZachOrr/tba-ios-certificates.git",
