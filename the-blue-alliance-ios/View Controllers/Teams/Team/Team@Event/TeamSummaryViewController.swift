@@ -212,14 +212,15 @@ class TeamSummaryViewController: TBATableViewController {
             return nil
         }()
 
-        let eventInfoItems = snapshot.itemIdentifiers(inSection: .eventInfo)
+        let hasEventInfoSection = snapshot.indexOfSection(.eventInfo) != nil
+        let eventInfoItems = hasEventInfoSection ? snapshot.itemIdentifiers(inSection: .eventInfo) : []
         let existingTeamStatusSummaryItems = eventInfoItems.filter({ switch $0 { case .status(_): return true; default: return false } })
         snapshot.deleteItems(existingTeamStatusSummaryItems)
 
         if let teamStatusSummaryItem = teamStatusSummaryItem {
             snapshot.insertSection(.eventInfo, atIndex: TeamSummarySection.eventInfo.rawValue)
             snapshot.insertItem(teamStatusSummaryItem, inSection: .eventInfo, atIndex: 0)
-        } else if snapshot.itemIdentifiers(inSection: .eventInfo).isEmpty {
+        } else if hasEventInfoSection, eventInfoItems.isEmpty {
             snapshot.deleteSections([.eventInfo])
         }
 
