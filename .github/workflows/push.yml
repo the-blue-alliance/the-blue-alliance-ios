@@ -44,6 +44,27 @@ jobs:
     if: ${{ contains(github.event.head_commit.message, '[beta]') && !contains(github.event.head_commit.message, '[app_store]') }}
     needs: [test]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
+      - uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: ${{ runner.os }}-pods-
+      - name: Install
+        run: |
+          cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
+          bundle install
+          bundle exec pod install --repo-update
+          bundle exec fastlane run setup_ci
+          bundle exec fastlane setup_secrets
+        env:
+          TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane beta_ci
         run: bundle exec fastlane beta_ci
         env:
@@ -60,6 +81,27 @@ jobs:
     if: ${{ contains(github.event.head_commit.message, '[app_store]') && !contains(github.event.head_commit.message, '[beta]') }}
     needs: [test]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
+      - uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: ${{ runner.os }}-pods-
+      - name: Install
+        run: |
+          cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
+          bundle install
+          bundle exec pod install --repo-update
+          bundle exec fastlane run setup_ci
+          bundle exec fastlane setup_secrets
+        env:
+          TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane app_store
         if: ${{ contains(github.event.head_commit.message, '[app_store]') }}
         run: bundle exec fastlane app_store
