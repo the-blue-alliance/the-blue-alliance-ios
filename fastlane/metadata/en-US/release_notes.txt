@@ -1,1 +1,1 @@
-Hey y'all - this update fixes a typo in the 2020 Match Breakdown, fixes YouTube webcast links, and adds support for direct link webcasts. Stay safe out there, and wash your hands! The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes a crash when fetching 2021 events. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance

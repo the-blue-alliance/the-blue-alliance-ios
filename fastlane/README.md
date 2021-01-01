@@ -66,11 +66,6 @@ Run all of our tests
 fastlane ios setup_secrets
 ```
 Setup Secrets.plist file (used by CI)
-### ios configure_code_signing
-```
-fastlane ios configure_code_signing
-```
-Configure code signing
 ### ios beta_ci
 ```
 fastlane ios beta_ci
