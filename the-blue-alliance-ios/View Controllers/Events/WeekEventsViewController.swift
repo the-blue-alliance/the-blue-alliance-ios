@@ -103,7 +103,9 @@ class WeekEventsViewController: EventsViewController {
 
     override var fetchRequestPredicate: NSPredicate {
         if let weekEvent = weekEvent {
-            let eventType = weekEvent.eventType!
+            guard let eventType = weekEvent.eventType else {
+                return Event.unknownYearPredicate(year: weekEvent.year)
+            }
 
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week

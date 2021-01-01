@@ -147,10 +147,7 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
     }
 
     func titleForOption(_ option: OptionType) -> String {
-        if let weekString = option.weekString {
-            return weekString
-        }
-        return "---"
+        return option.weekString
     }
 
 }

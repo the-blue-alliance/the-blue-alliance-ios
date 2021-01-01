@@ -8,7 +8,7 @@ import TBAProtocols
 import TBAUtils
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
-public enum EventType: Int {
+public enum EventType: Int, CaseIterable {
     case regional = 0
     case district = 1
     case districtChampionship = 2
@@ -242,9 +242,9 @@ extension Event {
         return webcasts
     }
 
-    public var weekString: String? {
+    public var weekString: String {
         guard let eventType = eventType else {
-            return nil
+            return "Unknown"
         }
 
         if eventType == .championshipDivision || eventType == .championshipFinals {
@@ -1074,6 +1074,12 @@ extension Event {
         return NSPredicate(format: "%K == %ld", #keyPath(Event.yearRaw), year)
     }
 
+    public static func unknownYearPredicate(year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld && NOT (%K IN %@)",
+                           #keyPath(Event.yearRaw), year,
+                           #keyPath(Event.eventTypeRaw), EventType.allCases.map { $0.rawValue })
+    }
+
     public static func nonePredicate() -> NSPredicate {
         return NSPredicate(format: "%K == -1", #keyPath(Event.yearRaw))
     }
@@ -1150,10 +1156,18 @@ extension Event {
         // ex: one Preseason, one Week 1, one Week 2..., one CMP #1, one CMP #2, one Offseason for each month
         // Jesus, take the wheel
         var handledWeeks: Set<Int> = []
-        var handledTypes: Set<EventType> = []
+        var handledTypes: Set<EventType?> = []
         var handledOffseasonMonths: Set<String> = []
         return Array(events.compactMap({ (event) -> Event? in
-            let eventType = event.eventType!
+            guard let eventType = event.eventType else {
+                // Special case to handle unknown events - group all unknown event types together
+                if handledTypes.contains(nil) {
+                    return nil
+                }
+                handledTypes.insert(nil)
+                return event
+            }
+
             if let week = event.week {
                 // Make sure each week only shows up once
                 if handledWeeks.contains(week) {

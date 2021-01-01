@@ -72,8 +72,8 @@ class EventsContainerViewController: ContainerViewController {
     // MARK: - Private Methods
 
     private static func eventsTitle(_ event: Event?) -> String {
-        if let event = event, let weekString = event.weekString {
-            return "\(weekString) Events"
+        if let event = event {
+            return "\(event.weekString) Events"
         } else {
             return "---- Events"
         }
