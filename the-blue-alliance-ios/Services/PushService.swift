@@ -66,6 +66,10 @@ class PushService: NSObject {
         UIApplication.shared.registerForRemoteNotifications()
     }
 
+    static func unregisterForRemoteNotifications(_ completion: ((Error?) -> ())?) {
+        // TODO: Something here
+    }
+
 }
 
 extension PushService: MyTBAAuthenticationObservable {

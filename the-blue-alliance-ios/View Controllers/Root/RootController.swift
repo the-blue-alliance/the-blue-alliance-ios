@@ -54,6 +54,7 @@ enum RootType: CaseIterable {
 }
 
 protocol RootController {
+    var authDelegate: AuthDelegate { get }
     var fcmTokenProvider: FCMTokenProvider { get }
     var myTBA: MyTBA { get }
     var pasteboard: UIPasteboard? { get }
@@ -110,9 +111,8 @@ extension RootController {
     }
 
     var myTBAViewController: MyTBAViewController {
-        return MyTBAViewController(myTBA: myTBA,
-                                   pasteboard: pasteboard,
-                                   photoLibrary: photoLibrary,
+        return MyTBAViewController(authDelegate: authDelegate,
+                                   myTBA: myTBA,
                                    statusService: statusService,
                                    urlOpener: urlOpener,
                                    dependencies: dependencies)

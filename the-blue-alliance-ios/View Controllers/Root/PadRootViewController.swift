@@ -8,6 +8,7 @@ import UIKit
 
 class PadRootViewController: UISplitViewController, RootController {
 
+    let authDelegate: AuthDelegate
     let fcmTokenProvider: FCMTokenProvider
     let myTBA: MyTBA
     let pasteboard: UIPasteboard?
@@ -19,7 +20,8 @@ class PadRootViewController: UISplitViewController, RootController {
     let dependencies: Dependencies
 
     lazy fileprivate var masterViewController: PadMasterViewController = {
-        return PadMasterViewController(fcmTokenProvider: fcmTokenProvider,
+        return PadMasterViewController(authDelegate: authDelegate,
+                                       fcmTokenProvider: fcmTokenProvider,
                                        myTBA: myTBA,
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
@@ -41,7 +43,8 @@ class PadRootViewController: UISplitViewController, RootController {
         return navigationController
     }()
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(authDelegate: AuthDelegate, fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.authDelegate = authDelegate
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -82,6 +85,7 @@ class PadRootViewController: UISplitViewController, RootController {
 
 private class PadMasterViewController: ContainerViewController, RootController {
 
+    let authDelegate: AuthDelegate
     let fcmTokenProvider: FCMTokenProvider
     let myTBA: MyTBA
     let pasteboard: UIPasteboard?
@@ -93,7 +97,8 @@ private class PadMasterViewController: ContainerViewController, RootController {
 
     var searchController: UISearchController!
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(authDelegate: AuthDelegate, fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.authDelegate = authDelegate
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard

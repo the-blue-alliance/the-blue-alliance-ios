@@ -108,7 +108,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     func updateInterface() {
         saveBarButtonItem.isEnabled = hasChanges
         isModalInPresentation = hasChanges
-        
+
         if isSaving {
             navigationItem.rightBarButtonItem = saveActivityIndicatorBarButtonItem
         } else {

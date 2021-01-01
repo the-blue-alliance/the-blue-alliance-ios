@@ -1,10 +1,8 @@
 import CoreData
 import CoreSpotlight
 import Firebase
-import FirebaseAuth
 import FirebaseCrashlytics
 import FirebaseMessaging
-import GoogleSignIn
 import MyTBAKit
 import Photos
 import Search
@@ -32,7 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
     }()
     lazy private var rootViewControllerPhone: PhoneRootViewController = {
-        return PhoneRootViewController(fcmTokenProvider: messaging,
+        return PhoneRootViewController(authDelegate: authDelegate,
+                                       fcmTokenProvider: messaging,
                                        myTBA: myTBA,
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
@@ -43,15 +42,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                        dependencies: dependencies)
     }()
     lazy private var rootViewControllerPad: PadRootViewController = {
-        return PadRootViewController(fcmTokenProvider: messaging,
-                                       myTBA: myTBA,
-                                       pasteboard: pasteboard,
-                                       photoLibrary: photoLibrary,
-                                       pushService: pushService,
-                                       searchService: searchService,
-                                       statusService: statusService,
-                                       urlOpener: urlOpener,
-                                       dependencies: dependencies)
+        return PadRootViewController(authDelegate: authDelegate,
+                                     fcmTokenProvider: messaging,
+                                     myTBA: myTBA,
+                                     pasteboard: pasteboard,
+                                     photoLibrary: photoLibrary,
+                                     pushService: pushService,
+                                     searchService: searchService,
+                                     statusService: statusService,
+                                     urlOpener: urlOpener,
+                                     dependencies: dependencies)
+    }()
+
+    // MARK: - Delegates
+
+    lazy var authDelegate: AuthDelegate = {
+        return AuthDelegate(myTBA: myTBA)
     }()
 
     // MARK: - Services
@@ -157,19 +163,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
 
-        Auth.auth().addIDTokenDidChangeListener { (_, user) in
-            if let user = user {
-                user.getIDToken { (token, _) in
-                    self.myTBA.authToken = token
-                }
-            } else {
-                self.myTBA.authToken = nil
-            }
-        }
-
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
-
         // Our app setup operation will load our persistent stores, propogate persistance container
         let appSetupOperation = AppSetupOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         weak var weakAppSetupOperation = appSetupOperation
@@ -186,12 +179,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 DispatchQueue.main.async {
                     self.remoteConfigService.registerRetryable(initiallyRetry: true)
                     self.statusService.registerRetryable(initiallyRetry: true)
-
-                    // Check our minimum app version
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
-                        return
-                    }
 
                     guard let window = self.window else {
                         fatalError("Window not setup when setting root vc")
@@ -240,7 +227,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        GIDSignIn.sharedInstance().handle(url)
+        return authDelegate.handle(url: url)
     }
 
     // MARK: Search Delegate Methods
@@ -274,8 +261,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    private static func showMinimumAppAlert(appStoreID: String, currentAppVersion: Int, in window: UIWindow) {
-        showRootAlertView(title: "Unsupported App Version", message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
+    private static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
+        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
+            return true
+        }
+
+        return Bundle.main.buildVersionNumber >= minimumAppVersion
+    }
+
+    private static func showMinimumAppVersionAlert(in window: UIWindow) {
+        DispatchQueue.main.async {
+            showRootAlertView(title: "Unsupported App Version", message: "Your version of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
+        }
     }
 
     private static func showRootAlertView(title: String, message: String, in window: UIWindow, handler: ((UIAlertAction) -> Void)?) {
@@ -289,19 +286,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
-    }
-
-    private func setupGoogleAuthentication() {
-        guard let signIn = GIDSignIn.sharedInstance() else { return }
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-
-        signIn.clientID = clientID
-        signIn.delegate = self
-
-        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
-        if Auth.auth().currentUser == nil, signIn.hasPreviousSignIn() {
-            signIn.restorePreviousSignIn()
-        }
     }
 
     private var launchViewController: UIViewController {
@@ -334,65 +318,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-extension AppDelegate: GIDSignInDelegate {
-
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
-        // Don't respond to errors from signInSilently or a user cancelling a sign in
-        if let error = error as NSError?, error.code == GIDSignInErrorCode.canceled.rawValue {
-            return
-        } else if let error = error {
-            errorRecorder.record(error)
-            if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
-                signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
-            }
-            return
-        }
-
-        guard let authentication = user.authentication else { return }
-
-        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                                                       accessToken: authentication.accessToken)
-        Auth.auth().signIn(with: credential) { [self] (_, error) in
-            if let error = error {
-                errorRecorder.record(error)
-                if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
-                    signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
-                }
-            } else {
-                PushService.requestAuthorizationForNotifications { (_, error) in
-                    if let error = error {
-                        errorRecorder.record(error)
-                    }
-                }
-            }
-        }
-    }
-
-    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
-        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
-            return true
-        }
-
-        return Bundle.main.buildVersionNumber >= minimumAppVersion
-    }
-
-    func showMinimumAppVersionAlert(currentAppVersion: Int) {
-        guard let window = window else {
-            return
-        }
-
-        DispatchQueue.main.async {
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
-        }
-    }
-
-}
-
 extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
         if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
+            guard let window = window else {
+                return
+            }
+            AppDelegate.showMinimumAppVersionAlert(in: window)
         }
     }
 

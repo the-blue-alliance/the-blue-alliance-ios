@@ -8,6 +8,7 @@ import UIKit
 
 class PhoneRootViewController: UITabBarController, RootController {
 
+    let authDelegate: AuthDelegate
     let fcmTokenProvider: FCMTokenProvider
     let myTBA: MyTBA
     let pasteboard: UIPasteboard?
@@ -18,7 +19,8 @@ class PhoneRootViewController: UITabBarController, RootController {
     let urlOpener: URLOpener
     let dependencies: Dependencies
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(authDelegate: AuthDelegate, fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.authDelegate = authDelegate
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard
