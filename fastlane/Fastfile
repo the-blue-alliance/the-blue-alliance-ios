@@ -115,7 +115,7 @@ platform :ios do
   private_lane :ship_github do |options|
    set_github_release(
      repository_name: "the-blue-alliance/the-blue-alliance-ios",
-     api_token: ENV["GITHUB_TOKEN"],
+     api_token: ENV["GH_TOKEN"],
      name: current_version,
      tag_name: current_version,
      description: commit_changelog,
