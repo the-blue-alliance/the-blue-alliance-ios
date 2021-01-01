@@ -107,7 +107,10 @@ class WeekEventsViewController: EventsViewController {
                 return Event.unknownYearPredicate(year: weekEvent.year)
             }
 
-            if let week = weekEvent.week {
+            if eventType == .remote {
+                // Special case - group all remote events together
+                return Event.remoteYearPredicate(year: weekEvent.year)
+            } else if let week = weekEvent.week {
                 // Event has a week - filter based on the week
                 return Event.weekYearPredicate(week: week, year: weekEvent.year)
             } else {
