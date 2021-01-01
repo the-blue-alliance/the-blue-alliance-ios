@@ -287,7 +287,11 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBARegisterOperation = myTBA.register { [weak self] (response, error) in
+        guard let token = fcmTokenProvider.fcmToken else {
+            return
+        }
+
+        myTBARegisterOperation = myTBA.register(token: token) { [weak self] (response, error) in
             self?.myTBARegisterOperation = nil
             self?.myTBARegisterResponse = response
             self?.myTBARegisterError = error

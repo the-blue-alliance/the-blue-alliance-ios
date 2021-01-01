@@ -18,8 +18,8 @@ extension MyTBA {
     // TODO: Android has some local rate limiting, which is probably smart
     // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/174
 
-    public func updatePreferences(modelKey: String, modelType: MyTBAModelType, favorite: Bool, notifications: [NotificationType], completion: @escaping (_ favoriteResponse: MyTBABaseResponse?, _ subscriptionResponse: MyTBABaseResponse?, _ error: Error?) -> Void) -> MyTBAOperation? {
-        let preferences = MyTBAPreferences(deviceKey: fcmToken,
+    public func updatePreferences(token: String, modelKey: String, modelType: MyTBAModelType, favorite: Bool, notifications: [NotificationType], completion: @escaping (_ favoriteResponse: MyTBABaseResponse?, _ subscriptionResponse: MyTBABaseResponse?, _ error: Error?) -> Void) -> MyTBAOperation? {
+        let preferences = MyTBAPreferences(deviceKey: token,
                                            favorite: favorite,
                                            modelKey: modelKey,
                                            modelType: modelType,

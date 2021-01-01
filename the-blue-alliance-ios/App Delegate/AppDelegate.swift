@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Delegates
 
     lazy var authDelegate: AuthDelegate = {
-        return AuthDelegate(myTBA: myTBA)
+        return AuthDelegate(errorRecorder: errorRecorder, myTBA: myTBA)
     }()
 
     // MARK: - Services
@@ -74,8 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
         return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
-                     deviceName: UIDevice.current.name,
-                     fcmTokenProvider: messaging)
+                     deviceName: UIDevice.current.name)
     }()
     let pasteboard = UIPasteboard.general
     lazy var persistentContainer: TBAPersistenceContainer = {

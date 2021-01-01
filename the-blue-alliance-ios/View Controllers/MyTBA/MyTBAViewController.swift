@@ -12,6 +12,7 @@ import UserNotifications
 class MyTBAViewController: ContainerViewController {
 
     private let authDelegate: AuthDelegate
+    private let fcmTokenProvider: FCMTokenProvider
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
@@ -43,8 +44,9 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(authDelegate: AuthDelegate, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(authDelegate: AuthDelegate, fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.authDelegate = authDelegate
+        self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
@@ -115,23 +117,29 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logout() {
-        let signOutOperation = myTBA.unregister { [weak self] (_, error) in
-            self?.isLoggingOut = false
+        if let token = fcmTokenProvider.fcmToken {
+            let signOutOperation = myTBA.unregister(token: token) { [weak self] (_, error) in
+                guard let self = self else { return }
 
-            if let error = error as? MyTBAError, error.code != 404 {
-                self?.errorRecorder.record(error)
-                self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
-            } else {
-                // Run on main thread, since we delete our Core Data objects on the main thread.
-                DispatchQueue.main.async {
-                    self?.logoutSuccessful()
+                self.isLoggingOut = false
+
+                if let error = error as? MyTBAError, error.code != 404 {
+                    self.errorRecorder.record(error)
+                    self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
+                } else {
+                    // Run on main thread, since we delete our Core Data objects on the main thread.
+                    DispatchQueue.main.async {
+                        self.logoutSuccessful()
+                    }
                 }
             }
-        }
-        guard let op = signOutOperation else { return }
+            guard let op = signOutOperation else { return }
 
-        isLoggingOut = true
-        OperationQueue.main.addOperation(op)
+            isLoggingOut = true
+            OperationQueue.main.addOperation(op)
+        } else {
+            logoutSuccessful()
+        }
     }
 
     private func logoutSuccessful() {

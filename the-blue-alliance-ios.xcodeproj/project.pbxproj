@@ -66,6 +66,7 @@
 		9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957221B7514700560D81 /* DistrictTeamsViewController.swift */; };
 		9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957421B7519C00560D81 /* EventTeamsViewController.swift */; };
 		92761F79228E47E900CEDF68 /* FetchMediaOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */; };
+		9278E5B3259FB9E5001F7AA0 /* AuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9278E5B2259FB9E5001F7AA0 /* AuthDelegate.swift */; };
 		9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737623CFF06A00FF9B86 /* EventInsightsConfigurator.swift */; };
 		9279737923CFF38D00FF9B86 /* EventStatsConfigurator2016.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737823CFF38D00FF9B86 /* EventStatsConfigurator2016.swift */; };
 		9279737B23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737A23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift */; };
@@ -138,7 +139,6 @@
 		92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */; };
 		92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */; };
 		92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */; };
-		92BA25BA238EEA5100EC796D /* AuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA25B9238EEA5100EC796D /* AuthDelegate.swift */; };
 		92BA25BE238F4C6300EC796D /* RemoteConfigDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */; };
 		92BA25C0238F4E9000EC796D /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */; };
 		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
@@ -313,6 +313,7 @@
 		9275957221B7514700560D81 /* DistrictTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamsViewController.swift; sourceTree = "<group>"; };
 		9275957421B7519C00560D81 /* EventTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamsViewController.swift; sourceTree = "<group>"; };
 		92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMediaOperation.swift; sourceTree = "<group>"; };
+		9278E5B2259FB9E5001F7AA0 /* AuthDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthDelegate.swift; sourceTree = "<group>"; };
 		9279737623CFF06A00FF9B86 /* EventInsightsConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator.swift; sourceTree = "<group>"; };
 		9279737823CFF38D00FF9B86 /* EventStatsConfigurator2016.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2016.swift; sourceTree = "<group>"; };
 		9279737A23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2017.swift; sourceTree = "<group>"; };
@@ -388,7 +389,6 @@
 		92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
 		92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSummaryView.swift; sourceTree = "<group>"; };
 		92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchSummaryView.xib; sourceTree = "<group>"; };
-		92BA25B9238EEA5100EC796D /* AuthDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDelegate.swift; sourceTree = "<group>"; };
 		92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RemoteConfigDefaults.plist; sourceTree = "<group>"; };
 		92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
 		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
@@ -591,6 +591,7 @@
 			children = (
 				92B0AA3A20CB837A0074FDF1 /* main.swift */,
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
+				9278E5B1259FB9E5001F7AA0 /* Delegates */,
 				92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */,
 				92598CC624A92AFE007E08CB /* Dependencies.swift */,
 			);
@@ -692,6 +693,14 @@
 				92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */,
 			);
 			path = Media;
+			sourceTree = "<group>";
+		};
+		9278E5B1259FB9E5001F7AA0 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				9278E5B2259FB9E5001F7AA0 /* AuthDelegate.swift */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 		928030E12197802C0099CB65 /* View Elements */ = {
@@ -993,14 +1002,6 @@
 				92B55629215FCB1300C1D9A3 /* Reusable.swift */,
 			);
 			path = Protocols;
-			sourceTree = "<group>";
-		};
-		92BA25B8238EEA4500EC796D /* Delegates */ = {
-			isa = PBXGroup;
-			children = (
-				92BA25B9238EEA5100EC796D /* AuthDelegate.swift */,
-			);
-			path = Delegates;
 			sourceTree = "<group>";
 		};
 		92BB717920CE05770081F4E5 /* App Setup */ = {
@@ -1810,7 +1811,6 @@
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
 				92FF10FA21A61AC2003BC5C4 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
-				92BA25BA238EEA5100EC796D /* AuthDelegate.swift in Sources */,
 				92FF10F121A61A1B003BC5C4 /* TeamInfoViewController.swift in Sources */,
 				9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
@@ -1849,6 +1849,7 @@
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
 				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
+				9278E5B3259FB9E5001F7AA0 /* AuthDelegate.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventInsightsContainerViewController.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,

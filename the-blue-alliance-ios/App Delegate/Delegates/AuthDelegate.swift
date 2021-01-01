@@ -1,17 +1,18 @@
 import AuthenticationServices
-import Crashlytics
 import CryptoKit
 import Firebase
 import FirebaseAuth
 import Foundation
 import GoogleSignIn
 import MyTBAKit
+import TBAUtils
 
 class AuthDelegate: NSObject {
 
     private let auth: Auth
     private let myTBA: MyTBA
     private let googleSignIn: GIDSignIn
+    private let errorRecorder: ErrorRecorder
 
     public var presentingViewController: (ContainerViewController & Alertable)? {
         didSet {
@@ -19,9 +20,10 @@ class AuthDelegate: NSObject {
         }
     }
 
-    init(app: FirebaseApp? = FirebaseApp.app(), auth: Auth = Auth.auth(), googleSignIn: GIDSignIn = GIDSignIn.sharedInstance(), myTBA: MyTBA) {
+    init(app: FirebaseApp? = FirebaseApp.app(), auth: Auth = Auth.auth(), googleSignIn: GIDSignIn = GIDSignIn.sharedInstance(), errorRecorder: ErrorRecorder, myTBA: MyTBA) {
         self.auth = auth
         self.googleSignIn = googleSignIn
+        self.errorRecorder = errorRecorder
         self.myTBA = myTBA
 
         // Setup Sign In with Google
@@ -85,15 +87,16 @@ class AuthDelegate: NSObject {
 
     private func signInWithCredentials(credential: AuthCredential) {
         auth.signIn(with: credential) { [weak self] (_, error) in
+            guard let self = self else { return }
             if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
-                if let presentingViewController = self?.presentingViewController {
+                self.errorRecorder.record(error)
+                if let presentingViewController = self.presentingViewController {
                     presentingViewController.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {
                 PushService.requestAuthorizationForNotifications { (_, error) in
                     if let error = error {
-                        Crashlytics.sharedInstance().recordError(error)
+                        self.errorRecorder.record(error)
                     }
                 }
             }
@@ -185,7 +188,7 @@ extension AuthDelegate: GIDSignInDelegate {
         if let error = error as NSError?, error.code == GIDSignInErrorCode.canceled.rawValue {
             return
         } else if let error = error {
-            Crashlytics.sharedInstance().recordError(error)
+            errorRecorder.record(error)
             if let presentingViewController = presentingViewController {
                 presentingViewController.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
             }
@@ -234,7 +237,7 @@ extension AuthDelegate: ASAuthorizationControllerDelegate {
         if let error = error as NSError?, error.code == ASAuthorizationError.canceled.rawValue {
             return
         } else {
-            Crashlytics.sharedInstance().recordError(error)
+            errorRecorder.record(error)
             if let presentingViewController = presentingViewController {
                 presentingViewController.showErrorAlert(with: "Error signing in to Apple - \(error.localizedDescription)")
             }

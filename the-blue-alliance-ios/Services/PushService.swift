@@ -22,7 +22,7 @@ class PushService: NSObject {
         super.init()
     }
 
-    fileprivate func registerPushToken() {
+    fileprivate func register(pushToken token: String) {
         if !myTBA.isAuthenticated {
             // Not authenticated to myTBA - we'll try again when we're auth'd
             return
@@ -34,7 +34,7 @@ class PushService: NSObject {
             // We should look to fix this properly some other time
             return
         }
-        let registerOperation = myTBA.register { (_, error) in
+        let registerOperation = myTBA.register(token: token) { (_, error) in
             if let error = error {
                 self.errorRecorder.record(error)
                 if !self.retryService.isRetryRegistered {
@@ -75,7 +75,8 @@ class PushService: NSObject {
 extension PushService: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        registerPushToken()
+        // TODO: Get push token + register
+        // registerPushToken()
     }
 
     func unauthenticated() {
@@ -88,8 +89,12 @@ extension PushService: MyTBAAuthenticationObservable {
 extension PushService: MessagingDelegate {
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("Firebase registration token: \(fcmToken)")
-        registerPushToken()
+        if let fcmToken = fcmToken {
+            print("Firebase registration token: \(fcmToken)")
+            register(pushToken: fcmToken)
+        } else {
+            print("No push token recieved - not registering... should unregister?")
+        }
     }
 
 }
@@ -125,7 +130,8 @@ extension PushService: Retryable {
     }
 
     func retry() {
-        registerPushToken()
+        // TODO: Retry registering our push token
+        // registerPushToken()
     }
 
 }

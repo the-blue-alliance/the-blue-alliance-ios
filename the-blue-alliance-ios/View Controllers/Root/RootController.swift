@@ -112,6 +112,7 @@ extension RootController {
 
     var myTBAViewController: MyTBAViewController {
         return MyTBAViewController(authDelegate: authDelegate,
+                                   fcmTokenProvider: fcmTokenProvider,
                                    myTBA: myTBA,
                                    statusService: statusService,
                                    urlOpener: urlOpener,
