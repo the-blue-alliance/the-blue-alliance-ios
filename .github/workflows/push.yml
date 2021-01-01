@@ -1,4 +1,4 @@
-name: Publish
+name: On push
 
 on:
   push:
@@ -10,8 +10,9 @@ env:
 
 jobs:
   test:
+    name: Test
     runs-on: macos-latest
-    if: ${{ contains(github.event.head_commit.message, '[app_store]') || contains(github.event.head_commit.message, '[beta]') }}
+    if: ${{ !contains(github.event.head_commit.message, '[clowntown]') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,8 +35,16 @@ jobs:
           bundle exec fastlane setup_secrets
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
+      - name: fastlane test
+        run: bundle exec fastlane test
+
+  beta:
+    name: Beta
+    runs-on: macos-latest
+    if: ${{ contains(github.event.head_commit.message, '[beta]') && !contains(github.event.head_commit.message, '[app_store]') }}
+    needs: [test]
+    steps:
       - name: fastlane beta_ci
-        if: ${{ contains(github.event.head_commit.message, '[beta]') }}
         run: bundle exec fastlane beta_ci
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -44,6 +53,13 @@ jobs:
           MATCH_GIT_REPO: ${{ secrets.MATCH_GIT_REPO }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           SLACK_URL: ${{ secrets.SLACK_URL }}
+
+  app-store:
+    name: App Store
+    runs-on: macos-latest
+    if: ${{ contains(github.event.head_commit.message, '[app_store]') && !contains(github.event.head_commit.message, '[beta]') }}
+    needs: [test]
+    steps:
       - name: fastlane app_store
         if: ${{ contains(github.event.head_commit.message, '[app_store]') }}
         run: bundle exec fastlane app_store

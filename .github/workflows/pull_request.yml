@@ -1,14 +1,14 @@
-name: CI
+name: On pull request
 
-on: [push, pull_request]
+on: pull_request
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
 
 jobs:
   test:
+    name: Test
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[clowntown]') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
