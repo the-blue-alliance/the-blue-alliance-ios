@@ -134,7 +134,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         let district = event.district
         let districtName = district?.name
 
-        let eventType = event.eventType!
+        let eventType = event.eventType
         let eventTypeString = event.eventTypeString
 
         if event.isDistrictChampionshipEvent {
@@ -153,17 +153,13 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         } else if event.isFoC {
             return "Festival of Champions"
         } else if event.isOffseason {
-            if let weekString = event.weekString {
-                return "\(weekString) Events"
-            } else {
-                return "Offseason Events"
-            }
+            return "\(event.weekString) Events"
         } else if event.isPreseason {
             return "Preseason Events"
         } else if event.isRegional {
             return "Regional Events"
         }
-        return "Other Events"
+        return "Unknown Events"
     }
 
     // MARK: - EventsViewControllerDataSourceConfiguration

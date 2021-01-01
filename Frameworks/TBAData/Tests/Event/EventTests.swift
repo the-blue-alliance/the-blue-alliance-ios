@@ -6,6 +6,10 @@ import XCTest
 
 class EventTestCase: TBADataTestCase {
 
+    func test_EventType_caseIterable() {
+        XCTAssertFalse(EventType.allCases.isEmpty)
+    }
+
     func test_address() {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(event.address)
@@ -324,7 +328,6 @@ class EventTestCase: TBADataTestCase {
 
     func test_champsYearPredicate() {
         let predicate = Event.champsYearPredicate(key: "2020cmpmi", year: 2020)
-        print(predicate.predicateFormat)
         XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND ((eventTypeRaw == 4 OR eventTypeRaw == 3) AND (keyRaw == \"2020cmpmi\" OR parentEventRaw.keyRaw == \"2020cmpmi\"))")
 
         let parentEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
@@ -476,13 +479,16 @@ class EventTestCase: TBADataTestCase {
 
     func test_yearPredicate() {
         let p = Event.yearPredicate(year: 2020)
-        print(p.predicateFormat)
         XCTAssertEqual(p.predicateFormat, "yearRaw == 2020")
     }
 
+    func test_unknownYearPredicate() {
+        let p = Event.unknownYearPredicate(year: 2021)
+        XCTAssertEqual(p.predicateFormat, "yearRaw == 2021 AND (NOT eventTypeRaw IN {0, 1, 2, 3, 4, 5, 6, 99, 100, -1})")
+    }
+    
     func test_nonePredicate() {
         let p = Event.nonePredicate()
-        print(p.predicateFormat)
         XCTAssertEqual(p.predicateFormat, "yearRaw == -1")
     }
 
@@ -1254,8 +1260,7 @@ class EventTestCase: TBADataTestCase {
 
     func test_weekString_noEventType() {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        // No eventType
-        XCTAssertNil(event.weekString)
+        XCTAssertEqual(event.weekString, "Unknown")
     }
 
     func test_weekString_championship() {
