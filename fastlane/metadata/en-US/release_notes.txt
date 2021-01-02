@@ -1,1 +1,1 @@
-Hey y'all - this update fixes a crash when fetching 2021 events. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update drops the required OS version back down to iOS 13 to enable as many users as possible to get a critical bug fix. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
