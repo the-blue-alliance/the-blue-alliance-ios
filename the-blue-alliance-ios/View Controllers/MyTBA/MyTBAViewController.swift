@@ -11,13 +11,17 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
+    private let authDelegate: AuthDelegate
+    private let fcmTokenProvider: FCMTokenProvider
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
-    private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
+    private(set) lazy var signInViewController: MyTBASignInViewController = {
+        return MyTBASignInViewController(authDelegate: authDelegate)
+    }()
     private(set) var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
     private(set) var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
 
@@ -40,7 +44,9 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(authDelegate: AuthDelegate, fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.authDelegate = authDelegate
+        self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
@@ -60,7 +66,7 @@ class MyTBAViewController: ContainerViewController {
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance()?.presentingViewController = self
+        authDelegate.presentingViewController = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -111,28 +117,33 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logout() {
-        let signOutOperation = myTBA.unregister { [weak self] (_, error) in
-            self?.isLoggingOut = false
+        if let token = fcmTokenProvider.fcmToken {
+            let signOutOperation = myTBA.unregister(token: token) { [weak self] (_, error) in
+                guard let self = self else { return }
 
-            if let error = error as? MyTBAError, error.code != 404 {
-                self?.errorRecorder.record(error)
-                self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
-            } else {
-                // Run on main thread, since we delete our Core Data objects on the main thread.
-                DispatchQueue.main.async {
-                    self?.logoutSuccessful()
+                self.isLoggingOut = false
+
+                if let error = error as? MyTBAError, error.code != 404 {
+                    self.errorRecorder.record(error)
+                    self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
+                } else {
+                    // Run on main thread, since we delete our Core Data objects on the main thread.
+                    DispatchQueue.main.async {
+                        self.logoutSuccessful()
+                    }
                 }
             }
-        }
-        guard let op = signOutOperation else { return }
+            guard let op = signOutOperation else { return }
 
-        isLoggingOut = true
-        OperationQueue.main.addOperation(op)
+            isLoggingOut = true
+            OperationQueue.main.addOperation(op)
+        } else {
+            logoutSuccessful()
+        }
     }
 
     private func logoutSuccessful() {
-        GIDSignIn.sharedInstance().signOut()
-        try! Auth.auth().signOut()
+        authDelegate.signOut()
 
         // Cancel any ongoing requests
         for vc in [favoritesViewController, subscriptionsViewController] as! [Refreshable] {

@@ -66,6 +66,7 @@
 		9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957221B7514700560D81 /* DistrictTeamsViewController.swift */; };
 		9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957421B7519C00560D81 /* EventTeamsViewController.swift */; };
 		92761F79228E47E900CEDF68 /* FetchMediaOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */; };
+		9278E5B3259FB9E5001F7AA0 /* AuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9278E5B2259FB9E5001F7AA0 /* AuthDelegate.swift */; };
 		9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737623CFF06A00FF9B86 /* EventInsightsConfigurator.swift */; };
 		9279737923CFF38D00FF9B86 /* EventStatsConfigurator2016.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737823CFF38D00FF9B86 /* EventStatsConfigurator2016.swift */; };
 		9279737B23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9279737A23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift */; };
@@ -312,6 +313,7 @@
 		9275957221B7514700560D81 /* DistrictTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamsViewController.swift; sourceTree = "<group>"; };
 		9275957421B7519C00560D81 /* EventTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamsViewController.swift; sourceTree = "<group>"; };
 		92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMediaOperation.swift; sourceTree = "<group>"; };
+		9278E5B2259FB9E5001F7AA0 /* AuthDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthDelegate.swift; sourceTree = "<group>"; };
 		9279737623CFF06A00FF9B86 /* EventInsightsConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator.swift; sourceTree = "<group>"; };
 		9279737823CFF38D00FF9B86 /* EventStatsConfigurator2016.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2016.swift; sourceTree = "<group>"; };
 		9279737A23CFF39B00FF9B86 /* EventStatsConfigurator2017.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2017.swift; sourceTree = "<group>"; };
@@ -589,6 +591,7 @@
 			children = (
 				92B0AA3A20CB837A0074FDF1 /* main.swift */,
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
+				9278E5B1259FB9E5001F7AA0 /* Delegates */,
 				92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */,
 				92598CC624A92AFE007E08CB /* Dependencies.swift */,
 			);
@@ -690,6 +693,14 @@
 				92761F78228E47E900CEDF68 /* FetchMediaOperation.swift */,
 			);
 			path = Media;
+			sourceTree = "<group>";
+		};
+		9278E5B1259FB9E5001F7AA0 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				9278E5B2259FB9E5001F7AA0 /* AuthDelegate.swift */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 		928030E12197802C0099CB65 /* View Elements */ = {
@@ -1838,6 +1849,7 @@
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
 				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
+				9278E5B3259FB9E5001F7AA0 /* AuthDelegate.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventInsightsContainerViewController.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,

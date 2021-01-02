@@ -11,6 +11,7 @@
             <connections>
                 <outlet property="favoriteImageView" destination="V9P-3O-rGH" id="fy3-zh-SBn"/>
                 <outlet property="signInButton" destination="PCK-YF-VW6" id="1PY-Z8-Fey"/>
+                <outlet property="stackView" destination="GHm-jo-SWw" id="ESV-mw-UYs"/>
                 <outlet property="starImageView" destination="g4n-2a-hdA" id="hej-fJ-PJL"/>
                 <outlet property="subscriptionImageView" destination="kK2-7h-yg5" id="HJV-ED-UAH"/>
                 <outlet property="view" destination="t8S-eI-yHk" id="D5w-pZ-piN"/>
@@ -93,7 +94,7 @@
                             <state key="selected" backgroundImage="btn_google_signin_focus"/>
                             <state key="highlighted" backgroundImage="btn_google_signin_pressed"/>
                             <connections>
-                                <action selector="signIn" destination="-1" eventType="touchUpInside" id="j7V-xA-bYK"/>
+                                <action selector="signInWithGoogle" destination="-1" eventType="touchUpInside" id="2E0-dS-P7i"/>
                             </connections>
                         </button>
                     </subviews>
