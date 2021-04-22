@@ -11,10 +11,8 @@ target 'The Blue Alliance' do
 
   # Deps
   pod 'BFRImageViewer'
-  pod 'PINRemoteImage'
   pod 'PureLayout'
   pod 'XCDYouTubeKit', '~> 2.8'
-  pod 'Zip', '~> 1.1'
 
   # Firebase
   pod 'Firebase/Analytics'
@@ -24,7 +22,6 @@ target 'The Blue Alliance' do
   pod 'Firebase/Messaging'
   pod 'Firebase/Performance'
   pod 'Firebase/RemoteConfig'
-  pod 'Firebase/Storage'
 
   # Local Deps
   pod 'MyTBAKit', :path => 'Frameworks/MyTBAKit', :testspecs => ['Tests']
