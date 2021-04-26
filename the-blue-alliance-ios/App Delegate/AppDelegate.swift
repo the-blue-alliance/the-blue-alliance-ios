@@ -1,6 +1,7 @@
 import CoreData
 import CoreSpotlight
 import Firebase
+import FirebaseAnalytics
 import FirebaseAuth
 import FirebaseCrashlytics
 import FirebaseMessaging
