@@ -16,6 +16,7 @@ public enum EventType: Int, CaseIterable {
     case championshipFinals = 4
     case districtChampionshipDivision = 5
     case festivalOfChampions = 6
+    case remote = 7
     case offseason = 99
     case preseason = 100
     case unlabeled = -1
@@ -52,6 +53,9 @@ extension Event {
     }
 
     public var eventType: EventType? {
+        if key == "2020award" {
+            return .remote
+        }
         guard let eventTypeInt = getValue(\Event.eventTypeRaw)?.intValue else {
             return nil
         }
@@ -254,6 +258,8 @@ extension Event {
             return "Championship"
         } else {
             switch eventType {
+            case .remote:
+                return "Remote"
             case .unlabeled:
                 return "Other"
             case .preseason:
@@ -385,6 +391,16 @@ extension Event {
             return false
         }
         return eventType == .festivalOfChampions
+    }
+
+    /**
+     If the event is a remote event.
+     */
+    public var isRemote: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .remote
     }
 
     /**
@@ -1074,6 +1090,12 @@ extension Event {
         return NSPredicate(format: "%K == %ld", #keyPath(Event.yearRaw), year)
     }
 
+    public static func remoteYearPredicate(year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld && %K == %ld",
+                           #keyPath(Event.yearRaw), year,
+                           #keyPath(Event.eventTypeRaw), EventType.remote.rawValue)
+    }
+
     public static func unknownYearPredicate(year: Int) -> NSPredicate {
         return NSPredicate(format: "%K == %ld && NOT (%K IN %@)",
                            #keyPath(Event.yearRaw), year,
@@ -1168,7 +1190,14 @@ extension Event {
                 return event
             }
 
-            if let week = event.week {
+            if eventType == .remote {
+                // Special case - group `remote` events together, regardless of week
+                if handledTypes.contains(.remote) {
+                    return nil
+                }
+                handledTypes.insert(.remote)
+                return event
+            } else if let week = event.week {
                 // Make sure each week only shows up once
                 if handledWeeks.contains(week) {
                     return nil

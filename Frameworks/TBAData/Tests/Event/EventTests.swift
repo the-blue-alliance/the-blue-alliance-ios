@@ -1456,6 +1456,13 @@ class EventTestCase: TBADataTestCase {
         XCTAssertTrue(event.isRegional)
     }
 
+    func test_isRemote() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isRemote)
+        event.eventTypeRaw = NSNumber(value: EventType.remote.rawValue)
+        XCTAssertTrue(event.isRemote)
+    }
+
     func test_isUnlabeled() {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertFalse(event.isUnlabeled)

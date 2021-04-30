@@ -152,6 +152,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
             return "\(districtName) District Events"
         } else if event.isFoC {
             return "Festival of Champions"
+        } else if event.isRemote {
+            return "Remote Events"
         } else if event.isOffseason {
             return "\(event.weekString) Events"
         } else if event.isPreseason {
