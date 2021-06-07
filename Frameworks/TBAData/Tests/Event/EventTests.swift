@@ -1496,7 +1496,7 @@ class EventTestCase: TBADataTestCase {
         oneLater.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 3, day: 3))!
         let two = _test_event(type: .district, week: 2, year: 2017)
         let three = _test_event(type: .regional, week: 3, year: 2017)
-        let four = _test_event(type: .regional, week: 4, year: 2017)
+        let four = _test_event(type: .remote, week: 4, year: 2017)
         let five = _test_event(type: .district, week: 5, year: 2017)
         let fiveDCMP = _test_event(type: .districtChampionship, week: 5, year: 2017)
         fiveDCMP.startDateRaw = Calendar.current.date(from: DateComponents(year: 2017, month: 4, day: 1))!

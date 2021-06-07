@@ -16,6 +16,7 @@ public enum EventType: Int, CaseIterable {
     case championshipFinals = 4
     case districtChampionshipDivision = 5
     case festivalOfChampions = 6
+    case remote = 7
     case offseason = 99
     case preseason = 100
     case unlabeled = -1
@@ -248,7 +249,8 @@ extension Event {
         }
 
         if eventType == .championshipDivision || eventType == .championshipFinals {
-            if self.year >= 2017, let city = city {
+            // 2021 was remote - only had one CMP
+            if (self.year >= 2017 && year != 2021), let city = city {
                 return "Championship - \(city)"
             }
             return "Championship"
@@ -280,6 +282,19 @@ extension Event {
                         return "Week 0.5"
                     }
                     return "Week \(week)"
+                } else if year == 2021 {
+                    // Special-case 2021 - group events by their event type
+                    if week == 0 {
+                        return "Participation"
+                    } else if week == 2 {
+                        return "FIRST Innovation Challenge"
+                    } else if week == 3 {
+                        return "INFINITE RECHARGE At Home Challenge"
+                    } else if week == 4 {
+                        return "Game Design Challenge"
+                    } else {
+                        return "Awards"
+                    }
                 }
                 return "Week \(week + 1)"
             }
@@ -415,6 +430,16 @@ extension Event {
             return false
         }
         return eventType == .regional
+    }
+
+    /**
+     If the event is a remote event.
+     */
+    public var isRemote: Bool {
+        guard let eventType = eventType else {
+            return false
+        }
+        return eventType == .remote
     }
 
     /**
@@ -1225,6 +1250,11 @@ extension Event {
             let monthString = String(format: "%02d", month)
             return "\(eventType).\(monthString)"
         }
+
+        if eventType == EventType.remote.rawValue {
+            return "\(EventType.regional.rawValue).\(eventType)"
+        }
+
         return "\(eventType)"
     }
 
