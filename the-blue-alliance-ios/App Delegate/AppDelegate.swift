@@ -14,6 +14,7 @@ import TBAKit
 import TBAUtils
 import UIKit
 import UserNotifications
+import SwiftUI
 
 let kNoSelectionNavigationController = "NoSelectionNavigationController"
 
@@ -28,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UIDevice.isPhone {
             return rootViewControllerPhone
         } else if UIDevice.isPad {
-            return rootViewControllerPad
+            return padRootView
         }
         fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
     }()
@@ -43,6 +44,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                        urlOpener: urlOpener,
                                        dependencies: dependencies)
     }()
+    lazy private var padRootView: PadRootViewHostingController = {
+        return PadRootViewHostingController(fcmTokenProvider: messaging,
+                                            myTBA: myTBA,
+                                            pasteboard: pasteboard,
+                                            photoLibrary: photoLibrary,
+                                            pushService: pushService,
+                                            searchService: searchService,
+                                            urlOpener: urlOpener,
+                                            statusService: statusService,
+                                            dependencies: dependencies
+        )
+    }()
+    /*
     lazy private var rootViewControllerPad: PadRootViewController = {
         return PadRootViewController(fcmTokenProvider: messaging,
                                        myTBA: myTBA,
@@ -54,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                        urlOpener: urlOpener,
                                        dependencies: dependencies)
     }()
+    */
 
     // MARK: - Services
     private lazy var dependencies = Dependencies(errorRecorder: errorRecorder,
