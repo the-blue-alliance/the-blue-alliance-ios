@@ -8,19 +8,19 @@
 import Foundation
 
 public struct APIMatch: Decodable {
-    public let key: String
-    public let compLevel: String
-    public let setNumber: Int
-    public let matchNumber: Int
-    public let alliances: [String: APIMatchAlliance]?
-    public let winningAlliance: String?
-    public let eventKey: String
-    public let time: Int64?
-    public let actualTime: Int64?
-    public let predictedTime: Int64?
-    public let postResultTime: Int64?
-    public let breakdown: [String: Any]?
-    public let videos: [APIMatchVideo]?
+    public var key: String
+    public var compLevel: String
+    public var setNumber: Int
+    public var matchNumber: Int
+    public var alliances: [String: APIMatchAlliance]?
+    public var winningAlliance: String?
+    public var eventKey: String
+    public var time: Int64?
+    public var actualTime: Int64?
+    public var predictedTime: Int64?
+    public var postResultTime: Int64?
+    public var breakdown: [String: Any]?
+    public var videos: [APIMatchVideo]?
 
     enum CodingKeys: String, CodingKey {
         case key
@@ -57,8 +57,8 @@ public struct APIMatch: Decodable {
 }
 
 public struct APIMatchVideo: Decodable {
-    public let key: String
-    public let type: String
+    public var key: String
+    public var type: String
 
     enum CodingKeys: String, CodingKey {
         case key
@@ -67,10 +67,10 @@ public struct APIMatchVideo: Decodable {
 }
 
 public struct APIMatchAlliance: Decodable {
-    public let score: Int
-    public let teamKeys: [String]
-    public let surrogateTeamKeys: [String]?
-    public let dqTeamKeys: [String]?
+    public var score: Int
+    public var teamKeys: [String]
+    public var surrogateTeamKeys: [String]?
+    public var dqTeamKeys: [String]?
 
     enum CodingKeys: String, CodingKey {
         case score
@@ -81,9 +81,9 @@ public struct APIMatchAlliance: Decodable {
 }
 
 public struct APIMatchZebra: Decodable {
-    public let key: String
-    public let times: [Double]
-    public let alliances: [String: [APIMachZebraTeam]]
+    public var key: String
+    public var times: [Double]
+    public var alliances: [String: [APIMachZebraTeam]]
 
     enum CodingKeys: String, CodingKey {
         case key
@@ -93,9 +93,9 @@ public struct APIMatchZebra: Decodable {
 }
 
 public struct APIMachZebraTeam: Decodable {
-    public let teamKey: String
-    public let xs: [Double?]
-    public let ys: [Double?]
+    public var teamKey: String
+    public var xs: [Double?]
+    public var ys: [Double?]
 
     enum CodingKeys: String, CodingKey {
         case teamKey = "team_key"

@@ -8,24 +8,24 @@
 import Foundation
 
 public struct APITeam: Decodable {
-    public let key: String
-    public let teamNumber: Int
-    public let nickname: String?
-    public let name: String?
-    public let schoolName: String?
-    public let city: String?
-    public let stateProv: String?
-    public let country: String?
-    public let address: String?
-    public let postalCode: String?
-    public let gmapsPlaceID: String?
-    public let gmapsURL: String?
-    public let lat: Double?
-    public let lng: Double?
-    public let locationName: String?
-    public let website: String?
-    public let rookieYear: Int?
-    public let homeChampionship: [String: String]?
+    public var key: String
+    public var teamNumber: Int
+    public var nickname: String?
+    public var name: String?
+    public var schoolName: String?
+    public var city: String?
+    public var stateProv: String?
+    public var country: String?
+    public var address: String?
+    public var postalCode: String?
+    public var gmapsPlaceID: String?
+    public var gmapsURL: String?
+    public var lat: Double?
+    public var lng: Double?
+    public var locationName: String?
+    public var website: String?
+    public var rookieYear: Int?
+    public var homeChampionship: [String: String]?
 
     enum CodingKeys: String, CodingKey {
         case key

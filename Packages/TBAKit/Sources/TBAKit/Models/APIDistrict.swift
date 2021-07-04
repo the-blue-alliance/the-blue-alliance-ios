@@ -8,10 +8,10 @@
 import Foundation
 
 public struct APIDistrict: Decodable {
-    public let abbreviation: String
-    public let name: String
-    public let key: String
-    public let year: Int
+    public var abbreviation: String
+    public var name: String
+    public var key: String
+    public var year: Int
 
     enum CodingKeys: String, CodingKey {
         case abbreviation
@@ -22,11 +22,11 @@ public struct APIDistrict: Decodable {
 }
 
 public struct APIDistrictRanking: Decodable {
-    public let teamKey: String
-    public let rank: Int
-    public let rookieBonus: Int?
-    public let pointTotal: Int
-    public let eventPoints: [APIEventDistrictPointsPoints]
+    public var teamKey: String
+    public var rank: Int
+    public var rookieBonus: Int?
+    public var pointTotal: Int
+    public var eventPoints: [APIEventDistrictPointsPoints]
 
     enum CodingKeys: String, CodingKey {
         case teamKey = "team_key"

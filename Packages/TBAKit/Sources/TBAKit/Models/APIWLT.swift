@@ -8,7 +8,7 @@
 import Foundation
 
 public struct APIWLT: Decodable {
-    public let wins: Int
-    public let losses: Int
-    public let ties: Int
+    public var wins: Int
+    public var losses: Int
+    public var ties: Int
 }

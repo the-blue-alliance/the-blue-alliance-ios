@@ -8,8 +8,8 @@
 import Foundation
 
 public struct APIWebcast: Decodable {
-    public let type: String
-    public let channel: String
-    public let file: String?
-    public let date: Date?
+    public var type: String
+    public var channel: String
+    public var file: String?
+    public var date: Date?
 }

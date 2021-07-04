@@ -1,12 +1,12 @@
 import CoreData
-import CoreSpotlight
-import Foundation
-import MyTBAKit
-import Search
+// import CoreSpotlight
+// import MyTBAKit
+// import Search
 import TBAKit
-import TBAProtocols
-import TBAUtils
+// import TBAProtocols
+// import TBAUtils
 
+/*
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
 public enum EventType: Int, CaseIterable {
     case regional = 0
@@ -28,29 +28,11 @@ extension EventType: Comparable {
     }
 
 }
+*/
 
-extension Event {
+extension TBAEvent {
 
-    public var address: String? {
-        return getValue(\Event.addressRaw)
-    }
-
-    public var city: String? {
-        return getValue(\Event.cityRaw)
-    }
-
-    public var country: String? {
-        return getValue(\Event.countryRaw)
-    }
-
-    public var endDate: Date? {
-        return getValue(\Event.endDateRaw)
-    }
-
-    public var eventCode: String? {
-        return getValue(\Event.eventCodeRaw)
-    }
-
+    /*
     public var eventType: EventType? {
         guard let eventTypeInt = getValue(\Event.eventTypeRaw)?.intValue else {
             return nil
@@ -60,84 +42,14 @@ extension Event {
         }
         return eventType
     }
+    */
 
-    public var eventTypeString: String? {
-        return getValue(\Event.eventTypeStringRaw)
-    }
-
-    public var firstEventCode: String? {
-        return getValue(\Event.firstEventCodeRaw)
-    }
-
-    public var firstEventID: String? {
-        return getValue(\Event.firstEventIDRaw)
-    }
-
-    public var gmapsPlaceID: String? {
-        return getValue(\Event.gmapsPlaceIDRaw)
-    }
-
-    public var gmapsURL: String? {
-        return getValue(\Event.gmapsURLRaw)
-    }
-
+    /*
     public var key: String {
         guard let key = getValue(\Event.keyRaw) else {
             fatalError("Save Event before accessing key")
         }
         return key
-    }
-
-    public var lat: Double? {
-        return getValue(\Event.latRaw)?.doubleValue
-    }
-
-    public var lng: Double? {
-        return getValue(\Event.lngRaw)?.doubleValue
-    }
-
-    public var locationName: String? {
-        return getValue(\Event.locationNameRaw)
-    }
-
-    public var name: String? {
-        return getValue(\Event.nameRaw)
-    }
-
-    public var playoffType: Int? {
-        return getValue(\Event.playoffTypeRaw)?.intValue
-    }
-
-    public var playoffTypeString: String? {
-        return getValue(\Event.playoffTypeStringRaw)
-    }
-
-    public var postalCode: String? {
-        return getValue(\Event.postalCodeRaw)
-    }
-
-    public var shortName: String? {
-        return getValue(\Event.shortNameRaw)
-    }
-
-    public var startDate: Date? {
-        return getValue(\Event.startDateRaw)
-    }
-
-    public var stateProv: String? {
-        return getValue(\Event.stateProvRaw)
-    }
-
-    public var timezone: String? {
-        return getValue(\Event.timezoneRaw)
-    }
-
-    public var website: String? {
-        return getValue(\Event.websiteRaw)
-    }
-
-    public var week: Int? {
-        return getValue(\Event.weekRaw)?.intValue
     }
 
     public var year: Int {
@@ -146,102 +58,18 @@ extension Event {
         }
         return year
     }
+    */
 
+    /*
     public var alliances: NSOrderedSet {
         guard let alliances = getValue(\Event.alliancesRaw) else {
             fatalError("Save Event before accessing alliances")
         }
         return alliances
     }
+    */
 
-    public var awards: [Award] {
-        guard let awardsRaw = getValue(\Event.awardsRaw),
-            let awards = awardsRaw.allObjects as? [Award] else {
-                return []
-        }
-        return awards
-    }
-
-    public var district: District? {
-        return getValue(\Event.districtRaw)
-    }
-
-    public var divisions: [Event] {
-        guard let divisionsRaw = getValue(\Event.divisionsRaw),
-            let divisions = divisionsRaw.allObjects as? [Event] else {
-                return []
-        }
-        return divisions
-    }
-
-    public var insights: EventInsights? {
-        return getValue(\Event.insightsRaw)
-    }
-
-    public var matches: [Match] {
-        guard let matchesRaw = getValue(\Event.matchesRaw),
-            let matches = matchesRaw.allObjects as? [Match] else {
-                return []
-        }
-        return matches
-    }
-
-    public var parentEvent: Event? {
-        return getValue(\Event.parentEventRaw)
-    }
-
-    public var points: [DistrictEventPoints] {
-        guard let pointsRaw = getValue(\Event.pointsRaw),
-            let points = pointsRaw.allObjects as? [DistrictEventPoints] else {
-                return []
-        }
-        return points
-    }
-
-    public var rankings: [EventRanking] {
-        guard let rankingsRaw = getValue(\Event.rankingsRaw),
-            let rankings = rankingsRaw.allObjects as? [EventRanking] else {
-                return []
-        }
-        return rankings
-    }
-
-    public var stats: [EventTeamStat] {
-        guard let statsRaw = getValue(\Event.statsRaw),
-            let stats = statsRaw.allObjects as? [EventTeamStat] else {
-                return []
-        }
-        return stats
-    }
-
-    public var status: Status? {
-        return getValue(\Event.statusRaw)
-    }
-
-    public var statuses: [EventStatus] {
-        guard let statusesRaw = getValue(\Event.statusesRaw),
-            let statuses = statusesRaw.allObjects as? [EventStatus] else {
-                return []
-        }
-        return statuses
-    }
-
-    public var teams: [Team] {
-        guard let teamsRaw = getValue(\Event.teamsRaw),
-            let teams = teamsRaw.allObjects as? [Team] else {
-                return []
-        }
-        return teams
-    }
-
-    public var webcasts: [Webcast] {
-        guard let webcastsRaw = getValue(\Event.webcastsRaw),
-            let webcasts = webcastsRaw.allObjects as? [Webcast] else {
-                return []
-        }
-        return webcasts
-    }
-
+    /*
     public var weekString: String {
         guard let eventType = eventType else {
             return "Unknown"
@@ -459,187 +287,57 @@ extension Event {
         dateFormatter.dateFormat = "MMMM"
         return dateFormatter.string(from: startDate)
     }
+    */
 
 }
 
-@objc(Event)
-public class Event: NSManagedObject {
+@objc(TBAEvent)
+public class TBAEvent: NSManagedObject {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Event> {
-        return NSFetchRequest<Event>(entityName: Event.entityName)
-    }
-
-    @NSManaged var addressRaw: String?
-    @NSManaged var cityRaw: String?
-    @NSManaged var countryRaw: String?
-    @NSManaged var endDateRaw: Date?
-    @NSManaged var eventCodeRaw: String?
-    @NSManaged var eventTypeRaw: NSNumber?
-    @NSManaged var eventTypeStringRaw: String?
-    @NSManaged var firstEventCodeRaw: String?
-    @NSManaged var firstEventIDRaw: String?
-    @NSManaged var gmapsPlaceIDRaw: String?
-    @NSManaged var gmapsURLRaw: String?
+    @NSManaged var address: String?
+    @NSManaged var city: String?
+    @NSManaged var country: String?
+    @NSManaged var endDate: Date?
+    @NSManaged var eventCode: String?
+    @NSManaged var eventType: NSNumber?
+    @NSManaged var eventTypeString: String?
+    @NSManaged var firstEventCode: String?
+    @NSManaged var firstEventID: String?
+    @NSManaged var gmapsPlaceID: String?
+    @NSManaged var gmapsURL: String?
     @NSManaged var hybridType: String?
-    @NSManaged var keyRaw: String?
-    @NSManaged var latRaw: NSNumber?
-    @NSManaged var lngRaw: NSNumber?
-    @NSManaged var locationNameRaw: String?
-    @NSManaged var nameRaw: String?
-    @NSManaged var playoffTypeRaw: NSNumber?
-    @NSManaged var playoffTypeStringRaw: String?
-    @NSManaged var postalCodeRaw: String?
-    @NSManaged var shortNameRaw: String?
-    @NSManaged var startDateRaw: Date?
-    @NSManaged var stateProvRaw: String?
-    @NSManaged var timezoneRaw: String?
-    @NSManaged var websiteRaw: String?
-    @NSManaged var weekRaw: NSNumber?
-    @NSManaged var yearRaw: NSNumber?
-    @NSManaged var alliancesRaw: NSOrderedSet?
-    @NSManaged var awardsRaw: NSSet?
-    @NSManaged var districtRaw: District?
-    @NSManaged var divisionsRaw: NSSet?
-    @NSManaged var insightsRaw: EventInsights?
-    @NSManaged var matchesRaw: NSSet?
-    @NSManaged var parentEventRaw: Event?
-    @NSManaged var pointsRaw: NSSet?
-    @NSManaged var rankingsRaw: NSSet?
-    @NSManaged var statsRaw: NSSet?
-    @NSManaged var statusRaw: Status?
-    @NSManaged var statusesRaw: NSSet?
-    @NSManaged var teamsRaw: NSSet?
-    @NSManaged var webcastsRaw: NSSet?
-
+    @NSManaged var key: String
+    @NSManaged var lat: NSNumber?
+    @NSManaged var lng: NSNumber?
+    @NSManaged var locationName: String?
+    @NSManaged var name: String?
+    @NSManaged var playoffType: NSNumber?
+    @NSManaged var playoffTypeString: String?
+    @NSManaged var postalCode: String?
+    @NSManaged var shortName: String?
+    @NSManaged var startDate: Date?
+    @NSManaged var stateProv: String?
+    @NSManaged var timezone: String?
+    @NSManaged var website: String?
+    @NSManaged var week: NSNumber? // TODO: Convert to Int (Int32 in Core Data?)
+    @NSManaged var year: NSNumber
+    @NSManaged var alliances: NSOrderedSet? // TODO: How do we get some generics here?
+    // @NSManaged var awards: Set<Award>?
+    // @NSManaged var district: District?
+    @NSManaged var divisions: Set<TBAEvent>?
+    // @NSManaged var insights: EventInsights?
+    // @NSManaged var matches: Set<Match>?
+    @NSManaged var parentEvent: TBAEvent?
+    // @NSManaged var points: Set<DistrictEventPoints>?
+    // @NSManaged var rankings: Set<EventRanking>?
+    // @NSManaged var stats: Set<EventTeamStat>?
+    // @NSManaged var status: Status?
+    // @NSManaged var statuses: Set<EventStatus>?
+    // @NSManaged var teams: Set<Team>?
+    @NSManaged var webcasts: Set<TBAWebcast>
 }
 
-// MARK: Generated accessors for alliancesRaw
-extension Event {
-
-    @objc(insertObject:inAlliancesRawAtIndex:)
-    @NSManaged func insertIntoAlliancesRaw(_ value: EventAlliance, at idx: Int)
-
-    @objc(removeObjectFromAlliancesRawAtIndex:)
-    @NSManaged func removeFromAlliancesRaw(at idx: Int)
-
-    @objc(insertAlliancesRaw:atIndexes:)
-    @NSManaged func insertIntoAlliancesRaw(_ values: [EventAlliance], at indexes: NSIndexSet)
-
-    @objc(removeAlliancesRawAtIndexes:)
-    @NSManaged func removeFromAlliancesRaw(at indexes: NSIndexSet)
-
-    @objc(replaceObjectInAlliancesRawAtIndex:withObject:)
-    @NSManaged func replaceAlliancesRaw(at idx: Int, with value: EventAlliance)
-
-    @objc(replaceAlliancesRawAtIndexes:withAlliancesRaw:)
-    @NSManaged func replaceAlliancesRaw(at indexes: NSIndexSet, with values: [EventAlliance])
-
-    @objc(addAlliancesRawObject:)
-    @NSManaged func addToAlliancesRaw(_ value: EventAlliance)
-
-    @objc(removeAlliancesRawObject:)
-    @NSManaged func removeFromAlliancesRaw(_ value: EventAlliance)
-
-    @objc(addAlliancesRaw:)
-    @NSManaged func addToAlliancesRaw(_ values: NSOrderedSet)
-
-    @objc(removeAlliancesRaw:)
-    @NSManaged func removeFromAlliancesRaw(_ values: NSOrderedSet)
-
-}
-
-// MARK: Generated accessors for awardsRaw
-extension Event {
-
-    @objc(addAwardsRawObject:)
-    @NSManaged func addToAwardsRaw(_ value: Award)
-
-    @objc(removeAwardsRawObject:)
-    @NSManaged func removeFromAwardsRaw(_ value: Award)
-
-    @objc(addAwardsRaw:)
-    @NSManaged func addToAwardsRaw(_ values: NSSet)
-
-    @objc(removeAwardsRaw:)
-    @NSManaged func removeFromAwardsRaw(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for matchesRaw
-extension Event {
-
-    @objc(addMatchesRawObject:)
-    @NSManaged func addToMatchesRaw(_ value: Match)
-
-    @objc(removeMatchesRawObject:)
-    @NSManaged func removeFromMatchesRaw(_ value: Match)
-
-    @objc(addMatchesRaw:)
-    @NSManaged func addToMatchesRaw(_ values: NSSet)
-
-    @objc(removeMatchesRaw:)
-    @NSManaged func removeFromMatchesRaw(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for rankingsRaw
-extension Event {
-
-    @objc(addRankingsRawObject:)
-    @NSManaged public func addToRankingsRaw(_ value: EventRanking)
-
-    @objc(removeRankingsRawObject:)
-    @NSManaged public func removeFromRankingsRaw(_ value: EventRanking)
-
-    @objc(addRankingsRaw:)
-    @NSManaged public func addToRankingsRaw(_ values: NSSet)
-
-    @objc(removeRankingsRaw:)
-    @NSManaged public func removeFromRankingsRaw(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for statusesRaw
-extension Event {
-
-    @objc(addStatusesRawObject:)
-    @NSManaged func addToStatusesRaw(_ value: EventStatus)
-
-    @objc(removeStatusesRawObject:)
-    @NSManaged func removeFromStatusesRaw(_ value: EventStatus)
-
-    @objc(addStatusesRaw:)
-    @NSManaged func addToStatusesRaw(_ values: NSSet)
-
-    @objc(removeStatusesRaw:)
-    @NSManaged func removeFromStatusesRaw(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for webcastsRaw
-extension Event {
-
-    @objc(addWebcastsRawObject:)
-    @NSManaged func addToWebcastsRaw(_ value: Webcast)
-
-    @objc(removeWebcastsRawObject:)
-    @NSManaged func removeFromWebcastsRaw(_ value: Webcast)
-
-    @objc(addWebcastsRaw:)
-    @NSManaged func addToWebcastsRaw(_ values: NSSet)
-
-    @objc(removeWebcastsRaw:)
-    @NSManaged func removeFromWebcastsRaw(_ values: NSSet)
-
-}
-
-extension Event: Managed {
-
-    static var dateFormatter: DateFormatter {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter
-    }
+extension TBAEvent: Managed {
 
     /**
      Insert Events for a year with values from TBAKit Event models in to the managed object context.
@@ -652,22 +350,25 @@ extension Event: Managed {
 
      - Parameter context: The NSManagedContext to insert the Event in to.
      */
-    public static func insert(_ events: [TBAEvent], year: Int, in context: NSManagedObjectContext) {
+    public static func insert(_ events: [APIEvent], year: Int, in context: NSManagedObjectContext) async throws -> [TBAEvent] {
         // Fetch all of the previous Events for this year
-        let oldEvents = Event.fetch(in: context) {
+        let oldEvents = try await TBAEvent.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(Event.yearRaw), year)
+                                       #keyPath(TBAEvent.year), year)
         }
 
         // Insert new Events for this year
-        let events = events.map({
-            return Event.insert($0, in: context)
-        })
+        var newEvents: [TBAEvent] = []
+        for event in events {
+            newEvents.append(try await TBAEvent.insert(event, in: context))
+        }
 
         // Delete orphaned Events for this year
-        Set(oldEvents).subtracting(Set(events)).forEach({
+        Set(oldEvents).subtracting(Set(newEvents)).forEach({
             context.delete($0)
         })
+
+        return newEvents
     }
 
     /**
@@ -679,17 +380,18 @@ extension Event: Managed {
 
      - Returns: The inserted Event.
      */
-    public static func insert(_ key: String, in context: NSManagedObjectContext) -> Event {
-        let predicate = Event.predicate(key: key)
-        return findOrCreate(in: context, matching: predicate) { (event) in
-            // Required: key, year
-            event.keyRaw = key
+    public static func insert(_ key: String, in context: NSManagedObjectContext) async throws -> TBAEvent {
+        let predicate = TBAEvent.predicate(key: key)
+        let event = try await findOrCreate(in: context, matching: predicate)
 
-            let yearString = String(key.prefix(4))
-            if let year = Int(yearString) {
-                event.yearRaw = NSNumber(value: year)
-            }
+        event.key = key
+
+        let yearString = String(key.prefix(4))
+        if let year = Int(yearString) {
+            event.year = NSNumber(value: year)
         }
+
+        return event
     }
 
     /**
@@ -704,85 +406,97 @@ extension Event: Managed {
      - Returns: The inserted Event.
      */
     @discardableResult
-    public static func insert(_ model: TBAEvent, in context: NSManagedObjectContext) -> Event {
-        let predicate = Event.predicate(key: model.key)
-        return findOrCreate(in: context, matching: predicate) { (event) in
-            // Required: endDate, eventCode, eventType, key, name, startDate, year
-            event.addressRaw = model.address
-            event.cityRaw = model.city
-            event.countryRaw = model.country
+    public static func insert(_ model: APIEvent, in context: NSManagedObjectContext) async throws -> TBAEvent {
+        let predicate = TBAEvent.predicate(key: model.key)
+        let event = try await findOrCreate(in: context, matching: predicate)
 
-            if let district = model.district {
-                event.districtRaw = District.insert(district, in: context)
-            } else {
-                event.districtRaw = nil
-            }
+        event.address = model.address
+        event.city = model.city
+        event.country = model.country
 
-            event.divisionsRaw = NSSet(array: model.divisionKeys.map {
-                return Event.insert($0, in: context)
-            })
-
-            event.endDateRaw = model.endDate
-            event.eventCodeRaw = model.eventCode
-            event.eventTypeRaw = NSNumber(value: model.eventType)
-            event.eventTypeStringRaw = model.eventTypeString
-            event.firstEventIDRaw = model.firstEventID
-            event.firstEventCodeRaw = model.firstEventCode
-            event.gmapsPlaceIDRaw = model.gmapsPlaceID
-            event.gmapsURLRaw = model.gmapsURL
-
-            event.keyRaw = model.key
-
-            if let lat = model.lat {
-                event.latRaw = NSNumber(value: lat)
-            } else {
-                event.latRaw = nil
-            }
-            if let lng = model.lng {
-                event.lngRaw = NSNumber(value: lng)
-            } else {
-                event.lngRaw = nil
-            }
-
-            event.locationNameRaw = model.locationName
-            event.nameRaw = model.name
-
-            if let parentEventKey = model.parentEventKey {
-                event.parentEventRaw = Event.insert(parentEventKey, in: context)
-            } else {
-                event.parentEventRaw = nil
-            }
-            if let playoffType = model.playoffType {
-                event.playoffTypeRaw = NSNumber(value: playoffType)
-            } else {
-                event.playoffTypeRaw = nil
-            }
-            event.playoffTypeStringRaw = model.playoffTypeString
-
-            event.postalCodeRaw = model.postalCode
-            event.shortNameRaw = model.shortName
-            event.startDateRaw = model.startDate
-            event.stateProvRaw = model.stateProv
-            event.timezoneRaw = model.timezone
-
-            event.insert(model.webcasts ?? [])
-
-            event.websiteRaw = model.website
-
-            if let week = model.week {
-                event.weekRaw = NSNumber(value: week)
-            } else {
-                event.weekRaw = nil
-            }
-
-            event.yearRaw = NSNumber(value: model.year)
-
-            event.hybridType = calculateHybridType(eventType: model.eventType,
-                                                   startDate: model.startDate,
-                                                   district: model.district)
+        /*
+        if let district = model.district {
+            event.district = District.insert(district, in: context)
+        } else {
+            event.districtRaw = nil
         }
+        */
+
+        // Note to Zach: We were trying to see if we could use an AsyncSequence here
+        // so that we could still use map/filter. It feels like there's some way
+        // to make this sort of thing happen, I'm just unsure how
+        var divisions: Set<TBAEvent> = Set()
+        for key in model.divisionKeys {
+            divisions.insert(try await TBAEvent.insert(key, in: context))
+        }
+        event.divisions = !divisions.isEmpty ? divisions : nil
+
+        event.endDate = model.endDate
+        event.eventCode = model.eventCode
+        event.eventType = NSNumber(value: model.eventType)
+        event.eventTypeString = model.eventTypeString
+        event.firstEventID = model.firstEventID
+        event.firstEventCode = model.firstEventCode
+        event.gmapsPlaceID = model.gmapsPlaceID
+        event.gmapsURL = model.gmapsURL
+
+        event.key = model.key
+
+        if let lat = model.lat {
+            event.lat = NSNumber(value: lat)
+        } else {
+            event.lat = nil
+        }
+        if let lng = model.lng {
+            event.lng = NSNumber(value: lng)
+        } else {
+            event.lng = nil
+        }
+
+        event.locationName = model.locationName
+        event.name = model.name
+
+        if let parentEventKey = model.parentEventKey {
+            event.parentEvent = try await TBAEvent.insert(parentEventKey, in: context)
+        } else {
+            event.parentEvent = nil
+        }
+
+        if let playoffType = model.playoffType {
+            event.playoffType = NSNumber(value: playoffType)
+        } else {
+            event.playoffType = nil
+        }
+        event.playoffTypeString = model.playoffTypeString
+
+        event.postalCode = model.postalCode
+        event.shortName = model.shortName
+        event.startDate = model.startDate
+        event.stateProv = model.stateProv
+        event.timezone = model.timezone
+
+        try await event.insert(model.webcasts ?? [])
+
+        event.website = model.website
+
+        if let week = model.week {
+            event.week = NSNumber(value: week)
+        } else {
+            event.week = nil
+        }
+
+        event.year = NSNumber(value: model.year)
+
+        /*
+        event.hybridType = calculateHybridType(eventType: model.eventType,
+                                               startDate: model.startDate,
+                                               district: model.district)
+        */
+
+        return event
     }
 
+    /*
     /**
      Insert Event Alliances with values from a TBAKit Alliance models in to the managed object context.
 
@@ -956,6 +670,7 @@ extension Event: Managed {
             return Team.insert($0, in: managedObjectContext)
         }))
     }
+    */
 
     /**
      Insert Webcasts with values from TBAKit Webcast models in to the managed object context.
@@ -964,14 +679,18 @@ extension Event: Managed {
 
      - Parameter webcasts: The TBAKit Webcast representations to set values from.
      */
-    public func insert(_ webcasts: [TBAWebcast]) {
+    public func insert(_ webcasts: [APIWebcast]) async throws {
         guard let managedObjectContext = managedObjectContext else {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(Event.webcastsRaw), newValues: webcasts.map({
-            return Webcast.insert($0, in: managedObjectContext)
-        }))
+        var wcs: [TBAWebcast] = []
+        // TODO: Async sequence
+        for webcast in webcasts {
+            wcs.append(try await TBAWebcast.insert(webcast, in: managedObjectContext))
+        }
+
+        try await updateToManyRelationship(relationship: #keyPath(TBAEvent.webcasts), newValues: wcs)
     }
 
     /// Event's shouldn't really be deleted, but sometimes they can be
@@ -990,15 +709,16 @@ extension Event: Managed {
 
 }
 
-extension Event: Dateable, Locatable, Surfable {}
+// extension Event: Dateable, Locatable, Surfable {}
 
-extension Event {
+extension TBAEvent {
 
     public static func predicate(key: String) -> NSPredicate {
         return NSPredicate(format: "%K == %@",
-                           #keyPath(Event.keyRaw), key)
+                           #keyPath(TBAEvent.key), key)
     }
 
+    /*
     public static func districtPredicate(districtKey: String) -> NSPredicate {
         return NSPredicate(format: "%K.%K == %@",
                            #keyPath(Event.districtRaw), #keyPath(District.keyRaw), districtKey)
@@ -1227,9 +947,11 @@ extension Event {
         }
         return "\(eventType)"
     }
+    */
 
 }
 
+/*
 extension Event: Comparable {
 
     // MARK: Comparable
@@ -1380,3 +1102,4 @@ extension Event: Searchable {
     }
 
 }
+*/

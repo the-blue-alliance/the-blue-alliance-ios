@@ -8,9 +8,9 @@
 import Foundation
 
 public struct APIEventStats: Decodable {
-    public let ccwms: [String: Double]
-    public let dprs: [String: Double]
-    public let oprs: [String: Double]
+    public var ccwms: [String: Double]
+    public var dprs: [String: Double]
+    public var oprs: [String: Double]
 
     enum CodingKeys: String, CodingKey {
         case ccwms

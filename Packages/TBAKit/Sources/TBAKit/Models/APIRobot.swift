@@ -8,10 +8,10 @@
 import Foundation
 
 public struct APIRobot: Decodable {
-    public let key: String
-    public let name: String
-    public let teamKey: String
-    public let year: Int
+    public var key: String
+    public var name: String
+    public var teamKey: String
+    public var year: Int
 
     enum CodingKeys: String, CodingKey {
         case key

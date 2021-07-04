@@ -8,16 +8,16 @@
 import Foundation
 
 public struct APIEventTeamStatus: Decodable {
-    public let qual: APIEventTeamStatusQual?
-    public let alliance: APIEventTeamStatusAlliance?
-    public let playoff: APIAllianceStatus?
+    public var qual: APIEventTeamStatusQual?
+    public var alliance: APIEventTeamStatusAlliance?
+    public var playoff: APIAllianceStatus?
 
-    public let allianceStatusString: String?
-    public let playoffStatusString: String?
-    public let overallStatusString: String?
+    public var allianceStatusString: String?
+    public var playoffStatusString: String?
+    public var overallStatusString: String?
 
-    public let nextMatchKey: String?
-    public let lastMatchKey: String?
+    public var nextMatchKey: String?
+    public var lastMatchKey: String?
 
     enum CodingKeys: String, CodingKey {
         case qual
@@ -32,10 +32,10 @@ public struct APIEventTeamStatus: Decodable {
 }
 
 public struct APIEventTeamStatusQual: Decodable {
-    public let numTeams: Int?
-    public let status: String?
-    public let ranking: APIEventRankingRanking?
-    public let sortOrderInfo: [APIEventRankingStat]?
+    public var numTeams: Int?
+    public var status: String?
+    public var ranking: APIEventRankingRanking?
+    public var sortOrderInfo: [APIEventRankingStat]?
 
     enum CodingKeys: String, CodingKey {
         case numTeams = "num_teams"
@@ -46,10 +46,10 @@ public struct APIEventTeamStatusQual: Decodable {
 }
 
 public struct APIEventTeamStatusAlliance: Decodable {
-    public let number: Int
-    public let pick: Int
-    public let name: String?
-    public let backup: APIAllianceBackup?
+    public var number: Int
+    public var pick: Int
+    public var name: String?
+    public var backup: APIAllianceBackup?
 
     enum CodingKeys: String, CodingKey {
         case number

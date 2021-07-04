@@ -9,9 +9,9 @@ import Foundation
 
 public struct APIEventRanking: Decodable {
     // TODO: This should be non-null - needs a fix upstream
-    public let rankings: [APIEventRankingRanking]?
-    public let extraStatsInfo: [APIEventRankingStat]?
-    public let sortOrderInfo: [APIEventRankingStat]
+    public var rankings: [APIEventRankingRanking]?
+    public var extraStatsInfo: [APIEventRankingStat]?
+    public var sortOrderInfo: [APIEventRankingStat]
 
     enum CodingKeys: String, CodingKey {
         case rankings
@@ -21,14 +21,14 @@ public struct APIEventRanking: Decodable {
 }
 
 public struct APIEventRankingRanking: Decodable {
-    public let teamKey: String
-    public let rank: Int
-    public let dq: Int?
-    public let matchesPlayed: Int?
-    public let qualAverage: Double?
-    public let record: APIWLT?
-    public let extraStats: [Double]?
-    public let sortOrders: [Double]?
+    public var teamKey: String
+    public var rank: Int
+    public var dq: Int?
+    public var matchesPlayed: Int?
+    public var qualAverage: Double?
+    public var record: APIWLT?
+    public var extraStats: [Double]?
+    public var sortOrders: [Double]?
 
     enum CodingKeys: String, CodingKey {
         case teamKey = "team_key"
@@ -43,6 +43,6 @@ public struct APIEventRankingRanking: Decodable {
 }
 
 public struct APIEventRankingStat: Decodable {
-    public let name: String
-    public let precision: Int
+    public var name: String
+    public var precision: Int
 }

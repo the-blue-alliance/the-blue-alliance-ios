@@ -1,7 +1,8 @@
 import CoreData
 import Foundation
-import Search
+// import Search
 
+/*
 extension Searchable where Self: NSManagedObject {
 
     public var uniqueIdentifier: String {
@@ -9,3 +10,4 @@ extension Searchable where Self: NSManagedObject {
     }
 
 }
+*/

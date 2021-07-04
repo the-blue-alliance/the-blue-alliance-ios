@@ -1,39 +1,18 @@
 import CoreData
-import Foundation
-import TBAUtils
-
-extension NSManagedObject {
-
-    /** Syncronous, thread-safe method to get a typed value from a NSManagedObject. **/
-    func getValue<T, J>(_ keyPath: KeyPath<T, J>) -> J {
-        guard let context = managedObjectContext else {
-            fatalError("No managedObjectContext for object.")
-        }
-        guard let value = context.getKeyPathAndWait(obj: self, keyPath: keyPath) else {
-            fatalError("No value for keyPath \(keyPath)")
-        }
-        return value
-    }
-
-}
 
 extension NSManagedObjectContext {
 
-    public func insertObject<A: NSManagedObject>() -> A where A: Managed {
-        guard let obj = NSEntityDescription.insertNewObject(forEntityName: A.entityName, into: self) as? A else { fatalError("Wrong object type") }
+    public func insertObject<T: Managed>() throws -> T {
+        guard let obj = NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as? T else { throw TBADataError.wrongObjectType }
         return obj
     }
 
-    @discardableResult
-    public func saveOrRollback(errorRecorder: ErrorRecorder) -> Bool {
+    /*
+    public func saveOrRollback(errorRecorder: ErrorRecorder) rethrows {
         do {
             try save()
-            return true
         } catch {
-            print(error)
-            errorRecorder.record(error)
             rollback()
-            return false
         }
     }
 
@@ -121,5 +100,6 @@ extension NSManagedObjectContext {
             delete(object)
         }
     }
+    */
 
 }

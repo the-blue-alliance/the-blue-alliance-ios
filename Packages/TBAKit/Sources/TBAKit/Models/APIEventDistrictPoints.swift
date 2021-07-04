@@ -8,18 +8,18 @@
 import Foundation
 
 public struct APIEventDistrictPoints: Decodable {
-    public let points: [String: APIEventDistrictPointsPoints]
-    public let tiebreakers: [String: APIEventDistrictPointsTiebreaker]
+    public var points: [String: APIEventDistrictPointsPoints]
+    public var tiebreakers: [String: APIEventDistrictPointsTiebreaker]
 }
 
 public struct APIEventDistrictPointsPoints: Decodable {
-    public let eventKey: String?
-    public let districtCMP: Bool?
-    public let alliancePoints: Int
-    public let awardPoints: Int
-    public let qualPoints: Int
-    public let elimPoints: Int
-    public let total: Int
+    public var eventKey: String?
+    public var districtCMP: Bool?
+    public var alliancePoints: Int
+    public var awardPoints: Int
+    public var qualPoints: Int
+    public var elimPoints: Int
+    public var total: Int
 
     enum CodingKeys: String, CodingKey {
         case eventKey = "event_key"
@@ -33,8 +33,8 @@ public struct APIEventDistrictPointsPoints: Decodable {
 }
 
 public struct APIEventDistrictPointsTiebreaker: Decodable {
-    public let highestQualScores: [Int]
-    public let qualWins: Int
+    public var highestQualScores: [Int]
+    public var qualWins: Int
 
     enum CodingKeys: String, CodingKey {
         case highestQualScores = "highest_qual_scores"

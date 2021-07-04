@@ -8,12 +8,12 @@
 import Foundation
 
 public struct APIStatus: Decodable {
-    public let android: APIAppInfo
-    public let ios: APIAppInfo
-    public let currentSeason: Int
-    public let downEvents: [String]
-    public let datafeedDown: Bool
-    public let maxSeason: Int
+    public var android: APIAppInfo
+    public var ios: APIAppInfo
+    public var currentSeason: Int
+    public var downEvents: [String]
+    public var datafeedDown: Bool
+    public var maxSeason: Int
 
     enum CodingKeys: String, CodingKey {
         case android
@@ -26,8 +26,8 @@ public struct APIStatus: Decodable {
 }
 
 public struct APIAppInfo: Decodable {
-    public let latestAppVersion: Int
-    public let minAppVersion: Int
+    public var latestAppVersion: Int
+    public var minAppVersion: Int
 
     enum CodingKeys: String, CodingKey {
         case latestAppVersion = "latest_app_version"

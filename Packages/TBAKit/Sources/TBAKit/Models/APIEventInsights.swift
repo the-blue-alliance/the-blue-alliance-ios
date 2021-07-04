@@ -8,8 +8,8 @@
 import Foundation
 
 public struct APIEventInsights: Decodable {
-    public let qual: [String: Any]?
-    public let playoff: [String: Any]?
+    public var qual: [String: Any]?
+    public var playoff: [String: Any]?
 
     enum CodingKeys: String, CodingKey {
         case qual

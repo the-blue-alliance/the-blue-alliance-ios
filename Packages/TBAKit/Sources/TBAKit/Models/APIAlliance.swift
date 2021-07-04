@@ -8,19 +8,19 @@
 import Foundation
 
 public struct APIAlliance: Decodable {
-    public let name: String?
-    public let backup: APIAllianceBackup?
-    public let declines: [String]?
-    public let picks: [String]
-    public let status: APIAllianceStatus?
+    public var name: String?
+    public var backup: APIAllianceBackup?
+    public var declines: [String]?
+    public var picks: [String]
+    public var status: APIAllianceStatus?
 }
 
 public struct APIAllianceStatus: Decodable {
-    public let currentRecord: APIWLT?
-    public let level: String?
-    public let playoffAverage: Double?
-    public let record: APIWLT?
-    public let status: String?
+    public var currentRecord: APIWLT?
+    public var level: String?
+    public var playoffAverage: Double?
+    public var record: APIWLT?
+    public var status: String?
 
     enum CodingKeys: String, CodingKey {
         case currentRecord = "current_level_record"
@@ -33,8 +33,8 @@ public struct APIAllianceStatus: Decodable {
 
 
 public struct APIAllianceBackup: Decodable {
-    public let teamKeyIn: String
-    public let teamKeyOut: String
+    public var teamKeyIn: String
+    public var teamKeyOut: String
 
     enum CodingKeys: String, CodingKey {
         case teamKeyIn = "in"

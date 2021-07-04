@@ -8,12 +8,12 @@
 import Foundation
 
 public struct APIMedia: Decodable {
-    public let type: String
-    public let foreignKey: String
-    public let details: [String: Any]?
-    public let preferred: Bool
-    public let directURL: String?
-    public let viewURL: String?
+    public var type: String
+    public var foreignKey: String
+    public var details: [String: Any]?
+    public var preferred: Bool
+    public var directURL: String?
+    public var viewURL: String?
 
     enum CodingKeys: String, CodingKey {
         case type
