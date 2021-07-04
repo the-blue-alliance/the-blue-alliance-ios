@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1130"
+   LastUpgradeVersion = "1300"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9273098B23DBFE0F006145E0"
+               BlueprintIdentifier = "9273099B23DC0F26006145E0"
                BuildableName = "TBA Spotlight Index Extension.appex"
                BlueprintName = "TBA Spotlight Index Extension"
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
