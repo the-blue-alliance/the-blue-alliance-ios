@@ -35,9 +35,6 @@ target 'The Blue Alliance' do
   # myTBA
   pod 'GoogleSignIn', '~> 5'
 
-  # Debugging
-  pod 'Reveal-SDK', :configurations => ['Debug']
-
   target 'tba-unit-tests' do
     inherit! :search_paths
 
@@ -64,6 +61,7 @@ post_install do | installer |
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['WARNING_CFLAGS'] ||= ['"-Wno-nullability-completeness"']
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
     end
 
     if "#{target}" == "AppAuth"
