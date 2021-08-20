@@ -6,8 +6,7 @@ import PackageDescription
 let package = Package(
     name: "TBAKit",
     platforms: [
-        .macOS("12.0"), // TODO: Drop, when we can
-        .iOS("15.0") // TODO: Change to .v15 when available
+        .iOS(.v15),
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.

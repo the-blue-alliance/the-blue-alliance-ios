@@ -4,7 +4,7 @@ import CoreData
 // import Search
 import TBAKit
 // import TBAProtocols
-// import TBAUtils
+import TBAUtils
 
 /*
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
@@ -414,13 +414,11 @@ extension TBAEvent: Managed {
         event.city = model.city
         event.country = model.country
 
-        /*
         if let district = model.district {
             event.district = District.insert(district, in: context)
         } else {
-            event.districtRaw = nil
+            event.district = nil
         }
-        */
 
         // Note to Zach: We were trying to see if we could use an AsyncSequence here
         // so that we could still use map/filter. It feels like there's some way
@@ -702,7 +700,7 @@ extension TBAEvent: Managed {
                 // Webcast will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {
-                $0.removeFromEventsRaw(self)
+                $0.events.remove(self)
             }
         }
     }

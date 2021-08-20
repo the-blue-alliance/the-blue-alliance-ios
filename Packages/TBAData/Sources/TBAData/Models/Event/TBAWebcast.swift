@@ -4,7 +4,6 @@ import TBAKit
 
 extension TBAWebcast {
 
-    /*
     public var displayName: String {
         if type == "youtube" {
             return "YouTube"
@@ -22,9 +21,7 @@ extension TBAWebcast {
         }
         return type
     }
-    */
 
-    /*
     public var urlString: String? {
         if type == "twitch" {
             return "https://twitch.tv/\(channel)"
@@ -35,7 +32,6 @@ extension TBAWebcast {
         }
         return nil
     }
-    */
 
 }
 

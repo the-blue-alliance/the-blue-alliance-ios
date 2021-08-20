@@ -6,7 +6,7 @@ public protocol Managed: NSFetchRequestResult {
 }
 
 internal protocol Orphanable {
-    var isOrphaned: Bool { get async }
+    var isOrphaned: Bool { get }
 }
 
 extension Managed where Self: NSManagedObject {
@@ -72,7 +72,7 @@ extension Managed where Self: NSManagedObject {
     }
     */
 
-    func updateToOneRelationship<J: Any, T: NSManagedObject & Orphanable>(relationship: String, newValue: J?, newObject: ((J) -> T)? = nil) {
+    func updateToOneRelationship<J: Any, T: NSManagedObject & Orphanable>(relationship: String, newValue: J?, newObject: ((J) -> T)? = nil) async {
         // Store our old value so we can reference it later
         let oldValue = value(forKeyPath: relationship) as? T
 

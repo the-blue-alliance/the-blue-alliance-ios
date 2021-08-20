@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "TBAData"
-               BuildableName = "TBAData"
-               BlueprintName = "TBAData"
+               BlueprintIdentifier = "TBAKit"
+               BuildableName = "TBAKit"
+               BlueprintName = "TBAKit"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,16 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "TBADataTests"
-               BuildableName = "TBADataTests"
-               BlueprintName = "TBADataTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -60,9 +50,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "TBAData"
-            BuildableName = "TBAData"
-            BlueprintName = "TBAData"
+            BlueprintIdentifier = "TBAKit"
+            BuildableName = "TBAKit"
+            BlueprintName = "TBAKit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

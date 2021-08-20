@@ -480,6 +480,7 @@
 		92CAF54F240775180078CA0A /* PhoneRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRootViewController.swift; sourceTree = "<group>"; };
 		92CC6D35234588810085867D /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
+		92D0DE1C26CF1CD300574B2C /* TBAUtils */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TBAUtils; sourceTree = "<group>"; };
 		92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-unit-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D6483E20BE4CB8008F0DB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92D649E926727196001C2C97 /* TBAKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TBAKit; sourceTree = "<group>"; };
@@ -1286,6 +1287,7 @@
 		92D649E826727143001C2C97 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				92D0DE1C26CF1CD300574B2C /* TBAUtils */,
 				9226E0F52676757F008F9381 /* TBAData */,
 				92D649E926727196001C2C97 /* TBAKit */,
 			);

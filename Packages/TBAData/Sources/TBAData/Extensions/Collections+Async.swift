@@ -8,7 +8,8 @@
 import Foundation
 
 extension Array {
-
+        
+    /*
     @inlinable public func map<T>(_ transform: (Element) throws -> T) async rethrows -> [T] {
         return try await withCheckedThrowingContinuation { continuation in
             do {
@@ -19,6 +20,7 @@ extension Array {
             }
         }
     }
+    */
 
     /*
     public func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
