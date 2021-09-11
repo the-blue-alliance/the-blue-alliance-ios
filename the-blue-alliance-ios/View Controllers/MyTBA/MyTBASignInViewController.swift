@@ -73,7 +73,14 @@ class MyTBASignInViewController: UIViewController {
     // MARK: - IBActions
 
     @IBAction private func signIn() {
-        GIDSignIn.sharedInstance().signIn()
+        // TODO: We need a clientID here
+        // guard let clientID = clientID else { return }
+        let configuration = GIDConfiguration(clientID: "")
+        GIDSignIn.sharedInstance.signIn(with: configuration, presenting: self) { user, error in
+            guard error == nil else { return }
+
+            // If sign in succeeded, display the app's main content View.
+        }
     }
 
 }

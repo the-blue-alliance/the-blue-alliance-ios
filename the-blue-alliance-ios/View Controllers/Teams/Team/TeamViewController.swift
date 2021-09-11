@@ -1,4 +1,4 @@
-import BFRImageViewer
+// import BFRImageViewer
 import CoreData
 import Firebase
 import MyTBAKit
@@ -232,18 +232,21 @@ extension TeamViewController: EventsViewControllerDelegate {
 extension TeamViewController: TeamMediaCollectionViewControllerDelegate {
 
     func mediaSelected(_ media: TeamMedia) {
+        /*
         if let imageViewController = TeamMediaImageViewController.forMedia(media: media) {
             DispatchQueue.main.async {
                 self.present(imageViewController, animated: true)
             }
         }
+        */
     }
 
 }
 
-class TeamMediaImageViewController: BFRImageViewController {
+class TeamMediaImageViewController {
 
     public static func forMedia(media: TeamMedia, peek: Bool = false) -> TeamMediaImageViewController? {
+        /*
         // TODO: Support showing multiple images
         var imageViewController: TeamMediaImageViewController?
         if let image = media.image {
@@ -260,6 +263,8 @@ class TeamMediaImageViewController: BFRImageViewController {
         imageViewController?.modalPresentationStyle = .fullScreen
         imageViewController?.showDoneButtonOnLeft = false
         return imageViewController
+        */
+        return nil
     }
 
 }

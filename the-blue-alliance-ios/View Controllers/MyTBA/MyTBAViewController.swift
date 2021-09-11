@@ -59,8 +59,6 @@ class MyTBAViewController: ContainerViewController {
 
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
-
-        GIDSignIn.sharedInstance()?.presentingViewController = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -131,7 +129,7 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logoutSuccessful() {
-        GIDSignIn.sharedInstance().signOut()
+        GIDSignIn.sharedInstance.signOut()
         try! Auth.auth().signOut()
 
         // Cancel any ongoing requests
