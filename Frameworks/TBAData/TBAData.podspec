@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://thebluealliance.com/', :tag => s.version.to_s }
   s.swift_version    = '5.0'
 
-  s.ios.deployment_target = '14.0'
+  s.ios.deployment_target = '15.0'
 
   s.source_files = 'Sources/**/*.swift'
   s.resources = 'Resources/TBA.xcdatamodeld'
