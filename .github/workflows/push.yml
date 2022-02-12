@@ -5,14 +5,14 @@ on:
     branches:
       - master
 
-env:
-  DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
-
 jobs:
   test-publish:
     name: Test + Publish
     runs-on: macos-latest
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
