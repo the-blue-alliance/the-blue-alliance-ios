@@ -17,7 +17,7 @@ class DistrictsViewController: TBATableViewController {
         }
     }
 
-    private var tableViewDataSource: TableViewDataSource<String, District>!
+    private var dataSource: TableViewDataSource<String, District>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<District>!
 
     // MARK: - Init
@@ -38,7 +38,7 @@ class DistrictsViewController: TBATableViewController {
         super.viewDidLoad()
 
         setupDataSource()
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
@@ -53,16 +53,14 @@ class DistrictsViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource () {
-        let dataSource = UITableViewDiffableDataSource<String, District>(tableView: tableView) { (tableView, indexPath, district) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, District>(tableView: tableView) { (tableView, indexPath, district) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
             cell.textLabel?.text = district.name
             cell.accessoryType = .disclosureIndicator
             // TODO: Convert to some custom cell... show # of events if non-zero
             return cell
         }
-        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        tableViewDataSource.delegate = self
-        tableViewDataSource.statefulDelegate = self
+        dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
         fetchRequest.sortDescriptors = [
@@ -72,6 +70,9 @@ class DistrictsViewController: TBATableViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+        
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
     private func updateDataSource() {
@@ -116,10 +117,10 @@ extension DistrictsViewController: Refreshable {
             }
 
             let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                District.insert(districts, year: year, in: context)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            context.performChangesAndWait({ [unowned self] in
+                District.insert(districts, year: self.year, in: context)
+            }, saved: { [unowned self] in
+                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

@@ -69,7 +69,7 @@ class EventAwardsViewController: TBATableViewController {
     private let event: Event
     private let team: Team?
 
-    private var tableViewDataSource: TableViewDataSource<String, Award>!
+    private var dataSource: TableViewDataSource<String, Award>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Award>!
 
     // MARK: - Init
@@ -93,13 +93,13 @@ class EventAwardsViewController: TBATableViewController {
         tableView.registerReusableCell(AwardTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String, Award>(tableView: tableView) { (tableView, indexPath, award) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Award>(tableView: tableView) { (tableView, indexPath, award) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as AwardTableViewCell
             cell.selectionStyle = .none
             cell.viewModel = AwardCellViewModel(award: award)
@@ -112,9 +112,7 @@ class EventAwardsViewController: TBATableViewController {
             }
             return cell
         }
-        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        self.tableViewDataSource.delegate = self
-        self.tableViewDataSource.statefulDelegate = self
+        dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
         fetchRequest.sortDescriptors = [
@@ -128,6 +126,9 @@ class EventAwardsViewController: TBATableViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+        
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
 }

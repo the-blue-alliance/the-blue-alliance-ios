@@ -27,7 +27,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     weak var delegate: TeamMediaCollectionViewControllerDelegate?
 
-    private var collectionViewDataSource: CollectionViewDataSource<String, TeamMedia>!
+    private var dataSource: CollectionViewDataSource<String, TeamMedia>!
     var fetchedResultsController: CollectionViewDataSourceFetchedResultsController<TeamMedia>!
 
     // MARK: Init
@@ -54,7 +54,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
 
         setupDataSource()
-        collectionView.dataSource = collectionViewDataSource
+        collectionView.dataSource = dataSource
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -132,7 +132,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let dataSource = UICollectionViewDiffableDataSource<String, TeamMedia>(collectionView: collectionView) { [weak self ] (collectionView, indexPath, media) -> UICollectionViewCell? in
+        dataSource = CollectionViewDataSource<String, TeamMedia>(collectionView: collectionView) { [weak self ] (collectionView, indexPath, media) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as MediaCollectionViewCell
             if let image = media.image {
                 cell.state = .loaded(image)
@@ -145,14 +145,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             }
             return cell
         }
-        self.collectionViewDataSource = CollectionViewDataSource(dataSource: dataSource)
-        self.collectionViewDataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = CollectionViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+        
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
     private func updateDataSource() {

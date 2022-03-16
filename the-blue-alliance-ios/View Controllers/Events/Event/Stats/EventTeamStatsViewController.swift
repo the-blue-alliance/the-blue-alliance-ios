@@ -26,7 +26,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     private let event: Event
 
-    private var tableViewDataSource: TableViewDataSource<String, EventTeamStat>!
+    private var dataSource: TableViewDataSource<String, EventTeamStat>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<EventTeamStat>!
 
     var filter: EventTeamStatFilter {
@@ -75,7 +75,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
         tableView.registerReusableCell(RankingTableViewCell.self)
 
         setupDataSource()
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
@@ -91,20 +91,21 @@ class EventTeamStatsTableViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String, EventTeamStat>(tableView: tableView) { (tableView, indexPath, eventTeamStat) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, EventTeamStat>(tableView: tableView) { (tableView, indexPath, eventTeamStat) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             cell.viewModel = RankingCellViewModel(eventTeamStat: eventTeamStat)
             return cell
         }
-        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        self.tableViewDataSource.delegate = self
-        self.tableViewDataSource.statefulDelegate = self
+        dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+        
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
     private func updateDataSource() {
