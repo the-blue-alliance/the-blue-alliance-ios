@@ -46,8 +46,8 @@ class DistrictTeamsViewController: TeamsViewController {
             context.performChangesAndWait({
                 let district = context.object(with: self.district.objectID) as! District
                 district.insert(teams)
-            }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: self.errorRecorder)
         }
         addRefreshOperations([operation])

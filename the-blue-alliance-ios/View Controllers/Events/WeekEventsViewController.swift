@@ -74,8 +74,8 @@ class WeekEventsViewController: EventsViewController {
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Event.insert(events, year: year, in: context)
-            }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
 
             // Only setup weeks if we don't have a currently selected week
