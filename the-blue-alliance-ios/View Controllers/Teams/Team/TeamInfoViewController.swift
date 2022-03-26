@@ -236,8 +236,8 @@ extension TeamInfoViewController: Refreshable {
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(team, in: context)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: infoOperation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: infoOperation)
             }, errorRecorder: errorRecorder)
         }
 
@@ -251,8 +251,8 @@ extension TeamInfoViewController: Refreshable {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.setYearsParticipated(years)
-            }, saved: {
-                tbaKit.storeCacheHeaders(yearsOperation)
+            }, saved: { [unowned self] in
+                self.tbaKit.storeCacheHeaders(yearsOperation)
             }, errorRecorder: errorRecorder)
         }
 

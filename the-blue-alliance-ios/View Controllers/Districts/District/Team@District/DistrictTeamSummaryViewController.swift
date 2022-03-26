@@ -128,8 +128,8 @@ extension DistrictTeamSummaryViewController: Refreshable {
             context.performChangesAndWait({
                 let district = context.object(with: self.ranking.district.objectID) as! District
                 district.insert(rankings)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

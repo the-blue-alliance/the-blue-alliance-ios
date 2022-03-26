@@ -360,9 +360,9 @@ extension AppDelegate: GIDSignInDelegate {
                     signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {
-                PushService.requestAuthorizationForNotifications { (_, error) in
+                PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
                     if let error = error {
-                        errorRecorder.record(error)
+                        self.errorRecorder.record(error)
                     }
                 }
             }

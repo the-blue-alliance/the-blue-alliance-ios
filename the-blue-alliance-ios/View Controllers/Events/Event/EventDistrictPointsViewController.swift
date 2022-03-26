@@ -154,15 +154,15 @@ extension EventDistrictPointsViewController: Refreshable {
 
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventDistrictPoints(key: eventKey) { [self] (result, notModified) in
-            guard case .success(let eventPoints, _) = result, !notModified else {
+            guard case .success((let eventPoints, _)) = result, !notModified else {
                 return
             }
 
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
