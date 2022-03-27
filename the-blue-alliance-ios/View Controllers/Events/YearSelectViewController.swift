@@ -186,13 +186,13 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
             }
 
             let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Event.insert(events, year: year, in: context)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
-                hasRefreshed = true
+            context.performChangesAndWait({ [unowned self] in
+                Event.insert(events, year: self.year, in: context)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: operation)
+                self.hasRefreshed = true
                 OperationQueue.main.addOperation {
-                    updateWeeks(in: persistentContainer.viewContext)
+                    self.updateWeeks(in: self.persistentContainer.viewContext)
                 }
             }, errorRecorder: errorRecorder)
         }

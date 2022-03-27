@@ -34,8 +34,8 @@ class FetchMediaOperation: TBAOperation {
 
         task = URLSession.shared.dataTask(with: url, completionHandler: { [self] (data, _, error) in
             let backgroundContext = persistentContainer.newBackgroundContext()
-            backgroundContext.performChangesAndWait({
-                let backgroundMedia = backgroundContext.object(with: media.objectID) as! TeamMedia
+            backgroundContext.performChangesAndWait({ [unowned self] in
+                let backgroundMedia = backgroundContext.object(with: self.media.objectID) as! TeamMedia
                 if let error = error {
                     backgroundMedia.imageError = MediaError.error(error.localizedDescription)
                 } else if let data = data {

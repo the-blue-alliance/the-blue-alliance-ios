@@ -57,7 +57,7 @@ class PadRootViewController: UISplitViewController, RootController {
         let masterNavigationController = UINavigationController(rootViewController: masterViewController)
         viewControllers = [masterNavigationController, emptyNavigationController]
 
-        preferredDisplayMode = .allVisible
+        preferredDisplayMode = .oneBesideSecondary
     }
 
     required init?(coder: NSCoder) {

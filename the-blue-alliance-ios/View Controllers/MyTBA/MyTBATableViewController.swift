@@ -266,9 +266,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Event.insert(event, in: context)
-            }, saved: {
-                tbaKit.storeCacheHeaders(operation)
-                executeUpdate(myTBAModel)
+            }, saved: { [unowned self] in
+                self.tbaKit.storeCacheHeaders(operation)
+                self.executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
         return operation
@@ -284,9 +284,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(team, in: context)
-            }, saved: {
-                tbaKit.storeCacheHeaders(operation)
-                executeUpdate(myTBAModel)
+            }, saved: { [unowned self] in
+                self.tbaKit.storeCacheHeaders(operation)
+                self.executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
         return operation
@@ -302,9 +302,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
-            }, saved: {
-                tbaKit.storeCacheHeaders(operation)
-                executeUpdate(myTBAModel)
+            }, saved: { [unowned self] in
+                self.tbaKit.storeCacheHeaders(operation)
+                self.executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
         return operation

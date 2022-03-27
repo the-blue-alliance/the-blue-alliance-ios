@@ -482,8 +482,8 @@ extension TeamSummaryViewController: Refreshable {
                 let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     Event.insert(event, in: context)
-                }, saved: {
-                    markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
+                }, saved: { [unowned self] in
+                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
                 }, errorRecorder: errorRecorder)
             })
         }
@@ -504,8 +504,8 @@ extension TeamSummaryViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(status)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: teamStatusOperation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: teamStatusOperation)
             }, errorRecorder: errorRecorder)
         }
 

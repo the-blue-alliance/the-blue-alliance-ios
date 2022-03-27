@@ -44,8 +44,8 @@ class DistrictEventsViewController: EventsViewController {
             context.performChangesAndWait({
                 let district = context.object(with: self.district.objectID) as! District
                 district.insert(events)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
