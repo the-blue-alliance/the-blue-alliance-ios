@@ -204,7 +204,7 @@ PODS:
   - TBATestingMocks (1.0.0-LOCAL)
   - TBAUtils (1.0.0-LOCAL)
   - TBAUtils/Tests (1.0.0-LOCAL)
-  - XCDYouTubeKit (2.15.2)
+  - youtube-ios-player-helper (1.0.4)
 
 DEPENDENCIES:
   - BFRImageViewer
@@ -236,7 +236,7 @@ DEPENDENCIES:
   - TBATestingMocks (from `Frameworks/TBATestingMocks`)
   - TBAUtils (from `Frameworks/TBAUtils`)
   - TBAUtils/Tests (from `Frameworks/TBAUtils`)
-  - XCDYouTubeKit (~> 2.8)
+  - youtube-ios-player-helper (~> 1.0.4)
 
 SPEC REPOS:
   trunk:
@@ -265,7 +265,7 @@ SPEC REPOS:
     - PromisesObjC
     - Protobuf
     - PureLayout
-    - XCDYouTubeKit
+    - youtube-ios-player-helper
 
 EXTERNAL SOURCES:
   MyTBAKit:
@@ -331,8 +331,8 @@ SPEC CHECKSUMS:
   TBAProtocols: 7088cc67541800f6e7526796e57c881fabbd49f0
   TBATestingMocks: 31563f070cdebd3b2f5bc097932c180304a1e297
   TBAUtils: 33dee003122f653472fa5fe579731d1634f84f9a
-  XCDYouTubeKit: b120aced3d8638ffb570c5450cddb5a1dac448c7
+  youtube-ios-player-helper: e9b97535e816db3152179d84d999bc1807ecd689
 
-PODFILE CHECKSUM: ea0f77e183910e6fa8536accd6cdaf8382d865a8
+PODFILE CHECKSUM: 504c7b43c73096b9a60b80656401bffd22da0454
 
 COCOAPODS: 1.11.3

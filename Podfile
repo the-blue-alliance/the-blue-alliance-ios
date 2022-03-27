@@ -12,7 +12,7 @@ target 'The Blue Alliance' do
   # Deps
   pod 'BFRImageViewer'
   pod 'PureLayout'
-  pod 'XCDYouTubeKit', '~> 2.8'
+  pod "youtube-ios-player-helper", "~> 1.0.4"
 
   # Firebase
   pod 'Firebase/Analytics'
