@@ -41,10 +41,9 @@ jobs:
         if: ${{ contains(github.event.head_commit.message, '[beta]') }}
         run: bundle exec fastlane beta_ci
         env:
-          SPACESHIP_SKIP_2FA_UPGRADE: 1
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           MATCH_GIT_REPO: ${{ secrets.MATCH_GIT_REPO }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           SLACK_URL: ${{ secrets.SLACK_URL }}
@@ -52,10 +51,9 @@ jobs:
         if: ${{ contains(github.event.head_commit.message, '[app_store]') }}
         run: bundle exec fastlane app_store
         env:
-          SPACESHIP_SKIP_2FA_UPGRADE: 1
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           MATCH_GIT_REPO: ${{ secrets.MATCH_GIT_REPO }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           SLACK_URL: ${{ secrets.SLACK_URL }}
