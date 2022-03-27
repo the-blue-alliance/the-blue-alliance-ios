@@ -38,6 +38,10 @@ class EventInsightsViewController: TBATableViewController, Observable {
             eventStatsConfigurator = EventInsightsConfigurator2019.self
         } else if event.year == 2020 {
             eventStatsConfigurator = EventInsightsConfigurator2020.self
+        } else if event.year == 2021 {
+            eventStatsConfigurator = EventInsightsConfigurator2020.self
+        } else if event.year == 2022 {
+            eventStatsConfigurator = EventInsightsConfigurator2022.self
         } else {
             eventStatsConfigurator = nil
         }

@@ -301,9 +301,11 @@ extension TeamMediaCollectionViewController: Refreshable {
     private func fetchMedia(_ media: TeamMedia, _ dependentOperation: Operation) {
         let refreshOperation = BlockOperation { [weak self] in
             guard let self = self else { return }
+            var snapshot = self.dataSource.snapshot()
             // Reload our cell, so we can get rid of our loading state
             if let indexPath = self.indexPath(for: media) {
-                self.collectionView.reloadItems(at: [indexPath])
+                snapshot.reloadItems([snapshot.itemIdentifiers[indexPath.row]])
+                self.dataSource.apply(snapshot)
             }
         }
 
