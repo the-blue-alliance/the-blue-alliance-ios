@@ -58,6 +58,10 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
             breakdownConfigurator = MatchBreakdownConfigurator2019.self
         } else if match.event.year == 2020 {
             breakdownConfigurator = MatchBreakdownConfigurator2020.self
+        } else if match.event.year == 2021 {
+            breakdownConfigurator = MatchBreakdownConfigurator2020.self
+        } else if match.event.year == 2022 {
+            breakdownConfigurator = MatchBreakdownConfigurator2022.self
         } else {
             breakdownConfigurator = nil
         }

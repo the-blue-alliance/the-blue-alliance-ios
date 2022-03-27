@@ -90,6 +90,12 @@ struct MatchViewModel {
         case 2020:
             rpName1 = "shieldEnergizedRankingPoint"
             rpName2 = "shieldOperationalRankingPoint"
+        case 2021:
+            rpName1 = "shieldEnergizedRankingPoint"
+            rpName2 = "shieldOperationalRankingPoint"
+        case 2022:
+            rpName1 = "cargoBonusRankingPoint"
+            rpName2 = "hangarBonusRankingPoint"
         default:
             break
         }

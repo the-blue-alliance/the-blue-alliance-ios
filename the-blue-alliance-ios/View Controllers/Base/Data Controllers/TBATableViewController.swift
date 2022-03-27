@@ -58,6 +58,11 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self
         tableView.registerReusableCell(BasicTableViewCell.self)
+
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+            tableView.contentInsetAdjustmentBehavior = .never
+        }
     }
 
     // MARK: - UITableViewDelegate

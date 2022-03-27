@@ -314,6 +314,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     static func setupAppearance() {
+        if #available(iOS 15.0, *) {
+            let navigationBarAppearance = UINavigationBarAppearance()
+            navigationBarAppearance.configureWithDefaultBackground()
+
+            navigationBarAppearance.backgroundColor = UIColor.navigationBarTintColor
+            navigationBarAppearance.shadowColor = nil
+            navigationBarAppearance.shadowImage = UIImage()
+            navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+            UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+            UINavigationBar.appearance().compactAppearance = navigationBarAppearance
+            UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+        }
+
         let navigationBarAppearance = UINavigationBar.appearance()
 
         navigationBarAppearance.barTintColor = UIColor.navigationBarTintColor
@@ -323,6 +337,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        if #available(iOS 15.0, *) {
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithOpaqueBackground()
+
+            tabBarAppearance.selectionIndicatorTintColor = UIColor.tabBarTintColor
+
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        }
 
         let tabBarAppearance = UITabBar.appearance()
         tabBarAppearance.isTranslucent = false
