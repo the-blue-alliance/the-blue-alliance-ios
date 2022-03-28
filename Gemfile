@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
 gem 'cocoapods'
-gem 'fastlane', '2.176.0'
+gem 'fastlane'
 gem 'cocoapods-generate'
