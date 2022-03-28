@@ -33,4 +33,5 @@ jobs:
         run: bundle exec fastlane refresh_dsyms
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          SPACESHIP_SKIP_2FA_UPGRADE: 1
