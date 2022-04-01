@@ -26,13 +26,21 @@ public class WLT: NSObject, NSSecureCoding {
     }
 
     public func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.wins, forKey: "wins")
-        aCoder.encode(self.losses, forKey: "losses")
-        aCoder.encode(self.ties, forKey: "ties")
+        aCoder.encode(wins, forKey: "wins")
+        aCoder.encode(losses, forKey: "losses")
+        aCoder.encode(ties, forKey: "ties")
     }
 
     public var stringValue: String {
         return "\(wins)-\(losses)-\(ties)"
+    }
+
+    public override var hash: Int {
+        var hasher = Hasher()
+        hasher.combine(wins)
+        hasher.combine(losses)
+        hasher.combine(ties)
+        return hasher.finalize()
     }
 
 }
