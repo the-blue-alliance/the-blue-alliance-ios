@@ -56,7 +56,7 @@ class HandoffServiceTests: TBATestCase {
         super.setUp()
 
         let rootController = FakeRootController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, searchService: searchService, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
-        self.handoffService = HandoffService(errorRecorder: errorRecorder, persistentContainer: persistentContainer, rootController: rootController)
+        self.handoffService = HandoffService(errorRecorder: errorRecorder, persistentContainer: persistentContainer, rootControllerProvider: { return rootController })
     }
 
     func test_handoff_unsupported() {
