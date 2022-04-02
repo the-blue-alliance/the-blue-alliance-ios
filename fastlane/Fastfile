@@ -80,6 +80,7 @@ platform :ios do
 
   desc "Upload a new beta build to TestFlight (for CI machine)"
   lane :beta_ci do
+    setup_api
     prebeta
     build
 
@@ -94,6 +95,7 @@ platform :ios do
 
   desc "Upload a new build to the App Store"
   lane :app_store do
+    setup_api
     preship
     build
 
@@ -127,6 +129,15 @@ platform :ios do
   ## End Release Lanes ##
 
   ## Shipping Lanes for Release Lanes ##
+
+  desc "Setup App Store Connect API Key"
+  private_lane :setup_api do
+    app_store_connect_api_key(
+      key_id: ENV["APPLE_KEY_ID"],
+      issuer_id: ENV["APPLE_ISSUER_ID"],
+      key_content: ENV["APPLE_KEY_CONTENT"]
+    )
+  end
 
   desc "Perform pre-TestFlight tasks"
   private_lane :prebeta do

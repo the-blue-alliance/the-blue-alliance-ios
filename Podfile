@@ -20,7 +20,6 @@ target 'The Blue Alliance' do
   pod 'Firebase/Core'
   pod 'Firebase/Crashlytics'
   pod 'Firebase/Messaging'
-  pod 'Firebase/Performance'
   pod 'Firebase/RemoteConfig'
 
   # Local Deps
