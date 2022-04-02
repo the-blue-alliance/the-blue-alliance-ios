@@ -41,6 +41,9 @@ jobs:
         if: ${{ contains(github.event.head_commit.message, '[beta]') }}
         run: bundle exec fastlane beta_ci
         env:
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+          APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -54,6 +57,9 @@ jobs:
         if: ${{ contains(github.event.head_commit.message, '[app_store]') }}
         run: bundle exec fastlane app_store
         env:
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+          APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
