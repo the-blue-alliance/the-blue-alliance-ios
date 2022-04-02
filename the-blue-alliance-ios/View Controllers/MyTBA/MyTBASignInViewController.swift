@@ -1,8 +1,13 @@
+import Firebase
 import Foundation
 import UIKit
 import GoogleSignIn
+import TBAUtils
 
 class MyTBASignInViewController: UIViewController {
+
+    private let clientID: String
+    private let callback: (GIDGoogleUser?, Error?) -> ()
 
     @IBOutlet var starImageView: UIImageView! {
         didSet {
@@ -13,12 +18,15 @@ class MyTBASignInViewController: UIViewController {
     @IBOutlet var subscriptionImageView: UIImageView!
     @IBOutlet var signInButton: UIButton!
 
-    init() {
+    init(clientID: String, callback: @escaping (GIDGoogleUser?, Error?) -> ()) {
+        self.clientID = clientID
+        self.callback = callback
+
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - View Lifecycle
@@ -73,7 +81,8 @@ class MyTBASignInViewController: UIViewController {
     // MARK: - IBActions
 
     @IBAction private func signIn() {
-        GIDSignIn.sharedInstance().signIn()
+        GIDSignIn.sharedInstance.signIn(with: .init(clientID: clientID), presenting: self, callback: callback)
     }
 
 }
+

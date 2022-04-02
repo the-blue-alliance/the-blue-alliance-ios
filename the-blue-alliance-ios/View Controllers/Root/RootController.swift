@@ -1,9 +1,11 @@
 import CoreData
+import Firebase
 import Foundation
 import MyTBAKit
 import Photos
 import TBAData
 import TBAKit
+import UIKit
 
 protocol RootChildController {
     var rootType: RootType { get }
@@ -109,8 +111,10 @@ extension RootController {
                                       dependencies: dependencies)
     }
 
-    var myTBAViewController: MyTBAViewController {
-        return MyTBAViewController(myTBA: myTBA,
+    var myTBAViewController: MyTBAViewController? {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return nil }
+        return MyTBAViewController(clientID: clientID,
+                                   myTBA: myTBA,
                                    pasteboard: pasteboard,
                                    photoLibrary: photoLibrary,
                                    statusService: statusService,

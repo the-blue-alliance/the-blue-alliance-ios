@@ -1,5 +1,6 @@
 import Firebase
 import Foundation
+import UIKit
 
 // TODO: Subclass AppDelegate and override some of the properties to make things testable
 class TestAppDelegate: UIResponder, UIApplicationDelegate {

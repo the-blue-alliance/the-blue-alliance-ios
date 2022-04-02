@@ -194,7 +194,7 @@ extension PadMasterViewController: PadRootTableViewControllerDelegate {
             case .districts:
                 return districtsViewController
             case .myTBA:
-                return myTBAViewController
+                return myTBAViewController!
             case .settings:
                 return settingsViewController
             }

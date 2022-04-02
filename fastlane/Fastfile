@@ -2,55 +2,55 @@ default_platform :ios
 
 platform :ios do
 
-  desc "Install project dependencies"
-  lane :install_deps do
-    bundle_install # Update bundle deps
-    cocoapods(repo_update: true, use_bundle_exec: true) # Install pods
-  end
-
   desc "Run TBA unit tests"
   lane :test_unit do
-    scan(workspace: "the-blue-alliance-ios.xcworkspace", scheme: "tba-unit-tests")
+    scan(project: "the-blue-alliance-ios.xcodeproj", scheme: "tba-unit-tests")
   end
 
   desc "Run MyTBAKit unit tests"
   lane :test_mytbakit do
-    scan(project: "Pods/Pods.xcodeproj", scheme: "MyTBAKit-Unit-Tests")
+    test_spm(package: "MyTBAKit", scheme: "MyTBAKit-Package")
   end
 
   desc "Run Search unit tests"
   lane :test_search do
-    scan(project: "Pods/Pods.xcodeproj", scheme: "Search-Unit-Tests")
+    test_spm(package: "Search")
   end
 
   desc "Run TBAData unit tests"
   lane :test_tbadata do
-    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAData-Unit-Tests")
+    test_spm(package: "TBAData", scheme: "TBAData-Package")
   end
 
   desc "Run TBAKit unit tests"
   lane :test_tbakit do
-    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAKit-Unit-Tests")
+    test_spm(package: "TBAKit", scheme: "TBAKit-Package")
   end
 
   desc "Run TBAOperation unit tests"
   lane :test_tbaoperation do
-    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAOperation-Unit-Tests")
+    test_spm(package: "TBAOperation", scheme: "TBAOperation-Package")
   end
 
   desc "Run TBAUtils unit tests"
   lane :test_tbautils do
-    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAUtils-Unit-Tests")
+    test_spm(package: "TBAUtils")
+  end
+
+  private_lane :test_spm do |options|
+    # TODO: Remove the `fail_build` once scan starts generating xcresult files for spm packages
+    # https://github.com/fastlane/fastlane/issues/20012
+    scan(package_path: "Packages/#{options[:package]}", scheme: "#{options[:scheme] ? options[:scheme] : options[:package]}", result_bundle: true, fail_build: false)
   end
 
   desc "Run all of our tests"
   lane :test do
-    test_mytbakit
-    test_search
-    test_tbadata
-    test_tbakit
-    test_tbaoperation
-    test_tbautils
+    # test_mytbakit
+    # test_search
+    # test_tbadata
+    # test_tbakit
+    # test_tbaoperation
+    # test_tbautils
     test_unit
   end
 

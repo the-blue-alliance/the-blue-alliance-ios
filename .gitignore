@@ -26,8 +26,6 @@ DerivedData
 #
 Pods/
 
-the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-
 Secrets.plist
 
 # fastlane specific
@@ -60,3 +58,7 @@ gen/
 /.bundle/
 /vendor/bundle
 /lib/bundler/man/
+
+.swiftpm
+
+fastlane/test_output/

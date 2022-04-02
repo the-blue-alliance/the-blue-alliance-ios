@@ -3,6 +3,7 @@ import Foundation
 import TBAData
 import TBAOperation
 import TBAUtils
+import UIKit
 
 class FetchMediaOperation: TBAOperation {
 
