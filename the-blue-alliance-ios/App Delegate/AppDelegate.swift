@@ -89,7 +89,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var handoffService: HandoffService = {
         return HandoffService(errorRecorder: errorRecorder,
                               persistentContainer: persistentContainer,
-                              rootController: rootViewController)
+                              rootControllerProvider: { [unowned self] in
+            return rootViewController
+        })
     }()
     lazy var pushService: PushService = {
         return PushService(errorRecorder: errorRecorder,
