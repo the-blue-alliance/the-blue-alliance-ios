@@ -1,1 +1,1 @@
-Hey y'all - this update fixes the misnamed icon for the 2022 game. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes a crash in the Team@Event view, fixes crashes when opening links from Handoff, and attempts to fix the nasty periodic random crashes y'all have been reporting! The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
