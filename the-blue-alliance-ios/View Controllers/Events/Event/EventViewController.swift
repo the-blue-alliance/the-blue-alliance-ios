@@ -2,6 +2,7 @@ import CoreData
 import Firebase
 import MyTBAKit
 import Photos
+import Search
 import TBAData
 import TBAKit
 import UIKit

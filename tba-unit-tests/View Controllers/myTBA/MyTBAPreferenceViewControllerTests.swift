@@ -1,7 +1,7 @@
 import TBAData
 import TBAKitTesting
 import TBATestingMocks
-import TBAOperationTesting
+import TBAOperationMocks
 import XCTest
 @testable import MyTBAKit
 @testable import The_Blue_Alliance

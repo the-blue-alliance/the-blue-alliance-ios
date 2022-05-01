@@ -1,4 +1,5 @@
 import CoreData
+import Firebase
 import FirebaseAuth
 import GoogleSignIn
 import MyTBAKit
@@ -11,19 +12,23 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
+    private let clientID: String
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
-    private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
+    private(set) lazy var signInViewController: MyTBASignInViewController = {
+        return MyTBASignInViewController(clientID: clientID, callback: login(user:withError:))
+    }()
     private(set) var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
     private(set) var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
 
     private var signInView: UIView! {
         return signInViewController.view
     }
+
     private lazy var signOutBarButtonItem: UIBarButtonItem = {
          return UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(logoutTapped))
     }()
@@ -40,7 +45,8 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(clientID: String, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.clientID = clientID
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
@@ -59,8 +65,6 @@ class MyTBAViewController: ContainerViewController {
 
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
-
-        GIDSignIn.sharedInstance()?.presentingViewController = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -110,6 +114,37 @@ class MyTBAViewController: ContainerViewController {
         signInView.isHidden = isLoggedIn
     }
 
+    private func login(user: GIDGoogleUser?, withError error: Error?) {
+        // Don't respond to errors from signInSilently or a user cancelling a sign in
+        if let error = error as NSError?, error.code == GIDSignInError.canceled.rawValue {
+            return
+        } else if let error = error {
+            errorRecorder.record(error)
+            showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
+            return
+        }
+
+        guard let user = user else { return }
+        let authentication = user.authentication
+
+        guard let idToken = authentication.idToken else { return }
+
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                       accessToken: authentication.accessToken)
+        Auth.auth().signIn(with: credential) { [self] (_, error) in
+            if let error = error {
+                errorRecorder.record(error)
+                showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
+            } else {
+                PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
+                    if let error = error {
+                        self.errorRecorder.record(error)
+                    }
+                }
+            }
+        }
+    }
+
     private func logout() {
         let signOutOperation = myTBA.unregister { [weak self] (_, error) in
             self?.isLoggingOut = false
@@ -131,7 +166,7 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logoutSuccessful() {
-        GIDSignIn.sharedInstance().signOut()
+        GIDSignIn.sharedInstance.signOut()
         try! Auth.auth().signOut()
 
         // Cancel any ongoing requests

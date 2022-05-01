@@ -17,19 +17,22 @@ jobs:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: ${{ runner.os }}-gems-
-      - uses: actions/cache@v2
+      - name: Cache SPM
+        uses: actions/cache@v1
         with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: ${{ runner.os }}-pods-
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
       - name: Install
         run: |
           cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
           bundle install
-          bundle exec pod install --repo-update
           bundle exec fastlane run setup_ci
           bundle exec fastlane setup_secrets
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane test
         run: bundle exec fastlane test
+        env:
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "180"

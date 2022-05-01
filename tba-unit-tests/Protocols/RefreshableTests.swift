@@ -1,5 +1,5 @@
 import XCTest
-import TBAOperationTesting
+import TBAOperationMocks
 @testable import The_Blue_Alliance
 
 class MockRefreshable: Refreshable {

@@ -20,15 +20,16 @@ jobs:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: ${{ runner.os }}-gems-
-      - uses: actions/cache@v2
+      - name: Cache SPM
+        uses: actions/cache@v1
         with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: ${{ runner.os }}-pods-
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
       - name: Install
         run: |
           bundle install
-          bundle exec pod install --repo-update
       - name: fastlane refresh_dsyms
         run: bundle exec fastlane refresh_dsyms
         env:
