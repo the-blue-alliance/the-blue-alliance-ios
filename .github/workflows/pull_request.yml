@@ -30,8 +30,9 @@ jobs:
           bundle install
           bundle exec fastlane run setup_ci
           bundle exec fastlane setup_secrets
-          bundle exec ruby Scripts/recreate_schemes.rb
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane test
         run: bundle exec fastlane test
+        env:
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "180"

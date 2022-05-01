@@ -65,7 +65,6 @@
 		9220F1EC27FA11A40019288A /* TBAOperationMocks in Frameworks */ = {isa = PBXBuildFile; productRef = 9220F1EB27FA11A40019288A /* TBAOperationMocks */; };
 		9220F1F027FA12610019288A /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 9220F1EF27FA12610019288A /* TBAOperation */; };
 		9220F1F527FA145E0019288A /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 9220F1F427FA145E0019288A /* TBAData */; };
-		9220F1F727FA14670019288A /* TBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9220F1F627FA14670019288A /* TBAKit */; };
 		9220F1F927FA14720019288A /* TBAProtocols in Frameworks */ = {isa = PBXBuildFile; productRef = 9220F1F827FA14720019288A /* TBAProtocols */; };
 		9220F1FB27FA14780019288A /* TBAUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 9220F1FA27FA14780019288A /* TBAUtils */; };
 		9220F1FD27FA14AC0019288A /* TBAKitTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 9220F1FC27FA14AC0019288A /* TBAKitTesting */; };
@@ -145,6 +144,7 @@
 		929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */; };
 		929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */; };
 		92A03A9727F8C667001DA129 /* BFRImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 92A03A9627F8C667001DA129 /* BFRImageViewer */; };
+		92A31F0A281EF216003D61B6 /* TBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92A31F09281EF216003D61B6 /* TBAKit */; };
 		92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C6214EF83800FDADFB /* SettingsViewController.swift */; };
 		92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */; };
 		92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5C921A22D550025CC85 /* Bundle+Version.swift */; };
@@ -509,13 +509,13 @@
 				92A03A9727F8C667001DA129 /* BFRImageViewer in Frameworks */,
 				92AAA4DA27F81BEB00504C0D /* FirebaseCrashlytics in Frameworks */,
 				9220F1F027FA12610019288A /* TBAOperation in Frameworks */,
+				92A31F0A281EF216003D61B6 /* TBAKit in Frameworks */,
 				92AAA4DC27F81BEB00504C0D /* FirebaseMessaging in Frameworks */,
 				9220F1F527FA145E0019288A /* TBAData in Frameworks */,
 				9220F1F927FA14720019288A /* TBAProtocols in Frameworks */,
 				92AAA4DE27F81BEB00504C0D /* FirebaseRemoteConfig in Frameworks */,
 				9266AA9E27F81CE6003FE725 /* PureLayout in Frameworks */,
 				92AAA4D827F81BEB00504C0D /* FirebaseAuth in Frameworks */,
-				9220F1F727FA14670019288A /* TBAKit in Frameworks */,
 				92AAA4D627F81BEB00504C0D /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				9220F1AF27FA07C10019288A /* MyTBAKit in Frameworks */,
 				92AAA4E127F81C5600504C0D /* GoogleSignIn in Frameworks */,
@@ -1417,9 +1417,9 @@
 				9220F1AE27FA07C10019288A /* MyTBAKit */,
 				9220F1EF27FA12610019288A /* TBAOperation */,
 				9220F1F427FA145E0019288A /* TBAData */,
-				9220F1F627FA14670019288A /* TBAKit */,
 				9220F1F827FA14720019288A /* TBAProtocols */,
 				9220F1FA27FA14780019288A /* TBAUtils */,
+				92A31F09281EF216003D61B6 /* TBAKit */,
 			);
 			productName = "the-blue-alliance";
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
@@ -1494,11 +1494,11 @@
 			);
 			mainGroup = 92942D891E2154DA008E79CA;
 			packageReferences = (
-				92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */,
-				92AAA4DF27F81C5500504C0D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS.git" */,
-				9266AA9C27F81CE6003FE725 /* XCRemoteSwiftPackageReference "PureLayout.git" */,
-				9266AA9F27F81D21003FE725 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper.git" */,
-				92A03A9527F8C5EA001DA129 /* XCRemoteSwiftPackageReference "buffer-ios-image-viewer.git" */,
+				92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				92AAA4DF27F81C5500504C0D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				9266AA9C27F81CE6003FE725 /* XCRemoteSwiftPackageReference "PureLayout" */,
+				9266AA9F27F81D21003FE725 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
+				92A03A9527F8C5EA001DA129 /* XCRemoteSwiftPackageReference "buffer-ios-image-viewer" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -2149,7 +2149,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		9266AA9C27F81CE6003FE725 /* XCRemoteSwiftPackageReference "PureLayout.git" */ = {
+		9266AA9C27F81CE6003FE725 /* XCRemoteSwiftPackageReference "PureLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureLayout/PureLayout.git";
 			requirement = {
@@ -2157,7 +2157,7 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		9266AA9F27F81D21003FE725 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper.git" */ = {
+		9266AA9F27F81D21003FE725 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/youtube/youtube-ios-player-helper.git";
 			requirement = {
@@ -2165,7 +2165,7 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		92A03A9527F8C5EA001DA129 /* XCRemoteSwiftPackageReference "buffer-ios-image-viewer.git" */ = {
+		92A03A9527F8C5EA001DA129 /* XCRemoteSwiftPackageReference "buffer-ios-image-viewer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ZachOrr/buffer-ios-image-viewer.git";
 			requirement = {
@@ -2173,7 +2173,7 @@
 				kind = branch;
 			};
 		};
-		92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */ = {
+		92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -2181,7 +2181,7 @@
 				minimumVersion = 8.0.0;
 			};
 		};
-		92AAA4DF27F81C5500504C0D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS.git" */ = {
+		92AAA4DF27F81C5500504C0D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
 			requirement = {
@@ -2216,10 +2216,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TBAData;
 		};
-		9220F1F627FA14670019288A /* TBAKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TBAKit;
-		};
 		9220F1F827FA14720019288A /* TBAProtocols */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TBAProtocols;
@@ -2234,47 +2230,51 @@
 		};
 		9266AA9D27F81CE6003FE725 /* PureLayout */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9266AA9C27F81CE6003FE725 /* XCRemoteSwiftPackageReference "PureLayout.git" */;
+			package = 9266AA9C27F81CE6003FE725 /* XCRemoteSwiftPackageReference "PureLayout" */;
 			productName = PureLayout;
 		};
 		9266AAA027F81D21003FE725 /* YouTubeiOSPlayerHelper */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9266AA9F27F81D21003FE725 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper.git" */;
+			package = 9266AA9F27F81D21003FE725 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
 			productName = YouTubeiOSPlayerHelper;
 		};
 		92A03A9627F8C667001DA129 /* BFRImageViewer */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 92A03A9527F8C5EA001DA129 /* XCRemoteSwiftPackageReference "buffer-ios-image-viewer.git" */;
+			package = 92A03A9527F8C5EA001DA129 /* XCRemoteSwiftPackageReference "buffer-ios-image-viewer" */;
 			productName = BFRImageViewer;
+		};
+		92A31F09281EF216003D61B6 /* TBAKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAKit;
 		};
 		92AAA4D527F81BEB00504C0D /* FirebaseAnalyticsWithoutAdIdSupport */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
 		92AAA4D727F81BEB00504C0D /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
 		92AAA4D927F81BEB00504C0D /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
 		};
 		92AAA4DB27F81BEB00504C0D /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
 		};
 		92AAA4DD27F81BEB00504C0D /* FirebaseRemoteConfig */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = 92AAA4D427F81BEB00504C0D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
 		};
 		92AAA4E027F81C5600504C0D /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 92AAA4DF27F81C5500504C0D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS.git" */;
+			package = 92AAA4DF27F81C5500504C0D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignIn;
 		};
 		92BC270627FA042C000DBAC4 /* Search */ = {

@@ -31,7 +31,7 @@ let package = Package(
             ]),
         .target(
             name: "TBADataTesting",
-            dependencies: ["TBAData", "TBAKit"]),
+            dependencies: ["TBAKit"]),
         .testTarget(
             name: "TBADataTests",
             dependencies: ["TBAData", "TBADataTesting"]),
