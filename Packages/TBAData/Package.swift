@@ -1,11 +1,11 @@
-// swift-tools-version: 5.5
+// swift-tools-version: 5.6
 
 import PackageDescription
 
 let package = Package(
     name: "TBAData",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v15)
     ],
     products: [
         .library(

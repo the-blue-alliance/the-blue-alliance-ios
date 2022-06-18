@@ -1,185 +1,110 @@
 import Foundation
 
-public typealias TBAKitOperationCompletion = (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()
-
-private struct Constants {
-    struct APIConstants {
-        static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
-        static let lastModifiedDictionary = "LastModifiedDictionary"
-        static let etagDictionary = "EtagDictionary"
-    }
+private struct APIConstants {
+    static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
 }
 
-public enum APIError: Error {
-    case error(String)
-}
+public struct TBAKit {
 
-extension APIError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .error(message: let message):
-            // TODO: This, unlike the name says, isn't localized
-            return message
-        }
-    }
-}
+    internal var apiKey: String
+    internal var session: TBASession
+    internal var cacheStore: TBACacheStore?
 
-internal protocol TBAModel {
-    init?(json: [String: Any])
-}
-
-open class TBAKit: NSObject {
-
-    internal let apiKey: String
-    internal let sessionProvider: (() -> URLSession)
-    internal let userDefaults: UserDefaults
-
-    public init(apiKey: String, sessionProvider: (() -> URLSession)? = nil, userDefaults: UserDefaults) {
+    public init(apiKey: String, session: TBASession? = nil, cacheStore: TBACacheStore? = nil) {
         self.apiKey = apiKey
-        if let sessionProvider = sessionProvider {
-            self.sessionProvider = sessionProvider
-        } else {
-            self.sessionProvider = {
-                return URLSession.init(configuration: .default)
+        self.session = session ?? URLSession(configuration: .default)
+        self.cacheStore = cacheStore
+    }
+
+    public func clearCache() {
+        cacheStore?.clear()
+    }
+
+    internal func decodeAndCache<T: Decodable>(response: HTTPURLResponse, data: Data) throws -> T {
+        let decoded: T = try decode(data: data)
+        // Only cache if we successfully decoded the data
+        if response.statusCode == 200 {
+            cache(response: response, data: data)
+        }
+        return decoded
+    }
+
+    internal func fetch<T: Decodable>(_ endpoint: String, useCache: Bool = true) async throws -> T {
+        var request = try request(endpoint: endpoint)
+        var postRequestBlock = { (response: HTTPURLResponse, data: Data) throws -> T in
+            return try decodeAndCache(response: response, data: data)
+        }
+        // Swap our request for our request with cache headers
+        // Swap our post-request block to return cached data, if necessary
+        if useCache, let (cachedRequest, cachedData) = try? cachedRequest(endpoint: endpoint) {
+            request = cachedRequest
+            postRequestBlock = { (response: HTTPURLResponse, data: Data) -> T in
+                // Decode from our cached data
+                if response.statusCode == 304 {
+                    return try decode(data: cachedData)
+                }
+                return try postRequestBlock(response, data)
             }
         }
-        self.userDefaults = userDefaults
+        let (data, response) = try await session.data(for: request)
+        guard let response = response as? HTTPURLResponse else {
+            throw APIError.invalidHTTPResponse
+        }
+        return try postRequestBlock(response, data)
     }
 
-    public func storeCacheHeaders(_ operation: TBAKitOperation) {
-        // Pull our response off of our request
-        guard let httpResponse = operation.task.response as? HTTPURLResponse else {
+    private static func url(forEndpoint endpoint: String) -> URL? {
+        return URL(string: endpoint, relativeTo: APIConstants.baseURL)
+    }
+
+    private func cache(response: HTTPURLResponse, data: Data) {
+        guard let url = response.url else {
             return
         }
-        // Grab our lastModified to store
-        let lastModified = httpResponse.allHeaderFields["Last-Modified"]
-        // Grab our etag to store
-        let etag = httpResponse.allHeaderFields["Etag"]
-
-        // And finally, grab our URL
-        guard let url = httpResponse.url else {
+        guard let etag = response.allHeaderFields["Etag"] as? String else {
             return
         }
+        cacheStore?.set(TBACachedResponse(url: url, date: Date(), etag: etag, data: data), forURL: url)
+    }
 
-        if let lastModified = lastModified as? String {
-            let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
-            var lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
-            lastModifiedDictionary[lastModifiedString] = lastModified
-            userDefaults.set(lastModifiedDictionary, forKey: Constants.APIConstants.lastModifiedDictionary)
+    private func request(endpoint: String) throws -> URLRequest {
+        guard let url = TBAKit.url(forEndpoint: endpoint) else {
+            throw APIError.invalidURL
         }
-        if let etag = etag as? String {
-            let etagString = TBAKit.etagURLString(for: url)
-            var etagDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.etagDictionary) ?? [:]
-            etagDictionary[etagString] = etag
-            userDefaults.set(etagDictionary, forKey: Constants.APIConstants.etagDictionary)
-        }
-        userDefaults.synchronize()
-    }
 
-    public func clearCacheHeaders() {
-        userDefaults.removeObject(forKey: Constants.APIConstants.lastModifiedDictionary)
-        userDefaults.removeObject(forKey: Constants.APIConstants.etagDictionary)
-        userDefaults.synchronize()
-    }
-
-    static func lastModifiedURLString(for url: URL) -> String {
-        return "LAST_MODIFIED:\(url.absoluteString)"
-    }
-
-    static func etagURLString(for url: URL) -> String {
-        return "ETAG:\(url.absoluteString)"
-    }
-
-    func lastModified(for url: URL) -> String? {
-        let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
-        let lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
-        return lastModifiedDictionary[lastModifiedString] as? String
-    }
-
-    func etag(for url: URL) -> String? {
-        let etagString = TBAKit.etagURLString(for: url)
-        let etagDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.etagDictionary) ?? [:]
-        return etagDictionary[etagString] as? String
-    }
-
-    func createRequest(_ method: String) -> URLRequest {
-        let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
-        var request = URLRequest(url: apiURL)
+        var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(apiKey, forHTTPHeaderField: "X-TBA-Auth-Key")
         request.addValue("gzip", forHTTPHeaderField: "Accept-Encoding")
 
-        if let lastModified = lastModified(for: apiURL) {
-            request.addValue(lastModified, forHTTPHeaderField: "If-Modified-Since")
-        }
-
-        if let etag = etag(for: apiURL) {
-            request.addValue(etag, forHTTPHeaderField: "If-None-Match")
-        }
-
         return request
     }
 
-    func callApi(method: String, completion: @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> TBAKitOperation {
-        return TBAKitOperation(tbaKit: self, method: method, completion: completion)
-    }
-
-    func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success(nil), true)
-            } else if let json = json as? [String: Any] {
-                completion(.success(T(json: json)), false)
-            } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
-            }
+    private func cachedRequest(endpoint: String) throws -> (URLRequest, Data)? {
+        guard let url = TBAKit.url(forEndpoint: endpoint) else {
+            throw APIError.invalidURL
         }
-    }
 
-    func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([]), true)
-            } else if let json = json as? [[String: Any]] {
-                let models = json.compactMap({
-                    return T(json: $0)
-                })
-                completion(.success(models), false)
-            } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
-            }
+        guard let cachedResponse = cacheStore?.get(forURL: url) else {
+            return nil
         }
+
+        var request = URLRequest(url: url)
+        request.addValue(cachedResponse.etag, forHTTPHeaderField: "If-None-Match")
+
+        return (request, cachedResponse.data)
     }
 
-    func callArray(method: String, completion: @escaping (Result<[Any], Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([]), true)
-            } else if let array = json as? [Any] {
-                completion(.success(array), false)
-            } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
-            }
+    private func decode<T: Decodable>(data: Data) throws -> T {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        do {
+            return try decoder.decode(T.self, from: data)
         }
-    }
-
-    func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([:]), true)
-            } else if let dict = json as? [String: Any] {
-                completion(.success(dict), false)
-            } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
-            }
+        catch {
+            throw APIError.invalidResponse(error)
         }
     }
 
