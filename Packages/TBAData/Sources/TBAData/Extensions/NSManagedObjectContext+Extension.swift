@@ -1,7 +1,7 @@
 import CoreData
 import Foundation
-import TBAUtils
 
+/*
 extension NSManagedObject {
 
     /** Syncronous, thread-safe method to get a typed value from a NSManagedObject. **/
@@ -23,14 +23,17 @@ extension NSManagedObject {
     }
 
 }
+*/
 
 extension NSManagedObjectContext {
 
     public func insertObject<A: NSManagedObject>() -> A where A: Managed {
-        guard let obj = NSEntityDescription.insertNewObject(forEntityName: A.entityName, into: self) as? A else { fatalError("Wrong object type") }
-        return obj
+        return performAndWait {
+            return A(context: self)
+        }
     }
 
+    /*
     @discardableResult
     public func saveOrRollback(errorRecorder: ErrorRecorder) -> Bool {
         do {
@@ -128,5 +131,6 @@ extension NSManagedObjectContext {
             delete(object)
         }
     }
+    */
 
 }
