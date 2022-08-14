@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Award" representedClassName="Award" syncable="YES">
-        <attribute name="awardTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="nameRaw" attributeType="String"/>
-        <attribute name="yearRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="TBAEvent"/>
-        <relationship name="recipientsRaw" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="AwardRecipient" inverseName="awardsRaw" inverseEntity="AwardRecipient"/>
-    </entity>
-    <entity name="AwardRecipient" representedClassName="AwardRecipient" syncable="YES">
-        <attribute name="awardeeRaw" optional="YES" attributeType="String"/>
-        <relationship name="awardsRaw" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Award" inverseName="recipientsRaw" inverseEntity="Award"/>
-        <relationship name="teamRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TBATeam"/>
-    </entity>
     <entity name="DistrictEventPoints" representedClassName="DistrictEventPoints" syncable="YES">
         <attribute name="alliancePointsRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="awardPointsRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
@@ -179,6 +167,18 @@
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES">
         <attribute name="notificationsRaw" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
     </entity>
+    <entity name="TBAAward" representedClassName="TBAAward" syncable="YES" codeGenerationType="class">
+        <attribute name="awardType" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="year" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="TBAEvent" inverseName="awards" inverseEntity="TBAEvent"/>
+        <relationship name="recipients" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="TBAAwardRecipient" inverseName="awards" inverseEntity="TBAAwardRecipient"/>
+    </entity>
+    <entity name="TBAAwardRecipient" representedClassName="TBAAwardRecipient" syncable="YES" codeGenerationType="class">
+        <attribute name="awardee" optional="YES" attributeType="String"/>
+        <relationship name="awards" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="TBAAward" inverseName="recipients" inverseEntity="TBAAward"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TBATeam" inverseName="awards" inverseEntity="TBATeam"/>
+    </entity>
     <entity name="TBADistrict" representedClassName="TBADistrict" syncable="YES" codeGenerationType="class">
         <attribute name="abbreviation" optional="YES" attributeType="String"/>
         <attribute name="key" attributeType="String"/>
@@ -221,16 +221,12 @@
         <attribute name="website" optional="YES" attributeType="String"/>
         <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="year" optional="YES" attributeType="Integer 64" minValueString="1992" usesScalarValueType="NO"/>
+        <relationship name="awards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TBAAward" inverseName="event" inverseEntity="TBAAward"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TBADistrict" inverseName="events" inverseEntity="TBADistrict"/>
         <relationship name="divisions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TBAEvent" inverseName="parentEvent" inverseEntity="TBAEvent"/>
         <relationship name="parentEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TBAEvent" inverseName="divisions" inverseEntity="TBAEvent"/>
-        <relationship name="teams" toMany="YES" deletionRule="Nullify" destinationEntity="TBATeam" inverseName="events" inverseEntity="TBATeam"/>
-        <relationship name="webcasts" toMany="YES" deletionRule="Cascade" destinationEntity="TBAWebcast" inverseName="events" inverseEntity="TBAWebcast"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="key"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
+        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TBATeam" inverseName="events" inverseEntity="TBATeam"/>
+        <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TBAWebcast" inverseName="events" inverseEntity="TBAWebcast"/>
     </entity>
     <entity name="TBATeam" representedClassName="TBATeam" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String"/>
@@ -252,6 +248,7 @@
         <attribute name="teamNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="website" optional="YES" attributeType="String"/>
         <attribute name="yearsParticipated" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int]"/>
+        <relationship name="awards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TBAAwardRecipient" inverseName="team" inverseEntity="TBAAwardRecipient"/>
         <relationship name="districts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TBADistrict" inverseName="teams" inverseEntity="TBADistrict"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TBAEvent" inverseName="teams" inverseEntity="TBAEvent"/>
         <uniquenessConstraints>
@@ -280,8 +277,7 @@
         <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="TBATeam"/>
     </entity>
     <elements>
-        <element name="Award" positionX="-54" positionY="135" width="128" height="104"/>
-        <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="74"/>
+        <element name="TBAAwardRecipient" positionX="-54" positionY="135" width="128" height="74"/>
         <element name="DistrictEventPoints" positionX="-54" positionY="135" width="128" height="164"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="119"/>
         <element name="EventAlliance" positionX="54" positionY="144" width="128" height="119"/>
@@ -305,10 +301,11 @@
         <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="73"/>
         <element name="Status" positionX="45" positionY="135" width="128" height="133"/>
         <element name="Subscription" positionX="54" positionY="144" width="128" height="58"/>
+        <element name="TBAAward" positionX="-54" positionY="135" width="128" height="104"/>
         <element name="TBADistrict" positionX="-63" positionY="135" width="128" height="119"/>
-        <element name="TBAEvent" positionX="-63" positionY="-18" width="128" height="524"/>
+        <element name="TBAEvent" positionX="-63" positionY="-18" width="128" height="539"/>
+        <element name="TBATeam" positionX="45" positionY="0" width="128" height="359"/>
         <element name="TBAWebcast" positionX="-45" positionY="144" width="128" height="104"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="179"/>
-        <element name="TBATeam" positionX="45" positionY="0" width="128" height="344"/>
     </elements>
 </model>

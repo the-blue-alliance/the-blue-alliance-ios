@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "TBAData",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v15),
+        .macOS(.v12),
     ],
     products: [
         .library(
@@ -16,15 +17,13 @@ let package = Package(
             targets: ["TBADataTesting"]),
     ],
     dependencies: [
-        .package(path: "../MyTBAKit"),
         .package(path: "../TBAKit"),
-        .package(path: "../TBAProtocols"),
         .package(path: "../TBAUtils"),
     ],
     targets: [
         .target(
             name: "TBAData",
-            dependencies: ["TBAKit", "MyTBAKit", "TBAProtocols", "TBAUtils"],
+            dependencies: ["TBAKit", "TBAUtils"],
             resources: [
                 .process("StatusDefaults.plist"),
                 .process("TBA.xcdatamodeld"),

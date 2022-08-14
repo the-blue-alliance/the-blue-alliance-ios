@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import TBAKit
+import TBAUtils
 
 //extension Team {
 //
@@ -87,7 +88,6 @@ extension TBATeam: Managed {
         }
     }
 
-    /*
     /**
      Insert a Team with a specified key in to the managed object context.
 
@@ -97,18 +97,17 @@ extension TBATeam: Managed {
 
      - Returns: The inserted Team.
      */
-    public static func insert(_ key: String, in context: NSManagedObjectContext) -> TBATeam {
-        let predicate = Team.predicate(key: key)
-        return findOrCreate(in: context, matching: predicate) { (team) in
-            team.keyRaw = key
+    public static func insert(_ key: String, in context: NSManagedObjectContext) throws -> TBATeam {
+        let predicate = TBATeam.predicate(key: key)
+        return try findOrCreate(in: context, matching: predicate) { (team) in
+            team.key = key
 
-            let teamNumberString = Team.trimFRCPrefix(key)
+            let teamNumberString = TBATeam.trimFRCPrefix(key)
             if let teamNumber = Int(teamNumberString) {
-                team.teamNumberRaw = NSNumber(value: teamNumber)
+                team.teamNumber = NSNumber(value: teamNumber)
             }
         }
     }
-    */
 
     /**
      Insert a Team with values from a TBAKit Team model in to the managed object context.
@@ -230,68 +229,71 @@ extension TBATeam: Managed {
 
 }
 
-//extension Team {
-//
-//    public static func districtPredicate(districtKey: String) -> NSPredicate {
-//        return NSPredicate(format: "ANY %K.%K = %@",
-//                           #keyPath(Team.districtsRaw), #keyPath(District.keyRaw), districtKey)
-//    }
-//
-//    public static func eventPredicate(eventKey: String) -> NSPredicate {
-//        return NSPredicate(format: "ANY %K.%K = %@",
-//                           #keyPath(Team.eventsRaw), #keyPath(Event.keyRaw), eventKey)
-//    }
-//
-//    public static func searchPredicate(searchText: String) -> NSPredicate {
-//        return Team.searchKeyPathPredicate(
-//            nicknameKeyPath: #keyPath(Team.nicknameRaw),
-//            teamNumberKeyPath: #keyPath(Team.teamNumberRaw.stringValue),
-//            cityKeyPath: #keyPath(Team.cityRaw),
-//            searchText: searchText
-//        )
-//    }
-//
-//    public static func searchKeyPathPredicate(nicknameKeyPath: String, teamNumberKeyPath: String, cityKeyPath: String, searchText: String) -> NSPredicate {
-//        return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@ OR %K contains[cd] %@)",
-//                           nicknameKeyPath, searchText,
-//                           teamNumberKeyPath, searchText,
-//                           cityKeyPath, searchText)
-//    }
-//
-//    public static func teamNumberSortDescriptor() -> NSSortDescriptor {
-//        return NSSortDescriptor(key: #keyPath(Team.teamNumberRaw), ascending: true)
-//    }
-//
-//    /**
-//     Returns an uppercased team number by removing the `frc` prefix on the key
-//     */
-//    public static func trimFRCPrefix(_ key: String) -> String {
-//        return key.trimPrefix("frc").uppercased()
-//    }
-//
-//    /**
-//     Returns an NSPredicate for full Team objects - aka, they have all required API fields.
-//     This includes key, name, teamNumber
-//     */
-//    public static func populatedTeamsPredicate() -> NSPredicate {
-//        let keys = [#keyPath(Team.keyRaw),
-//                    #keyPath(Team.nameRaw)]
-//        let format = keys.map {
-//            return String("\($0) != nil")
-//        }.joined(separator: " && ")
-//        return NSPredicate(format: format)
-//    }
-//
-//    /**
-//     The team number name for the team
-//     Ex: "Team 7332"
-//     */
-//    public var teamNumberNickname: String {
-//        return "Team \(teamNumber)"
-//    }
-//
-//}
-//
+extension TBATeam {
+
+    public static func districtPredicate(districtKey: String) -> NSPredicate {
+        return NSPredicate(format: "ANY %K.%K = %@",
+                           #keyPath(TBATeam.districts), #keyPath(TBADistrict.key), districtKey)
+    }
+
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "ANY %K.%K = %@",
+                           #keyPath(TBATeam.events), #keyPath(TBAEvent.key), eventKey)
+    }
+
+    public static func searchPredicate(searchText: String) -> NSPredicate {
+        return TBATeam.searchKeyPathPredicate(
+            nicknameKeyPath: #keyPath(TBATeam.nickname),
+            teamNumberKeyPath: #keyPath(TBATeam.teamNumber.stringValue),
+            cityKeyPath: #keyPath(TBATeam.city),
+            searchText: searchText
+        )
+    }
+
+    public static func searchKeyPathPredicate(nicknameKeyPath: String, teamNumberKeyPath: String, cityKeyPath: String, searchText: String) -> NSPredicate {
+        return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@ OR %K contains[cd] %@)",
+                           nicknameKeyPath, searchText,
+                           teamNumberKeyPath, searchText,
+                           cityKeyPath, searchText)
+    }
+
+    public static func teamNumberSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(TBATeam.teamNumber), ascending: true)
+    }
+
+    /**
+     Returns an uppercased team number by removing the `frc` prefix on the key
+     */
+    public static func trimFRCPrefix(_ key: String) -> String {
+        return key.trimPrefix("frc").uppercased()
+    }
+
+    /**
+     Returns an NSPredicate for full Team objects - aka, they have all required API fields.
+     This includes key, name, teamNumber
+     */
+    public static func populatedTeamsPredicate() -> NSPredicate {
+        let keys = [#keyPath(TBATeam.key),
+                    #keyPath(TBATeam.name)]
+        let format = keys.map {
+            return String("\($0) != nil")
+        }.joined(separator: " && ")
+        return NSPredicate(format: format)
+    }
+
+    /**
+     The team number name for the team
+     Ex: "Team 7332"
+     */
+    public var teamNumberNickname: String {
+        guard let teamNumber = teamNumber else {
+            return "Team ----"
+        }
+        return "Team \(teamNumber)"
+    }
+
+}
+
 //extension Team: Comparable {
 //
 //    public static func <(lhs: Team, rhs: Team) -> Bool {

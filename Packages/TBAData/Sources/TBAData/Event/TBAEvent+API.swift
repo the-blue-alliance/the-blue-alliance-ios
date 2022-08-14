@@ -183,56 +183,58 @@ extension TBAEvent: Managed {
 //            return EventAlliance.insert($0, eventKey: key, in: managedObjectContext)
 //        })
 //    }
-//
-//    /**
-//     Insert Awards with values from a TBAKit Award models in to the managed object context.
-//
-//     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards on the Event.
-//
-//     - Parameter awards: The TBAKit Award representations to set values from.
-//     */
-//    public func insert(_ awards: [TBAAward]) {
-//        guard let managedObjectContext = managedObjectContext else {
-//            return
-//        }
-//
-//        updateToManyRelationship(relationship: #keyPath(Event.awardsRaw), newValues: awards.map({
-//            return Award.insert($0, in: managedObjectContext)
-//        }))
-//    }
-//
-//    /**
-//     Insert Awards for a given Team key with values from a TBAKit Award models in to the managed object context.
-//
-//     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a Team key on the Event.
-//
-//     - Parameter awards: The TBAKit Award representations to set values from.
-//
-//     - Parameter teamKey: The key for the Team the Awards belong to.
-//     */
-//    public func insert(_ awards: [TBAAward], teamKey: String) {
-//        guard let managedObjectContext = managedObjectContext else {
-//            return
-//        }
-//
-//        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
-//        let oldAwards = self.awards.filter {
-//            return teamPredicate.evaluate(with: $0)
-//        }
-//
-//        // Insert new Awards
-//        let awards = awards.map({ (model: TBAAward) -> Award in
-//            let a = Award.insert(model, in: managedObjectContext)
-//            addToAwardsRaw(a)
-//            return a
-//        })
-//
-//        // Delete orphaned Awards for this Event/TeamKey
-//        Set(oldAwards).subtracting(Set(awards)).forEach {
-//            managedObjectContext.delete($0)
-//        }
-//    }
-//
+
+    /**
+     Insert Awards with values from a TBAKit Award models in to the managed object context.
+
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards on the Event.
+
+     - Parameter awards: The TBAKit Award representations to set values from.
+     */
+    public func insert(_ awards: [APIAward]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        /* TODO: Uncomment
+        try updateToManyRelationship(relationship: #keyPath(TBAEvent.awards), newValues: awards.map({
+            return try TBAAward.insert($0, in: managedObjectContext)
+        }))
+        */
+    }
+
+    /**
+     Insert Awards for a given Team key with values from a TBAKit Award models in to the managed object context.
+
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a Team key on the Event.
+
+     - Parameter awards: The TBAKit Award representations to set values from.
+
+     - Parameter teamKey: The key for the Team the Awards belong to.
+     */
+    public func insert(_ awards: [APIAward], teamKey: String) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        let teamPredicate = TBAAward.teamPredicate(teamKey: teamKey)
+        let oldAwards = self.awards?.filter {
+            return teamPredicate.evaluate(with: $0)
+        }
+
+        // Insert new Awards
+        let awards = try awards.map { (model: APIAward) -> TBAAward in
+            let a = try TBAAward.insert(model, in: managedObjectContext)
+            addToAwards(a)
+            return a
+        }
+
+        // Delete orphaned Awards for this Event/TeamKey
+        Set(oldAwards).subtracting(Set(awards)).forEach {
+            managedObjectContext.delete($0)
+        }
+    }
+
 //    /**
 //     Insert an EventInsight with values from TBAKit EventInsight model in to the managed object context.
 //

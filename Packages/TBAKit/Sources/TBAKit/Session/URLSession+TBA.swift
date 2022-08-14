@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(macOS 12.0, *) // TODO: Remove
 extension URLSession: TBASession {
 
     public func data(for request: URLRequest) async throws -> (Data, URLResponse) {

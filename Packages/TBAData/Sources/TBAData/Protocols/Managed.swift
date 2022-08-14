@@ -23,10 +23,10 @@ extension Managed where Self: NSManagedObject {
         return object
     }
 
-    public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: @escaping (Self) -> Void) async throws -> Self {
+    public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: @escaping (Self) throws -> Void) async throws -> Self {
         let object = try await findOrFetch(in: context, matching: predicate) ?? context.insertObject()
-        await context.perform {
-            configure(object)
+        try await context.perform {
+            try configure(object)
         }
         return object
     }
