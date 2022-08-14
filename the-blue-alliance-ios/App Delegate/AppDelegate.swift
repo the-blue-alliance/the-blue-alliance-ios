@@ -175,47 +175,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Our app setup operation will load our persistent stores, propogate persistance container
         let appSetupOperation = AppSetupOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        weak var weakAppSetupOperation = appSetupOperation
-        appSetupOperation.completionBlock = { [unowned self] in
-            if let error = weakAppSetupOperation?.completionError as NSError? {
-                errorRecorder.record(error)
-                DispatchQueue.main.async {
-                    AppDelegate.showFatalError(error, in: window)
-                }
-            } else {
-                self.searchService.refresh()
-
-                // Register retries for our status service on the main thread
-                DispatchQueue.main.async {
-                    self.remoteConfigService.registerRetryable(initiallyRetry: true)
-                    self.statusService.registerRetryable(initiallyRetry: true)
-
-                    // Check our minimum app version
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
-                        return
-                    }
-
-                    guard let window = self.window else {
-                        fatalError("Window not setup when setting root vc")
-                    }
-                    guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-                        fatalError("Unable to snapshot root view controller")
-                    }
-                    self.rootViewController.view.addSubview(snapshot)
-                    window.rootViewController = self.rootViewController
-
-                    // 0.35 is an iOS animation magic number... for now
-                    UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                        snapshot.layer.opacity = 0;
-                    }, completion: { (status) in
-                        snapshot.removeFromSuperview()
-                        self.handoffService.appSetup = true
-                    })
-                }
+        do {
+            // TODO: This needs to move elsewhere to support the await
+            // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/942
+            try await appSetupOperation.execute()
+        } catch {
+            errorRecorder.record(error)
+            DispatchQueue.main.async {
+                AppDelegate.showFatalError(error as NSError, in: window)
             }
+            return false
         }
-        OperationQueue.main.addOperation(appSetupOperation)
+
+        self.searchService.refresh()
+
+        // Register retries for our status service on the main thread
+        DispatchQueue.main.async {
+            self.remoteConfigService.registerRetryable(initiallyRetry: true)
+            self.statusService.registerRetryable(initiallyRetry: true)
+
+            // Check our minimum app version
+            if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
+                self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
+                return
+            }
+
+            guard let window = self.window else {
+                fatalError("Window not setup when setting root vc")
+            }
+            guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+                fatalError("Unable to snapshot root view controller")
+            }
+            self.rootViewController.view.addSubview(snapshot)
+            window.rootViewController = self.rootViewController
+
+            // 0.35 is an iOS animation magic number... for now
+            UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                snapshot.layer.opacity = 0;
+            }, completion: { (status) in
+                snapshot.removeFromSuperview()
+                self.handoffService.appSetup = true
+            })
+        }
 
         return true
     }
