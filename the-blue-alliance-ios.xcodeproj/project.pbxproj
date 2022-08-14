@@ -113,7 +113,6 @@
 		92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */; };
 		92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */; };
 		9287013E20CD72EC0077D6DA /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9287013D20CD72EC0077D6DA /* StatusDefaults.plist */; };
-		9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */; };
 		9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */; };
 		9288BD1423CED19200157F74 /* MatchBreakdownConfigurator2018.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */; };
 		9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */; };
@@ -158,7 +157,6 @@
 		92AAA4DC27F81BEB00504C0D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 92AAA4DB27F81BEB00504C0D /* FirebaseMessaging */; };
 		92AAA4DE27F81BEB00504C0D /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 92AAA4DD27F81BEB00504C0D /* FirebaseRemoteConfig */; };
 		92AAA4E127F81C5600504C0D /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 92AAA4E027F81C5600504C0D /* GoogleSignIn */; };
-		92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */; };
 		92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectTableViewController.swift */; };
 		92AF73D821EB9E1E006A338D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF73D721EB9E1E006A338D /* SearchViewController.swift */; };
 		92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B07370235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift */; };
@@ -177,7 +175,6 @@
 		92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */; };
 		92BA25BE238F4C6300EC796D /* RemoteConfigDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */; };
 		92BA25C0238F4E9000EC796D /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */; };
-		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
 		92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B63214F17440035AF28 /* URLOpener.swift */; };
 		92BC270727FA042C000DBAC4 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 92BC270627FA042C000DBAC4 /* Search */; };
@@ -205,6 +202,9 @@
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
 		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
 		92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */; };
+		92FF02E328A9534800CB7C9F /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF02E028A9534800CB7C9F /* AppSetupOperation.swift */; };
+		92FF02E428A9534800CB7C9F /* DestroyPersistentStoreOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF02E128A9534800CB7C9F /* DestroyPersistentStoreOperation.swift */; };
+		92FF02E528A9534800CB7C9F /* PersistentContainerOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF02E228A9534800CB7C9F /* PersistentContainerOperation.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
 		92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */; };
 		92FF10ED21A61A1B003BC5C4 /* TeamAtEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E621A61A1B003BC5C4 /* TeamAtEventViewController.swift */; };
@@ -351,7 +351,6 @@
 		92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventTeamStatTableViewCell.xib; sourceTree = "<group>"; };
 		92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatTableViewCell.swift; sourceTree = "<group>"; };
 		9287013D20CD72EC0077D6DA /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
-		9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation.swift; sourceTree = "<group>"; };
 		9288BD1123CEC40200157F74 /* MatchBreakdownConfigurator2017.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2017.swift; sourceTree = "<group>"; };
 		9288BD1323CED19200157F74 /* MatchBreakdownConfigurator2018.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2018.swift; sourceTree = "<group>"; };
 		9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2019.swift; sourceTree = "<group>"; };
@@ -393,7 +392,6 @@
 		92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+SplitView.swift"; sourceTree = "<group>"; };
 		92A5E5D121A22D550025CC85 /* URL+Reachable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Reachable.swift"; sourceTree = "<group>"; };
 		92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix.swift"; sourceTree = "<group>"; };
-		92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestroyPersistentStoreOperation.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTableViewController.swift; sourceTree = "<group>"; };
 		92AF73D721EB9E1E006A338D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		92B07370235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSourceFetchedResultsController.swift; sourceTree = "<group>"; };
@@ -412,7 +410,6 @@
 		92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchSummaryView.xib; sourceTree = "<group>"; };
 		92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RemoteConfigDefaults.plist; sourceTree = "<group>"; };
 		92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
-		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
 		92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperationTests.swift; sourceTree = "<group>"; };
 		92BB718820D216D50081F4E5 /* EmptyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyViewController.xib; sourceTree = "<group>"; };
 		92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerTests.swift; sourceTree = "<group>"; };
@@ -458,6 +455,9 @@
 		92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewModel.swift; sourceTree = "<group>"; };
 		92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewTests.swift; sourceTree = "<group>"; };
 		92FCE586234839AA00DD284B /* ContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewControllerTests.swift; sourceTree = "<group>"; };
+		92FF02E028A9534800CB7C9F /* AppSetupOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
+		92FF02E128A9534800CB7C9F /* DestroyPersistentStoreOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestroyPersistentStoreOperation.swift; sourceTree = "<group>"; };
+		92FF02E228A9534800CB7C9F /* PersistentContainerOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamEventsViewController.swift; sourceTree = "<group>"; };
 		92FF10E621A61A1B003BC5C4 /* TeamAtEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtEventViewController.swift; sourceTree = "<group>"; };
@@ -761,8 +761,8 @@
 		9287014320CD8BF60077D6DA /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				92FF02DF28A9534800CB7C9F /* App Setup */,
 				92761F77228E47DC00CEDF68 /* Media */,
-				92BB717920CE05770081F4E5 /* App Setup */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -1051,16 +1051,6 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
-		92BB717920CE05770081F4E5 /* App Setup */ = {
-			isa = PBXGroup;
-			children = (
-				92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */,
-				92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */,
-				9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */,
-			);
-			path = "App Setup";
-			sourceTree = "<group>";
-		};
 		92BB717A20CE115D0081F4E5 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
@@ -1226,6 +1216,16 @@
 				92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */,
 			);
 			path = Teams;
+			sourceTree = "<group>";
+		};
+		92FF02DF28A9534800CB7C9F /* App Setup */ = {
+			isa = PBXGroup;
+			children = (
+				92FF02E028A9534800CB7C9F /* AppSetupOperation.swift */,
+				92FF02E128A9534800CB7C9F /* DestroyPersistentStoreOperation.swift */,
+				92FF02E228A9534800CB7C9F /* PersistentContainerOperation.swift */,
+			);
+			path = "App Setup";
 			sourceTree = "<group>";
 		};
 		92FF10E221A61A1B003BC5C4 /* Team */ = {
@@ -1600,6 +1600,7 @@
 				92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */,
 				92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
+				92FF02E528A9534800CB7C9F /* PersistentContainerOperation.swift in Sources */,
 				9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */,
 				92C079C723F99CA400AE2AFA /* EventInsightsConfigurator2020.swift in Sources */,
@@ -1616,6 +1617,7 @@
 				921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */,
 				92F8E356209AAE890094213F /* PushService.swift in Sources */,
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
+				92FF02E328A9534800CB7C9F /* AppSetupOperation.swift in Sources */,
 				928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */,
 				92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */,
 				14796940215E9A590075AF4E /* MatchViewModel.swift in Sources */,
@@ -1624,7 +1626,6 @@
 				92FF110721A61AF6003BC5C4 /* EventRankingsViewController.swift in Sources */,
 				92B3873E21CAF6740041A049 /* IconTableViewCell.swift in Sources */,
 				92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */,
-				9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */,
 				929F571C2092B77300E5313A /* TBATableViewController.swift in Sources */,
@@ -1668,6 +1669,7 @@
 				929F57262092BA1C00E5313A /* Persistable.swift in Sources */,
 				92FF10F821A61AC2003BC5C4 /* MatchesViewController.swift in Sources */,
 				92B1DF6C23655F74008130F6 /* CollectionViewDataSourceFetchedResultsController.swift in Sources */,
+				92FF02E428A9534800CB7C9F /* DestroyPersistentStoreOperation.swift in Sources */,
 				92943B08222E1DF700EA35B2 /* SwitchTableViewCell.swift in Sources */,
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
 				92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */,
@@ -1687,8 +1689,6 @@
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
 				9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
-				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
-				92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */,
 				92BA25C0238F4E9000EC796D /* RemoteConfigService.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
