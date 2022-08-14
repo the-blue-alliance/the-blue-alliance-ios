@@ -1,63 +1,53 @@
 import CoreData
 import Foundation
 import TBAData
-import TBAOperation
 import TBAUtils
 import UIKit
 
-class FetchMediaOperation: TBAOperation {
+struct FetchMediaOperation {
 
-    let errorRecorder: ErrorRecorder
-    let media: TeamMedia
-    let persistentContainer: NSPersistentContainer
-
-    var task: URLSessionTask?
+    private let errorRecorder: ErrorRecorder
+    private let media: TeamMedia
+    private let persistentContainer: NSPersistentContainer
 
     public init(errorRecorder: ErrorRecorder, media: TeamMedia, persistentContainer: NSPersistentContainer) {
         self.errorRecorder = errorRecorder
         self.media = media
         self.persistentContainer = persistentContainer
-
-        super.init()
     }
 
-    override open func execute() {
+    func execute() async {
         // Make sure we can attempt to fetch our media
         guard let url = media.imageDirectURL else {
             if let managedObjectContext = media.managedObjectContext {
-                managedObjectContext.performChangesAndWait({ [weak self] in
-                    self?.media.imageError = MediaError.error("No url for media")
-                }, errorRecorder: errorRecorder)
+                managedObjectContext.performAndWait {
+                    self.media.imageError = MediaError.error("No url for media")
+                }
             }
-            finish()
             return
         }
 
-        task = URLSession.shared.dataTask(with: url, completionHandler: { [self] (data, _, error) in
+        if #available(iOS 15.0, *) {
             let backgroundContext = persistentContainer.newBackgroundContext()
-            backgroundContext.performChangesAndWait({ [unowned self] in
-                let backgroundMedia = backgroundContext.object(with: self.media.objectID) as! TeamMedia
-                if let error = error {
-                    backgroundMedia.imageError = MediaError.error(error.localizedDescription)
-                } else if let data = data {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                await backgroundContext.perform {
+                    let backgroundMedia = backgroundContext.object(with: self.media.objectID) as! TeamMedia
                     if let image = UIImage(data: data) {
                         backgroundMedia.image = image
                     } else {
                         backgroundMedia.imageError = MediaError.error("Invalid data for request")
                     }
-                } else {
-                    backgroundMedia.imageError = MediaError.error("No data for request")
                 }
-            }, errorRecorder: errorRecorder)
-            finish()
-        })
-        task?.resume()
-    }
-
-    override open func cancel() {
-        task?.cancel()
-
-        super.cancel()
+            } catch {
+                await backgroundContext.perform {
+                    let backgroundMedia = backgroundContext.object(with: self.media.objectID) as! TeamMedia
+                    backgroundMedia.imageError = MediaError.error(error.localizedDescription)
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
 }

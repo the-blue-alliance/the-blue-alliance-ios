@@ -246,7 +246,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         return fetchedResultsController.isDataSourceEmpty
     }
 
-    @objc func refresh() {
+    @objc func refresh() async {
         guard let year = year else {
             updateRefresh()
             return
@@ -270,8 +270,6 @@ extension TeamMediaCollectionViewController: Refreshable {
         //    and second, it prevents a user from refreshing again and queueing duplicate media download actions,
         //    which can be expensive.
 
-        var finalOperation: Operation!
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchTeamMedia(key: team.key, year: year) { [self] (result, notModified) in
             guard case .success(let media) = result, !notModified else {
@@ -286,37 +284,22 @@ extension TeamMediaCollectionViewController: Refreshable {
                 self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
-        let fetchMediaOperation = BlockOperation {
-            for media in self.team.media {
-                self.fetchMedia(media, finalOperation)
-            }
+        // TODO: Update with new TBAData async/await
+        for media in self.team.media {
+            await fetchMedia(media)
         }
-        fetchMediaOperation.addDependency(operation)
-        OperationQueue.main.addOperation(fetchMediaOperation)
-
-        finalOperation = addRefreshOperations([operation])
-        finalOperation.addDependency(fetchMediaOperation)
     }
 
-    private func fetchMedia(_ media: TeamMedia, _ dependentOperation: Operation) {
-        let refreshOperation = BlockOperation { [weak self] in
-            guard let self = self else { return }
-            var snapshot = self.dataSource.snapshot()
-            // Reload our cell, so we can get rid of our loading state
-            if let indexPath = self.indexPath(for: media) {
-                snapshot.reloadItems([snapshot.itemIdentifiers[indexPath.row]])
-                self.dataSource.apply(snapshot)
-            }
-        }
-
+    private func fetchMedia(_ media: TeamMedia) async {
         let fetchMediaOperation = FetchMediaOperation(errorRecorder: errorRecorder, media: media, persistentContainer: persistentContainer)
-        refreshOperation.addDependency(fetchMediaOperation)
-        [fetchMediaOperation, refreshOperation].forEach {
-            dependentOperation.addDependency($0)
-        }
+        await fetchMediaOperation.execute()
 
-        OperationQueue.main.addOperation(refreshOperation)
-        fetchMediaOperationQueue.addOperation(fetchMediaOperation)
+        var snapshot = dataSource.snapshot()
+        // Reload our cell, so we can get rid of our loading state
+        if let indexPath = self.indexPath(for: media) {
+            snapshot.reloadItems([snapshot.itemIdentifiers[indexPath.row]])
+            dataSource.apply(snapshot)
+        }
     }
 
 }
