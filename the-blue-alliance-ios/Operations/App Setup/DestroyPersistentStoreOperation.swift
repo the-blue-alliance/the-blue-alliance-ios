@@ -1,26 +1,23 @@
 import CoreData
 import Foundation
 import TBAKit
-import TBAOperation
 
-class DestroyPersistentStoreOperation: TBAOperation {
+struct DestroyPersistentStoreOperation {
 
     private static let CoreDataVersionKey: String = "CoreDataVersion"
     private static let CoreDataVersion: Int = 2
 
-    var persistentContainer: NSPersistentContainer
-    var tbaKit: TBAKit
-    var userDefaults: UserDefaults
+    private let persistentContainer: NSPersistentContainer
+    private let tbaKit: TBAKit
+    private let userDefaults: UserDefaults
 
     init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.persistentContainer = persistentContainer
         self.tbaKit = tbaKit
         self.userDefaults = userDefaults
-
-        super.init()
     }
 
-    override func execute() {
+    func execute() throws {
         // See if we need to nuke our persistent store due to an upgrade
         let coreDataVersion = userDefaults.integer(forKey: DestroyPersistentStoreOperation.CoreDataVersionKey)
         if coreDataVersion < DestroyPersistentStoreOperation.CoreDataVersion {
@@ -28,12 +25,8 @@ class DestroyPersistentStoreOperation: TBAOperation {
             for url in FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask) {
                 let coreDataURL = url.appendingPathComponent("TBA.sqlite")
                 if FileManager.default.fileExists(atPath: coreDataURL.path) {
-                    do {
-                        try persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: coreDataURL, ofType: "sqlite", options: nil)
-                        success = true
-                    } catch {
-                        completionError = error
-                    }
+                    try persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: coreDataURL, ofType: "sqlite", options: nil)
+                    success = true
                 }
             }
             if success {
@@ -42,7 +35,6 @@ class DestroyPersistentStoreOperation: TBAOperation {
                 userDefaults.synchronize()
             }
         }
-        finish()
     }
     
 }
