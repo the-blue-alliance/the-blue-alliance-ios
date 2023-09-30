@@ -1031,7 +1031,7 @@ extension Event {
         let predicate = NSPredicate(format: "%K == %ld && (%K >= %@) AND (%K <= %@)",
                                     #keyPath(Event.eventTypeRaw), EventType.offseason.rawValue,
                                     #keyPath(Event.startDateRaw), firstDayOfMonth,
-                                    #keyPath(Event.endDateRaw), lastDayOfMonth)
+                                    #keyPath(Event.startDateRaw), lastDayOfMonth)
         return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
     }
 
