@@ -241,7 +241,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        GIDSignIn.sharedInstance.handle(url)
+        return GIDSignIn.sharedInstance.handle(url)
     }
 
     // MARK: Search Delegate Methods
@@ -296,11 +296,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setupGoogleAuthentication() {
         // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
         if Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() {
-            GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
-                if error != nil || user == nil {
-                    // Show the app's signed-out state.
-                } else {
-                    // Show the app's signed-in state.
+            GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
+                if let error = error {
+                    errorRecorder.record(error)
+                    return
+                }
+
+                guard let user = user, let idToken = user.idToken?.tokenString else { return }
+
+                let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                               accessToken: user.accessToken.tokenString)
+
+                Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
+                    if let error = error {
+                        errorRecorder.record(error)
+                    } else {
+                        PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
+                            if let error = error {
+                                errorRecorder.record(error)
+                            }
+                        }
+                    }
                 }
             }
         }

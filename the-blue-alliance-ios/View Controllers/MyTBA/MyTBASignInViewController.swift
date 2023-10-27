@@ -1,3 +1,4 @@
+import FirebaseAuth
 import Foundation
 import UIKit
 import GoogleSignIn
@@ -73,13 +74,33 @@ class MyTBASignInViewController: UIViewController {
     // MARK: - IBActions
 
     @IBAction private func signIn() {
-        // TODO: We need a clientID here
-        // guard let clientID = clientID else { return }
-        let configuration = GIDConfiguration(clientID: "")
-        GIDSignIn.sharedInstance.signIn(with: configuration, presenting: self) { user, error in
-            guard error == nil else { return }
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { result, error in
+            // Don't respond to errors from signInSilently or a user cancelling a sign in
+            if let error = error as NSError?, error.code == GIDSignInError.canceled.rawValue {
+                return
+            } else if let error = error {
+                // errorRecorder.record(error)
+                // signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
+                return
+            }
 
-            // If sign in succeeded, display the app's main content View.
+            guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
+
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                           accessToken: user.accessToken.tokenString)
+
+            Auth.auth().signIn(with: credential) { (_, error) in
+                if let error = error {
+                    // errorRecorder.record(error)
+                    // signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
+                } else {
+                    PushService.requestAuthorizationForNotifications { (_, error) in
+                        if let error = error {
+                            // errorRecorder.record(error)
+                        }
+                    }
+                }
+            }
         }
     }
 
