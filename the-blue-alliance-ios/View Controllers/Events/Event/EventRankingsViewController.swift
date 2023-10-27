@@ -36,8 +36,8 @@ class EventRankingsViewController: TBATableViewController {
 
         tableView.registerReusableCell(RankingTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
     }
 
     // MARK: UITableView Delegate

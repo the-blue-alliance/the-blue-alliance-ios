@@ -37,8 +37,8 @@ class DistrictsViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
     }
 
     // MARK: UITableView Delegate
