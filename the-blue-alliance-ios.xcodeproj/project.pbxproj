@@ -24,6 +24,12 @@
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
 		92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92009B5623DD49A60058E567 /* HandoffServiceTests.swift */; };
+		920240072AEB6AAD0003D118 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 920240062AEB6AAD0003D118 /* PureLayout */; };
+		920240092AEB6AC30003D118 /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 920240082AEB6AC30003D118 /* TBAOperation */; };
+		9202400B2AEB6ACF0003D118 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400A2AEB6ACF0003D118 /* Search */; };
+		9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400C2AEB6ADC0003D118 /* MyTBAKit */; };
+		9202400F2AEB6ADC0003D118 /* TBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400E2AEB6ADC0003D118 /* TBAKit */; };
+		920240112AEB6AE60003D118 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 920240102AEB6AE60003D118 /* TBAData */; };
 		9204401526D2B65D00B94661 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 9204401426D2B65D00B94661 /* Search */; };
 		9204401726D2B68A00B94661 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 9204401626D2B68A00B94661 /* TBAData */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
@@ -488,11 +494,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9202400B2AEB6ACF0003D118 /* Search in Frameworks */,
 				924BDD8C26D2B366008BE7D2 /* FirebaseAuth in Frameworks */,
 				924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */,
+				9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */,
 				924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */,
+				920240112AEB6AE60003D118 /* TBAData in Frameworks */,
 				924BDD8726D2B277008BE7D2 /* XCDYouTubeKit in Frameworks */,
+				920240072AEB6AAD0003D118 /* PureLayout in Frameworks */,
+				920240092AEB6AC30003D118 /* TBAOperation in Frameworks */,
 				924BDD8A26D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				9202400F2AEB6ADC0003D118 /* TBAKit in Frameworks */,
 				924BDD9226D2B366008BE7D2 /* FirebaseRemoteConfig in Frameworks */,
 				924BDD9526D2B391008BE7D2 /* GoogleSignIn in Frameworks */,
 			);
@@ -1373,6 +1385,12 @@
 				924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */,
 				924BDD9126D2B366008BE7D2 /* FirebaseRemoteConfig */,
 				924BDD9426D2B391008BE7D2 /* GoogleSignIn */,
+				920240062AEB6AAD0003D118 /* PureLayout */,
+				920240082AEB6AC30003D118 /* TBAOperation */,
+				9202400A2AEB6ACF0003D118 /* Search */,
+				9202400C2AEB6ADC0003D118 /* MyTBAKit */,
+				9202400E2AEB6ADC0003D118 /* TBAKit */,
+				920240102AEB6AE60003D118 /* TBAData */,
 			);
 			productName = "the-blue-alliance";
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
@@ -1516,14 +1534,18 @@
 			files = (
 			);
 			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
 			);
 			name = "Run FirebaseCrashlytics";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2131,6 +2153,31 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		920240062AEB6AAD0003D118 /* PureLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */;
+			productName = PureLayout;
+		};
+		920240082AEB6AC30003D118 /* TBAOperation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAOperation;
+		};
+		9202400A2AEB6ACF0003D118 /* Search */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Search;
+		};
+		9202400C2AEB6ADC0003D118 /* MyTBAKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MyTBAKit;
+		};
+		9202400E2AEB6ADC0003D118 /* TBAKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAKit;
+		};
+		920240102AEB6AE60003D118 /* TBAData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAData;
+		};
 		9204401426D2B65D00B94661 /* Search */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Search;

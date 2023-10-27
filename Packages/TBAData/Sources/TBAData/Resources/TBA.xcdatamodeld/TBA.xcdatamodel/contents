@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES">
         <attribute name="awardTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="nameRaw" attributeType="String"/>
@@ -294,36 +294,4 @@
         <attribute name="typeRaw" attributeType="String"/>
         <relationship name="eventsRaw" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcastsRaw" inverseEntity="Event"/>
     </entity>
-    <elements>
-        <element name="Award" positionX="-54" positionY="135" width="128" height="118"/>
-        <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="88"/>
-        <element name="District" positionX="-63" positionY="135" width="128" height="148"/>
-        <element name="DistrictEventPoints" positionX="-54" positionY="135" width="128" height="178"/>
-        <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="133"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="658"/>
-        <element name="EventAlliance" positionX="54" positionY="144" width="128" height="133"/>
-        <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="103"/>
-        <element name="EventInsights" positionX="45" positionY="135" width="128" height="88"/>
-        <element name="EventRanking" positionX="160" positionY="192" width="128" height="223"/>
-        <element name="EventRankingStat" positionX="54" positionY="144" width="128" height="88"/>
-        <element name="EventRankingStatInfo" positionX="45" positionY="135" width="128" height="103"/>
-        <element name="EventStatus" positionX="45" positionY="135" width="128" height="193"/>
-        <element name="EventStatusAlliance" positionX="63" positionY="153" width="128" height="118"/>
-        <element name="EventStatusPlayoff" positionX="72" positionY="162" width="128" height="148"/>
-        <element name="EventStatusQual" positionX="54" positionY="144" width="128" height="103"/>
-        <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="118"/>
-        <element name="Favorite" positionX="45" positionY="135" width="128" height="43"/>
-        <element name="Match" positionX="-54" positionY="135" width="128" height="268"/>
-        <element name="MatchAlliance" positionX="45" positionY="135" width="128" height="133"/>
-        <element name="MatchVideo" positionX="45" positionY="135" width="128" height="88"/>
-        <element name="MatchZebra" positionX="45" positionY="135" width="128" height="103"/>
-        <element name="MatchZebraAlliance" positionX="54" positionY="144" width="128" height="88"/>
-        <element name="MatchZebraTeam" positionX="63" positionY="153" width="128" height="103"/>
-        <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="73"/>
-        <element name="Status" positionX="45" positionY="135" width="128" height="133"/>
-        <element name="Subscription" positionX="54" positionY="144" width="128" height="58"/>
-        <element name="Team" positionX="-54" positionY="135" width="128" height="583"/>
-        <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="193"/>
-        <element name="Webcast" positionX="-45" positionY="144" width="128" height="118"/>
-    </elements>
 </model>

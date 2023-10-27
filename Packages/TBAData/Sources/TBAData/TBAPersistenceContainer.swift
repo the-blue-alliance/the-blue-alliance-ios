@@ -13,8 +13,7 @@ public class TBAPersistenceContainer: NSPersistentContainer {
     }
 
     private static let managedObjectModel: NSManagedObjectModel? = {
-        let modelBundle = Bundle(for: TBAPersistenceContainer.self)
-        return NSManagedObjectModel.mergedModel(from: [modelBundle])
+        return NSManagedObjectModel.mergedModel(from: [Bundle.module])
     } ()
 
     override public init(name: String, managedObjectModel model: NSManagedObjectModel) {
