@@ -1005,9 +1005,6 @@
 				92775E3626D01C9700539304 /* TBAOperation */,
 				92775E3826D01D1400539304 /* TBAProtocols */,
 				92A7B62F26D01BB900EECCC9 /* TBAUtils */,
-				92C5FBE02B00388F0006AE48 /* MyTBAKit */,
-				92C5FBE12B00389D0006AE48 /* Search */,
-				92C5FBE22B0038E70006AE48 /* TBAData */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
