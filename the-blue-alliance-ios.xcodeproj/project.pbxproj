@@ -561,14 +561,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		92004C6221C21BC600A858C8 /* App Icons */ = {
+		92004C6221C21BC600A858C8 /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
 				9244ABB02B00398B007BA24C /* 2019DeepSpace */,
 				9244ABAA2B00398B007BA24C /* 2020InfiniteRecharge */,
 				9244ABAD2B00398B007BA24C /* 2022RapidReact */,
 			);
-			path = "App Icons";
+			path = AppIcons;
 			sourceTree = "<group>";
 		};
 		921F609723CD4DE000FE633B /* Breakdown */ = {
@@ -587,7 +587,7 @@
 			path = Breakdown;
 			sourceTree = "<group>";
 		};
-		923A0D7620D21D3800BF5E31 /* Launch Views */ = {
+		923A0D7620D21D3800BF5E31 /* LaunchViews */ = {
 			isa = PBXGroup;
 			children = (
 				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
@@ -595,10 +595,10 @@
 				92E9F0AA216C439700C1F916 /* NoDataViewController.swift */,
 				924AFD782171AB1A00D7BE7E /* NoDataView.xib */,
 			);
-			path = "Launch Views";
+			path = LaunchViews;
 			sourceTree = "<group>";
 		};
-		923AEE8F2165966C00EF50C8 /* App Delegate */ = {
+		923AEE8F2165966C00EF50C8 /* AppDelegate */ = {
 			isa = PBXGroup;
 			children = (
 				92B0AA3A20CB837A0074FDF1 /* main.swift */,
@@ -606,7 +606,7 @@
 				92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */,
 				92598CC624A92AFE007E08CB /* Dependencies.swift */,
 			);
-			path = "App Delegate";
+			path = AppDelegate;
 			sourceTree = "<group>";
 		};
 		92435E2A23CBC21300CDD2D4 /* Stats */ = {
@@ -807,10 +807,10 @@
 			isa = PBXGroup;
 			children = (
 				927246C12AFFFC8900EF7796 /* Auth */,
-				923AEE8F2165966C00EF50C8 /* App Delegate */,
-				923A0D7620D21D3800BF5E31 /* Launch Views */,
+				923AEE8F2165966C00EF50C8 /* AppDelegate */,
+				923A0D7620D21D3800BF5E31 /* LaunchViews */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
-				92004C6221C21BC600A858C8 /* App Icons */,
+				92004C6221C21BC600A858C8 /* AppIcons */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
 				92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */,
@@ -821,13 +821,13 @@
 				92F8E354209AAE400094213F /* Services */,
 				92EA0CEF1E2C296300C12A4C /* Protocols */,
 				92A5E5C721A22D550025CC85 /* Extensions */,
-				92FFE5221E7C994B0037E48C /* View Elements */,
-				92942DAD1E215722008E79CA /* View Controllers */,
+				92FFE5221E7C994B0037E48C /* ViewElements */,
+				92942DAD1E215722008E79CA /* ViewControllers */,
 			);
 			path = "the-blue-alliance-ios";
 			sourceTree = "<group>";
 		};
-		92942DAD1E215722008E79CA /* View Controllers */ = {
+		92942DAD1E215722008E79CA /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				92CAF54C240774A80078CA0A /* Root */,
@@ -840,7 +840,7 @@
 				92A321C5214EF81700FDADFB /* Settings */,
 				92FF10F221A61AC2003BC5C4 /* Match */,
 			);
-			path = "View Controllers";
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		92942DB21E215B08008E79CA /* Events */ = {
@@ -1318,7 +1318,7 @@
 			path = myTBA;
 			sourceTree = "<group>";
 		};
-		92FFE5221E7C994B0037E48C /* View Elements */ = {
+		92FFE5221E7C994B0037E48C /* ViewElements */ = {
 			isa = PBXGroup;
 			children = (
 				92B55628215FCB0900C1D9A3 /* Protocols */,
@@ -1331,7 +1331,7 @@
 				929BBB061EC55745006D3854 /* Info */,
 				9274E14321B10D8F00F5D5D0 /* Settings */,
 			);
-			path = "View Elements";
+			path = ViewElements;
 			sourceTree = "<group>";
 		};
 		92FFE5231E7C994B0037E48C /* Events */ = {
