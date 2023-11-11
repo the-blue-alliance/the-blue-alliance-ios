@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Agrume",
+        "repositoryURL": "git@github.com:JanGorman/Agrume.git",
+        "state": {
+          "branch": null,
+          "revision": "32d6a31d87aa6aed1c8f8162cc8e25915bbbc510",
+          "version": "5.8.7"
+        }
+      },
+      {
         "package": "AppAuth",
         "repositoryURL": "https://github.com/openid/AppAuth-iOS.git",
         "state": {
@@ -143,6 +152,15 @@
           "branch": null,
           "revision": "1f62db409f2c9b0223a3f68567b4a01333aae778",
           "version": "1.17.0"
+        }
+      },
+      {
+        "package": "SwiftyGif",
+        "repositoryURL": "https://github.com/kirualex/SwiftyGif",
+        "state": {
+          "branch": null,
+          "revision": "d6d26061d6553a493781ad3df4a8e275c43fc373",
+          "version": "5.4.4"
         }
       },
       {

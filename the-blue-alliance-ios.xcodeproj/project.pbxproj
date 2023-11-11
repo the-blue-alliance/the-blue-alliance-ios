@@ -67,6 +67,7 @@
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */; };
 		927246C32AFFFC9300EF7796 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927246C22AFFFC9300EF7796 /* AuthHelper.swift */; };
+		927246C72B00025400EF7796 /* Agrume in Frameworks */ = {isa = PBXBuildFile; productRef = 927246C62B00025400EF7796 /* Agrume */; };
 		927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */; };
 		927309B223DD1E66006145E0 /* HandoffService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309B123DD1E66006145E0 /* HandoffService.swift */; };
@@ -507,6 +508,7 @@
 				920240092AEB6AC30003D118 /* TBAOperation in Frameworks */,
 				924BDD8A26D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				9202400F2AEB6ADC0003D118 /* TBAKit in Frameworks */,
+				927246C72B00025400EF7796 /* Agrume in Frameworks */,
 				924BDD9226D2B366008BE7D2 /* FirebaseRemoteConfig in Frameworks */,
 				924BDD9526D2B391008BE7D2 /* GoogleSignIn in Frameworks */,
 			);
@@ -1402,6 +1404,7 @@
 				9202400C2AEB6ADC0003D118 /* MyTBAKit */,
 				9202400E2AEB6ADC0003D118 /* TBAKit */,
 				920240102AEB6AE60003D118 /* TBAData */,
+				927246C62B00025400EF7796 /* Agrume */,
 			);
 			productName = "the-blue-alliance";
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
@@ -1474,6 +1477,7 @@
 				924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				924BDD9326D2B391008BE7D2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
+				927246C52B00025400EF7796 /* XCRemoteSwiftPackageReference "Agrume" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -2154,6 +2158,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		927246C52B00025400EF7796 /* XCRemoteSwiftPackageReference "Agrume" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:JanGorman/Agrume.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureLayout/PureLayout";
@@ -2232,6 +2244,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 924BDD9326D2B391008BE7D2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignIn;
+		};
+		927246C62B00025400EF7796 /* Agrume */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 927246C52B00025400EF7796 /* XCRemoteSwiftPackageReference "Agrume" */;
+			productName = Agrume;
 		};
 /* End XCSwiftPackageProductDependency section */
 
