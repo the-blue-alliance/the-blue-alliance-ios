@@ -4,7 +4,7 @@ import PureLayout
 import TBAData
 import TBAProtocols
 import UIKit
-import youtube_ios_player_helper
+import YouTubeiOSPlayerHelper
 
 class PlayerView: UIView {
 

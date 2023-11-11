@@ -119,6 +119,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>GIDClientID</key>
+	<string>836511118694-aj54f0d17nui5453fe0rbj230cqto6sl.apps.googleusercontent.com</string>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>

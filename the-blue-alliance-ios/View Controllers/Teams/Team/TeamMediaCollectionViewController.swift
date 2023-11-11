@@ -53,8 +53,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
 
-        setupDataSource()
         collectionView.dataSource = dataSource
+        setupDataSource()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -151,7 +151,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = CollectionViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-        
+
         // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }
@@ -301,12 +301,11 @@ extension TeamMediaCollectionViewController: Refreshable {
     private func fetchMedia(_ media: TeamMedia, _ dependentOperation: Operation) {
         let refreshOperation = BlockOperation { [weak self] in
             guard let self = self else { return }
-            var snapshot = self.dataSource.snapshot()
             // Reload our cell, so we can get rid of our loading state
-            if let indexPath = self.indexPath(for: media) {
-                snapshot.reloadItems([snapshot.itemIdentifiers[indexPath.row]])
-                self.dataSource.apply(snapshot)
-            }
+            // TODO: Fix this so we're only reloading the cells we need
+            var snapshot = dataSource.snapshot()
+            snapshot.reloadSections(snapshot.sectionIdentifiers)
+            dataSource.applySnapshotUsingReloadData(snapshot)
         }
 
         let fetchMediaOperation = FetchMediaOperation(errorRecorder: errorRecorder, media: media, persistentContainer: persistentContainer)

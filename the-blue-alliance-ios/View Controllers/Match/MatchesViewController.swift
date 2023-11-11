@@ -52,8 +52,8 @@ class MatchesViewController: TBATableViewController {
 
         tableView.registerReusableCell(MatchTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = dataSource
+        setupDataSource()
 
         updateInterface()
     }
@@ -90,7 +90,7 @@ class MatchesViewController: TBATableViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: Match.compLevelSortOrderKeyPath(), cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-        
+
         // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }

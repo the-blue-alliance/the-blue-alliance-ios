@@ -37,8 +37,8 @@ class DistrictsViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupDataSource()
         tableView.dataSource = dataSource
+        setupDataSource()
     }
 
     // MARK: UITableView Delegate
@@ -70,7 +70,7 @@ class DistrictsViewController: TBATableViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-        
+
         // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }

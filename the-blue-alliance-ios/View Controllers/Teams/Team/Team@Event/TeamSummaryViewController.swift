@@ -136,8 +136,8 @@ class TeamSummaryViewController: TBATableViewController {
         tableView.registerReusableCell(InfoTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = dataSource
+        setupDataSource()
 
         // Since we leverage didSet, we need to do this *after* initilization
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)

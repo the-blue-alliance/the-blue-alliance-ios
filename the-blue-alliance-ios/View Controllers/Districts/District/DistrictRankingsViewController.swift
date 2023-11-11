@@ -38,8 +38,8 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
 
         tableView.registerReusableCell(RankingTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = dataSource
+        setupDataSource()
     }
 
     // MARK: UITableView Delegate
@@ -69,7 +69,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-        
+
         // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }

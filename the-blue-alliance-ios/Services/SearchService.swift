@@ -6,6 +6,7 @@ import Search
 import TBAData
 import TBAKit
 import TBAUtils
+import UIKit
 
 private struct SearchConstants {
     static let lastRefreshEventsAllKey = "kLastRefreshAllEvents"

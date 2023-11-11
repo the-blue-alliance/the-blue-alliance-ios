@@ -3,6 +3,7 @@ import Foundation
 import MyTBAKit
 import TBAUtils
 import UserNotifications
+import UIKit
 
 // PushService handles registering push notification tokens with TBA and handling APNS messages
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate

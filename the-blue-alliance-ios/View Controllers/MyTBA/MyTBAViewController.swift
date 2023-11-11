@@ -60,7 +60,7 @@ class MyTBAViewController: ContainerViewController {
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance()?.presentingViewController = self
+        signInViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -131,7 +131,7 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logoutSuccessful() {
-        GIDSignIn.sharedInstance().signOut()
+        GIDSignIn.sharedInstance.signOut()
         try! Auth.auth().signOut()
 
         // Cancel any ongoing requests
@@ -215,6 +215,19 @@ extension MyTBAViewController: MyTBAAuthenticationObservable {
         DispatchQueue.main.async { [weak self] in
             self?.updateInterface()
         }
+    }
+
+}
+
+extension MyTBAViewController: SignInViewControllerDelegate {
+
+    func signInError(error: Error) {
+         errorRecorder.record(error)
+         showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
+    }
+
+    func pushRegistrationError(error: Error) {
+        errorRecorder.record(error)
     }
 
 }
