@@ -423,9 +423,6 @@
 		92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
 		92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewControllerTests.swift; sourceTree = "<group>"; };
-		92C5FBE02B00388F0006AE48 /* MyTBAKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MyTBAKit; sourceTree = "<group>"; };
-		92C5FBE12B00389D0006AE48 /* Search */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Search; sourceTree = "<group>"; };
-		92C5FBE22B0038E70006AE48 /* TBAData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TBAData; sourceTree = "<group>"; };
 		92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
@@ -2064,7 +2061,7 @@
 					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
 				);
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2102,7 +2099,7 @@
 					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
 				);
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
