@@ -92,7 +92,7 @@ class EventAwardsViewController: TBATableViewController {
 
         tableView.registerReusableCell(AwardTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
     }
 

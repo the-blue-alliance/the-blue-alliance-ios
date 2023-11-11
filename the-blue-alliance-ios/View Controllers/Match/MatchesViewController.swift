@@ -52,7 +52,7 @@ class MatchesViewController: TBATableViewController {
 
         tableView.registerReusableCell(MatchTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
 
         updateInterface()

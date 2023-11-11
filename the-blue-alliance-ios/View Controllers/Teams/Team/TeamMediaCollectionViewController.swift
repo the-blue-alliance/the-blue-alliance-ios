@@ -53,7 +53,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
 
-        collectionView.dataSource = collectionViewDataSource
+        collectionView.dataSource = dataSource
         setupDataSource()
     }
 
@@ -301,12 +301,11 @@ extension TeamMediaCollectionViewController: Refreshable {
     private func fetchMedia(_ media: TeamMedia, _ dependentOperation: Operation) {
         let refreshOperation = BlockOperation { [weak self] in
             guard let self = self else { return }
-            var snapshot = self.dataSource.snapshot()
             // Reload our cell, so we can get rid of our loading state
             // TODO: Fix this so we're only reloading the cells we need
-            var snapshot = collectionViewDataSource.dataSource.snapshot()
+            var snapshot = dataSource.snapshot()
             snapshot.reloadSections(snapshot.sectionIdentifiers)
-            collectionViewDataSource.dataSource.applySnapshotUsingReloadData(snapshot)
+            dataSource.applySnapshotUsingReloadData(snapshot)
         }
 
         let fetchMediaOperation = FetchMediaOperation(errorRecorder: errorRecorder, media: media, persistentContainer: persistentContainer)

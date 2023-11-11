@@ -36,7 +36,7 @@ class EventRankingsViewController: TBATableViewController {
 
         tableView.registerReusableCell(RankingTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
     }
 

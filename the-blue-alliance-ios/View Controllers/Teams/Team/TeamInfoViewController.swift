@@ -54,7 +54,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
 
         updateTeamInfo()

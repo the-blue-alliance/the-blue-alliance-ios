@@ -38,7 +38,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
 
         tableView.registerReusableCell(RankingTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
     }
 
