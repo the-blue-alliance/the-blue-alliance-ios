@@ -66,6 +66,7 @@
 		92598CC724A92AFE007E08CB /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92598CC624A92AFE007E08CB /* Dependencies.swift */; };
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */; };
+		927246C32AFFFC9300EF7796 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927246C22AFFFC9300EF7796 /* AuthHelper.swift */; };
 		927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */; };
 		927309B223DD1E66006145E0 /* HandoffService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309B123DD1E66006145E0 /* HandoffService.swift */; };
@@ -306,6 +307,7 @@
 		92598CC624A92AFE007E08CB /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
 		926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA.swift"; sourceTree = "<group>"; };
+		927246C22AFFFC9300EF7796 /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
 		9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TBA Spotlight Index Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		927309A823DC0F5F006145E0 /* spotlight-index.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "spotlight-index.entitlements"; sourceTree = "<group>"; };
 		927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
@@ -666,6 +668,14 @@
 			path = Media;
 			sourceTree = "<group>";
 		};
+		927246C12AFFFC8900EF7796 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				927246C22AFFFC9300EF7796 /* AuthHelper.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		927309A923DC0F68006145E0 /* spotlight-index */ = {
 			isa = PBXGroup;
 			children = (
@@ -773,6 +783,7 @@
 		92942D941E2154DA008E79CA /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
+				927246C12AFFFC8900EF7796 /* Auth */,
 				923AEE8F2165966C00EF50C8 /* App Delegate */,
 				923A0D7620D21D3800BF5E31 /* Launch Views */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
@@ -1599,6 +1610,7 @@
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
 				921F609923CD4DFD00FE633B /* MatchBreakdownView.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
+				927246C32AFFFC9300EF7796 /* AuthHelper.swift in Sources */,
 				92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */,
 				921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */,
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,

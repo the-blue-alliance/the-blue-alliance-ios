@@ -291,8 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
     }
-    
-    // TODO: Rename method
+
     private func setupGoogleAuthentication() {
         // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
         if Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() {
@@ -302,20 +301,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     return
                 }
 
-                guard let user = user, let idToken = user.idToken?.tokenString else { return }
-
-                let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                               accessToken: user.accessToken.tokenString)
-
-                Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
+                AuthHelper.signInToGoogle(user: user) { [unowned self] success, error in
                     if let error = error {
                         errorRecorder.record(error)
-                    } else {
-                        PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
-                            if let error = error {
-                                errorRecorder.record(error)
-                            }
+                    }
+                    guard success else {
+                        return
+                    }
+                    PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
+                        guard let error = error else {
+                            return
                         }
+                        errorRecorder.record(error)
                     }
                 }
             }

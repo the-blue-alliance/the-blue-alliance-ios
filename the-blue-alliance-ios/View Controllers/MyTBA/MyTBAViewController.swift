@@ -59,6 +59,8 @@ class MyTBAViewController: ContainerViewController {
 
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
+
+        signInViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -213,6 +215,19 @@ extension MyTBAViewController: MyTBAAuthenticationObservable {
         DispatchQueue.main.async { [weak self] in
             self?.updateInterface()
         }
+    }
+
+}
+
+extension MyTBAViewController: SignInViewControllerDelegate {
+
+    func signInError(error: Error) {
+         errorRecorder.record(error)
+         showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
+    }
+
+    func pushRegistrationError(error: Error) {
+        errorRecorder.record(error)
     }
 
 }

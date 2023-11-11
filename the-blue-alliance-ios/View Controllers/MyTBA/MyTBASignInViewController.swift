@@ -1,7 +1,13 @@
+import GoogleSignIn
 import FirebaseAuth
 import Foundation
+import TBAUtils
 import UIKit
-import GoogleSignIn
+
+protocol SignInViewControllerDelegate: AnyObject {
+    func signInError(error: Error)
+    func pushRegistrationError(error: Error)
+}
 
 class MyTBASignInViewController: UIViewController {
 
@@ -13,6 +19,8 @@ class MyTBASignInViewController: UIViewController {
     @IBOutlet var favoriteImageView: UIImageView!
     @IBOutlet var subscriptionImageView: UIImageView!
     @IBOutlet var signInButton: UIButton!
+
+    weak var delegate: SignInViewControllerDelegate?
 
     init() {
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
@@ -74,31 +82,27 @@ class MyTBASignInViewController: UIViewController {
     // MARK: - IBActions
 
     @IBAction private func signIn() {
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { result, error in
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
             // Don't respond to errors from signInSilently or a user cancelling a sign in
             if let error = error as NSError?, error.code == GIDSignInError.canceled.rawValue {
                 return
             } else if let error = error {
-                // errorRecorder.record(error)
-                // signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
+                self.delegate?.signInError(error: error)
                 return
             }
 
-            guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
-
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                           accessToken: user.accessToken.tokenString)
-
-            Auth.auth().signIn(with: credential) { (_, error) in
+            AuthHelper.signInToGoogle(user: result?.user) { [unowned self] success, error in
                 if let error = error {
-                    // errorRecorder.record(error)
-                    // signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
-                } else {
-                    PushService.requestAuthorizationForNotifications { (_, error) in
-                        if let error = error {
-                            // errorRecorder.record(error)
-                        }
+                    delegate?.signInError(error: error)
+                }
+                guard success else {
+                    return
+                }
+                PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
+                    guard let error = error else {
+                        return
                     }
+                    delegate?.pushRegistrationError(error: error)
                 }
             }
         }

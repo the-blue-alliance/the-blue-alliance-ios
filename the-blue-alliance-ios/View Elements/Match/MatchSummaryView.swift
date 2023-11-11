@@ -2,7 +2,7 @@ import Foundation
 import TBAData
 import UIKit
 
-protocol MatchSummaryViewDelegate:class {
+protocol MatchSummaryViewDelegate: AnyObject {
     func teamPressed(teamNumber: Int)
 }
 
