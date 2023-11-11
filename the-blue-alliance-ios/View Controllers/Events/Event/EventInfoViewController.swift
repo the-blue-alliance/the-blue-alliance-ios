@@ -68,8 +68,8 @@ class EventInfoViewController: TBATableViewController, Observable {
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(InfoTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
 
         updateEventInfo()
 

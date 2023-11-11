@@ -56,8 +56,8 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 
         tableView.registerReusableCell(TeamTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
     }
 
     // MARK: UITableView Delegate

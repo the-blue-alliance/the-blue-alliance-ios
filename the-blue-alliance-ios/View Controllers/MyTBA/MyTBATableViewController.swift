@@ -63,8 +63,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
 
         // Disable subscriptions
         setupFetchedResultsController()

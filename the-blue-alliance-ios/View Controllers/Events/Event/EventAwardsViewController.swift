@@ -92,8 +92,8 @@ class EventAwardsViewController: TBATableViewController {
 
         tableView.registerReusableCell(AwardTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
     }
 
     // MARK: Table View Data Source

@@ -59,8 +59,8 @@ class EventInsightsViewController: TBATableViewController, Observable {
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
         tableView.insetsContentViewsToSafeArea = false
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
 
         let eventStatsSupported = (eventStatsConfigurator != nil)
         if eventStatsSupported {
