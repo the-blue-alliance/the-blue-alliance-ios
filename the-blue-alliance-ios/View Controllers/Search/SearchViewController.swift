@@ -89,8 +89,8 @@ class SearchViewController: TBATableViewController {
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = tableViewDataSource
+        setupDataSource()
 
         enableRefreshing()
     }

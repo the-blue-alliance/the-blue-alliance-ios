@@ -1,4 +1,4 @@
-import BFRImageViewer
+import Agrume
 import CoreData
 import Firebase
 import MyTBAKit
@@ -229,37 +229,25 @@ extension TeamViewController: EventsViewControllerDelegate {
 
 }
 
-extension TeamViewController: TeamMediaCollectionViewControllerDelegate {
+extension TeamViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {
 
     func mediaSelected(_ media: TeamMedia) {
-        if let imageViewController = TeamMediaImageViewController.forMedia(media: media) {
-            DispatchQueue.main.async {
-                self.present(imageViewController, animated: true)
-            }
-        }
+        show(media: media)
     }
 
 }
 
-class TeamMediaImageViewController: BFRImageViewController {
+protocol MediaViewer: UIViewController {}
+extension MediaViewer {
 
-    public static func forMedia(media: TeamMedia, peek: Bool = false) -> TeamMediaImageViewController? {
-        // TODO: Support showing multiple images
-        var imageViewController: TeamMediaImageViewController?
+    func show(media: TeamMedia, peek: Bool = false) {
         if let image = media.image {
-            let images = [image]
-            imageViewController = peek ?
-                TeamMediaImageViewController(forPeekWithImageSource: images) :
-                TeamMediaImageViewController(imageSource: images)
+            let agrume = Agrume(image: image)
+            agrume.show(from: self)
         } else if let url = media.imageDirectURL {
-            let urls = [url]
-            imageViewController = peek ?
-                TeamMediaImageViewController(forPeekWithImageSource: urls) :
-                TeamMediaImageViewController(imageSource: urls)
+            let agrume = Agrume(url: url)
+            agrume.show(from: self)
         }
-        imageViewController?.modalPresentationStyle = .fullScreen
-        imageViewController?.showDoneButtonOnLeft = false
-        return imageViewController
     }
 
 }

@@ -1,6 +1,13 @@
-import Foundation
-import UIKit
 import GoogleSignIn
+import FirebaseAuth
+import Foundation
+import TBAUtils
+import UIKit
+
+protocol SignInViewControllerDelegate: AnyObject {
+    func signInError(error: Error)
+    func pushRegistrationError(error: Error)
+}
 
 class MyTBASignInViewController: UIViewController {
 
@@ -12,6 +19,8 @@ class MyTBASignInViewController: UIViewController {
     @IBOutlet var favoriteImageView: UIImageView!
     @IBOutlet var subscriptionImageView: UIImageView!
     @IBOutlet var signInButton: UIButton!
+
+    weak var delegate: SignInViewControllerDelegate?
 
     init() {
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
@@ -73,7 +82,30 @@ class MyTBASignInViewController: UIViewController {
     // MARK: - IBActions
 
     @IBAction private func signIn() {
-        GIDSignIn.sharedInstance().signIn()
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
+            // Don't respond to errors from signInSilently or a user cancelling a sign in
+            if let error = error as NSError?, error.code == GIDSignInError.canceled.rawValue {
+                return
+            } else if let error = error {
+                self.delegate?.signInError(error: error)
+                return
+            }
+
+            AuthHelper.signInToGoogle(user: result?.user) { [unowned self] success, error in
+                if let error = error {
+                    delegate?.signInError(error: error)
+                }
+                guard success else {
+                    return
+                }
+                PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
+                    guard let error = error else {
+                        return
+                    }
+                    delegate?.pushRegistrationError(error: error)
+                }
+            }
+        }
     }
 
 }

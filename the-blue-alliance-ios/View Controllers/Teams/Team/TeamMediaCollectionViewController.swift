@@ -53,8 +53,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
 
-        setupDataSource()
         collectionView.dataSource = collectionViewDataSource
+        setupDataSource()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -301,9 +301,9 @@ extension TeamMediaCollectionViewController: Refreshable {
         let refreshOperation = BlockOperation { [weak self] in
             guard let self = self else { return }
             // Reload our cell, so we can get rid of our loading state
-            if let indexPath = self.indexPath(for: media) {
-                self.collectionView.reloadItems(at: [indexPath])
-            }
+            var snapshot = collectionViewDataSource.dataSource.snapshot()
+            snapshot.reloadSections(snapshot.sectionIdentifiers)
+            collectionViewDataSource.dataSource.applySnapshotUsingReloadData(snapshot)
         }
 
         let fetchMediaOperation = FetchMediaOperation(errorRecorder: errorRecorder, media: media, persistentContainer: persistentContainer)
