@@ -19,7 +19,7 @@ class MatchesViewController: TBATableViewController {
     private let team: Team?
     private var myTBA: MyTBA
 
-    private var tableViewDataSource: TableViewDataSource<String, Match>!
+    private var dataSource: TableViewDataSource<String, Match>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Match>!
 
     private var favoriteTeamKeys: [String] = []
@@ -52,7 +52,7 @@ class MatchesViewController: TBATableViewController {
 
         tableView.registerReusableCell(MatchTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
 
         updateInterface()
@@ -69,7 +69,7 @@ class MatchesViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String, Match>(tableView: tableView) { [weak self] (tableView, indexPath, match) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Match>(tableView: tableView) { [weak self] (tableView, indexPath, match) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
             var baseTeamKeys: Set<String> = Set()
@@ -83,15 +83,16 @@ class MatchesViewController: TBATableViewController {
 
             return cell
         }
-        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        self.tableViewDataSource.delegate = self
-        self.tableViewDataSource.statefulDelegate = self
+        dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: Match.compLevelSortOrderKeyPath(), cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
     private func updateDataSource() {
@@ -198,8 +199,8 @@ extension MatchesViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(matches)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

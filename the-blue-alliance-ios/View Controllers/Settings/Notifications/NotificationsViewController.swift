@@ -269,6 +269,8 @@ class NotificationsViewController: TBATableViewController {
                 return .invalid("Permission for push notifications was denied.")
             case .provisional:
                 return .valid
+            case .ephemeral:
+                return .valid
             @unknown default:
                 return .invalid("Unknown permissions error.")
             }

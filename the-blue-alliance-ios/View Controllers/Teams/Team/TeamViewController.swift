@@ -177,8 +177,8 @@ class TeamViewController: HeaderContainerViewController, Observable {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(media, year: year)
-            }, saved: {
-                tbaKit.storeCacheHeaders(mediaOperation)
+            }, saved: { [unowned self] in
+                self.tbaKit.storeCacheHeaders(mediaOperation)
             }, errorRecorder: errorRecorder)
         })
         operationQueue.addOperation(mediaOperation)

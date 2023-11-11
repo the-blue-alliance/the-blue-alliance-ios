@@ -164,8 +164,8 @@ extension EventAlliancesViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(alliances)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

@@ -57,8 +57,8 @@ class TeamEventsViewController: EventsViewController {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(events)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

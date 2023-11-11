@@ -85,7 +85,7 @@ extension PushService: MyTBAAuthenticationObservable {
 extension PushService: MessagingDelegate {
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("Firebase registration token: \(fcmToken)")
+        print("Firebase registration token: \(fcmToken ?? "N/A")")
         registerPushToken()
     }
 

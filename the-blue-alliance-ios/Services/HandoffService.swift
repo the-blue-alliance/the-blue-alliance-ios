@@ -11,7 +11,7 @@ class HandoffService {
 
     private let errorRecorder: ErrorRecorder
     private let persistentContainer: NSPersistentContainer
-    private let rootController: RootController
+    private let rootControllerProvider: () -> RootController
 
     var appSetup: Bool = false {
         didSet {
@@ -25,10 +25,10 @@ class HandoffService {
     private(set) var continueSearchText: String?
     private(set) var continueURI: URL?
 
-    init(errorRecorder: ErrorRecorder, persistentContainer: NSPersistentContainer, rootController: RootController) {
+    init(errorRecorder: ErrorRecorder, persistentContainer: NSPersistentContainer, rootControllerProvider: @escaping () -> RootController) {
         self.errorRecorder = errorRecorder
         self.persistentContainer = persistentContainer
-        self.rootController = rootController
+        self.rootControllerProvider = rootControllerProvider
     }
 
     func application(continue userActivity: NSUserActivity) -> Bool {
@@ -102,6 +102,7 @@ class HandoffService {
             continueSearchText = searchText
             return true
         }
+        let rootController = rootControllerProvider()
         return rootController.continueSearch(searchText)
     }
 
@@ -111,6 +112,8 @@ class HandoffService {
             continueURI = uri
             return true
         }
+
+        let rootController = rootControllerProvider()
 
         guard let objectID = persistentContainer.persistentStoreCoordinator.managedObjectID(forURIRepresentation: uri) else {
             return false

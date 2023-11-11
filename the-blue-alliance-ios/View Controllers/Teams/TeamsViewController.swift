@@ -30,7 +30,7 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 
     weak var delegate: TeamsViewControllerDelegate?
 
-    private var tableViewDataSource: TableViewDataSource<String, Team>!
+    private var dataSource: TableViewDataSource<String, Team>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
 
     init(refreshProvider: TeamsRefreshProvider? = nil, showSearch: Bool = true, dependencies: Dependencies) {
@@ -56,7 +56,7 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 
         tableView.registerReusableCell(TeamTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
     }
 
@@ -118,14 +118,12 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String, Team>(tableView: tableView) { (tableView, indexPath, team) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Team>(tableView: tableView) { (tableView, indexPath, team) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
             cell.viewModel = TeamCellViewModel(team: team)
             return cell
         }
-        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        self.tableViewDataSource.delegate = self
-        self.tableViewDataSource.statefulDelegate = self
+        dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
         fetchRequest.sortDescriptors = [
@@ -136,6 +134,9 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
     override func updateDataSource() {

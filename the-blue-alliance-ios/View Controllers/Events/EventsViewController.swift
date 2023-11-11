@@ -32,7 +32,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
     weak var delegate: EventsViewControllerDelegate?
 
-    private var tableViewDataSource: TableViewDataSource<String, Event>!
+    private var dataSource: TableViewDataSource<String, Event>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Event>!
 
     // MARK: - View Lifecycle
@@ -42,7 +42,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
         tableView.registerReusableCell(EventTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
     }
 
@@ -86,14 +86,12 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String, Event>(tableView: tableView) { (tableView, indexPath, event) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Event>(tableView: tableView) { (tableView, indexPath, event) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
             cell.viewModel = EventCellViewModel(event: event)
             return cell
         }
-        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        self.tableViewDataSource.delegate = self
-        self.tableViewDataSource.statefulDelegate = self
+        dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         let sortDescriptors = [firstSortDescriptor] + Event.sortDescriptors()
@@ -102,6 +100,9 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
     func updateDataSource() {

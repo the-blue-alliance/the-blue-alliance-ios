@@ -219,8 +219,8 @@ extension MatchInfoViewController: Refreshable {
                 let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     Event.insert(event, in: context)
-                }, saved: {
-                    markTBARefreshSuccessful(tbaKit, operation: eventOperation!)
+                }, saved: { [unowned self] in
+                    self.markTBARefreshSuccessful(tbaKit, operation: eventOperation!)
                 }, errorRecorder: errorRecorder)
             })
         }
@@ -240,8 +240,8 @@ extension MatchInfoViewController: Refreshable {
                     break
                 }
 
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: matchOperation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: matchOperation)
             }, errorRecorder: errorRecorder)
         })
         addRefreshOperations([eventOperation, matchOperation].compactMap({ $0 }))

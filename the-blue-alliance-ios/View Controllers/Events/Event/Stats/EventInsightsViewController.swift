@@ -15,7 +15,7 @@ class EventInsightsViewController: TBATableViewController, Observable {
     private let event: Event
     private let eventStatsConfigurator: EventInsightsConfigurator.Type?
 
-    private var tableViewDataSource: TableViewDataSource<String, InsightRow>!
+    private var dataSource: TableViewDataSource<String, InsightRow>!
 
     // MARK: - Observable
 
@@ -38,6 +38,10 @@ class EventInsightsViewController: TBATableViewController, Observable {
             eventStatsConfigurator = EventInsightsConfigurator2019.self
         } else if event.year == 2020 {
             eventStatsConfigurator = EventInsightsConfigurator2020.self
+        } else if event.year == 2021 {
+            eventStatsConfigurator = EventInsightsConfigurator2020.self
+        } else if event.year == 2022 {
+            eventStatsConfigurator = EventInsightsConfigurator2022.self
         } else {
             eventStatsConfigurator = nil
         }
@@ -59,7 +63,7 @@ class EventInsightsViewController: TBATableViewController, Observable {
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
         tableView.insetsContentViewsToSafeArea = false
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
 
         let eventStatsSupported = (eventStatsConfigurator != nil)
@@ -88,7 +92,7 @@ class EventInsightsViewController: TBATableViewController, Observable {
             return nil
         }
 
-        let snapshot = tableViewDataSource.dataSource.snapshot()
+        let snapshot = dataSource.snapshot()
         let section = snapshot.sectionIdentifiers[section]
 
         headerView.title = section
@@ -104,7 +108,7 @@ class EventInsightsViewController: TBATableViewController, Observable {
         if section == 0 {
             return nil
         }
-        let snapshot = tableViewDataSource.dataSource.snapshot()
+        let snapshot = dataSource.snapshot()
         let title = snapshot.sectionIdentifiers[section]
         return title
     }
@@ -112,7 +116,7 @@ class EventInsightsViewController: TBATableViewController, Observable {
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String, InsightRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, InsightRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
             if indexPath.section == 0 {
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventInsightsTableViewCell
                 cell.title = row.title
@@ -131,13 +135,12 @@ class EventInsightsViewController: TBATableViewController, Observable {
                 return cell
             }
         }
-        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        tableViewDataSource.delegate = self
-        tableViewDataSource.statefulDelegate = self
+        dataSource.delegate = self
+        dataSource.statefulDelegate = self
     }
 
     private func configureDataSource(_ insights: EventInsights?) {
-        var snapshot = tableViewDataSource.dataSource.snapshot()
+        var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
 
         let qual = insights?.qual
@@ -147,7 +150,7 @@ class EventInsightsViewController: TBATableViewController, Observable {
             eventStatsConfigurator.configureDataSource(&snapshot, qual, playoff)
         }
 
-        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
 }
@@ -171,7 +174,7 @@ extension EventInsightsViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return tableViewDataSource.isDataSourceEmpty
+        return dataSource.isDataSourceEmpty
     }
 
     @objc func refresh() {
@@ -185,8 +188,8 @@ extension EventInsightsViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(insights)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

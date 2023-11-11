@@ -32,7 +32,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
     let match: Match
     let breakdownConfigurator: MatchBreakdownConfigurator.Type?
 
-    var tableViewDataSource: TableViewDataSource<String?, BreakdownRow>!
+    var dataSource: TableViewDataSource<String?, BreakdownRow>!
 
     // MARK: - Observable
 
@@ -58,6 +58,10 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
             breakdownConfigurator = MatchBreakdownConfigurator2019.self
         } else if match.event.year == 2020 {
             breakdownConfigurator = MatchBreakdownConfigurator2020.self
+        } else if match.event.year == 2021 {
+            breakdownConfigurator = MatchBreakdownConfigurator2020.self
+        } else if match.event.year == 2022 {
+            breakdownConfigurator = MatchBreakdownConfigurator2022.self
         } else {
             breakdownConfigurator = nil
         }
@@ -77,7 +81,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
         tableView.registerReusableCell(MatchBreakdownTableViewCell.self)
         tableView.insetsContentViewsToSafeArea = false
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
 
         let breakdownSupported = (breakdownConfigurator != nil)
@@ -99,7 +103,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
     // MARK: - Methods
 
     func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String?, BreakdownRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String?, BreakdownRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchBreakdownTableViewCell
             cell.titleText = row.title
             cell.redElements = row.redElements
@@ -107,13 +111,12 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
             cell.type = row.type
             return cell
         }
-        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        tableViewDataSource.delegate = self
-        tableViewDataSource.statefulDelegate = self
+        dataSource.delegate = self
+        dataSource.statefulDelegate = self
     }
 
     func configureDataSource(_ breakdown: [String: Any]?) {
-        var snapshot = tableViewDataSource.dataSource.snapshot()
+        var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
 
         let red = breakdown?["red"] as? [String: Any]
@@ -123,7 +126,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
             breakdownConfigurator.configureDataSource(&snapshot, breakdown, red, blue)
         }
 
-        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     // MARK: - Refreshable
@@ -144,7 +147,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
     }
 
     var isDataSourceEmpty: Bool {
-        return tableViewDataSource.isDataSourceEmpty
+        return dataSource.isDataSourceEmpty
     }
 
     @objc func refresh() {
@@ -157,8 +160,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         })
         addRefreshOperations([operation])

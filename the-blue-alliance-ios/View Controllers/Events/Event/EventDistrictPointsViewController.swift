@@ -69,7 +69,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
     private let event: Event
 
-    private var tableViewDataSource: TableViewDataSource<String, DistrictEventPoints>!
+    private var dataSource: TableViewDataSource<String, DistrictEventPoints>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<DistrictEventPoints>!
 
     // MARK: - Init
@@ -91,7 +91,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
         tableView.registerReusableCell(RankingTableViewCell.self)
 
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         setupDataSource()
     }
 
@@ -107,14 +107,12 @@ private class EventDistrictPointsViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let dataSource = UITableViewDiffableDataSource<String, DistrictEventPoints>(tableView: tableView) { (tableView, indexPath, districtEventPoints) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, DistrictEventPoints>(tableView: tableView) { (tableView, indexPath, districtEventPoints) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: districtEventPoints)
             return cell
         }
-        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
-        self.tableViewDataSource.delegate = self
-        self.tableViewDataSource.statefulDelegate = self
+        dataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
         fetchRequest.sortDescriptors = [DistrictEventPoints.totalSortDescriptor()]
@@ -122,6 +120,9 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
+
+        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
+        dataSource.delegate = self
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
@@ -153,15 +154,15 @@ extension EventDistrictPointsViewController: Refreshable {
 
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventDistrictPoints(key: eventKey) { [self] (result, notModified) in
-            guard case .success(let eventPoints, _) = result, !notModified else {
+            guard case .success((let eventPoints, _)) = result, !notModified else {
                 return
             }
 
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

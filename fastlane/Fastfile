@@ -80,6 +80,7 @@ platform :ios do
 
   desc "Upload a new beta build to TestFlight (for CI machine)"
   lane :beta_ci do
+    setup_api
     prebeta
     build
 
@@ -94,6 +95,7 @@ platform :ios do
 
   desc "Upload a new build to the App Store"
   lane :app_store do
+    setup_api
     preship
     build
 
@@ -106,7 +108,7 @@ platform :ios do
       icon_url: "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png",
       attachment_properties: {}
     )
-    deliver
+    deliver(precheck_include_in_app_purchases: false)
 
     new_version(version_type: 'patch')
     beta_ci
@@ -127,6 +129,15 @@ platform :ios do
   ## End Release Lanes ##
 
   ## Shipping Lanes for Release Lanes ##
+
+  desc "Setup App Store Connect API Key"
+  private_lane :setup_api do
+    app_store_connect_api_key(
+      key_id: ENV["APPLE_KEY_ID"],
+      issuer_id: ENV["APPLE_ISSUER_ID"],
+      key_content: ENV["APPLE_KEY_CONTENT"]
+    )
+  end
 
   desc "Perform pre-TestFlight tasks"
   private_lane :prebeta do
@@ -197,7 +208,8 @@ platform :ios do
   end
 
   lane :refresh_dsyms do
-    download_dsyms(app_identifier: "com.the-blue-alliance.tba", min_version: "2.0.0")
+    setup_api
+    download_dsyms(app_identifier: "com.the-blue-alliance.tba", min_version: "3.0.0")
     upload_symbols_to_crashlytics(gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
     clean_build_artifacts           # Delete the local dSYM files
   end

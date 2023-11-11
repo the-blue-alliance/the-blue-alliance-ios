@@ -126,11 +126,11 @@ extension DistrictBreakdownViewController: Refreshable {
             }
 
             let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let district = context.object(with: ranking.district.objectID) as! District
+            context.performChangesAndWait({ [unowned self] in
+                let district = context.object(with: self.ranking.district.objectID) as! District
                 district.insert(rankings)
-            }, saved: {
-                markTBARefreshSuccessful(tbaKit, operation: operation!)
+            }, saved: { [unowned self] in
+                self.markTBARefreshSuccessful(tbaKit, operation: operation!)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
