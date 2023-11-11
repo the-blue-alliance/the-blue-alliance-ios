@@ -42,8 +42,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
         tableView.registerReusableCell(EventTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
     }
 
     // MARK: - Refreshable

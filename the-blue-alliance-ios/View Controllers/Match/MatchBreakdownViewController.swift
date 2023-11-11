@@ -81,8 +81,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
         tableView.registerReusableCell(MatchBreakdownTableViewCell.self)
         tableView.insetsContentViewsToSafeArea = false
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
 
         let breakdownSupported = (breakdownConfigurator != nil)
         if breakdownSupported {

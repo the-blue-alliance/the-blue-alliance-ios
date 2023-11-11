@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Award" representedClassName="Award" syncable="YES">
+        <attribute name="awardTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="nameRaw" attributeType="String"/>
+        <attribute name="yearRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="awardsRaw" inverseEntity="Event"/>
+        <relationship name="recipientsRaw" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="AwardRecipient" inverseName="awardsRaw" inverseEntity="AwardRecipient"/>
+    </entity>
+    <entity name="AwardRecipient" representedClassName="AwardRecipient" syncable="YES">
+        <attribute name="awardeeRaw" optional="YES" attributeType="String"/>
+        <relationship name="awardsRaw" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Award" inverseName="recipientsRaw" inverseEntity="Award"/>
+        <relationship name="teamRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="awardsRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="District" representedClassName="District" syncable="YES">
+        <attribute name="abbreviationRaw" attributeType="String"/>
+        <attribute name="keyRaw" attributeType="String"/>
+        <attribute name="nameRaw" attributeType="String"/>
+        <attribute name="yearRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="eventsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="districtRaw" inverseEntity="Event"/>
+        <relationship name="rankingsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictRanking" inverseName="districtRaw" inverseEntity="DistrictRanking"/>
+        <relationship name="teamsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="districtsRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="DistrictEventPoints" representedClassName="DistrictEventPoints" syncable="YES">
+        <attribute name="alliancePointsRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="awardPointsRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="districtCMPRaw" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="elimPointsRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="qualPointsRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="totalRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="districtRankingRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DistrictRanking" inverseName="eventPointsRaw" inverseEntity="DistrictRanking"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="pointsRaw" inverseEntity="Event"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventPointsRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="DistrictRanking" representedClassName="DistrictRanking" syncable="YES">
+        <attribute name="pointTotalRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="rankRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="rookieBonusRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="districtRaw" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="rankingsRaw" inverseEntity="District"/>
+        <relationship name="eventPointsRaw" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictEventPoints" inverseName="districtRankingRaw" inverseEntity="DistrictEventPoints"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="districtRankingsRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="Event" representedClassName="Event" syncable="YES">
+        <attribute name="addressRaw" optional="YES" attributeType="String"/>
+        <attribute name="cityRaw" optional="YES" attributeType="String"/>
+        <attribute name="countryRaw" optional="YES" attributeType="String"/>
+        <attribute name="endDateRaw" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="eventCodeRaw" optional="YES" attributeType="String"/>
+        <attribute name="eventTypeRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="eventTypeStringRaw" optional="YES" attributeType="String"/>
+        <attribute name="firstEventCodeRaw" optional="YES" attributeType="String"/>
+        <attribute name="firstEventIDRaw" optional="YES" attributeType="String"/>
+        <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
+        <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
+        <attribute name="hybridType" optional="YES" attributeType="String"/>
+        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="locationNameRaw" optional="YES" attributeType="String"/>
+        <attribute name="nameRaw" optional="YES" attributeType="String"/>
+        <attribute name="playoffTypeRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="playoffTypeStringRaw" optional="YES" attributeType="String"/>
+        <attribute name="postalCodeRaw" optional="YES" attributeType="String"/>
+        <attribute name="shortNameRaw" optional="YES" attributeType="String"/>
+        <attribute name="startDateRaw" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="stateProvRaw" optional="YES" attributeType="String"/>
+        <attribute name="timezoneRaw" optional="YES" attributeType="String"/>
+        <attribute name="websiteRaw" optional="YES" attributeType="String"/>
+        <attribute name="weekRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="yearRaw" attributeType="Integer 64" minValueString="1992" usesScalarValueType="NO"/>
+        <relationship name="alliancesRaw" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventAlliance" inverseName="eventRaw" inverseEntity="EventAlliance"/>
+        <relationship name="awardsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Award" inverseName="eventRaw" inverseEntity="Award"/>
+        <relationship name="districtRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="eventsRaw" inverseEntity="District"/>
+        <relationship name="divisionsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="parentEventRaw" inverseEntity="Event"/>
+        <relationship name="insightsRaw" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="EventInsights" inverseName="eventRaw" inverseEntity="EventInsights"/>
+        <relationship name="matchesRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="eventRaw" inverseEntity="Match"/>
+        <relationship name="parentEventRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="divisionsRaw" inverseEntity="Event"/>
+        <relationship name="pointsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="eventRaw" inverseEntity="DistrictEventPoints"/>
+        <relationship name="rankingsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="eventRaw" inverseEntity="EventRanking"/>
+        <relationship name="statsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventTeamStat" inverseName="eventRaw" inverseEntity="EventTeamStat"/>
+        <relationship name="statusesRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventStatus" inverseName="eventRaw" inverseEntity="EventStatus"/>
+        <relationship name="statusRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="downEventsRaw" inverseEntity="Status"/>
+        <relationship name="teamsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="eventsRaw" inverseEntity="Team"/>
+        <relationship name="webcastsRaw" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Webcast" inverseName="eventsRaw" inverseEntity="Webcast"/>
+        <fetchIndex name="byKeyIndex">
+            <fetchIndexElement property="keyRaw" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="EventAlliance" representedClassName="EventAlliance" syncable="YES">
+        <attribute name="nameRaw" optional="YES" attributeType="String"/>
+        <relationship name="backupRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventAllianceBackup" inverseName="alliancesRaw" inverseEntity="EventAllianceBackup"/>
+        <relationship name="declinesRaw" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="declinedAlliancesRaw" inverseEntity="Team"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="alliancesRaw" inverseEntity="Event"/>
+        <relationship name="picksRaw" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="pickedAlliancesRaw" inverseEntity="Team"/>
+        <relationship name="statusRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusPlayoff" inverseName="allianceRaw" inverseEntity="EventStatusPlayoff"/>
+    </entity>
+    <entity name="EventAllianceBackup" representedClassName="EventAllianceBackup" syncable="YES">
+        <relationship name="alliancesRaw" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="EventAlliance" inverseName="backupRaw" inverseEntity="EventAlliance"/>
+        <relationship name="allianceStatusRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusAlliance" inverseName="backupRaw" inverseEntity="EventStatusAlliance"/>
+        <relationship name="inTeamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="inBackupAlliancesRaw" inverseEntity="Team"/>
+        <relationship name="outTeamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="outBackupAlliancesRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="EventInsights" representedClassName="EventInsights" syncable="YES">
+        <attribute name="playoffRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: Any]"/>
+        <attribute name="qualRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: Any]"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="insightsRaw" inverseEntity="Event"/>
+    </entity>
+    <entity name="EventRanking" representedClassName="EventRanking" syncable="YES">
+        <attribute name="dqRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="matchesPlayedRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="qualAverageRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="rankRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="recordRaw" optional="YES" attributeType="Transformable" valueTransformerName="WLTTransformer" customClassName="WLT"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankingsRaw" inverseEntity="Event"/>
+        <relationship name="extraStatsInfoRaw" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="EventRankingStatInfo" inverseName="extraStatsRankingsRaw" inverseEntity="EventRankingStatInfo"/>
+        <relationship name="extraStatsRaw" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventRankingStat" inverseName="extraStatsRankingRaw" inverseEntity="EventRankingStat"/>
+        <relationship name="qualStatusRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusQual" inverseName="rankingRaw" inverseEntity="EventStatusQual"/>
+        <relationship name="sortOrdersInfoRaw" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="EventRankingStatInfo" inverseName="sortOrdersRankingsRaw" inverseEntity="EventRankingStatInfo"/>
+        <relationship name="sortOrdersRaw" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventRankingStat" inverseName="sortOrderRankingRaw" inverseEntity="EventRankingStat"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventRankingsRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="EventRankingStat" representedClassName="EventRankingStat" syncable="YES">
+        <attribute name="valueRaw" attributeType="Double" valueTransformerName="NSNumber" usesScalarValueType="NO"/>
+        <relationship name="extraStatsRankingRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="extraStatsRaw" inverseEntity="EventRanking"/>
+        <relationship name="sortOrderRankingRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="sortOrdersRaw" inverseEntity="EventRanking"/>
+    </entity>
+    <entity name="EventRankingStatInfo" representedClassName="EventRankingStatInfo" syncable="YES">
+        <attribute name="nameRaw" attributeType="String"/>
+        <attribute name="precisionRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="extraStatsRankingsRaw" toMany="YES" deletionRule="Deny" destinationEntity="EventRanking" inverseName="extraStatsInfoRaw" inverseEntity="EventRanking"/>
+        <relationship name="sortOrdersRankingsRaw" toMany="YES" deletionRule="Deny" destinationEntity="EventRanking" inverseName="sortOrdersInfoRaw" inverseEntity="EventRanking"/>
+    </entity>
+    <entity name="EventStatus" representedClassName="EventStatus" syncable="YES">
+        <attribute name="allianceStatusRaw" optional="YES" attributeType="String"/>
+        <attribute name="lastMatchKeyRaw" optional="YES" attributeType="String"/>
+        <attribute name="nextMatchKeyRaw" optional="YES" attributeType="String"/>
+        <attribute name="overallStatusRaw" optional="YES" attributeType="String"/>
+        <attribute name="playoffStatusRaw" optional="YES" attributeType="String"/>
+        <relationship name="allianceRaw" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="EventStatusAlliance" inverseName="eventStatusRaw" inverseEntity="EventStatusAlliance"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="statusesRaw" inverseEntity="Event"/>
+        <relationship name="playoffRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusPlayoff" inverseName="eventStatusRaw" inverseEntity="EventStatusPlayoff"/>
+        <relationship name="qualRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusQual" inverseName="eventStatusRaw" inverseEntity="EventStatusQual"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventStatusesRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="EventStatusAlliance" representedClassName="EventStatusAlliance" syncable="YES">
+        <attribute name="nameRaw" optional="YES" attributeType="String"/>
+        <attribute name="numberRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="pickRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="backupRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventAllianceBackup" inverseName="allianceStatusRaw" inverseEntity="EventAllianceBackup"/>
+        <relationship name="eventStatusRaw" maxCount="1" deletionRule="Deny" destinationEntity="EventStatus" inverseName="allianceRaw" inverseEntity="EventStatus"/>
+    </entity>
+    <entity name="EventStatusPlayoff" representedClassName="EventStatusPlayoff" syncable="YES">
+        <attribute name="currentRecordRaw" optional="YES" attributeType="Transformable" valueTransformerName="WLTTransformer" customClassName="WLT"/>
+        <attribute name="levelRaw" optional="YES" attributeType="String"/>
+        <attribute name="playoffAverageRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="recordRaw" optional="YES" attributeType="Transformable" valueTransformerName="WLTTransformer" customClassName="WLT"/>
+        <attribute name="statusRaw" optional="YES" attributeType="String"/>
+        <relationship name="allianceRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventAlliance" inverseName="statusRaw" inverseEntity="EventAlliance"/>
+        <relationship name="eventStatusRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatus" inverseName="playoffRaw" inverseEntity="EventStatus"/>
+    </entity>
+    <entity name="EventStatusQual" representedClassName="EventStatusQual" syncable="YES">
+        <attribute name="numTeamsRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="statusRaw" optional="YES" attributeType="String"/>
+        <relationship name="eventStatusRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatus" inverseName="qualRaw" inverseEntity="EventStatus"/>
+        <relationship name="rankingRaw" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventRanking" inverseName="qualStatusRaw" inverseEntity="EventRanking"/>
+    </entity>
+    <entity name="EventTeamStat" representedClassName="EventTeamStat" syncable="YES">
+        <attribute name="ccwmRaw" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="dprRaw" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="oprRaw" attributeType="Double" usesScalarValueType="NO"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="statsRaw" inverseEntity="Event"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="statsRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="Favorite" representedClassName="Favorite" parentEntity="MyTBAEntity" syncable="YES"/>
+    <entity name="Match" representedClassName="Match" syncable="YES">
+        <attribute name="actualTimeRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="breakdownRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: Any]"/>
+        <attribute name="compLevelSortOrderRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="compLevelStringRaw" attributeType="String"/>
+        <attribute name="keyRaw" attributeType="String"/>
+        <attribute name="matchNumberRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="postResultTimeRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="predictedTimeRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="setNumberRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="timeRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="winningAllianceRaw" optional="YES" attributeType="String"/>
+        <relationship name="alliancesRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchAlliance" inverseName="matchRaw" inverseEntity="MatchAlliance"/>
+        <relationship name="eventRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matchesRaw" inverseEntity="Event"/>
+        <relationship name="videosRaw" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="MatchVideo" inverseName="matchesRaw" inverseEntity="MatchVideo"/>
+        <relationship name="zebraRaw" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="MatchZebra" inverseName="matchRaw" inverseEntity="MatchZebra"/>
+    </entity>
+    <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES">
+        <attribute name="allianceKeyRaw" attributeType="String"/>
+        <attribute name="scoreRaw" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="dqTeamsRaw" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="dqAlliancesRaw" inverseEntity="Team"/>
+        <relationship name="matchRaw" maxCount="1" deletionRule="Deny" ordered="YES" destinationEntity="Match" inverseName="alliancesRaw" inverseEntity="Match"/>
+        <relationship name="surrogateTeamsRaw" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="surrogateAlliancesRaw" inverseEntity="Team"/>
+        <relationship name="teamsRaw" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="alliancesRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES">
+        <attribute name="keyRaw" attributeType="String"/>
+        <attribute name="typeRaw" attributeType="String"/>
+        <relationship name="matchesRaw" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videosRaw" inverseEntity="Match"/>
+    </entity>
+    <entity name="MatchZebra" representedClassName="MatchZebra" syncable="YES">
+        <attribute name="keyRaw" attributeType="String"/>
+        <attribute name="timesRaw" attributeType="Transformable" valueTransformerName="" customClassName="[Double]"/>
+        <relationship name="alliancesRaw" toMany="YES" deletionRule="Cascade" destinationEntity="MatchZebraAlliance" inverseName="zebraRaw" inverseEntity="MatchZebraAlliance"/>
+        <relationship name="matchRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="zebraRaw" inverseEntity="Match"/>
+    </entity>
+    <entity name="MatchZebraAlliance" representedClassName="MatchZebraAlliance" syncable="YES">
+        <attribute name="allianceKeyRaw" attributeType="String"/>
+        <relationship name="teamsRaw" toMany="YES" deletionRule="Cascade" destinationEntity="MatchZebraTeam" inverseName="allianceRaw" inverseEntity="MatchZebraTeam"/>
+        <relationship name="zebraRaw" maxCount="1" deletionRule="Nullify" destinationEntity="MatchZebra" inverseName="alliancesRaw" inverseEntity="MatchZebra"/>
+    </entity>
+    <entity name="MatchZebraTeam" representedClassName="MatchZebraTeam" syncable="YES">
+        <attribute name="xsRaw" attributeType="Transformable" valueTransformerName="" customClassName="[AnyObject]"/>
+        <attribute name="ysRaw" attributeType="Transformable" valueTransformerName="" customClassName="[AnyObject]"/>
+        <relationship name="allianceRaw" maxCount="1" deletionRule="Nullify" destinationEntity="MatchZebraAlliance" inverseName="teamsRaw" inverseEntity="MatchZebraAlliance"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="zebraRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES">
+        <attribute name="modelKeyRaw" attributeType="String"/>
+        <attribute name="modelTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="Status" representedClassName="Status" syncable="YES">
+        <attribute name="currentSeasonRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="isDatafeedDownRaw" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="latestAppVersionRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="maxSeasonRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="minAppVersionRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="downEventsRaw" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="statusRaw" inverseEntity="Event"/>
+    </entity>
+    <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES">
+        <attribute name="notificationsRaw" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+    </entity>
+    <entity name="Team" representedClassName="Team" syncable="YES">
+        <attribute name="addressRaw" optional="YES" attributeType="String"/>
+        <attribute name="cityRaw" optional="YES" attributeType="String"/>
+        <attribute name="countryRaw" optional="YES" attributeType="String"/>
+        <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
+        <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
+        <attribute name="homeChampionshipRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: String]"/>
+        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="locationNameRaw" optional="YES" attributeType="String"/>
+        <attribute name="nameRaw" optional="YES" attributeType="String"/>
+        <attribute name="nicknameRaw" optional="YES" attributeType="String"/>
+        <attribute name="postalCodeRaw" optional="YES" attributeType="String"/>
+        <attribute name="rookieYearRaw" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="schoolNameRaw" optional="YES" attributeType="String"/>
+        <attribute name="stateProvRaw" optional="YES" attributeType="String"/>
+        <attribute name="teamNumberRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="websiteRaw" optional="YES" attributeType="String"/>
+        <attribute name="yearsParticipatedRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int]"/>
+        <relationship name="alliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="teamsRaw" inverseEntity="MatchAlliance"/>
+        <relationship name="awardsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AwardRecipient" inverseName="teamRaw" inverseEntity="AwardRecipient"/>
+        <relationship name="declinedAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAlliance" inverseName="declinesRaw" inverseEntity="EventAlliance"/>
+        <relationship name="districtRankingsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="teamRaw" inverseEntity="DistrictRanking"/>
+        <relationship name="districtsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="District" inverseName="teamsRaw" inverseEntity="District"/>
+        <relationship name="dqAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="dqTeamsRaw" inverseEntity="MatchAlliance"/>
+        <relationship name="eventPointsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="teamRaw" inverseEntity="DistrictEventPoints"/>
+        <relationship name="eventRankingsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="teamRaw" inverseEntity="EventRanking"/>
+        <relationship name="eventsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teamsRaw" inverseEntity="Event"/>
+        <relationship name="eventStatusesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventStatus" inverseName="teamRaw" inverseEntity="EventStatus"/>
+        <relationship name="inBackupAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAllianceBackup" inverseName="inTeamRaw" inverseEntity="EventAllianceBackup"/>
+        <relationship name="mediaRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TeamMedia" inverseName="teamRaw" inverseEntity="TeamMedia"/>
+        <relationship name="outBackupAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAllianceBackup" inverseName="outTeamRaw" inverseEntity="EventAllianceBackup"/>
+        <relationship name="pickedAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAlliance" inverseName="picksRaw" inverseEntity="EventAlliance"/>
+        <relationship name="statsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="teamRaw" inverseEntity="EventTeamStat"/>
+        <relationship name="surrogateAlliancesRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="surrogateTeamsRaw" inverseEntity="MatchAlliance"/>
+        <relationship name="zebraRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchZebraTeam" inverseName="teamRaw" inverseEntity="MatchZebraTeam"/>
+        <fetchIndex name="byKeyIndex">
+            <fetchIndexElement property="keyRaw" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="TeamMedia" representedClassName="TeamMedia" syncable="YES">
+        <attribute name="detailsRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: Any]"/>
+        <attribute name="directURLRaw" optional="YES" attributeType="String"/>
+        <attribute name="foreignKeyRaw" attributeType="String"/>
+        <attribute name="mediaData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="mediaError" optional="YES" attributeType="Transformable" valueTransformerName="ErrorTransformer" customClassName="Error"/>
+        <attribute name="preferredRaw" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO"/>
+        <attribute name="typeStringRaw" attributeType="String"/>
+        <attribute name="viewURLRaw" optional="YES" attributeType="String"/>
+        <attribute name="yearRaw" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <relationship name="teamRaw" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="mediaRaw" inverseEntity="Team"/>
+    </entity>
+    <entity name="Webcast" representedClassName="Webcast" syncable="YES">
+        <attribute name="channelRaw" attributeType="String"/>
+        <attribute name="dateRaw" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="fileRaw" optional="YES" attributeType="String"/>
+        <attribute name="typeRaw" attributeType="String"/>
+        <relationship name="eventsRaw" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcastsRaw" inverseEntity="Event"/>
+    </entity>
+</model>

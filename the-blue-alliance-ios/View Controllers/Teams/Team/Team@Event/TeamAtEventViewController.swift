@@ -94,14 +94,10 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
 
 }
 
-extension TeamAtEventViewController: TeamMediaCollectionViewControllerDelegate {
+extension TeamAtEventViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {
 
     func mediaSelected(_ media: TeamMedia) {
-        if let imageViewController = TeamMediaImageViewController.forMedia(media: media) {
-            DispatchQueue.main.async {
-                self.present(imageViewController, animated: true)
-            }
-        }
+        show(media: media)
     }
 
 }

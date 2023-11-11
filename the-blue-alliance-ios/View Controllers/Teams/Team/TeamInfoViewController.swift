@@ -54,13 +54,10 @@ class TeamInfoViewController: TBATableViewController, Observable {
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
 
         updateTeamInfo()
-
-        // TODO: Add support for Pits
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
 
         contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
             guard let self = self else { return }
