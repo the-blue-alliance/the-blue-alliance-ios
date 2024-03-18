@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,7 @@
 		14F51704239AA70A00D9240F /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F51703239AA70A00D9240F /* SearchService.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
+		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
 		92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92009B5623DD49A60058E567 /* HandoffServiceTests.swift */; };
 		920240072AEB6AAD0003D118 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 920240062AEB6AAD0003D118 /* PureLayout */; };
 		920240092AEB6AC30003D118 /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 920240082AEB6AC30003D118 /* TBAOperation */; };
@@ -279,6 +280,7 @@
 		14F51703239AA70A00D9240F /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
+		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
 		92009B5623DD49A60058E567 /* HandoffServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffServiceTests.swift; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
@@ -583,6 +585,7 @@
 				9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */,
 				D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */,
 				9263922727F0FD71003C302A /* MatchBreakdownConfigurator2022.swift */,
+				371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */,
 			);
 			path = Breakdown;
 			sourceTree = "<group>";
@@ -1393,8 +1396,8 @@
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
-				924E826C208FE7D20053247C /* Run FirebaseCrashlytics */,
 				927309A323DC0F26006145E0 /* Embed App Extensions */,
+				924E826C208FE7D20053247C /* Run FirebaseCrashlytics */,
 			);
 			buildRules = (
 			);
@@ -1564,7 +1567,7 @@
 			);
 			inputPaths = (
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF",
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
 				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
 				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
@@ -1709,6 +1712,7 @@
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				9263922827F0FD71003C302A /* MatchBreakdownConfigurator2022.swift in Sources */,
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
+				371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */,
 				92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */,
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
 				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
