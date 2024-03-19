@@ -17,16 +17,10 @@ jobs:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: ${{ runner.os }}-gems-
-      - uses: actions/cache@v2
-        with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: ${{ runner.os }}-pods-
       - name: Install
         run: |
           cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
           bundle install
-          bundle exec pod install --repo-update
           bundle exec fastlane run setup_ci
           bundle exec fastlane setup_secrets
         env:
