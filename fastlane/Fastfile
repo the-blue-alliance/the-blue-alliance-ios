@@ -172,7 +172,7 @@ platform :ios do
       code_signing_identity: "iPhone Distribution"
     )
     gym(buildlog_path: "logs")
-    upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
+    # upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
   end
 
   ## End Shipping Lanes for Release Lanes ##
