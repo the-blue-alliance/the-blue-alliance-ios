@@ -40,6 +40,8 @@
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
 		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
 		92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */; };
+		922FF7492BAA1E5E0075AD53 /* 2024Crescendo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 922FF7472BAA1E5E0075AD53 /* 2024Crescendo@2x.png */; };
+		922FF74A2BAA1E5E0075AD53 /* 2024Crescendo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 922FF7482BAA1E5E0075AD53 /* 2024Crescendo@3x.png */; };
 		923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */; };
 		92435E2E23CBC2ED00CDD2D4 /* EventInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */; };
 		924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */; };
@@ -298,6 +300,8 @@
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
 		92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictViewControllerTests.swift; sourceTree = "<group>"; };
+		922FF7472BAA1E5E0075AD53 /* 2024Crescendo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2024Crescendo@2x.png"; sourceTree = "<group>"; };
+		922FF7482BAA1E5E0075AD53 /* 2024Crescendo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2024Crescendo@3x.png"; sourceTree = "<group>"; };
 		923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version_Tests.swift"; sourceTree = "<group>"; };
 		92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsView.swift; sourceTree = "<group>"; };
 		924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix_Tests.swift"; sourceTree = "<group>"; };
@@ -580,6 +584,7 @@
 		92004C6221C21BC600A858C8 /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
+				922FF7462BAA1E5E0075AD53 /* 2024Crescendo */,
 				9244ABB02B00398B007BA24C /* 2019DeepSpace */,
 				9244ABAA2B00398B007BA24C /* 2020InfiniteRecharge */,
 				9244ABAD2B00398B007BA24C /* 2022RapidReact */,
@@ -602,6 +607,15 @@
 				371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */,
 			);
 			path = Breakdown;
+			sourceTree = "<group>";
+		};
+		922FF7462BAA1E5E0075AD53 /* 2024Crescendo */ = {
+			isa = PBXGroup;
+			children = (
+				922FF7472BAA1E5E0075AD53 /* 2024Crescendo@2x.png */,
+				922FF7482BAA1E5E0075AD53 /* 2024Crescendo@3x.png */,
+			);
+			path = 2024Crescendo;
 			sourceTree = "<group>";
 		};
 		923A0D7620D21D3800BF5E31 /* LaunchViews */ = {
@@ -1555,7 +1569,9 @@
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
+				922FF74A2BAA1E5E0075AD53 /* 2024Crescendo@3x.png in Resources */,
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
+				922FF7492BAA1E5E0075AD53 /* 2024Crescendo@2x.png in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				9244ABB52B00398B007BA24C /* 2022RapidReact@3x.png in Resources */,

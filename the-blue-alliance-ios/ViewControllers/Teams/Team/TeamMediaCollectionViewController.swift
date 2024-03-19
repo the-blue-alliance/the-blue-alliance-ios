@@ -303,9 +303,9 @@ extension TeamMediaCollectionViewController: Refreshable {
             guard let self = self else { return }
             // Reload our cell, so we can get rid of our loading state
             // TODO: Fix this so we're only reloading the cells we need
-            var snapshot = dataSource.snapshot()
+            var snapshot = self.dataSource.snapshot()
             snapshot.reloadSections(snapshot.sectionIdentifiers)
-            dataSource.applySnapshotUsingReloadData(snapshot)
+            self.dataSource.applySnapshotUsingReloadData(snapshot)
         }
 
         let fetchMediaOperation = FetchMediaOperation(errorRecorder: errorRecorder, media: media, persistentContainer: persistentContainer)
