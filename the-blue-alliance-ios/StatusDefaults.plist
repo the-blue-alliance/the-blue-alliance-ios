@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>max_season</key>
-	<real>2022</real>
+	<integer>2024</integer>
 	<key>min_app_version</key>
 	<integer>-1</integer>
 	<key>latest_app_version</key>
 	<integer>-1</integer>
 	<key>current_season</key>
-	<real>2022</real>
+	<integer>2024</integer>
 </dict>
 </plist>

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -194,6 +194,13 @@
 		92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF54E021B1B65A0082C58C /* StatusService.swift */; };
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
+		92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63E9A2BA91B4F0025CC03 /* MyTBAKit */; };
+		92F63E9E2BA91BCA0025CC03 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63E9D2BA91BCA0025CC03 /* Search */; };
+		92F63EA12BA91BD80025CC03 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EA02BA91BD80025CC03 /* TBAData */; };
+		92F63EA42BA91BEC0025CC03 /* TBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EA32BA91BEC0025CC03 /* TBAKit */; };
+		92F63EA72BA91BFB0025CC03 /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EA62BA91BFB0025CC03 /* TBAOperation */; };
+		92F63EAA2BA91C070025CC03 /* TBAProtocols in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EA92BA91C070025CC03 /* TBAProtocols */; };
+		92F63EAD2BA91C170025CC03 /* TBAUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EAC2BA91C170025CC03 /* TBAUtils */; };
 		92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F79A7523D6536A0026E9E8 /* SearchContainer.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
@@ -513,12 +520,19 @@
 				924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */,
 				9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */,
 				924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */,
+				92F63EA12BA91BD80025CC03 /* TBAData in Frameworks */,
 				920240112AEB6AE60003D118 /* TBAData in Frameworks */,
 				920240072AEB6AAD0003D118 /* PureLayout in Frameworks */,
+				92F63EA72BA91BFB0025CC03 /* TBAOperation in Frameworks */,
 				920240092AEB6AC30003D118 /* TBAOperation in Frameworks */,
 				924BDD8A26D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				92F63EAD2BA91C170025CC03 /* TBAUtils in Frameworks */,
 				9202400F2AEB6ADC0003D118 /* TBAKit in Frameworks */,
+				92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */,
+				92F63E9E2BA91BCA0025CC03 /* Search in Frameworks */,
 				92C5FBDF2B0038250006AE48 /* Agrume in Frameworks */,
+				92F63EAA2BA91C070025CC03 /* TBAProtocols in Frameworks */,
+				92F63EA42BA91BEC0025CC03 /* TBAKit in Frameworks */,
 				924BDD9226D2B366008BE7D2 /* FirebaseRemoteConfig in Frameworks */,
 				924BDD9526D2B391008BE7D2 /* GoogleSignIn in Frameworks */,
 			);
@@ -1420,6 +1434,13 @@
 				920240102AEB6AE60003D118 /* TBAData */,
 				92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */,
 				92C5FBDE2B0038250006AE48 /* Agrume */,
+				92F63E9A2BA91B4F0025CC03 /* MyTBAKit */,
+				92F63E9D2BA91BCA0025CC03 /* Search */,
+				92F63EA02BA91BD80025CC03 /* TBAData */,
+				92F63EA32BA91BEC0025CC03 /* TBAKit */,
+				92F63EA62BA91BFB0025CC03 /* TBAOperation */,
+				92F63EA92BA91C070025CC03 /* TBAProtocols */,
+				92F63EAC2BA91C170025CC03 /* TBAUtils */,
 			);
 			productName = "the-blue-alliance";
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
@@ -1493,6 +1514,13 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
+				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
+				92F63E9C2BA91BCA0025CC03 /* XCLocalSwiftPackageReference "Packages/Search" */,
+				92F63E9F2BA91BD80025CC03 /* XCLocalSwiftPackageReference "Packages/TBAData" */,
+				92F63EA22BA91BEC0025CC03 /* XCLocalSwiftPackageReference "Packages/TBAKit" */,
+				92F63EA52BA91BFB0025CC03 /* XCLocalSwiftPackageReference "Packages/TBAOperation" */,
+				92F63EA82BA91C070025CC03 /* XCLocalSwiftPackageReference "Packages/TBAProtocols" */,
+				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -2159,13 +2187,44 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MyTBAKit;
+		};
+		92F63E9C2BA91BCA0025CC03 /* XCLocalSwiftPackageReference "Packages/Search" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Search;
+		};
+		92F63E9F2BA91BD80025CC03 /* XCLocalSwiftPackageReference "Packages/TBAData" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TBAData;
+		};
+		92F63EA22BA91BEC0025CC03 /* XCLocalSwiftPackageReference "Packages/TBAKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TBAKit;
+		};
+		92F63EA52BA91BFB0025CC03 /* XCLocalSwiftPackageReference "Packages/TBAOperation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TBAOperation;
+		};
+		92F63EA82BA91C070025CC03 /* XCLocalSwiftPackageReference "Packages/TBAProtocols" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TBAProtocols;
+		};
+		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TBAUtils;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 7.0.0;
+				minimumVersion = 10.0.0;
 			};
 		};
 		924BDD9326D2B391008BE7D2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
@@ -2275,6 +2334,34 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */;
 			productName = Agrume;
+		};
+		92F63E9A2BA91B4F0025CC03 /* MyTBAKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MyTBAKit;
+		};
+		92F63E9D2BA91BCA0025CC03 /* Search */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Search;
+		};
+		92F63EA02BA91BD80025CC03 /* TBAData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAData;
+		};
+		92F63EA32BA91BEC0025CC03 /* TBAKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAKit;
+		};
+		92F63EA62BA91BFB0025CC03 /* TBAOperation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAOperation;
+		};
+		92F63EA92BA91C070025CC03 /* TBAProtocols */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAProtocols;
+		};
+		92F63EAC2BA91C170025CC03 /* TBAUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAUtils;
 		};
 /* End XCSwiftPackageProductDependency section */
 

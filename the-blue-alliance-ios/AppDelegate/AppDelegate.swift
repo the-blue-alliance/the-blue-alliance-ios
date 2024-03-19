@@ -170,8 +170,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
+        // Kickoff background myTBA, along with setting up delegates
+        setupPreviousAuthentication()
 
         // Our app setup operation will load our persistent stores, propogate persistance container
         let appSetupOperation = AppSetupOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -294,9 +294,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         myTBA.authenticationProvider.add(observer: pushService)
     }
 
-    private func setupGoogleAuthentication() {
+    private func setupPreviousAuthentication() {
         // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
         if Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() {
+            // TODO: Need to figure out if it's a Google user or an Apple user?
+            // I suppose, let's print something here...
             GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
                 if let error = error {
                     errorRecorder.record(error)

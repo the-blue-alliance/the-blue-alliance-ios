@@ -10,7 +10,10 @@ public class MyTBAOperation: TBAOperation {
 
         let request = myTBA.createRequest(method, bodyData)
         task = myTBA.urlSession.dataTask(with: request) { [weak self] (data: Data?, response: URLResponse?, error: Error?) in
-            if let error = error {
+            if let response = response as? HTTPURLResponse, response.statusCode == 500 {
+                // Catch 500s as errors
+                completion(nil, MyTBAError.error(500, "Internal server error"))
+            } else if let error = error {
                 completion(nil, error)
             } else if let data = data {
                 #if DEBUG
