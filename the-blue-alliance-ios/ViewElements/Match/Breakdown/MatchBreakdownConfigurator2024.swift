@@ -11,7 +11,6 @@ private class BreakdownStyle2024 {
 
 struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
 
-    
     static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>, _ breakdown: [String: Any]?, _ red: [String: Any]?, _ blue: [String: Any]?) {
 
         var rows: [BreakdownRow?] = []
@@ -27,13 +26,12 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         // Teleop
         rows.append(row(title: "Teleop Amp Note Count", key: "teleopAmpNoteCount", red: red, blue: blue))
         rows.append(speakerRow(title:"Teleop Speaker Note Count", red: red, blue: blue))
-        //rows.append(notesRow(title: "Teleop Note Count", period: "teleop", red: red, blue: blue))
-        
+
         rows.append(row(title: "Teleop Note Points", key: "teleopTotalNotePoints", red: red, blue: blue, type: .subtotal))
         for i in [1, 2, 3] {
             rows.append(endgameRow(i: i, red: red, blue: blue))
         }
-        
+
         rows.append(row(title: "Harmony Points", key: "endGameHarmonyPoints", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Trap Points", key: "endGameNoteInTrapPoints", red: red, blue: blue, type: .subtotal))
         rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
@@ -114,7 +112,7 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
 
     private static func notesRow(title: String, period: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         let heightKeys = ["Amp", "Speaker"]
-    
+
         let images = [BreakdownStyle2024.lowerImage, BreakdownStyle2024.upperImage]
 
         var redCells: [Int] = []
@@ -123,7 +121,7 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         for heightKey in heightKeys {
             var redHeightValues: [Int] = []
             var blueHeightValues: [Int] = []
-        
+
             let key = "\(period)\(heightKey)NoteCount"
             guard let cellValues = values(key: key, red: red, blue: blue) else {
                 return nil
@@ -136,7 +134,7 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
             }
             redHeightValues.append(redCellValue)
             blueHeightValues.append(blueCellValue)
-        
+
             redCells.append(redHeightValues.reduce(0, +))
             blueCells.append(blueHeightValues.reduce(0, +))
         }
@@ -153,7 +151,6 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
     }
 
-           
     private static func endgameRow(i: Int, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         guard let endgameValues = values(key: "endGameRobot\(i)", red: red, blue: blue) else {
             return nil
@@ -167,9 +164,9 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         enum MicLocations: String, CaseIterable {
             case CenterStage, StageLeft, StageRight
         }
-        
-        for micLocation in MicLocations.allCases{
-            guard let micValues = values(key: "mic\(micLocation)", red: red, blue: blue) else{
+
+        for micLocation in MicLocations.allCases {
+            guard let micValues = values(key: "mic\(micLocation)", red: red, blue: blue) else {
                 return nil
             }
             let (rm,bm) = micValues
@@ -178,43 +175,38 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
             }
             micScoredRed.insert(redMic, at: getArrayPosition(micPosition: micLocation.rawValue))
             micScoredBlue.insert(blueMic, at: getArrayPosition(micPosition: micLocation.rawValue))
-
         }
-        var newRedEndgame = ""
+
         let redArrayPos = getArrayPosition(micPosition: redEndgame)
-        if ( redArrayPos > -1 && micScoredRed[redArrayPos]) {
+        if redArrayPos > -1, micScoredRed[redArrayPos] {
             redEndgame = "Spotlit"
         }
+
         let blueArrayPos = getArrayPosition(micPosition: blueEndgame)
-        if ( blueArrayPos > -1 && micScoredBlue[blueArrayPos]) {
+        if blueArrayPos > -1, micScoredBlue[blueArrayPos] {
             blueEndgame = "Spotlit"
         }
-                
-        
 
         let elements = [redEndgame, blueEndgame].map { (endgame) -> AnyHashable in
             if endgame == "None" {
                 return BreakdownStyle.xImage
-            }
-            else if endgame == "Parked" {
+            } else if endgame == "Parked" {
                 return "Park (+1)"
             } else if endgame == "Spotlit" {
                 return "Spotlit (+4)"
-            } 
-            else if didRobotHang(endgame: endgame) {
+            } else if didRobotHang(endgame: endgame) {
                 return "Onstage (+3)"
             }
             return BreakdownStyle.xImage
         }
         return BreakdownRow(title: "Robot \(i) Endgame", red: [elements.first], blue: [elements.last])
     }
-    
+
     private static func didRobotHang(endgame: String) -> Bool{
         return endgame.contains("Stage")
     }
-    
-    private static func getArrayPosition(micPosition: String) -> Int
-    {
+
+    private static func getArrayPosition(micPosition: String) -> Int {
         switch micPosition{
         case "CenterStage":
             return 0
@@ -226,7 +218,7 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
             return -1
         }
     }
-    
+
     private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         guard let foulValues = values(key: "foulCount", red: red, blue: blue) else {
             return nil
@@ -271,17 +263,17 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
-    
+
     private static func totalNotesScoredRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        
+
         let scoringElementKeys = ["Amp", "Speaker"]
         let periodKeys = ["auto", "teleop"]
-        guard let melodyBonusThresholdValues = values(key: "melodyBonusThreshold", red: red, blue: blue)
-        else{
+        guard let melodyBonusThresholdValues = values(key: "melodyBonusThreshold", red: red, blue: blue) else {
             return nil
         }
-        let (threshold,_) = melodyBonusThresholdValues
-        guard let melodyBonusThreshold = threshold as? Int else{
+
+        let (threshold, _) = melodyBonusThresholdValues
+        guard let melodyBonusThreshold = threshold as? Int else {
             return nil
         }
 
@@ -307,10 +299,10 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
             redNotes.append(redScoringElementValues.reduce(0, +))
             blueNotes.append(blueScoringElementValues.reduce(0, +))
         }
-        
+
         return BreakdownRow(title: title, red: ["\(redNotes.reduce(0, +)) / \(melodyBonusThreshold)"], blue: ["\(blueNotes.reduce(0, +)) / \(melodyBonusThreshold)"])
     }
-    
+
     private static func speakerRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         let amplificationKeys = ["Count", "AmplifiedCount"]
 
@@ -322,7 +314,7 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         for amplificationKey in amplificationKeys {
             var redHeightValues: [Int] = []
             var blueHeightValues: [Int] = []
-            
+
             let key = "teleopSpeakerNote\(amplificationKey)"
             guard let cellValues = values(key: key, red: red, blue: blue) else {
                 return nil
@@ -333,10 +325,10 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
             guard let redCellValue = rv as? Int, let blueCellValue = bv as? Int else {
                 return nil
             }
-            
+
             redHeightValues.append(redCellValue)
             blueHeightValues.append(blueCellValue)
-        
+
             redNotes.append(redHeightValues.reduce(0, +))
             blueNotes.append(blueHeightValues.reduce(0, +))
         }
