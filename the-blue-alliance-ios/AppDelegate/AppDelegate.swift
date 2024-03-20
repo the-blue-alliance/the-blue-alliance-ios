@@ -63,8 +63,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let errorRecorder = TBAErrorRecorder()
     lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
         let description = persistentContainer.persistentStoreDescriptions.first!
-        return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
-                                                model: persistentContainer.managedObjectModel)
+        let coordinator = persistentContainer.persistentStoreCoordinator
+        let spotlightDelegate = TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
+                                                                 coordinator: coordinator)
+        spotlightDelegate.startSpotlightIndexing()
+        return spotlightDelegate
     }()
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
@@ -76,6 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var persistentContainer: TBAPersistenceContainer = {
         let persistentContainer = TBAPersistenceContainer()
         persistentContainer.persistentStoreDescriptions.forEach {
+            $0.type = NSSQLiteStoreType
             $0.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         }
         return persistentContainer
@@ -174,7 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupPreviousAuthentication()
 
         // Our app setup operation will load our persistent stores, propogate persistance container
-        let appSetupOperation = AppSetupOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
