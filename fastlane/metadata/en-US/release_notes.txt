@@ -1,1 +1,1 @@
-Hey y'all - this update adds support for the 2024 match breakdown and adds a 2024 CRESCENDO app icon! The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes search. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
