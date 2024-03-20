@@ -12,10 +12,10 @@ class AppSetupOperation: TBAOperation {
 
     let appSetupOperationQueue = OperationQueue()
 
-    init(indexDelegate: TBACoreDataCoreSpotlightDelegate, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.destroyPersistentStoreOperation = DestroyPersistentStoreOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        self.persistentContainerOperation = PersistentContainerOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer)
+        self.persistentContainerOperation = PersistentContainerOperation(persistentContainer: persistentContainer)
         self.persistentContainerOperation.addDependency(self.destroyPersistentStoreOperation)
 
         super.init()
