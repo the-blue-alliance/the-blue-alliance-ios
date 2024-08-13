@@ -112,8 +112,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
         }
         if team.name != nil {
             infoItems.append(.rookieYear)
-            infoItems.append(.sponsors)
-            
+            infoItems.append(.sponsors)            
         }
 
         if !infoItems.isEmpty {
