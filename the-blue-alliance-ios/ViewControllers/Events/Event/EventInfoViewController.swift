@@ -113,7 +113,7 @@ class EventInfoViewController: TBATableViewController, Observable {
                 return cell
             case .twitter:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "View #\(self.event.key) on Twitter"
+                cell.textLabel?.text = "View \(self.event.key) on Twitter"
                 return cell
             case .youtube:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)

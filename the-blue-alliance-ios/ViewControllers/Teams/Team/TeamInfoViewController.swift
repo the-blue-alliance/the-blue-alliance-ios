@@ -10,6 +10,7 @@ private enum TeamInfoSection: Int {
 
 private enum TeamInfoItem {
     case location
+    case rookieYear
     case sponsors
     case website
     case twitter
@@ -75,6 +76,8 @@ class TeamInfoViewController: TBATableViewController, Observable {
             switch item {
             case .location:
                 return self.tableView(tableView, locationCellForRowAt: indexPath)
+            case .rookieYear:
+                return self.tableView(tableView, rookieYearCellForRowAt: indexPath)
             case .sponsors:
                 return self.tableView(tableView, sponsorCellForRowAt: indexPath)
             case .website:
@@ -83,7 +86,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
                 return cell
             case .twitter:
                 let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                cell.textLabel?.text = "View #\(self.team.key) on Twitter"
+                cell.textLabel?.text = "View \(self.team.key) on Twitter"
                 return cell
             case .youtube:
                 let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
@@ -108,7 +111,8 @@ class TeamInfoViewController: TBATableViewController, Observable {
             infoItems.append(.location)
         }
         if team.name != nil {
-            infoItems.append(.sponsors)
+            infoItems.append(.rookieYear)
+            infoItems.append(.sponsors)            
         }
 
         if !infoItems.isEmpty {
@@ -140,6 +144,18 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
         cell.titleLabel?.text = "Location"
         cell.subtitleLabel?.text = team.locationString
+
+        cell.accessoryType = .none
+        cell.selectionStyle = .none
+
+        return cell
+    }
+    
+    private func tableView(_ tableView: UITableView, rookieYearCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+
+        cell.titleLabel?.text = "Rookie Year"
+        cell.subtitleLabel?.text = String(team.rookieYear!)
 
         cell.accessoryType = .none
         cell.selectionStyle = .none
