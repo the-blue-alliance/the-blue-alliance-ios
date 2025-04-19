@@ -31,6 +31,7 @@
 		920240112AEB6AE60003D118 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 920240102AEB6AE60003D118 /* TBAData */; };
 		9204401526D2B65D00B94661 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 9204401426D2B65D00B94661 /* Search */; };
 		9204401726D2B68A00B94661 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 9204401626D2B68A00B94661 /* TBAData */; };
+		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */; };
@@ -436,6 +437,7 @@
 		92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
 		92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewControllerTests.swift; sourceTree = "<group>"; };
+		92C5C68F2DB4248B00FAF60A /* TBAAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TBAAPI; sourceTree = "<group>"; };
 		92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
@@ -525,6 +527,7 @@
 				9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */,
 				924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */,
 				92F63EA12BA91BD80025CC03 /* TBAData in Frameworks */,
+				921843032DB42424003B4F9E /* TBAAPI in Frameworks */,
 				920240112AEB6AE60003D118 /* TBAData in Frameworks */,
 				920240072AEB6AAD0003D118 /* PureLayout in Frameworks */,
 				92F63EA72BA91BFB0025CC03 /* TBAOperation in Frameworks */,
@@ -1033,6 +1036,7 @@
 				92775E3626D01C9700539304 /* TBAOperation */,
 				92775E3826D01D1400539304 /* TBAProtocols */,
 				92A7B62F26D01BB900EECCC9 /* TBAUtils */,
+				92C5C68F2DB4248B00FAF60A /* TBAAPI */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -1455,6 +1459,7 @@
 				92F63EA62BA91BFB0025CC03 /* TBAOperation */,
 				92F63EA92BA91C070025CC03 /* TBAProtocols */,
 				92F63EAC2BA91C170025CC03 /* TBAUtils */,
+				921843022DB42424003B4F9E /* TBAAPI */,
 			);
 			productName = "the-blue-alliance";
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
@@ -1535,6 +1540,7 @@
 				92F63EA52BA91BFB0025CC03 /* XCLocalSwiftPackageReference "Packages/TBAOperation" */,
 				92F63EA82BA91C070025CC03 /* XCLocalSwiftPackageReference "Packages/TBAProtocols" */,
 				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
+				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -2205,6 +2211,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TBAAPI;
+		};
 		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/MyTBAKit;
@@ -2311,6 +2321,10 @@
 		9204401626D2B68A00B94661 /* TBAData */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TBAData;
+		};
+		921843022DB42424003B4F9E /* TBAAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TBAAPI;
 		};
 		924BDD8926D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
 			isa = XCSwiftPackageProductDependency;
