@@ -27,8 +27,6 @@ class TeamViewController: HeaderContainerViewController, Observable {
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
 
-    private var activity: NSUserActivity?
-
     override var subscribableModel: MyTBASubscribable {
         return team
     }
@@ -96,8 +94,6 @@ class TeamViewController: HeaderContainerViewController, Observable {
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
         setupObservers()
-
-        activity = team.userActivity
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -106,22 +102,10 @@ class TeamViewController: HeaderContainerViewController, Observable {
         errorRecorder.log("Team: %@", [team.key])
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        activity?.becomeCurrent()
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         operationQueue.cancelAllOperations()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        activity?.resignCurrent()
     }
 
     // MARK: - Private
@@ -177,8 +161,6 @@ class TeamViewController: HeaderContainerViewController, Observable {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(media, year: year)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(mediaOperation)
             }, errorRecorder: errorRecorder)
         })
         operationQueue.addOperation(mediaOperation)

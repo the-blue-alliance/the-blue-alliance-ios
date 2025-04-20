@@ -1,5 +1,4 @@
 import CoreData
-import CoreSpotlight
 import Firebase
 import FirebaseAnalytics
 import FirebaseAuth
@@ -8,7 +7,7 @@ import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
 import Photos
-import Search
+import TBAAPI
 import TBAData
 import TBAKit
 import TBAUtils
@@ -33,42 +32,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
     }()
     lazy private var rootViewControllerPhone: PhoneRootViewController = {
-        return PhoneRootViewController(fcmTokenProvider: messaging,
-                                       myTBA: myTBA,
-                                       pasteboard: pasteboard,
-                                       photoLibrary: photoLibrary,
-                                       pushService: pushService,
-                                       searchService: searchService,
-                                       statusService: statusService,
-                                       urlOpener: urlOpener,
-                                       dependencies: dependencies)
+        return PhoneRootViewController(
+            fcmTokenProvider: messaging,
+            myTBA: myTBA,
+            pasteboard: pasteboard,
+            photoLibrary: photoLibrary,
+            pushService: pushService,
+            searchService: searchService,
+            statusService: statusService,
+            urlOpener: urlOpener,
+            dependencies: dependencies
+        )
     }()
     lazy private var rootViewControllerPad: PadRootViewController = {
-        return PadRootViewController(fcmTokenProvider: messaging,
-                                       myTBA: myTBA,
-                                       pasteboard: pasteboard,
-                                       photoLibrary: photoLibrary,
-                                       pushService: pushService,
-                                       searchService: searchService,
-                                       statusService: statusService,
-                                       urlOpener: urlOpener,
-                                       dependencies: dependencies)
+        return PadRootViewController(
+            fcmTokenProvider: messaging,
+            myTBA: myTBA,
+            pasteboard: pasteboard,
+            photoLibrary: photoLibrary,
+            pushService: pushService,
+            searchService: searchService,
+            statusService: statusService,
+            urlOpener: urlOpener,
+            dependencies: dependencies
+        )
     }()
 
     // MARK: - Services
-    private lazy var dependencies = Dependencies(errorRecorder: errorRecorder,
+    private lazy var dependencies = Dependencies(api: api,
+                                                 errorRecorder: errorRecorder,
                                                  persistentContainer: persistentContainer,
                                                  tbaKit: tbaKit,
                                                  userDefaults: userDefaults)
     private let errorRecorder = TBAErrorRecorder()
-    lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
-        let description = persistentContainer.persistentStoreDescriptions.first!
-        let coordinator = persistentContainer.persistentStoreCoordinator
-        let spotlightDelegate = TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
-                                                                 coordinator: coordinator)
-        spotlightDelegate.startSpotlightIndexing()
-        return spotlightDelegate
-    }()
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
         return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
@@ -86,17 +82,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     let photoLibrary = PHPhotoLibrary.shared()
     lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
+    var api: TBAAPI!
     var tbaKit: TBAKit!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
-    lazy var handoffService: HandoffService = {
-        return HandoffService(errorRecorder: errorRecorder,
-                              persistentContainer: persistentContainer,
-                              rootControllerProvider: { [unowned self] in
-            return rootViewController
-        })
-    }()
     lazy var pushService: PushService = {
         return PushService(errorRecorder: errorRecorder,
                            myTBA: myTBA,
@@ -108,20 +98,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                    retryService: RetryService())
     }()
     lazy var searchService: SearchService = {
-        return SearchService(application: UIApplication.shared,
-                             errorRecorder: errorRecorder,
-                             indexDelegate: indexDelegate,
-                             persistentContainer: persistentContainer,
-                             searchIndex: CSSearchableIndex.default(),
-                             statusService: statusService,
-                             tbaKit: tbaKit,
-                             userDefaults: userDefaults)
+        return SearchService(
+            api: api,
+            retryService: RetryService()
+        )
     }()
     lazy var statusService: StatusService = {
-        return StatusService(errorRecorder: errorRecorder,
-                             persistentContainer: persistentContainer,
-                             retryService: RetryService(),
-                             tbaKit: tbaKit)
+        return StatusService(
+            api: api,
+            retryService: RetryService(),
+            userDefaults: userDefaults
+        )
     }()
 
     // A completion block for registering for remote notifications
@@ -153,11 +140,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         let secrets = Secrets()
+        api = TBAAPI(apiKey: secrets.tbaAPIKey)
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
 
         // Listen for changes to FMS availability
         registerForFMSStatusChanges()
-        registerForStatusChanges()
 
         // Assign our Push Service as a delegate to all push-related classes
         setupPushServiceDelegates()
@@ -178,48 +165,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupPreviousAuthentication()
 
         // Our app setup operation will load our persistent stores, propogate persistance container
-        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        weak var weakAppSetupOperation = appSetupOperation
-        appSetupOperation.completionBlock = { [unowned self] in
-            if let error = weakAppSetupOperation?.completionError as NSError? {
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, userDefaults: userDefaults)
+        Task {
+            do {
+                try await appSetupOperation.execute()
+            } catch {
                 errorRecorder.record(error)
                 DispatchQueue.main.async {
-                    AppDelegate.showFatalError(error, in: window)
+                    AppDelegate.showFatalError(error as NSError, in: window)
                 }
-            } else {
-                self.searchService.refresh()
-
-                // Register retries for our status service on the main thread
-                DispatchQueue.main.async {
-                    self.remoteConfigService.registerRetryable(initiallyRetry: true)
-                    self.statusService.registerRetryable(initiallyRetry: true)
-
-                    // Check our minimum app version
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
-                        return
-                    }
-
-                    guard let window = self.window else {
-                        fatalError("Window not setup when setting root vc")
-                    }
-                    guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-                        fatalError("Unable to snapshot root view controller")
-                    }
-                    self.rootViewController.view.addSubview(snapshot)
-                    window.rootViewController = self.rootViewController
-
-                    // 0.35 is an iOS animation magic number... for now
-                    UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                        snapshot.layer.opacity = 0;
-                    }, completion: { (status) in
-                        snapshot.removeFromSuperview()
-                        self.handoffService.appSetup = true
-                    })
-                }
+                return false
             }
+            // Register retries for our status service on the main thread
+            DispatchQueue.main.async {
+                self.remoteConfigService.registerRetryable(initiallyRetry: true)
+                self.statusService.registerRetryable(initiallyRetry: true)
+                self.searchService.registerRetryable(initiallyRetry: true)
+
+                guard let window = self.window else {
+                    fatalError("Window not setup when setting root vc")
+                }
+                guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+                    fatalError("Unable to snapshot root view controller")
+                }
+                self.rootViewController.view.addSubview(snapshot)
+                window.rootViewController = self.rootViewController
+
+                // 0.35 is an iOS animation magic number... for now
+                UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                    snapshot.layer.opacity = 0;
+                }, completion: { (status) in
+                    snapshot.removeFromSuperview()
+                })
+            }
+            return true
         }
-        OperationQueue.main.addOperation(appSetupOperation)
 
         return true
     }
@@ -248,12 +228,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         return GIDSignIn.sharedInstance.handle(url)
-    }
-
-    // MARK: Search Delegate Methods
-
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return handoffService.application(continue: userActivity)
     }
 
     // MARK: Push Delegate Methods
@@ -377,38 +351,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let segmentedControlAppearance = UISegmentedControl.appearance()
         segmentedControlAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         segmentedControlAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.segmentedControlSelectedColor], for: .selected)
-    }
-
-}
-
-extension AppDelegate {
-
-    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
-        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
-            return true
-        }
-
-        return Bundle.main.buildVersionNumber >= minimumAppVersion
-    }
-
-    func showMinimumAppVersionAlert(currentAppVersion: Int) {
-        guard let window = window else {
-            return
-        }
-
-        DispatchQueue.main.async {
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
-        }
-    }
-
-}
-
-extension AppDelegate: StatusSubscribable {
-
-    func statusChanged(status: Status) {
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
-        }
     }
 
 }

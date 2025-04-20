@@ -222,18 +222,6 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
 extension TeamInfoViewController: Refreshable {
 
-    var refreshKey: String? {
-        return team.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
     var isDataSourceEmpty: Bool {
         let years = team.yearsParticipated ?? []
         return team.name == nil || years.isEmpty
@@ -249,8 +237,6 @@ extension TeamInfoViewController: Refreshable {
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(team, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: infoOperation)
             }, errorRecorder: errorRecorder)
         }
 
@@ -264,8 +250,6 @@ extension TeamInfoViewController: Refreshable {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.setYearsParticipated(years)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(yearsOperation)
             }, errorRecorder: errorRecorder)
         }
 

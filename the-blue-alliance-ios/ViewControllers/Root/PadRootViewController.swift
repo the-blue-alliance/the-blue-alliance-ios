@@ -13,8 +13,8 @@ class PadRootViewController: UISplitViewController, RootController {
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let pushService: PushService
-    let searchService: SearchService
     let urlOpener: URLOpener
+    let searchService: SearchService
     let statusService: StatusService
     let dependencies: Dependencies
 
@@ -63,21 +63,6 @@ class PadRootViewController: UISplitViewController, RootController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    // MARK: - RootController
-
-    func continueSearch(_ searchText: String) -> Bool {
-        return masterViewController.continueSearch(searchText)
-    }
-
-    func show(event: Event) -> Bool {
-        return masterViewController.show(event: event)
-    }
-
-    func show(team: Team) -> Bool {
-        return masterViewController.show(team: team)
-    }
-
 }
 
 private class PadMasterViewController: ContainerViewController, RootController {
@@ -123,55 +108,6 @@ private class PadMasterViewController: ContainerViewController, RootController {
     }
 
     // MARK: - RootController
-
-    func continueSearch(_ searchText: String) -> Bool {
-        // Pop to root tab, show search
-        // Dismiss existing modal view controller
-        if let presentedViewController = presentedViewController {
-            presentedViewController.dismiss(animated: false)
-        }
-
-        guard let navigationController = navigationController else {
-            return false
-        }
-
-        // Fix `popToRootViewController` clobbering our `isActive` animation
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/878
-        CATransaction.setCompletionBlock { [weak self] in
-            self?.searchController.isActive = true
-        }
-        CATransaction.begin()
-        navigationController.popToRootViewController(animated: false)
-        CATransaction.commit()
-
-        searchController.searchBar.text = searchText
-
-        return true
-    }
-
-    func show(event: Event) -> Bool {
-        let eventViewController = EventViewController(event: event,
-                                                      pasteboard: pasteboard,
-                                                      photoLibrary: photoLibrary,
-                                                      statusService: statusService,
-                                                      urlOpener: urlOpener,
-                                                      myTBA: myTBA,
-                                                      dependencies: dependencies)
-        _push(eventViewController)
-        return true
-    }
-
-    func show(team: Team) -> Bool {
-        let teamViewController = TeamViewController(team: team,
-                                                    pasteboard: pasteboard,
-                                                    photoLibrary: photoLibrary,
-                                                    statusService: statusService,
-                                                    urlOpener: urlOpener,
-                                                    myTBA: myTBA,
-                                                    dependencies: dependencies)
-        _push(teamViewController)
-        return true
-    }
 
     func _push(_ viewController: UIViewController) {
         let navigationController = UINavigationController(rootViewController: viewController)
@@ -253,18 +189,6 @@ private class PadRootTableViewController: TBATableViewController, Refreshable, S
     }
 
     // MARK: - Refreshable
-
-    var refreshKey: String? {
-        return nil
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
 
     var isDataSourceEmpty: Bool {
         return false

@@ -21,14 +21,15 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.showsSearchResultsController = true
         searchController.searchResultsUpdater = searchViewController
+        searchController.scopeBarActivation = .onSearchActivation
 
         navigationItem.searchController = searchController
 
         // Style our search bar
         searchController.searchBar.backgroundColor = UIColor.navigationBarTintColor
         searchController.searchBar.autocapitalizationType = .words
-        searchController.searchBar.placeholder = "Search teams and events"
-        searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map { $0.title }
+        searchController.searchBar.placeholder = "Search events and teams"
+        searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map { $0.rawValue.capitalized }
         searchController.searchBar.delegate = searchViewController
 
         // Style our search bar text field

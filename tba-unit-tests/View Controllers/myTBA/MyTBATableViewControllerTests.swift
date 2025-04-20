@@ -147,14 +147,6 @@ class MyTBATableViewControllerTests: TBATestCase {
         XCTAssertEqual(subscriptions.refreshKey, "subscriptions")
     }
 
-    func test_automaticRefreshInterval() {
-        XCTAssertEqual(myTBATableViewController.automaticRefreshInterval?.day, 1)
-    }
-
-    func test_automaticRefreshEndDate() {
-        XCTAssertNil(myTBATableViewController.automaticRefreshEndDate)
-    }
-
     func test_isDataSourceEmpty() {
         // No objects, myTBA not auth'd
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)

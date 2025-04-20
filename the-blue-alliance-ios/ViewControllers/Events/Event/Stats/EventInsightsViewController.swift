@@ -157,22 +157,6 @@ class EventInsightsViewController: TBATableViewController, Observable {
 
 extension EventInsightsViewController: Refreshable {
 
-    var refreshKey: String? {
-        if eventStatsConfigurator == nil {
-            return nil
-        }
-        return "\(event.key)_insights"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh event insights until the event is over
-        return event.endDate?.endOfDay()
-    }
-
     var isDataSourceEmpty: Bool {
         return dataSource.isDataSourceEmpty
     }
@@ -188,8 +172,6 @@ extension EventInsightsViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(insights)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

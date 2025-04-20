@@ -78,7 +78,7 @@ class DistrictsViewController: TBATableViewController {
     private func updateDataSource() {
         fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
 
-        if shouldRefresh() {
+        if isDataSourceEmpty {
             refresh()
         }
     }
@@ -90,20 +90,6 @@ class DistrictsViewController: TBATableViewController {
 }
 
 extension DistrictsViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(year)_districts"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh districts until the start of the year
-        // Ex: 2019 Districts will automatically refresh until Jan 1st, 2019 (when districts should be all set)
-        return Calendar.current.date(from: DateComponents(year: year))
-    }
 
     var isDataSourceEmpty: Bool {
         return fetchedResultsController.isDataSourceEmpty
@@ -119,8 +105,6 @@ extension DistrictsViewController: Refreshable {
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({ [unowned self] in
                 District.insert(districts, year: self.year, in: context)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

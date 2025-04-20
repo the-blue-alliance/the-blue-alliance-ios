@@ -1,8 +1,6 @@
 import CoreData
-import CoreSpotlight
 import Foundation
 import MyTBAKit
-import Search
 import TBAKit
 import TBAProtocols
 import TBAUtils
@@ -1344,39 +1342,6 @@ extension Event: MyTBASubscribable {
             NotificationType.scheduleUpdated,
             NotificationType.matchVideo
         ]
-    }
-
-}
-
-extension Event: Searchable {
-
-    public var searchAttributes: CSSearchableItemAttributeSet {
-        let attributeSet = CSSearchableItemAttributeSet(itemContentType: Event.entityName)
-
-        attributeSet.displayName = safeNameYear
-        attributeSet.alternateNames = [key, shortName, name].compactMap({ $0 }) // Queryable by short name or name
-        // attributeSet.contentDescription = dateString
-
-        // Date-related event stuff
-        attributeSet.startDate = startDate
-        attributeSet.endDate = endDate
-        attributeSet.allDay = NSNumber(value: 1)
-
-        // Location-related event stuff
-        attributeSet.city = city
-        attributeSet.country = country
-        attributeSet.latitude = getValue(\Event.latRaw)
-        attributeSet.longitude = getValue(\Event.lngRaw)
-        attributeSet.namedLocation = locationName
-        attributeSet.stateOrProvince = stateProv
-        attributeSet.fullyFormattedAddress = address
-        attributeSet.postalCode = postalCode
-
-        return attributeSet
-    }
-
-    public var webURL: URL {
-        return URL(string: "https://www.thebluealliance.com/event/\(key)")!
     }
 
 }

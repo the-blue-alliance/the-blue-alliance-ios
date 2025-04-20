@@ -47,10 +47,6 @@ private class MockContainableViewController: ContainableViewController {
     var refreshView: UIScrollView {
         return UIScrollView()
     }
-    var refreshKey: String?
-    var automaticRefreshInterval: DateComponents?
-    var automaticRefreshEndDate: Date?
-    var isDataSourceEmpty: Bool = false
 
     // MARK: - Navigatable
 

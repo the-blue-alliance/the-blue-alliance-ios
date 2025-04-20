@@ -232,8 +232,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     // If we don't get any models and we don't have an error, we probably don't have any models upstream
                     context.deleteAllObjectsForEntity(entity: T.entity())
                 }
-            }, saved: {
-                self.markRefreshSuccessful()
             }, errorRecorder: errorRecorder)
         }
         finalOperation = addRefreshOperations([operation])
@@ -267,7 +265,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             context.performChangesAndWait({
                 Event.insert(event, in: context)
             }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
@@ -285,7 +282,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             context.performChangesAndWait({
                 Team.insert(team, in: context)
             }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
@@ -303,7 +299,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             context.performChangesAndWait({
                 Match.insert(match, in: context)
             }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
@@ -379,18 +374,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 }
 
 extension MyTBATableViewController: Refreshable {
-
-    var refreshKey: String? {
-        return J.arrayKey
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
 
     var isDataSourceEmpty: Bool {
         if myTBA.isAuthenticated, dataSource.isDataSourceEmpty {

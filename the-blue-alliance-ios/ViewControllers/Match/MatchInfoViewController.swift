@@ -185,23 +185,6 @@ class MatchInfoViewController: TBAViewController, Observable {
 
 extension MatchInfoViewController: Refreshable {
 
-    var refreshKey: String? {
-        return match.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh the match info until a few days after the match has been played
-        // (Mostly looking for new videos)
-        guard let endDate = match.event.endDate else {
-            return nil
-        }
-        return Calendar.current.date(byAdding: DateComponents(day: 7), to: endDate)
-    }
-
     var isDataSourceEmpty: Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
@@ -219,8 +202,6 @@ extension MatchInfoViewController: Refreshable {
                 let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     Event.insert(event, in: context)
-                }, saved: { [unowned self] in
-                    self.markTBARefreshSuccessful(tbaKit, operation: eventOperation!)
                 }, errorRecorder: errorRecorder)
             })
         }
@@ -240,8 +221,6 @@ extension MatchInfoViewController: Refreshable {
                     break
                 }
 
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: matchOperation)
             }, errorRecorder: errorRecorder)
         })
         addRefreshOperations([eventOperation, matchOperation].compactMap({ $0 }))

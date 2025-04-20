@@ -96,19 +96,6 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
 
 extension DistrictRankingsViewController: Refreshable {
 
-    var refreshKey: String? {
-        return "\(district.key)_rankings"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh district rankings until DCMP is over
-        return district.endDate?.endOfDay()
-    }
-
     var isDataSourceEmpty: Bool {
         return fetchedResultsController.isDataSourceEmpty
     }
@@ -124,8 +111,6 @@ extension DistrictRankingsViewController: Refreshable {
             context.performChangesAndWait({
                 let district = context.object(with: self.district.objectID) as! District
                 district.insert(rankings)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

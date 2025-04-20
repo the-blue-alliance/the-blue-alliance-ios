@@ -1,8 +1,7 @@
-import CoreData
-import TBAData
-import TBAKit
-import TBAUtils
 import Foundation
+import TBAAPI
+import TBAModels
+import os
 
 /**
  Service to periodically fetch from the /status endpoint
@@ -11,28 +10,21 @@ public class StatusService: NSObject {
 
     var retryService: RetryService
 
-    private let operationQueue = OperationQueue()
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: StatusService.self)
+    )
 
-    private let bundle: Bundle
-    private let errorRecorder: ErrorRecorder
-    private let persistentContainer: NSPersistentContainer
-    private let tbaKit: TBAKit
-
-    lazy var status: Status = {
-        if let status = Status.status(in: persistentContainer.viewContext) {
-            return status
-        } else {
-            guard let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) else {
-                fatalError("Cannot setup Status for StatusService")
-            }
-            _ = persistentContainer.viewContext.saveOrRollback(errorRecorder: errorRecorder)
-            return status
+    private let api: TBAAPI
+    fileprivate var status: Status {
+        didSet {
+            Self.logger.debug("Status: \(self.status, privacy: .public)")
+            dispatchStatusChanged(status)
+            dispatchFMSDown(status.datafeedDown)
+            dispatchEvents(downEventKeys: status.downEvents)
         }
-    }()
-
-    lazy var contextObserver: CoreDataContextObserver<Status> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    }
+    private let userDefaults: UserDefaults
 
     private let statusSubscribers: NSHashTable<StatusSubscribable> = NSHashTable.weakObjects()
     private let fmsStatusSubscribers: NSHashTable<FMSStatusSubscribable> = NSHashTable.weakObjects()
@@ -50,38 +42,53 @@ public class StatusService: NSObject {
         return status.maxSeason
     }
 
-    init(bundle: Bundle = Bundle.main, errorRecorder: ErrorRecorder, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
-        self.bundle = bundle
-        self.errorRecorder = errorRecorder
-        self.persistentContainer = persistentContainer
+    init(api: TBAAPI, retryService: RetryService, userDefaults: UserDefaults) {
+        self.api = api
         self.retryService = retryService
-        self.tbaKit = tbaKit
+        self.userDefaults = userDefaults
+
+        let defaultStatus = Status(
+            ios: AppInfo(
+                latestAppVersion: -1,
+                minAppVersion: -1
+            ),
+            currentSeason: 2025,
+            downEvents: [],
+            datafeedDown: false,
+            maxSeason: 2025,
+            maxTeamPage: 21
+        )
+
+        do {
+            if let status = try userDefaults.getStatus() {
+                self.status = status
+                Self.logger.debug("Using UserDefaults Status")
+            } else {
+                self.status = defaultStatus
+                Self.logger.debug("Using default Status")
+            }
+        } catch {
+            Self.logger.error("Error fetching Status from UserDefaults: \(error)")
+            self.status = defaultStatus
+        }
+        Self.logger.debug("Init Status: \(self.status, privacy: .public)")
 
         super.init()
     }
 
-    func setupStatusObservers() {
-        contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
-            self?.dispatchStatusChanged(status)
-            self?.dispatchFMSDown(status.isDatafeedDown)
-            self?.dispatchEvents(downEventKeys: status.downEvents.map({ $0.key }))
+    func fetchStatus() async {
+        do {
+            let status = try await api.getStatus()
+            Self.logger.debug("Fetched Status from API")
+            self.status = status
+        } catch {
+            Self.logger.error("Error fetching Status from API: \(error)")
         }
-    }
-
-    internal func fetchStatus(completion: ((_ error: Error?) -> Void)? = nil) -> TBAKitOperation {
-        return tbaKit.fetchStatus { [self] (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion?(error)
-            case .success(let status):
-                let context = persistentContainer.newBackgroundContext()
-                context.performChangesAndWait({
-                    if !notModified, let status = status {
-                        Status.insert(status, in: context)
-                    }
-                }, errorRecorder: errorRecorder)
-                completion?(nil)
-            }
+        do {
+            try self.userDefaults.setStatus(status: status)
+            Self.logger.debug("Saved API Status to UserDefaults")
+        } catch {
+            Self.logger.error("Error saving Status to UserDefaults: \(error)")
         }
     }
 
@@ -131,7 +138,7 @@ public class StatusService: NSObject {
 
     fileprivate func updateStatusSubscribers(_ status: Status) {
         for subscriber in self.statusSubscribers.allObjects {
-            subscriber.statusChanged(status: status)
+            subscriber.statusChanged(statusService: self)
         }
     }
 
@@ -160,16 +167,17 @@ extension StatusService: Retryable {
     }
 
     func retry() {
-        let op = fetchStatus()
-        operationQueue.addOperation(op)
+        Task {
+            await fetchStatus()
+        }
     }
 
 }
 
-@objc protocol StatusSubscribable {
+@objc protocol StatusSubscribable: AnyObject {
     var statusService: StatusService { get }
 
-    func statusChanged(status: Status)
+    func statusChanged(statusService: StatusService)
 }
 
 extension StatusSubscribable {
@@ -207,8 +215,25 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        let downEventKeys = statusService.status.downEvents.map({ $0.key })
-        return downEventKeys.contains(eventKey)
+        return statusService.status.downEvents.contains(eventKey)
+    }
+
+}
+
+fileprivate extension UserDefaults {
+
+    private static let kStatus = "kStatus"
+
+    func getStatus() throws -> Status? {
+        guard let encodedStatus = object(forKey: Self.kStatus) as? Data else {
+            return nil
+        }
+        return try PropertyListDecoder().decode(Status.self, from: encodedStatus)
+    }
+
+    func setStatus(status: Status) throws {
+        let encodedStatus = try PropertyListEncoder().encode(status)
+        set(encodedStatus, forKey: Self.kStatus)
     }
 
 }

@@ -23,8 +23,6 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     private(set) var rankingsViewController: EventRankingsViewController
     private(set) var matchesViewController: MatchesViewController
 
-    private var activity: NSUserActivity?
-
     override var subscribableModel: MyTBASubscribable {
         return event
     }
@@ -78,26 +76,12 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
                 self.title = event.friendlyNameWithYear
             }
         }
-
-        activity = event.userActivity
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         errorRecorder.log("Event: %@", [event.key])
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        activity?.becomeCurrent()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        activity?.resignCurrent()
     }
 
     // MARK: - Interface Methods

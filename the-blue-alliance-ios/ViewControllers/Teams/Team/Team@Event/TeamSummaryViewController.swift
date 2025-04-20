@@ -452,19 +452,6 @@ class TeamSummaryViewController: TBATableViewController {
 
 extension TeamSummaryViewController: Refreshable {
 
-    var refreshKey: String? {
-        return "\(team.key)@\(event.key)_status"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh team summary until the event is over
-        return event.endDate?.endOfDay()
-    }
-
     var isDataSourceEmpty: Bool {
         return dataSource.isDataSourceEmpty
     }
@@ -482,8 +469,6 @@ extension TeamSummaryViewController: Refreshable {
                 let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     Event.insert(event, in: context)
-                }, saved: { [unowned self] in
-                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
                 }, errorRecorder: errorRecorder)
             })
         }
@@ -504,8 +489,6 @@ extension TeamSummaryViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(status)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: teamStatusOperation)
             }, errorRecorder: errorRecorder)
         }
 
@@ -534,7 +517,6 @@ extension TeamSummaryViewController: Refreshable {
             context.performChangesAndWait({
                 Match.insert(match, in: context)
             }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
                 self.executeUpdate(update)
             }, errorRecorder: errorRecorder)
         }

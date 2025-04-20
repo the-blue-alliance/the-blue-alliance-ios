@@ -66,11 +66,11 @@ platform :ios do
       match(
         git_url: "#{ENV["MATCH_GIT_REPO"]}",
         keychain_name: "fastlane_tmp_keychain",
-        app_identifier: ["com.the-blue-alliance.tba", "com.the-blue-alliance.tba.spotlight-index"]
+        app_identifier: ["com.the-blue-alliance.tba"]
       )
     else
       match(
-        app_identifier: ["com.the-blue-alliance.tba", "com.the-blue-alliance.tba.spotlight-index"]
+        app_identifier: ["com.the-blue-alliance.tba"]
       )
     end
   end
@@ -167,12 +167,6 @@ platform :ios do
     update_project_provisioning(
       profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
       target_filter: "The Blue Alliance",
-      build_configuration: "Release",
-      code_signing_identity: "iPhone Distribution"
-    )
-    update_project_provisioning(
-      profile: ENV["sigh_com.the-blue-alliance.tba.spotlight-index_appstore_profile-path"],
-      target_filter: "TBA Spotlight Index Extension",
       build_configuration: "Release",
       code_signing_identity: "iPhone Distribution"
     )

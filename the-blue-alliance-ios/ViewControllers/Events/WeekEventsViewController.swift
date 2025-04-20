@@ -43,20 +43,6 @@ class WeekEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override var refreshKey: String? {
-        return "\(year)_events"
-    }
-
-    override var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
-    override var automaticRefreshEndDate: Date? {
-        // Automatically refresh the events for the duration of the year
-        // Ex: 2019 events will stop automatically refreshing on Jan 1st, 2020
-        return Calendar.current.date(from: DateComponents(year: year + 1))
-    }
-
     @objc override func refresh() {
         // Default to refreshing the currently selected year
         // Fall back to the init'd year (used during initial refresh)
@@ -74,8 +60,6 @@ class WeekEventsViewController: EventsViewController {
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Event.insert(events, year: year, in: context)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
 
             // Only setup weeks if we don't have a currently selected week

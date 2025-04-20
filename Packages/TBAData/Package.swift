@@ -17,7 +17,6 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(name: "MyTBAKit", path: "../MyTBAKit"),
-        .package(name: "Search", path: "../Search"),
         .package(name: "TBAKit", path: "../TBAKit"),
         .package(name: "TBAUtils", path: "../TBAUtils"),
     ],
@@ -26,7 +25,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "TBAData",
-            dependencies: ["MyTBAKit", "Search", "TBAKit", "TBAUtils"],
+            dependencies: ["MyTBAKit", "TBAKit", "TBAUtils"],
             resources: [
                 .copy("Resources/TBA.xcdatamodeld"),
                 .copy("Resources/StatusDefaults.plist"),

@@ -1,8 +1,6 @@
 import CoreData
-import CoreSpotlight
 import FirebaseRemoteConfig
 import MyTBAKitTesting
-import Search
 import TBAData
 import TBADataTesting
 import TBAKitTesting
@@ -20,9 +18,7 @@ class TBATestCase: TBADataTestCase {
     var tbaKit: MockTBAKit!
     var urlOpener: MockURLOpener!
     var pushService: PushService!
-    var searchService: SearchService!
     var statusService: StatusService!
-    var indexDelegate: TBACoreDataCoreSpotlightDelegate!
 
     var dependencies: Dependencies!
 
@@ -36,13 +32,7 @@ class TBATestCase: TBADataTestCase {
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
         pushService = PushService(errorRecorder: errorRecorder, myTBA: myTBA, retryService: RetryService())
-        indexDelegate = {
-            let description = persistentContainer.persistentStoreDescriptions.first!
-            return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
-                                                    model: persistentContainer.managedObjectModel)
-        }()
         statusService = StatusService(bundle: StatusBundle.bundle, errorRecorder: errorRecorder, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
-        searchService = SearchService(application: UIApplication.shared, errorRecorder: errorRecorder, indexDelegate: indexDelegate, persistentContainer: persistentContainer, searchIndex: CSSearchableIndex.default(), statusService: statusService, tbaKit: tbaKit, userDefaults: userDefaults)
 
         dependencies = Dependencies(errorRecorder: errorRecorder, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }

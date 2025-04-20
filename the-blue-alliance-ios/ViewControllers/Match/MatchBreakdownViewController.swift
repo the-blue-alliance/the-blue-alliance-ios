@@ -133,21 +133,6 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
 
     // MARK: - Refreshable
 
-    var refreshKey: String? {
-        if breakdownConfigurator == nil {
-            return nil
-        }
-        return match.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
     var isDataSourceEmpty: Bool {
         return dataSource.isDataSourceEmpty
     }
@@ -162,8 +147,6 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         })
         addRefreshOperations([operation])

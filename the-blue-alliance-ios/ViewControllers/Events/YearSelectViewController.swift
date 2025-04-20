@@ -170,14 +170,6 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     // MARK: - Refreshable
 
-    override var refreshKey: String? {
-        return "\(year)_events"
-    }
-
-    override var isDataSourceEmpty: Bool {
-        return options.isEmpty
-    }
-
     @objc override func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEvents(year: year) { [self] (result, notModified) in
@@ -189,7 +181,6 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
             context.performChangesAndWait({ [unowned self] in
                 Event.insert(events, year: self.year, in: context)
             }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
                 self.hasRefreshed = true
                 OperationQueue.main.addOperation {
                     self.updateWeeks(in: self.persistentContainer.viewContext)

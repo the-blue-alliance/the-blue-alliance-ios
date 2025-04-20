@@ -19,20 +19,6 @@ class DistrictEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override var refreshKey: String? {
-        return "\(district.key)_events"
-    }
-
-    override var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
-    override var automaticRefreshEndDate: Date? {
-        // Automatically refresh event districts during the year before the selected year (when events are rolling in)
-        // Ex: Districts for 2019 will stop automatically refreshing on January 1st, 2019 (should all be set by then)
-        return Calendar.current.date(from: DateComponents(year: district.year))
-    }
-
     @objc override func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistrictEvents(key: district.key) { [self] (result, notModified) in
@@ -44,8 +30,6 @@ class DistrictEventsViewController: EventsViewController {
             context.performChangesAndWait({
                 let district = context.object(with: self.district.objectID) as! District
                 district.insert(events)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])
