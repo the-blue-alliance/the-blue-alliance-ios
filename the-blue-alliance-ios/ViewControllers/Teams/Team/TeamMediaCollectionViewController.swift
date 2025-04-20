@@ -99,14 +99,14 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 actions.append(viewOnlineAction)
             }
 
-            if let image = media.image, let pasteboard = self.pasteboard {
+            if let data = media.mediaData, let image = UIImage(data: data), let pasteboard = self.pasteboard {
                 let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc.fill")) { _ in
                     pasteboard.image = image
                 }
                 actions.append(copyAction)
             }
 
-            if let image = media.image, let photoLibrary = self.photoLibrary {
+            if let data = media.mediaData, let image = UIImage(data: data), let photoLibrary = self.photoLibrary {
                 let saveAction = UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down.fill")) { _ in
                     photoLibrary.performChanges({
                         PHAssetChangeRequest.creationRequestForAsset(from: image)
@@ -134,7 +134,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private func setupDataSource() {
         dataSource = CollectionViewDataSource<String, TeamMedia>(collectionView: collectionView) { [weak self ] (collectionView, indexPath, media) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as MediaCollectionViewCell
-            if let image = media.image {
+            if let data = media.mediaData, let image = UIImage(data: data) {
                 cell.state = .loaded(image)
             } else if let error = media.imageError {
                 cell.state = .error("Error loading media - \(error.localizedDescription)")

@@ -12,7 +12,7 @@ public class TBAPersistenceContainer: NSPersistentContainer {
         return super.defaultDirectoryURL()
     }
 
-    private static let managedObjectModel: NSManagedObjectModel? = {
+    nonisolated(unsafe) private static let managedObjectModel: NSManagedObjectModel? = {
         return NSManagedObjectModel.mergedModel(from: [Bundle.module])
     } ()
 

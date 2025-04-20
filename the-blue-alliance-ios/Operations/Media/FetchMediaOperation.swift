@@ -40,11 +40,7 @@ class FetchMediaOperation: TBAOperation {
                 if let error = error {
                     backgroundMedia.imageError = MediaError.error(error.localizedDescription)
                 } else if let data = data {
-                    if let image = UIImage(data: data) {
-                        backgroundMedia.image = image
-                    } else {
-                        backgroundMedia.imageError = MediaError.error("Invalid data for request")
-                    }
+                    backgroundMedia.mediaData = data
                 } else {
                     backgroundMedia.imageError = MediaError.error("No data for request")
                 }

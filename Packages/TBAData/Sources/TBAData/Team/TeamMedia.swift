@@ -2,7 +2,6 @@ import CoreData
 import Foundation
 import TBAKit
 import TBAProtocols
-import UIKit
 
 public enum MediaError: Error {
     case error(String)
@@ -74,15 +73,12 @@ extension TeamMedia {
         return foreignKey
     }
 
-    public var image: UIImage? {
+    public var mediaData: Data? {
         get {
-            if let mediaData = getValue(\TeamMedia.mediaData) {
-                return UIImage(data: mediaData)
-            }
-            return nil
+            return getValue(\TeamMedia.mediaDataRaw)
         }
         set {
-            mediaData = newValue?.pngData()
+            mediaDataRaw = newValue
             mediaError = nil
         }
     }
@@ -144,7 +140,7 @@ public class TeamMedia: NSManagedObject {
     @NSManaged var detailsRaw: [String: Any]?
     @NSManaged var directURLRaw: String?
     @NSManaged var foreignKeyRaw: String?
-    @NSManaged var mediaData: Data?
+    @NSManaged var mediaDataRaw: Data?
     @NSManaged var mediaError: Error?
     @NSManaged var preferredRaw: NSNumber?
     @NSManaged var typeStringRaw: String?

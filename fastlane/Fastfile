@@ -17,11 +17,6 @@ platform :ios do
     spm(command: "test", package_path: "Packages/MyTBAKit")
   end
 
-  desc "Run Search unit tests"
-  lane :test_search do
-    spm(command: "test", package_path: "Packages/Search")
-  end
-
   desc "Run TBAData unit tests"
   lane :test_tbadata do
     spm(command: "test", package_path: "Packages/TBAData")
@@ -45,7 +40,6 @@ platform :ios do
   desc "Run all of our tests"
   lane :test do
     test_mytbakit
-    test_search
     test_tbadata
     test_tbakit
     test_tbaoperation

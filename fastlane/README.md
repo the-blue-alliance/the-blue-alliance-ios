@@ -39,14 +39,6 @@ Run TBA unit tests
 
 Run MyTBAKit unit tests
 
-### ios test_search
-
-```sh
-[bundle exec] fastlane ios test_search
-```
-
-Run Search unit tests
-
 ### ios test_tbadata
 
 ```sh

@@ -223,7 +223,7 @@ protocol MediaViewer: UIViewController {}
 extension MediaViewer {
 
     func show(media: TeamMedia, peek: Bool = false) {
-        if let image = media.image {
+        if let data = media.mediaData, let image = UIImage(data: data) {
             let agrume = Agrume(image: image)
             agrume.show(from: self)
         } else if let url = media.imageDirectURL {
