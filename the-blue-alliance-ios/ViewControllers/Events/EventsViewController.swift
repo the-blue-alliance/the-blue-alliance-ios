@@ -159,6 +159,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
             return "Preseason Events"
         } else if event.isRegional {
             return "Regional Events"
+        } else if event.isRemote {
+            return event.weekString
         }
         return "Unknown Events"
     }
