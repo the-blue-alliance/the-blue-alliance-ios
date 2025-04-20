@@ -1895,7 +1895,7 @@
 				DEVELOPMENT_TEAM = "";
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1920,7 +1920,7 @@
 				DEVELOPMENT_TEAM = "";
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1957,7 +1957,7 @@
 					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
 				);
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1995,7 +1995,7 @@
 					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
 				);
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

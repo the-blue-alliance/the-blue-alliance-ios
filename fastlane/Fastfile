@@ -78,7 +78,7 @@ platform :ios do
     build
 
     slack(channel: "#github-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
-    pilot(changelog: commit_changelog, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
+    pilot(beta_app_description: "TBA for iOS", changelog: commit_changelog, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
     slack(
       channel: "#github-ios",
       message: "#{current_git_tag} uploaded to TestFlight 🎉",
