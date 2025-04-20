@@ -53,7 +53,7 @@
         <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
         <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
         <attribute name="hybridType" optional="YES" attributeType="String"/>
-        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="keyRaw" attributeType="String"/>
         <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationNameRaw" optional="YES" attributeType="String"/>
@@ -241,7 +241,7 @@
         <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
         <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
         <attribute name="homeChampionshipRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: String]"/>
-        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="keyRaw" attributeType="String"/>
         <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationNameRaw" optional="YES" attributeType="String"/>
