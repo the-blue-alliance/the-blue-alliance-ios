@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - five
 
 jobs:
   test-publish:

@@ -32,8 +32,3 @@ jobs:
           bundle exec fastlane setup_secrets
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
-      - name: fastlane test
-        run: bundle exec fastlane test
-        if: ${{ !contains(github.event.head_commit.message, '[clowntown]') }}
-        env:
-          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "180"
