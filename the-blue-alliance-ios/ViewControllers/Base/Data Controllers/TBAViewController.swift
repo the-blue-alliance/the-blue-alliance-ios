@@ -116,17 +116,11 @@ extension Stateful where Self: TBAViewController {
 }
 
 extension Refreshable where Self: TBAViewController & Stateful {
-
-    func hideNoData() {
-        removeNoDataView()
-    }
-
-    func noDataReload() {
+    @MainActor func noDataReload() {
         if isDataSourceEmpty {
             showNoDataView()
         } else {
-            removeNoDataView()
+            hideNoData()
         }
     }
-
 }

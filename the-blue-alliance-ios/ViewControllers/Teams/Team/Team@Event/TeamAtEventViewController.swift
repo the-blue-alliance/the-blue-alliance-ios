@@ -35,11 +35,10 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
         let summaryViewController = TeamSummaryViewController(team: team, event: event, dependencies: dependencies)
         matchesViewController = MatchesViewController(event: event, team: team, myTBA: myTBA, dependencies: dependencies)
-        let mediaViewController = TeamMediaCollectionViewController(team: team, year: event.year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
         let statsViewController = TeamStatsViewController(team: team, event: event, dependencies: dependencies)
         let awardsViewController = EventAwardsViewController(event: event, team: team, dependencies: dependencies)
 
-        super.init(viewControllers: [summaryViewController, matchesViewController, mediaViewController, statsViewController, awardsViewController],
+        super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
                    navigationTitle: team.teamNumberNickname,
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
@@ -51,7 +50,6 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
         summaryViewController.delegate = self
         matchesViewController.delegate = self
-        mediaViewController.delegate = self
         awardsViewController.delegate = self
     }
 

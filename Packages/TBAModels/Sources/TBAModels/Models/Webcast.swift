@@ -5,7 +5,6 @@
 //  Created by Zachary Orr on 6/10/21.
 //
 
-/*
 import Foundation
 
 public struct Webcast: Decodable, Sendable {
@@ -31,4 +30,3 @@ public struct Webcast: Decodable, Sendable {
 }
 
 extension Webcast: Equatable, Hashable {}
-*/

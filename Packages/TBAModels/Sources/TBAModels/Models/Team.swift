@@ -7,8 +7,7 @@
 
 import Foundation
 
-/*
-public struct Team: Decodable {
+public struct Team: Decodable, Sendable {
     public var key: String
     public var teamNumber: Int
     public var nickname: String?
@@ -51,4 +50,27 @@ public struct Team: Decodable {
 }
 
 extension Team: Hashable {}
-*/
+
+extension Team {
+    /**
+     The team number name for the team
+     Ex: "Team 7332"
+     */
+    public var teamNumberNickname: String {
+        return "Team \(teamNumber)"
+    }
+
+    public var displayName: String {
+        return nickname ?? teamNumberNickname
+    }
+
+    public var locationString: String? {
+        let location = [city, stateProv, country].reduce("", { (locationString, locationPart) -> String in
+            guard let locationPart = locationPart, !locationPart.isEmpty else {
+                return locationString
+            }
+            return locationString.isEmpty ? locationPart : "\(locationString), \(locationPart)"
+        })
+        return !location.isEmpty ? location : locationName
+    }
+}

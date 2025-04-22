@@ -1,24 +1,32 @@
 import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
+import TBAModels
 import UIKit
 
 protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)
 }
 
-class DistrictsViewController: TBATableViewController {
+class DistrictsViewController: TBAFakeTableViewController {
+
+    var year: Int {
+        didSet {
+            guard isViewLoaded else {
+                return
+            }
+            refresh()
+        }
+    }
 
     weak var delegate: DistrictsViewControllerDelegate?
-    var year: Int {
+
+    private var dataSource: CollectionViewDataSource<String, District>!
+    @SortedKeyPath(comparator: KeyPathComparator(\District.name)) private var districts: [District]? = nil {
         didSet {
             updateDataSource()
         }
     }
-
-    private var dataSource: TableViewDataSource<String, District>!
-    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<District>!
 
     // MARK: - Init
 
@@ -37,85 +45,62 @@ class DistrictsViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.dataSource = dataSource
+        collectionView.dataSource = dataSource
         setupDataSource()
     }
 
-    // MARK: UITableView Delegate
+    // TODO: MOVE THIS ELSEWHERE
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let district = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        refresh()
+    }
+
+    // MARK: UICollectionView Delegate
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let district = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         delegate?.districtSelected(district)
     }
 
-    // MARK: Table View Data Source
+    // MARK: Collection View Data Source
 
     private func setupDataSource () {
-        dataSource = TableViewDataSource<String, District>(tableView: tableView) { (tableView, indexPath, district) -> UITableViewCell? in
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
-            cell.textLabel?.text = district.name
-            cell.accessoryType = .disclosureIndicator
-            // TODO: Convert to some custom cell... show # of events if non-zero
+        dataSource = CollectionViewDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, district in
+            let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as ListCollectionViewCell
+            var contentConfig = cell.defaultContentConfiguration()
+            contentConfig.text = district.name
+
+            cell.contentConfiguration = contentConfig
+            cell.accessories = [.disclosureIndicator()]
+
             return cell
-        }
+        })
         dataSource.statefulDelegate = self
-
-        let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
-        fetchRequest.sortDescriptors = [
-            District.nameSortDescriptor()
-        ]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
-        dataSource.delegate = self
     }
 
-    private func updateDataSource() {
-        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
-
-        if isDataSourceEmpty {
-            refresh()
+    @MainActor private func updateDataSource() {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.insertSection("districts", atIndex: 0)
+        if let districts {
+            snapshot.appendItems(districts)
         }
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
-    private func setupFetchRequest(_ request: NSFetchRequest<District>) {
-        request.predicate = District.yearPredicate(year: year)
+    // MARK: - SimpleRefreshable
+
+    override func performRefresh() async throws {
+        self.districts = try await api.getDistricts(year: self.year)
     }
-
-}
-
-extension DistrictsViewController: Refreshable {
-
-    var isDataSourceEmpty: Bool {
-        return fetchedResultsController.isDataSourceEmpty
-    }
-
-    @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistricts(year: year) { [self] (result, notModified) in
-            guard case .success(let districts) = result, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({ [unowned self] in
-                District.insert(districts, year: self.year, in: context)
-            }, errorRecorder: errorRecorder)
-        }
-        addRefreshOperations([operation])
-    }
-
 }
 
 extension DistrictsViewController: Stateful {
-
     var noDataText: String? {
         return "No districts for year"
     }
-
 }

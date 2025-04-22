@@ -7,11 +7,14 @@
 
 import TBAAPI
 
-/*
 extension TBAAPI {
     public func getTeamsSimple(pageNumber: Int) async throws -> [Team] {
         let response = try await client.getTeamsSimple(path: .init(page_num: pageNumber))
         return try convertResponse(response: response.ok.body.json)
     }
+
+    public func getTeamSimple(teamKey: TeamKey) async throws -> Team {
+        let response = try await client.getTeamSimple(path: .init(team_key: teamKey))
+        return try convertResponse(response: response.ok.body.json)
+    }
 }
-*/

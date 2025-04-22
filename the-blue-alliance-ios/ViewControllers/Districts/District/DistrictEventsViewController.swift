@@ -1,11 +1,12 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
+import TBAModels
 
-class DistrictEventsViewController: EventsViewController {
+class DistrictEventsViewController: SimpleEventsViewController {
 
     private let district: District
+
+    // TODO: We need a way to change how these get sorted across different views...
 
     init(district: District, dependencies: Dependencies) {
         self.district = district
@@ -19,40 +20,24 @@ class DistrictEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    @objc override func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictEvents(key: district.key) { [self] (result, notModified) in
-            guard case .success(let events) = result, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let district = context.object(with: self.district.objectID) as! District
-                district.insert(events)
-            }, errorRecorder: errorRecorder)
-        }
-        addRefreshOperations([operation])
+    override func performRefresh() async throws {
+        self.events = try await api.getDistrictEvents(districtKey: district.key)
     }
 
-    // MARK: - Stateful
+    // MARK: - SimpleEventsViewControllerDataSourceConfiguration
 
-    override var noDataText: String? {
+    override var firstKeyPathComparator: KeyPathComparator<TBAModels.Event> {
+        return KeyPathComparator(\.week)
+    }
+
+    override var groupingKeyForValue: (Event) -> String {
+        return \.weekString
+    }
+
+}
+
+extension DistrictEventsViewController: Stateful {
+    var noDataText: String? {
         return "No events for district"
     }
-
-    // MARK: - EventsViewControllerDataSourceConfiguration
-
-    override var firstSortDescriptor: NSSortDescriptor {
-        return Event.weekSortDescriptor()
-    }
-
-    override var sectionNameKeyPath: String {
-        return Event.weekKeyPath()
-    }
-
-    override var fetchRequestPredicate: NSPredicate {
-        return Event.districtPredicate(districtKey: district.key)
-    }
-
 }

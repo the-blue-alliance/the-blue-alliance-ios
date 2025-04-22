@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct District: Decodable, Sendable {
+public struct District: Decodable {
     public var abbreviation: String
     public var name: String
     public var key: String
@@ -21,22 +21,4 @@ public struct District: Decodable, Sendable {
     }
 }
 
-extension District: Equatable, Hashable {}
-
-/*
-public struct DistrictRanking: Decodable {
-    public var teamKey: String
-    public var rank: Int
-    public var rookieBonus: Int?
-    public var pointTotal: Int
-    public var eventPoints: [EventDistrictPointsPoints]
-
-    enum CodingKeys: String, CodingKey {
-        case teamKey = "team_key"
-        case rank
-        case rookieBonus = "rookie_bonus"
-        case pointTotal = "point_total"
-        case eventPoints = "event_points"
-    }
-}
-*/
+extension District: Equatable, Hashable, Sendable {}

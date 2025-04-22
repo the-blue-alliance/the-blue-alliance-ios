@@ -5,7 +5,9 @@ import UIKit
 /// UICollectionViewDataSource for TBA where we manage no data states and whatnot for table views
 class CollectionViewDataSource<Section: Hashable, Item: Hashable>: UICollectionViewDiffableDataSource<Section, Item> {
 
-    weak var delegate: (Stateful & Refreshable)?
+    weak var statefulDelegate: Stateful?
+
+    // TODO: Could override our init here to manage supplementaryViewProvider
 
     // MARK: - Public Methods
 
@@ -19,7 +21,7 @@ class CollectionViewDataSource<Section: Hashable, Item: Hashable>: UICollectionV
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         let sections = super.numberOfSections(in: collectionView)
         if sections == 0 {
-            delegate?.showNoDataView()
+            statefulDelegate?.showNoDataView()
         }
         return sections
     }
@@ -27,9 +29,9 @@ class CollectionViewDataSource<Section: Hashable, Item: Hashable>: UICollectionV
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let items = super.collectionView(collectionView, numberOfItemsInSection: section)
         if items == 0 {
-            delegate?.showNoDataView()
+            statefulDelegate?.showNoDataView()
         } else {
-            delegate?.removeNoDataView()
+            statefulDelegate?.hideNoDataView()
         }
         return items
     }

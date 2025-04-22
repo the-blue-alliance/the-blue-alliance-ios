@@ -77,8 +77,6 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.836511118694-aj54f0d17nui5453fe0rbj230cqto6sl</string>
@@ -88,6 +86,14 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<false/>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<false/>
+	<key>GIDClientID</key>
+	<string>836511118694-aj54f0d17nui5453fe0rbj230cqto6sl.apps.googleusercontent.com</string>
+	<key>GIDServerClientID</key>
+	<string>836511118694-mbfv4s710u7b790stk874bnqecv58lhm.apps.googleusercontent.com</string>
+	<key>GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED</key>
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
@@ -102,25 +108,16 @@
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>com.the-blue-alliance.tba.Team</string>
-		<string>com.the-blue-alliance.tba.Event</string>
-	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
+	<string>LaunchStoryboard.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>GIDClientID</key>
-	<string>836511118694-aj54f0d17nui5453fe0rbj230cqto6sl.apps.googleusercontent.com</string>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -136,7 +133,22 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FirebaseCrashlyticsCollectionEnabled</key>
-	<false/>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 </dict>
 </plist>

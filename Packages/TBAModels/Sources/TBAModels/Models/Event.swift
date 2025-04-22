@@ -5,7 +5,6 @@
 //  Created by Zachary Orr on 6/10/21.
 //
 
-/*
 import Foundation
 import Algorithms
 import TBAUtils
@@ -233,6 +232,49 @@ extension Event {
         return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
     }
 
+    public var month: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM"
+        return dateFormatter.string(from: startDate)
+    }
+
+    public var weekString: String {
+        if eventType == .championshipDivision || eventType == .championshipFinals {
+            if self.year >= 2017, let city = city {
+                return "Championship - \(city)"
+            }
+            return "Championship"
+        } else {
+            switch eventType {
+            case .unlabeled:
+                return "Other"
+            case .preseason:
+                return "Preseason"
+            case .offseason:
+                return "\(month) Offseason"
+            case .festivalOfChampions:
+                return "Festival of Champions"
+            default:
+                guard let week = week else {
+                    return "Other"
+                }
+
+                /**
+                 * Special cases for 2016:
+                 * Week 1 is actually Week 0.5, eveything else is one less
+                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+                 */
+                if year == 2016 {
+                    if week == 0 {
+                        return "Week 0.5"
+                    }
+                    return "Week \(week)"
+                }
+                return "Week \(week + 1)"
+            }
+        }
+    }
+
     /**
      If the event is currently going, based on it's start and end dates.
      */
@@ -240,4 +282,3 @@ extension Event {
         return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
     }
 }
-*/

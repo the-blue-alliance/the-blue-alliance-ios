@@ -79,7 +79,6 @@
         <relationship name="rankingsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="eventRaw" inverseEntity="EventRanking"/>
         <relationship name="statsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventTeamStat" inverseName="eventRaw" inverseEntity="EventTeamStat"/>
         <relationship name="statusesRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventStatus" inverseName="eventRaw" inverseEntity="EventStatus"/>
-        <relationship name="statusRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="downEventsRaw" inverseEntity="Status"/>
         <relationship name="teamsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="eventsRaw" inverseEntity="Team"/>
         <relationship name="webcastsRaw" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Webcast" inverseName="eventsRaw" inverseEntity="Webcast"/>
         <fetchIndex name="byKeyIndex">
@@ -222,14 +221,6 @@
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES">
         <attribute name="modelKeyRaw" attributeType="String"/>
         <attribute name="modelTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-    </entity>
-    <entity name="Status" representedClassName="Status" syncable="YES">
-        <attribute name="currentSeasonRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="isDatafeedDownRaw" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="latestAppVersionRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="maxSeasonRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="minAppVersionRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <relationship name="downEventsRaw" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="statusRaw" inverseEntity="Event"/>
     </entity>
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES">
         <attribute name="notificationsRaw" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>

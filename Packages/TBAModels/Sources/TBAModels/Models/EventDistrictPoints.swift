@@ -7,11 +7,12 @@
 
 import Foundation
 
-/*
 public struct EventDistrictPoints: Decodable {
     public var points: [String: EventDistrictPointsPoints]
     public var tiebreakers: [String: EventDistrictPointsTiebreaker]
 }
+
+extension EventDistrictPoints: Equatable, Hashable, Sendable {}
 
 public struct EventDistrictPointsPoints: Decodable {
     public var eventKey: String?
@@ -33,6 +34,8 @@ public struct EventDistrictPointsPoints: Decodable {
     }
 }
 
+extension EventDistrictPointsPoints: Equatable, Hashable, Sendable {}
+
 public struct EventDistrictPointsTiebreaker: Decodable {
     public var highestQualScores: [Int]
     public var qualWins: Int
@@ -42,4 +45,5 @@ public struct EventDistrictPointsTiebreaker: Decodable {
         case qualWins = "qual_wins"
     }
 }
-*/
+
+extension EventDistrictPointsTiebreaker: Equatable, Hashable, Sendable {}

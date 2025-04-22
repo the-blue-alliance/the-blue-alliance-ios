@@ -212,10 +212,6 @@ extension Event {
         return stats
     }
 
-    public var status: Status? {
-        return getValue(\Event.statusRaw)
-    }
-
     public var statuses: [EventStatus] {
         guard let statusesRaw = getValue(\Event.statusesRaw),
             let statuses = statusesRaw.allObjects as? [EventStatus] else {
@@ -504,7 +500,6 @@ public class Event: NSManagedObject {
     @NSManaged var pointsRaw: NSSet?
     @NSManaged var rankingsRaw: NSSet?
     @NSManaged var statsRaw: NSSet?
-    @NSManaged var statusRaw: Status?
     @NSManaged var statusesRaw: NSSet?
     @NSManaged var teamsRaw: NSSet?
     @NSManaged var webcastsRaw: NSSet?

@@ -68,7 +68,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
             showNoDataView()
             return 0
         }
-        removeNoDataView()
+        hideNoData()
         return 3
     }
 

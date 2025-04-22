@@ -88,10 +88,10 @@ extension RootController {
     }
 
     var districtsViewController: DistrictsContainerViewController {
-        return DistrictsContainerViewController(myTBA: myTBA,
-                                                statusService: statusService,
-                                                urlOpener: urlOpener,
-                                                dependencies: dependencies)
+        return DistrictsContainerViewController(
+            statusService: statusService,
+            dependencies: dependencies
+        )
     }
 
     var settingsViewController: SettingsViewController {

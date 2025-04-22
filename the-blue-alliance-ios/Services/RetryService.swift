@@ -53,7 +53,7 @@ protocol Retryable {
 
 extension Retryable {
 
-    func registerRetryable(initiallyRetry: Bool = false) {
+    func registerRetryable(initiallyRetry: Bool = true) {
         retryService.register(self, initiallyRetry: initiallyRetry)
     }
 

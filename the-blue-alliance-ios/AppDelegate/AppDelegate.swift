@@ -18,52 +18,15 @@ let kNoSelectionNavigationController = "NoSelectionNavigationController"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
-
-    // MARK: - View Hierarchy
-
-    // Root VC on iPhone: a tab bar controller, iPad: a split view controller
-    lazy private var rootViewController: UIViewController & RootController = {
-        if UIDevice.isPhone {
-            return rootViewControllerPhone
-        } else if UIDevice.isPad {
-            return rootViewControllerPad
-        }
-        fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
-    }()
-    lazy private var rootViewControllerPhone: PhoneRootViewController = {
-        return PhoneRootViewController(
-            fcmTokenProvider: messaging,
-            myTBA: myTBA,
-            pasteboard: pasteboard,
-            photoLibrary: photoLibrary,
-            pushService: pushService,
-            searchService: searchService,
-            statusService: statusService,
-            urlOpener: urlOpener,
-            dependencies: dependencies
-        )
-    }()
-    lazy private var rootViewControllerPad: PadRootViewController = {
-        return PadRootViewController(
-            fcmTokenProvider: messaging,
-            myTBA: myTBA,
-            pasteboard: pasteboard,
-            photoLibrary: photoLibrary,
-            pushService: pushService,
-            searchService: searchService,
-            statusService: statusService,
-            urlOpener: urlOpener,
-            dependencies: dependencies
-        )
-    }()
-
     // MARK: - Services
-    private lazy var dependencies = Dependencies(api: api,
-                                                 errorRecorder: errorRecorder,
-                                                 persistentContainer: persistentContainer,
-                                                 tbaKit: tbaKit,
-                                                 userDefaults: userDefaults)
+
+    lazy var dependencies = Dependencies(
+        api: api,
+        errorRecorder: errorRecorder,
+        persistentContainer: persistentContainer,
+        tbaKit: tbaKit,
+        userDefaults: userDefaults
+    )
     private let errorRecorder = TBAErrorRecorder()
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
@@ -80,8 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return persistentContainer
     }()
-    let photoLibrary = PHPhotoLibrary.shared()
-    lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
     var api: TBAAPI!
     var tbaKit: TBAKit!
     let userDefaults: UserDefaults = UserDefaults.standard
@@ -91,11 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return PushService(errorRecorder: errorRecorder,
                            myTBA: myTBA,
                            retryService: RetryService())
-    }()
-    lazy var remoteConfigService: RemoteConfigService = {
-        return RemoteConfigService(errorRecorder: errorRecorder,
-                                   remoteConfig: remoteConfig,
-                                   retryService: RetryService())
     }()
     lazy var searchService: SearchService = {
         return SearchService(
@@ -118,14 +74,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.setupAppearance()
-
-        // Setup a dummy launch screen in our window while we're doing setup tasks
-        window = UIWindow()
-        guard let window = window else {
-            fatalError("window should be window")
-        }
-        window.rootViewController = launchViewController
-        window.makeKeyAndVisible()
 
         // Setup our Firebase app - make sure this is called before other Firebase setup
         FirebaseApp.configure()
@@ -164,70 +112,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Kickoff background myTBA, along with setting up delegates
         setupPreviousAuthentication()
 
-        // Our app setup operation will load our persistent stores, propogate persistance container
-        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, userDefaults: userDefaults)
-        Task {
-            do {
-                try await appSetupOperation.execute()
-            } catch {
-                errorRecorder.record(error)
-                DispatchQueue.main.async {
-                    AppDelegate.showFatalError(error as NSError, in: window)
-                }
-                return false
-            }
-            // Register retries for our status service on the main thread
-            DispatchQueue.main.async {
-                self.remoteConfigService.registerRetryable(initiallyRetry: true)
-                self.statusService.registerRetryable(initiallyRetry: true)
-                self.searchService.registerRetryable(initiallyRetry: true)
-
-                guard let window = self.window else {
-                    fatalError("Window not setup when setting root vc")
-                }
-                guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-                    fatalError("Unable to snapshot root view controller")
-                }
-                self.rootViewController.view.addSubview(snapshot)
-                window.rootViewController = self.rootViewController
-
-                // 0.35 is an iOS animation magic number... for now
-                UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                    snapshot.layer.opacity = 0;
-                }, completion: { (status) in
-                    snapshot.removeFromSuperview()
-                })
-            }
-            return true
-        }
+        statusService.registerRetryable()
+        searchService.registerRetryable()
 
         return true
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Update anything we want to be fresh
-    }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        return GIDSignIn.sharedInstance.handle(url)
+    public func loadCoreData() async throws {
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, userDefaults: userDefaults)
+        try await appSetupOperation.execute()
     }
 
     // MARK: Push Delegate Methods
@@ -246,25 +139,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: Private
-
-    private static func showFatalError(_ error: NSError, in window: UIWindow) {
-        showRootAlertView(title: "Error Loading Data",
-                          message: "There was an error loading local data - try reinstalling The Blue Alliance",
-                          in: window) { (_) in
-                            fatalError("Unresolved error \(error), \(error.userInfo)")
-        }
-    }
-
-    private static func showMinimumAppAlert(appStoreID: String, currentAppVersion: Int, in window: UIWindow) {
-        showRootAlertView(title: "Unsupported App Version", message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
-    }
-
-    private static func showRootAlertView(title: String, message: String, in window: UIWindow, handler: ((UIAlertAction) -> Void)?) {
-        let alertController = UIAlertController(title: title,
-                                                message: message,
-                                                preferredStyle: .alert)
-        window.rootViewController?.present(alertController, animated: true, completion: nil)
-    }
 
     private func setupPushServiceDelegates() {
         messaging.delegate = pushService
@@ -299,14 +173,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-    }
-
-    private var launchViewController: UIViewController {
-        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
-            fatalError("Unable to load launch view controller")
-        }
-        return launchViewController
     }
 
     static func setupAppearance() {
@@ -364,10 +230,21 @@ extension AppDelegate: FMSStatusSubscribable {
             return
         }
 
+        let connectedScenes = UIApplication.shared.connectedScenes
+        guard let windowScene = connectedScenes.first(where: { scene in
+            // Ensure the scene is a UIWindowScene (as only these have windows)
+            guard let windowScene = scene as? UIWindowScene else { return false }
+            // Check if this window scene contains the key window
+             return windowScene.windows.first(where: { $0.isKeyWindow }) != nil
+        }) as? UIWindowScene else {
+            return
+        }
+
         let alertController = UIAlertController(title: "FIRST's servers are down",
                                                 message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
                                                 preferredStyle: .alert)
-        window?.rootViewController?.present(alertController, animated: true, completion: nil)
+
+        windowScene.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
 }
@@ -375,7 +252,7 @@ extension AppDelegate: FMSStatusSubscribable {
 // Make Crashlytics conform to ErrorRecorder for TBAData
 // extension Crashlytics: ErrorRecorder {}
 // Make Messaging conform to FCMTokenProvider for MyTBAKit
-extension Messaging: FCMTokenProvider {}
+extension Messaging: @retroactive FCMTokenProvider {}
 
 private class TBAErrorRecorder: ErrorRecorder {
 

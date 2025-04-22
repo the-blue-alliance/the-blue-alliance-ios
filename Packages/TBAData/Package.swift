@@ -29,8 +29,7 @@ let package = Package(
             name: "TBAData",
             dependencies: ["MyTBAKit", "TBAKit", "TBAUtils", "TBAProtocols"],
             resources: [
-                .copy("Resources/TBA.xcdatamodeld"),
-                .copy("Resources/StatusDefaults.plist"),
+                .copy("Resources/TBA.xcdatamodeld")
             ]),
         .testTarget(
             name: "TBADataTests",

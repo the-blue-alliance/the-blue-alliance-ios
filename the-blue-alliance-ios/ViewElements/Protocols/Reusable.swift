@@ -53,8 +53,7 @@ extension UICollectionView {
         return self.dequeueReusableCell(withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
     }
 
-    /*
-    func registerReusableSupplementaryView<T: Reusable>(elementKind: String, _: T.Type) {
+    func registerReusableSupplementaryView<T: Reusable & AnyObject>(elementKind: String, _: T.Type) {
         if let nib = T.nib {
             self.register(nib, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: T.reuseIdentifier)
         } else {
@@ -62,9 +61,8 @@ extension UICollectionView {
         }
     }
 
-    func dequeueReusableSupplementaryView<T: UICollectionViewCell>(elementKind: String, indexPath: IndexPath) -> T where T: Reusable {
+    func dequeueReusableSupplementaryView<T: UICollectionReusableView>(elementKind: String, indexPath: IndexPath) -> T where T: Reusable {
         return self.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
     }
-    */
 
 }

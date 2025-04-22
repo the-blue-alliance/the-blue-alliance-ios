@@ -25,7 +25,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
-    private(set) var mediaViewController: TeamMediaCollectionViewController
+    // TODO: Media
 
     override var subscribableModel: MyTBASubscribable {
         return team
@@ -35,7 +35,6 @@ class TeamViewController: HeaderContainerViewController, Observable {
         didSet {
             if let year = year {
                 eventsViewController.year = year
-                mediaViewController.year = year
 
                 fetchTeaMedia(year: year)
             }
@@ -65,19 +64,17 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, dependencies: dependencies)
         eventsViewController = TeamEventsViewController(team: team, year: year, dependencies: dependencies)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
 
         super.init(
-            viewControllers: [infoViewController, eventsViewController, mediaViewController],
+            viewControllers: [infoViewController, eventsViewController],
             navigationTitle: team.teamNumberNickname,
             navigationSubtitle: year?.description ?? "----",
-            segmentedControlTitles: ["Info", "Events", "Media"],
+            segmentedControlTitles: ["Info", "Events"],
             myTBA: myTBA,
             dependencies: dependencies
         )
 
         eventsViewController.delegate = self
-        mediaViewController.delegate = self
 
         teamHeaderView.yearButton.addTarget(self, action: #selector(showSelectYear), for: .touchUpInside)
     }

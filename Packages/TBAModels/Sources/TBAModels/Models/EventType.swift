@@ -5,7 +5,6 @@
 //  Created by Zachary Orr on 4/19/25.
 //
 
-/*
 public enum EventType: Int, CaseIterable, Hashable {
     case regional = 0
     case district = 1
@@ -78,4 +77,3 @@ extension Event {
         eventType == .offseason
     }
 }
-*/
