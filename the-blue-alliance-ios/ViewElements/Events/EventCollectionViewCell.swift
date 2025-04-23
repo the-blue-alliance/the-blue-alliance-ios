@@ -9,25 +9,19 @@
 import UIKit
 import TBAModels
 
-// TODO: UIBackgroundConfiguration
-
 struct EventCellContentConfiguration: UIContentConfiguration, Hashable {
 
-    var name: String
+    var name: String?
     var location: String?
     var dateString: String?
 
     init(event: Event) {
-        name = event.displayShortName
+        name = event.displayName
         location = event.displayLocation
         dateString = event.displayDates
     }
 
-    init(name: String, location: String?, dateString: String?) {
-        self.name = name
-        self.location = location
-        self.dateString = dateString
-    }
+    fileprivate var separatorLayoutGuide: UILayoutGuide?
 
     func makeContentView() -> any UIView & UIContentView {
         return EventCellContentView(configuration: self)
@@ -40,9 +34,18 @@ struct EventCellContentConfiguration: UIContentConfiguration, Hashable {
 
 class EventCellContentView: UIView, UIContentView {
 
+    private var currentConfiguration: EventCellContentConfiguration
+
     var configuration: UIContentConfiguration {
-        didSet {
-            apply(configuration: configuration)
+        get {
+            return currentConfiguration
+        }
+        set {
+            guard let newConfiguration = newValue as? EventCellContentConfiguration else {
+                return
+            }
+            currentConfiguration = newConfiguration
+            apply(configuration: currentConfiguration)
         }
     }
 
@@ -52,34 +55,26 @@ class EventCellContentView: UIView, UIContentView {
         label.font = .preferredFont(forTextStyle: .body)
         return label
     }()
-    // TODO: DRY these...
     private lazy var locationLabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .secondaryLabel
-        return label
+        return UILabel.subheadlineLabel()
     }()
     private lazy var dateLabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .secondaryLabel
+        let label = UILabel.subheadlineLabel()
         label.setContentHuggingPriority(.defaultLow + 1, for: .horizontal)
         label.setContentCompressionResistancePriority(.defaultHigh + 1, for: .horizontal)
         return label
     }()
 
     init(configuration: EventCellContentConfiguration) {
-        self.configuration = configuration
+        self.currentConfiguration = configuration
 
         super.init(frame: .zero)
 
-        // Create the content view UI
-        setupAllViews()
+        preservesSuperviewLayoutMargins = true
 
-        // Apply the configuration (set data to UI elements / define custom content view appearance)
-        apply(configuration: configuration)
+        setupViews(configuration: currentConfiguration)
+
+        apply(configuration: currentConfiguration)
     }
 
     required init?(coder: NSCoder) {
@@ -87,14 +82,21 @@ class EventCellContentView: UIView, UIContentView {
     }
 
     @MainActor
-    private func setupAllViews() {
-        let stackView = UIStackView(forAutoLayout: ())
+    private func setupViews(configuration: EventCellContentConfiguration) {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.spacing = .zero
         addSubview(stackView)
-        stackView.autoPinEdgesToSuperviewEdges(with: .init(top: 8, left: 16, bottom: 8, right: 8))
+
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
 
         stackView.addArrangedSubview(nameLabel)
 
@@ -109,11 +111,7 @@ class EventCellContentView: UIView, UIContentView {
     }
 
     @MainActor
-    private func apply(configuration: UIContentConfiguration) {
-        guard let configuration = configuration as? EventCellContentConfiguration else {
-            return
-        }
-
+    private func apply(configuration: EventCellContentConfiguration) {
         nameLabel.text = configuration.name
         locationLabel.text = configuration.location
         dateLabel.text = configuration.dateString

@@ -3,7 +3,13 @@ import UIKit
 
 class NoDataViewController: UIViewController {
 
-    @IBOutlet weak var textLabel: UILabel!
+    var noDataText: String? {
+        didSet {
+            textLabel.text = noDataText
+        }
+    }
+
+    @IBOutlet private weak var textLabel: UILabel!
 
     init() {
         super.init(nibName: "NoDataView", bundle: nil)

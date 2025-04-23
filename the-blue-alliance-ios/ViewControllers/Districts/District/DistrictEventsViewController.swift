@@ -4,9 +4,15 @@ import TBAModels
 
 class DistrictEventsViewController: SimpleEventsViewController {
 
-    private let district: District
+    override class var firstEventKeyPathComparator: KeyPathComparator<Event> {
+        return KeyPathComparator(\.weekString)
+    }
 
-    // TODO: We need a way to change how these get sorted across different views...
+    override class var sectionKey: (Event) -> String {
+        return \.weekString
+    }
+
+    private let district: District
 
     init(district: District, dependencies: Dependencies) {
         self.district = district
@@ -21,23 +27,13 @@ class DistrictEventsViewController: SimpleEventsViewController {
     // MARK: - Refreshable
 
     override func performRefresh() async throws {
-        self.events = try await api.getDistrictEvents(districtKey: district.key)
+        events = try await api.getDistrictEvents(districtKey: district.key)
     }
 
-    // MARK: - SimpleEventsViewControllerDataSourceConfiguration
+    // MARK: - Stateful
 
-    override var firstKeyPathComparator: KeyPathComparator<TBAModels.Event> {
-        return KeyPathComparator(\.week)
-    }
-
-    override var groupingKeyForValue: (Event) -> String {
-        return \.weekString
-    }
-
-}
-
-extension DistrictEventsViewController: Stateful {
-    var noDataText: String? {
+    override var noDataText: String? {
         return "No events for district"
     }
+
 }

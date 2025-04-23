@@ -43,7 +43,7 @@ class PlayerView: UIView {
     }
 
     private func showErrorView(error: String) {
-        noDataViewController.textLabel.text = error
+        noDataViewController.noDataText = error
         if noDataViewController.view.superview == nil {
             addSubview(noDataViewController.view)
             noDataViewController.view.autoPinEdgesToSuperviewEdges()

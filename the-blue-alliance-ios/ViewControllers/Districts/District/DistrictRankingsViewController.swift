@@ -7,19 +7,19 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ districtRanking: DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICollectionViewDataSourcePrefetching {
+class DistrictRankingsViewController: TBAFakeSearchableTableViewController<String, DistrictRanking>, UICollectionViewDataSourcePrefetching {
 
     weak var delegate: DistrictRankingsViewControllerDelegate?
 
     private let district: District
-    @SortedKeyPath(comparator: KeyPathComparator(\DistrictRanking.rank)) private var districtRankings: [DistrictRanking]? = nil {
+
+    @SortedKeyPath(comparator: KeyPathComparator(\.rank))
+    private var districtRankings: [DistrictRanking]? = nil {
         didSet {
             updateDataSource()
         }
     }
     private var teams: [String: Team] = [:]
-
-    private var dataSource: CollectionViewDataSource<String, DistrictRanking>!
 
     // TODO: Void, Never ? Or should it be Team, Never ?
     private var ongoingTeamFetchTasks: [String: Task<Void, Never>] = [:]
@@ -62,7 +62,9 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICo
     // MARK: Collection View Delegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let ranking = dataSource.itemIdentifier(for: indexPath) else {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
+        guard let dataSource, let ranking = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         delegate?.districtRankingSelected(ranking)
@@ -77,7 +79,7 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICo
             let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as ListCollectionViewCell
 
             if team == nil {
-                self.fetchTeam(for: districtRanking)
+                self.fetchTeam(for: districtRanking.teamKey)
             }
 
             // Configure the cell's content
@@ -97,6 +99,7 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICo
             cell.contentConfiguration = content
             return cell
         })
+        // TODO: Generalize this
         dataSource.supplementaryViewProvider = { (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
             guard kind == UICollectionView.elementKindSectionHeader else { return nil }
 
@@ -115,11 +118,14 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICo
             }
             return headerView
         }
-        dataSource.statefulDelegate = self
-        // dataSource.delegate = self
     }
 
     @MainActor override func updateDataSource() {
+        guard let dataSource else {
+            showNoDataView()
+            return
+        }
+
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         snapshot.insertSection("district_rankings", atIndex: 0)
@@ -129,58 +135,43 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICo
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
-    // MARK: - SimpleRefreshable
+    // MARK: - Refresh
 
     override func performRefresh() async throws {
-        self.districtRankings = try await api.getDistrictRankings(districtKey: district.key)
+        districtRankings = try await api.getDistrictRankings(districtKey: district.key)
+    }
+
+    // MARK: - Stateful
+
+    override var noDataText: String? {
+        return "No rankings for district"
     }
 
     // MARK: - Team Fetching
 
-    private func fetchTeam(for districtRanking: DistrictRanking) {
-        let teamKey = districtRanking.teamKey
+    private func fetchTeam(for teamKey: String) {
         guard teams[teamKey] == nil, ongoingTeamFetchTasks[teamKey] == nil else {
             return
         }
 
-        print("Starting new fetch task for team: \(teamKey)")
-
-        // Create a new Task for the asynchronous work.
-        // Since this is called from a @MainActor context, the Task inherits
-        // the MainActor's executor. The UI updates inside the Task are implicitly
-        // happening on the main actor.
         let task = Task { [weak self] in
             do {
-                // Await the asynchronous API call from the actor.
                 let team = try await self?.api.getTeamSimple(teamKey: teamKey)
 
                 // Check for cancellation after await
                 try Task.checkCancellation()
 
-                // UI updates and data source modifications happen here.
-                // Since this Task block was started on the MainActor, these operations
-                // are safe (implicitly on the main actor).
-                if let team = team, let self = self {
-                    // Store the fetched team data
-                    // Accessing teams dictionary is safe
-                    self.teams[team.key] = team
+                if let self, let team {
+                    teams[team.key] = team
 
-                    // Find all visible/prefetched rankings associated with this teamKey
-                    // and reconfigure their cells.
-                    var snapshot = self.dataSource.snapshot()
+                    if let dataSource {
+                        var snapshot = dataSource.snapshot()
+                        let rankingsToReconfigure = snapshot.itemIdentifiers.filter { $0.teamKey == team.key }
 
-                    // Find items (DistrictRankings) in the current snapshot
-                    // that match the fetched teamKey
-                    let rankingsToReconfigure = snapshot.itemIdentifiers.filter { $0.teamKey == team.key }
-
-                    // If the ranking exists in the snapshot, reconfigure its item(s).
-                    // Applying the snapshot updates the UI, requires MainActor
-                    if !rankingsToReconfigure.isEmpty {
-                        snapshot.reconfigureItems(rankingsToReconfigure)
-                        await dataSource.apply(snapshot, animatingDifferences: true)
-                        print("Fetched team data and updated cell(s) for team: \(team.key)")
-                    } else {
-                        print("Fetched team data for \(team.key), but no corresponding ranking found in snapshot.")
+                        if !rankingsToReconfigure.isEmpty {
+                            snapshot.reconfigureItems(rankingsToReconfigure)
+                            await dataSource.apply(snapshot, animatingDifferences: true)
+                        }
                     }
                 }
             } catch is CancellationError {
@@ -192,12 +183,9 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICo
                 // TODO: Handle error state, maybe update the ranking item to show error
             }
 
-            // Remove the task from tracking upon completion (success or failure)
-            // Accessing ongoingTeamFetchTasks is safe
             self?.ongoingTeamFetchTasks[teamKey] = nil
         }
 
-        // Store the task handle. Accessing ongoingTeamFetchTasks is safe.
         ongoingTeamFetchTasks[teamKey] = task
     }
 
@@ -209,28 +197,30 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController, UICo
     // MARK: - UICollectionViewDataSourcePrefetching
 
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        guard let dataSource else {
+            return
+        }
+
         for indexPath in indexPaths {
-            if let districtRanking = dataSource.itemIdentifier(for: indexPath) {
-                // Start the fetch task. The method checks if details are needed/task is ongoing.
-                fetchTeam(for: districtRanking)
+            guard let districtRanking = dataSource.itemIdentifier(for: indexPath) else {
+                continue
             }
+            fetchTeam(for: districtRanking.teamKey)
         }
     }
 
     // Called by the collection view to indicate that data prefetching for these index paths should be cancelled
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        guard let dataSource else {
+            return
+        }
+
         for indexPath in indexPaths {
-            if let districtRanking = dataSource.itemIdentifier(for: indexPath) {
-                // Cancel the fetch task for this item
-                cancelFetchingTask(for: districtRanking.teamKey)
+            guard let districtRanking = dataSource.itemIdentifier(for: indexPath) else {
+                continue
             }
+            cancelFetchingTask(for: districtRanking.teamKey)
         }
     }
 
-}
-
-extension DistrictRankingsViewController: Stateful {
-    var noDataText: String? {
-        return "No rankings for district"
-    }
 }

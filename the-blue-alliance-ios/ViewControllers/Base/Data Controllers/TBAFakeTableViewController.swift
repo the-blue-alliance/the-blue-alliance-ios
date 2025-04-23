@@ -8,10 +8,13 @@
 
 import UIKit
 
-class TBAFakeTableViewController: TBACollectionViewController {
+class TBAFakeTableViewController<Section: Hashable, Item: Hashable>: TBACollectionViewController<Section, Item> {
 
-    static let emptySupplementaryViewProvider: (_ collectionView: UICollectionView, _ elementKind: String, _ indexPath: IndexPath) -> UICollectionReusableView? = { _, _, _ in
-        return nil
+    static var emptySupplementaryViewProvider: (_ collectionView: UICollectionView, _ elementKind: String, _ indexPath: IndexPath) -> UICollectionReusableView? {
+        // Return the closure from the computed property's getter
+        return { _, _, _ in
+            return nil
+        }
     }
 
     init(dependencies: Dependencies, headerMode: UICollectionLayoutListConfiguration.HeaderMode = .none) {

@@ -13,7 +13,6 @@ protocol Stateful: AnyObject {
      Add the no data view to the view hierarchy. This method should not be called directly - you probably want showNoDataView.
      */
     @MainActor func addNoDataView(_ noDataView: UIView)
-    @MainActor func showNoDataView()
 
     /**
      Remove the no data view from the view hierarchy. This method should not be called directly - you probably want removeNoDataView.
@@ -21,62 +20,36 @@ protocol Stateful: AnyObject {
     @MainActor func removeNoDataView(_ noDataView: UIView)
 }
 
-extension Stateful {
+extension Stateful where Self: UIViewController {
+
+    @MainActor
+    func showNoDataView() {
+        // If the no data view is already in our view hierarchy, don't animate in
+        guard noDataViewController.parent == nil else {
+            return
+        }
+
+        noDataViewController.noDataText = noDataText
+
+        addChild(noDataViewController)
+
+        noDataViewController.view.alpha = 0
+        addNoDataView(noDataViewController.view)
+
+        UIView.animate(withDuration: 0.25, animations: {
+            self.noDataViewController.view.alpha = 1.0
+        })
+
+        noDataViewController.didMove(toParent: self)
+    }
+
     @MainActor func hideNoDataView() {
+        guard noDataViewController.parent != nil else {
+            return
+        }
+
+        noDataViewController.willMove(toParent: nil)
         removeNoDataView(noDataViewController.view)
-    }
-}
-
-extension Stateful where Self: Refreshable {
-    /**
-     Show the no data view in the view hierarchy.
-     */
-    @MainActor func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-
-        noDataViewController.textLabel?.text = noDataText
-
-        let noDataView = noDataViewController.view as UIView
-
-        // If the no data view is already in our view hierarchy, don't animate in
-        if noDataView.superview != nil {
-            return
-        }
-
-        noDataView.alpha = 0
-        addNoDataView(noDataView)
-
-        UIView.animate(withDuration: 0.25, animations: {
-            noDataView.alpha = 1.0
-        })
-    }
-}
-
-extension Stateful where Self: SimpleRefreshable {
-    /**
-     Show the no data view in the view hierarchy.
-     */
-    @MainActor func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-
-        noDataViewController.textLabel?.text = noDataText
-
-        let noDataView = noDataViewController.view as UIView
-
-        // If the no data view is already in our view hierarchy, don't animate in
-        if noDataView.superview != nil {
-            return
-        }
-
-        noDataView.alpha = 0
-        addNoDataView(noDataView)
-
-        UIView.animate(withDuration: 0.25, animations: {
-            noDataView.alpha = 1.0
-        })
+        noDataViewController.removeFromParent()
     }
 }

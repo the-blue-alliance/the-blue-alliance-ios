@@ -197,7 +197,7 @@ extension Event {
 
     }
 
-    public var displayShortName: String {
+    public var displayName: String {
         let fallbackName = name.isEmpty ? key : name
         guard let shortName = shortName else {
             return fallbackName

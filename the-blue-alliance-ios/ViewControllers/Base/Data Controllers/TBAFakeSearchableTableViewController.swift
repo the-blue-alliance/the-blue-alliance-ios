@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TBAFakeSearchableTableViewController: TBAFakeTableViewController, SearchableController {
+class TBAFakeSearchableTableViewController<Section: Hashable, Item: Hashable>: TBAFakeTableViewController<Section, Item>, SearchableController, UISearchResultsUpdating {
 
     let searchBar = UISearchBar()
 
@@ -36,13 +36,13 @@ class TBAFakeSearchableTableViewController: TBAFakeTableViewController, Searchab
     func updateDataSource() {
         fatalError("Implement updateDataSource in subclass")
     }
-}
 
-extension TBAFakeSearchableTableViewController: UISearchResultsUpdating {
-    @MainActor
+    // MARK: - UISearchResultsUpdating
+
     public func updateSearchResults(for searchController: UISearchController) {
         updateDataSource()
     }
+
 }
 
 class SearchHeaderView: UICollectionReusableView, Reusable {

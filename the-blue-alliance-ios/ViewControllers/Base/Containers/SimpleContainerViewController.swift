@@ -7,33 +7,7 @@
 //
 
 import Foundation
-import TBAAPI
-import TBAUtils
 import UIKit
-
-protocol ContainerDataSource: NSObjectProtocol {
-    /// Asks the data source for the total number of segments the container should potentially manage.
-    func numberOfSegments(in containerViewController: SimpleContainerViewController) -> Int
-
-    /// Asks the data source for the title for a segment at a specific index (corresponding to the index from numberOfSegments).
-    /// Return nil if the segment at this index should *not* have a segmented control title.
-    func containerViewController(_ containerViewController: SimpleContainerViewController, titleForSegmentAt index: Int) -> String?
-
-    /// Asks the data source for the view controller to display for a segment at a specific index.
-    /// This index corresponds to the index from numberOfSegments.
-    /// Implementations should typically perform lazy loading and caching here.
-    func containerViewController(_ containerViewController: SimpleContainerViewController, viewControllerForSegmentAt index: Int) -> UIViewController
-}
-
-extension ContainerDataSource where Self: SimpleContainerViewController {
-    func numberOfSegments(in containerViewController: SimpleContainerViewController) -> Int {
-        return 1
-    }
-
-    func containerViewController(_ containerViewController: SimpleContainerViewController, titleForSegmentAt index: Int) -> String? {
-        return nil
-    }
-}
 
 protocol ContainerNavigationBarProvider: UIViewController {
     /// An array of UIBarButtonItems that the view controller wants to display
@@ -51,26 +25,17 @@ class SimpleContainerViewController: UIViewController, Alertable {
 
     let dependencies: Dependencies
 
-    weak var dataSource: ContainerDataSource? {
-        didSet {
-            guard isViewLoaded else {
-                return
-            }
-            reloadData()
-        }
-    }
-
     var navigationTitle: String? {
         didSet {
             title = navigationTitle
             navigationTitleLabel.text = navigationTitle
+            updateTitleView()
         }
     }
 
     var navigationSubtitle: String? {
         didSet {
             navigationSubtitleLabel.text = navigationSubtitle
-
             updateTitleView()
         }
     }
@@ -80,11 +45,13 @@ class SimpleContainerViewController: UIViewController, Alertable {
     // MARK: - Internal Properties
 
     private var shouldShowNavigationTitleView: Bool {
-        if let navigationSubtitle {
-            return !navigationSubtitle.isEmpty
+        if let navigationTitle, let navigationSubtitle {
+            return navigationTitle.isEmpty && !navigationSubtitle.isEmpty
         }
         return false
     }
+
+    private var defaultRightBarButtonItems: [UIBarButtonItem]?
 
     private var currentViewController: UIViewController?
 
@@ -172,18 +139,28 @@ class SimpleContainerViewController: UIViewController, Alertable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        defaultRightBarButtonItems = navigationItem.rightBarButtonItems
+
         view.addSubview(rootStackView)
         rootStackView.autoPinEdge(toSuperviewSafeArea: .top)
         // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
         rootStackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
 
-        // Reload content from the data source if it was set before viewDidLoad
-        if dataSource != nil {
-            reloadData()
-        } else {
-            // Show empty state initially if no data source is set
-            // showEmptyContainerState(text: "No data source set.")
-        }
+        reloadData()
+    }
+
+    // MARK: - Data Sources
+
+    var numberOfContainedViewControllers: Int {
+        return 0
+    }
+
+    func titleForSegment(at index: Int) -> String? {
+        return nil
+    }
+
+    func viewControllerForSegment(at index: Int) -> UIViewController {
+        fatalError("Implement in subclass")
     }
 
     // MARK: - Public Methods
@@ -265,23 +242,18 @@ class SimpleContainerViewController: UIViewController, Alertable {
         transition(from: currentViewController, to: nil)
         currentViewController = nil
 
-        guard let dataSource else {
-            return
-        }
-
-        let numberOfSegments = dataSource.numberOfSegments(in: self)
-        for i in 0..<numberOfSegments {
-            if let title = dataSource.containerViewController(self, titleForSegmentAt: i) {
+        for index in 0..<numberOfContainedViewControllers {
+            if let title = titleForSegment(at: index) {
                 segmentedControl.insertSegment(withTitle: title, at: segmentedControl.numberOfSegments, animated: false)
             }
         }
 
-        if numberOfSegments > 1 {
+        if numberOfContainedViewControllers > 1 {
             segmentedControlView.isHidden = false
 
             segmentedControl.selectedSegmentIndex = 0
             displayViewController(at: 0)
-        } else if numberOfSegments == 1 {
+        } else if numberOfContainedViewControllers == 1 {
             segmentedControlView.isHidden = true
 
             displayViewController(at: 0)
@@ -292,29 +264,19 @@ class SimpleContainerViewController: UIViewController, Alertable {
 
     @MainActor
     private func displayViewController(at segmentedControlIndex: Int) {
-        guard let dataSource = self.dataSource else {
+        guard segmentedControlIndex >= 0, segmentedControlIndex < numberOfContainedViewControllers else {
             return
         }
 
-        // TODO: We need to make sure we're not out-of-range here by passing a index=0 where there's no views
-        let viewController = dataSource.containerViewController(self, viewControllerForSegmentAt: segmentedControlIndex)
-
+        let viewController = viewControllerForSegment(at: segmentedControlIndex)
         if currentViewController == viewController {
             return
         }
 
-        // Perform the transition from the current VC to the new one
         transition(from: currentViewController, to: viewController)
         currentViewController = viewController
 
         updateNavigationBarItems(for: viewController)
-
-        // TODO: Update some currentViewController stuff here...
-        /*
-        if let emptyStateVC = currentViewController as? ChildContentEmptyState {
-            emptyStateVC.updateEmptyStateUI()
-        }
-        */
     }
 
     @MainActor
@@ -343,11 +305,10 @@ class SimpleContainerViewController: UIViewController, Alertable {
 
     @MainActor
     private func updateNavigationBarItems(for viewController: UIViewController) {
-        // TODO: Set this as some default or something
-         var rightBarButtonItems: [UIBarButtonItem] = []
-
         if let viewController = viewController as? ContainerNavigationBarProvider {
-            navigationItem.rightBarButtonItems = rightBarButtonItems + viewController.additionalRightBarButtonItems
+            navigationItem.rightBarButtonItems = (defaultRightBarButtonItems ?? []) + viewController.additionalRightBarButtonItems
+        } else {
+            navigationItem.rightBarButtonItems = defaultRightBarButtonItems
         }
     }
 

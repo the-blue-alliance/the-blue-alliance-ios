@@ -8,7 +8,7 @@ protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)
 }
 
-class DistrictsViewController: TBAFakeTableViewController {
+class DistrictsViewController: TBAFakeTableViewController<String, District> {
 
     var year: Int {
         didSet {
@@ -21,8 +21,8 @@ class DistrictsViewController: TBAFakeTableViewController {
 
     weak var delegate: DistrictsViewControllerDelegate?
 
-    private var dataSource: CollectionViewDataSource<String, District>!
-    @SortedKeyPath(comparator: KeyPathComparator(\District.name)) private var districts: [District]? = nil {
+    @SortedKeyPath(comparator: KeyPathComparator(\.name))
+    private var districts: [District]? = nil {
         didSet {
             updateDataSource()
         }
@@ -45,22 +45,15 @@ class DistrictsViewController: TBAFakeTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.dataSource = dataSource
         setupDataSource()
-    }
-
-    // TODO: MOVE THIS ELSEWHERE
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        refresh()
     }
 
     // MARK: UICollectionView Delegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let district = dataSource.itemIdentifier(for: indexPath) else {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
+        guard let dataSource, let district = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         delegate?.districtSelected(district)
@@ -69,20 +62,26 @@ class DistrictsViewController: TBAFakeTableViewController {
     // MARK: Collection View Data Source
 
     private func setupDataSource () {
-        dataSource = CollectionViewDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, district in
-            let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as ListCollectionViewCell
+        let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, District>(handler: { (cell, indexPath, district) in
             var contentConfig = cell.defaultContentConfiguration()
             contentConfig.text = district.name
 
             cell.contentConfiguration = contentConfig
             cell.accessories = [.disclosureIndicator()]
-
-            return cell
         })
-        dataSource.statefulDelegate = self
+        dataSource = CollectionViewDataSource(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, district: District) -> UICollectionViewCell? in
+            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: district)
+        }
     }
 
+    // TODO: This needs to move... elsewhere
     @MainActor private func updateDataSource() {
+        guard let dataSource else {
+            showNoDataView()
+            return
+        }
+
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         snapshot.insertSection("districts", atIndex: 0)
@@ -92,15 +91,16 @@ class DistrictsViewController: TBAFakeTableViewController {
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
-    // MARK: - SimpleRefreshable
+    // MARK: - Refresh
 
     override func performRefresh() async throws {
-        self.districts = try await api.getDistricts(year: self.year)
+        districts = try await api.getDistricts(year: self.year)
     }
-}
 
-extension DistrictsViewController: Stateful {
-    var noDataText: String? {
+    // MARK: - Stateful
+
+    override var noDataText: String? {
         return "No districts for year"
     }
+
 }

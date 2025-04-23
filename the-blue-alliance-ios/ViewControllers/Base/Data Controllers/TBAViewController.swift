@@ -88,29 +88,19 @@ extension Refreshable where Self: TBAViewController {
         return scrollView
     }
 
-    func hideNoData() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-    func noDataReload() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
 }
 
 extension Stateful where Self: TBAViewController {
 
+    @MainActor
     func addNoDataView(_ noDataView: UIView) {
-        DispatchQueue.main.async {
-            self.view.insertSubview(noDataView, at: 0)
-            self.view.autoPinEdgesToSuperviewEdges()
-        }
+        view.insertSubview(noDataView, at: 0)
+        view.autoPinEdgesToSuperviewEdges()
     }
 
+    @MainActor
     func removeNoDataView(_ noDataView: UIView) {
-        DispatchQueue.main.async {
-            noDataView.removeFromSuperview()
-        }
+        noDataView.removeFromSuperview()
     }
 
 }
@@ -120,7 +110,7 @@ extension Refreshable where Self: TBAViewController & Stateful {
         if isDataSourceEmpty {
             showNoDataView()
         } else {
-            hideNoData()
+            hideNoDataView()
         }
     }
 }

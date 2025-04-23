@@ -113,29 +113,6 @@ extension Refreshable where Self: TBATableViewController {
 
 }
 
-extension SimpleRefreshable where Self: TBATableViewController {
-    var refreshControl: UIRefreshControl? {
-        get {
-            return tableView.refreshControl
-        }
-        set {
-            tableView.refreshControl = newValue
-        }
-    }
-
-    var refreshView: UIScrollView {
-        return tableView
-    }
-
-    func hideNoData() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-    func noDataReload(error: Error?) {
-        // Does not conform to Stateful - probably no no data view
-    }
-}
-
 extension Stateful where Self: TBATableViewController {
 
     @MainActor func addNoDataView(_ noDataView: UIView) {
@@ -153,7 +130,7 @@ extension Refreshable where Self: TBATableViewController & Stateful {
         if isDataSourceEmpty {
             showNoDataView()
         } else {
-            hideNoData()
+            hideNoDataView()
         }
     }
 }

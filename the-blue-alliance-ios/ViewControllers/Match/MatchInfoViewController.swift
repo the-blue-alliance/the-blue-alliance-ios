@@ -185,6 +185,14 @@ class MatchInfoViewController: TBAViewController, Observable {
 
 extension MatchInfoViewController: Refreshable {
 
+    func hideNoData() {
+        // TODO: Stubbing this for now
+    }
+    
+    func noDataReload() {
+        // TODO: Stubbing this for now
+    }
+
     var isDataSourceEmpty: Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135

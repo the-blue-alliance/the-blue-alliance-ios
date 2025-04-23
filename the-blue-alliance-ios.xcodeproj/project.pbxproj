@@ -190,6 +190,8 @@
 		92CC6D36234588810085867D /* Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92CC6D34234588810085867D /* Test.xcdatamodeld */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D034F42DB6F69E0010A53A /* LaunchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D034F32DB6F69E0010A53A /* LaunchStoryboard.storyboard */; };
+		92D0350C2DB720130010A53A /* UILabel+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D0350B2DB720110010A53A /* UILabel+TBA.swift */; };
+		92D0350F2DB735850010A53A /* TitleCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */; };
 		92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */; };
 		92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D31EC68F4200572F27 /* TeamsViewController.swift */; };
 		92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D61EC695C400572F27 /* TeamTableViewCell.swift */; };
@@ -448,6 +450,8 @@
 		92CC6D35234588810085867D /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D034F32DB6F69E0010A53A /* LaunchStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchStoryboard.storyboard; sourceTree = "<group>"; };
+		92D0350B2DB720110010A53A /* UILabel+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+TBA.swift"; sourceTree = "<group>"; };
+		92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionHeaderView.swift; sourceTree = "<group>"; };
 		92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-unit-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D6483E20BE4CB8008F0DB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewController.swift; sourceTree = "<group>"; };
@@ -982,6 +986,7 @@
 		92A5E5C721A22D550025CC85 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				92D0350B2DB720110010A53A /* UILabel+TBA.swift */,
 				92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */,
 				92A5E5C921A22D550025CC85 /* Bundle+Version.swift */,
 				92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */,
@@ -1167,6 +1172,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		92D0350D2DB735740010A53A /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
 		92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1330,6 +1343,7 @@
 		92FFE5221E7C994B0037E48C /* ViewElements */ = {
 			isa = PBXGroup;
 			children = (
+				92D0350D2DB735740010A53A /* Headers */,
 				92B55628215FCB0900C1D9A3 /* Protocols */,
 				929DB38A209563E800FB575F /* Base */,
 				92564C69216180470047917F /* Media */,
@@ -1588,6 +1602,7 @@
 				92CAF54E240774B90078CA0A /* PadRootViewController.swift in Sources */,
 				92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */,
 				92FF10F021A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift in Sources */,
+				92D0350F2DB735850010A53A /* TitleCollectionHeaderView.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
 				92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */,
 				92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */,
@@ -1700,6 +1715,7 @@
 				371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */,
 				92BCEEB12DB464F10069DA77 /* SearchService.swift in Sources */,
 				92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */,
+				92D0350C2DB720130010A53A /* UILabel+TBA.swift in Sources */,
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
 				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,

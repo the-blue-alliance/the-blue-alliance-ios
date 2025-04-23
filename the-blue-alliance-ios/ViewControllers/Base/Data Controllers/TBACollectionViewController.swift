@@ -5,43 +5,36 @@ import TBAKit
 import TBAUtils
 import UIKit
 
-class TBACollectionViewController: UICollectionViewController, DataController, Navigatable, SimpleRefreshable {
+class TBACollectionViewController<Section: Hashable, Item: Hashable>: UICollectionViewController, Stateful {
 
     let dependencies: Dependencies
 
     var api: TBAAPI {
         return dependencies.api
     }
-    var errorRecorder: ErrorRecorder {
-        return dependencies.errorRecorder
-    }
-    var persistentContainer: NSPersistentContainer {
-        return dependencies.persistentContainer
-    }
-    var tbaKit: TBAKit {
-        return dependencies.tbaKit
-    }
-    var userDefaults: UserDefaults {
-        return dependencies.userDefaults
-    }
 
-    // MARK: - Refreshable
+    var dataSource: CollectionViewDataSource<Section, Item>!
 
-    var refreshOperationQueue: OperationQueue = OperationQueue()
+    // MARK: - Private Properties
 
-    // MARK: - SimpleRefreshable
-
-    var refreshTask: Task<Void, any Error>?
-    weak var refreshDelegate: (any RefreshDelegate)?
+    private var hasViewWillAppeared = false
 
     // MARK: - Stateful
 
     var noDataViewController: NoDataViewController = NoDataViewController()
 
-    // MARK: - Navigatable
+    var noDataText: String? {
+        fatalError("Should implement in subclass")
+    }
 
-    var additionalRightBarButtonItems: [UIBarButtonItem] {
-        return []
+    @MainActor
+    func addNoDataView(_ noDataView: UIView) {
+        collectionView.backgroundView = noDataView
+    }
+
+    @MainActor
+    func removeNoDataView(_ noDataView: UIView) {
+        collectionView.backgroundView = nil
     }
 
     // MARK: - Init
@@ -50,8 +43,6 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
         self.dependencies = dependencies
 
         super.init(collectionViewLayout: collectionViewLayout)
-
-        refreshDelegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,19 +55,106 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
         super.viewDidLoad()
 
         collectionView.backgroundColor = UIColor.systemGroupedBackground
-        collectionView.delegate = self
-
-        collectionView.registerReusableSupplementaryView(elementKind: UICollectionView.elementKindSectionHeader, TitleCollectionHeaderView.self)
-
-        collectionView.registerReusableCell(BasicCollectionViewCell.self)
-        collectionView.registerReusableCell(ListCollectionViewCell.self)
+        // collectionView.delegate = self
 
         enableRefreshing()
     }
 
-    // MARK: - SimpleRefreshable
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-    @objc func handleRefreshControlTrigger() {
+        if !hasViewWillAppeared, dataSource.isEmpty {
+            refresh()
+        }
+        hasViewWillAppeared = true
+    }
+
+    // MARK: - Refresh
+
+    private var refreshTask: Task<Void, any Error>?
+
+    var isRefreshing: Bool {
+        guard let refreshTask else {
+            return false
+        }
+        return !refreshTask.isCancelled
+    }
+
+    func refresh() {
+        guard !isRefreshing else {
+            return
+        }
+
+        refreshTask = Task {
+            await MainActor.run {
+                refreshDidStart()
+            }
+
+            var refreshError: Error?
+            do {
+                try await performRefresh()
+            } catch is CancellationError {
+                // Do not show error if request cancelled
+            } catch {
+                refreshError = error
+            }
+
+            await MainActor.run {
+                refreshDidEnd(error: refreshError)
+                refreshTask = nil
+            }
+        }
+    }
+
+    func cancelRefresh() {
+        refreshTask?.cancel()
+    }
+
+    @MainActor
+    func refreshDidStart() {
+        hideNoDataView()
+    }
+
+    @MainActor
+    func refreshDidEnd(error: (any Error)?) {
+        collectionView.refreshControl?.endRefreshing()
+
+        noDataReload(error: error)
+    }
+
+    @MainActor
+    func noDataReload(error: (any Error)?) {
+        if let error {
+            noDataViewController.noDataText = error.localizedDescription
+            showNoDataView()
+        } else if dataSource.isEmpty {
+            showNoDataView()
+        } else {
+            hideNoDataView()
+        }
+    }
+
+    @MainActor
+    func enableRefreshing() {
+        guard collectionView.refreshControl == nil else {
+            return
+        }
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefreshControlTrigger(_:)), for: .valueChanged)
+
+        collectionView.refreshControl = refreshControl
+    }
+
+    @MainActor
+    func disableRefreshing() {
+        collectionView.refreshControl = nil
+
+        cancelRefresh()
+    }
+
+    @MainActor
+    @objc private func handleRefreshControlTrigger(_ sender: UIRefreshControl) {
         Task {
             refresh()
         }
@@ -85,119 +163,5 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
     func performRefresh() async throws {
         fatalError("Should implement performRefresh in sublcass")
     }
-}
 
-extension TBACollectionViewController: RefreshDelegate {}
-
-// TODO: Move this out
-class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
-    let headerTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    // MARK: - Initialization
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        setupViews()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-
-        setupViews()
-    }
-
-    @MainActor
-    private func setupViews() {
-        backgroundColor = UIColor.tableViewHeaderColor
-
-        addSubview(headerTitleLabel)
-        NSLayoutConstraint.activate([
-            headerTitleLabel.leadingAnchor.constraint(equalTo: self.layoutMarginsGuide.leadingAnchor),
-            // TODO: I think to get this to match table view, we make this a >= constraint
-            // The content should collapse in itself
-            headerTitleLabel.trailingAnchor.constraint(equalTo: self.layoutMarginsGuide.trailingAnchor, constant: -8),
-            headerTitleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            headerTitleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
-        ])
-        // headerTitleLabel.autoPinEdgesToSuperviewEdges(with: .init(top: 8, left: 8, bottom: 8, right: 8))
-    }
-
-    // MARK: - Reuse
-
-    @MainActor
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        headerTitleLabel.text = nil
-    }
-
-    // MARK: - Configuration
-
-    // Method to set the data for the header
-    @MainActor
-    func configure(with title: String?) {
-        headerTitleLabel.text = title
-    }
-}
-
-extension RefreshDelegate where Self: TBACollectionViewController & SimpleRefreshable {
-    @MainActor func refreshDidStart() {
-        // TODO: Add this back in
-        // hideNoData()
-
-        // TODO: We should really debounce this animation so it only occurs if we're refreshing after
-        // maybe let's say like... half a second? Otherwise we get a flash when showing the view.
-        let refreshControlHeight = refreshView.refreshControl?.frame.size.height ?? 0
-        refreshView.setContentOffset(CGPoint(x: 0, y: -refreshControlHeight), animated: true)
-        refreshView.refreshControl?.beginRefreshing()
-    }
-
-    @MainActor func refreshDidEnd(error: (any Error)?) {
-        refreshView.refreshControl?.endRefreshing()
-
-        // TODO: Remove this
-        // noDataReload(error: error)
-    }
-}
-
-extension RefreshDelegate where Self: TBACollectionViewController & SimpleRefreshable & Stateful {
-}
-
-extension Refreshable where Self: TBACollectionViewController {
-
-    var refreshView: UIScrollView {
-        return collectionView
-    }
-
-    func hideNoData() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-    func noDataReload() {
-        // Does not conform to Stateful - probably no no data view
-    }
-}
-
-extension SimpleRefreshable where Self: TBACollectionViewController {
-    var refreshView: UIScrollView {
-        return collectionView
-    }
-}
-
-extension Stateful where Self: TBACollectionViewController {
-
-    @MainActor func addNoDataView(_ noDataView: UIView) {
-        self.collectionView.backgroundView = noDataView
-    }
-
-    @MainActor func removeNoDataView(_ view: UIView) {
-        self.collectionView.backgroundView = nil
-    }
 }

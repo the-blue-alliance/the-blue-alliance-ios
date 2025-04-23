@@ -26,8 +26,6 @@ class DistrictViewController: SimpleContainerViewController {
         self.district = district
 
         super.init(dependencies: dependencies)
-
-        dataSource = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -43,30 +41,27 @@ class DistrictViewController: SimpleContainerViewController {
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
     }
-}
 
-extension DistrictViewController: ContainerDataSource {
+    // MARK: Container Data Source
 
-    func numberOfSegments(in containerViewController: SimpleContainerViewController) -> Int {
-        // TODO: Should be 3
+    override var numberOfContainedViewControllers: Int {
         return 2
     }
 
-    // TODO: Can we use generics to give this some Section enum?
-    func containerViewController(_ containerViewController: SimpleContainerViewController, titleForSegmentAt index: Int) -> String? {
+    override func titleForSegment(at index: Int) -> String? {
         if index == 0 {
             return "Events"
         }
         return "Rankings"
     }
-    
-    func containerViewController(_ containerViewController: SimpleContainerViewController, viewControllerForSegmentAt index: Int) -> UIViewController {
+
+    override func viewControllerForSegment(at index: Int) -> UIViewController {
         if index == 0 {
             return eventsViewController
         }
         return rankingsViewController
     }
-    
+
 }
 
 extension DistrictViewController: SimpleEventsViewControllerDelegate {

@@ -6,7 +6,7 @@ import UIKit
 
 // TODO: This could probably conform to some "Root" view or "Tabbed" view and setup all the tab related stuff...
 
-class DistrictsContainerViewController: SimpleContainerViewController, ContainerDataSource {
+class DistrictsContainerViewController: SimpleContainerViewController {
 
     private let statusService: StatusService
 
@@ -34,7 +34,6 @@ class DistrictsContainerViewController: SimpleContainerViewController, Container
 
         super.init(dependencies: dependencies)
 
-        dataSource = self
         navigationTitleDelegate = self
 
         // TODO: I HATE that this has to go here... but it does?
@@ -55,7 +54,11 @@ class DistrictsContainerViewController: SimpleContainerViewController, Container
 
     // MARK: Container Data Source
 
-    func containerViewController(_ containerViewController: SimpleContainerViewController, viewControllerForSegmentAt index: Int) -> UIViewController {
+    override var numberOfContainedViewControllers: Int {
+        return 1
+    }
+
+    override func viewControllerForSegment(at index: Int) -> UIViewController {
         return districtsViewController
     }
 

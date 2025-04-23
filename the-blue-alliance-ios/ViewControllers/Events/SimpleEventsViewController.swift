@@ -17,45 +17,42 @@ protocol SimpleEventsViewControllerDelegate: AnyObject {
     func eventSelected(_ event: Event)
 }
 
-//extension SimpleEventsViewControllerDelegate {
-//    func title(for event: Event) -> String? {
-//        return nil
-//    }
-//}
-
-protocol SimpleEventsViewControllerDataSourceConfiguration {
-    var firstKeyPathComparator: KeyPathComparator<Event> { get }
-    var groupingKeyForValue: (Event) -> String { get }
-}
-
-class SimpleEventsViewController: TBAFakeTableViewController, SimpleEventsViewControllerDataSourceConfiguration {
-
-    var firstKeyPathComparator: KeyPathComparator<Event> {
-        return KeyPathComparator(\.hybridType)
-    }
-
-    var groupingKeyForValue: (Event) -> String {
-        return \.hybridType
-    }
+class SimpleEventsViewController: TBAFakeTableViewController<String, Event> {
 
     weak var delegate: SimpleEventsViewControllerDelegate?
 
-    private var dataSource: CollectionViewDataSource<String, Event>!
+    class var firstEventKeyPathComparator: KeyPathComparator<Event> {
+        return KeyPathComparator(\.hybridType)
+    }
+
+    class var sectionKey: (Event) -> String {
+        return \.hybridType
+    }
+
     var events: [Event]? = nil {
         didSet {
-            guard var events else {
-                return
-            }
-            events = events.sorted(using: [
-                firstKeyPathComparator,
+            events?.sort(using: [
+                Self.firstEventKeyPathComparator,
                 KeyPathComparator(\.startDate),
                 KeyPathComparator(\.name)
             ])
-            eventsByType = OrderedDictionary(grouping: events, by: groupingKeyForValue)
+            if let events = events {
+                eventsByType = OrderedDictionary(grouping: events, by: Self.sectionKey)
+            } else {
+                eventsByType = nil
+            }
+        }
+    }
+    var eventsByType: OrderedDictionary<String, [Event]>? = nil {
+        didSet {
+            guard isViewLoaded else {
+                return
+            }
             updateDataSource()
         }
     }
-    var eventsByType: OrderedDictionary<String, [Event]>? = nil
+
+    // MARK: - Init
 
     init(dependencies: Dependencies) {
         super.init(dependencies: dependencies, headerMode: .supplementary)
@@ -70,51 +67,49 @@ class SimpleEventsViewController: TBAFakeTableViewController, SimpleEventsViewCo
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.registerReusableCell(EventCollectionViewCell.self)
-
-        collectionView.dataSource = dataSource
         setupDataSource()
     }
 
     // MARK: UICollectionView Delegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let event = dataSource.itemIdentifier(for: indexPath) else {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
+        guard let dataSource, let event = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         delegate?.eventSelected(event)
-        collectionView.deselectItem(at: indexPath, animated: true)
     }
 
     // MARK: Collection View Data Source
 
     private func setupDataSource () {
-        // TODO: Something like this...
         let cellRegistration = UICollectionView.CellRegistration<EventCollectionViewCell, Event> { cell, indexPath, event in
-            var contentConfiguration = EventCellContentConfiguration(event: event)
-            // contentConfiguration.event = event
             cell.contentConfiguration = EventCellContentConfiguration(event: event)
             cell.accessories = [.disclosureIndicator()]
+        }
+        let headerRegistration = UICollectionView.SupplementaryRegistration<TitleCollectionHeaderView>(
+            elementKind: UICollectionView.elementKindSectionHeader
+        ) { supplementaryView, elementKind, indexPath in
+            guard elementKind == UICollectionView.elementKindSectionHeader else { return }
+            guard let hybridType = self.dataSource.sectionIdentifier(for: indexPath.section) else { return }
+
+            supplementaryView.text = hybridType
         }
 
         dataSource = CollectionViewDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, event in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: event)
         })
-        dataSource.supplementaryViewProvider = { (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
-            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-
-            let headerView = collectionView.dequeueReusableSupplementaryView(elementKind: UICollectionView.elementKindSectionHeader, indexPath: indexPath) as TitleCollectionHeaderView
-
-            if let event = self.dataSource.itemIdentifier(for: indexPath) {
-                headerView.configure(with: self.delegate?.title(for: event))
-            }
-
-            return headerView
+        dataSource.supplementaryViewProvider = { (collectionView, elementKind, indexPath) -> UICollectionReusableView? in
+            return collectionView.dequeueConfiguredReusableSupplementary(
+                using: headerRegistration,
+                for: indexPath
+            )
         }
-        // dataSource.statefulDelegate = self
     }
 
-    @MainActor private func updateDataSource() {
+    @MainActor
+    private func updateDataSource() {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         if let eventsByType {
@@ -123,71 +118,16 @@ class SimpleEventsViewController: TBAFakeTableViewController, SimpleEventsViewCo
                 snapshot.appendItems(events, toSection: section)
             }
         }
-        dataSource.applySnapshotUsingReloadData(snapshot)
-    }
-
-    // Handles context menu presentation (long-press)
-    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-
-        guard let indexPath = indexPaths.first, // Get the first selected item's index path
-              let item = dataSource.itemIdentifier(for: indexPath) else {
-            return nil // No item found at the index path
-        }
-
-        let configuration = UIContextMenuConfiguration(identifier: item.key as NSCopying, previewProvider: nil) { _ in
-
-            // Create actions for the context menu
-            let printTitleAction = UIAction(title: "Print Title", image: UIImage(systemName: "printer")) { _ in
-                print("Context Menu Action: Print Title for \(item.name)")
-                // Perform the action (e.g., log, trigger a print job, etc.)
+        dataSource.apply(snapshot)
+        /*
+        dataSource.applySnapshotUsingReloadData(snapshot) {
+            if self.dataSource.isEmpty {
+                self.showNoDataView()
+            } else {
+                self.hideNoDataView()
             }
-
-            // You could add other actions here, like:
-            // let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
-            //     print("Context Menu Action: Delete for \(item.title)")
-            //     self.deleteItem(item)
-            // }
-
-            // Create a menu with the actions
-            return UIMenu(title: "", children: [printTitleAction]) // Use children for a flat list of actions
-            // Or for submenus: return UIMenu(title: "Options", children: [someAction, UIMenu(title: "More", children: [anotherAction])])
         }
-
-        return configuration
+        */
     }
-
-    // Optional: Customize the preview when the context menu is presented
-    /*
-     override func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-     guard let identifier = configuration.identifier as? UUID,
-     let indexPath = dataSource.indexPath(for: ListItem(id: identifier, title: "")), // Note: Requires ListItem to be Equatable if title is not used
-     let cell = collectionView.cellForItem(at: indexPath) else {
-     return nil
-     }
-
-     let parameters = UIPreviewParameters()
-     // Customize parameters if needed (e.g., backgroundColor, visiblePath)
-     // parameters.backgroundColor = .systemGray6
-
-     return UITargetedPreview(view: cell, parameters: parameters)
-     }
-     */
-
-    // Optional: Customize the preview when the context menu is dismissed
-    /*
-     override func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-     guard let identifier = configuration.identifier as? UUID,
-     let indexPath = dataSource.indexPath(for: ListItem(id: identifier, title: "")), // Note: Requires ListItem to be Equatable if title is not used
-     let cell = collectionView.cellForItem(at: indexPath) else {
-     return nil
-     }
-
-     let parameters = UIPreviewParameters()
-     // Customize parameters if needed
-     // parameters.backgroundColor = .systemGray6
-
-     return UITargetedPreview(view: cell, parameters: parameters)
-     }
-     */
 
 }
