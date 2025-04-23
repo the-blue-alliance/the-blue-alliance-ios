@@ -10,18 +10,14 @@ import UIKit
 
 class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
 
-    @MainActor var text: String? {
+    @MainActor var title: String? {
         didSet {
-            textLabel.text = text
+            titleLabel.text = title
         }
     }
 
-    private lazy var textLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private lazy var titleLabel: UILabel = {
+        return UILabel.subheadlineLabel(textColor: .white)
     }()
 
     // MARK: - Initialization
@@ -29,9 +25,9 @@ class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setupViews()
+        backgroundColor = .tableViewHeaderColor
 
-        textLabel.text = text
+        setupViews()
     }
 
     required init?(coder: NSCoder) {
@@ -40,27 +36,16 @@ class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
 
     @MainActor
     private func setupViews() {
-        backgroundColor = UIColor.tableViewHeaderColor
+        addSubview(titleLabel)
 
-        addSubview(textLabel)
+        // Magic number - because it's been 5 for a decade, and I like the way it looks at 5
+        let verticalSpacing = 5.0
         NSLayoutConstraint.activate([
-            textLabel.leadingAnchor.constraint(equalTo: self.layoutMarginsGuide.leadingAnchor),
-            // TODO: I think to get this to match table view, we make this a >= constraint
-            // The content should collapse in itself
-            textLabel.trailingAnchor.constraint(equalTo: self.layoutMarginsGuide.trailingAnchor, constant: -8),
-            textLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            textLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
+            titleLabel.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: verticalSpacing),
+            titleLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -verticalSpacing)
         ])
-        // headerTitleLabel.autoPinEdgesToSuperviewEdges(with: .init(top: 8, left: 8, bottom: 8, right: 8))
-    }
-
-    // MARK: - Reuse
-
-    @MainActor
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        textLabel.text = nil
     }
 
 }

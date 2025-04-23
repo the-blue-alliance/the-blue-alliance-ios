@@ -5,11 +5,7 @@ import TBAModels
 class DistrictEventsViewController: SimpleEventsViewController {
 
     override class var firstEventKeyPathComparator: KeyPathComparator<Event> {
-        return KeyPathComparator(\.weekString)
-    }
-
-    override class var sectionKey: (Event) -> String {
-        return \.weekString
+        return KeyPathComparator(\.week)
     }
 
     private let district: District

@@ -50,10 +50,7 @@ class EventCellContentView: UIView, UIContentView {
     }
 
     private lazy var nameLabel = {
-        let label = UILabel()
-        label.numberOfLines = 1
-        label.font = .preferredFont(forTextStyle: .body)
-        return label
+        return UILabel.bodyLabel()
     }()
     private lazy var locationLabel = {
         return UILabel.subheadlineLabel()
@@ -94,8 +91,8 @@ class EventCellContentView: UIView, UIContentView {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
         ])
 
         stackView.addArrangedSubview(nameLabel)

@@ -26,7 +26,7 @@ class SimpleEventsViewController: TBAFakeTableViewController<String, Event> {
     }
 
     class var sectionKey: (Event) -> String {
-        return \.hybridType
+        return \.weekString
     }
 
     var events: [Event]? = nil {
@@ -94,7 +94,7 @@ class SimpleEventsViewController: TBAFakeTableViewController<String, Event> {
             guard elementKind == UICollectionView.elementKindSectionHeader else { return }
             guard let hybridType = self.dataSource.sectionIdentifier(for: indexPath.section) else { return }
 
-            supplementaryView.text = hybridType
+            supplementaryView.title = hybridType
         }
 
         dataSource = CollectionViewDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, event in
