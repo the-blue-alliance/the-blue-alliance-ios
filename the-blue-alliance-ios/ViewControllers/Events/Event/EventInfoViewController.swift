@@ -1,5 +1,4 @@
 import CoreData
-import FirebaseAnalytics
 import TBAData
 import TBAKit
 import UIKit
@@ -225,16 +224,6 @@ class EventInfoViewController: TBATableViewController, Observable {
         }
 
         if let urlString = urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
-            switch item {
-            case .webcast(let webcast):
-                Analytics.logEvent("watch_webcast", parameters: [
-                    "event": event.key,
-                    "webcast_channel": webcast.channel,
-                    "webcast_type": webcast.type
-                ])
-            default:
-                break
-            }
             urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
@@ -242,18 +231,6 @@ class EventInfoViewController: TBATableViewController, Observable {
 }
 
 extension EventInfoViewController: Refreshable {
-
-    var refreshKey: String? {
-        return event.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
 
     var isDataSourceEmpty: Bool {
         return event.name == nil
@@ -269,8 +246,6 @@ extension EventInfoViewController: Refreshable {
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Event.insert(event, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

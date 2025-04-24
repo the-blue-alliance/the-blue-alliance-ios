@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 protocol SearchableController {
-    func updateDataSource()
+    @MainActor func updateDataSource()
 }
 
 class TBASearchableTableViewController: TBATableViewController, SearchableController {
@@ -36,18 +36,15 @@ class TBASearchableTableViewController: TBATableViewController, SearchableContro
 
     // MARK: - SearchableController
 
-    func updateDataSource() {
+    @MainActor func updateDataSource() {
         fatalError("Implement updateDataSource in subclass")
     }
 
 }
 
 extension TBASearchableTableViewController: UISearchResultsUpdating {
-
+    @MainActor
     public func updateSearchResults(for searchController: UISearchController) {
-        OperationQueue.main.addOperation {
-            self.updateDataSource()
-        }
+        updateDataSource()
     }
-
 }

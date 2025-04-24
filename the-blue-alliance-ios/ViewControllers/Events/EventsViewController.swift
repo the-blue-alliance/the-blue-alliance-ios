@@ -48,18 +48,6 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
     // MARK: - Refreshable
 
-    var refreshKey: String? {
-        fatalError("implement in subclass")
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
     var isDataSourceEmpty: Bool {
         return fetchedResultsController.isDataSourceEmpty
     }
@@ -108,7 +96,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     func updateDataSource() {
         fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
 
-        if shouldRefresh() {
+        if isDataSourceEmpty {
             refresh()
         }
     }

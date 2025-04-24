@@ -30,14 +30,18 @@ class PhoneRootViewController: UITabBarController, RootController {
         self.dependencies = dependencies
 
         super.init(nibName: nil, bundle: nil)
-
-        viewControllers = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController].compactMap({ (viewController) -> UIViewController? in
-            return UINavigationController(rootViewController: viewController)
-        })
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        viewControllers = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController].compactMap {
+            return UINavigationController(rootViewController: $0)
+        }
     }
 
     // MARK: - RootController

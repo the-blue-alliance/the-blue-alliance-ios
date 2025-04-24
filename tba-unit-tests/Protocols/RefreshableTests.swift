@@ -18,12 +18,6 @@ class MockRefreshable: Refreshable {
 
     var noDataReloadExpectation: XCTestExpectation?
 
-    var mockRefreshKey: String?
-
-    var mockAutomaticRefreshInterval: DateComponents?
-
-    var mockAutomaticRefreshEndDate: Date?
-
     // MARK: - Protocol
 
     var refreshOperationQueue: OperationQueue = OperationQueue()
@@ -33,20 +27,6 @@ class MockRefreshable: Refreshable {
     var refreshView: UIScrollView {
         return UIScrollView()
     }
-
-    var refreshKey: String? {
-        return mockRefreshKey ?? "test_refresh_key"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return mockAutomaticRefreshInterval
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return mockAutomaticRefreshEndDate
-    }
-
-    var isDataSourceEmpty: Bool = false
 
     func refresh() {
         // TODO: Pass
@@ -99,62 +79,7 @@ class RefreshableTests: TBATestCase {
     }
 
     func test_shouldRefresh_isDataSourceEmpty() {
-        refreshable.markRefreshSuccessful()
         refreshable.isDataSourceEmpty = true
-        XCTAssert(refreshable.shouldRefresh())
-    }
-
-    func test_shouldRefresh_dataNotStale() {
-        refreshable.markRefreshSuccessful()
-        refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
-        XCTAssertFalse(refreshable.shouldRefresh())
-    }
-
-    func test_shouldRefresh_noEndDate() {
-        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())!)
-        refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
-        XCTAssert(refreshable.shouldRefresh())
-    }
-
-    func test_shouldRefresh_beforeEndDate() {
-        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())!)
-        refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
-        refreshable.mockAutomaticRefreshEndDate = Calendar.current.date(byAdding: DateComponents(hour: 1), to: Date())
-        XCTAssert(refreshable.shouldRefresh())
-    }
-
-    func test_shouldRefresh_afterEndDate() {
-        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())!)
-        refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
-        refreshable.mockAutomaticRefreshEndDate = Calendar.current.date(byAdding: DateComponents(hour: -1), to: Date())
-        XCTAssert(refreshable.shouldRefresh())
-    }
-
-    func test_shouldRefresh_afterEndDate_lastRefreshBeforeEndDate() {
-        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1), to: Date())!)
-        refreshable.mockAutomaticRefreshInterval = DateComponents(minute: 30)
-        refreshable.mockAutomaticRefreshEndDate = Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())
-        XCTAssertFalse(refreshable.shouldRefresh())
-    }
-
-    func test_markRefreshSuccessful() {
-        XCTAssert(refreshable.shouldRefresh())
-
-        refreshable.markRefreshSuccessful()
-        XCTAssertFalse(refreshable.shouldRefresh())
-    }
-
-    func test_hasSuccessfullyRefreshed() {
-        XCTAssertFalse(refreshable.hasSuccessfullyRefreshed)
-        refreshable.markRefreshSuccessful()
-        XCTAssert(refreshable.hasSuccessfullyRefreshed)
-    }
-
-    func test_clearSuccessfulRefreshes() {
-        XCTAssert(refreshable.shouldRefresh())
-        refreshable.markRefreshSuccessful()
-        XCTAssertFalse(refreshable.shouldRefresh())
-        userDefaults.clearSuccessfulRefreshes()
         XCTAssert(refreshable.shouldRefresh())
     }
 
@@ -238,14 +163,6 @@ class UserDefaultsRefreshableTests: TBATestCase {
         refreshable = nil
 
         super.tearDown()
-    }
-
-    func test_clearSuccessfulRefreshes() {
-        XCTAssertNil(userDefaults.object(forKey: "successful_refresh_keys"))
-        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1), to: Date())!)
-        XCTAssertNotNil(userDefaults.object(forKey: "successful_refresh_keys"))
-        userDefaults.clearSuccessfulRefreshes()
-        XCTAssertNil(userDefaults.object(forKey: "successful_refresh_keys"))
     }
 
 }

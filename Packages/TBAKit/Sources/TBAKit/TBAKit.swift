@@ -5,8 +5,6 @@ public typealias TBAKitOperationCompletion = (_ response: HTTPURLResponse?, _ js
 private struct Constants {
     struct APIConstants {
         static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
-        static let lastModifiedDictionary = "LastModifiedDictionary"
-        static let etagDictionary = "EtagDictionary"
     }
 }
 
@@ -46,60 +44,9 @@ open class TBAKit: NSObject {
         self.userDefaults = userDefaults
     }
 
-    public func storeCacheHeaders(_ operation: TBAKitOperation) {
-        // Pull our response off of our request
-        guard let httpResponse = operation.task.response as? HTTPURLResponse else {
-            return
-        }
-        // Grab our lastModified to store
-        let lastModified = httpResponse.allHeaderFields["Last-Modified"]
-        // Grab our etag to store
-        let etag = httpResponse.allHeaderFields["Etag"]
-
-        // And finally, grab our URL
-        guard let url = httpResponse.url else {
-            return
-        }
-
-        if let lastModified = lastModified as? String {
-            let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
-            var lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
-            lastModifiedDictionary[lastModifiedString] = lastModified
-            userDefaults.set(lastModifiedDictionary, forKey: Constants.APIConstants.lastModifiedDictionary)
-        }
-        if let etag = etag as? String {
-            let etagString = TBAKit.etagURLString(for: url)
-            var etagDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.etagDictionary) ?? [:]
-            etagDictionary[etagString] = etag
-            userDefaults.set(etagDictionary, forKey: Constants.APIConstants.etagDictionary)
-        }
-        userDefaults.synchronize()
-    }
-
-    public func clearCacheHeaders() {
-        userDefaults.removeObject(forKey: Constants.APIConstants.lastModifiedDictionary)
-        userDefaults.removeObject(forKey: Constants.APIConstants.etagDictionary)
-        userDefaults.synchronize()
-    }
-
-    static func lastModifiedURLString(for url: URL) -> String {
-        return "LAST_MODIFIED:\(url.absoluteString)"
-    }
-
-    static func etagURLString(for url: URL) -> String {
-        return "ETAG:\(url.absoluteString)"
-    }
-
-    func lastModified(for url: URL) -> String? {
-        let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
-        let lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
-        return lastModifiedDictionary[lastModifiedString] as? String
-    }
-
-    func etag(for url: URL) -> String? {
-        let etagString = TBAKit.etagURLString(for: url)
-        let etagDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.etagDictionary) ?? [:]
-        return etagDictionary[etagString] as? String
+    public func clearCache() {
+        let session = sessionProvider()
+        session.configuration.urlCache?.removeAllCachedResponses()
     }
 
     func createRequest(_ method: String) -> URLRequest {
@@ -108,15 +55,6 @@ open class TBAKit: NSObject {
         request.httpMethod = "GET"
         request.addValue(apiKey, forHTTPHeaderField: "X-TBA-Auth-Key")
         request.addValue("gzip", forHTTPHeaderField: "Accept-Encoding")
-
-        if let lastModified = lastModified(for: apiURL) {
-            request.addValue(lastModified, forHTTPHeaderField: "If-Modified-Since")
-        }
-
-        if let etag = etag(for: apiURL) {
-            request.addValue(etag, forHTTPHeaderField: "If-None-Match")
-        }
-
         return request
     }
 

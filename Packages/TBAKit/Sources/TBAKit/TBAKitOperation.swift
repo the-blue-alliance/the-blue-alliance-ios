@@ -1,7 +1,7 @@
 import Foundation
 import TBAOperation
 
-public class TBAKitOperation: TBAOperation {
+public class TBAKitOperation: TBAOperation, @unchecked Sendable {
 
     var task: URLSessionTask!
 

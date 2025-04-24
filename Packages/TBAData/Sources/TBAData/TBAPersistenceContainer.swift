@@ -1,18 +1,9 @@
 import Foundation
 import CoreData
 
-let AppGroupIdentifier = "group.com.the-blue-alliance.tba.tbadata"
-
 public class TBAPersistenceContainer: NSPersistentContainer {
 
-    override open class func defaultDirectoryURL() -> URL {
-        if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppGroupIdentifier) {
-            return appGroupURL
-        }
-        return super.defaultDirectoryURL()
-    }
-
-    private static let managedObjectModel: NSManagedObjectModel? = {
+    nonisolated(unsafe) private static let managedObjectModel: NSManagedObjectModel? = {
         return NSManagedObjectModel.mergedModel(from: [Bundle.module])
     } ()
 

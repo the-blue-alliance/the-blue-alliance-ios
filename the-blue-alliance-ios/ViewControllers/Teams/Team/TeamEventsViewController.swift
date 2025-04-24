@@ -29,23 +29,6 @@ class TeamEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override var refreshKey: String? {
-        return "\(team.key)_events"
-    }
-
-    override var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
-    override var automaticRefreshEndDate: Date? {
-        guard let year = year else {
-            return nil
-        }
-        // Automatically refresh team events until the year is over
-        // Ex: Team events for 2018 will stop refreshing on Jan 1st, 2019
-        return Calendar.current.date(from: DateComponents(year: year + 1))
-    }
-
     @objc override func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchTeamEvents(key: team.key) { [self] (result, notModified) in
@@ -57,8 +40,6 @@ class TeamEventsViewController: EventsViewController {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(events)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

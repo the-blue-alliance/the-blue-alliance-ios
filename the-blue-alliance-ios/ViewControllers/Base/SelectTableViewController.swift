@@ -88,18 +88,6 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
 
     // MARK: - Refreshable
 
-    var refreshKey: String? {
-        return nil
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
     var isDataSourceEmpty: Bool {
         return false
     }

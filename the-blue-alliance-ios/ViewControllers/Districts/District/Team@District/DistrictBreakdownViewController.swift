@@ -100,19 +100,6 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 
 extension DistrictBreakdownViewController: Refreshable {
 
-    var refreshKey: String? {
-        return "\(ranking.district.key)_breakdown"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh team's district breakdown until district is over
-        return ranking.district.endDate?.endOfDay()
-    }
-
     var isDataSourceEmpty: Bool {
         // This should never fire
         return ranking.sortedEventPoints.count == 0
@@ -129,8 +116,6 @@ extension DistrictBreakdownViewController: Refreshable {
             context.performChangesAndWait({ [unowned self] in
                 let district = context.object(with: self.ranking.district.objectID) as! District
                 district.insert(rankings)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation!)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

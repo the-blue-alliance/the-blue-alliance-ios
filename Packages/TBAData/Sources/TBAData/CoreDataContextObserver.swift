@@ -5,12 +5,12 @@ public struct CoreDataContextObserverState: OptionSet {
     public let rawValue: Int
     public init(rawValue: Int) { self.rawValue = rawValue }
 
-    public static let inserted  = CoreDataContextObserverState(rawValue: 1 << 0)
-    public static let updated   = CoreDataContextObserverState(rawValue: 1 << 1)
-    public static let deleted   = CoreDataContextObserverState(rawValue: 1 << 2)
-    public static let all: CoreDataContextObserverState = [inserted, updated, deleted]
+    nonisolated(unsafe) public static let inserted  = CoreDataContextObserverState(rawValue: 1 << 0)
+    nonisolated(unsafe) public static let updated   = CoreDataContextObserverState(rawValue: 1 << 1)
+    nonisolated(unsafe) public static let deleted   = CoreDataContextObserverState(rawValue: 1 << 2)
+    nonisolated(unsafe) public static let all: CoreDataContextObserverState = [inserted, updated, deleted]
 
-    public static let allList: [CoreDataContextObserverState] = [inserted, updated, deleted]
+    nonisolated(unsafe) public static let allList: [CoreDataContextObserverState] = [inserted, updated, deleted]
 }
 
 public struct CoreDataObserverAction<T: NSManagedObject> {

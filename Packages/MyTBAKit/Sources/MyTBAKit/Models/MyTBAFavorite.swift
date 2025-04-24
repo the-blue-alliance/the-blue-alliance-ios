@@ -22,7 +22,7 @@ public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
     public var modelKey: String
     public var modelType: MyTBAModelType
 
-    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchFavorites
+    nonisolated(unsafe) public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchFavorites
 }
 
 extension MyTBA {

@@ -272,7 +272,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
                 // Kickoff a reload to make sure our states match up.
                 reloadViewController(refreshViewController)
 
-                if refreshViewController.shouldRefresh() {
+                if refreshViewController.isDataSourceEmpty {
                     refreshViewController.refresh()
                 }
                 switchedIndex = index

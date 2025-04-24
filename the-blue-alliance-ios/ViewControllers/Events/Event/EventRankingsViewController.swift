@@ -76,19 +76,6 @@ class EventRankingsViewController: TBATableViewController {
 
 extension EventRankingsViewController: Refreshable {
 
-    var refreshKey: String? {
-        return "\(event.key)_rankings"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh event rankings until the event is over
-        return event.endDate?.endOfDay()
-    }
-
     var isDataSourceEmpty: Bool {
         return fetchedResultsController.isDataSourceEmpty
     }
@@ -104,8 +91,6 @@ extension EventRankingsViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

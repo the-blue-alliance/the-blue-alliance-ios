@@ -1,58 +1,65 @@
-import CoreData
 import Firebase
 import Foundation
+import TBAAPI
 import MyTBAKit
-import TBAData
-import TBAKit
 import UIKit
 
-class DistrictsContainerViewController: ContainerViewController {
+// TODO: This could probably conform to some "Root" view or "Tabbed" view and setup all the tab related stuff...
 
-    private let myTBA: MyTBA
+class DistrictsContainerViewController: SimpleContainerViewController {
+
     private let statusService: StatusService
-    private let urlOpener: URLOpener
 
     private(set) var year: Int {
         didSet {
+            guard isViewLoaded else {
+                return
+            }
+            navigationSubtitle = ContainerViewController.yearSubtitle(year)
             districtsViewController.year = year
-
-            updateInterface()
         }
     }
-    private(set) var districtsViewController: DistrictsViewController
+    private lazy var districtsViewController: DistrictsViewController = {
+        let districtsViewController = DistrictsViewController(year: year, api: api)
+        districtsViewController.delegate = self
+        return districtsViewController
+    }()
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.myTBA = myTBA
+    init(api: TBAAPI, statusService: StatusService) {
         self.statusService = statusService
-        self.urlOpener = urlOpener
 
-        year = statusService.currentSeason
-        districtsViewController = DistrictsViewController(year: year, dependencies: dependencies)
+        year = 2025
 
-        super.init(viewControllers: [districtsViewController],
-                   navigationTitle: "Districts",
-                   navigationSubtitle: ContainerViewController.yearSubtitle(year),
-                   dependencies: dependencies)
-
-        title = RootType.districts.title
-        tabBarItem.image = RootType.districts.icon
+        super.init(api: api)
 
         navigationTitleDelegate = self
-        districtsViewController.delegate = self
+
+        // TODO: I HATE that this has to go here... but it does?
+
+        tabBarItem.image = RootType.districts.icon
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-    // MARK: - Private Methods
+        navigationTitle = RootType.districts.title
+        navigationSubtitle = ContainerViewController.yearSubtitle(year) // TODO: Can we DRY this?
+    }
 
-    private func updateInterface() {
-        navigationSubtitle = ContainerViewController.yearSubtitle(year)
+    // MARK: Container Data Source
+
+    override var numberOfContainedViewControllers: Int {
+        return 1
+    }
+
+    override func viewControllerForSegment(at index: Int) -> UIViewController {
+        return districtsViewController
     }
 
 }
@@ -60,6 +67,7 @@ class DistrictsContainerViewController: ContainerViewController {
 extension DistrictsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
+        /*
         let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...statusService.maxSeason).reversed(), dependencies: dependencies)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
@@ -69,6 +77,7 @@ extension DistrictsContainerViewController: NavigationTitleDelegate {
         nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
 
         navigationController?.present(nav, animated: true, completion: nil)
+        */
     }
 
     @objc private func dismissSelectYear() {
@@ -95,7 +104,7 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let districtViewController = DistrictContainerViewController(district: district, api: api)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: districtViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

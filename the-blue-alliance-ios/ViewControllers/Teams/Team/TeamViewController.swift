@@ -25,9 +25,7 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
-    private(set) var mediaViewController: TeamMediaCollectionViewController
-
-    private var activity: NSUserActivity?
+    // TODO: Media
 
     override var subscribableModel: MyTBASubscribable {
         return team
@@ -37,7 +35,6 @@ class TeamViewController: HeaderContainerViewController, Observable {
         didSet {
             if let year = year {
                 eventsViewController.year = year
-                mediaViewController.year = year
 
                 fetchTeaMedia(year: year)
             }
@@ -67,19 +64,17 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, dependencies: dependencies)
         eventsViewController = TeamEventsViewController(team: team, year: year, dependencies: dependencies)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
 
         super.init(
-            viewControllers: [infoViewController, eventsViewController, mediaViewController],
+            viewControllers: [infoViewController, eventsViewController],
             navigationTitle: team.teamNumberNickname,
             navigationSubtitle: year?.description ?? "----",
-            segmentedControlTitles: ["Info", "Events", "Media"],
+            segmentedControlTitles: ["Info", "Events"],
             myTBA: myTBA,
             dependencies: dependencies
         )
 
         eventsViewController.delegate = self
-        mediaViewController.delegate = self
 
         teamHeaderView.yearButton.addTarget(self, action: #selector(showSelectYear), for: .touchUpInside)
     }
@@ -96,8 +91,6 @@ class TeamViewController: HeaderContainerViewController, Observable {
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
         setupObservers()
-
-        activity = team.userActivity
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -106,22 +99,10 @@ class TeamViewController: HeaderContainerViewController, Observable {
         errorRecorder.log("Team: %@", [team.key])
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        activity?.becomeCurrent()
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         operationQueue.cancelAllOperations()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        activity?.resignCurrent()
     }
 
     // MARK: - Private
@@ -177,8 +158,6 @@ class TeamViewController: HeaderContainerViewController, Observable {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(media, year: year)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(mediaOperation)
             }, errorRecorder: errorRecorder)
         })
         operationQueue.addOperation(mediaOperation)
@@ -241,7 +220,7 @@ protocol MediaViewer: UIViewController {}
 extension MediaViewer {
 
     func show(media: TeamMedia, peek: Bool = false) {
-        if let image = media.image {
+        if let data = media.mediaData, let image = UIImage(data: data) {
             let agrume = Agrume(image: image)
             agrume.show(from: self)
         } else if let url = media.imageDirectURL {

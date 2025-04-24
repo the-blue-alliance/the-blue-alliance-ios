@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24E263" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES">
         <attribute name="awardTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="nameRaw" attributeType="String"/>
@@ -53,7 +53,7 @@
         <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
         <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
         <attribute name="hybridType" optional="YES" attributeType="String"/>
-        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="keyRaw" attributeType="String"/>
         <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationNameRaw" optional="YES" attributeType="String"/>
@@ -79,7 +79,6 @@
         <relationship name="rankingsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="eventRaw" inverseEntity="EventRanking"/>
         <relationship name="statsRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventTeamStat" inverseName="eventRaw" inverseEntity="EventTeamStat"/>
         <relationship name="statusesRaw" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventStatus" inverseName="eventRaw" inverseEntity="EventStatus"/>
-        <relationship name="statusRaw" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="downEventsRaw" inverseEntity="Status"/>
         <relationship name="teamsRaw" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="eventsRaw" inverseEntity="Team"/>
         <relationship name="webcastsRaw" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Webcast" inverseName="eventsRaw" inverseEntity="Webcast"/>
         <fetchIndex name="byKeyIndex">
@@ -223,14 +222,6 @@
         <attribute name="modelKeyRaw" attributeType="String"/>
         <attribute name="modelTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
-    <entity name="Status" representedClassName="Status" syncable="YES">
-        <attribute name="currentSeasonRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="isDatafeedDownRaw" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="latestAppVersionRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="maxSeasonRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="minAppVersionRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <relationship name="downEventsRaw" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="statusRaw" inverseEntity="Event"/>
-    </entity>
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES">
         <attribute name="notificationsRaw" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
     </entity>
@@ -241,7 +232,7 @@
         <attribute name="gmapsPlaceIDRaw" optional="YES" attributeType="String"/>
         <attribute name="gmapsURLRaw" optional="YES" attributeType="String"/>
         <attribute name="homeChampionshipRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: String]"/>
-        <attribute name="keyRaw" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="keyRaw" attributeType="String"/>
         <attribute name="latRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="lngRaw" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationNameRaw" optional="YES" attributeType="String"/>
@@ -279,7 +270,7 @@
         <attribute name="detailsRaw" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String: Any]"/>
         <attribute name="directURLRaw" optional="YES" attributeType="String"/>
         <attribute name="foreignKeyRaw" attributeType="String"/>
-        <attribute name="mediaData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="mediaDataRaw" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="mediaError" optional="YES" attributeType="Transformable" valueTransformerName="ErrorTransformer" customClassName="Error"/>
         <attribute name="preferredRaw" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO"/>
         <attribute name="typeStringRaw" attributeType="String"/>

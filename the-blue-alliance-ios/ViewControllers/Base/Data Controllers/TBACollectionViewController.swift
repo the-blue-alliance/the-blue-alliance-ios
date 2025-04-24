@@ -1,50 +1,43 @@
+import TBAAPI
 import CoreData
 import Foundation
 import TBAKit
 import TBAUtils
 import UIKit
 
-class TBACollectionViewController: UICollectionViewController, DataController, Navigatable {
+class TBACollectionViewController<Cell: UICollectionViewCell & Reusable, Item: Hashable>:
+    UICollectionViewController, Stateful
+{
 
-    private let dependencies: Dependencies
-
-    var errorRecorder: ErrorRecorder {
-        return dependencies.errorRecorder
+    var cellRegistration: UICollectionView.CellRegistration<Cell, Item> {
+        fatalError("Subclasses must override cellRegistration and provide a concrete registration.")
     }
-    var persistentContainer: NSPersistentContainer {
-        return dependencies.persistentContainer
-    }
-    var tbaKit: TBAKit {
-        return dependencies.tbaKit
-    }
-    var userDefaults: UserDefaults {
-        return dependencies.userDefaults
-    }
-
-    // MARK: - Refreshable
-
-    var refreshOperationQueue: OperationQueue = OperationQueue()
+    private(set) var dataSource: CollectionViewDataSource<String, Item>!
 
     // MARK: - Stateful
 
     var noDataViewController: NoDataViewController = NoDataViewController()
 
-    // MARK: - Navigatable
-
-    var additionalRightBarButtonItems: [UIBarButtonItem] {
-        return []
+    var noDataText: String? {
+        fatalError("Should implement in subclass")
     }
+    
+    // MARK: - Private Properties
+
+    private var hasViewWillAppeared = false
 
     // MARK: - Init
 
-    init(collectionViewLayout: UICollectionViewLayout = UICollectionViewFlowLayout(), dependencies: Dependencies) {
-        self.dependencies = dependencies
-
+    override init(collectionViewLayout: UICollectionViewLayout = UICollectionViewFlowLayout()) {
         super.init(collectionViewLayout: collectionViewLayout)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        refreshTask = nil
     }
 
     // MARK: - View Lifecycle
@@ -53,65 +46,143 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
         super.viewDidLoad()
 
         collectionView.backgroundColor = UIColor.systemGroupedBackground
-        collectionView.delegate = self
-        collectionView.registerReusableCell(BasicCollectionViewCell.self)
+
+        setupDataSource()
+        enableRefreshing()
     }
 
-}
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-extension Refreshable where Self: TBACollectionViewController {
-
-    var refreshControl: UIRefreshControl? {
-        get {
-            return collectionView.refreshControl
+        if !hasViewWillAppeared, dataSource.isEmpty {
+            refresh()
         }
-        set {
-            collectionView.refreshControl = newValue
-        }
+        hasViewWillAppeared = true
     }
 
-    var refreshView: UIScrollView {
-        return collectionView
+    // MARK: - Data Source
+
+    private func setupDataSource() {
+        let cellRegistration = cellRegistration
+        dataSource = CollectionViewDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
+            return collectionView.dequeueConfiguredReusableCell(
+                using: cellRegistration,
+                for: indexPath,
+                item: item
+            )
+        })
     }
 
-    func hideNoData() {
-        // Does not conform to Stateful - probably no no data view
+    // MARK: - Refresh
+
+    func performRefresh() async throws {
+        fatalError("Should implement performRefresh in sublcass")
     }
 
-    func noDataReload() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-}
-
-extension Stateful where Self: TBACollectionViewController {
-
-    func addNoDataView(_ noDataView: UIView) {
-        DispatchQueue.main.async {
-            self.collectionView.backgroundView = noDataView
-        }
-    }
-
-    func removeNoDataView(_ view: UIView) {
-        DispatchQueue.main.async {
-            self.collectionView.backgroundView = nil
+    private var refreshTask: Task<Void, any Error>? {
+        willSet {
+            refreshTask?.cancel()
         }
     }
 
-}
-
-extension Refreshable where Self: TBACollectionViewController & Stateful {
-
-    func hideNoData() {
-        removeNoDataView()
+    private var isRefreshing: Bool {
+        guard let refreshTask else {
+            return false
+        }
+        return !refreshTask.isCancelled
     }
 
-    func noDataReload() {
-        if isDataSourceEmpty {
+    @MainActor
+    private func refreshDidStart() {
+        assert(Thread.isMainThread, "Should be running on the main thread!!")
+
+        hideNoDataView()
+    }
+
+    @MainActor
+    private func refreshDidEnd(error: (any Error)?) {
+        assert(Thread.isMainThread, "Should be running on the main thread!!")
+
+        collectionView.refreshControl?.endRefreshing()
+
+        if let error {
+            noDataViewController.noDataText = error.localizedDescription
+            showNoDataView()
+        } else if dataSource.isEmpty {
+            noDataViewController.noDataText = noDataText
             showNoDataView()
         } else {
-            removeNoDataView()
+            hideNoDataView()
         }
+    }
+
+    @MainActor
+    private func enableRefreshing() {
+        assert(Thread.isMainThread, "Should be running on the main thread!!")
+
+        guard collectionView.refreshControl == nil else {
+            return
+        }
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefreshControlTrigger(_:)), for: .valueChanged)
+
+        collectionView.refreshControl = refreshControl
+    }
+
+    @MainActor
+    private func disableRefreshing() {
+        assert(Thread.isMainThread, "Should be running on the main thread!!")
+
+        collectionView.refreshControl = nil
+
+        cancelRefresh()
+    }
+
+    @MainActor
+    @objc private func handleRefreshControlTrigger(_ sender: UIRefreshControl) {
+        Task { [weak self] in
+            self?.refresh()
+        }
+    }
+
+}
+
+// MARK: - Refresh
+
+extension TBACollectionViewController {
+
+    func refresh() {
+        guard !isRefreshing else {
+            return
+        }
+
+        refreshTask = Task.detached { [weak self] in
+            guard let self else { return }
+
+            await refreshDidStart()
+
+            var refreshError: Error?
+            do {
+                try await performRefresh()
+            } catch is CancellationError {
+                // Do not show error if request cancelled
+            } catch {
+                refreshError = error
+            }
+
+            await refreshDidEnd(error: refreshError)
+            await clearRefreshTask()
+        }
+    }
+
+    @MainActor func clearRefreshTask() {
+        refreshTask = nil
+    }
+
+    func cancelRefresh() {
+        refreshTask?.cancel()
+        refreshTask = nil
     }
 
 }

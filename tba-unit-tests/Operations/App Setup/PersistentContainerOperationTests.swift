@@ -1,6 +1,5 @@
 import XCTest
 import CoreData
-import Search
 @testable import The_Blue_Alliance
 
 class PersistentContainerOperationTests: XCTestCase {
@@ -16,12 +15,7 @@ class PersistentContainerOperationTests: XCTestCase {
             $0.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         }
 
-        let indexDelegate: TBACoreDataCoreSpotlightDelegate = {
-            let description = persistentContainer.persistentStoreDescriptions.first!
-            return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
-                                                    model: persistentContainer.managedObjectModel)
-        }()
-        persistentContainerOperation = MockPersistentContainerOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer)
+        persistentContainerOperation = MockPersistentContainerOperation(persistentContainer: persistentContainer)
     }
 
     override func tearDown() {

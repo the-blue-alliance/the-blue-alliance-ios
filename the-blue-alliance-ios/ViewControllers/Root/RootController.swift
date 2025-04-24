@@ -60,16 +60,10 @@ protocol RootController {
     var pasteboard: UIPasteboard? { get }
     var photoLibrary: PHPhotoLibrary? { get }
     var pushService: PushService { get }
-    var searchService: SearchService { get }
     var urlOpener: URLOpener { get }
+    var searchService: SearchService { get }
     var statusService: StatusService { get }
     var dependencies: Dependencies { get }
-
-    // MARK: - Handoff Methods
-    func continueSearch(_ searchText: String) -> Bool
-
-    func show(event: Event) -> Bool
-    func show(team: Team) -> Bool
 }
 
 extension RootController {
@@ -88,24 +82,22 @@ extension RootController {
         return TeamsContainerViewController(myTBA: myTBA,
                                             pasteboard: pasteboard,
                                             photoLibrary: photoLibrary,
-                                            searchService: searchService,
                                             statusService: statusService,
                                             urlOpener: urlOpener,
                                             dependencies: dependencies)
     }
 
     var districtsViewController: DistrictsContainerViewController {
-        return DistrictsContainerViewController(myTBA: myTBA,
-                                                statusService: statusService,
-                                                urlOpener: urlOpener,
-                                                dependencies: dependencies)
+        return DistrictsContainerViewController(
+            api: dependencies.api,
+            statusService: statusService
+        )
     }
 
     var settingsViewController: SettingsViewController {
         return SettingsViewController(fcmTokenProvider: fcmTokenProvider,
                                       myTBA: myTBA,
                                       pushService: pushService,
-                                      searchService: searchService,
                                       urlOpener: urlOpener,
                                       dependencies: dependencies)
     }

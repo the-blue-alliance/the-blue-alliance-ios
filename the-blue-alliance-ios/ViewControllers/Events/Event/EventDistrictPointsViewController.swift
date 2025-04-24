@@ -133,18 +133,6 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
 extension EventDistrictPointsViewController: Refreshable {
 
-    var refreshKey: String? {
-        return "\(event.key)_district_points"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
     var isDataSourceEmpty: Bool {
         return fetchedResultsController.isDataSourceEmpty
     }
@@ -161,8 +149,6 @@ extension EventDistrictPointsViewController: Refreshable {
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

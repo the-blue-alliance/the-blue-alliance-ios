@@ -1,3 +1,4 @@
 scheme("The Blue Alliance")
 configuration("Release")
+xcargs("-skipPackagePluginValidation")
 silent(true)

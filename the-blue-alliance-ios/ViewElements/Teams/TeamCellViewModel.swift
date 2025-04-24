@@ -7,7 +7,7 @@ struct TeamCellViewModel {
     let nickname: String
     let location: String?
 
-    init(team: Team) {
+    init(team: TBAData.Team) {
         teamNumber = "\(team.teamNumber)"
         nickname = team.nickname ?? team.teamNumberNickname
         location = team.locationString
@@ -18,5 +18,4 @@ struct TeamCellViewModel {
         self.nickname = nickname
         self.location = location
     }
-
 }

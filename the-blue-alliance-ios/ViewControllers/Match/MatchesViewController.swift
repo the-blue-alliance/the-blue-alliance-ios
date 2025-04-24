@@ -167,19 +167,6 @@ extension MatchesViewController: Refreshable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? {
-        return "\(event.key)_matches"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh event matches until the event is over
-        return event.endDate?.endOfDay()
-    }
-
     var isDataSourceEmpty: Bool {
         // If we've changed our `filter` query option, an empty list is a valid state
         if !query.filter.isDefault {
@@ -199,8 +186,6 @@ extension MatchesViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(matches)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

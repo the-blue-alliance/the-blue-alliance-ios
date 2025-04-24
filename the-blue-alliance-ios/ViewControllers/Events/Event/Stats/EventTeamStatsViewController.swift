@@ -111,7 +111,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     private func updateDataSource() {
         fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
 
-        if shouldRefresh() {
+        if isDataSourceEmpty {
             refresh()
         }
     }
@@ -144,19 +144,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
 extension EventTeamStatsTableViewController: Refreshable {
 
-    var refreshKey: String? {
-        return "\(event.key)_team_stats"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh team stats until the event is over
-        return event.endDate?.endOfDay()
-    }
-
     var isDataSourceEmpty: Bool {
         return fetchedResultsController.isDataSourceEmpty
     }
@@ -172,8 +159,6 @@ extension EventTeamStatsTableViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(stats)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

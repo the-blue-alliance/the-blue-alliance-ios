@@ -10,7 +10,7 @@ protocol TableViewDataSourceDelegate: AnyObject {
 class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<Section, Item> {
 
     weak var delegate: TableViewDataSourceDelegate?
-    weak var statefulDelegate: (Stateful & Refreshable)?
+    weak var statefulDelegate: (Stateful & Refreshable)? // TODO: Rename and delete
 
     // MARK: - Public Methods
 
@@ -24,7 +24,8 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffabl
     override func numberOfSections(in tableView: UITableView) -> Int {
         let sections = super.numberOfSections(in: tableView)
         if sections == 0 {
-            statefulDelegate?.showNoDataView()
+            // statefulDelegate?.showNoDataView()
+            // simpleStatefulDelegate?.showNoDataView()
         }
         return sections
     }
@@ -32,9 +33,9 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffabl
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let rows = super.tableView(tableView, numberOfRowsInSection: section)
         if rows == 0 {
-            statefulDelegate?.showNoDataView()
+            // statefulDelegate?.showNoDataView()
         } else {
-            statefulDelegate?.removeNoDataView()
+            statefulDelegate?.hideNoData()
         }
         return rows
     }
