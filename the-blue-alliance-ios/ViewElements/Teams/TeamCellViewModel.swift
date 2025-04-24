@@ -1,6 +1,5 @@
 import Foundation
 import TBAData
-import TBAModels
 
 struct TeamCellViewModel {
 
@@ -12,12 +11,6 @@ struct TeamCellViewModel {
         teamNumber = "\(team.teamNumber)"
         nickname = team.nickname ?? team.teamNumberNickname
         location = team.locationString
-    }
-
-    init(team: TBAModels.Team) {
-        teamNumber = "\(team.teamNumber)"
-        nickname = team.nickname ?? team.teamNumberNickname
-        location = team.locationName
     }
 
     init(teamNumber: String, nickname: String, location: String?) {

@@ -89,8 +89,8 @@ extension RootController {
 
     var districtsViewController: DistrictsContainerViewController {
         return DistrictsContainerViewController(
-            statusService: statusService,
-            dependencies: dependencies
+            api: dependencies.api,
+            statusService: statusService
         )
     }
 

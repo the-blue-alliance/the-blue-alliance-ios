@@ -1,6 +1,6 @@
 import Firebase
 import Foundation
-import TBAModels
+import TBAAPI
 import MyTBAKit
 import UIKit
 
@@ -20,19 +20,19 @@ class DistrictsContainerViewController: SimpleContainerViewController {
         }
     }
     private lazy var districtsViewController: DistrictsViewController = {
-        let districtsViewController = DistrictsViewController(year: year, dependencies: dependencies)
+        let districtsViewController = DistrictsViewController(year: year, api: api)
         districtsViewController.delegate = self
         return districtsViewController
     }()
 
     // MARK: - Init
 
-    init(statusService: StatusService, dependencies: Dependencies) {
+    init(api: TBAAPI, statusService: StatusService) {
         self.statusService = statusService
 
-        year = statusService.currentSeason
+        year = 2025
 
-        super.init(dependencies: dependencies)
+        super.init(api: api)
 
         navigationTitleDelegate = self
 
@@ -67,6 +67,7 @@ class DistrictsContainerViewController: SimpleContainerViewController {
 extension DistrictsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
+        /*
         let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...statusService.maxSeason).reversed(), dependencies: dependencies)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
@@ -76,6 +77,7 @@ extension DistrictsContainerViewController: NavigationTitleDelegate {
         nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
 
         navigationController?.present(nav, animated: true, completion: nil)
+        */
     }
 
     @objc private func dismissSelectYear() {
@@ -102,7 +104,7 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let districtViewController = DistrictViewController(district: district, dependencies: dependencies)
+        let districtViewController = DistrictContainerViewController(district: district, api: api)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: districtViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

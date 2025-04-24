@@ -8,8 +8,10 @@ protocol TeamMediaCollectionViewControllerDelegate: AnyObject {
     func mediaSelected(_ media: TeamMedia)
 }
 
-class TeamMediaCollectionViewController: TBACollectionViewController<String, TeamMedia> {
+class TeamMediaCollectionViewController: TBACollectionViewController<UICollectionViewListCell, TeamMedia> {
+    /*
     override var noDataText: String? {
         return ""
     }
+    */
 }

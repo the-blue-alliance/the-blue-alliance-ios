@@ -10,27 +10,25 @@ import UIKit
 
 extension UILabel {
 
-    private class func label() -> UILabel {
+    private class func label(forTextStyle style: UIFont.TextStyle) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 1
         return label
     }
 
     /// Body tea, face card never declines
     class func bodyLabel() -> UILabel {
-        let label = UILabel.label()
-        label.numberOfLines = 1
-        label.font = .preferredFont(forTextStyle: .body)
-        return label
+        return UILabel.label(forTextStyle: .body)
     }
 
-    class func subheadlineLabel(textColor: UIColor = .secondaryLabel) -> UILabel {
-        let label = UILabel.label()
-        label.numberOfLines = 1
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = textColor
-        return label
+    class func subheadlineLabel() -> UILabel {
+        return UILabel.label(forTextStyle: .subheadline)
+    }
+
+    class func caption2Label() -> UILabel {
+        return UILabel.label(forTextStyle: .caption2)
     }
 
 }

@@ -13,6 +13,13 @@ public struct District: Decodable {
     public var key: String
     public var year: Int
 
+    public init(abbreviation: String, name: String, key: String, year: Int) {
+        self.abbreviation = abbreviation
+        self.name = name
+        self.key = key
+        self.year = year
+    }
+
     enum CodingKeys: String, CodingKey {
         case abbreviation
         case name = "display_name"

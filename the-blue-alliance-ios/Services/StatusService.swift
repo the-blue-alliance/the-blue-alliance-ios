@@ -1,12 +1,27 @@
+import os
 import Foundation
 import TBAAPI
-import TBAModels
-import os
 
 /**
  Service to periodically fetch from the /status endpoint
  */
+// TODO: actor
 public class StatusService: NSObject {
+
+    static let defaultStatus = Components.Schemas.API_Status(
+        current_season: 2025,
+        max_season: 2025,
+        is_datafeed_down: false,
+        down_events: [],
+        ios: Components.Schemas.API_Status_App_Version(
+            min_app_version: -1,
+            latest_app_version: -1
+        ), android: Components.Schemas.API_Status_App_Version(
+            min_app_version: -1,
+            latest_app_version: -1
+        ),
+        max_team_page: 24
+    )
 
     var retryService: RetryService
 
@@ -16,12 +31,12 @@ public class StatusService: NSObject {
     )
 
     private let api: TBAAPI
-    fileprivate var status: Status {
+    fileprivate var status: Components.Schemas.API_Status {
         didSet {
-            Self.logger.debug("Status: \(self.status, privacy: .public)")
+            // Self.logger.debug("Status: \(self.status, privacy: .public)")
             dispatchStatusChanged(status)
-            dispatchFMSDown(status.datafeedDown)
-            dispatchEvents(downEventKeys: status.downEvents)
+            dispatchFMSDown(status.is_datafeed_down)
+            dispatchEvents(downEventKeys: status.down_events)
         }
     }
     private let userDefaults: UserDefaults
@@ -35,11 +50,11 @@ public class StatusService: NSObject {
     private var previouslyDownEventKeys: [String] = []
 
     var currentSeason: Int {
-        return status.currentSeason
+        return status.current_season
     }
 
     var maxSeason: Int {
-        return status.maxSeason
+        return status.max_season
     }
 
     init(api: TBAAPI, retryService: RetryService, userDefaults: UserDefaults) {
@@ -47,31 +62,19 @@ public class StatusService: NSObject {
         self.retryService = retryService
         self.userDefaults = userDefaults
 
-        let defaultStatus = Status(
-            ios: AppInfo(
-                latestAppVersion: -1,
-                minAppVersion: -1
-            ),
-            currentSeason: 2025,
-            downEvents: [],
-            datafeedDown: false,
-            maxSeason: 2025,
-            maxTeamPage: 21
-        )
-
         do {
             if let status = try userDefaults.getStatus() {
                 self.status = status
                 Self.logger.debug("Using UserDefaults Status")
             } else {
-                self.status = defaultStatus
+                self.status = Self.defaultStatus
                 Self.logger.debug("Using default Status")
             }
         } catch {
             Self.logger.error("Error fetching Status from UserDefaults: \(error)")
-            self.status = defaultStatus
+            self.status = Self.defaultStatus
         }
-        Self.logger.debug("Init Status: \(self.status, privacy: .public)")
+        // Self.logger.debug("Init Status: \(self.status, privacy: .public)")
 
         super.init()
     }
@@ -92,7 +95,7 @@ public class StatusService: NSObject {
         }
     }
 
-    func dispatchStatusChanged(_ status: Status) {
+    func dispatchStatusChanged(_ status: Components.Schemas.API_Status) {
         updateStatusSubscribers(status)
     }
 
@@ -136,7 +139,7 @@ public class StatusService: NSObject {
         eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
     }
 
-    fileprivate func updateStatusSubscribers(_ status: Status) {
+    fileprivate func updateStatusSubscribers(_ status: Components.Schemas.API_Status) {
         for subscriber in self.statusSubscribers.allObjects {
             subscriber.statusChanged(statusService: self)
         }
@@ -215,7 +218,7 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        return statusService.status.downEvents.contains(eventKey)
+        return statusService.status.down_events.contains(eventKey)
     }
 
 }
@@ -224,14 +227,14 @@ fileprivate extension UserDefaults {
 
     private static let kStatus = "kStatus"
 
-    func getStatus() throws -> Status? {
+    func getStatus() throws -> Components.Schemas.API_Status? {
         guard let encodedStatus = object(forKey: Self.kStatus) as? Data else {
             return nil
         }
-        return try PropertyListDecoder().decode(Status.self, from: encodedStatus)
+        return try PropertyListDecoder().decode(Components.Schemas.API_Status.self, from: encodedStatus)
     }
 
-    func setStatus(status: Status) throws {
+    func setStatus(status: Components.Schemas.API_Status) throws {
         let encodedStatus = try PropertyListEncoder().encode(status)
         set(encodedStatus, forKey: Self.kStatus)
     }

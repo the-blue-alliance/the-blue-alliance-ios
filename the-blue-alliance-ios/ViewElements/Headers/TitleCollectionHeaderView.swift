@@ -17,7 +17,9 @@ class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
     }
 
     private lazy var titleLabel: UILabel = {
-        return UILabel.subheadlineLabel(textColor: .white)
+        let label = UILabel.subheadlineLabel()
+        label.textColor = .white
+        return label
     }()
 
     // MARK: - Initialization
@@ -40,6 +42,8 @@ class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
 
         // Magic number - because it's been 5 for a decade, and I like the way it looks at 5
         let verticalSpacing = 5.0
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),

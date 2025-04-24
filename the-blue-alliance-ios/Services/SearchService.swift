@@ -6,10 +6,9 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
+import os
 import Foundation
 import TBAAPI
-import TBAModels
-import os
 
 public class SearchService: NSObject {
 
@@ -21,12 +20,12 @@ public class SearchService: NSObject {
     var api: TBAAPI
     var retryService: RetryService
 
-    var searchIndex: SearchIndex? {
+    var searchIndex: Components.Schemas.SearchIndex? {
         didSet {
             Self.logger.debug("SearchIndex updated")
         }
     }
-    var refreshTask: Task<SearchIndex, Error>?
+    var refreshTask: Task<Components.Schemas.SearchIndex, Error>?
 
     init(api: TBAAPI, retryService: RetryService) {
         self.api = api

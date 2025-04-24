@@ -1,4 +1,3 @@
-import TBAModels
 import TBAAPI
 import Foundation
 import UIKit
@@ -7,29 +6,74 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ districtRanking: DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBAFakeSearchableTableViewController<String, DistrictRanking>, UICollectionViewDataSourcePrefetching {
+class DistrictRankingsViewController: SearchContainerViewController, DistrictRankingsViewControllerDelegate {
 
     weak var delegate: DistrictRankingsViewControllerDelegate?
 
+    init(district: District, api: TBAAPI) {
+        let districtRankingsCollectionViewController = DistrictRankingsCollectionViewController(
+            district: district,
+            api: api
+        )
+        super.init(viewController: districtRankingsCollectionViewController)
+
+        districtRankingsCollectionViewController.delegate = self
+        searchDelegate = districtRankingsCollectionViewController
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Search
+
+    override var searchPlaceholderText: String? {
+        "Search district rankings"
+    }
+
+    // MARK: - DistrictRankingsViewControllerDelegate
+
+    func districtRankingSelected(_ districtRanking: DistrictRanking) {
+        delegate?.districtRankingSelected(districtRanking)
+    }
+
+}
+
+class DistrictRankingsCollectionViewController: TBACollectionViewListController<RankingCollectionViewListCell, DistrictRanking> {
+
+    /// TODO: We need to move this to use a more dedicated DistirctRanking cell,
+    /// as opposed to trying to get the existing Ranking cell to work
+
+    // MARK: - Public Properties
+
+    weak var delegate: DistrictRankingsViewControllerDelegate?
+
+    // MARK: - Private Properties
+
     private let district: District
+    private let api: TBAAPI
 
     @SortedKeyPath(comparator: KeyPathComparator(\.rank))
-    private var districtRankings: [DistrictRanking]? = nil {
-        didSet {
-            updateDataSource()
-        }
-    }
+    private var districtRankings: [DistrictRanking]? = nil
     private var teams: [String: Team] = [:]
 
-    // TODO: Void, Never ? Or should it be Team, Never ?
-    private var ongoingTeamFetchTasks: [String: Task<Void, Never>] = [:]
+    // TODO: Can there be a way for us to specify that we have multiple refreshing
+    // tasks and just cancel all the refreshing tasks together in the super?
+
+    private var districtTeamsFetchTask: Task<Void, Never>? {
+        willSet {
+            districtTeamsFetchTask?.cancel()
+        }
+    }
+    private var teamFetchTasks: [String: Task<Void, Never>] = [:]
 
     // MARK: - Init
 
-    init(district: District, dependencies: Dependencies) {
+    init(district: District, api: TBAAPI) {
         self.district = district
+        self.api = api
 
-        super.init(dependencies: dependencies)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -37,12 +81,7 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController<Strin
     }
 
     deinit {
-        cancelAllOngoingTasks()
-    }
-
-    private func cancelAllOngoingTasks() {
-        ongoingTeamFetchTasks.values.forEach { $0.cancel() }
-        ongoingTeamFetchTasks.removeAll()
+        cancelTeamFetchTasks()
     }
 
     // MARK: View Lifecycle
@@ -50,13 +89,158 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController<Strin
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // TODO: Basic list for now...
-        // tableView.registerReusableCell(RankingTableViewCell.self)
-
-        collectionView.dataSource = dataSource
-        setupDataSource()
-
         collectionView.prefetchDataSource = self
+    }
+
+    // MARK: Data Source
+
+    override var cellRegistration: UICollectionView.CellRegistration<RankingCollectionViewListCell, DistrictRanking> {
+        UICollectionView.CellRegistration { [weak self] cell, indexPath, districtRanking in
+            guard let self else { return }
+
+            var contentConfiguration = RankingListContentConfiguration(districtRanking: districtRanking)
+
+            if let team = teams[districtRanking.teamKey] {
+                contentConfiguration.teamName = team.displayName
+            } else {
+                fetchTeam(for: districtRanking.teamKey)
+                contentConfiguration.teamName = "Loading..."
+            }
+
+            cell.contentConfiguration = contentConfiguration
+            cell.accessories = [.disclosureIndicator()]
+        }
+    }
+
+    @MainActor
+    private func updateDataSource() async {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.insertSection("district_rankings", atIndex: 0)
+        if let districtRankings {
+            snapshot.appendItems(districtRankings)
+        }
+        await dataSource.apply(snapshot)
+
+        guard !Task.isCancelled else {
+            return
+        }
+        // TODO: Show No Data View
+    }
+
+    @MainActor
+    private func reconfigureItems(for teamKeys: Set<String>) async {
+        var snapshot = dataSource.snapshot()
+        let rankingsToReconfigure = snapshot.itemIdentifiers.filter { teamKeys.contains($0.teamKey) }
+
+        if !rankingsToReconfigure.isEmpty {
+            snapshot.reconfigureItems(rankingsToReconfigure)
+            await dataSource.apply(snapshot)
+        }
+    }
+
+    // MARK: - Search
+
+    /*
+    private func filterDistrictRankings(_ searchText: String?) {
+        guard let searchText else {
+            return
+        }
+        districtRankings = districtRankings?.filter { districtRanking in
+            var matchesNickname = false
+            if let team = teams[districtRanking.teamKey], let nickname = team.nickname {
+                let range = nickname.range(
+                    of: searchText,
+                    options: [.caseInsensitive, .diacriticInsensitive]
+                )
+                matchesNickname = range != nil
+            }
+            return districtRanking.teamNumber.starts(with: searchText) || matchesNickname
+        }
+    }
+    */
+
+    // MARK: - Refresh
+
+    override func performRefresh() async throws {
+        districtRankings = try await api.getDistrictRankings(districtKey: district.key)
+
+        let districtKey = district.key
+        districtTeamsFetchTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                let districtTeams = try await api.getDistrictTeamsSimple(districtKey: districtKey)
+
+                // Check for cancellation after await
+                try Task.checkCancellation()
+
+                var teamKeys = Set<String>()
+                for team in districtTeams {
+                    teams[team.key] = team
+                    teamKeys.insert(team.key)
+                }
+
+                await reconfigureItems(for: teamKeys)
+            }
+            catch is CancellationError {
+                print("District teams fetch task was cancelled")
+            } catch {
+                // TODO: Search will be degraded, show error
+                print("District teams fetch task failed")
+            }
+        }
+        // TODO: Should this occur... someplace else?
+        if !Task.isCancelled {
+            await updateDataSource()
+        }
+    }
+
+    private func fetchTeam(for teamKey: String) {
+        guard teams[teamKey] == nil, teamFetchTasks[teamKey] == nil else {
+            return
+        }
+
+        let task = Task { [weak self] in
+            guard let self else { return }
+            defer {
+                teamFetchTasks[teamKey] = nil
+            }
+            do {
+                let team = try await api.getTeamSimple(teamKey: teamKey)
+
+                // Check for cancellation after await
+                try Task.checkCancellation()
+
+                teams[team.key] = team
+
+                await reconfigureItems(for: [team.key])
+            } catch is CancellationError {
+                print("Team fetch task was cancelled for team: \(teamKey)")
+            } catch {
+                print("Team fetch task failed for team \(teamKey): \(error.localizedDescription)")
+            }
+        }
+
+        teamFetchTasks[teamKey] = task
+    }
+
+    private func cancelFetchingTask(for teamKey: String) {
+        teamFetchTasks[teamKey]?.cancel()
+        teamFetchTasks[teamKey] = nil
+    }
+
+    private func cancelTeamFetchTasks() {
+        districtTeamsFetchTask?.cancel()
+        districtTeamsFetchTask = nil
+
+        teamFetchTasks.values.forEach { $0.cancel() }
+        teamFetchTasks.removeAll()
+    }
+
+    // MARK: - Stateful
+
+    override var noDataText: String? {
+        return "No rankings for district"
     }
 
     // MARK: Collection View Delegate
@@ -70,137 +254,11 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController<Strin
         delegate?.districtRankingSelected(ranking)
     }
 
-    // MARK: Collection View Data Source
+}
 
-    private func setupDataSource() {
-        dataSource = CollectionViewDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, districtRanking in
-            let team = self.teams[districtRanking.teamKey]
-
-            let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as ListCollectionViewCell
-
-            if team == nil {
-                self.fetchTeam(for: districtRanking.teamKey)
-            }
-
-            // Configure the cell's content
-            var content = cell.defaultContentConfiguration()
-            content.text = "Rank \(districtRanking.rank)" // Primary text is the rank
-
-            // Secondary text is team name and city if team data is loaded
-            if let team = team {
-                content.secondaryText = team.displayName
-                content.secondaryTextProperties.color = .secondaryLabel
-            } else {
-                content.secondaryText = "Loading team data..."
-                content.secondaryTextProperties.color = .systemGray // Indicate loading
-            }
-            
-            // contentConfig.secondaryText = "\(districtRanking.pointTotal) Points"
-            cell.contentConfiguration = content
-            return cell
-        })
-        // TODO: Generalize this
-        dataSource.supplementaryViewProvider = { (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
-            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-
-            let headerView = collectionView.dequeueReusableSupplementaryView(elementKind: UICollectionView.elementKindSectionHeader, indexPath: indexPath) as SearchHeaderView
-
-            // Add the search bar to the header view
-            if self.searchBar.superview == nil {
-                headerView.addSubview(self.searchBar)
-                self.searchBar.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    self.searchBar.topAnchor.constraint(equalTo: headerView.topAnchor),
-                    self.searchBar.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-                    self.searchBar.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
-                    self.searchBar.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
-                ])
-            }
-            return headerView
-        }
-    }
-
-    @MainActor override func updateDataSource() {
-        guard let dataSource else {
-            showNoDataView()
-            return
-        }
-
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteAllItems()
-        snapshot.insertSection("district_rankings", atIndex: 0)
-        if let districtRankings {
-            snapshot.appendItems(districtRankings)
-        }
-        dataSource.applySnapshotUsingReloadData(snapshot)
-    }
-
-    // MARK: - Refresh
-
-    override func performRefresh() async throws {
-        districtRankings = try await api.getDistrictRankings(districtKey: district.key)
-    }
-
-    // MARK: - Stateful
-
-    override var noDataText: String? {
-        return "No rankings for district"
-    }
-
-    // MARK: - Team Fetching
-
-    private func fetchTeam(for teamKey: String) {
-        guard teams[teamKey] == nil, ongoingTeamFetchTasks[teamKey] == nil else {
-            return
-        }
-
-        let task = Task { [weak self] in
-            do {
-                let team = try await self?.api.getTeamSimple(teamKey: teamKey)
-
-                // Check for cancellation after await
-                try Task.checkCancellation()
-
-                if let self, let team {
-                    teams[team.key] = team
-
-                    if let dataSource {
-                        var snapshot = dataSource.snapshot()
-                        let rankingsToReconfigure = snapshot.itemIdentifiers.filter { $0.teamKey == team.key }
-
-                        if !rankingsToReconfigure.isEmpty {
-                            snapshot.reconfigureItems(rankingsToReconfigure)
-                            await dataSource.apply(snapshot, animatingDifferences: true)
-                        }
-                    }
-                }
-            } catch is CancellationError {
-                // Handle explicit task cancellation
-                print("Team fetch task was cancelled for team: \(teamKey)")
-            } catch {
-                // Handle other errors
-                print("Team fetch task failed for team \(teamKey): \(error.localizedDescription)")
-                // TODO: Handle error state, maybe update the ranking item to show error
-            }
-
-            self?.ongoingTeamFetchTasks[teamKey] = nil
-        }
-
-        ongoingTeamFetchTasks[teamKey] = task
-    }
-
-    private func cancelFetchingTask(for teamKey: String) {
-        ongoingTeamFetchTasks[teamKey]?.cancel()
-        ongoingTeamFetchTasks[teamKey] = nil
-    }
-
-    // MARK: - UICollectionViewDataSourcePrefetching
+extension DistrictRankingsCollectionViewController: UICollectionViewDataSourcePrefetching {
 
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        guard let dataSource else {
-            return
-        }
-
         for indexPath in indexPaths {
             guard let districtRanking = dataSource.itemIdentifier(for: indexPath) else {
                 continue
@@ -209,18 +267,33 @@ class DistrictRankingsViewController: TBAFakeSearchableTableViewController<Strin
         }
     }
 
-    // Called by the collection view to indicate that data prefetching for these index paths should be cancelled
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        guard let dataSource else {
-            return
-        }
-
         for indexPath in indexPaths {
             guard let districtRanking = dataSource.itemIdentifier(for: indexPath) else {
                 continue
             }
             cancelFetchingTask(for: districtRanking.teamKey)
         }
+    }
+
+}
+
+extension DistrictRankingsCollectionViewController: SearchDelegate {
+
+    func performSearch(_ searchText: String?) async throws {
+        print(searchText)
+        /*
+        if let searchText {
+            _filteredDistrictRankings = _districtRankings?.filter {
+                $0.teamNumber.starts(with: searchText)
+            }
+        } else {
+            _filteredDistrictRankings = nil
+        }
+        if !Task.isCancelled {
+            await updateDataSource()
+        }
+        */
     }
 
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import TBAAPI
 import UIKit
 
 protocol ContainerNavigationBarProvider: UIViewController {
@@ -23,7 +24,7 @@ protocol ContainerNavigationBarProvider: UIViewController {
 
 class SimpleContainerViewController: UIViewController, Alertable {
 
-    let dependencies: Dependencies
+    let api: TBAAPI
 
     var navigationTitle: String? {
         didSet {
@@ -42,7 +43,7 @@ class SimpleContainerViewController: UIViewController, Alertable {
 
     weak var navigationTitleDelegate: NavigationTitleDelegate?
 
-    // MARK: - Internal Properties
+    // MARK: - Private Properties
 
     private var shouldShowNavigationTitleView: Bool {
         if let navigationTitle, let navigationSubtitle {
@@ -58,14 +59,16 @@ class SimpleContainerViewController: UIViewController, Alertable {
     // MARK: - View Elements
 
     private var navigationTitleLabel: UILabel = {
-        let navigationTitleLabel = SimpleContainerViewController.createNavigationLabel()
-        navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
-        return navigationTitleLabel
+        let label = UILabel.bodyLabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
     }()
     private var navigationSubtitleLabel: UILabel = {
-        let navigationSubtitleLabel = SimpleContainerViewController.createNavigationLabel()
-        navigationSubtitleLabel.font = UIFont.systemFont(ofSize: 11)
-        return navigationSubtitleLabel
+        let label = UILabel.caption2Label()
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
     }()
     private lazy var navigationTitleView: UIStackView = {
         let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationSubtitleLabel])
@@ -79,7 +82,7 @@ class SimpleContainerViewController: UIViewController, Alertable {
         let segmentedControlView = UIView()
         segmentedControlView.translatesAutoresizingMaskIntoConstraints = false
         segmentedControlView.autoSetDimension(.height, toSize: 44.0)
-        segmentedControlView.backgroundColor = UIColor.navigationBarTintColor
+        segmentedControlView.backgroundColor = .navigationBarTintColor
         segmentedControlView.addSubview(segmentedControl)
         segmentedControl.autoAlignAxis(toSuperviewAxis: .horizontal)
         segmentedControl.autoPinEdge(toSuperviewEdge: .leading, withInset: 16.0)
@@ -124,8 +127,8 @@ class SimpleContainerViewController: UIViewController, Alertable {
 
     // MARK: - Initialization
 
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
+    init(api: TBAAPI) {
+        self.api = api
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -149,7 +152,7 @@ class SimpleContainerViewController: UIViewController, Alertable {
         reloadData()
     }
 
-    // MARK: - Data Sources
+    // MARK: - Data Source
 
     var numberOfContainedViewControllers: Int {
         return 0
@@ -183,22 +186,23 @@ class SimpleContainerViewController: UIViewController, Alertable {
                 rootStackView.addArrangedSubview(offlineEventView)
                 if animated {
                     // iOS animation timing magic number
-                    UIView.animate(withDuration: 0.35) {
-                        self.offlineEventView.isHidden = false
+                    UIView.animate(withDuration: 0.35) { [weak self] in
+                        self?.offlineEventView.isHidden = false
                     }
                 }
             }
         } else {
             if animated {
                 if rootStackView.arrangedSubviews.contains(offlineEventView) {
-                    UIView.animate(withDuration: 0.35, animations: {
-                        self.offlineEventView.isHidden = true
-                    }, completion: { (_) in
-                        self.rootStackView.removeArrangedSubview(self.offlineEventView)
-                        if self.offlineEventView.superview != nil {
-                            self.offlineEventView.removeFromSuperview()
+                    UIView.animate(withDuration: 0.35, animations: { [weak self] in
+                        self?.offlineEventView.isHidden = true
+                    }, completion: { [weak self] (_) in
+                        guard let self else { return }
+                        rootStackView.removeArrangedSubview(offlineEventView)
+                        if offlineEventView.superview != nil {
+                            offlineEventView.removeFromSuperview()
                         }
-                        self.offlineEventView.isHidden = false
+                        offlineEventView.isHidden = false
                     })
                 }
             } else {
@@ -206,7 +210,7 @@ class SimpleContainerViewController: UIViewController, Alertable {
                     rootStackView.removeArrangedSubview(offlineEventView)
                 }
                 if offlineEventView.superview != nil {
-                    self.offlineEventView.removeFromSuperview()
+                    offlineEventView.removeFromSuperview()
                 }
             }
         }
@@ -258,14 +262,14 @@ class SimpleContainerViewController: UIViewController, Alertable {
 
             displayViewController(at: 0)
         } else {
-            // TODO: Can show some no data view here
+            fatalError("Container view must contain some views!")
         }
     }
 
     @MainActor
     private func displayViewController(at segmentedControlIndex: Int) {
         guard segmentedControlIndex >= 0, segmentedControlIndex < numberOfContainedViewControllers else {
-            return
+            fatalError("Container view out of range: \(segmentedControlIndex)")
         }
 
         let viewController = viewControllerForSegment(at: segmentedControlIndex)

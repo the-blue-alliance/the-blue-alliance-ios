@@ -1,14 +1,15 @@
 import CoreData
 import Foundation
 import TBAAPI
-import TBAModels
 import UIKit
 
 protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)
 }
 
-class DistrictsViewController: TBAFakeTableViewController<String, District> {
+class DistrictsViewController: TBACollectionViewListController<UICollectionViewListCell, District> {
+
+    // MARK: - Public Properties
 
     var year: Int {
         didSet {
@@ -21,31 +22,66 @@ class DistrictsViewController: TBAFakeTableViewController<String, District> {
 
     weak var delegate: DistrictsViewControllerDelegate?
 
+    // MARK: - Private Properties
+
+    private let api: TBAAPI
+
     @SortedKeyPath(comparator: KeyPathComparator(\.name))
     private var districts: [District]? = nil {
         didSet {
+            guard isViewLoaded else {
+                return
+            }
             updateDataSource()
         }
     }
 
     // MARK: - Init
 
-    init(year: Int, dependencies: Dependencies) {
+    init(year: Int, api: TBAAPI) {
         self.year = year
+        self.api = api
 
-        super.init(dependencies: dependencies)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: View Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupDataSource()
+        updateDataSource()
+    }
+
+    // MARK: - Data Source
+
+    override var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell, District> {
+        UICollectionView.CellRegistration(handler: { (cell, indexPath, district) in
+            var contentConfig = cell.defaultContentConfiguration()
+            contentConfig.text = district.name
+
+            cell.contentConfiguration = contentConfig
+            cell.accessories = [.disclosureIndicator()]
+        })
+    }
+
+    @MainActor
+    func updateDataSource() {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.insertSection("districts", atIndex: 0)
+        if let districts {
+            snapshot.appendItems(districts)
+        }
+        dataSource.apply(snapshot)
+    }
+
+    // MARK: - Refresh
+
+    override func performRefresh() async throws {
+        districts = try await api.getDistricts(year: year)
     }
 
     // MARK: UICollectionView Delegate
@@ -57,44 +93,6 @@ class DistrictsViewController: TBAFakeTableViewController<String, District> {
             return
         }
         delegate?.districtSelected(district)
-    }
-
-    // MARK: Collection View Data Source
-
-    private func setupDataSource () {
-        let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, District>(handler: { (cell, indexPath, district) in
-            var contentConfig = cell.defaultContentConfiguration()
-            contentConfig.text = district.name
-
-            cell.contentConfiguration = contentConfig
-            cell.accessories = [.disclosureIndicator()]
-        })
-        dataSource = CollectionViewDataSource(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, district: District) -> UICollectionViewCell? in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: district)
-        }
-    }
-
-    // TODO: This needs to move... elsewhere
-    @MainActor private func updateDataSource() {
-        guard let dataSource else {
-            showNoDataView()
-            return
-        }
-
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteAllItems()
-        snapshot.insertSection("districts", atIndex: 0)
-        if let districts {
-            snapshot.appendItems(districts)
-        }
-        dataSource.applySnapshotUsingReloadData(snapshot)
-    }
-
-    // MARK: - Refresh
-
-    override func performRefresh() async throws {
-        districts = try await api.getDistricts(year: self.year)
     }
 
     // MARK: - Stateful

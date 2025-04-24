@@ -36,14 +36,15 @@ extension Stateful where Self: UIViewController {
         noDataViewController.view.alpha = 0
         addNoDataView(noDataViewController.view)
 
-        UIView.animate(withDuration: 0.25, animations: {
-            self.noDataViewController.view.alpha = 1.0
+        UIView.animate(withDuration: 0.25, animations: { [weak self] in
+            self?.noDataViewController.view.alpha = 1.0
         })
 
         noDataViewController.didMove(toParent: self)
     }
 
-    @MainActor func hideNoDataView() {
+    @MainActor
+    func hideNoDataView() {
         guard noDataViewController.parent != nil else {
             return
         }
@@ -52,4 +53,19 @@ extension Stateful where Self: UIViewController {
         removeNoDataView(noDataViewController.view)
         noDataViewController.removeFromParent()
     }
+
+}
+
+extension Stateful where Self: UICollectionViewController {
+
+    @MainActor
+    func addNoDataView(_ noDataView: UIView) {
+        collectionView.backgroundView = noDataView
+    }
+
+    @MainActor
+    func removeNoDataView(_ noDataView: UIView) {
+        collectionView.backgroundView = nil
+    }
+
 }

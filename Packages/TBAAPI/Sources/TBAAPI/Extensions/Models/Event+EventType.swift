@@ -1,26 +1,12 @@
 //
-//  EventType.swift
-//  TBAModels
+//  Event+EventType.swift
+//  TBAAPI
 //
-//  Created by Zachary Orr on 4/19/25.
+//  Created by Zachary Orr on 4/23/25.
 //
 
-public enum EventType: Int, CaseIterable, Hashable {
-    case regional = 0
-    case district = 1
-    case districtChampionship = 2
-    case championshipDivision = 3
-    case championshipFinals = 4
-    case districtChampionshipDivision = 5
-    case festivalOfChampions = 6
-    case remote = 7
-    case offseason = 99
-    case preseason = 100
-    case unlabeled = -1
-}
-
-extension EventType: Comparable {
-    public static func < (lhs: EventType, rhs: EventType) -> Bool {
+extension Event.EventType: Comparable {
+    public static func < (lhs: Event.EventType, rhs: Event.EventType) -> Bool {
         // Float preseasons to the top
         if lhs == .preseason || rhs == .preseason {
             return lhs == .preseason
@@ -33,7 +19,7 @@ extension EventType: Comparable {
         // we're going with this way
         // Put Remote up with Regional/District
         // Put DCMP Divisions before DCMP
-        let adjustValue: ((EventType) -> Double) = { eventType in
+        let adjustValue: ((Event.EventType) -> Double) = { eventType in
             if eventType == .remote {
                 return 1.1
             }

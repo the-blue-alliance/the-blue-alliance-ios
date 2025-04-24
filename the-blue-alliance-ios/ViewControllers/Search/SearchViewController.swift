@@ -17,34 +17,46 @@ enum SearchScope: String, CaseIterable {
     }
 }
 
-enum SearchSection: String {
+private enum SearchSection: String {
     case teams = "Teams"
     case events = "Events"
 }
 
-private struct SearchItem: Hashable {
-    enum SearchItemType {
-        case event, team
+private struct SearchTeam: Hashable {
+    let key: String
+    let name: String
+
+    var teamNumber: String {
+        String(key.trimmingPrefix("frc"))
     }
-    let type: SearchItemType
+}
+
+private struct SearchEvent: Hashable {
     let key: String
     let name: String
 }
 
+private enum SearchItem: Hashable {
+    case team(SearchTeam)
+    case event(SearchEvent)
+}
+
 protocol SearchViewControllerDelegate: AnyObject {
-    func eventSelected(_ event: Event)
-    func teamSelected(_ team: Team)
+    func eventSelected(_ event: TBAData.Event)
+    func teamSelected(_ team: TBAData.Team)
 }
 
 class SearchViewController: TBATableViewController {
 
     weak var delegate: SearchViewControllerDelegate?
 
-    private var events: [SearchItem] {
+    // TODO: Do our filtering of our lists in the background
+
+    private var events: [SearchEvent] {
         guard let searchIndex = searchService.searchIndex else {
             return []
         }
-        let searchItems = searchIndex.events.map { SearchItem(type: .event, key: $0.key, name: $0.name) }
+        let searchItems = searchIndex.events.map { SearchEvent(key: $0.key, name: $0.name) }
         guard let searchText else {
             return searchItems
         }
@@ -53,20 +65,20 @@ class SearchViewController: TBATableViewController {
         }
     }
 
-    private var teams: [SearchItem] {
+    private var teams: [SearchTeam] {
         guard let searchIndex = searchService.searchIndex else {
             return []
         }
-        let searchItems = searchIndex.teams.map { SearchItem(type: .team, key: $0.key, name: $0.nickname) }
+        let searchItems = searchIndex.teams.map { SearchTeam(key: $0.key, name: $0.nickname) }
         guard let searchText else {
             return searchItems
         }
         return searchItems.filter { team in
-            return team.key.trimPrefix("frc").starts(with: searchText) || team.name.contains(searchText)
+            return String(team.key.trimmingPrefix("frc")).starts(with: searchText) || team.name.contains(searchText)
         }
     }
 
-    var scope = SearchScope.all {
+    private var scope = SearchScope.all {
         didSet {
             updateDataSource()
         }
@@ -114,15 +126,13 @@ class SearchViewController: TBATableViewController {
     // MARK: Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<SearchSection, SearchItem>(tableView: tableView) { tableView, indexPath, itemIdentifier in
-            switch itemIdentifier.type {
-            case .event:
-                let name = itemIdentifier.name
-                let vm = EventCellViewModel(name: name, location: nil, dateString: nil)
+        dataSource = TableViewDataSource<SearchSection, SearchItem>(tableView: tableView) { tableView, indexPath, item in
+            switch item {
+            case .event(let event):
+                let vm = EventCellViewModel(name: event.name, location: nil, dateString: nil)
                 return SearchViewController.tableView(tableView, cellForEventModel: vm, at: indexPath)
-            case .team:
-                let teamNumber = itemIdentifier.key.trimPrefix("frc")
-                let vm = TeamCellViewModel(teamNumber: teamNumber, nickname: itemIdentifier.name, location: nil)
+            case .team(let team):
+                let vm = TeamCellViewModel(teamNumber: team.teamNumber, nickname: team.name, location: nil)
                 return SearchViewController.tableView(tableView, cellForTeamModel: vm, at: indexPath)
             }
         }
@@ -144,12 +154,12 @@ class SearchViewController: TBATableViewController {
 
         if scope.shouldShowTeams, !teams.isEmpty {
             snapshot.appendSections([.teams])
-            snapshot.appendItems(teams.sorted(using: KeyPathComparator(\.key)), toSection: .teams)
+            snapshot.appendItems(teams.sorted(using: KeyPathComparator(\.key)).map { SearchItem.team($0) }, toSection: .teams)
         }
 
         if scope.shouldShowEvents, !events.isEmpty {
             snapshot.appendSections([.events])
-            snapshot.appendItems(events.sorted(using: KeyPathComparator(\.key)), toSection: .events)
+            snapshot.appendItems(events.sorted(using: KeyPathComparator(\.key)).map { SearchItem.event($0) }, toSection: .events)
         }
 
         DispatchQueue.main.async {

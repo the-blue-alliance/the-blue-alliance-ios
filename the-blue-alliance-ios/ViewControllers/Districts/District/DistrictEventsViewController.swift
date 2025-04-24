@@ -1,19 +1,20 @@
 import Foundation
 import TBAAPI
-import TBAModels
 
 class DistrictEventsViewController: SimpleEventsViewController {
 
     override class var firstEventKeyPathComparator: KeyPathComparator<Event> {
-        return KeyPathComparator(\.week)
+        KeyPathComparator(\.week)
     }
 
     private let district: District
+    private let api: TBAAPI
 
-    init(district: District, dependencies: Dependencies) {
+    init(district: District, api: TBAAPI) {
         self.district = district
+        self.api = api
 
-        super.init(dependencies: dependencies)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,7 +30,7 @@ class DistrictEventsViewController: SimpleEventsViewController {
     // MARK: - Stateful
 
     override var noDataText: String? {
-        return "No events for district"
+        "No events for district"
     }
 
 }

@@ -7,27 +7,31 @@
 //
 
 import Foundation
-import TBAModels
 import TBAAPI
 import UIKit
 import Collections
 
 protocol SimpleEventsViewControllerDelegate: AnyObject {
-    func title(for event: Event) -> String?
     func eventSelected(_ event: Event)
 }
 
-class SimpleEventsViewController: TBAFakeTableViewController<String, Event> {
+class SimpleEventsViewController: TBACollectionViewListController<EventCollectionViewListCell, Event> {
 
-    weak var delegate: SimpleEventsViewControllerDelegate?
+    // MARK: - Events View Controller Configuration
 
     class var firstEventKeyPathComparator: KeyPathComparator<Event> {
-        return KeyPathComparator(\.hybridType)
+        KeyPathComparator(\.hybridType)
     }
 
     class var sectionKey: (Event) -> String {
-        return \.weekString
+        \.weekString
     }
+
+    // MARK: - Public Properties
+
+    weak var delegate: SimpleEventsViewControllerDelegate?
+
+    // MARK: - Private(ish) Properties
 
     var events: [Event]? = nil {
         didSet {
@@ -43,7 +47,7 @@ class SimpleEventsViewController: TBAFakeTableViewController<String, Event> {
             }
         }
     }
-    var eventsByType: OrderedDictionary<String, [Event]>? = nil {
+    private var eventsByType: OrderedDictionary<String, [Event]>? = nil {
         didSet {
             guard isViewLoaded else {
                 return
@@ -54,52 +58,43 @@ class SimpleEventsViewController: TBAFakeTableViewController<String, Event> {
 
     // MARK: - Init
 
-    init(dependencies: Dependencies) {
-        super.init(dependencies: dependencies, headerMode: .supplementary)
+    init() {
+        super.init(headerMode: .supplementary)
     }
 
     @MainActor required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.delegate = self
+
         setupDataSource()
-    }
-
-    // MARK: UICollectionView Delegate
-
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-
-        guard let dataSource, let event = dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
-        delegate?.eventSelected(event)
     }
 
     // MARK: Collection View Data Source
 
-    private func setupDataSource () {
-        let cellRegistration = UICollectionView.CellRegistration<EventCollectionViewCell, Event> { cell, indexPath, event in
-            cell.contentConfiguration = EventCellContentConfiguration(event: event)
+    override var cellRegistration: UICollectionView.CellRegistration<EventCollectionViewListCell, Event> {
+        UICollectionView.CellRegistration { cell, indexPath, event in
+            cell.contentConfiguration = EventListContentConfiguration(event: event)
             cell.accessories = [.disclosureIndicator()]
         }
+    }
+
+    private func setupDataSource() {
         let headerRegistration = UICollectionView.SupplementaryRegistration<TitleCollectionHeaderView>(
             elementKind: UICollectionView.elementKindSectionHeader
-        ) { supplementaryView, elementKind, indexPath in
+        ) { [weak self] supplementaryView, elementKind, indexPath in
+            guard let self else { return }
             guard elementKind == UICollectionView.elementKindSectionHeader else { return }
-            guard let hybridType = self.dataSource.sectionIdentifier(for: indexPath.section) else { return }
+            guard let hybridType = dataSource.sectionIdentifier(for: indexPath.section) else { return }
 
             supplementaryView.title = hybridType
         }
-
-        dataSource = CollectionViewDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, event in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: event)
-        })
         dataSource.supplementaryViewProvider = { (collectionView, elementKind, indexPath) -> UICollectionReusableView? in
             return collectionView.dequeueConfiguredReusableSupplementary(
                 using: headerRegistration,
@@ -119,15 +114,15 @@ class SimpleEventsViewController: TBAFakeTableViewController<String, Event> {
             }
         }
         dataSource.apply(snapshot)
-        /*
-        dataSource.applySnapshotUsingReloadData(snapshot) {
-            if self.dataSource.isEmpty {
-                self.showNoDataView()
-            } else {
-                self.hideNoDataView()
-            }
+    }
+
+    // MARK: UICollectionView Delegate
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let dataSource, let event = dataSource.itemIdentifier(for: indexPath) else {
+            return
         }
-        */
+        delegate?.eventSelected(event)
     }
 
 }

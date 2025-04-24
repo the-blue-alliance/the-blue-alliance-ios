@@ -2,30 +2,30 @@ import Firebase
 import MyTBAKit
 import Photos
 import UIKit
-import TBAModels
+import TBAAPI
 
-class DistrictViewController: SimpleContainerViewController {
+class DistrictContainerViewController: SimpleContainerViewController {
 
     private let district: District
 
     private lazy var eventsViewController: DistrictEventsViewController = {
-        let eventsViewController = DistrictEventsViewController(district: district, dependencies: dependencies)
+        let eventsViewController = DistrictEventsViewController(district: district, api: api)
         eventsViewController.delegate = self
         return eventsViewController
     }()
     // private(set) var teamsViewController: DistrictTeamsViewController
     private lazy var rankingsViewController: DistrictRankingsViewController = {
-        let rankingsViewController = DistrictRankingsViewController(district: district, dependencies: dependencies)
+        let rankingsViewController = DistrictRankingsViewController(district: district, api: api)
         rankingsViewController.delegate = self
         return rankingsViewController
     }()
 
     // MARK: - Init
 
-    init(district: District, dependencies: Dependencies) {
+    init(district: District, api: TBAAPI) {
         self.district = district
 
-        super.init(dependencies: dependencies)
+        super.init(api: api)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,7 +64,7 @@ class DistrictViewController: SimpleContainerViewController {
 
 }
 
-extension DistrictViewController: SimpleEventsViewControllerDelegate {
+extension DistrictContainerViewController: SimpleEventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         /*
@@ -89,7 +89,7 @@ extension DistrictViewController: TeamsViewControllerDelegate {
 }
 */
 
-extension DistrictViewController: DistrictRankingsViewControllerDelegate {
+extension DistrictContainerViewController: DistrictRankingsViewControllerDelegate {
 
     func districtRankingSelected(_ districtRanking: DistrictRanking) {
         /*

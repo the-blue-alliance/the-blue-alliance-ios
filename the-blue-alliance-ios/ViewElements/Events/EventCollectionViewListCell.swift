@@ -1,5 +1,5 @@
 //
-//  EventCollectionViewCell.swift
+//  EventCollectionViewListCell.swift
 //  the-blue-alliance-ios
 //
 //  Created by Zachary Orr on 4/20/25.
@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import TBAModels
+import TBAAPI // TODO: We can move this out to an extension somewhere that joins these...
 
-struct EventCellContentConfiguration: UIContentConfiguration, Hashable {
+struct EventListContentConfiguration: UIContentConfiguration {
 
     var name: String?
     var location: String?
@@ -24,25 +24,25 @@ struct EventCellContentConfiguration: UIContentConfiguration, Hashable {
     fileprivate var separatorLayoutGuide: UILayoutGuide?
 
     func makeContentView() -> any UIView & UIContentView {
-        return EventCellContentView(configuration: self)
+        return EventListContentView(configuration: self)
     }
 
-    func updated(for state: any UIConfigurationState) -> EventCellContentConfiguration {
+    func updated(for state: any UIConfigurationState) -> EventListContentConfiguration {
         return self
     }
 }
 
-class EventCellContentView: UIView, UIContentView {
+private class EventListContentView: UIView, UIContentView {
 
-    private var currentConfiguration: EventCellContentConfiguration
+    private var currentConfiguration: EventListContentConfiguration
 
     var configuration: UIContentConfiguration {
         get {
             return currentConfiguration
         }
         set {
-            guard let newConfiguration = newValue as? EventCellContentConfiguration else {
-                return
+            guard let newConfiguration = newValue as? EventListContentConfiguration else {
+                fatalError("EventListContentView expect configuration be a EventListContentConfiguration")
             }
             currentConfiguration = newConfiguration
             apply(configuration: currentConfiguration)
@@ -53,23 +53,26 @@ class EventCellContentView: UIView, UIContentView {
         return UILabel.bodyLabel()
     }()
     private lazy var locationLabel = {
-        return UILabel.subheadlineLabel()
+        let label = UILabel.subheadlineLabel()
+        label.textColor = .secondaryLabel
+        return label
     }()
     private lazy var dateLabel = {
         let label = UILabel.subheadlineLabel()
+        label.textColor = .secondaryLabel
         label.setContentHuggingPriority(.defaultLow + 1, for: .horizontal)
         label.setContentCompressionResistancePriority(.defaultHigh + 1, for: .horizontal)
         return label
     }()
 
-    init(configuration: EventCellContentConfiguration) {
+    init(configuration: EventListContentConfiguration) {
         self.currentConfiguration = configuration
 
         super.init(frame: .zero)
 
         preservesSuperviewLayoutMargins = true
 
-        setupViews(configuration: currentConfiguration)
+        setupViews()
 
         apply(configuration: currentConfiguration)
     }
@@ -79,7 +82,7 @@ class EventCellContentView: UIView, UIContentView {
     }
 
     @MainActor
-    private func setupViews(configuration: EventCellContentConfiguration) {
+    private func setupViews() {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -88,6 +91,7 @@ class EventCellContentView: UIView, UIContentView {
         stackView.spacing = .zero
         addSubview(stackView)
 
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
@@ -108,12 +112,17 @@ class EventCellContentView: UIView, UIContentView {
     }
 
     @MainActor
-    private func apply(configuration: EventCellContentConfiguration) {
+    private func apply(configuration: EventListContentConfiguration) {
         nameLabel.text = configuration.name
+        nameLabel.isHidden = configuration.name == nil
+
         locationLabel.text = configuration.location
+        locationLabel.isHidden = configuration.location == nil
+
         dateLabel.text = configuration.dateString
+        dateLabel.isHidden = configuration.dateString == nil
     }
 }
 
 
-class EventCollectionViewCell: UICollectionViewListCell, Reusable {}
+class EventCollectionViewListCell: UICollectionViewListCell {}
