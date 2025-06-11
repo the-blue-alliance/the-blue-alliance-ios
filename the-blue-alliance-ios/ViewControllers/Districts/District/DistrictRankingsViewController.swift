@@ -2,7 +2,7 @@ import TBAAPI
 import Foundation
 import UIKit
 
-protocol DistrictRankingsViewControllerDelegate: AnyObject {
+@MainActor protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ districtRanking: DistrictRanking)
 }
 
@@ -10,10 +10,10 @@ class DistrictRankingsViewController: SearchContainerViewController, DistrictRan
 
     weak var delegate: DistrictRankingsViewControllerDelegate?
 
-    init(district: District, api: TBAAPI) {
+    init(district: District, dependencyProvider: DependencyProvider) {
         let districtRankingsCollectionViewController = DistrictRankingsCollectionViewController(
             district: district,
-            api: api
+            dependencyProvider: dependencyProvider
         )
         super.init(viewController: districtRankingsCollectionViewController)
 
@@ -51,11 +51,12 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
     // MARK: - Private Properties
 
     private let district: District
-    private let api: TBAAPI
 
     @SortedKeyPath(comparator: KeyPathComparator(\.rank))
     private var districtRankings: [DistrictRanking]? = nil
     private var teams: [String: Team] = [:]
+
+    var searchText: String?
 
     // TODO: Can there be a way for us to specify that we have multiple refreshing
     // tasks and just cancel all the refreshing tasks together in the super?
@@ -69,19 +70,14 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
 
     // MARK: - Init
 
-    init(district: District, api: TBAAPI) {
+    init(district: District, dependencyProvider: DependencyProvider) {
         self.district = district
-        self.api = api
 
-        super.init()
+        super.init(dependencyProvider: dependencyProvider)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        cancelTeamFetchTasks()
     }
 
     // MARK: View Lifecycle
@@ -90,6 +86,12 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
         super.viewDidLoad()
 
         collectionView.prefetchDataSource = self
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        cancelTeamFetchTasks()
     }
 
     // MARK: Data Source
@@ -101,7 +103,7 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
             var contentConfiguration = RankingListContentConfiguration(districtRanking: districtRanking)
 
             if let team = teams[districtRanking.teamKey] {
-                contentConfiguration.teamName = team.displayName
+                contentConfiguration.teamName = team.nickname
             } else {
                 fetchTeam(for: districtRanking.teamKey)
                 contentConfiguration.teamName = "Loading..."
@@ -112,12 +114,31 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
         }
     }
 
+    // TODO: DRY
+
     @MainActor
+    private func updateDataSource() {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteAllItems()
+        snapshot.appendSections(["district_rankings"])
+        if var districtRankings {
+            if let searchText {
+                districtRankings = filterDistrictRankings(districtRankings: districtRankings, searchText)
+            }
+            snapshot.appendItems(districtRankings)
+        }
+        dataSource.apply(snapshot)
+        // TODO: Show No Data View
+    }
+
     private func updateDataSource() async {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
-        snapshot.insertSection("district_rankings", atIndex: 0)
-        if let districtRankings {
+        snapshot.appendSections(["district_rankings"])
+        if var districtRankings {
+            if let searchText {
+                districtRankings = filterDistrictRankings(districtRankings: districtRankings, searchText)
+            }
             snapshot.appendItems(districtRankings)
         }
         await dataSource.apply(snapshot)
@@ -141,15 +162,14 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
 
     // MARK: - Search
 
-    /*
-    private func filterDistrictRankings(_ searchText: String?) {
+    private func filterDistrictRankings(districtRankings: [DistrictRanking], _ searchText: String?) -> [DistrictRanking] {
         guard let searchText else {
-            return
+            return districtRankings
         }
-        districtRankings = districtRankings?.filter { districtRanking in
+        return districtRankings.filter { districtRanking in
             var matchesNickname = false
-            if let team = teams[districtRanking.teamKey], let nickname = team.nickname {
-                let range = nickname.range(
+            if let team = teams[districtRanking.teamKey] {
+                let range = team.nickname.range(
                     of: searchText,
                     options: [.caseInsensitive, .diacriticInsensitive]
                 )
@@ -158,18 +178,20 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
             return districtRanking.teamNumber.starts(with: searchText) || matchesNickname
         }
     }
-    */
 
     // MARK: - Refresh
 
     override func performRefresh() async throws {
-        districtRankings = try await api.getDistrictRankings(districtKey: district.key)
+        guard let api = dependencyProvider?.api else { return }
 
         let districtKey = district.key
+
+        async let districtRankingsTask = try api.getDistrictRankings(path: .init(districtKey: districtKey))
         districtTeamsFetchTask = Task { [weak self] in
             guard let self else { return }
             do {
-                let districtTeams = try await api.getDistrictTeamsSimple(districtKey: districtKey)
+                let response = try await api.getDistrictTeamsSimple(path: .init(districtKey: districtKey))
+                let districtTeams = try response.ok.body.json
 
                 // Check for cancellation after await
                 try Task.checkCancellation()
@@ -189,6 +211,7 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
                 print("District teams fetch task failed")
             }
         }
+        districtRankings = try await districtRankingsTask.ok.body.json
         // TODO: Should this occur... someplace else?
         if !Task.isCancelled {
             await updateDataSource()
@@ -200,13 +223,15 @@ class DistrictRankingsCollectionViewController: TBACollectionViewListController<
             return
         }
 
+        // TODO: Should this be Task.detached?
         let task = Task { [weak self] in
-            guard let self else { return }
+            guard let self, let api = dependencyProvider?.api else { return }
             defer {
                 teamFetchTasks[teamKey] = nil
             }
             do {
-                let team = try await api.getTeamSimple(teamKey: teamKey)
+                let response = try await api.getTeamSimple(path: .init(teamKey: teamKey))
+                let team = try response.ok.body.json
 
                 // Check for cancellation after await
                 try Task.checkCancellation()
@@ -280,20 +305,12 @@ extension DistrictRankingsCollectionViewController: UICollectionViewDataSourcePr
 
 extension DistrictRankingsCollectionViewController: SearchDelegate {
 
-    func performSearch(_ searchText: String?) async throws {
-        print(searchText)
-        /*
-        if let searchText {
-            _filteredDistrictRankings = _districtRankings?.filter {
-                $0.teamNumber.starts(with: searchText)
-            }
-        } else {
-            _filteredDistrictRankings = nil
+    func performSearch(_ searchText: String?) -> Task<Void, Never> {
+        // TODO: Remove this LOC, put it in the better spot
+        self.searchText = searchText
+        return Task.detached(priority: .userInitiated) { [weak self] in
+            await self?.updateDataSource()
         }
-        if !Task.isCancelled {
-            await updateDataSource()
-        }
-        */
     }
 
 }

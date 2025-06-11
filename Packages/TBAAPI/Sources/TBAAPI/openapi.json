@@ -101,6 +101,122 @@
                 ]
             }
         },
+        "/teams/all": {
+            "get": {
+                "tags": [
+                    "team",
+                    "list"
+                ],
+                "description": "Gets a list of all `Team` objects.",
+                "operationId": "getTeamsAll",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/If-None-Match"
+                    },
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "headers": {
+                            "Cache-Control": {
+                                "description": "The `Cache-Control` header, in particular the `max-age` value, contains the number of seconds the result should be considered valid for. During this time subsequent calls should return from the local cache directly.",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "ETag": {
+                                "description": "Specifies the version of the most recent response. Used by clients in the `If-None-Match` request header.",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Team"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "304": {
+                        "$ref": "#/components/responses/NotModified"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/teams/all/simple": {
+            "get": {
+                "tags": [
+                    "team",
+                    "list"
+                ],
+                "description": "Gets a list of all short form `Team_Simple` objects.",
+                "operationId": "getTeamsAllSimple",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/If-None-Match"
+                    },
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "headers": {
+                            "Cache-Control": {
+                                "description": "The `Cache-Control` header, in particular the `max-age` value, contains the number of seconds the result should be considered valid for. During this time subsequent calls should return from the local cache directly.",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "ETag": {
+                                "description": "Specifies the version of the most recent response. Used by clients in the `If-None-Match` request header.",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Team_Simple"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "304": {
+                        "$ref": "#/components/responses/NotModified"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
         "/teams/{page_num}": {
             "get": {
                 "tags": [

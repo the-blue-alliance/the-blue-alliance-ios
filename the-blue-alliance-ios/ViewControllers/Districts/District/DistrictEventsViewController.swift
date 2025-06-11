@@ -1,20 +1,18 @@
 import Foundation
 import TBAAPI
 
-class DistrictEventsViewController: SimpleEventsViewController {
+class DistrictEventsViewController: EventsViewController {
 
-    override class var firstEventKeyPathComparator: KeyPathComparator<Event> {
-        KeyPathComparator(\.week)
+    override class var firstEventSortKeyPathComparators: [KeyPathComparator<Event>] {
+        [KeyPathComparator(\.week)]
     }
 
     private let district: District
-    private let api: TBAAPI
 
-    init(district: District, api: TBAAPI) {
+    init(district: District, dependencyProvider: DependencyProvider) {
         self.district = district
-        self.api = api
 
-        super.init()
+        super.init(dependencyProvider: dependencyProvider)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -24,7 +22,9 @@ class DistrictEventsViewController: SimpleEventsViewController {
     // MARK: - Refreshable
 
     override func performRefresh() async throws {
-        events = try await api.getDistrictEvents(districtKey: district.key)
+        guard let api = dependencyProvider?.api else { return }
+        let response = try await api.getDistrictEvents(.init(path: .init(districtKey: district.key)))
+        events = try response.ok.body.json
     }
 
     // MARK: - Stateful

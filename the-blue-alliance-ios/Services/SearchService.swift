@@ -10,7 +10,9 @@ import os
 import Foundation
 import TBAAPI
 
-public class SearchService: NSObject {
+actor SearchService {
+
+    // TODO: We could set some timestamp to show the last time this was updated in Settings
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -18,47 +20,24 @@ public class SearchService: NSObject {
     )
 
     var api: TBAAPI
-    var retryService: RetryService
 
-    var searchIndex: Components.Schemas.SearchIndex? {
-        didSet {
-            Self.logger.debug("SearchIndex updated")
-        }
-    }
-    var refreshTask: Task<Components.Schemas.SearchIndex, Error>?
+    private var searchIndex: SearchIndex?
+    private var refreshTask: Task<Void, Never>?
 
-    init(api: TBAAPI, retryService: RetryService) {
+    init(api: TBAAPI) {
         self.api = api
-        self.retryService = retryService
-
-        super.init()
     }
 
-    func fetchSearchIndex() async {
-        defer {
-            self.refreshTask = nil
-        }
-        self.refreshTask = Task {
-            return try await api.getSearchIndex()
+    public func refresh() async {
+        guard refreshTask == nil else {
+            return
         }
         do {
-            self.searchIndex = try await refreshTask!.value
+            let response = try await api.getSearchIndex()
+            searchIndex = try response.ok.body.json
             Self.logger.debug("Search index updated from API")
         } catch {
             Self.logger.error("Failed to update SearchIndex: \(error)")
-        }
-    }
-}
-
-extension SearchService: Retryable {
-
-    var retryInterval: TimeInterval {
-        return 5 * 60
-    }
-
-    func retry() {
-        Task {
-            await fetchSearchIndex()
         }
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-protocol Stateful: AnyObject {
+@MainActor protocol Stateful: AnyObject {
     var noDataViewController: NoDataViewController { get set }
 
     /**
@@ -12,12 +12,12 @@ protocol Stateful: AnyObject {
     /**
      Add the no data view to the view hierarchy. This method should not be called directly - you probably want showNoDataView.
      */
-    @MainActor func addNoDataView(_ noDataView: UIView)
+    func addNoDataView(_ noDataView: UIView)
 
     /**
      Remove the no data view from the view hierarchy. This method should not be called directly - you probably want removeNoDataView.
      */
-    @MainActor func removeNoDataView(_ noDataView: UIView)
+    func removeNoDataView(_ noDataView: UIView)
 }
 
 extension Stateful where Self: UIViewController {

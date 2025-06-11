@@ -1,11 +1,9 @@
-import GoogleSignIn
-import MyTBAKit
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    weak var dependencyProvider: DependencyProvider!
 
     // MARK: - View Hiearchy
 
@@ -17,103 +15,86 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return launchViewController
     }
 
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        print("openURLContexts")
+        print(URLContexts)
+    }
+
     // MARK: - UIWindowSceneDelegate
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-        // Setup a dummy launch screen in our window while we're doing setup tasks
-        let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = launchViewController
-
-        self.window = window
-        window.makeKeyAndVisible()
-
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("Cannot get reference to AppDelegate")
+            fatalError("Cannot get reference to dependencyProvider")
         }
+        self.dependencyProvider = appDelegate
 
-        Task {
-            do {
-                try await appDelegate.loadCoreData()
-                showMainViewController(with: appDelegate)
-            } catch {
-                showFatalError(error as NSError)
-            }
-        }
-    }
-
-    // MARK: - Scene-Specific URL Handling
-
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard let urlContext = URLContexts.first else { return }
-        GIDSignIn.sharedInstance.handle(urlContext.url)
-    }
-
-    // MARK: - Private Methods
-
-    @MainActor
-    func showMainViewController(with appDelegate: AppDelegate) {
         let rootViewController: UIViewController = {
             // Root VC on iPhone: a tab bar controller, iPad: a split view controller
             if UIDevice.isPhone {
-                return PhoneRootViewController(
-                    fcmTokenProvider: appDelegate.messaging,
-                    myTBA: appDelegate.myTBA,
-                    pasteboard: appDelegate.pasteboard,
-                    // photoLibrary: appDelegate.photoLibrary,
-                    pushService: appDelegate.pushService,
-                    searchService: appDelegate.searchService,
-                    statusService: appDelegate.statusService,
-                    urlOpener: appDelegate.urlOpener,
-                    dependencies: appDelegate.dependencies
-                )
+                return PhoneRootViewController(dependencyProvider: appDelegate)
             } else if UIDevice.isPad {
-                return PadRootViewController(
-                    fcmTokenProvider: appDelegate.messaging,
-                    myTBA: appDelegate.myTBA,
-                    pasteboard: appDelegate.pasteboard,
-                    // photoLibrary: dependencyProvider.photoLibrary,
-                    pushService: appDelegate.pushService,
-                    searchService: appDelegate.searchService,
-                    statusService: appDelegate.statusService,
-                    urlOpener: appDelegate.urlOpener,
-                    dependencies: appDelegate.dependencies
-                )
+                return PadRootViewController(dependencyProvider: appDelegate)
             }
             fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
         }()
 
-        guard let window = self.window else {
-            fatalError("Window not setup when setting root vc")
-        }
-        guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-            fatalError("Unable to snapshot root view controller")
-        }
-        rootViewController.view.addSubview(snapshot)
+        // Setup a dummy launch screen in our window while we're doing setup tasks
+        let window = UIWindow(windowScene: windowScene)
         window.rootViewController = rootViewController
 
-        // 0.35 is an iOS animation magic number... for now
-        UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-            snapshot.layer.opacity = 0;
-        }, completion: { (status) in
-            snapshot.removeFromSuperview()
-        })
+        self.window = window
+        window.makeKeyAndVisible()
+
+        appDelegate.setupWindow(window)
     }
 
-    private func showFatalError(_ error: NSError) {
-        showRootAlertView(title: "Error Loading Data",
-                          message: "There was an error loading local data - try reinstalling The Blue Alliance",
-        ) { _ in
-            fatalError("Unresolved error \(error), \(error.userInfo)")
+    func sceneDidDisconnect(_ scene: UIScene) {
+        // TODO: Disconnect
+    }
+
+    // MARK: - Internal Methods
+
+    func transitionToRootViewController() {
+        // Note: This is legacy code, and I should just delete it, but I might
+        // need it again and I don't wanna go digging through version control
+        /*
+        if let snapshot = window.snapshotView(afterScreenUpdates: true) {
+            rootViewController.view.addSubview(snapshot)
+            window.rootViewController = rootViewController
+
+            UIView.transition(with: snapshot, duration: 0.35) {
+                snapshot.layer.opacity = 0
+            } completion: { _ in
+                snapshot.removeFromSuperview()
+            }
+        } else {
+            window.rootViewController = rootViewController
         }
+        */
     }
-
-    private func showRootAlertView(title: String, message: String, handler: ((_: UIAlertAction) -> Void)?) {
-        let alertController = UIAlertController(title: title,
-                                                message: message,
-                                                preferredStyle: .alert)
-        window?.rootViewController?.present(alertController, animated: true, completion: nil)
-    }
-
 }
+
+extension UIWindow {
+    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            // This is a GREAT spot to throw some debugging code
+        }
+        super.motionEnded(motion, with: event)
+    }
+
+    fileprivate func presentFMSDownAlert() {
+        let alertController = UIAlertController(
+            title: "FIRST's servers are down",
+            message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are down right now, so we can't get the latest updates. The information you see here may be out of date.",
+            preferredStyle: .alert
+        )
+
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .default)
+        alertController.addAction(dismissAction)
+
+        rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+}
+

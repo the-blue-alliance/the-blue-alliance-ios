@@ -1,16 +1,12 @@
-import CoreData
-import Foundation
-import MyTBAKit
-import Photos
-import TBAData
-import TBAKit
+import SwiftUI
+import TBAAPI
 import UIKit
 
-protocol RootChildController {
-    var rootType: RootType { get }
+@MainActor protocol RootController {
+    var dependencyProvider: DependencyProvider! { get }
 }
 
-enum RootType: CaseIterable {
+enum RootType: String, CaseIterable {
     case events
     case teams
     case districts
@@ -47,68 +43,43 @@ enum RootType: CaseIterable {
         }
     }
 
-    var supportsPush: Bool {
-        // Settings is currently the only VC that doesn't support a sub-menu push
-        return self != .settings
+    @MainActor
+    func viewController(dependencyProvider: DependencyProvider) -> UIViewController {
+        let viewController: UIViewController = {
+            switch self {
+            case .events:
+                let eventsViewController = SeasonEventsViewController(
+                    dependencyProvider: dependencyProvider
+                )
+                eventsViewController.title = title
+                return UINavigationController(rootViewController: eventsViewController)
+            case .teams:
+                let teamsViewController = TeamsViewController(
+                    dependencyProvider: dependencyProvider
+                )
+                teamsViewController.title = title
+                return UINavigationController(rootViewController: teamsViewController)
+            case .districts:
+                let districtsViewController = DistrictsViewController(
+                    dependencyProvider: dependencyProvider
+                )
+                districtsViewController.title = title
+                return UINavigationController(rootViewController: districtsViewController)
+            default:
+                return UIViewController()
+            }
+        }()
+        return viewController
     }
 
 }
 
-protocol RootController {
-    var fcmTokenProvider: FCMTokenProvider { get }
-    var myTBA: MyTBA { get }
-    var pasteboard: UIPasteboard? { get }
-    var photoLibrary: PHPhotoLibrary? { get }
-    var pushService: PushService { get }
-    var urlOpener: URLOpener { get }
-    var searchService: SearchService { get }
-    var statusService: StatusService { get }
-    var dependencies: Dependencies { get }
-}
+class Dependencies: ObservableObject, Observable {
+    @Published var api: TBAAPI
+    @Published var statusService: StatusService
 
-extension RootController {
-
-    var eventsViewController: EventsContainerViewController {
-        return EventsContainerViewController(myTBA: myTBA,
-                                             pasteboard: pasteboard,
-                                             photoLibrary: photoLibrary,
-                                             searchService: searchService,
-                                             statusService: statusService,
-                                             urlOpener: urlOpener,
-                                             dependencies: dependencies)
+    init(api: TBAAPI, statusService: StatusService) {
+        self.api = api
+        self.statusService = statusService
     }
-
-    var teamsViewController: TeamsContainerViewController {
-        return TeamsContainerViewController(myTBA: myTBA,
-                                            pasteboard: pasteboard,
-                                            photoLibrary: photoLibrary,
-                                            statusService: statusService,
-                                            urlOpener: urlOpener,
-                                            dependencies: dependencies)
-    }
-
-    var districtsViewController: DistrictsContainerViewController {
-        return DistrictsContainerViewController(
-            api: dependencies.api,
-            statusService: statusService
-        )
-    }
-
-    var settingsViewController: SettingsViewController {
-        return SettingsViewController(fcmTokenProvider: fcmTokenProvider,
-                                      myTBA: myTBA,
-                                      pushService: pushService,
-                                      urlOpener: urlOpener,
-                                      dependencies: dependencies)
-    }
-
-    var myTBAViewController: MyTBAViewController {
-        return MyTBAViewController(myTBA: myTBA,
-                                   pasteboard: pasteboard,
-                                   photoLibrary: photoLibrary,
-                                   statusService: statusService,
-                                   urlOpener: urlOpener,
-                                   dependencies: dependencies)
-    }
-
 }

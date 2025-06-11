@@ -8,8 +8,10 @@
 
 import UIKit
 
-protocol SearchDelegate: AnyObject {
-    func performSearch(_ searchText: String?) async throws
+@MainActor protocol SearchDelegate: AnyObject {
+    var searchText: String? { get set }
+
+    func performSearch(_ searchText: String?) -> Task<Void, Never>
 }
 
 class SearchContainerViewController: UIViewController {
@@ -25,14 +27,6 @@ class SearchContainerViewController: UIViewController {
     private let viewController: UIViewController
 
     private var searchTask: Task<Void, Never>? = nil
-
-    private func search(_ searchText: String?) {
-        searchTask?.cancel()
-
-        searchTask = Task { [weak self] in
-            try? await self?.searchDelegate?.performSearch(searchText)
-        }
-    }
 
     // TODO: We need to make sure we don't show this until after our data has loaded...
 
@@ -92,6 +86,11 @@ class SearchContainerViewController: UIViewController {
         ])
     }
 
+    fileprivate func search(_ searchText: String?) {
+        searchTask?.cancel()
+        searchTask = searchDelegate?.performSearch(searchText)
+    }
+
 }
 
 extension SearchContainerViewController: UISearchBarDelegate {
@@ -109,8 +108,9 @@ extension SearchContainerViewController: UISearchBarDelegate {
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
+        searchBar.text = nil
         search(nil)
+
         searchBar.resignFirstResponder()
         searchBar.setShowsCancelButton(false, animated: true)
     }

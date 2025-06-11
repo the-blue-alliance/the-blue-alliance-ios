@@ -1,18 +1,30 @@
-import CoreData
+import TBAAPI
 import Foundation
-import TBAData
-import TBAKit
 
 class DistrictTeamsViewController: TeamsViewController {
 
-    let district: District
+    init(district: District, dependencyProvider: DependencyProvider) {
+        let teamsViewController = DistrictTeamsCollectionViewController(
+            district: district,
+            dependencyProvider: dependencyProvider
+        )
+        super.init(viewController: teamsViewController, dependencyProvider: dependencyProvider)
+    }
 
-    // MARK: Init
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-    init(district: District, dependencies: Dependencies) {
+}
+
+class DistrictTeamsCollectionViewController: TeamsCollectionViewController {
+
+    private let district: District
+
+    init(district: District, dependencyProvider: DependencyProvider) {
         self.district = district
 
-        super.init(dependencies: dependencies)
+        super.init(dependencyProvider: dependencyProvider)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -21,32 +33,16 @@ class DistrictTeamsViewController: TeamsViewController {
 
     // MARK: - Refreshable
 
-    @objc override func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictTeams(key: district.key) { (result, notModified) in
-            guard case .success(let teams) = result, !notModified else {
-                return
-            }
-
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let district = context.object(with: self.district.objectID) as! District
-                district.insert(teams)
-            }, errorRecorder: self.errorRecorder)
-        }
-        addRefreshOperations([operation])
+    override func performRefresh() async throws {
+        guard let api = dependencyProvider?.api else { return }
+        let response = try await api.getDistrictTeamsSimple(path: .init(districtKey: district.key))
+        teams = try response.ok.body.json
     }
 
     // MARK: - Stateful
 
     override var noDataText: String? {
-        return "No teams for district"
-    }
-
-    // MARK: - TeamsViewControllerDataSourceConfiguration
-
-    override var fetchRequestPredicate: NSPredicate? {
-        return Team.districtPredicate(districtKey: district.key)
+        "No teams for district"
     }
 
 }
