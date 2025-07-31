@@ -20,7 +20,10 @@ class Secrets {
     init(secrets: String = "Secrets", in bundle: Bundle = Bundle.main) {
         if let path = bundle.path(forResource: secrets, ofType: "plist") {
             self.secrets = NSDictionary(contentsOfFile: path) as? Dictionary<String, AnyObject>
+            print("Secrets.plist path:", path as Any)
+
         }
+        
     }
 
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict/>
+<dict>
+	<key>tba_api_key</key>
+	<string>lIqG3JXN2Zb7IKxA7wNTg9hE43DekwJM8rjZOkqw5lhxflE8of9rFqtDRjselzDy</string>
+</dict>
 </plist>
