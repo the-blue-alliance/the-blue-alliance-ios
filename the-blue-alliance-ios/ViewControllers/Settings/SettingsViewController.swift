@@ -5,15 +5,8 @@ import TBAKit
 import UIKit
 
 private enum SettingsSection: Int, CaseIterable {
-    case info
     case icons
     case debug
-}
-
-private enum InfoRow: String, CaseIterable {
-    case website = "https://www.thebluealliance.com"
-    case github = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
-    case testFlight = "https://testflight.apple.com/join/gz7RmdS7"
 }
 
 private enum DebugRow: Int, CaseIterable {
@@ -66,7 +59,7 @@ class SettingsViewController: TBATableViewController {
         if !UIApplication.shared.supportsAlternateIcons, section >= SettingsSection.icons.rawValue {
             section += 1
         }
-        return SettingsSection(rawValue: section)!
+        return SettingsSection(rawValue: section)
     }
 
     // MARK: - Table View Data Source
@@ -87,8 +80,6 @@ class SettingsViewController: TBATableViewController {
         }
 
         switch section {
-        case .info:
-            return InfoRow.allCases.count
         case .icons:
             return alternateAppIcons.count + 1 // +1 for default icon
         case .debug:
@@ -102,8 +93,6 @@ class SettingsViewController: TBATableViewController {
         }
 
         switch section {
-        case .info:
-            return "Info"
         case .icons:
             return "App Icon"
         case .debug:
@@ -127,25 +116,6 @@ class SettingsViewController: TBATableViewController {
         }
 
         switch section {
-        case .info:
-            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-
-            let infoRow = InfoRow.allCases[indexPath.row]
-            let titleString: String = {
-                switch infoRow {
-                case .website:
-                    return "The Blue Alliance website"
-                case .github:
-                    return "The Blue Alliance for iOS is open source"
-                case .testFlight:
-                    return "Join The Blue Alliance TestFlight"
-                }
-            }()
-
-            cell.accessoryType = .disclosureIndicator
-            cell.textLabel?.text = titleString
-
-            return cell
         case .icons:
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as IconTableViewCell
 
@@ -206,11 +176,6 @@ class SettingsViewController: TBATableViewController {
         }
 
         switch section {
-        case .info:
-            let infoRow = InfoRow.allCases[indexPath.row]
-            if let url = URL(string: infoRow.rawValue) {
-                openURL(url: url)
-            }
         case .icons:
             if indexPath.row == 0 {
                 setDefaultAppIcon()
@@ -232,14 +197,6 @@ class SettingsViewController: TBATableViewController {
     }
 
     // MARK: - Private Methods
-
-    // MARK: - Info Methods
-
-    private func openURL(url: URL) {
-        if urlOpener.canOpenURL(url) {
-            urlOpener.open(url, options: [:], completionHandler: nil)
-        }
-    }
 
     // MARK: - Icons Methods
 
