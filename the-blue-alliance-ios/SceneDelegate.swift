@@ -1,19 +1,11 @@
+import SwiftUI
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    weak var dependencyProvider: DependencyProvider!
 
     // MARK: - View Hiearchy
-
-    private var launchViewController: UIViewController {
-        let launchStoryboard = UIStoryboard(name: "LaunchStoryboard", bundle: nil)
-        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
-            fatalError("Unable to load launch view controller")
-        }
-        return launchViewController
-    }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         print("openURLContexts")
@@ -23,31 +15,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // MARK: - UIWindowSceneDelegate
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("Cannot get reference to dependencyProvider")
-        }
-        self.dependencyProvider = appDelegate
-
-        let rootViewController: UIViewController = {
-            // Root VC on iPhone: a tab bar controller, iPad: a split view controller
-            if UIDevice.isPhone {
-                return PhoneRootViewController(dependencyProvider: appDelegate)
-            } else if UIDevice.isPad {
-                return PadRootViewController(dependencyProvider: appDelegate)
-            }
-            fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
-        }()
-
-        // Setup a dummy launch screen in our window while we're doing setup tasks
-        let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = rootViewController
-
-        self.window = window
-        window.makeKeyAndVisible()
-
-        appDelegate.setupWindow(window)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

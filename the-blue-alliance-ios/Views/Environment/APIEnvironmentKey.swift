@@ -10,7 +10,7 @@ import SwiftUI
 import TBAAPI
 
 private struct APIEnvironmentKey: EnvironmentKey {
-    static let defaultValue: TBAAPI = TBAAPI(apiKey: "")
+    static let defaultValue: TBAAPI = TBAAPI(apiKey: Secrets().tbaAPIKey)
 }
 
 extension EnvironmentValues {

@@ -5,8 +5,8 @@ import AsyncAlgorithms
 import TBAAPI
 
 private let defaultStatus = Status(
-    currentSeason: Calendar.current.component(.year, from: Date()),
-    maxSeason: Calendar.current.component(.year, from: Date()),
+    currentSeason: Calendar.current.year,
+    maxSeason: Calendar.current.year,
     isDatafeedDown: false,
     downEvents: [],
     ios: Status.AppInfo(

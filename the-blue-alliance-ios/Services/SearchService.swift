@@ -21,14 +21,14 @@ actor SearchService {
 
     var api: TBAAPI
 
-    private var searchIndex: SearchIndex?
+    private(set) var searchIndex: SearchIndex?
     private var refreshTask: Task<Void, Never>?
 
     init(api: TBAAPI) {
         self.api = api
     }
 
-    public func refresh() async {
+    public func refresh() async throws {
         guard refreshTask == nil else {
             return
         }
@@ -38,6 +38,7 @@ actor SearchService {
             Self.logger.debug("Search index updated from API")
         } catch {
             Self.logger.error("Failed to update SearchIndex: \(error)")
+            throw error
         }
     }
 }

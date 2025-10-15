@@ -1,33 +1,11 @@
 //
-//  View.swift
-//  the-blue-alliance-ios
+//  LoadingModifier.swift
+//  TBA
 //
-//  Created by Zachary Orr on 4/26/25.
-//  Copyright © 2025 The Blue Alliance. All rights reserved.
+//  Created by Zachary Orr on 8/17/24.
 //
 
 import SwiftUI
-
-struct ViewDidLoadModifier: ViewModifier {
-    @State private var viewDidLoad = false
-    let action: (() -> Void)?
-
-    func body(content: Content) -> some View {
-        content
-            .onAppear {
-                if viewDidLoad == false {
-                    viewDidLoad = true
-                    action?()
-                }
-            }
-    }
-}
-
-extension View {
-    func onViewDidLoad(perform action: (() -> Void)? = nil) -> some View {
-        self.modifier(ViewDidLoadModifier(action: action))
-    }
-}
 
 struct LoadingModifier: ViewModifier {
     fileprivate let isLoading: Bool
