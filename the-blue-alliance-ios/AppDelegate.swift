@@ -1,7 +1,3 @@
-// import Firebase
-// import FirebaseAnalytics
-// import FirebaseCrashlytics
-// import GoogleSignIn
 import SwiftUI
 import TBAAPI
 import UIKit
@@ -12,27 +8,21 @@ struct TBAApp: App {
 
     @Environment(\.scenePhase) private var scenePhase
 
-    /*
-    lazy var searchService: SearchService = {
-        return SearchService(
-            api: api
-        )
-    }()
-    lazy var statusService: StatusService = {
-        return StatusService(
-            api: api,
-            userDefaults: UserDefaults.standard
-        )
-    }()
-    */
-
     private let secrets = Secrets()
+    private let api: TBAAPI
+    private let statusService: StatusService
+
+    init() {
+        self.api = TBAAPI(apiKey: secrets.tbaAPIKey)
+        self.statusService = StatusService(api: api, userDefaults: .standard)
+    }
 
     var body: some Scene {
         WindowGroup {
             PhoneView()
         }
-        .environment(\.api, TBAAPI(apiKey: secrets.tbaAPIKey))
+        .environment(\.api, api)
+        // .environment(\.statusService, statusService)
     }
 }
 

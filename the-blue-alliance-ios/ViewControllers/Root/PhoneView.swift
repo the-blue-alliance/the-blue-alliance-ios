@@ -56,83 +56,37 @@ struct PhoneView: View {
     @State private var searchText: String = ""
     @State private var searchScope = SearchScope.all
 
-    var isPad: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad
-    }
-
     var body: some View {
-        if isPad {
-            NavigationSplitView {
-                List(TBATab.allCases, selection: $selection) { (tab) in
-                    NavigationLink(value: tab) {
-                        HStack {
-                            Image(systemName: tab.image)
-                            Text(tab.title)
-                        }
-                    }
-                }
-                .navigationTitle("The Blue Alliance")
-            } content: {
-                switch selection {
-                case .events:
-                    Text("Events")
-                case .districts:
-                    Text("Districts")
-                case .insights:
-                    Text("Insights")
-                case .myTBA:
-                    Text("myTBA")
-                case .none:
-                    fatalError("No tab selected")
-                }
-            } detail: {
-                /* column 3 */
+        TabView {
+            Tab("Events", systemImage: "calendar") {
+                // TODO: Events
+                // EventsRootView()
             }
-            .searchable(text: $searchText)
-        } else {
-            TabView {
-                Tab("Events", systemImage: "calendar") {
-                    NavigationStack {
-                        SeasonEventsView()
-                    }
-                }
-                Tab("Districts", systemImage: "circle.hexagongrid") {
-                    Text("Districts")
-                }
-                Tab("Insights", systemImage: "chart.bar") {
-                    Text("Insights")
-                }
-                Tab("myTBA", systemImage: "star") {
-                    Text("myTBA")
-                }
-                Tab(role: .search) {
-                    SearchView()
-                }
-                // #if !os(macOS) && !os(tvOS)
-                // .customizationBehavior(.disabled, for: .sidebar, .tabBar)
-                // #endif
+            Tab("Districts", systemImage: "circle.hexagongrid") {
+                // TODO: Districts
+                // DistrictsRootView()
             }
-            /*
-            .tabViewBottomAccessory {
-                HStack {
-                    Image(systemName: "baseball.diamond.bases.outs.indicator")
-                    Text("Week 2")
-                        .bold()
-                    Image(systemName: "arrow.up")
-                        .font(.caption)
-                    Text("7")
+            Tab("Insights", systemImage: "chart.bar") {
+                // TODO: Insights
+                // InsightsView()
+            }
+            Tab("myTBA", systemImage: "star") {
+                Text("myTBA")
+            }
+            Tab(role: .search) {
+                NavigationStack {
+                    Text("Search")
                 }
             }
-            */
-            .searchable(text: $searchText)
-            .searchScopes($searchScope, activation: .onSearchPresentation) {
-                ForEach(SearchScope.allCases, id: \.self) { scope in
-                    Text(scope.rawValue.capitalized)
-                }
-            }
-            .tabBarMinimizeBehavior(.onScrollDown)
-            // .tint(.tabBarTintColor)
         }
+        .searchable(text: $searchText)
+        .searchScopes($searchScope, activation: .onSearchPresentation) {
+            ForEach(SearchScope.allCases, id: \.self) { scope in
+                Text(scope.rawValue.capitalized)
+            }
+        }
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .tint(.tabBarTintColor)
     }
 }
 

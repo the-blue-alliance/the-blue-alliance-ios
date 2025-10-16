@@ -12,7 +12,6 @@ import SwiftUI
 struct SeasonEventsView: View {
 
     @Environment(\.api) private var api
-    // TODO: StatusService
 
     @State var year: Int
 
