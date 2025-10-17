@@ -8,21 +8,28 @@ struct TBAApp: App {
 
     @Environment(\.scenePhase) private var scenePhase
 
-    private let secrets = Secrets()
     private let api: TBAAPI
     private let statusService: StatusService
 
+    @State private var status: Status
+
     init() {
+        let secrets = Secrets()
         self.api = TBAAPI(apiKey: secrets.tbaAPIKey)
         self.statusService = StatusService(api: api, userDefaults: .standard)
+        self.status = statusService.status
+        // TODO: Kickoff an initial refresh, possibly?
     }
 
     var body: some Scene {
         WindowGroup {
             PhoneView()
         }
+        .onChange(of: statusService.status) {
+            self.status = statusService.status
+        }
         .environment(\.api, api)
-        // .environment(\.statusService, statusService)
+        .environment(\.status, status)
     }
 }
 

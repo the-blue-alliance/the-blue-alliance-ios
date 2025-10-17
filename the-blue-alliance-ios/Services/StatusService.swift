@@ -1,6 +1,7 @@
 import os
 import Foundation
 import OpenAPIRuntime
+import Observation
 import AsyncAlgorithms
 import TBAAPI
 
@@ -21,9 +22,10 @@ private let defaultStatus = Status(
 )
 
 @MainActor
-class StatusService: ObservableObject {
+@Observable
+class StatusService {
 
-    private var status: Status {
+    private(set) var status: Status {
         didSet {
             do {
                 try userDefaults.setStatus(status: status)
@@ -31,22 +33,6 @@ class StatusService: ObservableObject {
                 logger.error("StatusService failed to write status to UserDefaults: \(error)")
             }
         }
-    }
-
-    var currentSeason: Int {
-        status.currentSeason
-    }
-
-    var maxSeason: Int {
-        status.maxSeason
-    }
-
-    var isDatafeedDown: Bool {
-        status.isDatafeedDown
-    }
-
-    var downEvents: [EventKey] {
-        status.downEvents
     }
 
     private let api: TBAAPI
@@ -74,11 +60,12 @@ class StatusService: ObservableObject {
             self.status = defaultStatus
         }
 
-        // TODO: Refresh on timer...
+        // Kickoff an initial refresh
+        // TODO: This likely should not live here - maybe we manage these
+        // services in the AppDelegate level some other way...
         Task {
             try await refresh()
         }
-        // TODO: Kickoff initial refresh
     }
 
     // MARK: - Public Methods

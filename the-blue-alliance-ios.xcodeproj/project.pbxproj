@@ -16,9 +16,7 @@
 		924C0EB42DBB308C008E73EA /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 924C0EB32DBB308C008E73EA /* Collections */; };
 		924C0F342DBB7116008E73EA /* TeamCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C0F332DBB710E008E73EA /* TeamCollectionViewListCell.swift */; };
 		924C0F392DBBE6F7008E73EA /* TeamNumberLabel+Sizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C0F382DBBE6F2008E73EA /* TeamNumberLabel+Sizing.swift */; };
-		9254E9E52DB52E3600044332 /* EventCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9254E9E42DB52E2E00044332 /* EventCollectionViewListCell.swift */; };
 		9254EA032DB6DA6800044332 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9254EA022DB6DA6800044332 /* SceneDelegate.swift */; };
-		92552F562DB884590049FDCC /* RankingCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92552F552DB884530049FDCC /* RankingCollectionViewListCell.swift */; };
 		92564C6B21644AA30047917F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6A21644AA30047917F /* Secrets.swift */; };
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
 		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
@@ -27,7 +25,6 @@
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
 		92BCEEB12DB464F10069DA77 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCEEB02DB464EE0069DA77 /* SearchService.swift */; };
 		92BDCBA92E00FF49001EAF3F /* PhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBA82E00FF45001EAF3F /* PhoneView.swift */; };
-		92BDCBAB2E00FFBB001EAF3F /* SeasonEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBAA2E00FFB9001EAF3F /* SeasonEventsView.swift */; };
 		92BDCBB02E010045001EAF3F /* EventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBAF2E010042001EAF3F /* EventsView.swift */; };
 		92BDCBB22E010080001EAF3F /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBB12E01007E001EAF3F /* EventView.swift */; };
 		92BDCBB42E0100E4001EAF3F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBB32E0100E2001EAF3F /* SearchView.swift */; };
@@ -69,9 +66,7 @@
 		924AFD782171AB1A00D7BE7E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
 		924C0F332DBB710E008E73EA /* TeamCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCollectionViewListCell.swift; sourceTree = "<group>"; };
 		924C0F382DBBE6F2008E73EA /* TeamNumberLabel+Sizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TeamNumberLabel+Sizing.swift"; sourceTree = "<group>"; };
-		9254E9E42DB52E2E00044332 /* EventCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewListCell.swift; sourceTree = "<group>"; };
 		9254EA022DB6DA6800044332 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		92552F552DB884530049FDCC /* RankingCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingCollectionViewListCell.swift; sourceTree = "<group>"; };
 		92564C6A21644AA30047917F /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
@@ -84,7 +79,6 @@
 		92BB718820D216D50081F4E5 /* EmptyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyViewController.xib; sourceTree = "<group>"; };
 		92BCEEB02DB464EE0069DA77 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		92BDCBA82E00FF45001EAF3F /* PhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneView.swift; sourceTree = "<group>"; };
-		92BDCBAA2E00FFB9001EAF3F /* SeasonEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonEventsView.swift; sourceTree = "<group>"; };
 		92BDCBAF2E010042001EAF3F /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
 		92BDCBB12E01007E001EAF3F /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		92BDCBB32E0100E2001EAF3F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -102,6 +96,7 @@
 		92104E0C2E010DE00023CFB5 /* Modifiers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Modifiers; sourceTree = "<group>"; };
 		9216D5362DC66C3900DD353B /* Years */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Years; sourceTree = "<group>"; };
 		9216D53B2DC6819900DD353B /* Environment */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Environment; sourceTree = "<group>"; };
+		923C5E2D2EA1DF1E00BAA0C4 /* Events */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Events; sourceTree = "<group>"; };
 		924C0E872DBB273B008E73EA /* Extensions */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Extensions; sourceTree = "<group>"; };
 		924C0E962DBB27D6008E73EA /* Protocols */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Protocols; sourceTree = "<group>"; };
 		924C0E972DBB2915008E73EA /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
@@ -209,7 +204,6 @@
 		92942DB21E215B08008E79CA /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				92BDCBAA2E00FFB9001EAF3F /* SeasonEventsView.swift */,
 				92BDCBAF2E010042001EAF3F /* EventsView.swift */,
 				92104E072E010D6D0023CFB5 /* EventListItem.swift */,
 				92BDCBB32E0100E2001EAF3F /* SearchView.swift */,
@@ -257,24 +251,15 @@
 		92FFE5221E7C994B0037E48C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				923C5E2D2EA1DF1E00BAA0C4 /* Events */,
 				9216D53B2DC6819900DD353B /* Environment */,
 				9200601D2DBEB53800C9C40E /* TBASegmentedControl.swift */,
 				924C0F322DBB7109008E73EA /* Teams */,
 				92D0350D2DB735740010A53A /* Headers */,
-				92FFE5231E7C994B0037E48C /* Events */,
 				9216D5362DC66C3900DD353B /* Years */,
 				92104E0C2E010DE00023CFB5 /* Modifiers */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		92FFE5231E7C994B0037E48C /* Events */ = {
-			isa = PBXGroup;
-			children = (
-				92552F552DB884530049FDCC /* RankingCollectionViewListCell.swift */,
-				9254E9E42DB52E2E00044332 /* EventCollectionViewListCell.swift */,
-			);
-			path = Events;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -298,6 +283,7 @@
 				92104E0C2E010DE00023CFB5 /* Modifiers */,
 				9216D5362DC66C3900DD353B /* Years */,
 				9216D53B2DC6819900DD353B /* Environment */,
+				923C5E2D2EA1DF1E00BAA0C4 /* Events */,
 				924C0E872DBB273B008E73EA /* Extensions */,
 				924C0E962DBB27D6008E73EA /* Protocols */,
 				924C0E972DBB2915008E73EA /* Data */,
@@ -450,12 +436,9 @@
 				9254EA032DB6DA6800044332 /* SceneDelegate.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
 				92104E082E010D6D0023CFB5 /* EventListItem.swift in Sources */,
-				92552F562DB884590049FDCC /* RankingCollectionViewListCell.swift in Sources */,
 				9200601E2DBEB53E00C9C40E /* TBASegmentedControl.swift in Sources */,
 				92564C6B21644AA30047917F /* Secrets.swift in Sources */,
-				92BDCBAB2E00FFBB001EAF3F /* SeasonEventsView.swift in Sources */,
 				92BCEEB12DB464F10069DA77 /* SearchService.swift in Sources */,
-				9254E9E52DB52E3600044332 /* EventCollectionViewListCell.swift in Sources */,
 				92BDCBB02E010045001EAF3F /* EventsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

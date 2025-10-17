@@ -48,8 +48,6 @@ enum TBATab: CaseIterable, Identifiable {
 
 struct PhoneView: View {
 
-    @Environment(\.api) private var api
-
     // @State private var searchIndex: SearchIndex?
     @State private var selection: TBATab! = .events
 
@@ -58,19 +56,18 @@ struct PhoneView: View {
 
     var body: some View {
         TabView {
-            Tab("Events", systemImage: "calendar") {
-                // TODO: Events
-                // EventsRootView()
+            Tab(TBATab.events.title, systemImage: TBATab.events.image) {
+                SeasonEventsView()
             }
-            Tab("Districts", systemImage: "circle.hexagongrid") {
+            Tab(TBATab.districts.title, systemImage: TBATab.districts.image) {
                 // TODO: Districts
                 // DistrictsRootView()
             }
-            Tab("Insights", systemImage: "chart.bar") {
+            Tab(TBATab.insights.title, systemImage: TBATab.insights.image) {
                 // TODO: Insights
                 // InsightsView()
             }
-            Tab("myTBA", systemImage: "star") {
+            Tab(TBATab.myTBA.title, systemImage: TBATab.myTBA.image) {
                 Text("myTBA")
             }
             Tab(role: .search) {

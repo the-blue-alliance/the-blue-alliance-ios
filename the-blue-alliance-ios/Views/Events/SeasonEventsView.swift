@@ -12,8 +12,9 @@ import SwiftUI
 struct SeasonEventsView: View {
 
     @Environment(\.api) private var api
+    @Environment(\.status) private var status
 
-    @State var year: Int
+    @State var year: Int?
 
     private var eventsByWeek: [EventWeek: [SeasonEvent]]? {
         events?.groupedByWeek()
@@ -34,10 +35,6 @@ struct SeasonEventsView: View {
     @State private var isInitialLoading = false
     @State private var error: Error?
 
-    init(year: Int = Calendar.current.year) {
-        _year = State(initialValue: year)
-    }
-
     var body: some View {
         EventsView(events: events?.map { $0.event } ?? [])
             .loadingNoData(
@@ -47,13 +44,15 @@ struct SeasonEventsView: View {
             .refreshable {
                 await refreshEvents()
             }
-            .task {
-                await refreshEvents()
+            .onAppear {
+                if year == nil {
+                    year = status.currentSeason
+                }
             }
             .onChange(of: year) {
                 Task {
-                    events = nil
-                    await refreshEvents()
+                    events = nil // Clear events when year changes
+                    await refreshEvents() // Load events for the new year
                 }
             }
             .navigationTitle("Events")
@@ -82,7 +81,13 @@ struct SeasonEventsView: View {
                             }
                         }
                     } label: {
-                        Label(String(year), systemImage: "chevron.down")
+                        let title = {
+                            guard let year = year else {
+                                return "----"
+                            }
+                            return String(year)
+                        }()
+                        Label(title, systemImage: "chevron.down")
                     }
                     .menuStyle(.button)
                 }
@@ -90,6 +95,7 @@ struct SeasonEventsView: View {
     }
 
     private func refreshEvents() async {
+        guard let year = year else { return }
         error = nil
         if events == nil {
             isInitialLoading = true
