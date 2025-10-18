@@ -14,7 +14,7 @@ struct SeasonEventsView: View {
     @Environment(\.api) private var api
     @Environment(\.status) private var status
 
-    @State var year: Int?
+    @State private var yearWeek: YearWeek
 
     private var eventsByWeek: [EventWeek: [SeasonEvent]]? {
         events?.groupedByWeek()
@@ -34,6 +34,11 @@ struct SeasonEventsView: View {
 
     @State private var isInitialLoading = false
     @State private var error: Error?
+    @State private var showYearWeekSelect = false
+
+    init(year: Year) {
+        self.yearWeek = YearWeek(year: year, week: nil)
+    }
 
     var body: some View {
         EventsView(events: events?.map { $0.event } ?? [])
@@ -44,12 +49,7 @@ struct SeasonEventsView: View {
             .refreshable {
                 await refreshEvents()
             }
-            .onAppear {
-                if year == nil {
-                    year = status.currentSeason
-                }
-            }
-            .onChange(of: year) {
+            .onChange(of: yearWeek) {
                 Task {
                     events = nil // Clear events when year changes
                     await refreshEvents() // Load events for the new year
@@ -60,49 +60,42 @@ struct SeasonEventsView: View {
                 EventView(event: event)
             }
             .toolbar {
-                /*
                 ToolbarItem(placement: .principal) {
-                    YearWeekHeaderView(yearWeek: $yearWeek, showYearWeekSelect: $showYearWeekSelect)
+                    YearWeekHeaderView(
+                        yearWeek: $yearWeek,
+                        showYearWeekSelect: $showYearWeekSelect
+                    )
                 }
-                */
+                // .matchedTransitionSource(id: "transition-id", in: namespace)
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Settings", systemImage: "gear") {
                         // TODO: Show Settings in a sheet
                     }
-                    // .tint(.accentYellow)
+                    .tint(.accentYellow)
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        let years = Array((1992...2025).reversed())
-                        Picker("Year", selection: $year) {
-                            ForEach(years, id: \.self) { year in
-                                Text(String(year))
-                                    .tag(year)
-                            }
-                        }
-                    } label: {
-                        let title = {
-                            guard let year = year else {
-                                return "----"
-                            }
-                            return String(year)
-                        }()
-                        Label(title, systemImage: "chevron.down")
-                    }
-                    .menuStyle(.button)
+            }
+            .toolbarBackground(Color.navigationBarColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showYearWeekSelect) {
+                let years = Array((1992...status.maxSeason).reversed())
+                YearWeekSelectView(years: years, yearWeek: yearWeek) { yearWeek in
+                    self.yearWeek = yearWeek
                 }
+                .presentationDetents([.medium, .large])
+                .navigationTransition(.automatic)
+                // .navigationTransition(.zoom(sourceID: "transition-id", in: namespace))
             }
     }
 
     private func refreshEvents() async {
-        guard let year = year else { return }
         error = nil
         if events == nil {
             isInitialLoading = true
         }
         defer { isInitialLoading = false }
         do {
-            let response = try await api.getEventsByYear(path: .init(year: year))
+            let response = try await api.getEventsByYear(path: .init(year: yearWeek.year))
             events = try response.ok.body.json.compactMap { SeasonEvent(event: $0) }
         } catch {
             self.error = error

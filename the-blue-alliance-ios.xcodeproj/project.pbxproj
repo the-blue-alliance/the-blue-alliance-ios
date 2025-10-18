@@ -12,6 +12,7 @@
 		92104E082E010D6D0023CFB5 /* EventListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92104E072E010D6D0023CFB5 /* EventListItem.swift */; };
 		92104E172E0118040023CFB5 /* EventListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92104E142E0115470023CFB5 /* EventListHeader.swift */; };
 		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
+		923C5E932EA3443300BAA0C4 /* YearWeekHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923C5E922EA3443000BAA0C4 /* YearWeekHeaderView.swift */; };
 		924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924AFD782171AB1A00D7BE7E /* NoDataView.xib */; };
 		924C0EB42DBB308C008E73EA /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 924C0EB32DBB308C008E73EA /* Collections */; };
 		924C0F342DBB7116008E73EA /* TeamCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C0F332DBB710E008E73EA /* TeamCollectionViewListCell.swift */; };
@@ -63,6 +64,7 @@
 		9200601D2DBEB53800C9C40E /* TBASegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASegmentedControl.swift; sourceTree = "<group>"; };
 		92104E072E010D6D0023CFB5 /* EventListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListItem.swift; sourceTree = "<group>"; };
 		92104E142E0115470023CFB5 /* EventListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListHeader.swift; sourceTree = "<group>"; };
+		923C5E922EA3443000BAA0C4 /* YearWeekHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearWeekHeaderView.swift; sourceTree = "<group>"; };
 		924AFD782171AB1A00D7BE7E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
 		924C0F332DBB710E008E73EA /* TeamCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCollectionViewListCell.swift; sourceTree = "<group>"; };
 		924C0F382DBBE6F2008E73EA /* TeamNumberLabel+Sizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TeamNumberLabel+Sizing.swift"; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 		92D0350D2DB735740010A53A /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				923C5E922EA3443000BAA0C4 /* YearWeekHeaderView.swift */,
 				92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */,
 			);
 			path = Headers;
@@ -440,6 +443,7 @@
 				92564C6B21644AA30047917F /* Secrets.swift in Sources */,
 				92BCEEB12DB464F10069DA77 /* SearchService.swift in Sources */,
 				92BDCBB02E010045001EAF3F /* EventsView.swift in Sources */,
+				923C5E932EA3443300BAA0C4 /* YearWeekHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

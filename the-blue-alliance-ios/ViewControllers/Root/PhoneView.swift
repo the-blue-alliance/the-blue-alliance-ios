@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import TBAAPI
 
 enum TBATab: CaseIterable, Identifiable {
 
@@ -48,6 +49,8 @@ enum TBATab: CaseIterable, Identifiable {
 
 struct PhoneView: View {
 
+    @Environment(\.status) private var status
+
     // @State private var searchIndex: SearchIndex?
     @State private var selection: TBATab! = .events
 
@@ -57,7 +60,9 @@ struct PhoneView: View {
     var body: some View {
         TabView {
             Tab(TBATab.events.title, systemImage: TBATab.events.image) {
-                SeasonEventsView()
+                NavigationStack {
+                    SeasonEventsView(year: status.currentSeason)
+                }
             }
             Tab(TBATab.districts.title, systemImage: TBATab.districts.image) {
                 // TODO: Districts
