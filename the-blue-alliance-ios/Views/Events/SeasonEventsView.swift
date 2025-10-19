@@ -16,19 +16,17 @@ struct SeasonEventsView: View {
 
     @State private var yearWeek: YearWeek
 
-    private var eventsByWeek: [EventWeek: [SeasonEvent]]? {
-        events?.groupedByWeek()
-    }
-    @State var eventWeek: EventWeek?
     @State private var events: [SeasonEvent]? {
         didSet {
-            eventWeek = events?.nextOrFirstEvent()?.eventWeek
+            if yearWeek.week == nil, let eventWeek = events?.nextOrFirstEvent()?.eventWeek {
+                yearWeek = YearWeek(year: yearWeek.year, week: eventWeek)
+            }
         }
     }
     private var eventsForWeek: [Event]? {
         // TODO: We'll probably want some sort of error state in here...
-        guard let eventWeek else { return nil }
-        guard let eventsByWeek else { return nil }
+        guard let eventWeek = yearWeek.week else { return nil }
+        guard let eventsByWeek = events?.groupedByWeek() else { return nil }
         return eventsByWeek[eventWeek]?.map(\.event)
     }
 
@@ -41,11 +39,18 @@ struct SeasonEventsView: View {
     }
 
     var body: some View {
-        EventsView(events: events?.map { $0.event } ?? [])
+        // TODO: Maybe this takes like... events, and an eventWeek?
+        // It's a little wonky because `eventsForWeek` isn't State, so this
+        // doesn't update automatically. However, I don't think we have
+        // any kind of fallback error handling states in here
+        EventsView(events: eventsForWeek ?? events?.map { $0.event } ?? [])
             .loadingNoData(
                 isInitialLoading,
                 data: events,
                 title: "No Events")
+            .task {
+                await refreshEvents()
+            }
             .refreshable {
                 await refreshEvents()
             }

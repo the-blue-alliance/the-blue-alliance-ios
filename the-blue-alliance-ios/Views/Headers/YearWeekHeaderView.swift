@@ -14,10 +14,6 @@ struct YearWeekHeaderView: View {
     @Binding private var yearWeek: YearWeek
     @Binding private var showYearWeekSelect: Bool
 
-    var week: EventWeek? {
-        yearWeek.week
-    }
-
     init(yearWeek: Binding<YearWeek>, showYearWeekSelect: Binding<Bool>) {
         _yearWeek = yearWeek
         _showYearWeekSelect = showYearWeekSelect
@@ -25,8 +21,7 @@ struct YearWeekHeaderView: View {
 
     var body: some View {
         YearHeaderView(
-            // TODO: Something else here...
-            title: "\(week?.description ?? "---") Events",
+            title: "\(yearWeek.week?.description ?? "---") Events",
             year: Binding(
                 get: { self.yearWeek.year },
                 set: { year in }

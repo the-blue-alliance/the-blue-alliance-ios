@@ -28,7 +28,6 @@
 		92BDCBA92E00FF49001EAF3F /* PhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBA82E00FF45001EAF3F /* PhoneView.swift */; };
 		92BDCBB02E010045001EAF3F /* EventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBAF2E010042001EAF3F /* EventsView.swift */; };
 		92BDCBB22E010080001EAF3F /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBB12E01007E001EAF3F /* EventView.swift */; };
-		92BDCBB42E0100E4001EAF3F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BDCBB32E0100E2001EAF3F /* SearchView.swift */; };
 		92D034F42DB6F69E0010A53A /* LaunchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D034F32DB6F69E0010A53A /* LaunchStoryboard.storyboard */; };
 		92D0350F2DB735850010A53A /* TitleCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */; };
 		92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92D8CD1220C2634200777D93 /* GoogleService-Info.plist */; };
@@ -83,7 +82,6 @@
 		92BDCBA82E00FF45001EAF3F /* PhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneView.swift; sourceTree = "<group>"; };
 		92BDCBAF2E010042001EAF3F /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
 		92BDCBB12E01007E001EAF3F /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
-		92BDCBB32E0100E2001EAF3F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		92D034F32DB6F69E0010A53A /* LaunchStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchStoryboard.storyboard; sourceTree = "<group>"; };
 		92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionHeaderView.swift; sourceTree = "<group>"; };
 		92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-unit-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,7 +206,6 @@
 			children = (
 				92BDCBAF2E010042001EAF3F /* EventsView.swift */,
 				92104E072E010D6D0023CFB5 /* EventListItem.swift */,
-				92BDCBB32E0100E2001EAF3F /* SearchView.swift */,
 				92BDCBB12E01007E001EAF3F /* EventView.swift */,
 				92104E142E0115470023CFB5 /* EventListHeader.swift */,
 			);
@@ -431,7 +428,6 @@
 				92D0350F2DB735850010A53A /* TitleCollectionHeaderView.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
 				924C0F392DBBE6F7008E73EA /* TeamNumberLabel+Sizing.swift in Sources */,
-				92BDCBB42E0100E4001EAF3F /* SearchView.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
 				92BDCBA92E00FF49001EAF3F /* PhoneView.swift in Sources */,
 				92104E172E0118040023CFB5 /* EventListHeader.swift in Sources */,

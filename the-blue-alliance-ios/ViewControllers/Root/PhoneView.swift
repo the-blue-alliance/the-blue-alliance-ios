@@ -47,6 +47,10 @@ enum TBATab: CaseIterable, Identifiable {
     }
 }
 
+enum SearchScope: String, CaseIterable {
+    case all, events, teams
+}
+
 struct PhoneView: View {
 
     @Environment(\.status) private var status
@@ -76,15 +80,16 @@ struct PhoneView: View {
                 Text("myTBA")
             }
             Tab(role: .search) {
+                // TODO: Move this to some SearchView
                 NavigationStack {
                     Text("Search")
                 }
-            }
-        }
-        .searchable(text: $searchText)
-        .searchScopes($searchScope, activation: .onSearchPresentation) {
-            ForEach(SearchScope.allCases, id: \.self) { scope in
-                Text(scope.rawValue.capitalized)
+                .searchable(text: $searchText)
+                .searchScopes($searchScope, activation: .onSearchPresentation) {
+                    ForEach(SearchScope.allCases, id: \.self) { scope in
+                        Text(scope.rawValue.capitalized)
+                    }
+                }
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)

@@ -28,20 +28,6 @@ struct EventsView: View {
     }
 
     var body: some View {
-        List {
-            if events.keys.count > 1 {
-                ForEach(events.keys, id: \.self) { sectionKey in
-                    Section(sectionKey) {
-                        let events = self.events[sectionKey] ?? []
-                        EventsList(events: events)
-                    }
-                }
-            } else if events.keys.count == 1 {
-                let events = self.events[events.keys.first!] ?? []
-                EventsList(events: events)
-            }
-        }
-        /*
         ScrollViewReader { reader in
             ScrollView {
                 LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
@@ -66,7 +52,6 @@ struct EventsView: View {
                         .listSectionSpacing(0)
                     }
                 }
-                .background(Color(UIColor.systemGroupedBackground))
             }
             .onChange(of: events) {
                 guard let firstSection = events.keys.first else {
@@ -78,40 +63,6 @@ struct EventsView: View {
             }
             .listStyle(.plain)
             .listSectionSpacing(0)
-        }
-        */
-    }
-}
-
-private struct EventsList: View {
-
-    @State var events: [Event]
-
-    var body: some View {
-        ForEach(events, id: \.key) { event in
-            NavigationLink(value: event) {
-                HStack(spacing: 0) {
-                    VStack(spacing: 0) {
-                        HStack(spacing: 0) {
-                            Text(event.displayName)
-                                .lineLimit(1)
-                            Spacer()
-                        }
-                        .foregroundColor(.primary)
-                        HStack(spacing: 0) {
-                            if let location = event.displayLocation {
-                                Text(location)
-                                    .lineLimit(1)
-                            }
-                            Spacer()
-                            Text(event.displayDates)
-                                .lineLimit(1)
-                        }
-                        .foregroundColor(.secondary)
-                        .font(.subheadline)
-                    }
-                }
-            }
         }
     }
 }
