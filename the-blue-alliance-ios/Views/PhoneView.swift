@@ -69,8 +69,9 @@ struct PhoneView: View {
                 }
             }
             Tab(TBATab.districts.title, systemImage: TBATab.districts.image) {
-                // TODO: Districts
-                // DistrictsRootView()
+                NavigationStack {
+                    DistrictsList(year: status.currentSeason)
+                }
             }
             Tab(TBATab.insights.title, systemImage: TBATab.insights.image) {
                 // TODO: Insights

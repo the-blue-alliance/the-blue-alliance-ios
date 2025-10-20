@@ -97,6 +97,7 @@
 		9216D5362DC66C3900DD353B /* Years */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Years; sourceTree = "<group>"; };
 		9216D53B2DC6819900DD353B /* Environment */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Environment; sourceTree = "<group>"; };
 		923C5E2D2EA1DF1E00BAA0C4 /* Events */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Events; sourceTree = "<group>"; };
+		923C5E942EA5C72E00BAA0C4 /* Districts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Districts; sourceTree = "<group>"; };
 		924C0E872DBB273B008E73EA /* Extensions */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Extensions; sourceTree = "<group>"; };
 		924C0E962DBB27D6008E73EA /* Protocols */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Protocols; sourceTree = "<group>"; };
 		924C0E972DBB2915008E73EA /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
@@ -215,7 +216,6 @@
 		92CAF54C240774A80078CA0A /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				92BDCBA82E00FF45001EAF3F /* PhoneView.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -251,7 +251,9 @@
 		92FFE5221E7C994B0037E48C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				92BDCBA82E00FF45001EAF3F /* PhoneView.swift */,
 				923C5E2D2EA1DF1E00BAA0C4 /* Events */,
+				923C5E942EA5C72E00BAA0C4 /* Districts */,
 				9216D53B2DC6819900DD353B /* Environment */,
 				9200601D2DBEB53800C9C40E /* TBASegmentedControl.swift */,
 				924C0F322DBB7109008E73EA /* Teams */,
@@ -284,6 +286,7 @@
 				9216D5362DC66C3900DD353B /* Years */,
 				9216D53B2DC6819900DD353B /* Environment */,
 				923C5E2D2EA1DF1E00BAA0C4 /* Events */,
+				923C5E942EA5C72E00BAA0C4 /* Districts */,
 				924C0E872DBB273B008E73EA /* Extensions */,
 				924C0E962DBB27D6008E73EA /* Protocols */,
 				924C0E972DBB2915008E73EA /* Data */,

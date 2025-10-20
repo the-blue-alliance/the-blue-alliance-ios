@@ -47,7 +47,7 @@ struct SeasonEventsView: View {
             .loadingNoData(
                 isInitialLoading,
                 data: events,
-                title: "No Events")
+                title: "No events")
             .task {
                 await refreshEvents()
             }
