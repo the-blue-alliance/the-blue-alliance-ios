@@ -43,7 +43,7 @@ struct DistrictsList: View {
         }
         .navigationTitle("Districts")
         .navigationDestination(for: District.self) { district in
-            // Pass
+            DistrictView(district: district)
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
