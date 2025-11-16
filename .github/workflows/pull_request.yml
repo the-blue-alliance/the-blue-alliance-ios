@@ -28,9 +28,8 @@ jobs:
           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
-      - uses: sersoft-gmbh/xcodebuild-action@v4
-        with:
-          project: TBA.xcodeproj
-          scheme: TBA
-          destination: platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0
-          action: test
+      - run: |
+          xcrun xcodebuild test \
+        -project TBA.xcodeproj \
+        -scheme TBA \
+        # -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0'
