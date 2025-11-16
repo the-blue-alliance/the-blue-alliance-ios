@@ -14,9 +14,11 @@ jobs:
     steps:
       - name: List available Xcode versions
         run: ls /Applications | grep Xcode
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '26.1'
+      # - uses: maxim-lobanov/setup-xcode@v1
+      #   with:
+      #     xcode-version: '26.1'
+      - name: Select Xcode Version
+        run: sudo xcode-select -s /Applications/Xcode_26.1.app
       - name: Show current version of Xcode
         run: xcrun xcodebuild -version
       - name: Show Swift version
