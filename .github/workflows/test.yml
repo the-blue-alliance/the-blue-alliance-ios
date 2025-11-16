@@ -6,18 +6,15 @@ on:
   pull_request:
     branches: ["five"]
 
-env:
-  APP_NAME: "TBA"
-  PLATFORM: "iOS Simulator"
-  OS_VERSION: "26.1"
-
 jobs:
   test:
     name: Test
     runs-on: macos-26
     strategy:
       matrix:
-        device: ["iPhone 17 Pro"]
+        destination:
+          - "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0"
+          - "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1"
 
     steps:
       - name: List available Xcode versions
@@ -83,15 +80,15 @@ jobs:
           # device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
           xcrun xcodebuild \
             build-for-testing \
-            -project "${APP_NAME}.xcodeproj" \
-            -scheme "${SCHEME_NAME}" \
-            -destination "platform=${PLATFORM},name=${{ matrix.device }},OS=${OS_VERSION}" \
+            -project "TBA.xcodeproj" \
+            -scheme "TBA" \
+            -destination "${{ matrix.destination }}" \
             -quiet
 
       - name: Test
         run: |
           xcrun xcodebuild \
             test-without-building \
-            -project "${APP_NAME}.xcodeproj" \
-            -scheme "${SCHEME_NAME}" \
-            -destination "platform=${PLATFORM},name=${{ matrix.device }},OS=${OS_VERSION}"
+            -project "TBA.xcodeproj" \
+            -scheme "TBA" \
+            -destination "${{ matrix.destination }}"
