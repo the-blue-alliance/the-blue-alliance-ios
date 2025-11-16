@@ -6,15 +6,17 @@ on:
   pull_request:
     branches: ["five"]
 
+env:
+  APP_NAME: "TBA"
+  SCHEME_NAME: "TBA"
+  PLATFORM: "iOS Simulator"
+  DEVICE: "iPhone 17 Pro"
+  OS_VERSION: "26.1"
+
 jobs:
   test:
     name: Test
     runs-on: macos-26
-    strategy:
-      matrix:
-        destination:
-          - "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0"
-          - "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.1"
 
     steps:
       - name: List available Xcode versions
@@ -70,8 +72,8 @@ jobs:
 
       - name: Boot Simulator
         run: |
-          xcrun simctl boot "${{ matrix.device }}" || true
-          xcrun simctl bootstatus "${{ matrix.device }}"
+          xcrun simctl boot "${{ env.DEVICE }}" || true
+          xcrun simctl bootstatus "${{ env.DEVICE }}"
 
       - name: Build
         run: |
@@ -82,7 +84,7 @@ jobs:
             build-for-testing \
             -project "TBA.xcodeproj" \
             -scheme "TBA" \
-            -destination "${{ matrix.destination }}" \
+            -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS_VERSION }}" \
             -quiet
 
       - name: Test
@@ -91,4 +93,4 @@ jobs:
             test-without-building \
             -project "TBA.xcodeproj" \
             -scheme "TBA" \
-            -destination "${{ matrix.destination }}"
+            -destination "platform=${{ env.PLATFORM }},name=${{ env.DEVICE }},OS=${{ env.OS_VERSION }}"
