@@ -25,5 +25,4 @@ jobs:
         with:
           project: TBA.xcodeproj
           scheme: TBA
-          destination: platform=iOS
-          action: build
+          action: test
