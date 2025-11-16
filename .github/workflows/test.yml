@@ -1,5 +1,11 @@
 name: Build + Test iOS
 
+on:
+  push:
+    branches: [ "five" ]
+  pull_request:
+    branches: [ "five" ]
+
 jobs:
   test:
     name: Test
