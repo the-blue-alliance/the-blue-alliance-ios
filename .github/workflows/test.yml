@@ -70,11 +70,6 @@ jobs:
         run: |
           xcrun xcodebuild -resolvePackageDependencies
 
-      - name: Boot Simulator
-        run: |
-          xcrun simctl boot "${{ env.DEVICE }}" || true
-          xcrun simctl bootstatus "${{ env.DEVICE }}"
-
       - name: Build
         run: |
           # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
