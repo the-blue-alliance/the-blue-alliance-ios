@@ -262,6 +262,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "TBA" */;
 			buildPhases = (
+				92D53FF52ECA50BC00079B8D /* Setup Secrets */,
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
@@ -412,6 +413,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n  \"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nfi\n";
+		};
+		92D53FF52ECA50BC00079B8D /* Setup Secrets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/scripts/mock-Secrets.plist",
+			);
+			name = "Setup Secrets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${SRCROOT}/TBA/Secrets.plist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\nset -e  # Exit immediately if any command fails\n\n# Check if TBA/Secrets.plist exists\nif [ ! -f \"${SRCROOT}/TBA/Secrets.plist\" ]; then\n    echo \"TBA/Secrets.plist not found. Copying from scripts/mock-Secrets.plist...\"\n\n    # Verify source file exists\n    if [ ! -f \"${SRCROOT}/scripts/mock-Secrets.plist\" ]; then\n        echo \"ERROR: Source file scripts/mock-Secrets.plist not found!\"\n        exit 1\n    fi\n\n    # Attempt to copy\n    if ! cp \"${SRCROOT}/scripts/mock-Secrets.plist\" \"${SRCROOT}/TBA/Secrets.plist\"; then\n        echo \"ERROR: Failed to copy mock-Secrets.plist to TBA/Secrets.plist\"\n        exit 1\n    fi\n\n    echo \"Successfully copied mock-Secrets.plist to TBA/Secrets.plist\"\nelse\n    echo \"TBA/Secrets.plist already exists. Skipping copy.\"\nfi\n\n# Verify tba_api_key is not empty\nTBA_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :tba_api_key\" \"${SRCROOT}/TBA/Secrets.plist\" 2>/dev/null || echo \"\")\n\nif [ -z \"$TBA_API_KEY\" ]; then\n    echo \"ERROR: tba_api_key is empty in TBA/Secrets.plist\"\n    echo \"Please add your TBA API key to TBA/Secrets.plist\"\n    echo \"You can get an API key from: https://www.thebluealliance.com/account\"\n    exit 1\nfi\n\necho \"TBA API key found. Build can proceed.\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

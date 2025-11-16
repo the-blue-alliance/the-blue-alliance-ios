@@ -18,11 +18,19 @@ jobs:
         run: xcodebuild -version
       - name: Install
         run: |
-          cp ops/mock-Secrets.plist TBA/Secrets.plist
+          cp scripts/mock-Secrets.plist TBA/Secrets.plist
+          /usr/libexec/PlistBuddy -c "Set :tba_api_key $TBA_API_KEY" TBA/Secrets.plist
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
       - uses: sersoft-gmbh/xcodebuild-action@v4
         with:
           project: TBA.xcodeproj
           scheme: TBA
+          destination: platform=iOS
           action: test

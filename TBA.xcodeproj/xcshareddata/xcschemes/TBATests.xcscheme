@@ -18,7 +18,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92D6483920BE4CB8008F0DB3"
+               BlueprintIdentifier = "92D53FE82ECA4B0900079B8D"
                BuildableName = "TBATests.xctest"
                BlueprintName = "TBATests"
                ReferencedContainer = "container:TBA.xcodeproj">
