@@ -12,11 +12,10 @@ jobs:
     runs-on: macos-26
 
     steps:
-
       - name: List available Xcode versions
         run: ls /Applications | grep Xcode
       - name: Select Xcode Version
-        run: sudo xcode-select -s /Applications/Xcode_26.1.0.app
+        run: sudo xcode-select -s /Applications/Xcode_26.1.0.app/Contents/Developer
       - name: Show current version of Xcode
         run: xcrun xcodebuild -version
       - name: Show Swift version
