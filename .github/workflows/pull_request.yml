@@ -12,13 +12,10 @@ jobs:
           xcode-version: latest-stable
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Cache SPM
-        uses: actions/cache@v4
-        with:
-          path: .build
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-spm-
+      - name: List available Xcode versions
+        run: ls /Applications | grep Xcode
+      - name: Show current version of Xcode
+        run: xcodebuild -version
       - name: Install
         run: |
           cp ops/mock-Secrets.plist TBA/Secrets.plist
