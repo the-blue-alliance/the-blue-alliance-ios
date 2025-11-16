@@ -35,7 +35,9 @@ jobs:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - uses: actions/cache@v4
         with:
-          path: .build
+          path: |
+            .build
+            ~/Library/Developer/Xcode/DerivedData
           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
@@ -47,6 +49,9 @@ jobs:
           echo Using default scheme: $default
       - name: Skip Package Plugin Fingerprint Validation
         run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+      - name: Resolve Swift Package Dependencies
+        run: |
+          xcrun xcodebuild -resolvePackageDependencies
       - name: Build
         env:
           scheme: ${{ 'default' }}
