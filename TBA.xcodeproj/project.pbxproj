@@ -20,7 +20,6 @@
 		9254EA032DB6DA6800044332 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9254EA022DB6DA6800044332 /* SceneDelegate.swift */; };
 		92564C6B21644AA30047917F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6A21644AA30047917F /* Secrets.swift */; };
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
-		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
 		92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9E1E2154DA008E79CA /* Assets.xcassets */; };
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
@@ -37,12 +36,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */ = {
+		92D53FED2ECA4B0900079B8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 92942D911E2154DA008E79CA;
-			remoteInfo = "The Blue Alliance";
+			remoteInfo = TBA;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -71,7 +70,7 @@
 		92564C6A21644AA30047917F /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
-		92942D921E2154DA008E79CA /* The Blue Alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Blue Alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		92942D921E2154DA008E79CA /* TBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92942D9E1E2154DA008E79CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92942DA31E2154DA008E79CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -83,8 +82,8 @@
 		92D034F32DB6F69E0010A53A /* LaunchStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchStoryboard.storyboard; sourceTree = "<group>"; };
 		92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionHeaderView.swift; sourceTree = "<group>"; };
 		92D53F8E2ECA426C00079B8D /* TBA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TBA.entitlements; sourceTree = "<group>"; };
-		92D6483A20BE4CB8008F0DB3 /* TBATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		92D6483E20BE4CB8008F0DB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92D53FE32ECA49A600079B8D /* TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBATests.swift; sourceTree = "<group>"; };
+		92D53FE92ECA4B0900079B8D /* TBATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D8CD1220C2634200777D93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		92DF54E021B1B65A0082C58C /* StatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusService.swift; sourceTree = "<group>"; };
 		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +99,7 @@
 		924C0E872DBB273B008E73EA /* Extensions */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Extensions; sourceTree = "<group>"; };
 		924C0E962DBB27D6008E73EA /* Protocols */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Protocols; sourceTree = "<group>"; };
 		924C0E972DBB2915008E73EA /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
+		92D53FEA2ECA4B0900079B8D /* TBATests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TBATests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,7 +113,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92D6483720BE4CB8008F0DB3 /* Frameworks */ = {
+		92D53FE62ECA4B0900079B8D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -148,6 +148,7 @@
 			children = (
 				92942D941E2154DA008E79CA /* TBA */,
 				92D6483B20BE4CB8008F0DB3 /* TBATests */,
+				92D53FEA2ECA4B0900079B8D /* TBATests */,
 				92942D931E2154DA008E79CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -155,8 +156,8 @@
 		92942D931E2154DA008E79CA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
-				92D6483A20BE4CB8008F0DB3 /* TBATests.xctest */,
+				92942D921E2154DA008E79CA /* TBA.app */,
+				92D53FE92ECA4B0900079B8D /* TBATests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -222,7 +223,7 @@
 		92D6483B20BE4CB8008F0DB3 /* TBATests */ = {
 			isa = PBXGroup;
 			children = (
-				92D6483E20BE4CB8008F0DB3 /* Info.plist */,
+				92D53FE32ECA49A600079B8D /* TBATests.swift */,
 				92564C71216457060047917F /* TestSecrets.plist */,
 			);
 			path = TBATests;
@@ -257,9 +258,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		92942D911E2154DA008E79CA /* The Blue Alliance */ = {
+		92942D911E2154DA008E79CA /* TBA */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
+			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "TBA" */;
 			buildPhases = (
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
@@ -281,32 +282,37 @@
 				924C0E962DBB27D6008E73EA /* Protocols */,
 				924C0E972DBB2915008E73EA /* Data */,
 			);
-			name = "The Blue Alliance";
+			name = TBA;
 			packageProductDependencies = (
 				921843022DB42424003B4F9E /* TBAAPI */,
 				924C0EB32DBB308C008E73EA /* Collections */,
 				920060132DBDB1B800C9C40E /* AsyncAlgorithms */,
 			);
 			productName = "the-blue-alliance";
-			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
+			productReference = 92942D921E2154DA008E79CA /* TBA.app */;
 			productType = "com.apple.product-type.application";
 		};
-		92D6483920BE4CB8008F0DB3 /* TBATests */ = {
+		92D53FE82ECA4B0900079B8D /* TBATests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92D6484120BE4CB8008F0DB3 /* Build configuration list for PBXNativeTarget "TBATests" */;
+			buildConfigurationList = 92D53FEF2ECA4B0900079B8D /* Build configuration list for PBXNativeTarget "TBATests" */;
 			buildPhases = (
-				92D6483620BE4CB8008F0DB3 /* Sources */,
-				92D6483720BE4CB8008F0DB3 /* Frameworks */,
-				92D6483820BE4CB8008F0DB3 /* Resources */,
+				92D53FE52ECA4B0900079B8D /* Sources */,
+				92D53FE62ECA4B0900079B8D /* Frameworks */,
+				92D53FE72ECA4B0900079B8D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				92D6484020BE4CB8008F0DB3 /* PBXTargetDependency */,
+				92D53FEE2ECA4B0900079B8D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				92D53FEA2ECA4B0900079B8D /* TBATests */,
 			);
 			name = TBATests;
-			productName = "TBATests";
-			productReference = 92D6483A20BE4CB8008F0DB3 /* TBATests.xctest */;
+			packageProductDependencies = (
+			);
+			productName = TBATests;
+			productReference = 92D53FE92ECA4B0900079B8D /* TBATests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -316,7 +322,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2610;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
@@ -332,10 +338,8 @@
 							};
 						};
 					};
-					92D6483920BE4CB8008F0DB3 = {
-						CreatedOnToolsVersion = 9.3.1;
-						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
+					92D53FE82ECA4B0900079B8D = {
+						CreatedOnToolsVersion = 26.1.1;
 						TestTargetID = 92942D911E2154DA008E79CA;
 					};
 				};
@@ -358,8 +362,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				92942D911E2154DA008E79CA /* The Blue Alliance */,
-				92D6483920BE4CB8008F0DB3 /* TBATests */,
+				92942D911E2154DA008E79CA /* TBA */,
+				92D53FE82ECA4B0900079B8D /* TBATests */,
 			);
 		};
 /* End PBXProject section */
@@ -379,11 +383,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92D6483820BE4CB8008F0DB3 /* Resources */ = {
+		92D53FE72ECA4B0900079B8D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92564C72216457060047917F /* TestSecrets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,7 +439,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92D6483620BE4CB8008F0DB3 /* Sources */ = {
+		92D53FE52ECA4B0900079B8D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -446,10 +449,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		92D6484020BE4CB8008F0DB3 /* PBXTargetDependency */ = {
+		92D53FEE2ECA4B0900079B8D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
-			targetProxy = 92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */;
+			target = 92942D911E2154DA008E79CA /* TBA */;
+			targetProxy = 92D53FED2ECA4B0900079B8D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -620,80 +623,62 @@
 			};
 			name = Release;
 		};
-		92D6484220BE4CB8008F0DB3 /* Debug */ = {
+		92D53FF02ECA4B0900079B8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
-					"\"${PODS_ROOT}/Headers/Public/FirebaseAnalyticsInterop\"",
-					"\"${PODS_ROOT}/Headers/Public/FirebaseAuthInterop\"",
-					"$(inherited)",
-					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
-				);
-				INFOPLIST_FILE = TBATests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.TBATests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
-				VERSIONING_SYSTEM = "apple-generic";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TBA.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TBA";
 			};
 			name = Debug;
 		};
-		92D6484320BE4CB8008F0DB3 /* Release */ = {
+		92D53FF12ECA4B0900079B8D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
-					"\"${PODS_ROOT}/Headers/Public/FirebaseAnalyticsInterop\"",
-					"\"${PODS_ROOT}/Headers/Public/FirebaseAuthInterop\"",
-					"$(inherited)",
-					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"\"${PODS_ROOT}/Firebase/Core/Sources\"",
-				);
-				INFOPLIST_FILE = TBATests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.TBATests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
-				VERSIONING_SYSTEM = "apple-generic";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TBA.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TBA";
 			};
 			name = Release;
 		};
@@ -709,7 +694,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */ = {
+		92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "TBA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92942DA71E2154DA008E79CA /* Debug */,
@@ -718,11 +703,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		92D6484120BE4CB8008F0DB3 /* Build configuration list for PBXNativeTarget "TBATests" */ = {
+		92D53FEF2ECA4B0900079B8D /* Build configuration list for PBXNativeTarget "TBATests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				92D6484220BE4CB8008F0DB3 /* Debug */,
-				92D6484320BE4CB8008F0DB3 /* Release */,
+				92D53FF02ECA4B0900079B8D /* Debug */,
+				92D53FF12ECA4B0900079B8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

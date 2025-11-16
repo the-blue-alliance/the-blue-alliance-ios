@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "92942D911E2154DA008E79CA"
-               BuildableName = "The Blue Alliance.app"
-               BlueprintName = "The Blue Alliance"
+               BuildableName = "TBA.app"
+               BlueprintName = "TBA"
                ReferencedContainer = "container:TBA.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,8 +32,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "92942D911E2154DA008E79CA"
-            BuildableName = "The Blue Alliance.app"
-            BlueprintName = "The Blue Alliance"
+            BuildableName = "TBA.app"
+            BlueprintName = "TBA"
             ReferencedContainer = "container:TBA.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -67,8 +67,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "92942D911E2154DA008E79CA"
-            BuildableName = "The Blue Alliance.app"
-            BlueprintName = "The Blue Alliance"
+            BuildableName = "TBA.app"
+            BlueprintName = "TBA"
             ReferencedContainer = "container:TBA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -102,8 +102,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "92942D911E2154DA008E79CA"
-            BuildableName = "The Blue Alliance.app"
-            BlueprintName = "The Blue Alliance"
+            BuildableName = "TBA.app"
+            BlueprintName = "TBA"
             ReferencedContainer = "container:TBA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -27,6 +27,6 @@ jobs:
       - uses: sersoft-gmbh/xcodebuild-action@v4
         with:
           project: TBA.xcodeproj
-          scheme: "The Blue Alliance"
+          scheme: TBA
           destination: platform=iOS
           action: build
