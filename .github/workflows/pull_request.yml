@@ -32,5 +32,5 @@ jobs:
         with:
           project: TBA.xcodeproj
           scheme: TBA
-          destination: platform=iOS
+          destination: platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
           action: test
