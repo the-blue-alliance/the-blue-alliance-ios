@@ -101,122 +101,6 @@
                 ]
             }
         },
-        "/teams/all": {
-            "get": {
-                "tags": [
-                    "team",
-                    "list"
-                ],
-                "description": "Gets a list of all `Team` objects.",
-                "operationId": "getTeamsAll",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/If-None-Match"
-                    },
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "headers": {
-                            "Cache-Control": {
-                                "description": "The `Cache-Control` header, in particular the `max-age` value, contains the number of seconds the result should be considered valid for. During this time subsequent calls should return from the local cache directly.",
-                                "schema": {
-                                    "type": "string"
-                                }
-                            },
-                            "ETag": {
-                                "description": "Specifies the version of the most recent response. Used by clients in the `If-None-Match` request header.",
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Team"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "304": {
-                        "$ref": "#/components/responses/NotModified"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/Unauthorized"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/NotFound"
-                    }
-                },
-                "security": [
-                    {
-                        "apiKey": []
-                    }
-                ]
-            }
-        },
-        "/teams/all/simple": {
-            "get": {
-                "tags": [
-                    "team",
-                    "list"
-                ],
-                "description": "Gets a list of all short form `Team_Simple` objects.",
-                "operationId": "getTeamsAllSimple",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/If-None-Match"
-                    },
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "headers": {
-                            "Cache-Control": {
-                                "description": "The `Cache-Control` header, in particular the `max-age` value, contains the number of seconds the result should be considered valid for. During this time subsequent calls should return from the local cache directly.",
-                                "schema": {
-                                    "type": "string"
-                                }
-                            },
-                            "ETag": {
-                                "description": "Specifies the version of the most recent response. Used by clients in the `If-None-Match` request header.",
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Team_Simple"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "304": {
-                        "$ref": "#/components/responses/NotModified"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/Unauthorized"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/NotFound"
-                    }
-                },
-                "security": [
-                    {
-                        "apiKey": []
-                    }
-                ]
-            }
-        },
         "/teams/{page_num}": {
             "get": {
                 "tags": [
@@ -5678,7 +5562,7 @@
                             "integer",
                             "null"
                         ],
-                        "description": "Playoff Type, as defined here: https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/playoff_type.py#L4, or null."
+                        "description": "Playoff Type, as defined under `PlayoffType`: https://github.com/the-blue-alliance/the-blue-alliance/blob/py3/src/backend/common/consts/playoff_type.py#L37, or null."
                     },
                     "playoff_type_string": {
                         "type": [
@@ -5760,7 +5644,10 @@
                         "description": "Number of teams ranked."
                     },
                     "ranking": {
-                        "type": "object",
+                        "type": [
+                            "object",
+                            "null"
+                        ],
                         "properties": {
                             "matches_played": {
                                 "type": "integer",
@@ -5775,7 +5662,10 @@
                                 "format": "double"
                             },
                             "sort_orders": {
-                                "type": "array",
+                                "type": [
+                                    "array",
+                                    "null"
+                                ],
                                 "description": "Ordered list of values used to determine the rank. See the `sort_order_info` property for the name of each value.",
                                 "items": {
                                     "type": "number",
@@ -5790,11 +5680,17 @@
                                 ]
                             },
                             "rank": {
-                                "type": "integer",
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ],
                                 "description": "Relative rank of this team."
                             },
                             "dq": {
-                                "type": "integer",
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ],
                                 "description": "Number of matches the team was disqualified for."
                             },
                             "team_key": {
@@ -5804,7 +5700,10 @@
                         }
                     },
                     "sort_order_info": {
-                        "type": "array",
+                        "type": [
+                            "array",
+                            "null"
+                        ],
                         "description": "Ordered list of names corresponding to the elements of the `sort_orders` array.",
                         "items": {
                             "type": "object",
