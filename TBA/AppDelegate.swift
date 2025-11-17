@@ -15,9 +15,9 @@ struct TBAApp: App {
 
     init() {
         let secrets = Secrets()
-        self.api = TBAAPI(apiKey: secrets.tbaAPIKey)
-        self.statusService = StatusService(api: api, userDefaults: .standard)
-        self.status = statusService.status
+        api = TBAAPI(apiKey: secrets.tbaAPIKey)
+        statusService = StatusService(api: api, userDefaults: .standard)
+        status = statusService.status
         // TODO: Kickoff an initial refresh, possibly?
     }
 
@@ -26,7 +26,7 @@ struct TBAApp: App {
             PhoneView()
         }
         .onChange(of: statusService.status) {
-            self.status = statusService.status
+            status = statusService.status
         }
         .environment(\.api, api)
         .environment(\.status, status)
@@ -36,12 +36,32 @@ struct TBAApp: App {
 import BackgroundTasks
 
 class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
-
     // MARK: - UIApplicationDelegate
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    // For later, when we need to delete our old Core Data store...
+    /*
+     lazy var persistentContainer: TBAPersistenceContainer = {
+         let persistentContainer = TBAPersistenceContainer()
+         persistentContainer.persistentStoreDescriptions.forEach {
+             $0.type = NSSQLiteStoreType
+         }
+         return persistentContainer
+     }()
+     */
 
-        // TODO: Add some code to delete the previous Core Data store
+    func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        /*
+         for url in FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask) {
+             let coreDataURL = url.appendingPathComponent("TBA.sqlite")
+             if FileManager.default.fileExists(atPath: coreDataURL.path) {
+                 do {
+                     try persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: coreDataURL, ofType: "sqlite", options: nil)
+                 } catch {
+                     // TODO: Log some error, break
+                 }
+             }
+         }
+         */
 
         /*
          // Setup our Firebase app - make sure this is called before other Firebase setup
@@ -76,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
         return true
     }
 
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    func application(_: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options _: UIScene.ConnectionOptions) -> UISceneConfiguration {
         let sceneConfig = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
         sceneConfig.delegateClass = SceneDelegate.self
         return sceneConfig
@@ -84,32 +104,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
 
     // MARK: Private Methods
 
-    private func setupWindow(_ window: UIWindow) {
+    private func setupWindow(_: UIWindow) {
         Task {
             // TODO: Show/register for isDatafeedDown
         }
     }
-
 }
 
 /*
-private class TBAErrorRecorder: ErrorRecorder {
+ private class TBAErrorRecorder: ErrorRecorder {
 
-    func log(_ format: String, _ args: [CVarArg]) {
-        #if DEBUG
-        print(String(format: format, arguments: args))
-        #else
-        Crashlytics.crashlytics().log(format: format, arguments: getVaList(args))
-        #endif
-    }
+     func log(_ format: String, _ args: [CVarArg]) {
+         #if DEBUG
+         print(String(format: format, arguments: args))
+         #else
+         Crashlytics.crashlytics().log(format: format, arguments: getVaList(args))
+         #endif
+     }
 
-    func record(_ error: Error) {
-        #if DEBUG
-        print(error)
-        #else
-        Crashlytics.crashlytics().record(error: error)
-        #endif
-    }
+     func record(_ error: Error) {
+         #if DEBUG
+         print(error)
+         #else
+         Crashlytics.crashlytics().record(error: error)
+         #endif
+     }
 
-}
-*/
+ }
+ */
+
+// For later, when we need to delete our old Core Data store...
+/*
+ import CoreData
+
+ let AppGroupIdentifier = "group.com.the-blue-alliance.tba.tbadata"
+
+ public class TBAPersistenceContainer: NSPersistentContainer {
+
+     override open class func defaultDirectoryURL() -> URL {
+         if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppGroupIdentifier) {
+             return appGroupURL
+         }
+         return super.defaultDirectoryURL()
+     }
+
+     private static let managedObjectModel: NSManagedObjectModel? = {
+         return NSManagedObjectModel.mergedModel(from: [Bundle.module])
+     } ()
+
+     override public init(name: String, managedObjectModel model: NSManagedObjectModel) {
+         super.init(name: name, managedObjectModel: model)
+     }
+
+     public init() {
+         guard let managedObjectModel = TBAPersistenceContainer.managedObjectModel else {
+             fatalError("Could not load model")
+         }
+         super.init(name: "TBA", managedObjectModel: managedObjectModel)
+     }
+
+ }
+ */

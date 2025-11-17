@@ -6,16 +6,16 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
+import RegexBuilder
 import SwiftUI
 import TBAAPI
-import RegexBuilder
 
 typealias DistrictKey = String
 
 extension DistrictKey {
     var year: Int {
         let regex = /^(?<year>\d{4})/
-        guard let match = self.prefixMatch(of: regex) else {
+        guard let match = prefixMatch(of: regex) else {
             fatalError("Invalid year in district key \(self)")
         }
         // Convert from Substring -> Int, which might fail
@@ -27,7 +27,6 @@ extension DistrictKey {
 }
 
 struct DistrictView: View {
-
     @Environment(\.api) private var api
     @Environment(\.status) private var status
 
@@ -39,7 +38,7 @@ struct DistrictView: View {
 
     init(district: District) {
         self.district = district
-        self.districtKey = district.key
+        districtKey = district.key
     }
 
     init(districtKey: String) {
@@ -48,16 +47,16 @@ struct DistrictView: View {
 
     var body: some View {
         Text(String(districtKey.year))
-        .task {
-            await refreshDistrict()
-        }
-        .refreshable {
-            await refreshDistrict()
-        }
-        .navigationTitle(district?.name ?? districtKey)
-        .toolbarBackground(Color.navigationBarColor, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .navigationBarTitleDisplayMode(.inline)
+            .task {
+                await refreshDistrict()
+            }
+            .refreshable {
+                await refreshDistrict()
+            }
+            .navigationTitle(district?.name ?? districtKey)
+            .toolbarBackground(Color.navigationBarColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
     }
 
     private func refreshDistrict() async {
@@ -76,7 +75,6 @@ struct DistrictView: View {
 }
 
 private struct DistrictListItem: View {
-
     var district: District
 
     var body: some View {

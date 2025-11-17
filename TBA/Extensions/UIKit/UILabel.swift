@@ -1,5 +1,5 @@
 //
-//  UILabel+TBA.swift
+//  UILabel.swift
 //  TBA
 //
 //  Created by Zachary Orr on 4/21/25.
@@ -9,7 +9,6 @@
 import UIKit
 
 extension UILabel {
-
     private class func label(forTextStyle style: UIFont.TextStyle) -> UILabel {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: style)
@@ -20,20 +19,19 @@ extension UILabel {
     }
 
     class func headlineLabel() -> UILabel {
-        return UILabel.label(forTextStyle: .headline)
+        UILabel.label(forTextStyle: .headline)
     }
 
     /// Body tea, face card never declines
     class func bodyLabel() -> UILabel {
-        return UILabel.label(forTextStyle: .body)
+        UILabel.label(forTextStyle: .body)
     }
 
     class func subheadlineLabel() -> UILabel {
-        return UILabel.label(forTextStyle: .subheadline)
+        UILabel.label(forTextStyle: .subheadline)
     }
 
     class func caption2Label() -> UILabel {
-        return UILabel.label(forTextStyle: .caption2)
+        UILabel.label(forTextStyle: .caption2)
     }
-
 }

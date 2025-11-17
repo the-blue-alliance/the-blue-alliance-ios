@@ -29,6 +29,6 @@ public struct SortedKeyPath<Value> {
 
 extension SortedKeyPath: Equatable where Value: Equatable {
     public static func == (lhs: SortedKeyPath<Value>, rhs: SortedKeyPath<Value>) -> Bool {
-        return lhs.wrappedValue == rhs.wrappedValue
+        lhs.wrappedValue == rhs.wrappedValue
     }
 }

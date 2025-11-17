@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct EventListHeader: View {
-
     let title: String
 
     var body: some View {
@@ -23,5 +22,4 @@ struct EventListHeader: View {
         }
         .background(Color(UIColor.tableViewHeaderColor))
     }
-
 }

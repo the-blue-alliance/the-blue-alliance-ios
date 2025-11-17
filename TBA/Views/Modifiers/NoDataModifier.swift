@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func noData<T: Collection>(_ data: T, title: LocalizedStringKey, systemImage: String? = nil, description: Text? = nil) -> some View {
+    func noData(_ data: some Collection, title: LocalizedStringKey, systemImage: String? = nil, description: Text? = nil) -> some View {
         loadingNoData(false, data: data, title: title, systemImage: systemImage, description: description)
     }
 }

@@ -6,11 +6,11 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
-import TBAAPI
 import SwiftUI
+import TBAAPI
 
 private struct SearchServiceEnvironmentKey: EnvironmentKey {
-    static let defaultValue: SearchService = SearchService(api: TBAAPI(apiKey: Secrets().tbaAPIKey))
+    static let defaultValue: SearchService = .init(api: TBAAPI(apiKey: Secrets().tbaAPIKey))
 }
 
 extension EnvironmentValues {
@@ -23,15 +23,13 @@ extension EnvironmentValues {
 extension Scene {
     @discardableResult
     func searchService(searchService: SearchService) -> some Scene {
-        self
-            .environment(\.searchService, searchService)
+        environment(\.searchService, searchService)
     }
 }
 
 extension View {
     @discardableResult
     func searchService(searchService: SearchService) -> some View {
-        self
-            .environment(\.searchService, searchService)
+        environment(\.searchService, searchService)
     }
 }

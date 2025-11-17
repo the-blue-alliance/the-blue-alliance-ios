@@ -1,8 +1,7 @@
 import Foundation
 
-extension URL {
-
-    fileprivate func checkRemoteURLIsReachable() async throws -> Bool {
+private extension URL {
+    func checkRemoteURLIsReachable() async throws -> Bool {
         var request = URLRequest(url: self)
         request.httpMethod = "HEAD"
 
@@ -10,5 +9,4 @@ extension URL {
         _ = try await session.data(for: request)
         return true
     }
-
 }

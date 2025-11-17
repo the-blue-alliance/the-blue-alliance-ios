@@ -10,9 +10,8 @@ import SwiftUI
 import TBAAPI
 
 enum TBATab: CaseIterable, Identifiable {
-
     var id: Self {
-        return self
+        self
     }
 
     case events
@@ -23,26 +22,26 @@ enum TBATab: CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .events:
-            return "Events"
+            "Events"
         case .districts:
-            return "Districts"
+            "Districts"
         case .insights:
-            return "Insights"
+            "Insights"
         case .myTBA:
-            return "myTBA"
+            "myTBA"
         }
     }
 
     var image: String {
         switch self {
         case .events:
-            return "calendar"
+            "calendar"
         case .districts:
-            return "circle.hexagongrid"
+            "circle.hexagongrid"
         case .insights:
-            return "chart.bar"
+            "chart.bar"
         case .myTBA:
-            return "star"
+            "star"
         }
     }
 }
@@ -52,7 +51,6 @@ enum SearchScope: String, CaseIterable {
 }
 
 struct PhoneView: View {
-
     @Environment(\.status) private var status
 
     // @State private var searchIndex: SearchIndex?
@@ -101,4 +99,3 @@ struct PhoneView: View {
 #Preview {
     PhoneView()
 }
-

@@ -1,5 +1,5 @@
 //
-//  Event.swift
+//  Event+TBA.swift
 //  TBAAPI
 //
 //  Created by Zachary Orr on 4/23/25.
@@ -7,30 +7,29 @@
 
 import Foundation
 
-extension Event {
-
+public extension Event {
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter
     }()
 
-    public var startDate: Date {
-        return Self.dateFormatter.date(from: startDateString)!
+    var startDate: Date {
+        Self.dateFormatter.date(from: startDateString)!
     }
 
-    public var startMonth: String {
+    var startMonth: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM"
         return dateFormatter.string(from: startDate)
     }
 
     private var startMonthComponent: Int {
-        return Calendar.current.component(.month, from: startDate)
+        Calendar.current.component(.month, from: startDate)
     }
 
-    public var endDate: Date {
-        return Self.dateFormatter.date(from: endDateString)!
+    var endDate: Date {
+        Self.dateFormatter.date(from: endDateString)!
     }
 
     /**
@@ -41,17 +40,17 @@ extension Event {
      but not necessairly their true sorts (see Comparable for a true sort)
      */
     // TODO: Convert hybridType into enum
-    public var hybridType: String {
+    var hybridType: String {
         // Group districts together, group district CMPs together
         if isDistrictChampionshipEvent {
             // Due to how DCMP divisions come *after* everything else if sorted by default
             // This is a bit of a hack to get them to show up before DCMPs
             // Future-proofing - group DCMP divisions together based on district
-            if isDistrictChampionshipDivision, let district = district {
+            if isDistrictChampionshipDivision, let district {
                 return "\(EventType.districtChampionship.rawValue)..\(district.abbreviation).dcmpd"
             }
             return "\(eventType).dcmp"
-        } else if let district = district, !isDistrictChampionshipEvent {
+        } else if let district, !isDistrictChampionshipEvent {
             return "\(eventType).\(district.abbreviation)"
         } else if isOffseason {
             // Group offseason events together by month
@@ -64,9 +63,9 @@ extension Event {
         return "\(eventType)"
     }
 
-    public var weekString: String {
+    var weekString: String {
         if isDistrictChampionshipEvent {
-            if self.year >= 2017, let city = city {
+            if year >= 2017, let city {
                 return "Championship - \(city)"
             }
             return "Championship"
@@ -81,7 +80,7 @@ extension Event {
             case EventType.festivalOfChampions.rawValue:
                 return "Festival of Champions"
             default:
-                guard let week = week else {
+                guard let week else {
                     return "Other"
                 }
 
@@ -98,17 +97,13 @@ extension Event {
                 } else if year == 2021 {
                     if week == 0 {
                         return "Participation"
-                    }
-                    else if week == 6 {
+                    } else if week == 6 {
                         return "FIRST Innovation Challenge"
-                    }
-                    else if week == 7 {
+                    } else if week == 7 {
                         return "INFINITE RECHARGE At Home Challenge"
-                    }
-                    else if week == 8 {
+                    } else if week == 8 {
                         return "Game Design Challenge"
-                    }
-                    else if week == 9 {
+                    } else if week == 9 {
                         return "Awards"
                     }
                 }
@@ -117,15 +112,15 @@ extension Event {
         }
     }
 
-    public var displayName: String {
+    var displayName: String {
         let fallbackName = name.isEmpty ? key : name
-        guard let shortName = shortName else {
+        guard let shortName else {
             return fallbackName
         }
         return shortName.isEmpty ? fallbackName : shortName
     }
 
-    public var displayLocation: String? {
+    var displayLocation: String? {
         let location = [city, stateProv, country].compactMap { dateComponent in
             guard let dateComponent else {
                 return nil
@@ -135,7 +130,7 @@ extension Event {
         return location.isEmpty ? nil : location
     }
 
-    public var displayDates: String {
+    var displayDates: String {
         let calendar = Calendar.current
 
         let shortDateFormatter = DateFormatter()
@@ -151,10 +146,9 @@ extension Event {
         }
         return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
     }
-
 }
 
-//extension Event {
+// extension Event {
 //    /**
 //     If the event is currently going, based on it's start and end dates.
 //     */
@@ -165,4 +159,4 @@ extension Event {
 //        }
 //        return currentDate >= startDate && currentDate <= endDate
 //    }
-//}
+// }

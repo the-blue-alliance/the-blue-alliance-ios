@@ -9,7 +9,6 @@
 import UIKit
 
 class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
-
     @MainActor var title: String? {
         didSet {
             titleLabel.text = title
@@ -32,7 +31,8 @@ class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
         setupViews()
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -48,8 +48,7 @@ class TitleCollectionHeaderView: UICollectionReusableView, Reusable {
             titleLabel.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
             titleLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: verticalSpacing),
-            titleLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -verticalSpacing)
+            titleLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -verticalSpacing),
         ])
     }
-
 }

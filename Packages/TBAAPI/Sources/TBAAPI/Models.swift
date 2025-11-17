@@ -16,8 +16,8 @@ public typealias TeamFull = Components.Schemas.TeamFull
 public typealias TeamSimple = Components.Schemas.TeamSimple
 
 public typealias Status = Components.Schemas.APIStatus
-extension Status {
-    public typealias AppInfo = Components.Schemas.APIStatusAppVersion
+public extension Status {
+    typealias AppInfo = Components.Schemas.APIStatusAppVersion
 }
 
 public typealias Webcast = Components.Schemas.Webcast

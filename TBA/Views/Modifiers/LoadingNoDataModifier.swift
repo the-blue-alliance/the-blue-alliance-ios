@@ -28,7 +28,7 @@ struct LoadingNoDataModifier<T: Collection>: ViewModifier {
                 ContentUnavailableView(
                     title,
                     systemImage: systemImage,
-                    description: d
+                    description: d,
                 )
                 .opacity((data?.isEmpty ?? true) ? 0.5 : 0.0)
             }
@@ -37,11 +37,11 @@ struct LoadingNoDataModifier<T: Collection>: ViewModifier {
 }
 
 extension View {
-    func loadingNoData<T: Collection>(_ isNoDataRefreshing: Bool, data: T?, title: LocalizedStringKey, systemImage: String? = nil, description: Text? = Text("Pull to refresh")) -> some View {
+    func loadingNoData(_ isNoDataRefreshing: Bool, data: (some Collection)?, title: LocalizedStringKey, systemImage: String? = nil, description: Text? = Text("Pull to refresh")) -> some View {
         modifier(LoadingNoDataModifier(isInitialLoading: isNoDataRefreshing, data: data, title: title, error: nil, systemImage: systemImage ?? "x.square", description: description))
     }
 
-    func loadingNoDataError<T: Collection>(_ isNoDataRefreshing: Bool, data: T?, title: LocalizedStringKey, error: LocalizedError?, systemImage: String? = nil, description: Text? = Text("Pull to refresh")) -> some View {
+    func loadingNoDataError(_ isNoDataRefreshing: Bool, data: (some Collection)?, title: LocalizedStringKey, error: LocalizedError?, systemImage: String? = nil, description: Text? = Text("Pull to refresh")) -> some View {
         modifier(LoadingNoDataModifier(isInitialLoading: isNoDataRefreshing, data: data, title: title, error: error, systemImage: systemImage ?? "x.square", description: description))
     }
 }

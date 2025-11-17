@@ -6,11 +6,10 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
-import TBAAPI
 import SwiftUI
+import TBAAPI
 
 struct YearWeekHeaderView: View {
-
     @Binding private var yearWeek: YearWeek
     @Binding private var showYearWeekSelect: Bool
 
@@ -23,10 +22,10 @@ struct YearWeekHeaderView: View {
         YearHeaderView(
             title: "\(yearWeek.week?.description ?? "---") Events",
             year: Binding(
-                get: { self.yearWeek.year },
-                set: { year in }
+                get: { yearWeek.year },
+                set: { _ in },
             ),
-            showYearSelect: $showYearWeekSelect
+            showYearSelect: $showYearWeekSelect,
         )
     }
 }

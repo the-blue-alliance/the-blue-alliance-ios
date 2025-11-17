@@ -23,23 +23,27 @@ struct SeasonEvent {
     }
 }
 
-extension Array where Element == SeasonEvent {
-
+extension [SeasonEvent] {
     func nextOrFirstEvent() -> SeasonEvent? {
         let today = Date()
-        let sortedSeasonEvents = self.sorted(using: [KeyPathComparator(\.event.startDate), KeyPathComparator(\.event.endDate)])
+        let sortedSeasonEvents = sorted { lhs, rhs in
+            if lhs.event.startDate != rhs.event.startDate {
+                return lhs.event.startDate < rhs.event.startDate
+            }
+            return lhs.event.endDate < rhs.event.endDate
+        }
         let firstSeasonEvent = sortedSeasonEvents.first
         guard firstSeasonEvent?.event.year == Calendar.current.component(.year, from: today) else {
             return firstSeasonEvent
         }
         return sortedSeasonEvents.first { seasonEvent in
             // TODO: Probably a bug here with endDate not working properly on same day
-            return Calendar.current.compare(today, to: seasonEvent.event.endDate, toGranularity: .day) == .orderedAscending
+            Calendar.current.compare(today, to: seasonEvent.event.endDate, toGranularity: .day) == .orderedAscending
         } ?? firstSeasonEvent
     }
 
     private var sortedCMPKeys: [EventKey] {
-        return self.filter(\.event.isCMPFinals).sorted(using: KeyPathComparator(\.event.startDate)).map(\.event.key)
+        filter(\.event.isCMPFinals).sorted { $0.event.startDate < $1.event.startDate }.map(\.event.key)
     }
 
     func groupedByWeek() -> [EventWeek: [SeasonEvent]] {

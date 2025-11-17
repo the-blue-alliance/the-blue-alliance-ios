@@ -1,5 +1,5 @@
 //
-//  UICollectionViewListCell+Reusable.swift
+//  UICollectionViewListCell.swift
 //  TBA
 //
 //  Created by Zachary Orr on 4/23/25.

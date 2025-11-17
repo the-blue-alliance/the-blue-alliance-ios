@@ -9,15 +9,14 @@ import Foundation
 import OpenAPIRuntime
 import OpenAPIURLSession
 
-private struct APIConstants {
+private enum APIConstants {
     static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
 }
 
 public typealias TBAAPI = Client
 
-extension TBAAPI {
-
-    public init(apiKey: String, transport: (any ClientTransport)? = nil) {
+public extension TBAAPI {
+    init(apiKey: String, transport: (any ClientTransport)? = nil) {
         let serverURL = (try? Servers.Server1.url()) ?? APIConstants.baseURL
 
         let configuration = URLSessionConfiguration.ephemeral
@@ -26,17 +25,16 @@ extension TBAAPI {
         ]
 
         #if DEBUG
-        if let urlCache = configuration.urlCache {
-            urlCache.removeAllCachedResponses()
-        }
+            if let urlCache = configuration.urlCache {
+                urlCache.removeAllCachedResponses()
+            }
         #endif
 
         self.init(
             serverURL: serverURL,
             transport: transport ?? URLSessionTransport(configuration: .init(
-                session: URLSession(configuration: configuration)
-            ))
+                session: URLSession(configuration: configuration),
+            )),
         )
     }
-
 }

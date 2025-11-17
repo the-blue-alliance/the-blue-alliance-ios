@@ -1,16 +1,15 @@
 //
-//  EventsView.swift
+//  SeasonEventsView.swift
 //  TBA
 //
 //  Created by Zachary Orr on 6/16/25.
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
-import TBAAPI
 import SwiftUI
+import TBAAPI
 
 struct SeasonEventsView: View {
-
     @Environment(\.api) private var api
     @Environment(\.status) private var status
 
@@ -23,6 +22,7 @@ struct SeasonEventsView: View {
             }
         }
     }
+
     private var eventsForWeek: [Event]? {
         // TODO: We'll probably want some sort of error state in here...
         guard let eventWeek = yearWeek.week else { return nil }
@@ -35,7 +35,7 @@ struct SeasonEventsView: View {
     @State private var showYearWeekSelect = false
 
     init(year: Year) {
-        self.yearWeek = YearWeek(year: year, week: nil)
+        yearWeek = YearWeek(year: year, week: nil)
     }
 
     var body: some View {
@@ -43,11 +43,12 @@ struct SeasonEventsView: View {
         // It's a little wonky because `eventsForWeek` isn't State, so this
         // doesn't update automatically. However, I don't think we have
         // any kind of fallback error handling states in here
-        EventsView(events: eventsForWeek ?? events?.map { $0.event } ?? [])
+        EventsView(events: eventsForWeek ?? events?.map(\.event) ?? [])
             .loadingNoData(
                 isInitialLoading,
                 data: events,
-                title: "No events")
+                title: "No events",
+            )
             .task {
                 await refreshEvents()
             }
@@ -68,7 +69,7 @@ struct SeasonEventsView: View {
                 ToolbarItem(placement: .principal) {
                     YearWeekHeaderView(
                         yearWeek: $yearWeek,
-                        showYearWeekSelect: $showYearWeekSelect
+                        showYearWeekSelect: $showYearWeekSelect,
                     )
                 }
                 // .matchedTransitionSource(id: "transition-id", in: namespace)
@@ -83,7 +84,7 @@ struct SeasonEventsView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showYearWeekSelect) {
-                let years = Array((1992...status.maxSeason).reversed())
+                let years = Array((1992 ... status.maxSeason).reversed())
                 YearWeekSelectView(years: years, yearWeek: yearWeek) { yearWeek in
                     self.yearWeek = yearWeek
                 }

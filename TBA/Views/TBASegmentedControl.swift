@@ -13,7 +13,6 @@ protocol ScrollableTabBarViewDelegate: AnyObject {
 }
 
 class TBASegmentedControl: UIView {
-
     weak var delegate: ScrollableTabBarViewDelegate?
 
     private let scrollView: UIScrollView = {
@@ -69,7 +68,7 @@ class TBASegmentedControl: UIView {
             scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
         NSLayoutConstraint.activate([
@@ -79,7 +78,7 @@ class TBASegmentedControl: UIView {
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             // TODO: This is problematic, because we're not taking our system spacing into account
-            stackView.widthAnchor.constraint(greaterThanOrEqualTo: widthAnchor, multiplier: 1.0)
+            stackView.widthAnchor.constraint(greaterThanOrEqualTo: widthAnchor, multiplier: 1.0),
         ])
 
         underlineLeadingConstraint = underlineIndicator.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 0)
@@ -88,7 +87,7 @@ class TBASegmentedControl: UIView {
             underlineLeadingConstraint,
             underlineWidthConstraint,
             underlineIndicator.bottomAnchor.constraint(equalTo: bottomAnchor),
-            underlineIndicator.heightAnchor.constraint(equalToConstant: 2)
+            underlineIndicator.heightAnchor.constraint(equalToConstant: 2),
         ])
     }
 
@@ -133,7 +132,7 @@ class TBASegmentedControl: UIView {
         } else {
             // Tabs need to scroll, size based on content with minimum width
             stackView.distribution = .fill // Reset to fill
-            tabButtons.forEach { button in
+            for button in tabButtons {
                 // Add width constraints based on intrinsic content size + padding, with minimum
                 let textWidth = button.intrinsicContentSize.width
                 let buttonWidth = max(textWidth + 20, 100) // Text width + padding, minimum 100
@@ -146,7 +145,7 @@ class TBASegmentedControl: UIView {
     }
 
     func selectTab(at index: Int, animated: Bool) {
-        guard index >= 0 && index < tabButtons.count else {
+        guard index >= 0, index < tabButtons.count else {
             return
         }
 

@@ -6,12 +6,11 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
-import TBAAPI
-import SwiftUI
 import Collections
+import SwiftUI
+import TBAAPI
 
 struct EventsView: View {
-
     private var events: OrderedDictionary<String, [Event]>
 
     init(events: [Event], firstEventSortKeyPathComparator: KeyPathComparator<Event> = KeyPathComparator(\Event.hybridType), sectionKey: (Event) -> String = \.hybridType) {
@@ -22,7 +21,7 @@ struct EventsView: View {
         let events = events.sorted(using: firstEventSortKeyPathComparators + [
             KeyPathComparator(\.startDate),
             KeyPathComparator(\.endDate),
-            KeyPathComparator(\.name)
+            KeyPathComparator(\.name),
         ])
         self.events = OrderedDictionary(grouping: events, by: sectionKey)
     }
@@ -34,7 +33,7 @@ struct EventsView: View {
                     ForEach(events.keys, id: \.self) { sectionKey in
                         Section {
                             ForEach(events[sectionKey]!, id: \.key) { event in
-                                VStack() {
+                                VStack {
                                     Spacer()
                                     NavigationLink(value: event) {
                                         EventListItem(event: event)

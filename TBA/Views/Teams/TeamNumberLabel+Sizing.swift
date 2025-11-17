@@ -12,7 +12,6 @@ import Foundation
 import UIKit
 
 extension UIFont {
-
     @MainActor
     func widthForTeamMaxTeamNumber() -> CGFloat {
         // 8 is the widest number in SF Pro
@@ -22,9 +21,8 @@ extension UIFont {
             with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude),
             options: [.usesLineFragmentOrigin, .usesFontLeading],
             attributes: [.font: self],
-            context: nil
+            context: nil,
         )
         return ceil(boundingBox.width)
     }
-
 }

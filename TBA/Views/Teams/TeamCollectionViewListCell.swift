@@ -6,9 +6,8 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
-import UIKit
 import TBAAPI // TODO: We can move this out to an extension somewhere that joins these...
-
+import UIKit
 
 @MainActor private let fontToTeamNumberWidthCache: NSCache<UIFont, NSNumber> = {
     let cache = NSCache<UIFont, NSNumber>()
@@ -17,7 +16,6 @@ import TBAAPI // TODO: We can move this out to an extension somewhere that joins
 }()
 
 struct TeamListContentConfiguration: UIContentConfiguration {
-
     var teamNumber: String?
     var name: String?
     var location: String?
@@ -31,21 +29,20 @@ struct TeamListContentConfiguration: UIContentConfiguration {
     }
 
     func makeContentView() -> any UIView & UIContentView {
-        return TeamListContentView(configuration: self)
+        TeamListContentView(configuration: self)
     }
 
-    func updated(for state: any UIConfigurationState) -> TeamListContentConfiguration {
-        return self
+    func updated(for _: any UIConfigurationState) -> TeamListContentConfiguration {
+        self
     }
 }
 
 private class TeamListContentView: UIView, UIContentView {
-
     private var currentConfiguration: TeamListContentConfiguration
 
     var configuration: UIContentConfiguration {
         get {
-            return currentConfiguration
+            currentConfiguration
         }
         set {
             guard let newConfiguration = newValue as? TeamListContentConfiguration else {
@@ -64,6 +61,7 @@ private class TeamListContentView: UIView, UIContentView {
         // label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return label
     }()
+
     var numberLabelWidthConstraint: NSLayoutConstraint!
 
     let nameLabel: UILabel = {
@@ -107,7 +105,7 @@ private class TeamListContentView: UIView, UIContentView {
     }()
 
     init(configuration: TeamListContentConfiguration) {
-        self.currentConfiguration = configuration
+        currentConfiguration = configuration
 
         super.init(frame: .zero)
 
@@ -119,7 +117,8 @@ private class TeamListContentView: UIView, UIContentView {
         apply(configuration: currentConfiguration)
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -144,7 +143,7 @@ private class TeamListContentView: UIView, UIContentView {
             mainStackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
+            mainStackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
         ])
     }
 
@@ -183,6 +182,5 @@ private class TeamListContentView: UIView, UIContentView {
         updateTeamNumberLabel(configuration: configuration)
     }
 }
-
 
 class TeamCollectionViewListCell: UICollectionViewListCell {}

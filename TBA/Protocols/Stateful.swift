@@ -21,7 +21,6 @@ import UIKit
 }
 
 extension Stateful where Self: UIViewController {
-
     @MainActor
     func showNoDataView() {
         // If the no data view is already in our view hierarchy, don't animate in
@@ -53,19 +52,16 @@ extension Stateful where Self: UIViewController {
         removeNoDataView(noDataViewController.view)
         noDataViewController.removeFromParent()
     }
-
 }
 
 extension Stateful where Self: UICollectionViewController {
-
     @MainActor
     func addNoDataView(_ noDataView: UIView) {
         collectionView.backgroundView = noDataView
     }
 
     @MainActor
-    func removeNoDataView(_ noDataView: UIView) {
+    func removeNoDataView(_: UIView) {
         collectionView.backgroundView = nil
     }
-
 }

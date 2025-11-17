@@ -6,15 +6,13 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
-import TBAAPI
 import SwiftUI
+import TBAAPI
 
 struct EventView: View {
-
     var event: Event
 
     var body: some View {
         Text(event.name)
     }
-
 }

@@ -9,16 +9,15 @@ import SwiftUI
 import TBAAPI
 
 struct YearSelectView: View {
-
     @State var years: [Int]
     @State var year: Year?
-    private let yearSelected: (Year) -> ()
+    private let yearSelected: (Year) -> Void
 
-    init(year: Year, minSeason: Year, maxSeason: Year, yearSelected: @escaping (Year) -> ()) {
-        self.init(year: year, years: Array(minSeason...maxSeason), yearSelected: yearSelected)
+    init(year: Year, minSeason: Year, maxSeason: Year, yearSelected: @escaping (Year) -> Void) {
+        self.init(year: year, years: Array(minSeason ... maxSeason), yearSelected: yearSelected)
     }
 
-    init(year: Year, years: [Int], yearSelected: @escaping (Year) -> ()) {
+    init(year: Year, years: [Int], yearSelected: @escaping (Year) -> Void) {
         self.year = year
         // sort descending
         self.years = years.sorted(by: >)

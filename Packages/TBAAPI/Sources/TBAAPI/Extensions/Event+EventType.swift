@@ -5,9 +5,8 @@
 //  Created by Zachary Orr on 4/23/25.
 //
 
-extension Event {
-
-    public enum EventType: Int {
+public extension Event {
+    enum EventType: Int {
         case regional = 0
         case district = 1
         case districtChampionship = 2
@@ -21,38 +20,37 @@ extension Event {
         case unlabeled = -1
     }
 
-    public var isDistrictChampionshipEvent: Bool {
-        return isDistrictChampionship || isDistrictChampionshipDivision
+    var isDistrictChampionshipEvent: Bool {
+        isDistrictChampionship || isDistrictChampionshipDivision
     }
 
-    public var isDistrictChampionshipDivision: Bool {
-        return eventType == EventType.districtChampionshipDivision.rawValue
+    var isDistrictChampionshipDivision: Bool {
+        eventType == EventType.districtChampionshipDivision.rawValue
     }
 
-    public var isDistrictChampionship: Bool {
-        return eventType == EventType.districtChampionship.rawValue
+    var isDistrictChampionship: Bool {
+        eventType == EventType.districtChampionship.rawValue
     }
 
-    public var isChampionshipEvent: Bool {
-        return isCMPDivision || isCMPFinals
+    var isChampionshipEvent: Bool {
+        isCMPDivision || isCMPFinals
     }
 
-    public var isCMPDivision: Bool {
-        return eventType == EventType.championshipDivision.rawValue
+    var isCMPDivision: Bool {
+        eventType == EventType.championshipDivision.rawValue
     }
 
-    public var isCMPFinals: Bool {
-        return eventType == EventType.championshipFinals.rawValue
+    var isCMPFinals: Bool {
+        eventType == EventType.championshipFinals.rawValue
     }
 
-    public var isOffseason: Bool {
+    var isOffseason: Bool {
         eventType == EventType.offseason.rawValue
     }
 
-    public var isUnlabeled: Bool {
+    var isUnlabeled: Bool {
         eventType == EventType.unlabeled.rawValue
     }
-
 }
 
 extension Event.EventType: Comparable {

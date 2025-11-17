@@ -6,17 +6,16 @@
 //  Copyright © 2025 The Blue Alliance. All rights reserved.
 //
 
-import os
 import Foundation
+import os
 import TBAAPI
 
 actor SearchService {
-
     // TODO: We could set some timestamp to show the last time this was updated in Settings
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: SearchService.self)
+        category: String(describing: SearchService.self),
     )
 
     var api: TBAAPI
@@ -28,7 +27,7 @@ actor SearchService {
         self.api = api
     }
 
-    public func refresh() async throws {
+    func refresh() async throws {
         guard refreshTask == nil else {
             return
         }

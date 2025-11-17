@@ -2,7 +2,6 @@ import Foundation
 import UIKit
 
 extension UINavigationController {
-
     func setupSplitViewLeftBarButtonItem(viewController: UIViewController) {
         if viewControllers.firstIndex(of: viewController) == 0 {
             viewController.navigationItem.leftBarButtonItem = viewController.splitViewController?.displayModeButtonItem
@@ -12,5 +11,4 @@ extension UINavigationController {
             viewController.navigationItem.leftItemsSupplementBackButton = false
         }
     }
-
 }

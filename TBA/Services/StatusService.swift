@@ -1,8 +1,8 @@
-import os
-import Foundation
-import OpenAPIRuntime
-import Observation
 import AsyncAlgorithms
+import Foundation
+import Observation
+import OpenAPIRuntime
+import os
 import TBAAPI
 
 private let defaultStatus = Status(
@@ -12,19 +12,18 @@ private let defaultStatus = Status(
     downEvents: [],
     ios: Status.AppInfo(
         minAppVersion: -1,
-        latestAppVersion: -1
+        latestAppVersion: -1,
     ),
     android: Status.AppInfo(
         minAppVersion: -1,
-        latestAppVersion: -1
+        latestAppVersion: -1,
     ),
-    maxTeamPage: -1
+    maxTeamPage: -1,
 )
 
 @MainActor
 @Observable
 class StatusService {
-
     private(set) var status: Status {
         didSet {
             do {
@@ -40,7 +39,7 @@ class StatusService {
 
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: StatusService.self)
+        category: String(describing: StatusService.self),
     )
 
     init(api: TBAAPI, userDefaults: UserDefaults) {
@@ -52,12 +51,12 @@ class StatusService {
                 self.status = status
                 logger.debug("Using UserDefaults Status")
             } else {
-                self.status = defaultStatus
+                status = defaultStatus
                 logger.debug("Using default Status")
             }
         } catch {
             logger.error("Error fetching Status from UserDefaults: \(error)")
-            self.status = defaultStatus
+            status = defaultStatus
         }
 
         // Kickoff an initial refresh
@@ -86,7 +85,8 @@ class StatusService {
                 if clientError.underlyingError is CancellationError {
                     wasCancelled = true
                 } else if let urlError = clientError.underlyingError as? URLError,
-                          urlError.code == .cancelled {
+                          urlError.code == .cancelled
+                {
                     wasCancelled = true
                 }
             }
@@ -97,12 +97,10 @@ class StatusService {
             }
         }
     }
-
 }
 
 // TODO: Write a wrapper to protect UserDefaults access
-fileprivate extension UserDefaults {
-
+private extension UserDefaults {
     private static let kStatus = "kStatus"
 
     func getStatus() throws -> Status? {
@@ -116,5 +114,4 @@ fileprivate extension UserDefaults {
         let encodedStatus = try PropertyListEncoder().encode(status)
         set(encodedStatus, forKey: Self.kStatus)
     }
-
 }

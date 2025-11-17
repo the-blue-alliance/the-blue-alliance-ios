@@ -10,20 +10,20 @@ import SwiftUI
 import TBAAPI
 
 extension EnvironmentValues {
-    @Entry var api: TBAAPI = TBAAPI(apiKey: Secrets().tbaAPIKey)
-    @Entry var status: Status = Status(
+    @Entry var api: TBAAPI = .init(apiKey: Secrets().tbaAPIKey)
+    @Entry var status: Status = .init(
         currentSeason: Calendar.current.year,
         maxSeason: Calendar.current.year,
         isDatafeedDown: false,
         downEvents: [],
         ios: Status.AppInfo(
             minAppVersion: -1,
-            latestAppVersion: -1
+            latestAppVersion: -1,
         ),
         android: Status.AppInfo(
             minAppVersion: -1,
-            latestAppVersion: -1
+            latestAppVersion: -1,
         ),
-        maxTeamPage: 0
+        maxTeamPage: 0,
     )
 }

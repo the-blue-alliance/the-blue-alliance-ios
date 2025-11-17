@@ -1,7 +1,6 @@
 import Foundation
 
 extension Int {
-
     var suffix: String {
         let positive = abs(self)
 
@@ -20,5 +19,4 @@ extension Int {
             return "th"
         }
     }
-
 }

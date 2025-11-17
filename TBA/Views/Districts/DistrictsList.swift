@@ -9,7 +9,6 @@ import SwiftUI
 import TBAAPI
 
 struct DistrictsList: View {
-
     @Environment(\.api) private var api
     @Environment(\.status) private var status
 
@@ -50,7 +49,7 @@ struct DistrictsList: View {
                 YearHeaderView(
                     title: "Districts",
                     year: $year,
-                    showYearSelect: $showYearSelect
+                    showYearSelect: $showYearSelect,
                 )
             }
             // .matchedTransitionSource(id: "transition-id", in: namespace)
@@ -82,7 +81,6 @@ struct DistrictsList: View {
 }
 
 private struct DistrictListItem: View {
-
     var district: District
 
     var body: some View {

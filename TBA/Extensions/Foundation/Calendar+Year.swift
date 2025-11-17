@@ -10,6 +10,6 @@ import Foundation
 
 extension Calendar {
     var year: Int {
-        return Calendar.current.component(.year, from: Date())
+        Calendar.current.component(.year, from: Date())
     }
 }

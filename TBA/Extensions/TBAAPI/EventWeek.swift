@@ -27,17 +27,17 @@ public enum EventWeek: Hashable {
 
     public var description: String {
         switch self {
-        case .eventType(_, let eventTypeString):
+        case let .eventType(_, eventTypeString):
             return eventTypeString
-        case .week(_, let weekString):
+        case let .week(_, weekString):
             return weekString
-        case .cmp(_, let index, let city):
+        case let .cmp(_, index, city):
             if let _ = index, let city {
                 return "FIRST Championship - \(city)"
             } else {
                 return "FIRST Championship"
             }
-        case .offseason(let month):
+        case let .offseason(month):
             let monthSymbol = Calendar.current.standaloneMonthSymbols[month - 1]
             return "\(monthSymbol) Offseason"
         case .other:
@@ -47,11 +47,11 @@ public enum EventWeek: Hashable {
 }
 
 extension EventWeek: Comparable {
-    public static func <(lhs: EventWeek, rhs: EventWeek) -> Bool {
+    public static func < (lhs: EventWeek, rhs: EventWeek) -> Bool {
         switch lhs {
         case .other:
             return false
-        case .offseason(let lhsMonth) where lhsMonth == 1:
+        case let .offseason(lhsMonth) where lhsMonth == 1:
             // Weirdly, float January offseasons to the top
             // Noting: This is probably wrong, since any January offseason would
             // be happening in the ~3-7 days before Kickoff, so technically these events
@@ -59,34 +59,34 @@ extension EventWeek: Comparable {
             return true
         case .eventType(.preseason, _):
             switch rhs {
-            case .offseason(let rhsMonth) where rhsMonth == 1:
+            case let .offseason(rhsMonth) where rhsMonth == 1:
                 return false
             default:
                 return true
             }
-        case .eventType(let lhsEventType, _):
+        case let .eventType(lhsEventType, _):
             switch rhs {
-            case .eventType(let rhsEventType, _):
+            case let .eventType(rhsEventType, _):
                 return lhsEventType < rhsEventType
-            case .offseason(_):
+            case .offseason:
                 return true
             default:
                 return false
             }
-        case .week(let lhsWeek, _):
+        case let .week(lhsWeek, _):
             switch rhs {
-            case .offseason(let rhsMonth) where rhsMonth == 1:
+            case let .offseason(rhsMonth) where rhsMonth == 1:
                 return false
             case .eventType(.preseason, _):
                 return false
-            case .week(let rhsWeek, _):
+            case let .week(rhsWeek, _):
                 return lhsWeek < rhsWeek
             default:
                 return true
             }
-        case .cmp(_, let lhsIndex, _):
+        case let .cmp(_, lhsIndex, _):
             switch rhs {
-            case .cmp(_, let rhsIndex, _):
+            case let .cmp(_, rhsIndex, _):
                 if let lhsIndex, let rhsIndex {
                     return lhsIndex < rhsIndex
                 }
@@ -96,9 +96,9 @@ extension EventWeek: Comparable {
             default:
                 return false
             }
-        case .offseason(let lhsMonth):
+        case let .offseason(lhsMonth):
             switch rhs {
-            case .offseason(let rhsMonth):
+            case let .offseason(rhsMonth):
                 return lhsMonth < rhsMonth
             case .other:
                 return true
@@ -111,7 +111,7 @@ extension EventWeek: Comparable {
 
 extension Event {
     public var eventWeek: EventWeek? {
-        if let week = week {
+        if let week {
             /**
              * Special cases for 2016:
              * Week 1 is actually Week 0.5, eveything else is one less
@@ -132,10 +132,10 @@ extension Event {
         return .eventType(eventType, eventTypeString)
     }
 
-    internal func eventWeek(cmpIndex: Int) -> EventWeek? {
+    func eventWeek(cmpIndex: Int) -> EventWeek? {
         let eventWeek = eventWeek
         switch eventWeek {
-        case .cmp(let key, let index, let city) where index == nil:
+        case let .cmp(key, index, city) where index == nil:
             return .cmp(key, cmpIndex, city)
         default:
             return eventWeek

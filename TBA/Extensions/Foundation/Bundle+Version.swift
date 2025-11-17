@@ -1,9 +1,8 @@
 import Foundation
 
 extension Bundle {
-
     var versionString: String? {
-        return infoDictionary?["CFBundleShortVersionString"] as? String
+        infoDictionary?["CFBundleShortVersionString"] as? String
     }
 
     var buildVersionNumber: Int {
@@ -14,7 +13,6 @@ extension Bundle {
     }
 
     var displayVersionString: String {
-        return "v\(versionString ?? "0.0.0") (\(buildVersionNumber))"
+        "v\(versionString ?? "0.0.0") (\(buildVersionNumber))"
     }
-
 }

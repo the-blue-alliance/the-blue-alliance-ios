@@ -15,16 +15,15 @@ struct YearWeek: Equatable, Hashable {
 }
 
 private struct WeekSelectView: View {
-
     @Environment(\.api) private var api
 
     private let year: Int
-    private let weekSelected: (YearWeek) -> ()
+    private let weekSelected: (YearWeek) -> Void
 
     @State private var yearWeek: YearWeek?
     @State private var yearWeeks: [YearWeek] = []
 
-    init(year: Year, yearWeek: YearWeek, weekSelected: @escaping (YearWeek) -> ()) {
+    init(year: Year, yearWeek: YearWeek, weekSelected: @escaping (YearWeek) -> Void) {
         self.year = year
         self.weekSelected = weekSelected
 
@@ -38,7 +37,7 @@ private struct WeekSelectView: View {
                 Spacer()
                 Image(systemName: "checkmark")
                     .bold()
-                // .foregroundStyle(.accent)
+                    // .foregroundStyle(.accent)
                     .visible(self.yearWeek == yearWeek)
             }
         }
@@ -66,18 +65,17 @@ private struct WeekSelectView: View {
 }
 
 struct YearWeekSelectView: View {
-
     @State private var yearPath: [Year] = []
 
     fileprivate let years: [Int]
     @State fileprivate var yearWeek: YearWeek
-    private let yearWeekSelected: (YearWeek) -> ()
+    private let yearWeekSelected: (YearWeek) -> Void
 
-    init(year: Year, week: EventWeek? = nil, minYear: Int, maxYear: Int, yearWeekSelected: @escaping (YearWeek) -> ()) {
-        self.init(years: Array(minYear...maxYear), yearWeek: YearWeek(year: year, week: week), yearWeekSelected: yearWeekSelected)
+    init(year: Year, week: EventWeek? = nil, minYear: Int, maxYear: Int, yearWeekSelected: @escaping (YearWeek) -> Void) {
+        self.init(years: Array(minYear ... maxYear), yearWeek: YearWeek(year: year, week: week), yearWeekSelected: yearWeekSelected)
     }
 
-    init(years: [Int], yearWeek: YearWeek, yearWeekSelected: @escaping (YearWeek) -> ()) {
+    init(years: [Int], yearWeek: YearWeek, yearWeekSelected: @escaping (YearWeek) -> Void) {
         // sort descending
         self.years = years.sorted(by: >)
         self.yearWeek = yearWeek

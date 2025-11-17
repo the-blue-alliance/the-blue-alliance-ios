@@ -7,60 +7,59 @@
 
 import SwiftUI
 
-extension ShapeStyle where Self == Color {
-
+public extension ShapeStyle where Self == Color {
     private static var primaryBlue: Color {
-        return Color(light: Color(hex: 0x3F51B5), dark: Color(hex: 0x5C6BC0))
+        Color(light: Color(hex: 0x3F51B5), dark: Color(hex: 0x5C6BC0))
     }
 
     private static var primaryDarkBlue: Color {
-        return Color(light: Color(hex: 0x303F9F), dark: Color(hex: 0x3F51B5))
+        Color(light: Color(hex: 0x303F9F), dark: Color(hex: 0x3F51B5))
     }
 
-    public static var accentYellow: Color {
-        return Color(hex: 0xFFD600)
+    static var accentYellow: Color {
+        Color(hex: 0xFFD600)
     }
 
-    public static var highlightColor: Color {
-        return Color(light: .primaryBlue, dark: .accentYellow)
+    static var highlightColor: Color {
+        Color(light: .primaryBlue, dark: .accentYellow)
     }
 
-    public static var navigationBarColor: Color {
-        return Color(light: .primaryBlue, dark: .backgroundGray)
+    static var navigationBarColor: Color {
+        Color(light: .primaryBlue, dark: .backgroundGray)
     }
 
-    public static var navigationBarTintColor: Color {
-        return Color(light: .white, dark: .accentYellow)
+    static var navigationBarTintColor: Color {
+        Color(light: .white, dark: .accentYellow)
     }
 
-    public static var tabBarTintColor: Color {
-        return Color(light: .blue, dark: .accentYellow)
+    static var tabBarTintColor: Color {
+        Color(light: .blue, dark: .accentYellow)
     }
 
-    public static var tableViewHeaderColor: Color {
-        return Color(light: .primaryDarkBlue, dark: .primaryGray)
+    static var tableViewHeaderColor: Color {
+        Color(light: .primaryDarkBlue, dark: .primaryGray)
     }
 
-    public static var segmentedControlSelectedColor: Color {
-        return Color(light: .primaryBlue, dark: .white)
+    static var segmentedControlSelectedColor: Color {
+        Color(light: .primaryBlue, dark: .white)
     }
 
     /*
-    public static var yearSelectColor: Color {
-        return Color(light: .white, dark: Color(uiColor: .systemGray5))
-    }
-    */
+     public static var yearSelectColor: Color {
+         return Color(light: .white, dark: Color(uiColor: .systemGray5))
+     }
+     */
 
     private static var primaryGray: Color {
-        return Color(.systemGray4)
+        Color(.systemGray4)
     }
 
     private static var backgroundGray: Color {
-        return Color(.systemGray6)
+        Color(.systemGray6)
     }
 
-    public static var systemBackground: Color {
-        return Color(uiColor: UIColor.systemBackground)
+    static var systemBackground: Color {
+        Color(uiColor: UIColor.systemBackground)
     }
 }
 
@@ -69,9 +68,9 @@ private extension Color {
         self = Color(uiColor: UIColor { traitCollection in
             switch traitCollection.userInterfaceStyle {
             case .dark:
-                return UIColor(dark)
+                UIColor(dark)
             default:
-                return UIColor(light)
+                UIColor(light)
             }
         })
     }
@@ -81,10 +80,10 @@ private extension Color {
     init(hex: UInt, alpha: Double = 1.0) {
         self.init(
             .sRGB,
-            red: Double((hex >> 16) & 0xff) / 255,
-            green: Double((hex >> 08) & 0xff) / 255,
-            blue: Double((hex >> 00) & 0xff) / 255,
-            opacity: alpha
+            red: Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 08) & 0xFF) / 255,
+            blue: Double((hex >> 00) & 0xFF) / 255,
+            opacity: alpha,
         )
     }
 }
@@ -92,10 +91,10 @@ private extension Color {
 private extension UIColor {
     convenience init(hex: UInt, alpha: Double = 1.0) {
         self.init(
-            red: Double((hex >> 16) & 0xff) / 255,
-            green: Double((hex >> 08) & 0xff) / 255,
-            blue: Double((hex >> 00) & 0xff) / 255,
-            alpha: alpha
+            red: Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 08) & 0xFF) / 255,
+            blue: Double((hex >> 00) & 0xFF) / 255,
+            alpha: alpha,
         )
     }
 }

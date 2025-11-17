@@ -12,7 +12,8 @@ let package = Package(
     products: [
         .library(
             name: "TBAAPI",
-            targets: ["TBAAPI"])
+            targets: ["TBAAPI"],
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.0.0"),
@@ -28,15 +29,15 @@ let package = Package(
             ],
             plugins: [
                 .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator"),
-            ]
+            ],
         ),
         .executableTarget(
             name: "TBAAPI-main",
-            dependencies: ["TBAAPI"]
+            dependencies: ["TBAAPI"],
         ),
         .testTarget(
             name: "TBAAPITests",
-            dependencies: ["TBAAPI"]
-        )
-    ]
+            dependencies: ["TBAAPI"],
+        ),
+    ],
 )
