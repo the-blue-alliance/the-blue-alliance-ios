@@ -16,6 +16,10 @@ public extension ShapeStyle where Self == Color {
         Color(light: Color(hex: 0x303F9F), dark: Color(hex: 0x3F51B5))
     }
 
+    static var accentColor: Color {
+        Color(light: .primaryBlue, dark: .accentYellow)
+    }
+
     static var accentYellow: Color {
         Color(hex: 0xFFD600)
     }

@@ -30,6 +30,7 @@ struct SeasonEventsView: View {
         return eventsByWeek[eventWeek]?.map(\.event)
     }
 
+    @State private var refreshTask: Task<Void, Never>?
     @State private var isInitialLoading = false
     @State private var error: Error?
     @State private var showYearWeekSelect = false
@@ -50,15 +51,15 @@ struct SeasonEventsView: View {
                 title: "No events",
             )
             .task {
-                await refreshEvents()
+                await startRefreshTask()
             }
             .refreshable {
-                await refreshEvents()
+                await startRefreshTask()
             }
             .onChange(of: yearWeek) {
+                events = nil
                 Task {
-                    events = nil // Clear events when year changes
-                    await refreshEvents() // Load events for the new year
+                    await startRefreshTask()
                 }
             }
             .navigationTitle("Events")
@@ -74,14 +75,15 @@ struct SeasonEventsView: View {
                 }
                 // .matchedTransitionSource(id: "transition-id", in: namespace)
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Settings", systemImage: "gear") {
+                    Button("Settings", systemImage: "gearshape") {
                         // TODO: Show Settings in a sheet
                     }
-                    .tint(.accentYellow)
+                    // .tint(.accentYellow)
                 }
             }
             .toolbarBackground(Color.navigationBarColor, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
+            .scrollEdgeEffectStyle(.hard, for: .top)
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showYearWeekSelect) {
                 let years = Array((1992 ... status.maxSeason).reversed())
@@ -94,6 +96,14 @@ struct SeasonEventsView: View {
             }
     }
 
+    private func startRefreshTask() async {
+        refreshTask?.cancel()
+        refreshTask = Task.immediate {
+            await refreshEvents()
+        }
+        await refreshTask?.value
+    }
+
     private func refreshEvents() async {
         error = nil
         if events == nil {
@@ -102,8 +112,10 @@ struct SeasonEventsView: View {
         defer { isInitialLoading = false }
         do {
             let response = try await api.getEventsByYear(path: .init(year: yearWeek.year))
+            guard !Task.isCancelled else { return }
             events = try response.ok.body.json.compactMap { SeasonEvent(event: $0) }
         } catch {
+            guard !Task.isCancelled else { return }
             self.error = error
         }
     }

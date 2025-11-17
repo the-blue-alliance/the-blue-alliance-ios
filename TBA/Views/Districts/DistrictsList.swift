@@ -54,7 +54,7 @@ struct DistrictsList: View {
             }
             // .matchedTransitionSource(id: "transition-id", in: namespace)
             ToolbarItem(placement: .topBarLeading) {
-                Button("Settings", systemImage: "gear") {
+                Button("Settings", systemImage: "gearshape") {
                     // TODO: Show Settings in a sheet
                 }
                 .tint(.accentYellow)

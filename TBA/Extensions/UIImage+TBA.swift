@@ -19,7 +19,7 @@ extension UIImage {
     }
 
     static var settingsIcon: UIImage? {
-        UIImage(systemName: "gear")
+        UIImage(systemName: "gearshape")
     }
 
     static var sortFilterIcon: UIImage? {
