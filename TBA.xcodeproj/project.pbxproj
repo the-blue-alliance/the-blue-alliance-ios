@@ -6,6 +6,22 @@
 	objectVersion = 70;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		92D5403C2ECAF4D000079B8D /* UpdateAPI */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 92D5403D2ECAF4D000079B8D /* Build configuration list for PBXAggregateTarget "UpdateAPI" */;
+			buildPhases = (
+				92D540402ECAF4DE00079B8D /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = UpdateAPI;
+			packageProductDependencies = (
+			);
+			productName = UpdateAPI;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		920060142DBDB1B800C9C40E /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 920060132DBDB1B800C9C40E /* AsyncAlgorithms */; };
 		9200601E2DBEB53E00C9C40E /* TBASegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200601D2DBEB53800C9C40E /* TBASegmentedControl.swift */; };
@@ -343,6 +359,9 @@
 						CreatedOnToolsVersion = 26.1.1;
 						TestTargetID = 92942D911E2154DA008E79CA;
 					};
+					92D5403C2ECAF4D000079B8D = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
 				};
 			};
 			buildConfigurationList = 92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "TBA" */;
@@ -365,6 +384,7 @@
 			targets = (
 				92942D911E2154DA008E79CA /* TBA */,
 				92D53FE82ECA4B0900079B8D /* TBATests */,
+				92D5403C2ECAF4D000079B8D /* UpdateAPI */,
 			);
 		};
 /* End PBXProject section */
@@ -433,6 +453,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\n\nset -e  # Exit immediately if any command fails\n\n# Check if TBA/Secrets.plist exists\nif [ ! -f \"${SRCROOT}/TBA/Secrets.plist\" ]; then\n    echo \"TBA/Secrets.plist not found. Copying from scripts/mock-Secrets.plist...\"\n\n    # Verify source file exists\n    if [ ! -f \"${SRCROOT}/scripts/mock-Secrets.plist\" ]; then\n        echo \"ERROR: Source file scripts/mock-Secrets.plist not found!\"\n        exit 1\n    fi\n\n    # Attempt to copy\n    if ! cp \"${SRCROOT}/scripts/mock-Secrets.plist\" \"${SRCROOT}/TBA/Secrets.plist\"; then\n        echo \"ERROR: Failed to copy mock-Secrets.plist to TBA/Secrets.plist\"\n        exit 1\n    fi\n\n    echo \"Successfully copied mock-Secrets.plist to TBA/Secrets.plist\"\nelse\n    echo \"TBA/Secrets.plist already exists. Skipping copy.\"\nfi\n\n# Verify tba_api_key is not empty\nTBA_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :tba_api_key\" \"${SRCROOT}/TBA/Secrets.plist\" 2>/dev/null || echo \"\")\n\nif [ -z \"$TBA_API_KEY\" ]; then\n    echo \"ERROR: tba_api_key is empty in TBA/Secrets.plist\"\n    echo \"Please add your TBA API key to TBA/Secrets.plist\"\n    echo \"You can get an API key from: https://www.thebluealliance.com/account\"\n    exit 1\nfi\n\necho \"TBA API key found. Build can proceed.\"\n\n";
+		};
+		92D540402ECAF4DE00079B8D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/scripts/apiv3_teams_all_patch.patch",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${SRCROOT}/Packages/TBAAPI/Sources/TBAAPI/openapi.json",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\nset -e  # Exit immediately if a command exits with a non-zero status\n\nAPI_URL=\"https://www.thebluealliance.com/swagger/api_v3.json\"\nOUTPUT_PATH=\"${SRCROOT}/Packages/TBAAPI/Sources/TBAAPI/openapi.json\"\nPATCH_PATH=\"${SRCROOT}/scripts/apiv3_teams_all_patch.patch\"\n\necho \"Downloading OpenAPI spec from ${API_URL}...\"\n\n# Download the API spec\nif ! curl -f -s -o \"${OUTPUT_PATH}\" \"${API_URL}\"; then\n    echo \"error: Failed to download OpenAPI spec from ${API_URL}\"\n    exit 1\nfi\n\necho \"Successfully downloaded OpenAPI spec to ${OUTPUT_PATH}\"\n\n# Apply the patch\necho \"Applying patch from ${PATCH_PATH}...\"\n\n# Change to the repository root to apply the patch\ncd \"${SRCROOT}\"\n\nif ! git apply --check \"${PATCH_PATH}\" 2>/dev/null; then\n    echo \"error: Patch check failed. The patch may already be applied or conflicts exist.\"\n    exit 1\nfi\n\nif ! git apply \"${PATCH_PATH}\"; then\n    echo \"error: Failed to apply patch from ${PATCH_PATH}\"\n    exit 1\nfi\n\necho \"Successfully applied patch\"\necho \"OpenAPI spec updated successfully!\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -698,6 +737,22 @@
 			};
 			name = Release;
 		};
+		92D5403E2ECAF4D000079B8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		92D5403F2ECAF4D000079B8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -724,6 +779,15 @@
 			buildConfigurations = (
 				92D53FF02ECA4B0900079B8D /* Debug */,
 				92D53FF12ECA4B0900079B8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		92D5403D2ECAF4D000079B8D /* Build configuration list for PBXAggregateTarget "UpdateAPI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92D5403E2ECAF4D000079B8D /* Debug */,
+				92D5403F2ECAF4D000079B8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
