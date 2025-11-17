@@ -68,6 +68,7 @@ struct SeasonEventsView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
+                    // TODO: We need to make this expand the entire toolbar item (as much as possible)
                     YearWeekHeaderView(
                         yearWeek: $yearWeek,
                         showYearWeekSelect: $showYearWeekSelect,

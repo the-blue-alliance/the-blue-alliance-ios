@@ -120,6 +120,10 @@ public extension Event {
         return shortName.isEmpty ? fallbackName : shortName
     }
 
+    var displayNameWithYear: String {
+        return "\(displayName) \(year)"
+    }
+
     var displayLocation: String? {
         let location = [city, stateProv, country].compactMap { dateComponent in
             guard let dateComponent else {
