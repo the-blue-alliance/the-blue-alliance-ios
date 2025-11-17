@@ -77,6 +77,8 @@
 		92D5413C2ECAF93F00079B8D /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540C92ECAF93F00079B8D /* UIColor.swift */; };
 		92D541402ECAF96200079B8D /* TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D5413D2ECAF96200079B8D /* TBATests.swift */; };
 		92D541412ECAF96200079B8D /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92D5413E2ECAF96200079B8D /* TestSecrets.plist */; };
+		92DDA4E32ECBD85C00F95FD2 /* EventHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDA4E22ECBD85700F95FD2 /* EventHeaderView.swift */; };
+		92DDA4E52ECBDB0500F95FD2 /* EventItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDA4E42ECBDB0500F95FD2 /* EventItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +160,8 @@
 		92D541062ECAF93F00079B8D /* TBA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TBA.entitlements; sourceTree = "<group>"; };
 		92D5413D2ECAF96200079B8D /* TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBATests.swift; sourceTree = "<group>"; };
 		92D5413E2ECAF96200079B8D /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
+		92DDA4E22ECBD85700F95FD2 /* EventHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderView.swift; sourceTree = "<group>"; };
+		92DDA4E42ECBDB0500F95FD2 /* EventItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -414,6 +418,8 @@
 			isa = PBXGroup;
 			children = (
 				92D540E22ECAF93F00079B8D /* EventView.swift */,
+				92DDA4E42ECBDB0500F95FD2 /* EventItemView.swift */,
+				92DDA4E22ECBD85700F95FD2 /* EventHeaderView.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -639,6 +645,7 @@
 				92D541282ECAF93F00079B8D /* URL.swift in Sources */,
 				92D541292ECAF93F00079B8D /* NoDataModifier.swift in Sources */,
 				92D5412A2ECAF93F00079B8D /* DistrictsList.swift in Sources */,
+				92DDA4E52ECBDB0500F95FD2 /* EventItemView.swift in Sources */,
 				92D5412B2ECAF93F00079B8D /* TeamNumberLabel+Sizing.swift in Sources */,
 				92D5412C2ECAF93F00079B8D /* Calendar+Year.swift in Sources */,
 				92D5412D2ECAF93F00079B8D /* Bundle+Version.swift in Sources */,
@@ -656,6 +663,7 @@
 				92D541392ECAF93F00079B8D /* TeamCollectionViewListCell.swift in Sources */,
 				92D5413A2ECAF93F00079B8D /* UIFont+TBA.swift in Sources */,
 				92D5413B2ECAF93F00079B8D /* Array+Event.swift in Sources */,
+				92DDA4E32ECBD85C00F95FD2 /* EventHeaderView.swift in Sources */,
 				92D5413C2ECAF93F00079B8D /* UIColor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
