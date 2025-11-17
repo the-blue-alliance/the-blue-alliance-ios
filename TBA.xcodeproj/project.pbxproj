@@ -85,7 +85,6 @@
 		9254EA022DB6DA6800044332 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		92564C6A21644AA30047917F /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
-		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* TBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92942D9E1E2154DA008E79CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -98,7 +97,6 @@
 		92D034F32DB6F69E0010A53A /* LaunchStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchStoryboard.storyboard; sourceTree = "<group>"; };
 		92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionHeaderView.swift; sourceTree = "<group>"; };
 		92D53F8E2ECA426C00079B8D /* TBA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TBA.entitlements; sourceTree = "<group>"; };
-		92D53FE32ECA49A600079B8D /* TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBATests.swift; sourceTree = "<group>"; };
 		92D53FE92ECA4B0900079B8D /* TBATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D8CD1220C2634200777D93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		92DF54E021B1B65A0082C58C /* StatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusService.swift; sourceTree = "<group>"; };
@@ -114,7 +112,6 @@
 		923C5E942EA5C72E00BAA0C4 /* Districts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Districts; sourceTree = "<group>"; };
 		924C0E872DBB273B008E73EA /* Extensions */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Extensions; sourceTree = "<group>"; };
 		924C0E962DBB27D6008E73EA /* Protocols */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Protocols; sourceTree = "<group>"; };
-		924C0E972DBB2915008E73EA /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		92D53FEA2ECA4B0900079B8D /* TBATests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TBATests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -163,7 +160,6 @@
 			isa = PBXGroup;
 			children = (
 				92942D941E2154DA008E79CA /* TBA */,
-				92D6483B20BE4CB8008F0DB3 /* TBATests */,
 				92D53FEA2ECA4B0900079B8D /* TBATests */,
 				92942D931E2154DA008E79CA /* Products */,
 			);
@@ -189,7 +185,6 @@
 				924C0E962DBB27D6008E73EA /* Protocols */,
 				924C0E872DBB273B008E73EA /* Extensions */,
 				92FFE5221E7C994B0037E48C /* Views */,
-				924C0E972DBB2915008E73EA /* Data */,
 				92942DAD1E215722008E79CA /* ViewControllers */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
@@ -234,15 +229,6 @@
 				92D0350E2DB735840010A53A /* TitleCollectionHeaderView.swift */,
 			);
 			path = Headers;
-			sourceTree = "<group>";
-		};
-		92D6483B20BE4CB8008F0DB3 /* TBATests */ = {
-			isa = PBXGroup;
-			children = (
-				92D53FE32ECA49A600079B8D /* TBATests.swift */,
-				92564C71216457060047917F /* TestSecrets.plist */,
-			);
-			path = TBATests;
 			sourceTree = "<group>";
 		};
 		92F8E354209AAE400094213F /* Services */ = {
@@ -297,7 +283,6 @@
 				923C5E942EA5C72E00BAA0C4 /* Districts */,
 				924C0E872DBB273B008E73EA /* Extensions */,
 				924C0E962DBB27D6008E73EA /* Protocols */,
-				924C0E972DBB2915008E73EA /* Data */,
 			);
 			name = TBA;
 			packageProductDependencies = (
