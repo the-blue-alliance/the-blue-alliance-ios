@@ -31,22 +31,31 @@ struct EventHeaderView: View {
             Text(event.displayNameWithYear)
                 .font(.title.bold())
 
-            VStack(alignment: .leading, spacing: 4) {
-                Label(event.displayDates, systemImage: "calendar")
+            Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 4) {
+                GridRow {
+                    Image(systemName: "calendar")
+                        .gridColumnAlignment(.center)
+                    Text(event.displayDates)
+                }
                 if let location = event.displayLocation {
-                    Label(location, systemImage: "mappin")
+                    GridRow {
+                        Image(systemName: "mappin")
+                            .gridColumnAlignment(.center)
+                        Text(location)
+                    }
                 }
                 if let website = event.website, let url = URL(string: website) {
-                    Button(action: {
-                        UIApplication.shared.open(url)
-                    }) {
-                        HStack(spacing: 4) {
-                            Label(website, systemImage: "link")
-                            Image(systemName: "arrow.up.right.square")
-                                .font(.caption)
+                    GridRow {
+                        Image(systemName: "link")
+                            .gridColumnAlignment(.center)
+                        Link(destination: url) {
+                            HStack(spacing: 4) {
+                                Text(website)
+                                Image(systemName: "arrow.up.right.square")
+                                    .font(.caption)
+                            }
                         }
                     }
-                    .buttonStyle(.plain)
                 }
                 // TODO: Statbotics?
             }

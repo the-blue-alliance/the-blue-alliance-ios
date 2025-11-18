@@ -10,9 +10,22 @@ import SwiftUI
 import TBAAPI
 
 struct EventView: View {
-    var event: Event
 
-    @State private var isStarred = true
+    @Environment(\.api) private var api
+
+    @State var event: Event
+
+    @State private var refreshTask: Task<Void, Never>?
+    @State private var isInitialLoading = false
+    @State private var error: Error?
+    @State private var showYearWeekSelect = false
+
+    // Fetch teams...
+    @State private var teams: [Team]? = nil
+
+    init(event: Event) {
+        self.event = event
+    }
 
     var body: some View {
         ScrollView {
@@ -24,20 +37,77 @@ struct EventView: View {
                 Divider()
 
                 VStack(spacing: 0) {
-                    EventItemView(title: "Matches")
-                    EventItemView(title: "Rankings")
-                    EventItemView(title: "Alliances")
-                    EventItemView(title: "Awards")
-                    EventItemView(title: "District Points")
-                    EventItemView(title: "Teams")
-                    EventItemView(title: "Insights")
-                    EventItemView(title: "Media")
+                    NavigationRowView(
+                        icon: "person.2.fill",
+                        iconColor: .blue,
+                        title: "Teams") {
+                            Text("Teams")
+                        }
+                    NavigationRowView(
+                        icon: "chart.bar.horizontal.page.fill",
+                        iconColor: .blue,
+                        title: "Matches") {
+                            Text("Matches")
+                        }
+                    NavigationRowView(
+                        icon: "text.line.first.and.arrowtriangle.forward",
+                        iconColor: .blue,
+                        title: "Rankings") {
+                            Text("Rankings")
+                        }
+                    NavigationRowView(
+                        icon: "person.3.fill",
+                        iconColor: .blue,
+                        title: "Alliances") {
+                            Text("Aliances")
+                        }
+                    NavigationRowView(
+                        icon: "chart.bar.xaxis.ascending",
+                        iconColor: .blue,
+                        title: "Insights") {
+                            Text("Insights")
+                        }
+                    NavigationRowView(
+                        icon: "trophy.fill",
+                        iconColor: .yellow,
+                        title: "Awards") {
+                            Text("Awards")
+                        }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.systemGray6))
+
+                /*
+                VStack(spacing: 0) {
+                    NavigationRowView(
+                        icon: "person.2.fill",
+                        iconColor: Color.blue,
+                        title: "Teams",
+                        count: nil
+                    ) {
+                        Text("Teams View")
+                    }
+
+                    Divider()
+                        .padding(.leading, 64)
+
+                    NavigationRowView(
+                        icon: "person.2.fill",
+                        iconColor: Color.blue,
+                        title: "Teams",
+                        count: nil
+                    ) {
+                        Text("Teams View")
+                    }
+                }
+                */
 
                 Divider()
             }
+        }
+        .refreshable {
+            // Pass
+        }
+        .task {
+            await refresh()
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -47,35 +117,54 @@ struct EventView: View {
                     .fixedSize(horizontal: true, vertical: false)
             }
             .sharedBackgroundVisibility(.hidden)
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    Button(action: {}) {
-                        Image(systemName: "plus")
-                    }
-                    Button(action: {}) {
-                        Image(systemName: "ellipsis")
-                    }
-                }
-            }
+            // TODO: myTBA bits here
+        }
+    }
+
+    private func refresh() async {
+        error = nil
+        isInitialLoading = true
+        // defer { isInitialLoading = false }
+        do {
+            let response = try await api.getEvent(.init(path: .init(eventKey: event.key)))
+            guard !Task.isCancelled else { return }
+            self.event = try response.ok.body.json
+        } catch {
+            guard !Task.isCancelled else { return }
+            self.error = error
         }
     }
 }
 
-struct NavigationRowView: View {
+struct NavigationRowView<Destination: View>: View {
     let icon: String
     let iconColor: Color
     let title: String
     let count: String?
+    let divider: Bool = true
+    let destination: Destination
+
+    init(icon: String, iconColor: Color, title: String, count: String? = nil, @ViewBuilder destination: () -> Destination) {
+        self.icon = icon
+        self.iconColor = iconColor
+        self.title = title
+        self.count = count
+        self.destination = destination()
+    }
 
     var body: some View {
-        Button(action: {}) {
+        NavigationLink(destination: destination) {
             HStack(spacing: 16) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundColor(.white)
-                    .frame(width: 44, height: 44)
-                    .background(iconColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(iconColor)
+                        .frame(width: 32, height: 32)
+                    Image(systemName: icon)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
+                        .padding(6)
+                }
+                .frame(width: 32, height: 32)
 
                 Text(title)
                     .font(.body)
@@ -90,12 +179,14 @@ struct NavigationRowView: View {
                 }
 
                 Image(systemName: "chevron.right")
-                    .font(.body.weight(.semibold))
-                    .foregroundColor(.secondary)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(Color(.tertiaryLabel))
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 16)
             .padding(.vertical, 12)
+            .frame(height: 56)
+            .background(Color(.secondarySystemGroupedBackground))
+            .contentShape(Rectangle())
         }
-        .background(Color(.systemBackground))
     }
 }
