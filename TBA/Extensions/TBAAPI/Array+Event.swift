@@ -9,7 +9,8 @@
 import Foundation
 import TBAAPI
 
-// Represents an Event we know how to support
+
+/// SeasonEvent describes an Event we know how to parse a EventWeek for.
 struct SeasonEvent {
     var event: Event
     var eventWeek: EventWeek
@@ -24,22 +25,23 @@ struct SeasonEvent {
 }
 
 extension [SeasonEvent] {
+
+    /// Returns the next upcoming event or the earliest event in the list.
     func nextOrFirstEvent() -> SeasonEvent? {
-        let today = Date()
+        // First, sort all of our events. Events are first sorted by start date. If the start date
+        // for two events is the same, sort by the end date.
         let sortedSeasonEvents = sorted { lhs, rhs in
             if lhs.event.startDate != rhs.event.startDate {
                 return lhs.event.startDate < rhs.event.startDate
             }
             return lhs.event.endDate < rhs.event.endDate
         }
-        let firstSeasonEvent = sortedSeasonEvents.first
-        guard firstSeasonEvent?.event.year == Calendar.current.component(.year, from: today) else {
-            return firstSeasonEvent
-        }
+        let today = Date()
         return sortedSeasonEvents.first { seasonEvent in
-            // TODO: Probably a bug here with endDate not working properly on same day
-            Calendar.current.compare(today, to: seasonEvent.event.endDate, toGranularity: .day) == .orderedAscending
-        } ?? firstSeasonEvent
+            // Look to find the first event in our sorted event list that the endDate is
+            // either before today or is today.
+            Calendar.current.compare(today, to: seasonEvent.event.endDate, toGranularity: .day) == .orderedAscending || Calendar.current.compare(today, to: seasonEvent.event.endDate, toGranularity: .day) == .orderedSame
+        } ?? sortedSeasonEvents.first
     }
 
     private var sortedCMPKeys: [EventKey] {
