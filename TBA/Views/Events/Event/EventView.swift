@@ -75,31 +75,6 @@ struct EventView: View {
                         }
                 }
 
-                /*
-                VStack(spacing: 0) {
-                    NavigationRowView(
-                        icon: "person.2.fill",
-                        iconColor: Color.blue,
-                        title: "Teams",
-                        count: nil
-                    ) {
-                        Text("Teams View")
-                    }
-
-                    Divider()
-                        .padding(.leading, 64)
-
-                    NavigationRowView(
-                        icon: "person.2.fill",
-                        iconColor: Color.blue,
-                        title: "Teams",
-                        count: nil
-                    ) {
-                        Text("Teams View")
-                    }
-                }
-                */
-
                 Divider()
             }
         }
