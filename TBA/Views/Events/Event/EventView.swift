@@ -10,7 +10,6 @@ import SwiftUI
 import TBAAPI
 
 struct EventView: View {
-
     @Environment(\.api) private var api
 
     @State var event: Event
@@ -40,39 +39,45 @@ struct EventView: View {
                     NavigationRowView(
                         icon: "person.2.fill",
                         iconColor: .blue,
-                        title: "Teams") {
-                            Text("Teams")
-                        }
+                        title: "Teams",
+                    ) {
+                        Text("Teams")
+                    }
                     NavigationRowView(
                         icon: "chart.bar.horizontal.page.fill",
                         iconColor: .blue,
-                        title: "Matches") {
-                            Text("Matches")
-                        }
+                        title: "Matches",
+                    ) {
+                        Text("Matches")
+                    }
                     NavigationRowView(
                         icon: "text.line.first.and.arrowtriangle.forward",
                         iconColor: .blue,
-                        title: "Rankings") {
-                            Text("Rankings")
-                        }
+                        title: "Rankings",
+                    ) {
+                        Text("Rankings")
+                    }
                     NavigationRowView(
                         icon: "person.3.fill",
                         iconColor: .blue,
-                        title: "Alliances") {
-                            Text("Aliances")
-                        }
+                        title: "Alliances",
+                    ) {
+                        Text("Aliances")
+                    }
                     NavigationRowView(
                         icon: "chart.bar.xaxis.ascending",
                         iconColor: .blue,
-                        title: "Insights") {
-                            Text("Insights")
-                        }
+                        title: "Insights",
+                    ) {
+                        Text("Insights")
+                    }
                     NavigationRowView(
                         icon: "trophy.fill",
                         iconColor: .yellow,
-                        title: "Awards") {
-                            Text("Awards")
-                        }
+                        title: "Awards",
+                    ) {
+                        Text("Awards")
+                    }
                 }
 
                 Divider()
@@ -103,7 +108,7 @@ struct EventView: View {
         do {
             let response = try await api.getEvent(.init(path: .init(eventKey: event.key)))
             guard !Task.isCancelled else { return }
-            self.event = try response.ok.body.json
+            event = try response.ok.body.json
         } catch {
             guard !Task.isCancelled else { return }
             self.error = error
@@ -147,7 +152,7 @@ struct NavigationRowView<Destination: View>: View {
 
                 Spacer()
 
-                if let count = count {
+                if let count {
                     Text(count)
                         .font(.body)
                         .foregroundColor(.secondary)

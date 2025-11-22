@@ -10,7 +10,6 @@ import SwiftUI
 import TBAAPI
 
 struct EventHeaderView: View {
-
     let event: Event
 
     var body: some View {
@@ -19,7 +18,7 @@ struct EventHeaderView: View {
             if let district = event.district {
                 HStack(spacing: 8) {
                     Image(systemName: "circle.hexagongrid.fill")
-                    // .font(.title2)
+                        // .font(.title2)
                         .tint(.accentColor)
 
                     Text("\(district.name) District")
@@ -63,5 +62,4 @@ struct EventHeaderView: View {
             .foregroundColor(.secondary)
         }
     }
-
 }

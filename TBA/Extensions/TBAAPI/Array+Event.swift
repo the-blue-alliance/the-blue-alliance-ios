@@ -9,7 +9,6 @@
 import Foundation
 import TBAAPI
 
-
 /// SeasonEvent describes an Event we know how to parse a EventWeek for.
 struct SeasonEvent {
     var event: Event
@@ -25,7 +24,6 @@ struct SeasonEvent {
 }
 
 extension [SeasonEvent] {
-
     /// Returns the next upcoming event or the earliest event in the list.
     func nextOrFirstEvent() -> SeasonEvent? {
         // First, sort all of our events. Events are first sorted by start date. If the start date

@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct EventItemView: View {
-
     let title: String
 
     var body: some View {
@@ -36,5 +35,4 @@ struct EventItemView: View {
         }
         .padding(.leading)
     }
-
 }
