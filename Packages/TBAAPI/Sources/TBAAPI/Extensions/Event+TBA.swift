@@ -46,53 +46,35 @@ public extension Event {
         return .event(self)
     }
 
-    var weekString: String {
-        if isDistrictChampionshipEvent {
-            if year >= 2017, let city {
-                return "Championship - \(city)"
-            }
-            return "Championship"
-        } else {
-            switch eventType {
-            case EventType.unlabeled.rawValue:
-                return "Other"
-            case EventType.preseason.rawValue:
-                return "Preseason"
-            case EventType.offseason.rawValue:
-                return "\(startMonth) Offseason"
-            case EventType.festivalOfChampions.rawValue:
-                return "Festival of Champions"
-            default:
-                guard let week else {
-                    return "Other"
-                }
+    var weekString: String? {
+        guard let week else {
+            return nil
+        }
 
-                if year == 2016 {
-                    /**
-                     * Special cases for 2016:
-                     * Week 1 is actually Week 0.5, eveything else is one less
-                     * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
-                     */
-                    if week == 0 {
-                        return "Week 0.5"
-                    }
-                    return "Week \(week)"
-                } else if year == 2021 {
-                    if week == 0 {
-                        return "Participation"
-                    } else if week == 6 {
-                        return "FIRST Innovation Challenge"
-                    } else if week == 7 {
-                        return "INFINITE RECHARGE At Home Challenge"
-                    } else if week == 8 {
-                        return "Game Design Challenge"
-                    } else if week == 9 {
-                        return "Awards"
-                    }
-                }
-                return "Week \(week + 1)"
+        if year == 2016 {
+            /**
+             * Special cases for 2016:
+             * Week 1 is actually Week 0.5, eveything else is one less
+             * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+             */
+            if week == 0 {
+                return "Week 0.5"
+            }
+            return "Week \(week)"
+        } else if year == 2021 {
+            if week == 0 {
+                return "Participation"
+            } else if week == 6 {
+                return "FIRST Innovation Challenge"
+            } else if week == 7 {
+                return "INFINITE RECHARGE At Home Challenge"
+            } else if week == 8 {
+                return "Game Design Challenge"
+            } else if week == 9 {
+                return "Awards"
             }
         }
+        return "Week \(week + 1)"
     }
 
     var displayName: String {
@@ -104,7 +86,7 @@ public extension Event {
     }
 
     var displayNameWithYear: String {
-        return "\(displayName) \(year)"
+        "\(displayName) \(year)"
     }
 
     var displayLocation: String? {
@@ -149,16 +131,16 @@ public enum HybridType: Comparable {
 
     public var sectionTitle: String {
         switch self {
-        case .event(let event):
-            return "\(event.eventTypeString) Events"
-        case .districtEvent(let district, _):
-            return "\(district.name) District Events"
-        case .districtCMPDivision(let district):
-            return "\(district.name) Championship Divisions"
-        case .districtCMP(_):
-            return "District Championship Events"
-        case .offseasonEvent(let event):
-            return "\(event.startMonth) Offseason Events"
+        case let .event(event):
+            "\(event.eventTypeString) Events"
+        case let .districtEvent(district, _):
+            "\(district.name) District Events"
+        case let .districtCMPDivision(district):
+            "\(district.name) Championship Divisions"
+        case .districtCMP:
+            "District Championship Events"
+        case let .offseasonEvent(event):
+            "\(event.startMonth) Offseason Events"
         }
     }
 
@@ -174,11 +156,11 @@ public enum HybridType: Comparable {
         // Primary types are equal, now use secondary/tertiary sorting
         // This matches the string comparison logic from hybridType
         switch (lhs, rhs) {
-        case (.districtEvent(let lhsDistrict, _), .districtEvent(let rhsDistrict, _)):
+        case let (.districtEvent(lhsDistrict, _), .districtEvent(rhsDistrict, _)):
             // For district events of same type, sort by district abbreviation
             return lhsDistrict.abbreviation < rhsDistrict.abbreviation
 
-        case (.districtCMPDivision(let lhsDistrict), .districtCMPDivision(let rhsDistrict)):
+        case let (.districtCMPDivision(lhsDistrict), .districtCMPDivision(rhsDistrict)):
             // For district CMP divisions, sort by district abbreviation
             return lhsDistrict.abbreviation < rhsDistrict.abbreviation
 
@@ -191,7 +173,7 @@ public enum HybridType: Comparable {
             // dcmp (regular championship) should sort after dcmpd (divisions)
             return false
 
-        case (.offseasonEvent(let lhsEvent), .offseasonEvent(let rhsEvent)):
+        case let (.offseasonEvent(lhsEvent), .offseasonEvent(rhsEvent)):
             // Sort offseason events by month
             let lhsMonth = Calendar.current.component(.month, from: lhsEvent.startDate)
             let rhsMonth = Calendar.current.component(.month, from: rhsEvent.startDate)
@@ -206,19 +188,18 @@ public enum HybridType: Comparable {
     /// Returns the primary event type for sorting
     private var primaryEventType: Int {
         switch self {
-        case .event(let event):
-            return event.eventType
-        case .districtEvent(_, let event):
-            return event.eventType
-        case .districtCMP(_), .districtCMPDivision(_):
+        case let .event(event):
+            event.eventType
+        case let .districtEvent(_, event):
+            event.eventType
+        case .districtCMP(_), .districtCMPDivision:
             // Both district CMP types share the same primary type
-            return Event.EventType.districtChampionship.rawValue
-        case .offseasonEvent(let event):
-            return event.eventType
+            Event.EventType.districtChampionship.rawValue
+        case let .offseasonEvent(event):
+            event.eventType
         }
     }
 }
-
 
 // extension Event {
 //    /**

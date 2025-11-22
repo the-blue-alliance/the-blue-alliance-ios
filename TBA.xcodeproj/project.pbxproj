@@ -26,6 +26,7 @@
 		920060142DBDB1B800C9C40E /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 920060132DBDB1B800C9C40E /* AsyncAlgorithms */; };
 		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
 		924C0EB42DBB308C008E73EA /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 924C0EB32DBB308C008E73EA /* Collections */; };
+		9271B07B2ED199F0002FB2D6 /* Date+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271B07A2ED199E9002FB2D6 /* Date+TBA.swift */; };
 		92D541092ECAF93F00079B8D /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D540D52ECAF93F00079B8D /* NoDataView.xib */; };
 		92D5410B2ECAF93F00079B8D /* LaunchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D540D42ECAF93F00079B8D /* LaunchStoryboard.storyboard */; };
 		92D5410C2ECAF93F00079B8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92D541022ECAF93F00079B8D /* GoogleService-Info.plist */; };
@@ -50,7 +51,7 @@
 		92D541202ECAF93F00079B8D /* TeamNumberLabel+Resizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540F62ECAF93F00079B8D /* TeamNumberLabel+Resizing.swift */; };
 		92D541212ECAF93F00079B8D /* UIImage+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540D12ECAF93F00079B8D /* UIImage+TBA.swift */; };
 		92D541222ECAF93F00079B8D /* EnvironmentValues+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540CF2ECAF93F00079B8D /* EnvironmentValues+TBA.swift */; };
-		92D541232ECAF93F00079B8D /* EventWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540C52ECAF93F00079B8D /* EventWeek.swift */; };
+		92D541232ECAF93F00079B8D /* Event+EventWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540C52ECAF93F00079B8D /* Event+EventWeek.swift */; };
 		92D541252ECAF93F00079B8D /* DistrictView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540E52ECAF93F00079B8D /* DistrictView.swift */; };
 		92D541262ECAF93F00079B8D /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540CC2ECAF93F00079B8D /* UINavigationController.swift */; };
 		92D541272ECAF93F00079B8D /* UIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D540C72ECAF93F00079B8D /* UIBarButtonItem.swift */; };
@@ -105,6 +106,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9271B07A2ED199E9002FB2D6 /* Date+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+TBA.swift"; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* TBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D53FE92ECA4B0900079B8D /* TBATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D540BF2ECAF93F00079B8D /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
@@ -112,7 +114,7 @@
 		92D540C12ECAF93F00079B8D /* Int16+Suffix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix.swift"; sourceTree = "<group>"; };
 		92D540C22ECAF93F00079B8D /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		92D540C42ECAF93F00079B8D /* Array+Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Event.swift"; sourceTree = "<group>"; };
-		92D540C52ECAF93F00079B8D /* EventWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWeek.swift; sourceTree = "<group>"; };
+		92D540C52ECAF93F00079B8D /* Event+EventWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventWeek.swift"; sourceTree = "<group>"; };
 		92D540C72ECAF93F00079B8D /* UIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItem.swift; sourceTree = "<group>"; };
 		92D540C82ECAF93F00079B8D /* UICollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewListCell.swift; sourceTree = "<group>"; };
 		92D540C92ECAF93F00079B8D /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 		92D540C32ECAF93F00079B8D /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				9271B07A2ED199E9002FB2D6 /* Date+TBA.swift */,
 				92D540BF2ECAF93F00079B8D /* Bundle+Version.swift */,
 				92D540C02ECAF93F00079B8D /* Calendar+Year.swift */,
 				92D540C12ECAF93F00079B8D /* Int16+Suffix.swift */,
@@ -218,7 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				92D540C42ECAF93F00079B8D /* Array+Event.swift */,
-				92D540C52ECAF93F00079B8D /* EventWeek.swift */,
+				92D540C52ECAF93F00079B8D /* Event+EventWeek.swift */,
 			);
 			path = TBAAPI;
 			sourceTree = "<group>";
@@ -638,7 +641,7 @@
 				92D541202ECAF93F00079B8D /* TeamNumberLabel+Resizing.swift in Sources */,
 				92D541212ECAF93F00079B8D /* UIImage+TBA.swift in Sources */,
 				92D541222ECAF93F00079B8D /* EnvironmentValues+TBA.swift in Sources */,
-				92D541232ECAF93F00079B8D /* EventWeek.swift in Sources */,
+				92D541232ECAF93F00079B8D /* Event+EventWeek.swift in Sources */,
 				92D541252ECAF93F00079B8D /* DistrictView.swift in Sources */,
 				92D541262ECAF93F00079B8D /* UINavigationController.swift in Sources */,
 				92D541272ECAF93F00079B8D /* UIBarButtonItem.swift in Sources */,
@@ -655,6 +658,7 @@
 				92D541312ECAF93F00079B8D /* EventsView.swift in Sources */,
 				92D541322ECAF93F00079B8D /* Secrets.swift in Sources */,
 				92D541332ECAF93F00079B8D /* Int16+Suffix.swift in Sources */,
+				9271B07B2ED199F0002FB2D6 /* Date+TBA.swift in Sources */,
 				92D541342ECAF93F00079B8D /* NoDataViewController.swift in Sources */,
 				92D541352ECAF93F00079B8D /* LoadingNoDataModifier.swift in Sources */,
 				92D541362ECAF93F00079B8D /* Stateful.swift in Sources */,

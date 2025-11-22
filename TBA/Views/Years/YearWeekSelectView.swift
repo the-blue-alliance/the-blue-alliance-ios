@@ -57,7 +57,7 @@ private struct WeekSelectView: View {
         do {
             let response = try await api.getEventsByYear(path: .init(year: year))
             // I think this might be the problem but idk
-            yearWeeks = try response.ok.body.json.compactMap { SeasonEvent(event: $0) }.groupedByWeek().keys.sorted().map { YearWeek(year: year, week: $0) }
+            yearWeeks = try response.ok.body.json.compactMap { SeasonEvent($0) }.groupedByWeek().keys.sorted().map { YearWeek(year: year, week: $0) }
         } catch {
             // TODO: Error
         }

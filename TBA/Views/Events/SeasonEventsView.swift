@@ -112,7 +112,7 @@ struct SeasonEventsView: View {
         do {
             let response = try await api.getEventsByYear(path: .init(year: yearWeek.year))
             guard !Task.isCancelled else { return }
-            events = try response.ok.body.json.compactMap { SeasonEvent(event: $0) }
+            events = try response.ok.body.json.compactMap { SeasonEvent($0) }
         } catch {
             guard !Task.isCancelled else { return }
             self.error = error
