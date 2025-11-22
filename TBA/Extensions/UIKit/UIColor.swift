@@ -1,6 +1,11 @@
 import Foundation
 import UIKit
 
+// TODO: Eventually we should deprecate all these old UIColor models
+// Currently they're still in the app because we can't get all these
+// colors using the SwiftUI Color (like systemGrey5)
+// We need to pick new colors, but these colors were agonized over
+// during the dark mode update, and I don't want to settle for just-okay.
 public extension UIColor {
     // MARK: - Internal Colors
 

@@ -74,7 +74,6 @@ struct SeasonEventsView: View {
                         showYearWeekSelect: $showYearWeekSelect,
                     )
                 }
-                // .matchedTransitionSource(id: "transition-id", in: namespace)
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Settings", systemImage: "gearshape") {
                         // TODO: Show Settings in a sheet
@@ -93,7 +92,6 @@ struct SeasonEventsView: View {
                 }
                 .presentationDetents([.medium, .large])
                 .navigationTransition(.automatic)
-                // .navigationTransition(.zoom(sourceID: "transition-id", in: namespace))
             }
     }
 
