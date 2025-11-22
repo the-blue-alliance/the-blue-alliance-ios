@@ -13,11 +13,11 @@ import TBAAPI
 struct EventsView: View {
     private var events: OrderedDictionary<String, [Event]>
 
-    init(events: [Event], firstEventSortKeyPathComparator: KeyPathComparator<Event> = KeyPathComparator(\Event.hybridType), sectionKey: (Event) -> String = \.hybridType) {
+    init(events: [Event], firstEventSortKeyPathComparator: KeyPathComparator<Event> = KeyPathComparator(\Event.hybridType), sectionKey: (Event) -> String = \.hybridType.sectionTitle) {
         self.init(events: events, firstEventSortKeyPathComparators: [firstEventSortKeyPathComparator], sectionKey: sectionKey)
     }
 
-    init(events: [Event], firstEventSortKeyPathComparators: [KeyPathComparator<Event>], sectionKey: (Event) -> String = \.hybridType) {
+    init(events: [Event], firstEventSortKeyPathComparators: [KeyPathComparator<Event>], sectionKey: (Event) -> String = \.hybridType.sectionTitle) {
         let events = events.sorted(using: firstEventSortKeyPathComparators + [
             KeyPathComparator(\.startDate),
             KeyPathComparator(\.endDate),
@@ -48,7 +48,7 @@ struct EventsView: View {
                         }
                         .textCase(nil) // Will uppercase by default
                         // .listRowBackground(Color.systemBackground)
-                        .listSectionSpacing(0)
+                        // .listSectionSpacing(0)
                     }
                 }
             }

@@ -32,35 +32,18 @@ public extension Event {
         Self.dateFormatter.date(from: endDateString)!
     }
 
-    /**
-     hybridType is used a mechanism for sorting Events properly in lists. It use a variety
-     of event data to kinda "move around" events in our data model to get groups/order right.
-     Note - hybrid type is ONLY safe to sort by for events within the same year.
-     Sorting by hybrid type for events across years will put events together roughly by their types,
-     but not necessairly their true sorts (see Comparable for a true sort)
-     */
-    // TODO: Convert hybridType into enum
-    var hybridType: String {
-        // Group districts together, group district CMPs together
-        if isDistrictChampionshipEvent {
-            // Due to how DCMP divisions come *after* everything else if sorted by default
-            // This is a bit of a hack to get them to show up before DCMPs
-            // Future-proofing - group DCMP divisions together based on district
-            if isDistrictChampionshipDivision, let district {
-                return "\(EventType.districtChampionship.rawValue)..\(district.abbreviation).dcmpd"
+    var hybridType: HybridType {
+        if let district {
+            if isDistrictChampionshipDivision {
+                return .districtCMPDivision(district)
+            } else if isDistrictChampionshipEvent {
+                return .districtCMP(district)
             }
-            return "\(eventType).dcmp"
-        } else if let district, !isDistrictChampionshipEvent {
-            return "\(eventType).\(district.abbreviation)"
+            return .districtEvent(district, self)
         } else if isOffseason {
-            // Group offseason events together by month
-            // Pad our month with a leading `0` - this is so we can have "99.9" < "99.11"
-            // (September Offseason to be sorted before November Offseason). Swift will compare
-            // each character's hex value one-by-one, which means we'll fail at "9" < "1".
-            let formattedStartMonthNumber = String(format: "%02d", startMonthComponent)
-            return "\(eventType).\(formattedStartMonthNumber)"
+            return .offseasonEvent(self)
         }
-        return "\(eventType)"
+        return .event(self)
     }
 
     var weekString: String {
@@ -151,6 +134,91 @@ public extension Event {
         return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
     }
 }
+
+/// hybridType is used a mechanism for sorting Events properly in lists. It use a variety
+/// of event data to kinda "move around" events in our data model to get groups/order right.
+/// Note - hybrid type is ONLY safe to sort by for events within the same year.
+/// Sorting by hybrid type for events across years will put events together roughly by their types,
+/// but not necessairly their true sorts (see Comparable for a true sort)
+public enum HybridType: Comparable {
+    case event(Event)
+    case districtEvent(District, Event)
+    case districtCMP(District)
+    case districtCMPDivision(District)
+    case offseasonEvent(Event)
+
+    public var sectionTitle: String {
+        switch self {
+        case .event(let event):
+            return "\(event.eventTypeString) Events"
+        case .districtEvent(let district, _):
+            return "\(district.name) District Events"
+        case .districtCMPDivision(let district):
+            return "\(district.name) Championship Divisions"
+        case .districtCMP(_):
+            return "District Championship Events"
+        case .offseasonEvent(let event):
+            return "\(event.startMonth) Offseason Events"
+        }
+    }
+
+    public static func < (lhs: HybridType, rhs: HybridType) -> Bool {
+        // First, compare by primary event type (Int)
+        let lhsPrimaryType = lhs.primaryEventType
+        let rhsPrimaryType = rhs.primaryEventType
+
+        if lhsPrimaryType != rhsPrimaryType {
+            return lhsPrimaryType < rhsPrimaryType
+        }
+
+        // Primary types are equal, now use secondary/tertiary sorting
+        // This matches the string comparison logic from hybridType
+        switch (lhs, rhs) {
+        case (.districtEvent(let lhsDistrict, _), .districtEvent(let rhsDistrict, _)):
+            // For district events of same type, sort by district abbreviation
+            return lhsDistrict.abbreviation < rhsDistrict.abbreviation
+
+        case (.districtCMPDivision(let lhsDistrict), .districtCMPDivision(let rhsDistrict)):
+            // For district CMP divisions, sort by district abbreviation
+            return lhsDistrict.abbreviation < rhsDistrict.abbreviation
+
+        case (.districtCMPDivision(_), .districtCMP(_)):
+            // dcmpd (divisions) should sort before dcmp (regular championship)
+            // This matches the string logic where "2..{abbrev}.dcmpd" < "2.dcmp"
+            return true
+
+        case (.districtCMP(_), .districtCMPDivision(_)):
+            // dcmp (regular championship) should sort after dcmpd (divisions)
+            return false
+
+        case (.offseasonEvent(let lhsEvent), .offseasonEvent(let rhsEvent)):
+            // Sort offseason events by month
+            let lhsMonth = Calendar.current.component(.month, from: lhsEvent.startDate)
+            let rhsMonth = Calendar.current.component(.month, from: rhsEvent.startDate)
+            return lhsMonth < rhsMonth
+
+        default:
+            // All other cases are equal at this level
+            return false
+        }
+    }
+
+    /// Returns the primary event type for sorting
+    private var primaryEventType: Int {
+        switch self {
+        case .event(let event):
+            return event.eventType
+        case .districtEvent(_, let event):
+            return event.eventType
+        case .districtCMP(_), .districtCMPDivision(_):
+            // Both district CMP types share the same primary type
+            return Event.EventType.districtChampionship.rawValue
+        case .offseasonEvent(let event):
+            return event.eventType
+        }
+    }
+}
+
 
 // extension Event {
 //    /**
