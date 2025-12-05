@@ -44,6 +44,10 @@ public extension Event {
         eventType == EventType.championshipFinals.rawValue
     }
 
+    var isRemote: Bool {
+        eventType == EventType.remote.rawValue
+    }
+
     var isOffseason: Bool {
         eventType == EventType.offseason.rawValue
     }
