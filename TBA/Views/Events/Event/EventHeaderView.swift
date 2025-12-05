@@ -14,7 +14,7 @@ struct EventHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // TODO: We could use this to show if this is a part of a District?
+            // TODO: Should this be tappable?
             if let district = event.district {
                 HStack(spacing: 8) {
                     Image(systemName: "circle.hexagongrid.fill")
@@ -26,27 +26,54 @@ struct EventHeaderView: View {
                         .foregroundColor(.secondary)
                 }
             }
-
-            Text(event.displayNameWithYear)
-                .font(.title.bold())
-
+            // TODO: We should support child events here too (division_keys/parent_event_key)
             Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 4) {
                 GridRow {
                     Image(systemName: "calendar")
                         .gridColumnAlignment(.center)
-                    Text(event.displayDates)
+                        .foregroundStyle(.accent)
+                    HStack(spacing: 8) {
+                        Text(event.displayDates)
+                        if let week = event.weekString, !event.isRemote {
+                            Text(week)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.accessoryColor)
+                                .foregroundColor(.white)
+                                .clipShape(Capsule())
+                        }
+                    }
                 }
-                if let location = event.displayLocation {
+                let mapPin = Image(systemName: "mappin")
+                    .gridColumnAlignment(.center)
+                    .foregroundStyle(.accent)
+                if let mapURL = event.mapURL(provider: .apple), let location = event.displayLocationWithVenue {
                     GridRow {
-                        Image(systemName: "mappin")
-                            .gridColumnAlignment(.center)
+                        mapPin
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text(location)
+                                .multilineTextAlignment(.leading)
+                            Link(destination: mapURL) {
+                                Image(systemName: "arrow.up.right.square")
+                                    .font(.caption)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                } else if let location = event.fullDisplayLocation {
+                    GridRow {
+                        mapPin
                         Text(location)
+                            .multilineTextAlignment(.leading)
                     }
                 }
                 if let website = event.website, let url = URL(string: website) {
                     GridRow {
                         Image(systemName: "link")
                             .gridColumnAlignment(.center)
+                            .foregroundStyle(.accent)
                         Link(destination: url) {
                             HStack(spacing: 4) {
                                 Text(website)
@@ -58,8 +85,9 @@ struct EventHeaderView: View {
                 }
                 // TODO: Statbotics?
             }
-            .font(.subheadline)
-            .foregroundColor(.secondary)
+            .font(.subheadline.weight(.medium))
+            .foregroundStyle(.secondary)
+            .imageScale(.medium)
         }
     }
 }

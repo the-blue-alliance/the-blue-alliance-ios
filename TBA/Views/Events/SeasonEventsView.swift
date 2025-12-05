@@ -75,10 +75,11 @@ struct SeasonEventsView: View {
                     )
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Settings", systemImage: "gearshape") {
+                    Button {
                         // TODO: Show Settings in a sheet
+                    } label: {
+                        Image(systemName: "gearshape")
                     }
-                    // .tint(.accentYellow)
                 }
             }
             .toolbarBackground(Color.navigationBarColor, for: .navigationBar)

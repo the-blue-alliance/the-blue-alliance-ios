@@ -9,6 +9,15 @@
 import SwiftUI
 import TBAAPI
 
+enum EventDetails {
+    case teams
+    case matches
+    case rankings
+    case alliances
+    case insights
+    case awards
+}
+
 struct EventView: View {
     @Environment(\.api) private var api
 
@@ -30,55 +39,14 @@ struct EventView: View {
         ScrollView {
             VStack(spacing: 0) {
                 EventHeaderView(event: event)
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding([.horizontal, .bottom])
+                    // .frame(maxWidth: .infinity, alignment: .leading)
+
+                // TODO: Maybe we add like, a webcasts row here?
 
                 Divider()
 
-                VStack(spacing: 0) {
-                    NavigationRowView(
-                        icon: "person.2.fill",
-                        iconColor: .blue,
-                        title: "Teams",
-                    ) {
-                        Text("Teams")
-                    }
-                    NavigationRowView(
-                        icon: "chart.bar.horizontal.page.fill",
-                        iconColor: .blue,
-                        title: "Matches",
-                    ) {
-                        Text("Matches")
-                    }
-                    NavigationRowView(
-                        icon: "text.line.first.and.arrowtriangle.forward",
-                        iconColor: .blue,
-                        title: "Rankings",
-                    ) {
-                        Text("Rankings")
-                    }
-                    NavigationRowView(
-                        icon: "person.3.fill",
-                        iconColor: .blue,
-                        title: "Alliances",
-                    ) {
-                        Text("Aliances")
-                    }
-                    NavigationRowView(
-                        icon: "chart.bar.xaxis.ascending",
-                        iconColor: .blue,
-                        title: "Insights",
-                    ) {
-                        Text("Insights")
-                    }
-                    NavigationRowView(
-                        icon: "trophy.fill",
-                        iconColor: .yellow,
-                        title: "Awards",
-                    ) {
-                        Text("Awards")
-                    }
-                }
+                Text("Something here")
 
                 Divider()
             }
@@ -89,16 +57,19 @@ struct EventView: View {
         .task {
             await refresh()
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large) // TODO: Can we remove this?
+        .navigationTitle(event.displayName)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Text(event.displayNameWithYear)
-                    .font(.headline)
-                    .fixedSize(horizontal: true, vertical: false)
+            ToolbarItem(placement: .largeTitle) {
+                Text(event.name)
+                    .font(.title.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .sharedBackgroundVisibility(.hidden)
             // TODO: myTBA bits here
         }
+        .toolbarBackground(Color.navigationBarColor, for: .navigationBar)
+        .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
     }
 
     private func refresh() async {

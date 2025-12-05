@@ -89,6 +89,20 @@ public extension Event {
         "\(displayName) \(year)"
     }
 
+    /// Returns the venue name, or extracts it from the first line of the address if available.
+    var displayVenue: String? {
+        if let locationName, !locationName.isEmpty {
+            return locationName
+        } else if let address, !address.isEmpty {
+            // Try to extract venue from first line of address
+            let firstLine = address.components(separatedBy: ", ").first
+            if let firstLine, !firstLine.isEmpty {
+                return firstLine
+            }
+        }
+        return nil
+    }
+
     var displayLocation: String? {
         let location = [city, stateProv, country].compactMap { dateComponent in
             guard let dateComponent else {
@@ -97,6 +111,64 @@ public extension Event {
             return dateComponent.isEmpty ? nil : dateComponent
         }.joined(separator: ", ")
         return location.isEmpty ? nil : location
+    }
+
+    /// Returns "venue in location" if both are available, otherwise just the location.
+    var displayLocationWithVenue: String? {
+        if let displayVenue, let displayLocation {
+            return "\(displayVenue) in \(displayLocation)"
+        }
+        return displayLocation
+    }
+
+    /// Returns the most complete location string possible, combining venue, address, city, state/province, country, and postal code.
+    /// Requires at minimum city, state, and country to form an address.
+    var fullDisplayLocation: String? {
+        // Require city, state, and country as baseline location info
+        guard let city, !city.isEmpty,
+            let stateProv, !stateProv.isEmpty,
+            let country, !country.isEmpty
+        else {
+            return nil
+        }
+
+        var components: [String] = []
+
+        // Add venue name if available
+        if let locationName, !locationName.isEmpty {
+            components.append(locationName)
+        }
+
+        // Build base location from city/state/postal/country
+        let validPostalCode = postalCode.flatMap { $0.isEmpty ? nil : $0 }
+        var baseLocationParts = [city, stateProv]
+        if let validPostalCode {
+            baseLocationParts.append(validPostalCode)
+        }
+        baseLocationParts.append(country)
+        let baseLocation = baseLocationParts.joined(separator: ", ")
+
+        if let address, !address.isEmpty {
+            // Check if address is fully qualified (contains state/country info)
+            let hasPostalCode = validPostalCode.map { address.contains($0) } ?? false
+            let isFullyQualifiedAddress =
+                address.contains(",") || address.contains(stateProv) || address.contains(country)
+                || hasPostalCode
+
+            if isFullyQualifiedAddress {
+                // Address is complete - use it as-is
+                components.append(address)
+            } else {
+                // Partial address - combine with base location
+                components.append(address)
+                components.append(baseLocation)
+            }
+        } else {
+            // No address - just use base location
+            components.append(baseLocation)
+        }
+
+        return components.joined(separator: ", ")
     }
 
     var displayDates: String {

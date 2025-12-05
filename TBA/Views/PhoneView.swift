@@ -93,6 +93,7 @@ struct PhoneView: View {
         }
         .tabBarMinimizeBehavior(.onScrollDown)
         .tint(.tabBarTintColor)
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 

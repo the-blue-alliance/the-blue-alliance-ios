@@ -8,12 +8,16 @@
 import SwiftUI
 
 public extension ShapeStyle where Self == Color {
-    private static var primaryBlue: Color {
+    static var primaryBlue: Color {
         Color(light: Color(hex: 0x3F51B5), dark: Color(hex: 0x5C6BC0))
     }
 
-    private static var primaryDarkBlue: Color {
+    static var primaryDarkBlue: Color {
         Color(light: Color(hex: 0x303F9F), dark: Color(hex: 0x3F51B5))
+    }
+
+    static var accessoryColor: Color {
+        Color(light: primaryBlue, dark: primaryDarkBlue)
     }
 
     static var accentColor: Color {

@@ -27,6 +27,7 @@
 		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
 		924C0EB42DBB308C008E73EA /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 924C0EB32DBB308C008E73EA /* Collections */; };
 		9271B07B2ED199F0002FB2D6 /* Date+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271B07A2ED199E9002FB2D6 /* Date+TBA.swift */; };
+		9271B07D2ED2454F002FB2D6 /* Event+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271B07C2ED2454C002FB2D6 /* Event+URL.swift */; };
 		92D541092ECAF93F00079B8D /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D540D52ECAF93F00079B8D /* NoDataView.xib */; };
 		92D5410B2ECAF93F00079B8D /* LaunchStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D540D42ECAF93F00079B8D /* LaunchStoryboard.storyboard */; };
 		92D5410C2ECAF93F00079B8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92D541022ECAF93F00079B8D /* GoogleService-Info.plist */; };
@@ -107,6 +108,7 @@
 
 /* Begin PBXFileReference section */
 		9271B07A2ED199E9002FB2D6 /* Date+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+TBA.swift"; sourceTree = "<group>"; };
+		9271B07C2ED2454C002FB2D6 /* Event+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+URL.swift"; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* TBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D53FE92ECA4B0900079B8D /* TBATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D540BF2ECAF93F00079B8D /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			children = (
 				92D540C42ECAF93F00079B8D /* Array+Event.swift */,
 				92D540C52ECAF93F00079B8D /* Event+EventWeek.swift */,
+				9271B07C2ED2454C002FB2D6 /* Event+URL.swift */,
 			);
 			path = TBAAPI;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				92D541152ECAF93F00079B8D /* TBASegmentedControl.swift in Sources */,
 				92D541162ECAF93F00079B8D /* ViewDidLoadModifier.swift in Sources */,
 				92D541172ECAF93F00079B8D /* TitleCollectionHeaderView.swift in Sources */,
+				9271B07D2ED2454F002FB2D6 /* Event+URL.swift in Sources */,
 				92D541182ECAF93F00079B8D /* SceneDelegate.swift in Sources */,
 				92D541192ECAF93F00079B8D /* YearSelectView.swift in Sources */,
 				92D5411A2ECAF93F00079B8D /* UILabel.swift in Sources */,
