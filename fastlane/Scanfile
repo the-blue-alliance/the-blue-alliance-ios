@@ -1,4 +1,0 @@
-devices(["iPhone 15 Pro"])
-buildlog_path("build/reports")
-disable_concurrent_testing(true)
-skip_slack(true)

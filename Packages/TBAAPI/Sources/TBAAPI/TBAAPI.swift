@@ -9,23 +9,14 @@ import Foundation
 import OpenAPIRuntime
 import OpenAPIURLSession
 
-private struct APIConstants {
+private enum APIConstants {
     static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
 }
 
-public struct TBAAPI {
+public typealias TBAAPI = Client
 
-    public static let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter
-    }()
-
-    // TODO: Add a way to set/change the cache strategy for debugging
-
-    public let client: Client
-
-    public init(apiKey: String) {
+public extension TBAAPI {
+    init(apiKey: String, transport: (any ClientTransport)? = nil) {
         let serverURL = (try? Servers.Server1.url()) ?? APIConstants.baseURL
 
         let configuration = URLSessionConfiguration.ephemeral
@@ -34,14 +25,16 @@ public struct TBAAPI {
         ]
 
         #if DEBUG
-        configuration.urlCache!.removeAllCachedResponses()
+            if let urlCache = configuration.urlCache {
+                urlCache.removeAllCachedResponses()
+            }
         #endif
 
-        self.client = Client(
+        self.init(
             serverURL: serverURL,
-            transport: URLSessionTransport(configuration: .init(
-                session: URLSession(configuration: configuration)
-            ))
+            transport: transport ?? URLSessionTransport(configuration: .init(
+                session: URLSession(configuration: configuration),
+            )),
         )
     }
 }

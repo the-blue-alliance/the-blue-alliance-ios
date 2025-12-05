@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,13 +6,14 @@ import PackageDescription
 let package = Package(
     name: "TBAAPI",
     platforms: [
-        .iOS(.v18),
-        .macOS(.v15),
+        .iOS(.v26),
+        .macOS(.v14),
     ],
     products: [
         .library(
             name: "TBAAPI",
-            targets: ["TBAAPI"])
+            targets: ["TBAAPI"],
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.0.0"),
@@ -28,15 +29,15 @@ let package = Package(
             ],
             plugins: [
                 .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator"),
-            ]
+            ],
         ),
         .executableTarget(
             name: "TBAAPI-main",
-            dependencies: ["TBAAPI"]
+            dependencies: ["TBAAPI"],
         ),
         .testTarget(
             name: "TBAAPITests",
-            dependencies: ["TBAAPI"]
-        )
-    ]
+            dependencies: ["TBAAPI"],
+        ),
+    ],
 )

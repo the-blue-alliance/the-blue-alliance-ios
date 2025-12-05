@@ -1,0 +1,39 @@
+name: cron (@ 11pm/12am EST/EDT)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 4 * * *'
+
+jobs:
+  refresh-dsyms:
+    name: Refresh dSYMs
+    runs-on: macos-latest
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+      - name: Install
+        run: |
+          bundle install
+      - name: fastlane refresh_dsyms
+        run: bundle exec fastlane refresh_dsyms
+        env:
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+          APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}

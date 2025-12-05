@@ -2,3 +2,9 @@ generate:
   - types
   - client
 accessModifier: public
+namingStrategy: idiomatic
+nameOverrides:
+  start_date: startDateString
+  end_date: endDateString
+  display_name: name
+  Team: TeamFull
