@@ -18,6 +18,7 @@ enum TBATab: CaseIterable, Identifiable {
     case districts
     case insights
     case myTBA
+    case search
 
     var title: String {
         switch self {
@@ -29,6 +30,8 @@ enum TBATab: CaseIterable, Identifiable {
             "Insights"
         case .myTBA:
             "myTBA"
+        case .search:
+            "Search"
         }
     }
 
@@ -42,6 +45,8 @@ enum TBATab: CaseIterable, Identifiable {
             "chart.bar"
         case .myTBA:
             "star"
+        case .search:
+            "magnifyingglass"
         }
     }
 }
@@ -54,31 +59,34 @@ struct PhoneView: View {
     @Environment(\.status) private var status
 
     // @State private var searchIndex: SearchIndex?
-    @State private var selection: TBATab! = .events
+    @State var selection: TBATab = .events
 
     @State private var searchText: String = ""
     @State private var searchScope = SearchScope.all
 
     var body: some View {
-        TabView {
-            Tab(TBATab.events.title, systemImage: TBATab.events.image) {
+        TabView(selection: $selection) {
+            Tab(TBATab.events.title, systemImage: TBATab.events.image, value: .events) {
                 NavigationStack {
                     SeasonEventsView(year: status.currentSeason)
+                        .navigationDestination(for: Event.self) { event in
+                            EventView(event: event)
+                        }
                 }
             }
-            Tab(TBATab.districts.title, systemImage: TBATab.districts.image) {
+            Tab(TBATab.districts.title, systemImage: TBATab.districts.image, value: .districts) {
                 NavigationStack {
                     DistrictsList(year: status.currentSeason)
                 }
             }
-            Tab(TBATab.insights.title, systemImage: TBATab.insights.image) {
+            Tab(TBATab.insights.title, systemImage: TBATab.insights.image, value: .insights) {
                 // TODO: Insights
                 // InsightsView()
             }
-            Tab(TBATab.myTBA.title, systemImage: TBATab.myTBA.image) {
+            Tab(TBATab.myTBA.title, systemImage: TBATab.myTBA.image, value: .myTBA) {
                 Text("myTBA")
             }
-            Tab(role: .search) {
+            Tab(value: .search, role: .search) {
                 // TODO: Move this to some SearchView
                 NavigationStack {
                     Text("Search")

@@ -18,6 +18,9 @@ struct LoadingNoDataModifier<T: Collection>: ViewModifier {
     @ViewBuilder func body(content: Content) -> some View {
         content
             .overlay {
+                // For Zach: For later.
+                // The problem is we're getting two redraws on the SeasonEventsView.
+                // The first one is when we set the EventWeek
                 // TODO: De-wonkify the error bits here
                 let d: Text? = {
                     if let error {

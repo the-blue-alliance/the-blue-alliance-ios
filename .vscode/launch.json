@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:the-blue-alliance-ios}/Packages/TBAAPI",
+            "name": "Debug TBAAPI-main (Packages/TBAAPI)",
+            "target": "TBAAPI-main",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug TBAAPI-main (Packages/TBAAPI)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:the-blue-alliance-ios}/Packages/TBAAPI",
+            "name": "Release TBAAPI-main (Packages/TBAAPI)",
+            "target": "TBAAPI-main",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release TBAAPI-main (Packages/TBAAPI)"
+        }
+    ]
+}
