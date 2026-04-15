@@ -62,6 +62,54 @@ extension MatchBreakdownConfigurator {
 
         return BreakdownRow(title: title, red: [String(format: formatString, arguments: redValues)], blue: [String(format: formatString, arguments: blueValues)], type: type, offset: offset)
     }
+    static func nestedValue(keys: [String], in dictionary: [String: Any]?) -> Any? {
+        guard let dict = dictionary else {
+            return nil
+        }
+        
+        var current: Any = dict
+        for key in keys {
+            guard let currentDict = current as? [String: Any] else {
+                return nil
+            }
+            guard let next = currentDict[key] else {
+                return nil
+            }
+            current = next
+        }
+        return current
+    }
+
+    static func nestedValues(keyPath: [String], red: [String: Any]?, blue: [String: Any]?) -> (Any?, Any?)? {
+        guard let redValue = nestedValue(keys: keyPath, in: red),
+              let blueValue = nestedValue(keys: keyPath, in: blue) else {
+            return nil
+        }
+        return (redValue, blueValue)
+    }
+
+    static func nestedBreakdownValueSupported(keyPath: [String], red: [String: Any], blue: [String: Any]) -> Bool {
+        return nestedValue(keys: keyPath, in: red) != nil && nestedValue(keys: keyPath, in: blue) != nil
+    }
+
+    static func nestedRow(title: String, keyPath: [String], formatString: String = "%@", red: [String: Any]?, blue: [String: Any]?, type: BreakdownRow.BreakdownRowType = .normal, offset: Int = 0) -> BreakdownRow? {
+        guard let red = red, let blue = blue else {
+            return nil
+        }
+        guard nestedBreakdownValueSupported(keyPath: keyPath, red: red, blue: blue) else {
+            return nil
+        }
+        
+        guard let redValue = nestedValue(keys: keyPath, in: red) as? CustomStringConvertible,
+              let blueValue = nestedValue(keys: keyPath, in: blue) as? CustomStringConvertible else {
+            return nil
+        }
+        
+        let redString = String(describing: redValue)
+        let blueString = String(describing: blueValue)
+        
+        return BreakdownRow(title: title, red: [String(format: formatString, redString)], blue: [String(format: formatString, blueString)], type: type, offset: offset)
+    }
 
     // Images
 

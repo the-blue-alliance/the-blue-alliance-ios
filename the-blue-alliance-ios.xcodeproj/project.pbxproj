@@ -22,6 +22,7 @@
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
+		514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */; };
 		92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92009B5623DD49A60058E567 /* HandoffServiceTests.swift */; };
 		920240072AEB6AAD0003D118 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 920240062AEB6AAD0003D118 /* PureLayout */; };
 		920240092AEB6AC30003D118 /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 920240082AEB6AC30003D118 /* TBAOperation */; };
@@ -291,6 +292,7 @@
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
+		514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2026.swift; sourceTree = "<group>"; };
 		92009B5623DD49A60058E567 /* HandoffServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffServiceTests.swift; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 				D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */,
 				9263922727F0FD71003C302A /* MatchBreakdownConfigurator2022.swift */,
 				371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */,
+				514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */,
 			);
 			path = Breakdown;
 			sourceTree = "<group>";
@@ -1647,6 +1650,7 @@
 			files = (
 				927309B223DD1E66006145E0 /* HandoffService.swift in Sources */,
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
+				514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */,
 				92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */,
 				92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
