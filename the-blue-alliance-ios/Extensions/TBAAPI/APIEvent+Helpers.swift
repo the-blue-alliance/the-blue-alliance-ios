@@ -15,7 +15,7 @@ enum APIEventType: Int, CaseIterable {
     case unlabeled = -1
 }
 
-extension Components.Schemas.Event {
+extension Event {
 
     var eventTypeEnum: APIEventType? {
         APIEventType(rawValue: eventType)
@@ -140,7 +140,7 @@ extension Components.Schemas.Event {
     }
 }
 
-extension Components.Schemas.Event {
+extension Event {
 
     // Parsed Date form of the API's string date fields. The generated struct
     // stores `startDate` and `endDate` as ISO-ish `yyyy-MM-dd` strings; these

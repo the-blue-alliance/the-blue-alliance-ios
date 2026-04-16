@@ -87,7 +87,7 @@ private struct TeamStats {
     let dpr: Float?
     let ccwm: Float?
 
-    init?(teamKey: String, oprs: Components.Schemas.EventOPRs?) {
+    init?(teamKey: String, oprs: EventOPRs?) {
         guard let oprs else { return nil }
         let o = oprs.oprs?.additionalProperties[teamKey]
         let d = oprs.dprs?.additionalProperties[teamKey]

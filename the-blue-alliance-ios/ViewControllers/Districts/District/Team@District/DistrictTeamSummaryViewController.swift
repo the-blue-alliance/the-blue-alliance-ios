@@ -10,13 +10,13 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, St
 
     private let teamKey: String
     private let districtKey: String
-    private var ranking: Components.Schemas.DistrictRanking
+    private var ranking: DistrictRanking
 
     weak var delegate: DistrictTeamSummaryViewControllerDelegate?
 
     // MARK: Init
 
-    init(ranking: Components.Schemas.DistrictRanking, districtKey: String, dependencies: Dependencies) {
+    init(ranking: DistrictRanking, districtKey: String, dependencies: Dependencies) {
         self.ranking = ranking
         self.teamKey = ranking.teamKey
         self.districtKey = districtKey
@@ -38,7 +38,7 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, St
 
     // MARK: - Table view data source
 
-    private var eventPoints: [Components.Schemas.DistrictRanking.EventPointsPayloadPayload] {
+    private var eventPoints: [DistrictRanking.EventPointsPayloadPayload] {
         ranking.eventPoints ?? []
     }
 

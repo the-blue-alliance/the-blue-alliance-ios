@@ -102,7 +102,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
         dataSource.delegate = self
     }
 
-    private func apply(oprs response: Components.Schemas.EventOPRs?) {
+    private func apply(oprs response: EventOPRs?) {
         let oprs = response?.oprs?.additionalProperties ?? [:]
         let dprs = response?.dprs?.additionalProperties ?? [:]
         let ccwms = response?.ccwms?.additionalProperties ?? [:]

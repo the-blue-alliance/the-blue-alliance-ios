@@ -31,7 +31,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
     private let year: Int
     private let breakdownConfigurator: MatchBreakdownConfigurator.Type?
 
-    private var match: Components.Schemas.Match?
+    private var match: Match?
 
     private var dataSource: TableViewDataSource<String?, BreakdownRow>!
 
@@ -94,7 +94,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         dataSource.statefulDelegate = self
     }
 
-    func apply(match: Components.Schemas.Match) {
+    func apply(match: Match) {
         self.match = match
         configureDataSource(match.breakdownDict)
     }

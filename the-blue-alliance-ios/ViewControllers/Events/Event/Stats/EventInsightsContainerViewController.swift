@@ -6,7 +6,7 @@ import UIKit
 
 class EventInsightsContainerViewController: ContainerViewController {
 
-    private(set) var event: Components.Schemas.Event
+    private(set) var event: Event
     private let myTBA: MyTBA
     private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
@@ -18,7 +18,7 @@ class EventInsightsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Components.Schemas.Event, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Event, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores

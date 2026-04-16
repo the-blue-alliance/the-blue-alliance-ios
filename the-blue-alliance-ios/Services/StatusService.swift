@@ -29,7 +29,7 @@ struct AppStatus {
         self.downEventKeys = downEventKeys
     }
 
-    init(apiStatus: Components.Schemas.APIStatus) {
+    init(apiStatus: APIStatus) {
         self.currentSeason = apiStatus.currentSeason
         self.maxSeason = apiStatus.maxSeason
         self.minAppVersion = apiStatus.ios.minAppVersion

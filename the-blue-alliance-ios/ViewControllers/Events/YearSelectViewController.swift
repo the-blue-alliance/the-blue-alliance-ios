@@ -4,14 +4,14 @@ import TBAAPI
 import UIKit
 
 protocol YearSelectViewControllerDelegate: AnyObject {
-    func weekEventSelected(year: Int, weekEvent: Components.Schemas.Event)
+    func weekEventSelected(year: Int, weekEvent: Event)
 }
 
 class YearSelectViewController: ContainerViewController {
 
     private(set) var year: Int
     private(set) var years: [Int]
-    private(set) var week: Components.Schemas.Event?
+    private(set) var week: Event?
 
     private let selectViewController: SelectTableViewController<YearSelectViewController>
     private var eventWeekSelectViewController: EventWeekSelectViewController?
@@ -24,7 +24,7 @@ class YearSelectViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(year: Int, years: [Int], week: Components.Schemas.Event?, dependencies: Dependencies) {
+    init(year: Int, years: [Int], week: Event?, dependencies: Dependencies) {
         self.year = year
         self.years = years
         self.week = week
@@ -106,7 +106,7 @@ private class EventWeekSelectViewController: ContainerViewController {
 
     weak var delegate: YearSelectViewControllerDelegate?
 
-    init(year: Int, week: Components.Schemas.Event?, dependencies: Dependencies) {
+    init(year: Int, week: Event?, dependencies: Dependencies) {
         self.year = year
 
         selectViewController = WeeksSelectTableViewController(year: year,
@@ -138,7 +138,7 @@ private class EventWeekSelectViewController: ContainerViewController {
 
 extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
 
-    typealias OptionType = Components.Schemas.Event
+    typealias OptionType = Event
 
     func optionSelected(_ option: OptionType) {
         delegate?.weekEventSelected(year: year, weekEvent: option)
@@ -155,7 +155,7 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
     private let year: Int
     fileprivate var hasRefreshed: Bool = false
 
-    init(year: Int, current: Components.Schemas.Event?, options: [Components.Schemas.Event], dependencies: Dependencies) {
+    init(year: Int, current: Event?, options: [Event], dependencies: Dependencies) {
         self.year = year
         super.init(current: current, options: options, dependencies: dependencies)
     }

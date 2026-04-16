@@ -11,7 +11,7 @@ struct AwardCellViewModel {
     let awardName: String?
     let recipients: [Recipient]
 
-    init(award: Components.Schemas.Award) {
+    init(award: Award) {
         awardName = award.name
         recipients = award.recipientList.map { apiRecipient in
             var awardText: [String] = []

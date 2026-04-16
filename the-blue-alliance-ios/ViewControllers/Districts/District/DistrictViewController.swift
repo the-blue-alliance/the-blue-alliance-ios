@@ -5,7 +5,7 @@ import UIKit
 
 class DistrictViewController: ContainerViewController {
 
-    private(set) var district: Components.Schemas.District
+    private(set) var district: District
     private let year: Int
     private let myTBA: MyTBA
     private let myTBAStores: MyTBAStores
@@ -20,7 +20,7 @@ class DistrictViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(district: Components.Schemas.District, year: Int? = nil, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(district: District, year: Int? = nil, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.district = district
         // District keys look like `2023fim` — year is the first 4 chars.
         let parsedYear = year ?? Int(district.key.prefix(4)) ?? statusService.currentSeason
@@ -69,12 +69,12 @@ class DistrictViewController: ContainerViewController {
 
 extension DistrictViewController: EventsListViewControllerDelegate {
 
-    func eventSelected(_ event: Components.Schemas.Event) {
+    func eventSelected(_ event: Event) {
         let eventViewController = EventViewController(eventKey: event.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
-    func title(for event: Components.Schemas.Event) -> String? {
+    func title(for event: Event) -> String? {
         "\(event.weekString) Events"
     }
 
@@ -91,7 +91,7 @@ extension DistrictViewController: TeamsListViewControllerDelegate {
 
 extension DistrictViewController: DistrictRankingsViewControllerDelegate {
 
-    func districtRankingSelected(_ ranking: Components.Schemas.DistrictRanking) {
+    func districtRankingSelected(_ ranking: DistrictRanking) {
         let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: ranking, district: district, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
     }

@@ -19,7 +19,7 @@ private enum EventInfoSection: Int {
 
 private enum EventInfoItem: Hashable {
     case title
-    case webcast(Components.Schemas.Webcast)
+    case webcast(Webcast)
     case alliances
     case districtPoints
     case insights
@@ -37,7 +37,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // Loaded from TBAAPI in `refresh()`. Until it's loaded the only row we
     // can render is the title placeholder.
-    private var event: Components.Schemas.Event?
+    private var event: Event?
 
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 

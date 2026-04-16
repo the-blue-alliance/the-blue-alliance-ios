@@ -8,7 +8,7 @@ class MatchViewController: MyTBAContainerViewController {
     private let matchKey: String
     private let teamKey: String?
 
-    private var match: Components.Schemas.Match?
+    private var match: Match?
 
     private(set) var infoViewController: MatchInfoViewController
     private let breakdownViewController: MatchBreakdownViewController

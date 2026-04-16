@@ -13,7 +13,7 @@ class TeamViewController: HeaderContainerViewController {
     private let urlOpener: URLOpener
 
     // Loaded from TBAAPI after init. Nil until the async load completes.
-    private var team: Components.Schemas.Team?
+    private var team: Team?
     private var yearsParticipated: [Int] = []
 
     private let teamHeaderView: TeamHeaderView
@@ -182,7 +182,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 
 extension TeamViewController: EventsListViewControllerDelegate {
 
-    func eventSelected(_ event: Components.Schemas.Event) {
+    func eventSelected(_ event: Event) {
         let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }

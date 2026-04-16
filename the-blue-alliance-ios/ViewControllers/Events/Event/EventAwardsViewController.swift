@@ -6,7 +6,7 @@ import UIKit
 
 class EventAwardsContainerViewController: ContainerViewController {
 
-    private(set) var event: Components.Schemas.Event
+    private(set) var event: Event
     private let myTBA: MyTBA
     private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
@@ -16,7 +16,7 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Components.Schemas.Event, teamKey: String? = nil, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Event, teamKey: String? = nil, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores
@@ -69,8 +69,8 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
     private let eventKey: String
     private let teamKey: String?
 
-    private var dataSource: TableViewDataSource<String, Components.Schemas.Award>!
-    private var awards: [Components.Schemas.Award] = []
+    private var dataSource: TableViewDataSource<String, Award>!
+    private var awards: [Award] = []
 
     // MARK: - Init
 
@@ -98,7 +98,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Components.Schemas.Award>(tableView: tableView) { [weak self] tableView, indexPath, award in
+        dataSource = TableViewDataSource<String, Award>(tableView: tableView) { [weak self] tableView, indexPath, award in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as AwardTableViewCell
             cell.selectionStyle = .none
             cell.viewModel = AwardCellViewModel(award: award)
@@ -112,8 +112,8 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
         dataSource.delegate = self
     }
 
-    private func applyAwards(_ awards: [Components.Schemas.Award]) {
-        let filtered: [Components.Schemas.Award]
+    private func applyAwards(_ awards: [Award]) {
+        let filtered: [Award]
         if let teamKey {
             filtered = awards.filter { $0.recipientList.contains(where: { $0.teamKey == teamKey }) }
         } else {
@@ -122,7 +122,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
         let sorted = filtered.sorted { $0.awardType < $1.awardType }
         self.awards = sorted
 
-        var snapshot = NSDiffableDataSourceSnapshot<String, Components.Schemas.Award>()
+        var snapshot = NSDiffableDataSourceSnapshot<String, Award>()
         snapshot.appendSections([""])
         snapshot.appendItems(sorted, toSection: "")
         dataSource.apply(snapshot, animatingDifferences: false)
