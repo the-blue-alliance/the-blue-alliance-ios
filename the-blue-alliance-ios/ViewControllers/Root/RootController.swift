@@ -3,10 +3,6 @@ import MyTBAKit
 import Photos
 import UIKit
 
-protocol RootChildController {
-    var rootType: RootType { get }
-}
-
 enum RootType: CaseIterable {
     case events
     case teams
@@ -42,11 +38,6 @@ enum RootType: CaseIterable {
         case .settings:
             return UIImage.settingsIcon
         }
-    }
-
-    var supportsPush: Bool {
-        // Settings is currently the only VC that doesn't support a sub-menu push
-        return self != .settings
     }
 
 }

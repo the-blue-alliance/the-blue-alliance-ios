@@ -167,9 +167,6 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
-        // The popover should point at the Close button
-        alert.popoverPresentationController?.barButtonItem = closeBarButtonItem
-
         present(alert, animated: true, completion: nil)
     }
 

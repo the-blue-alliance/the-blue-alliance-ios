@@ -44,10 +44,7 @@ class TeamsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Only show Search in container view on iPhone
-        if UIDevice.isPhone {
-            setupSearchController()
-        }
+        setupSearchController()
     }
 
 }

@@ -155,26 +155,17 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(eventKey: String) {
         let viewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
-        pushOrShowDetail(viewController)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func teamSelected(teamKey: String) {
         let viewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
-        pushOrShowDetail(viewController)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func matchSelected(matchKey: String) {
         let viewController = MatchViewController(matchKey: matchKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
-        pushOrShowDetail(viewController)
-    }
-
-    private func pushOrShowDetail(_ viewController: UIViewController) {
-        if let splitViewController = splitViewController {
-            let navigationController = UINavigationController(rootViewController: viewController)
-            splitViewController.showDetailViewController(navigationController, sender: nil)
-        } else if let navigationController = navigationController {
-            navigationController.pushViewController(viewController, animated: true)
-        }
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
 }
