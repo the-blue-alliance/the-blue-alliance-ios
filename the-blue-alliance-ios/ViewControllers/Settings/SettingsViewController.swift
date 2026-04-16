@@ -1,5 +1,4 @@
 import MyTBAKit
-import TBAKit
 import UIKit
 
 private enum SettingsSection: Int, CaseIterable {
@@ -312,7 +311,7 @@ class SettingsViewController: TBATableViewController {
         let alertController = UIAlertController(title: "Delete Network Cache", message: "Are you sure you want to delete all the network cache data?", preferredStyle: .alert)
 
         let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [unowned self] (deleteAction) in
-            self.tbaKit.clearCacheHeaders()
+            URLCache.shared.removeAllCachedResponses()
             self.userDefaults.clearSuccessfulRefreshes()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

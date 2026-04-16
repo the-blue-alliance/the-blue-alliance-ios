@@ -1,7 +1,5 @@
-import CoreData
 import Foundation
 import TBAAPI
-import TBAKit
 import TBAUtils
 import UIKit
 
@@ -11,12 +9,6 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
 
     var errorRecorder: ErrorRecorder {
         return dependencies.errorRecorder
-    }
-    var persistentContainer: NSPersistentContainer {
-        return dependencies.persistentContainer
-    }
-    var tbaKit: TBAKit {
-        return dependencies.tbaKit
     }
     var api: TBAAPI {
         return dependencies.api

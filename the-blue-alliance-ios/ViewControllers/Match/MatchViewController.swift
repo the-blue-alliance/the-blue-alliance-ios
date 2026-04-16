@@ -1,10 +1,6 @@
-import CoreData
-import Firebase
 import MyTBAKit
 import Photos
 import TBAAPI
-import TBAData
-import TBAKit
 import UIKit
 
 class MatchViewController: MyTBAContainerViewController {

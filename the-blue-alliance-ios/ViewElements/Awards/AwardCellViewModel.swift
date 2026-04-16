@@ -1,6 +1,5 @@
 import Foundation
 import TBAAPI
-import TBAData
 
 struct Recipient {
     let teamKey: String?
@@ -10,15 +9,7 @@ struct Recipient {
 struct AwardCellViewModel {
 
     let awardName: String?
-    // array of award texts for recipients
     let recipients: [Recipient]
-
-    init(award: Award) {
-        awardName = award.name
-        recipients = award.recipients.map {
-            return Recipient(teamKey: $0.team?.key, awardText: $0.awardText)
-        }
-    }
 
     init(award: Components.Schemas.Award) {
         awardName = award.name
@@ -38,8 +29,6 @@ struct AwardCellViewModel {
         }
     }
 
-    // Lightweight team display without fetching the full team. Phase 3 will
-    // reintroduce nickname lookup once Teams are on TBAAPI too.
     private static func teamDisplay(key: String) -> String {
         if key.hasPrefix("frc") {
             return "Team \(key.dropFirst(3))"

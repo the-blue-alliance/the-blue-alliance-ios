@@ -1,11 +1,7 @@
 import Agrume
-import CoreData
-import Firebase
 import MyTBAKit
 import Photos
 import TBAAPI
-import TBAData
-import TBAKit
 import UIKit
 
 class TeamViewController: HeaderContainerViewController {
@@ -61,11 +57,7 @@ class TeamViewController: HeaderContainerViewController {
 
         infoViewController = TeamInfoViewController(teamKey: teamKey, urlOpener: urlOpener, dependencies: dependencies)
         eventsViewController = TeamEventsViewController(teamKey: teamKey, year: nil, dependencies: dependencies)
-
-        // TeamMediaCollectionViewController is still on managed `Team` (Phase 3c).
-        // Look it up / insert a stub so the sub-VC has something to render against.
-        let managedTeam = Team.insert(teamKey, in: dependencies.persistentContainer.viewContext)
-        mediaViewController = TeamMediaCollectionViewController(team: managedTeam, year: Calendar.current.component(.year, from: Date()), pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
+        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: Calendar.current.component(.year, from: Date()), pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
@@ -198,8 +190,8 @@ extension TeamViewController: EventsListViewControllerDelegate {
 
 extension TeamViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {
 
-    func mediaSelected(_ media: TeamMedia) {
-        show(media: media)
+    func mediaSelected(image: UIImage?, directURL: URL?) {
+        show(image: image, directURL: directURL)
     }
 
 }
@@ -207,12 +199,12 @@ extension TeamViewController: MediaViewer, TeamMediaCollectionViewControllerDele
 protocol MediaViewer: UIViewController {}
 extension MediaViewer {
 
-    func show(media: TeamMedia, peek: Bool = false) {
-        if let image = media.image {
+    func show(image: UIImage?, directURL: URL?) {
+        if let image {
             let agrume = Agrume(image: image)
             agrume.show(from: self)
-        } else if let url = media.imageDirectURL {
-            let agrume = Agrume(url: url)
+        } else if let directURL {
+            let agrume = Agrume(url: directURL)
             agrume.show(from: self)
         }
     }

@@ -1,11 +1,7 @@
-import CoreData
-import Firebase
 import Foundation
 import MyTBAKit
 import Photos
 import TBAAPI
-import TBAData
-import TBAKit
 import UIKit
 
 class TeamAtEventViewController: ContainerViewController {
@@ -40,9 +36,7 @@ class TeamAtEventViewController: ContainerViewController {
 
         summaryViewController = TeamSummaryViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
         matchesViewController = MatchesViewController(eventKey: eventKey, teamKey: teamKey, myTBA: myTBA, favoritesStore: myTBAStores.favorites, dependencies: dependencies)
-        // TeamMediaCollectionViewController is still on managed Team (Phase 3c).
-        let managedTeam = Team.insert(teamKey, in: dependencies.persistentContainer.viewContext)
-        mediaViewController = TeamMediaCollectionViewController(team: managedTeam, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
+        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
         statsViewController = TeamStatsViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
         awardsViewController = EventAwardsViewController(eventKey: eventKey, teamKey: teamKey, dependencies: dependencies)
 
@@ -129,21 +123,21 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
 
 extension TeamAtEventViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {
 
-    func mediaSelected(_ media: TeamMedia) {
-        show(media: media)
+    func mediaSelected(image: UIImage?, directURL: URL?) {
+        show(image: image, directURL: directURL)
     }
 
 }
 
 extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
+    func teamSelected(teamKey: String) {
         // Don't push to team@event for the team we're already showing team@event for
-        if self.teamKey == team.key {
+        if self.teamKey == teamKey {
             return
         }
         guard let year = Int(eventKey.prefix(4)) else { return }
-        pushTeamAtEvent(teamKey: team.key, eventKey: eventKey, year: year)
+        pushTeamAtEvent(teamKey: teamKey, eventKey: eventKey, year: year)
     }
 
 }

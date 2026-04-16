@@ -1,5 +1,5 @@
 import Foundation
-import TBAData
+import TBAAPI
 import UIKit
 
 protocol MatchSummaryViewDelegate: AnyObject {
@@ -181,14 +181,14 @@ class MatchSummaryView: UIView {
     }
     
     private func teamLabel(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UILabel {
-        let text: String = "\(Team.trimFRCPrefix(teamKey))"
+        let text: String = "\(TeamKey.trimFRCPrefix(teamKey))"
         let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return label(text: text, isBold: isBold, isStrikethrough: dq)
     }
     
     private func teamButton(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UIButton {
-        let text: String = "\(Team.trimFRCPrefix(teamKey))"
+        let text: String = "\(TeamKey.trimFRCPrefix(teamKey))"
         let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return button(text: text, isBold: isBold, isStrikethrough: dq)

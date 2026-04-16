@@ -1,24 +1,16 @@
-import CoreData
 import Foundation
 import TBAAPI
-import TBAKit
 import TBAUtils
 import UIKit
 
-typealias DataController = Persistable & Alertable
+typealias DataController = Alertable
 
 class TBAViewController: UIViewController, DataController, Navigatable {
 
-    private let dependencies: Dependencies
+    let dependencies: Dependencies
 
     var errorRecorder: ErrorRecorder {
         return dependencies.errorRecorder
-    }
-    var persistentContainer: NSPersistentContainer {
-        return dependencies.persistentContainer
-    }
-    var tbaKit: TBAKit {
-        return dependencies.tbaKit
     }
     var api: TBAAPI {
         return dependencies.api

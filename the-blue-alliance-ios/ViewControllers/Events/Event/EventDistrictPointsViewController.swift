@@ -1,10 +1,7 @@
-import CoreData
-import Firebase
+import Foundation
 import MyTBAKit
 import Photos
 import TBAAPI
-import TBAData
-import TBAKit
 import UIKit
 
 class EventDistrictPointsContainerViewController: ContainerViewController {

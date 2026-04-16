@@ -1,10 +1,7 @@
-import CoreData
-import Firebase
+import Foundation
 import MyTBAKit
 import Photos
 import TBAAPI
-import TBAData
-import TBAKit
 import UIKit
 
 class EventAwardsContainerViewController: ContainerViewController {
@@ -54,15 +51,15 @@ class EventAwardsContainerViewController: ContainerViewController {
 
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.key, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func teamSelected(teamKey: String) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAwardsViewControllerDelegate: AnyObject {
-    func teamSelected(_ team: Team)
+    func teamSelected(teamKey: String)
 }
 
 class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
@@ -106,10 +103,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
             cell.selectionStyle = .none
             cell.viewModel = AwardCellViewModel(award: award)
             cell.teamKeySelected = { [weak self] (teamKey) in
-                // Team.insert is still managed — Phase 3 replaces this with an API-driven team lookup.
-                guard let context = self?.persistentContainer.viewContext else { return }
-                let team = Team.insert(teamKey, in: context)
-                self?.delegate?.teamSelected(team)
+                self?.delegate?.teamSelected(teamKey: teamKey)
             }
             _ = self
             return cell

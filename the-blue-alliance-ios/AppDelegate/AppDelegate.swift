@@ -1,4 +1,3 @@
-import CoreData
 import Firebase
 import FirebaseAnalytics
 import FirebaseAuth
@@ -8,8 +7,6 @@ import GoogleSignIn
 import MyTBAKit
 import Photos
 import TBAAPI
-import TBAData
-import TBAKit
 import TBAUtils
 import UIKit
 import UserNotifications
@@ -56,8 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Services
     private lazy var dependencies = Dependencies(errorRecorder: errorRecorder,
-                                                 persistentContainer: persistentContainer,
-                                                 tbaKit: tbaKit,
                                                  api: api,
                                                  userDefaults: userDefaults)
     // Owned here and wrapped in a MyTBAStores bag so the myTBA-related screens
@@ -74,17 +69,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      fcmTokenProvider: messaging)
     }()
     let pasteboard = UIPasteboard.general
-    lazy var persistentContainer: TBAPersistenceContainer = {
-        let persistentContainer = TBAPersistenceContainer()
-        persistentContainer.persistentStoreDescriptions.forEach {
-            $0.type = NSSQLiteStoreType
-            $0.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        }
-        return persistentContainer
-    }()
     let photoLibrary = PHPhotoLibrary.shared()
     lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
-    var tbaKit: TBAKit!
     var api: TBAAPI!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
@@ -111,6 +97,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Wipe the legacy Core Data SQLite files once per upgrade. Must run
+        // before anything else touches the app group.
+        LegacyCoreDataCleanup.run(userDefaults: userDefaults)
+
         AppDelegate.setupAppearance()
 
         // Setup a dummy launch screen in our window while we're doing setup tasks
@@ -134,7 +124,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         let secrets = Secrets()
-        tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
         api = TBAAPI(apiKey: secrets.tbaAPIKey)
 
         // Listen for changes to FMS availability
@@ -159,71 +148,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Kickoff background myTBA, along with setting up delegates
         setupPreviousAuthentication()
 
-        // Our app setup operation will load our persistent stores, propogate persistance container
-        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        weak var weakAppSetupOperation = appSetupOperation
-        appSetupOperation.completionBlock = { [unowned self] in
-            if let error = weakAppSetupOperation?.completionError as NSError? {
-                errorRecorder.record(error)
-                DispatchQueue.main.async {
-                    AppDelegate.showFatalError(error, in: window)
-                }
-            } else {
-                // Register retries for our status service on the main thread
-                DispatchQueue.main.async {
-                    self.remoteConfigService.registerRetryable(initiallyRetry: true)
-                    self.statusService.registerRetryable(initiallyRetry: true)
+        remoteConfigService.registerRetryable(initiallyRetry: true)
+        statusService.registerRetryable(initiallyRetry: true)
 
-                    // Check our minimum app version
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
-                        return
-                    }
-
-                    guard let window = self.window else {
-                        fatalError("Window not setup when setting root vc")
-                    }
-                    guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-                        fatalError("Unable to snapshot root view controller")
-                    }
-                    self.rootViewController.view.addSubview(snapshot)
-                    window.rootViewController = self.rootViewController
-
-                    // 0.35 is an iOS animation magic number... for now
-                    UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                        snapshot.layer.opacity = 0;
-                    }, completion: { (status) in
-                        snapshot.removeFromSuperview()
-                    })
-                }
-            }
+        // Check our minimum app version
+        if !AppDelegate.isAppVersionSupported(minimumAppVersion: statusService.status.minAppVersion) {
+            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
+            return true
         }
-        OperationQueue.main.addOperation(appSetupOperation)
+
+        guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+            fatalError("Unable to snapshot root view controller")
+        }
+        rootViewController.view.addSubview(snapshot)
+        window.rootViewController = rootViewController
+
+        // 0.35 is an iOS animation magic number... for now
+        UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
+            snapshot.layer.opacity = 0
+        }, completion: { _ in
+            snapshot.removeFromSuperview()
+        })
 
         return true
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-    }
+    func applicationWillResignActive(_ application: UIApplication) {}
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    }
+    func applicationDidEnterBackground(_ application: UIApplication) {}
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-    }
+    func applicationWillEnterForeground(_ application: UIApplication) {}
 
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Update anything we want to be fresh
-    }
+    func applicationDidBecomeActive(_ application: UIApplication) {}
 
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
+    func applicationWillTerminate(_ application: UIApplication) {}
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         return GIDSignIn.sharedInstance.handle(url)
@@ -246,14 +204,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: Private
 
-    private static func showFatalError(_ error: NSError, in window: UIWindow) {
-        showRootAlertView(title: "Error Loading Data",
-                          message: "There was an error loading local data - try reinstalling The Blue Alliance",
-                          in: window) { (_) in
-                            fatalError("Unresolved error \(error), \(error.userInfo)")
-        }
-    }
-
     private static func showMinimumAppAlert(appStoreID: String, currentAppVersion: Int, in window: UIWindow) {
         showRootAlertView(title: "Unsupported App Version", message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
     }
@@ -272,10 +222,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setupPreviousAuthentication() {
-        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
         if Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() {
-            // TODO: Need to figure out if it's a Google user or an Apple user?
-            // I suppose, let's print something here...
             GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
                 if let error = error {
                     errorRecorder.record(error)
@@ -327,7 +274,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         navigationBarAppearance.barTintColor = UIColor.navigationBarTintColor
         navigationBarAppearance.tintColor = UIColor.white
-        // Remove the shadow for a more seamless split between navigation bar and segmented controls
         navigationBarAppearance.shadowImage = UIImage()
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
@@ -336,7 +282,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 15.0, *) {
             let tabBarAppearance = UITabBarAppearance()
             tabBarAppearance.configureWithOpaqueBackground()
-
             tabBarAppearance.selectionIndicatorTintColor = UIColor.tabBarTintColor
 
             UITabBar.appearance().standardAppearance = tabBarAppearance
@@ -389,8 +334,6 @@ extension AppDelegate: StatusSubscribable {
 extension AppDelegate: FMSStatusSubscribable {
 
     func fmsStatusChanged(isDatafeedDown: Bool) {
-        // We could react to hiding/showing something, like Android does
-        // Since we're not setup to do this, we'll show an alert view only when the data feed is down
         if isDatafeedDown == false {
             return
         }
@@ -403,8 +346,6 @@ extension AppDelegate: FMSStatusSubscribable {
 
 }
 
-// Make Crashlytics conform to ErrorRecorder for TBAData
-// extension Crashlytics: ErrorRecorder {}
 // Make Messaging conform to FCMTokenProvider for MyTBAKit
 extension Messaging: FCMTokenProvider {}
 
