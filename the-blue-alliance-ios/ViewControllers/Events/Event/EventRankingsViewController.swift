@@ -1,27 +1,26 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 protocol EventRankingsViewControllerDelegate: AnyObject {
-    func rankingSelected(_ ranking: EventRanking)
+    func rankingSelected(_ ranking: Components.Schemas.EventRanking.RankingsPayloadPayload)
 }
 
-class EventRankingsViewController: TBATableViewController {
+class EventRankingsViewController: TBATableViewController, Refreshable, Stateful {
 
     weak var delegate: EventRankingsViewControllerDelegate?
 
-    private let event: Event
+    private let eventKey: String
 
-    private var dataSource: TableViewDataSource<String, EventRanking>!
-    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<EventRanking>!
+    private var dataSource: TableViewDataSource<String, Components.Schemas.EventRanking.RankingsPayloadPayload>!
+    private var rankings: [Components.Schemas.EventRanking.RankingsPayloadPayload] = []
+    private var extraStatsInfo: [Components.Schemas.EventRanking.ExtraStatsInfoPayloadPayload] = []
+    private var sortOrderInfo: [Components.Schemas.EventRanking.SortOrderInfoPayloadPayload] = []
 
     // MARK: - Init
 
-    init(event: Event, dependencies: Dependencies) {
-        self.event = event
-
+    init(eventKey: String, dependencies: Dependencies) {
+        self.eventKey = eventKey
         super.init(dependencies: dependencies)
     }
 
@@ -35,88 +34,85 @@ class EventRankingsViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.registerReusableCell(RankingTableViewCell.self)
-
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let ranking = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
+        guard let ranking = dataSource.itemIdentifier(for: indexPath) else { return }
         delegate?.rankingSelected(ranking)
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, EventRanking>(tableView: tableView) { (tableView, indexPath, eventRanking) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Components.Schemas.EventRanking.RankingsPayloadPayload>(tableView: tableView) { [weak self] tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
-            cell.viewModel = RankingCellViewModel(eventRanking: eventRanking)
+            let detail = self?.rankingInfoString(for: ranking)
+            cell.viewModel = RankingCellViewModel(apiRanking: ranking, detailText: detail)
             return cell
         }
         dataSource.statefulDelegate = self
-
-        let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [
-            EventRanking.rankSortDescriptor()
-        ]
-        fetchRequest.predicate = EventRanking.eventPredicate(eventKey: event.key)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }
 
-}
+    private func applyRanking(_ response: Components.Schemas.EventRanking?) {
+        let rankings = response?.rankings ?? []
+        let sorted = rankings.sorted { $0.rank < $1.rank }
+        self.rankings = sorted
+        self.extraStatsInfo = response?.extraStatsInfo ?? []
+        self.sortOrderInfo = response?.sortOrderInfo ?? []
 
-extension EventRankingsViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(event.key)_rankings"
+        var snapshot = NSDiffableDataSourceSnapshot<String, Components.Schemas.EventRanking.RankingsPayloadPayload>()
+        snapshot.appendSections([""])
+        snapshot.appendItems(sorted, toSection: "")
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
+    // MARK: Ranking info string
+
+    private func rankingInfoString(for ranking: Components.Schemas.EventRanking.RankingsPayloadPayload) -> String? {
+        var parts: [String] = []
+        parts.append(contentsOf: Self.formattedPairs(values: ranking.extraStats, info: extraStatsInfo.map { (name: $0.name, precision: Int($0.precision)) }))
+        parts.append(contentsOf: Self.formattedPairs(values: ranking.sortOrders ?? [], info: sortOrderInfo.map { (name: $0.name, precision: $0.precision) }))
+        return parts.isEmpty ? nil : parts.joined(separator: ", ")
     }
 
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh event rankings until the event is over
-        return event.endDate?.endOfDay()
+    private static func formattedPairs(values: [Double], info: [(name: String, precision: Int)]) -> [String] {
+        zip(info, values).compactMap { info, value in
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.maximumFractionDigits = info.precision
+            formatter.minimumFractionDigits = info.precision
+            guard let valueString = formatter.string(for: value) else { return nil }
+            return "\(info.name): \(valueString)"
+        }
     }
 
-    var isDataSourceEmpty: Bool {
-        return fetchedResultsController.isDataSourceEmpty
-    }
+    // MARK: - Refreshable
+
+    var refreshKey: String? { "\(eventKey)_rankings" }
+    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
+    // Phase 1b: event end date not available without fetching the event struct
+    // separately; matching the old "refresh until event over" behavior is
+    // deferred to a later pass.
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { rankings.isEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventRankings(key: event.key) { [self] (result, notModified) in
-            guard case .success((let rankings, let sortOrder, let extraStats)) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let response = try await dependencies.api.eventRankings(key: eventKey)
+                applyRanking(response)
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let event = context.object(with: self.event.objectID) as! Event
-                event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
+    // MARK: - Stateful
 
-extension EventRankingsViewController: Stateful {
-
-    var noDataText: String? {
-        return "No rankings for event"
-    }
-
+    var noDataText: String? { "No rankings for event" }
 }
