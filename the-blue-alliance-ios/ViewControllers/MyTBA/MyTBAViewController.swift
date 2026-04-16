@@ -1,25 +1,23 @@
-import CoreData
 import FirebaseAuth
 import GoogleSignIn
 import MyTBAKit
 import Photos
 import PureLayout
-import TBAData
-import TBAKit
 import UIKit
 import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
     private let myTBA: MyTBA
+    private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
     private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
-    private(set) var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
-    private(set) var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
+    private(set) var favoritesViewController: MyTBAFavoritesViewController
+    private(set) var subscriptionsViewController: MyTBASubscriptionsViewController
 
     private var signInView: UIView! {
         return signInViewController.view
@@ -40,15 +38,16 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, dependencies: dependencies)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, dependencies: dependencies)
+        favoritesViewController = MyTBAFavoritesViewController(myTBA: myTBA, favoritesStore: myTBAStores.favorites, dependencies: dependencies)
+        subscriptionsViewController = MyTBASubscriptionsViewController(myTBA: myTBA, subscriptionsStore: myTBAStores.subscriptions, dependencies: dependencies)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],
@@ -71,10 +70,6 @@ class MyTBAViewController: ContainerViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // TODO: Fix the white status bar/white UINavigationController during sign in
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/180
-        // modalPresentationCapturesStatusBarAppearance = true
 
         styleInterface()
 
@@ -118,7 +113,6 @@ class MyTBAViewController: ContainerViewController {
                 self?.errorRecorder.record(error)
                 self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
-                // Run on main thread, since we delete our Core Data objects on the main thread.
                 DispatchQueue.main.async {
                     self?.logoutSuccessful()
                 }
@@ -134,21 +128,16 @@ class MyTBAViewController: ContainerViewController {
         GIDSignIn.sharedInstance.signOut()
         try! Auth.auth().signOut()
 
-        // Cancel any ongoing requests
-        for vc in [favoritesViewController, subscriptionsViewController] as! [Refreshable] {
+        for vc in [favoritesViewController, subscriptionsViewController] as [Refreshable] {
             vc.cancelRefresh()
         }
 
-        // Remove all locally stored myTBA data
         removeMyTBAData()
     }
 
     func removeMyTBAData() {
-        persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Favorite.entity())
-        persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Subscription.entity())
-
-        // Clear notifications
-        persistentContainer.viewContext.performSaveOrRollback(errorRecorder: errorRecorder)
+        myTBAStores.favorites.clear()
+        myTBAStores.subscriptions.clear()
     }
 
     // MARK: - Interface Methods
@@ -166,28 +155,22 @@ class MyTBAViewController: ContainerViewController {
 
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
-    func eventSelected(_ event: Event) {
-        let viewController = EventViewController(eventKey: event.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
-        if let splitViewController = splitViewController {
-            let navigationController = UINavigationController(rootViewController: viewController)
-            splitViewController.showDetailViewController(navigationController, sender: nil)
-        } else if let navigationController = navigationController {
-            navigationController.pushViewController(viewController, animated: true)
-        }
+    func eventSelected(eventKey: String) {
+        let viewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        pushOrShowDetail(viewController)
     }
 
-    func teamSelected(_ team: Team) {
-        let viewController = TeamViewController(teamKey: team.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
-        if let splitViewController = splitViewController {
-            let navigationController = UINavigationController(rootViewController: viewController)
-            splitViewController.showDetailViewController(navigationController, sender: nil)
-        } else if let navigationController = navigationController {
-            navigationController.pushViewController(viewController, animated: true)
-        }
+    func teamSelected(teamKey: String) {
+        let viewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        pushOrShowDetail(viewController)
     }
 
-    func matchSelected(_ match: Match) {
-        let viewController = MatchViewController(matchKey: match.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+    func matchSelected(matchKey: String) {
+        let viewController = MatchViewController(matchKey: matchKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        pushOrShowDetail(viewController)
+    }
+
+    private func pushOrShowDetail(_ viewController: UIViewController) {
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: viewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

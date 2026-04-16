@@ -28,7 +28,7 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(matchKey: String, teamKey: String? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
+    init(matchKey: String, teamKey: String? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, myTBAStores: MyTBAStores, dependencies: Dependencies) {
         self.matchKey = matchKey
         self.teamKey = teamKey
         self.pasteboard = pasteboard
@@ -47,6 +47,7 @@ class MatchViewController: MyTBAContainerViewController {
             navigationSubtitle: nil,
             segmentedControlTitles: ["Info", "Breakdown"],
             myTBA: myTBA,
+            myTBAStores: myTBAStores,
             dependencies: dependencies
         )
 
@@ -105,7 +106,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         let targetKey = "frc\(teamNumber)"
         guard let match, match.allTeamKeys.contains(targetKey) else { return }
         let year = match.year ?? 0
-        let teamAtEventVC = TeamAtEventViewController(teamKey: targetKey, eventKey: match.eventKey, year: year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventVC = TeamAtEventViewController(teamKey: targetKey, eventKey: match.eventKey, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
 

@@ -57,6 +57,7 @@ enum RootType: CaseIterable {
 protocol RootController {
     var fcmTokenProvider: FCMTokenProvider { get }
     var myTBA: MyTBA { get }
+    var myTBAStores: MyTBAStores { get }
     var pasteboard: UIPasteboard? { get }
     var photoLibrary: PHPhotoLibrary? { get }
     var pushService: PushService { get }
@@ -70,6 +71,7 @@ extension RootController {
 
     var eventsViewController: EventsContainerViewController {
         return EventsContainerViewController(myTBA: myTBA,
+                                             myTBAStores: myTBAStores,
                                              pasteboard: pasteboard,
                                              photoLibrary: photoLibrary,
                                              searchService: searchService,
@@ -80,6 +82,7 @@ extension RootController {
 
     var teamsViewController: TeamsContainerViewController {
         return TeamsContainerViewController(myTBA: myTBA,
+                                            myTBAStores: myTBAStores,
                                             pasteboard: pasteboard,
                                             photoLibrary: photoLibrary,
                                             searchService: searchService,
@@ -90,6 +93,7 @@ extension RootController {
 
     var districtsViewController: DistrictsContainerViewController {
         return DistrictsContainerViewController(myTBA: myTBA,
+                                                myTBAStores: myTBAStores,
                                                 statusService: statusService,
                                                 urlOpener: urlOpener,
                                                 dependencies: dependencies)
@@ -106,6 +110,7 @@ extension RootController {
 
     var myTBAViewController: MyTBAViewController {
         return MyTBAViewController(myTBA: myTBA,
+                                   myTBAStores: myTBAStores,
                                    pasteboard: pasteboard,
                                    photoLibrary: photoLibrary,
                                    statusService: statusService,

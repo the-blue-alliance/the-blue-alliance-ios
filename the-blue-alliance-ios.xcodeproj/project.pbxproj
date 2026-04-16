@@ -23,7 +23,6 @@
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
 		514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */; };
-		92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92009B5623DD49A60058E567 /* HandoffServiceTests.swift */; };
 		920240072AEB6AAD0003D118 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 920240062AEB6AAD0003D118 /* PureLayout */; };
 		920240092AEB6AC30003D118 /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 920240082AEB6AC30003D118 /* TBAOperation */; };
 		9202400B2AEB6ACF0003D118 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400A2AEB6ACF0003D118 /* Search */; };
@@ -303,7 +302,6 @@
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
 		514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2026.swift; sourceTree = "<group>"; };
-		92009B5623DD49A60058E567 /* HandoffServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffServiceTests.swift; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
 		921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBATests.swift"; sourceTree = "<group>"; };
@@ -698,7 +696,6 @@
 				924459C720CB797E0007570D /* RetryService_Tests.swift */,
 				92564C6F216456800047917F /* Secrets_Tests.swift */,
 				9275956921B442AA00560D81 /* StatusServiceTests.swift */,
-				92009B5623DD49A60058E567 /* HandoffServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1863,7 +1860,6 @@
 				92CC6D36234588810085867D /* Test.xcdatamodeld in Sources */,
 				92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */,
 				921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */,
-				92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */,
 				9280EAED21685F310016621D /* RefreshableTests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				929820CF216968020080C1C8 /* TBATestCase.swift in Sources */,

@@ -1,15 +1,12 @@
-import CoreData
-import Firebase
 import Foundation
 import MyTBAKit
 import TBAAPI
-import TBAData
-import TBAKit
 import UIKit
 
 class DistrictsContainerViewController: ContainerViewController {
 
     private let myTBA: MyTBA
+    private let myTBAStores: MyTBAStores
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
@@ -23,8 +20,9 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(myTBA: MyTBA, myTBAStores: MyTBAStores, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -93,7 +91,7 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: Components.Schemas.District) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, myTBAStores: myTBAStores, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: districtViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

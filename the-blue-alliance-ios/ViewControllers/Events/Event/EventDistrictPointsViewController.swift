@@ -11,6 +11,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 
     private(set) var event: Components.Schemas.Event
     private let myTBA: MyTBA
+    private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
@@ -18,9 +19,10 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Components.Schemas.Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Components.Schemas.Event, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
@@ -53,7 +55,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func teamSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

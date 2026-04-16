@@ -11,6 +11,7 @@ import UIKit
 class EventsContainerViewController: ContainerViewController {
 
     private(set) var myTBA: MyTBA
+    private(set) var myTBAStores: MyTBAStores
     private(set) var pasteboard: UIPasteboard?
     private(set) var photoLibrary: PHPhotoLibrary?
     private(set) var searchService: SearchService
@@ -24,8 +25,9 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.searchService = searchService
@@ -124,16 +126,13 @@ extension EventsContainerViewController: SearchContainer, SearchContainerDelegat
 extension EventsContainerViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Components.Schemas.Event) {
-        // Push the legacy EventViewController using the event key. Phase 1b
-        // rewrites EventViewController to fetch from TBAAPI; until then the
-        // detail stack still reads from Core Data, which the WeekEvents
-        // refresh keeps warm via tbaKit.fetchEvents.
         let eventViewController = EventViewController(eventKey: event.key,
                                                       pasteboard: pasteboard,
                                                       photoLibrary: photoLibrary,
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       myTBA: myTBA,
+                                                      myTBAStores: myTBAStores,
                                                       dependencies: dependencies)
         if let splitViewController = splitViewController {
             let nav = UINavigationController(rootViewController: eventViewController)

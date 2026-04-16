@@ -1,12 +1,11 @@
-import CoreData
 import Foundation
 import MyTBAKit
-import TBAKit
 import UIKit
 
 class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     let myTBA: MyTBA
+    let myTBAStores: MyTBAStores
 
     lazy var favoriteBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(image: UIImage.starIcon, style: .plain, target: self, action: #selector(myTBAPreferencesTapped))
@@ -18,8 +17,9 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     // MARK: - Init
 
-    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, myTBA: MyTBA, dependencies: Dependencies) {
+    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, myTBA: MyTBA, myTBAStores: MyTBAStores, dependencies: Dependencies) {
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
 
         super.init(viewControllers: viewControllers, navigationTitle: navigationTitle, navigationSubtitle: navigationSubtitle, segmentedControlTitles: segmentedControlTitles, dependencies: dependencies)
 

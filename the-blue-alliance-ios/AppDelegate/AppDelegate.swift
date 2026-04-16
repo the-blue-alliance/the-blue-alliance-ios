@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy private var rootViewControllerPhone: PhoneRootViewController = {
         return PhoneRootViewController(fcmTokenProvider: messaging,
                                        myTBA: myTBA,
+                                       myTBAStores: myTBAStores,
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
                                        pushService: pushService,
@@ -47,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy private var rootViewControllerPad: PadRootViewController = {
         return PadRootViewController(fcmTokenProvider: messaging,
                                        myTBA: myTBA,
+                                       myTBAStores: myTBAStores,
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
                                        pushService: pushService,
@@ -62,11 +64,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                  tbaKit: tbaKit,
                                                  api: api,
                                                  userDefaults: userDefaults)
-    // Owned here and passed explicitly to myTBA view controllers when they're
-    // migrated off Core Data — not in Dependencies, since only a handful of
-    // screens need them.
+    // Owned here and wrapped in a MyTBAStores bag so the myTBA-related screens
+    // can thread both stores as one init param. Not in Dependencies — only a
+    // handful of screens care.
     let favoritesStore = FavoritesStore()
     let subscriptionsStore = SubscriptionsStore()
+    lazy var myTBAStores: MyTBAStores = MyTBAStores(favorites: favoritesStore, subscriptions: subscriptionsStore)
     private let errorRecorder = TBAErrorRecorder()
     lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
         let description = persistentContainer.persistentStoreDescriptions.first!
