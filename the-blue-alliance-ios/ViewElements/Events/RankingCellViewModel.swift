@@ -12,6 +12,14 @@ struct RankingCellViewModel {
     let detailText: String?
     let wltText: String?
 
+    init(apiDistrictRanking ranking: Components.Schemas.DistrictRanking) {
+        self.rankText = "Rank \(ranking.rank)"
+        self.teamNumber = Self.teamNumber(from: ranking.teamKey)
+        self.teamName = "Team \(self.teamNumber ?? ranking.teamKey)"
+        self.detailText = "\(ranking.pointTotal) Points"
+        self.wltText = nil
+    }
+
     init(rank: String, apiTeamKey teamKey: String, points: Int) {
         self.rankText = rank
         self.teamNumber = Self.teamNumber(from: teamKey)

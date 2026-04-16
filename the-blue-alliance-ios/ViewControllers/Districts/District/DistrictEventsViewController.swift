@@ -1,15 +1,14 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 
-class DistrictEventsViewController: EventsViewController {
+class DistrictEventsViewController: EventsListViewController {
 
-    private let district: District
+    let districtKey: String
+    let year: Int
 
-    init(district: District, dependencies: Dependencies) {
-        self.district = district
-
+    init(districtKey: String, year: Int, dependencies: Dependencies) {
+        self.districtKey = districtKey
+        self.year = year
         super.init(dependencies: dependencies)
     }
 
@@ -17,58 +16,15 @@ class DistrictEventsViewController: EventsViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
-
-    override var refreshKey: String? {
-        return "\(district.key)_events"
+    override func loadEvents() async throws -> [APIEvent] {
+        try await dependencies.api.districtEvents(key: districtKey)
     }
 
-    override var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
+    override var refreshKey: String? { "\(districtKey)_events" }
+    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
     override var automaticRefreshEndDate: Date? {
-        // Automatically refresh event districts during the year before the selected year (when events are rolling in)
-        // Ex: Districts for 2019 will stop automatically refreshing on January 1st, 2019 (should all be set by then)
-        return Calendar.current.date(from: DateComponents(year: district.year))
+        Calendar.current.date(from: DateComponents(year: year + 1))
     }
 
-    @objc override func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictEvents(key: district.key) { [self] (result, notModified) in
-            guard case .success(let events) = result, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let district = context.object(with: self.district.objectID) as! District
-                district.insert(events)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
-        }
-        addRefreshOperations([operation])
-    }
-
-    // MARK: - Stateful
-
-    override var noDataText: String? {
-        return "No events for district"
-    }
-
-    // MARK: - EventsViewControllerDataSourceConfiguration
-
-    override var firstSortDescriptor: NSSortDescriptor {
-        return Event.weekSortDescriptor()
-    }
-
-    override var sectionNameKeyPath: String {
-        return Event.weekKeyPath()
-    }
-
-    override var fetchRequestPredicate: NSPredicate {
-        return Event.districtPredicate(districtKey: district.key)
-    }
-
+    override var noDataText: String? { "No events for district" }
 }
