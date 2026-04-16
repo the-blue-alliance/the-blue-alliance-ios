@@ -3,7 +3,7 @@ import TBAData
 import Foundation
 import TBAKit
 
-class EventTeamsViewController: TeamsViewController {
+class EventTeamsViewController: LegacyTeamsViewController {
 
     let event: Event
 
