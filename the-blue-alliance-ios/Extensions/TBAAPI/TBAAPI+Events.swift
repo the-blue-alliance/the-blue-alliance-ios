@@ -131,6 +131,38 @@ extension TBAAPI {
         }
     }
 
+    func eventMatches(key eventKey: String) async throws -> [Components.Schemas.Match] {
+        let response = try await client.getEventMatches(path: .init(eventKey: eventKey))
+        switch response {
+        case .ok(let ok):
+            return try ok.body.json
+        case .notModified:
+            throw TBAAPIError.notModified
+        case .unauthorized:
+            throw TBAAPIError.unauthorized
+        case .notFound:
+            throw TBAAPIError.notFound
+        case .undocumented(let statusCode, _):
+            throw TBAAPIError.unexpectedStatus(statusCode)
+        }
+    }
+
+    func match(key matchKey: String) async throws -> Components.Schemas.Match? {
+        let response = try await client.getMatch(path: .init(matchKey: matchKey))
+        switch response {
+        case .ok(let ok):
+            return try ok.body.json
+        case .notModified:
+            throw TBAAPIError.notModified
+        case .unauthorized:
+            throw TBAAPIError.unauthorized
+        case .notFound:
+            throw TBAAPIError.notFound
+        case .undocumented(let statusCode, _):
+            throw TBAAPIError.unexpectedStatus(statusCode)
+        }
+    }
+
     func eventOPRs(key eventKey: String) async throws -> Components.Schemas.EventOPRs? {
         let response = try await client.getEventOPRs(path: .init(eventKey: eventKey))
         switch response {

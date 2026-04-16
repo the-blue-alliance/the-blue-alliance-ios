@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import TBAAPI
 import TBAKit
 import TBAUtils
 import UIKit
@@ -18,6 +19,9 @@ class TBAViewController: UIViewController, DataController, Navigatable {
     }
     var tbaKit: TBAKit {
         return dependencies.tbaKit
+    }
+    var api: TBAAPI {
+        return dependencies.api
     }
     var userDefaults: UserDefaults {
         return dependencies.userDefaults

@@ -187,7 +187,7 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
     }
 
     func matchSelected(_ match: Match) {
-        let viewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        let viewController = MatchViewController(matchKey: match.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: viewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)
