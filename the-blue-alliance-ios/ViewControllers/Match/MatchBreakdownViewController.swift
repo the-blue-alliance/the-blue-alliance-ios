@@ -1,7 +1,5 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 struct BreakdownRow: Hashable {
@@ -27,48 +25,33 @@ struct BreakdownRow: Hashable {
 
 }
 
-class MatchBreakdownViewController: TBATableViewController, Refreshable, Observable {
+class MatchBreakdownViewController: TBATableViewController, Refreshable, Stateful {
 
-    let match: Match
-    let breakdownConfigurator: MatchBreakdownConfigurator.Type?
+    private let matchKey: String
+    private let year: Int
+    private let breakdownConfigurator: MatchBreakdownConfigurator.Type?
 
-    var dataSource: TableViewDataSource<String?, BreakdownRow>!
+    private var match: Components.Schemas.Match?
 
-    // MARK: - Observable
-
-    typealias ManagedType = Match
-    lazy var contextObserver: CoreDataContextObserver<Match> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    private var dataSource: TableViewDataSource<String?, BreakdownRow>!
 
     // MARK: - Init
 
-    init(match: Match, dependencies: Dependencies) {
-        self.match = match
+    init(matchKey: String, year: Int, dependencies: Dependencies) {
+        self.matchKey = matchKey
+        self.year = year
 
-        if match.event.year == 2015 {
-            breakdownConfigurator = MatchBreakdownConfigurator2015.self
-        } else if match.event.year == 2016 {
-            breakdownConfigurator = MatchBreakdownConfigurator2016.self
-        } else if match.event.year == 2017 {
-            breakdownConfigurator = MatchBreakdownConfigurator2017.self
-        } else if match.event.year == 2018 {
-            breakdownConfigurator = MatchBreakdownConfigurator2018.self
-        } else if match.event.year == 2019 {
-            breakdownConfigurator = MatchBreakdownConfigurator2019.self
-        } else if match.event.year == 2020 {
-            breakdownConfigurator = MatchBreakdownConfigurator2020.self
-        } else if match.event.year == 2021 {
-            breakdownConfigurator = MatchBreakdownConfigurator2020.self
-        } else if match.event.year == 2022 {
-            breakdownConfigurator = MatchBreakdownConfigurator2022.self
-        } else if match.event.year == 2024 {
-            breakdownConfigurator = MatchBreakdownConfigurator2024.self
-        } else if match.event.year == 2026 {
-            breakdownConfigurator = MatchBreakdownConfigurator2026.self
-        }
-        else {
-            breakdownConfigurator = nil
+        switch year {
+        case 2015: breakdownConfigurator = MatchBreakdownConfigurator2015.self
+        case 2016: breakdownConfigurator = MatchBreakdownConfigurator2016.self
+        case 2017: breakdownConfigurator = MatchBreakdownConfigurator2017.self
+        case 2018: breakdownConfigurator = MatchBreakdownConfigurator2018.self
+        case 2019: breakdownConfigurator = MatchBreakdownConfigurator2019.self
+        case 2020, 2021: breakdownConfigurator = MatchBreakdownConfigurator2020.self
+        case 2022: breakdownConfigurator = MatchBreakdownConfigurator2022.self
+        case 2024: breakdownConfigurator = MatchBreakdownConfigurator2024.self
+        case 2026: breakdownConfigurator = MatchBreakdownConfigurator2026.self
+        default: breakdownConfigurator = nil
         }
 
         super.init(dependencies: dependencies)
@@ -86,19 +69,10 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
         tableView.registerReusableCell(MatchBreakdownTableViewCell.self)
         tableView.insetsContentViewsToSafeArea = false
 
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
 
-        let breakdownSupported = (breakdownConfigurator != nil)
-        if breakdownSupported {
-            configureDataSource(match.breakdown)
-
-            contextObserver.observeObject(object: match, state: .updated) { (match, _) in
-                DispatchQueue.main.async {
-                    self.configureDataSource(match.breakdown)
-                }
-            }
-        } else {
+        if breakdownConfigurator == nil {
             DispatchQueue.main.async {
                 self.disableRefreshing()
             }
@@ -120,6 +94,11 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
         dataSource.statefulDelegate = self
     }
 
+    func apply(match: Components.Schemas.Match) {
+        self.match = match
+        configureDataSource(match.breakdownDict)
+    }
+
     func configureDataSource(_ breakdown: [String: Any]?) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
@@ -137,50 +116,33 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Observa
     // MARK: - Refreshable
 
     var refreshKey: String? {
-        if breakdownConfigurator == nil {
-            return nil
-        }
-        return match.key
+        if breakdownConfigurator == nil { return nil }
+        return matchKey
     }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return dataSource.isDataSourceEmpty
-    }
+    var automaticRefreshInterval: DateComponents? { nil }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: match.key, { [self] (result, notModified) in
-            guard case .success(let object) = result, let match = object, !notModified else {
-                return
+        guard breakdownConfigurator != nil else { return }
+        Task { @MainActor in
+            do {
+                if let fetched = try await dependencies.api.match(key: matchKey) {
+                    apply(match: fetched)
+                }
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Match.insert(match, in: context)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
-        })
-        addRefreshOperations([operation])
+        }
     }
 
-}
-
-extension MatchBreakdownViewController: Stateful {
+    // MARK: - Stateful
 
     var noDataText: String? {
         guard breakdownConfigurator == nil else {
             return "No breakdown for match"
         }
-        return "\(match.event.year) Match Breakdowns are not supported - try updating your app via the App Store."
+        return "\(year) Match Breakdowns are not supported - try updating your app via the App Store."
     }
 
 }

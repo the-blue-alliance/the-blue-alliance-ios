@@ -51,7 +51,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         infoViewController = EventInfoViewController(eventKey: event.key, urlOpener: urlOpener, dependencies: dependencies)
         teamsViewController = EventTeamsViewController(event: event, dependencies: dependencies)
         rankingsViewController = EventRankingsViewController(eventKey: event.key, dependencies: dependencies)
-        matchesViewController = MatchesViewController(event: event, myTBA: myTBA, dependencies: dependencies)
+        matchesViewController = MatchesViewController(eventKey: event.key, myTBA: myTBA, dependencies: dependencies)
 
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
@@ -166,8 +166,8 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 
 extension EventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable {
 
-    func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+    func matchSelected(matchKey: String) {
+        let matchViewController = MatchViewController(matchKey: matchKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 

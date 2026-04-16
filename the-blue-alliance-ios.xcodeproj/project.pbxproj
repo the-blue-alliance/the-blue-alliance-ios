@@ -84,6 +84,7 @@
 		5EC0D41A2C26041800000003 /* TBAAPIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000002 /* TBAAPIError.swift */; };
 		5EC0D41A2C26041800000005 /* TBAAPI+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */; };
 		5EC0D41A2C26041800000007 /* APIWebcast+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000006 /* APIWebcast+Helpers.swift */; };
+		5EC0D41A2C26041900000002 /* APIMatch+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041900000001 /* APIMatch+Helpers.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
 		5EC0D41A2C26041700000002 /* APIEvent+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000001 /* APIEvent+Helpers.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
@@ -353,6 +354,7 @@
 		5EC0D41A2C26041800000002 /* TBAAPIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAAPIError.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TBAAPI+Events.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041800000006 /* APIWebcast+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIWebcast+Helpers.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26041900000001 /* APIMatch+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIMatch+Helpers.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000001 /* APIEvent+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIEvent+Helpers.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsGrouping.swift; sourceTree = "<group>"; };
@@ -1054,6 +1056,7 @@
 				5EC0D41A2C26041800000002 /* TBAAPIError.swift */,
 				5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */,
 				5EC0D41A2C26041800000006 /* APIWebcast+Helpers.swift */,
+				5EC0D41A2C26041900000001 /* APIMatch+Helpers.swift */,
 			);
 			path = TBAAPI;
 			sourceTree = "<group>";
@@ -1685,6 +1688,7 @@
 				5EC0D41A2C26041800000003 /* TBAAPIError.swift in Sources */,
 				5EC0D41A2C26041800000005 /* TBAAPI+Events.swift in Sources */,
 				5EC0D41A2C26041800000007 /* APIWebcast+Helpers.swift in Sources */,
+				5EC0D41A2C26041900000002 /* APIMatch+Helpers.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
 				5EC0D41A2C26041700000002 /* APIEvent+Helpers.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,

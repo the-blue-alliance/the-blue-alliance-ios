@@ -34,7 +34,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         self.urlOpener = urlOpener
 
         let summaryViewController = TeamSummaryViewController(team: team, event: event, dependencies: dependencies)
-        matchesViewController = MatchesViewController(event: event, team: team, myTBA: myTBA, dependencies: dependencies)
+        matchesViewController = MatchesViewController(eventKey: event.key, teamKey: team.key, myTBA: myTBA, dependencies: dependencies)
         let mediaViewController = TeamMediaCollectionViewController(team: team, year: event.year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
         let statsViewController = TeamStatsViewController(team: team, event: event, dependencies: dependencies)
         let awardsViewController = EventAwardsViewController(eventKey: event.key, teamKey: team.key, dependencies: dependencies)
@@ -87,8 +87,18 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
         pushTeam(team: team)
     }
 
+    // TeamSummaryViewControllerDelegate (still on managed Match — Phase 3).
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        pushMatch(matchKey: match.key)
+    }
+
+    // MatchesViewControllerDelegate (new API-based).
+    func matchSelected(matchKey: String) {
+        pushMatch(matchKey: matchKey)
+    }
+
+    private func pushMatch(matchKey: String) {
+        let matchViewController = MatchViewController(matchKey: matchKey, teamKey: team.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 
