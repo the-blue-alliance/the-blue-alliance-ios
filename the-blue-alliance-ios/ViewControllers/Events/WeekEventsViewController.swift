@@ -53,15 +53,14 @@ class WeekEventsViewController: EventsListViewController {
         case .championshipFinals:
             // Group the CMP finals event together with its CMP divisions.
             return sameYear.filter {
-                ($0.eventTypeEnum == .championshipFinals || $0.eventTypeEnum == .championshipDivision)
-                    && ($0.key == weekEvent.key || $0.parentEventKey == weekEvent.key)
+                $0.isChampionshipEvent && ($0.key == weekEvent.key || $0.parentEventKey == weekEvent.key)
             }
         case .offseason:
             guard let start = weekEvent.startDateParsed, let end = weekEvent.endDateParsed else { return [] }
             let firstOfMonth = start.startOfMonth()
             let lastOfMonth = end.endOfMonth()
             return sameYear.filter {
-                guard $0.eventTypeEnum == .offseason, let d = $0.startDateParsed else { return false }
+                guard $0.isOffseason, let d = $0.startDateParsed else { return false }
                 return d >= firstOfMonth && d <= lastOfMonth
             }
         default:
@@ -129,7 +128,7 @@ class WeekEventsViewController: EventsListViewController {
         // First non-finished event (endDate today or later) that's not a CMP division.
         let unplayed = events
             .filter { $0.year == year }
-            .filter { $0.eventTypeEnum != .championshipDivision }
+            .filter { !$0.isChampionshipDivision }
             .filter { ($0.endDateParsed ?? .distantPast) >= today }
             .sorted { ($0.endDateParsed ?? .distantPast) < ($1.endDateParsed ?? .distantPast) }
             .first

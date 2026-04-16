@@ -7,9 +7,9 @@ enum WeekEventsGrouping {
     // so the UI can render one row per bucket in the year/week selector.
     static func weekEvents(for year: Int, from events: [Components.Schemas.Event]) -> [Components.Schemas.Event] {
         let candidates = events
-            .filter { $0.year == year && $0.eventTypeEnum != nil }
+            .filter { $0.year == year }
             // Exclude CMP divisions — we keep those out of the week picker.
-            .filter { $0.eventTypeEnum != .championshipDivision }
+            .filter { !$0.isChampionshipDivision }
             .sorted { lhs, rhs in
                 if lhs.week != rhs.week {
                     return (lhs.week ?? Int.max) < (rhs.week ?? Int.max)
