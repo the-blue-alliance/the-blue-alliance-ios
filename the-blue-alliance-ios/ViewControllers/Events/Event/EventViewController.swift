@@ -48,7 +48,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        infoViewController = EventInfoViewController(event: event, urlOpener: urlOpener, dependencies: dependencies)
+        infoViewController = EventInfoViewController(eventKey: event.key, urlOpener: urlOpener, dependencies: dependencies)
         teamsViewController = EventTeamsViewController(event: event, dependencies: dependencies)
         rankingsViewController = EventRankingsViewController(eventKey: event.key, dependencies: dependencies)
         matchesViewController = MatchesViewController(event: event, myTBA: myTBA, dependencies: dependencies)

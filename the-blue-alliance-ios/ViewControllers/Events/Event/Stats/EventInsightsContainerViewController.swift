@@ -3,6 +3,7 @@ import Firebase
 import Foundation
 import MyTBAKit
 import Photos
+import TBAAPI
 import TBAData
 import TBAKit
 import UIKit
@@ -28,14 +29,14 @@ class EventInsightsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamStatsViewController = EventTeamStatsTableViewController(event: event, dependencies: dependencies)
+        teamStatsViewController = EventTeamStatsTableViewController(eventKey: event.key, dependencies: dependencies)
 
         var eventStatsViewController: EventInsightsViewController?
         // Only show event insights if year is 2016 or onward
         var titles = ["Team Stats"]
         if event.year >= 2016 {
             titles.append("Event Insights")
-            eventStatsViewController = EventInsightsViewController(event: event, dependencies: dependencies)
+            eventStatsViewController = EventInsightsViewController(eventKey: event.key, year: Int(event.year), dependencies: dependencies)
         }
 
         super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
@@ -101,8 +102,10 @@ extension EventInsightsContainerViewController: EventTeamStatsSelectionDelegate 
         showFilter()
     }
 
-    func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func eventTeamStatSelected(teamKey: String) {
+        // Team lookup is still managed — Phase 3 swaps this for an API-driven path.
+        let team = Team.insert(teamKey, in: persistentContainer.viewContext)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

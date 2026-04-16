@@ -1,7 +1,6 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import OpenAPIRuntime
+import TBAAPI
 import UIKit
 
 struct InsightRow: Hashable {
@@ -10,40 +9,27 @@ struct InsightRow: Hashable {
     var playoff: String?
 }
 
-class EventInsightsViewController: TBATableViewController, Observable {
+class EventInsightsViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let event: Event
+    private let eventKey: String
+    private let year: Int
     private let eventStatsConfigurator: EventInsightsConfigurator.Type?
 
     private var dataSource: TableViewDataSource<String, InsightRow>!
 
-    // MARK: - Observable
+    init(eventKey: String, year: Int, dependencies: Dependencies) {
+        self.eventKey = eventKey
+        self.year = year
 
-    typealias ManagedType = Event
-    lazy var contextObserver: CoreDataContextObserver<Event> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
-
-    init(event: Event, dependencies: Dependencies) {
-        self.event = event
-
-        // Supported event insights is 2016 to 2020
-        if event.year == 2016 {
-            eventStatsConfigurator = EventInsightsConfigurator2016.self
-        } else if event.year == 2017 {
-            eventStatsConfigurator = EventInsightsConfigurator2017.self
-        } else if event.year == 2018 {
-            eventStatsConfigurator = EventInsightsConfigurator2018.self
-        } else if event.year == 2019 {
-            eventStatsConfigurator = EventInsightsConfigurator2019.self
-        } else if event.year == 2020 {
-            eventStatsConfigurator = EventInsightsConfigurator2020.self
-        } else if event.year == 2021 {
-            eventStatsConfigurator = EventInsightsConfigurator2020.self
-        } else if event.year == 2022 {
-            eventStatsConfigurator = EventInsightsConfigurator2022.self
-        } else {
-            eventStatsConfigurator = nil
+        // Supported event insights is 2016 through 2022 (2021 falls back to 2020).
+        switch year {
+        case 2016: eventStatsConfigurator = EventInsightsConfigurator2016.self
+        case 2017: eventStatsConfigurator = EventInsightsConfigurator2017.self
+        case 2018: eventStatsConfigurator = EventInsightsConfigurator2018.self
+        case 2019: eventStatsConfigurator = EventInsightsConfigurator2019.self
+        case 2020, 2021: eventStatsConfigurator = EventInsightsConfigurator2020.self
+        case 2022: eventStatsConfigurator = EventInsightsConfigurator2022.self
+        default: eventStatsConfigurator = nil
         }
 
         super.init(dependencies: dependencies)
@@ -66,16 +52,7 @@ class EventInsightsViewController: TBATableViewController, Observable {
         tableView.dataSource = dataSource
         setupDataSource()
 
-        let eventStatsSupported = (eventStatsConfigurator != nil)
-        if eventStatsSupported {
-            configureDataSource(event.insights)
-
-            contextObserver.observeObject(object: event, state: .updated) { (event, _) in
-                DispatchQueue.main.async {
-                    self.configureDataSource(event.insights)
-                }
-            }
-        } else {
+        if eventStatsConfigurator == nil {
             DispatchQueue.main.async {
                 self.disableRefreshing()
             }
@@ -139,71 +116,58 @@ class EventInsightsViewController: TBATableViewController, Observable {
         dataSource.statefulDelegate = self
     }
 
-    private func configureDataSource(_ insights: EventInsights?) {
+    private func configureDataSource(qual: [String: Any]?, playoff: [String: Any]?) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
 
-        let qual = insights?.qual
-        let playoff = insights?.playoff
-
-        if let eventStatsConfigurator = eventStatsConfigurator {
+        if let eventStatsConfigurator {
             eventStatsConfigurator.configureDataSource(&snapshot, qual, playoff)
         }
 
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-}
-
-extension EventInsightsViewController: Refreshable {
+    // MARK: - Refreshable
 
     var refreshKey: String? {
-        if eventStatsConfigurator == nil {
-            return nil
-        }
-        return "\(event.key)_insights"
+        if eventStatsConfigurator == nil { return nil }
+        return "\(eventKey)_insights"
     }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh event insights until the event is over
-        return event.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        return dataSource.isDataSourceEmpty
-    }
+    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
+    // Phase 1b: event endDate not available without a separate fetch.
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventInsights(key: event.key) { [self] (result, notModified) in
-            guard case .success(let object) = result, let insights = object, !notModified else {
-                return
+        guard eventStatsConfigurator != nil else { return }
+        Task { @MainActor in
+            do {
+                let insights = try await dependencies.api.eventInsights(key: eventKey)
+                configureDataSource(qual: Self.toAnyDict(insights?.qual),
+                                    playoff: Self.toAnyDict(insights?.playoff))
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let event = context.object(with: self.event.objectID) as! Event
-                event.insert(insights)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
+    private static func toAnyDict(_ container: OpenAPIObjectContainer?) -> [String: Any]? {
+        guard let container else { return nil }
+        var out: [String: Any] = [:]
+        for (key, value) in container.value {
+            if let value {
+                out[key] = value
+            }
+        }
+        return out
+    }
 
-extension EventInsightsViewController: Stateful {
+    // MARK: - Stateful
 
     var noDataText: String? {
         guard eventStatsConfigurator == nil else {
             return "No insights for event"
         }
-        return "\(event.year) Event Insights are not supported - try updating your app via the App Store."
+        return "\(year) Event Insights are not supported - try updating your app via the App Store."
     }
-
 }

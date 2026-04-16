@@ -20,6 +20,14 @@ struct RankingCellViewModel {
         self.wltText = nil
     }
 
+    init(apiTeamKey teamKey: String, opr: Float, dpr: Float, ccwm: Float) {
+        self.rankText = nil
+        self.teamNumber = Self.teamNumber(from: teamKey)
+        self.teamName = "Team \(self.teamNumber ?? teamKey)"
+        self.detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", opr, dpr, ccwm)
+        self.wltText = nil
+    }
+
     init(apiRanking ranking: Components.Schemas.EventRanking.RankingsPayloadPayload, detailText: String?) {
         self.rankText = "Rank \(ranking.rank)"
         self.teamNumber = Self.teamNumber(from: ranking.teamKey)

@@ -90,6 +90,23 @@ extension Components.Schemas.Event {
     var isRegional: Bool { eventTypeEnum == .regional }
     var isUnlabeled: Bool { eventTypeEnum == .unlabeled }
 
+    var hasWebsite: Bool {
+        guard let website else { return false }
+        return !website.isEmpty
+    }
+
+    // Ported from TBAData.Event.isHappeningThisWeek: the event is going on
+    // now or starts within the next week.
+    var isHappeningThisWeek: Bool {
+        guard let start = startDateParsed, let end = endDateParsed else { return false }
+        let now = Date()
+        guard let startOfWeek = Calendar.current.date(byAdding: DateComponents(day: -7), to: start) else {
+            return false
+        }
+        let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: end) ?? end
+        return now >= startOfWeek && now <= endOfDay
+    }
+
     // Sort key used in place of the Core Data `hybridType` attribute — groups
     // events by their "conceptual bucket" within a season so the weekly
     // section headers stack in a sensible order.
