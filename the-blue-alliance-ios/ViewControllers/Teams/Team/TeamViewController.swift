@@ -30,8 +30,6 @@ class TeamViewController: HeaderContainerViewController {
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
 
-    private var activity: NSUserActivity?
-
     override var subscribableModel: MyTBASubscribable {
         TeamSubscribable(modelKey: teamKey)
     }
@@ -102,18 +100,6 @@ class TeamViewController: HeaderContainerViewController {
         super.viewWillAppear(animated)
 
         errorRecorder.log("Team: %@", [teamKey])
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        activity?.becomeCurrent()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        activity?.resignCurrent()
     }
 
     // MARK: - Private

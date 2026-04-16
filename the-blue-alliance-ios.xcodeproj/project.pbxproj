@@ -79,7 +79,6 @@
 		927246C32AFFFC9300EF7796 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927246C22AFFFC9300EF7796 /* AuthHelper.swift */; };
 		927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */; };
-		927309B223DD1E66006145E0 /* HandoffService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309B123DD1E66006145E0 /* HandoffService.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041800000003 /* TBAAPIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000002 /* TBAAPIError.swift */; };
 		5EC0D41A2C26041800000005 /* TBAAPI+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */; };
@@ -353,7 +352,6 @@
 		927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
 		927309AB23DC0F68006145E0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		927309B023DCD69D006145E0 /* miket.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = miket.gpx; sourceTree = "<group>"; };
-		927309B123DD1E66006145E0 /* HandoffService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffService.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041800000002 /* TBAAPIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAAPIError.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TBAAPI+Events.swift"; sourceTree = "<group>"; };
@@ -1290,7 +1288,6 @@
 		92F8E354209AAE400094213F /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				927309B123DD1E66006145E0 /* HandoffService.swift */,
 				5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */,
 				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
 				92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */,
@@ -1695,7 +1692,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				927309B223DD1E66006145E0 /* HandoffService.swift in Sources */,
 				5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */,
 				5EC0D41A2C26041800000003 /* TBAAPIError.swift in Sources */,
 				5EC0D41A2C26041800000005 /* TBAAPI+Events.swift in Sources */,

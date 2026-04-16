@@ -98,13 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
-    lazy var handoffService: HandoffService = {
-        return HandoffService(errorRecorder: errorRecorder,
-                              persistentContainer: persistentContainer,
-                              rootControllerProvider: { [unowned self] in
-            return rootViewController
-        })
-    }()
     lazy var pushService: PushService = {
         return PushService(errorRecorder: errorRecorder,
                            myTBA: myTBA,
@@ -223,7 +216,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         snapshot.layer.opacity = 0;
                     }, completion: { (status) in
                         snapshot.removeFromSuperview()
-                        self.handoffService.appSetup = true
                     })
                 }
             }
@@ -257,12 +249,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         return GIDSignIn.sharedInstance.handle(url)
-    }
-
-    // MARK: Search Delegate Methods
-
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return handoffService.application(continue: userActivity)
     }
 
     // MARK: Push Delegate Methods
