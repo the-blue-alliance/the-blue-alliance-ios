@@ -103,6 +103,7 @@
 		928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
 		92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9E1E2154DA008E79CA /* Assets.xcassets */; };
+		A11CF00E00000000000000BB /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A11CF00E00000000000000FF /* AppIcon.icon */; };
 		92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */; };
 		92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92942DAE1E2158EC008E79CA /* Settings.bundle */; };
 		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
@@ -302,6 +303,7 @@
 		92942D921E2154DA008E79CA /* The Blue Alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Blue Alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92942D9E1E2154DA008E79CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		92942DA11E2154DA008E79CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		92942DA31E2154DA008E79CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92942DAE1E2158EC008E79CA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -620,6 +622,7 @@
 				923AEE8F2165966C00EF50C8 /* AppDelegate */,
 				923A0D7620D21D3800BF5E31 /* LaunchViews */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
+				A11CF00E00000000000000FF /* AppIcon.icon */,
 				92004C6221C21BC600A858C8 /* AppIcons */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
@@ -1139,6 +1142,7 @@
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				922FF7492BAA1E5E0075AD53 /* 2024Crescendo@2x.png in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
+				A11CF00E00000000000000BB /* AppIcon.icon in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				9244ABB52B00398B007BA24C /* 2022RapidReact@3x.png in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
