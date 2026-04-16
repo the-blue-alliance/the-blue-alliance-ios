@@ -1,8 +1,5 @@
-import CoreData
 import Foundation
 import TBAAPI
-import TBAData
-import TBAKit
 import TBAUtils
 
 protocol WeekEventsDelegate: AnyObject {
@@ -84,32 +81,12 @@ class WeekEventsViewController: EventsListViewController {
                 errorRecorder.record(error)
             }
         }
-
-        // Fire-and-forget TBAKit write-through — keeps Core Data warm for the
-        // detail screens that still read from it in this interim phase.
-        syncToCoreData(year: currentYear)
     }
 
     private var currentYear: Int {
         // If the user has switched to a different week-event (via the year/week
         // picker), follow that year. Otherwise fall back to the init'd year.
         weekEvent.map { $0.year } ?? year
-    }
-
-    // MARK: - Legacy Core Data sync
-
-    private func syncToCoreData(year: Int) {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvents(year: year) { [unowned self] result, notModified in
-            guard case .success(let events) = result, !notModified else { return }
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Event.insert(events, year: year, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: self.errorRecorder)
-        }
-        addRefreshOperations([operation])
     }
 
     // MARK: - Initial week-event selection
