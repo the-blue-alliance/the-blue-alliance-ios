@@ -356,7 +356,6 @@
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CAF54D240774B90078CA0A /* PadRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadRootViewController.swift; sourceTree = "<group>"; };
 		92CAF54F240775180078CA0A /* PhoneRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRootViewController.swift; sourceTree = "<group>"; };
-		92CC6D35234588810085867D /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewController.swift; sourceTree = "<group>"; };
 		92D855D61EC695C400572F27 /* TeamTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamTableViewCell.swift; sourceTree = "<group>"; };

@@ -4,10 +4,6 @@ import Foundation
 // from the Core Data era of the app. Safe to call on every launch — the
 // `UserDefaults` flag short-circuits after a successful run.
 //
-// Not invoked yet — call site lands in AppDelegate in the Phase 7 cleanup,
-// after `TBAPersistenceContainer` is removed. Invoking it earlier is wasted
-// work: the Core Data stack would just recreate `TBA.sqlite` on launch.
-//
 // The legacy store lived in an app-group container (see below); older builds
 // may instead have written to the app's Application Support directory, so we
 // clear both.
