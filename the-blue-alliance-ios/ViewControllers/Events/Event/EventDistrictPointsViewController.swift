@@ -1,16 +1,14 @@
-import CoreData
-import Firebase
+import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
-// TODO: Eventually, this will be redundant, and will go away
 class EventDistrictPointsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
     private let myTBA: MyTBA
+    private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
@@ -18,15 +16,16 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Event, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let districtPointsViewController = EventDistrictPointsViewController(event: event, dependencies: dependencies)
+        let districtPointsViewController = EventDistrictPointsViewController(eventKey: event.key, dependencies: dependencies)
 
         super.init(viewControllers: [districtPointsViewController],
                    navigationTitle: "District Points",
@@ -52,31 +51,35 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
-    func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(team: districtEventPoints.team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func teamSelected(teamKey: String) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventDistrictPointsViewControllerDelegate: AnyObject {
-    func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints)
+    func teamSelected(teamKey: String)
 }
 
-private class EventDistrictPointsViewController: TBATableViewController {
+private struct TeamDistrictPointsRow: Hashable {
+    let teamKey: String
+    let total: Int
+}
+
+private class EventDistrictPointsViewController: TBATableViewController, Refreshable, Stateful {
 
     weak var delegate: EventDistrictPointsViewControllerDelegate?
 
-    private let event: Event
+    private let eventKey: String
 
-    private var dataSource: TableViewDataSource<String, DistrictEventPoints>!
-    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<DistrictEventPoints>!
+    private var dataSource: TableViewDataSource<String, TeamDistrictPointsRow>!
+    private var rows: [TeamDistrictPointsRow] = []
 
     // MARK: - Init
 
-    init(event: Event, dependencies: Dependencies) {
-        self.event = event
-
+    init(eventKey: String, dependencies: Dependencies) {
+        self.eventKey = eventKey
         super.init(dependencies: dependencies)
     }
 
@@ -90,90 +93,67 @@ private class EventDistrictPointsViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.registerReusableCell(RankingTableViewCell.self)
-
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let eventPoints = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
-        delegate?.districtEventPointsSelected(eventPoints)
+        guard let row = dataSource.itemIdentifier(for: indexPath) else { return }
+        delegate?.teamSelected(teamKey: row.teamKey)
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, DistrictEventPoints>(tableView: tableView) { (tableView, indexPath, districtEventPoints) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, TeamDistrictPointsRow>(tableView: tableView) { tableView, indexPath, row in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
-            cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: districtEventPoints)
+            cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)",
+                                                  apiTeamKey: row.teamKey,
+                                                  points: row.total)
             return cell
         }
         dataSource.statefulDelegate = self
-
-        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
-        fetchRequest.sortDescriptors = [DistrictEventPoints.totalSortDescriptor()]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }
 
-    private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
-        request.predicate = DistrictEventPoints.eventPredicate(eventKey: event.key)
+    private func apply(points: EventDistrictPoints?) {
+        let sortedRows: [TeamDistrictPointsRow]
+        if let dict = points?.points.additionalProperties {
+            sortedRows = dict
+                .map { TeamDistrictPointsRow(teamKey: $0.key, total: $0.value.total) }
+                .sorted { $0.total > $1.total }
+        } else {
+            sortedRows = []
+        }
+        self.rows = sortedRows
+
+        var snapshot = NSDiffableDataSourceSnapshot<String, TeamDistrictPointsRow>()
+        snapshot.appendSections([""])
+        snapshot.appendItems(sortedRows, toSection: "")
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-}
+    // MARK: - Refreshable
 
-extension EventDistrictPointsViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(event.key)_district_points"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return fetchedResultsController.isDataSourceEmpty
-    }
+    var refreshKey: String? { "\(eventKey)_district_points" }
+    var automaticRefreshInterval: DateComponents? { nil }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { rows.isEmpty }
 
     @objc func refresh() {
-        let eventKey = event.key
-
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventDistrictPoints(key: eventKey) { [self] (result, notModified) in
-            guard case .success((let eventPoints, _)) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let response = try await dependencies.api.eventDistrictPoints(key: eventKey)
+                apply(points: response)
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
+    // MARK: - Stateful
 
-extension EventDistrictPointsViewController: Stateful {
-
-    var noDataText: String? {
-        return "No district points for event"
-    }
-
+    var noDataText: String? { "No district points for event" }
 }

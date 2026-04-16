@@ -1,27 +1,26 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
 import MyTBAKit
+import TBAAPI
 import UIKit
 
 protocol MatchesViewControllerDelegate: AnyObject {
     func showFilter()
-    func matchSelected(_ match: Match)
+    func matchSelected(matchKey: String)
 }
 
-class MatchesViewController: TBATableViewController {
+class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     weak var delegate: MatchesViewControllerDelegate?
     var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
 
-    private let event: Event
-    private let team: Team?
+    private let eventKey: String
+    private let teamKey: String?
     private var myTBA: MyTBA
+    private let favoritesStore: FavoritesStore
 
     private var dataSource: TableViewDataSource<String, Match>!
-    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Match>!
 
+    private var allMatches: [Match] = []
     private var favoriteTeamKeys: [String] = []
 
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
@@ -33,10 +32,11 @@ class MatchesViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, myTBA: MyTBA, dependencies: Dependencies) {
-        self.event = event
-        self.team = team
+    init(eventKey: String, teamKey: String? = nil, myTBA: MyTBA, favoritesStore: FavoritesStore, dependencies: Dependencies) {
+        self.eventKey = eventKey
+        self.teamKey = teamKey
         self.myTBA = myTBA
+        self.favoritesStore = favoritesStore
 
         super.init(dependencies: dependencies)
     }
@@ -51,9 +51,8 @@ class MatchesViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.registerReusableCell(MatchTableViewCell.self)
-
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
 
         updateInterface()
     }
@@ -69,75 +68,60 @@ class MatchesViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Match>(tableView: tableView) { [weak self] (tableView, indexPath, match) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Match>(tableView: tableView) { [weak self] tableView, indexPath, match in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
             var baseTeamKeys: Set<String> = Set()
-            if let team = self?.team {
-                baseTeamKeys.insert(team.key)
+            if let teamKey = self?.teamKey {
+                baseTeamKeys.insert(teamKey)
             }
             if let query = self?.query, query.filter.favorites, let favoriteTeamKeys = self?.favoriteTeamKeys {
                 baseTeamKeys.formUnion(favoriteTeamKeys)
             }
-            cell.viewModel = MatchViewModel(match: match, baseTeamKeys: Array(baseTeamKeys))
-
+            cell.viewModel = MatchViewModel(apiMatch: match, baseTeamKeys: Array(baseTeamKeys))
             return cell
         }
         dataSource.statefulDelegate = self
-
-        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: Match.compLevelSortOrderKeyPath(), cacheName: nil)
-        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }
 
-    private func updateDataSource() {
-        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
+    private func applyMatches(_ matches: [Match]) {
+        let filtered = matches.filter(for: teamKey, favoriteTeamKeys: query.filter.favorites ? favoriteTeamKeys : nil)
+        let sorted = filtered.sorted(ascending: !query.sort.reverse)
 
-    private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
-        let ascending = !query.sort.reverse
-        request.sortDescriptors = Match.sortDescriptors(ascending: ascending)
-
-        let matchPredicate: NSPredicate = {
-            if let team = team {
-                return Match.eventTeamPredicate(eventKey: event.key, teamKey: team.key)
-            } else {
-                return Match.eventPredicate(eventKey: event.key)
+        var snapshot = NSDiffableDataSourceSnapshot<String, Match>()
+        // Group by comp-level string so sections mirror the old FRC behavior.
+        var sectionOrder: [String] = []
+        var grouped: [String: [Match]] = [:]
+        for match in sorted {
+            let key = match.compLevelString
+            if grouped[key] == nil {
+                sectionOrder.append(key)
+                grouped[key] = []
             }
-        }()
-
-        // Filter for only Matches with myTBA Favorites
-        let myTBAFavoritesPredicate: NSPredicate? = {
-            guard query.filter.favorites else {
-                return nil
-            }
-            return Match.teamKeysPredicate(teamKeys: favoriteTeamKeys)
-        }()
-
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [matchPredicate, myTBAFavoritesPredicate].compactMap({ $0 }))
+            grouped[key]?.append(match)
+        }
+        for section in sectionOrder {
+            snapshot.appendSections([section])
+            snapshot.appendItems(grouped[section] ?? [], toSection: section)
+        }
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     // MARK: TableViewDataSourceDelegate
 
     override func title(forSection section: Int) -> String? {
-        guard let firstMatch = fetchedResultsController.dataSource.itemIdentifier(for: IndexPath(row: 0, section: section)) else {
+        guard let firstMatch = dataSource.itemIdentifier(for: IndexPath(row: 0, section: section)) else {
             return "Matches"
         }
-        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString) Matches"
+        return "\(firstMatch.compLevel.level) Matches"
     }
 
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let match = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
-        delegate?.matchSelected(match)
+        guard let match = dataSource.itemIdentifier(for: indexPath) else { return }
+        delegate?.matchSelected(matchKey: match.key)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -148,11 +132,10 @@ class MatchesViewController: TBATableViewController {
 
     func updateWithQuery(query: MatchQueryOptions) {
         self.query = query
-        // Save favoriteTeamKeys when query changes - since this can be expensive
-        favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
+        favoriteTeamKeys = favoritesStore.favoriteTeamKeys()
 
         updateInterface()
-        updateDataSource()
+        applyMatches(allMatches)
     }
 
     // MARK: - Interface Methods
@@ -161,54 +144,30 @@ class MatchesViewController: TBATableViewController {
         delegate?.showFilter()
     }
 
-}
-
-extension MatchesViewController: Refreshable {
-
     // MARK: - Refreshable
 
-    var refreshKey: String? {
-        return "\(event.key)_matches"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh event matches until the event is over
-        return event.endDate?.endOfDay()
-    }
-
+    var refreshKey: String? { "\(eventKey)_matches" }
+    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
+    // Phase 2: event endDate not available without a separate fetch; deferred.
+    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool {
-        // If we've changed our `filter` query option, an empty list is a valid state
-        if !query.filter.isDefault {
-            return false
-        }
-        return fetchedResultsController.isDataSourceEmpty
+        if !query.filter.isDefault { return false }
+        return allMatches.isEmpty
     }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventMatches(key: event.key) { [self] (result, notModified) in
-            guard case .success(let matches) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.eventMatches(key: eventKey)
+                allMatches = fetched
+                applyMatches(fetched)
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let event = context.object(with: self.event.objectID) as! Event
-                event.insert(matches)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
-
-extension MatchesViewController: Stateful {
+    // MARK: - Stateful
 
     var noDataText: String? {
         if query.isDefault {
@@ -217,7 +176,40 @@ extension MatchesViewController: Stateful {
             return "No matches matching filter options"
         }
     }
+}
 
+extension MatchesViewController {
+    // Placeholder so `MatchesViewControllerQueryable`'s `showFilter()` still compiles.
+}
+
+private extension Array where Element == Match {
+    func filter(for teamKey: String?, favoriteTeamKeys: [String]?) -> [Match] {
+        var results = self
+        if let teamKey {
+            results = results.filter { $0.allTeamKeys.contains(teamKey) }
+        }
+        if let favoriteTeamKeys, !favoriteTeamKeys.isEmpty {
+            let favSet = Set(favoriteTeamKeys)
+            results = results.filter { match in
+                match.allTeamKeys.contains(where: favSet.contains)
+            }
+        }
+        return results
+    }
+
+    func sorted(ascending: Bool) -> [Match] {
+        sorted { lhs, rhs in
+            if lhs.compLevelSortOrder != rhs.compLevelSortOrder {
+                return ascending
+                    ? lhs.compLevelSortOrder < rhs.compLevelSortOrder
+                    : lhs.compLevelSortOrder > rhs.compLevelSortOrder
+            }
+            if lhs.setNumber != rhs.setNumber {
+                return ascending ? lhs.setNumber < rhs.setNumber : lhs.setNumber > rhs.setNumber
+            }
+            return ascending ? lhs.matchNumber < rhs.matchNumber : lhs.matchNumber > rhs.matchNumber
+        }
+    }
 }
 
 protocol MatchesViewControllerQueryable: ContainerViewController, MatchQueryOptionsDelegate {

@@ -1,6 +1,5 @@
-import CoreData
-import TBAData
-import TBAKit
+import Foundation
+import TBAAPI
 import UIKit
 
 private enum TeamInfoSection: Int {
@@ -18,26 +17,21 @@ private enum TeamInfoItem {
     case chiefDelphi
 }
 
-class TeamInfoViewController: TBATableViewController, Observable {
+class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
-    private var team: Team
+    private let teamKey: String
     private let urlOpener: URLOpener
+
+    private var team: Team?
 
     private var dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
 
     private var sponsorsExpanded: Bool = false
 
-    // MARK: - Observable
-
-    typealias ManagedType = Team
-    lazy var contextObserver: CoreDataContextObserver<Team> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
-
     // MARK: - Init
 
-    init(team: Team, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.team = team
+    init(teamKey: String, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.teamKey = teamKey
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, dependencies: dependencies)
@@ -57,15 +51,13 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
         tableView.dataSource = dataSource
         setupDataSource()
+    }
 
+    // MARK: - External
+
+    func apply(team: Team) {
+        self.team = team
         updateTeamInfo()
-
-        contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.updateTeamInfo()
-            }
-        }
     }
 
     // MARK: - Private Methods
@@ -86,11 +78,11 @@ class TeamInfoViewController: TBATableViewController, Observable {
                 return cell
             case .twitter:
                 let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                cell.textLabel?.text = "View \(self.team.key) on Twitter"
+                cell.textLabel?.text = "View \(self.teamKey) on Twitter"
                 return cell
             case .youtube:
                 let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                cell.textLabel?.text = "View \(self.team.key) on YouTube"
+                cell.textLabel?.text = "View \(self.teamKey) on YouTube"
                 return cell
             case .chiefDelphi:
                 let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
@@ -102,19 +94,22 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
     private func updateTeamInfo() {
         var snapshot = dataSource.snapshot()
-
         snapshot.deleteAllItems()
+
+        guard let team else {
+            dataSource.apply(snapshot, animatingDifferences: false)
+            return
+        }
 
         // Info
         var infoItems: [TeamInfoItem] = []
-        if team.hasLocation {
+        if team.locationString != nil {
             infoItems.append(.location)
         }
-        if team.name != nil {
+        if !team.name.isEmpty {
             infoItems.append(.rookieYear)
-            infoItems.append(.sponsors)            
+            infoItems.append(.sponsors)
         }
-
         if !infoItems.isEmpty {
             snapshot.appendSections([.info])
             snapshot.appendItems(infoItems, toSection: .info)
@@ -141,32 +136,26 @@ class TeamInfoViewController: TBATableViewController, Observable {
 
     private func tableView(_ tableView: UITableView, locationCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
-
         cell.titleLabel?.text = "Location"
-        cell.subtitleLabel?.text = team.locationString
-
+        cell.subtitleLabel?.text = team?.locationString
         cell.accessoryType = .none
         cell.selectionStyle = .none
-
         return cell
     }
-    
+
     private func tableView(_ tableView: UITableView, rookieYearCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
-
         cell.titleLabel?.text = "Rookie Year"
-        cell.subtitleLabel?.text = String(team.rookieYear!)
-
+        cell.subtitleLabel?.text = team?.rookieYear.map(String.init) ?? ""
         cell.accessoryType = .none
         cell.selectionStyle = .none
-
         return cell
     }
 
     private func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
-        cell.textLabel?.text = team.name
+        cell.textLabel?.text = team?.name
         cell.textLabel?.textColor = UIColor.secondaryLabel
 
         if sponsorsExpanded {
@@ -201,75 +190,42 @@ class TeamInfoViewController: TBATableViewController, Observable {
             sponsorsExpanded = true
             reloadSponsors()
         case .website:
-            urlString = team.website
+            urlString = team?.website
         case .twitter:
-            urlString = "https://twitter.com/search?q=%23\(team.key)"
+            urlString = "https://twitter.com/search?q=%23\(teamKey)"
         case .youtube:
-            urlString = "https://www.youtube.com/results?search_query=\(team.key)"
+            urlString = "https://www.youtube.com/results?search_query=\(teamKey)"
         case .chiefDelphi:
-            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(team.key)"
+            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(teamKey)"
         default:
             break
         }
 
-        if let urlString = urlString,
-            let url = URL(string: urlString), urlOpener.canOpenURL(url) {
-                urlOpener.open(url, options: [:], completionHandler: nil)
+        if let urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+            urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
 
-}
+    // MARK: - Refreshable
 
-extension TeamInfoViewController: Refreshable {
-
-    var refreshKey: String? {
-        return team.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        let years = team.yearsParticipated ?? []
-        return team.name == nil || years.isEmpty
-    }
+    var refreshKey: String? { teamKey }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { team == nil }
 
     @objc func refresh() {
-        var infoOperation: TBAKitOperation!
-        infoOperation = tbaKit.fetchTeam(key: team.key) { [self] (result, notModified) in
-            guard case .success(let object) = result, let team = object, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                if let fetched = try await api.team(key: teamKey) {
+                    apply(team: fetched)
+                }
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Team.insert(team, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: infoOperation)
-            }, errorRecorder: errorRecorder)
         }
-
-        var yearsOperation: TBAKitOperation!
-        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key) { [self] (result, notModified) in
-            guard case .success(let years) = result, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let team = context.object(with: self.team.objectID) as! Team
-                team.setYearsParticipated(years)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(yearsOperation)
-            }, errorRecorder: errorRecorder)
-        }
-
-        addRefreshOperations([infoOperation, yearsOperation])
     }
 
+    // MARK: - Stateful
+
+    var noDataText: String? { nil }
 }

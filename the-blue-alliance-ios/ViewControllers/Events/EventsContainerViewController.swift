@@ -1,18 +1,15 @@
-import CoreData
-import Firebase
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 class EventsContainerViewController: ContainerViewController {
 
     private(set) var myTBA: MyTBA
+    private(set) var myTBAStores: MyTBAStores
     private(set) var pasteboard: UIPasteboard?
     private(set) var photoLibrary: PHPhotoLibrary?
-    private(set) var searchService: SearchService
     private(set) var statusService: StatusService
     private(set) var urlOpener: URLOpener
 
@@ -23,11 +20,11 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -116,4 +113,26 @@ extension EventsContainerViewController: WeekEventsDelegate {
 
 }
 
-extension EventsContainerViewController: EventsViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+extension EventsContainerViewController: SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+
+// MARK: - EventsListViewControllerDelegate
+
+extension EventsContainerViewController: EventsListViewControllerDelegate {
+
+    func eventSelected(_ event: Event) {
+        let eventViewController = EventViewController(eventKey: event.key,
+                                                      pasteboard: pasteboard,
+                                                      photoLibrary: photoLibrary,
+                                                      statusService: statusService,
+                                                      urlOpener: urlOpener,
+                                                      myTBA: myTBA,
+                                                      myTBAStores: myTBAStores,
+                                                      dependencies: dependencies)
+        if let splitViewController = splitViewController {
+            let nav = UINavigationController(rootViewController: eventViewController)
+            splitViewController.showDetailViewController(nav, sender: nil)
+        } else if let navigationController = navigationController {
+            navigationController.pushViewController(eventViewController, animated: true)
+        }
+    }
+}

@@ -1,152 +1,140 @@
-import CoreData
-import TBAData
-import TBAKit
-import TBAUtils
 import Foundation
+import TBAAPI
+import TBAUtils
 
-/**
- Service to periodically fetch from the /status endpoint
- */
+struct AppStatus {
+    let currentSeason: Int
+    let maxSeason: Int
+    let minAppVersion: Int
+    let latestAppVersion: Int
+    let isDatafeedDown: Bool
+    let downEventKeys: [String]
+
+    static var `default`: AppStatus {
+        let year = Calendar.current.component(.year, from: Date())
+        return AppStatus(currentSeason: year,
+                         maxSeason: year,
+                         minAppVersion: -1,
+                         latestAppVersion: -1,
+                         isDatafeedDown: false,
+                         downEventKeys: [])
+    }
+
+    init(currentSeason: Int, maxSeason: Int, minAppVersion: Int, latestAppVersion: Int, isDatafeedDown: Bool, downEventKeys: [String]) {
+        self.currentSeason = currentSeason
+        self.maxSeason = maxSeason
+        self.minAppVersion = minAppVersion
+        self.latestAppVersion = latestAppVersion
+        self.isDatafeedDown = isDatafeedDown
+        self.downEventKeys = downEventKeys
+    }
+
+    init(apiStatus: APIStatus) {
+        self.currentSeason = apiStatus.currentSeason
+        self.maxSeason = apiStatus.maxSeason
+        self.minAppVersion = apiStatus.ios.minAppVersion
+        self.latestAppVersion = apiStatus.ios.latestAppVersion
+        self.isDatafeedDown = apiStatus.isDatafeedDown
+        self.downEventKeys = apiStatus.downEvents
+    }
+}
+
 public class StatusService: NSObject {
 
     var retryService: RetryService
 
-    private let operationQueue = OperationQueue()
-
-    private let bundle: Bundle
     private let errorRecorder: ErrorRecorder
-    private let persistentContainer: NSPersistentContainer
-    private let tbaKit: TBAKit
+    private let api: TBAAPI
 
-    lazy var status: Status = {
-        if let status = Status.status(in: persistentContainer.viewContext) {
-            return status
-        } else {
-            guard let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) else {
-                fatalError("Cannot setup Status for StatusService")
-            }
-            _ = persistentContainer.viewContext.saveOrRollback(errorRecorder: errorRecorder)
-            return status
-        }
-    }()
+    private(set) var status: AppStatus = .default
 
-    lazy var contextObserver: CoreDataContextObserver<Status> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    private let statusSubscribers = NSHashTable<AnyObject>.weakObjects()
+    private let fmsStatusSubscribers = NSHashTable<AnyObject>.weakObjects()
+    private let eventStatusSubscribers = NSMapTable<NSString, NSHashTable<AnyObject>>()
 
-    private let statusSubscribers: NSHashTable<StatusSubscribable> = NSHashTable.weakObjects()
-    private let fmsStatusSubscribers: NSHashTable<FMSStatusSubscribable> = NSHashTable.weakObjects()
-    private let eventStatusSubscribers: NSMapTable<NSString, NSHashTable<EventStatusSubscribable>> = NSMapTable()
-
-    // Keep internal state of previously-down Events so we can dispatch when they're back up
     private var previousFMSStatus: Bool = false
     private var previouslyDownEventKeys: [String] = []
 
-    var currentSeason: Int {
-        return status.currentSeason
-    }
+    var currentSeason: Int { status.currentSeason }
+    var maxSeason: Int { status.maxSeason }
 
-    var maxSeason: Int {
-        return status.maxSeason
-    }
-
-    init(bundle: Bundle = Bundle.main, errorRecorder: ErrorRecorder, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
-        self.bundle = bundle
+    init(errorRecorder: ErrorRecorder, api: TBAAPI, retryService: RetryService) {
         self.errorRecorder = errorRecorder
-        self.persistentContainer = persistentContainer
+        self.api = api
         self.retryService = retryService
-        self.tbaKit = tbaKit
 
         super.init()
     }
 
-    func setupStatusObservers() {
-        contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
-            self?.dispatchStatusChanged(status)
-            self?.dispatchFMSDown(status.isDatafeedDown)
-            self?.dispatchEvents(downEventKeys: status.downEvents.map({ $0.key }))
+    func fetchStatus() async {
+        do {
+            let apiStatus = try await api.getStatus()
+            let newStatus = AppStatus(apiStatus: apiStatus)
+            await MainActor.run { apply(newStatus) }
+        } catch {
+            errorRecorder.record(error)
         }
     }
 
-    internal func fetchStatus(completion: ((_ error: Error?) -> Void)? = nil) -> TBAKitOperation {
-        return tbaKit.fetchStatus { [self] (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion?(error)
-            case .success(let status):
-                let context = persistentContainer.newBackgroundContext()
-                context.performChangesAndWait({
-                    if !notModified, let status = status {
-                        Status.insert(status, in: context)
-                    }
-                }, errorRecorder: errorRecorder)
-                completion?(nil)
-            }
+    @MainActor
+    private func apply(_ newStatus: AppStatus) {
+        status = newStatus
+        dispatchStatusChanged(newStatus)
+        dispatchFMSDown(newStatus.isDatafeedDown)
+        dispatchEvents(downEventKeys: newStatus.downEventKeys)
+    }
+
+    private func dispatchStatusChanged(_ status: AppStatus) {
+        for obj in statusSubscribers.allObjects {
+            (obj as? StatusSubscribable)?.statusChanged(status: status)
         }
     }
 
-    func dispatchStatusChanged(_ status: Status) {
-        updateStatusSubscribers(status)
-    }
-
-    func dispatchFMSDown(_ fmsStatus: Bool) {
+    private func dispatchFMSDown(_ fmsStatus: Bool) {
         if fmsStatus != previousFMSStatus {
-            updateFMSSubscribers(isDatafeedDown: fmsStatus)
+            for obj in fmsStatusSubscribers.allObjects {
+                (obj as? FMSStatusSubscribable)?.fmsStatusChanged(isDatafeedDown: fmsStatus)
+            }
         }
         previousFMSStatus = fmsStatus
     }
 
-    func dispatchEvents(downEventKeys: [String]) {
-        // Dispatch new events are down
-        let newlyDownEventKeys = downEventKeys.filter({ !previouslyDownEventKeys.contains($0) })
+    private func dispatchEvents(downEventKeys: [String]) {
+        let newlyDownEventKeys = downEventKeys.filter { !previouslyDownEventKeys.contains($0) }
         for eventKey in newlyDownEventKeys {
             updateEventSubscribers(eventKey: eventKey, isEventOffline: true)
         }
 
-        // Dispatch old events are up
-        let newlyUpEventKeys = previouslyDownEventKeys.filter({ !downEventKeys.contains($0) })
+        let newlyUpEventKeys = previouslyDownEventKeys.filter { !downEventKeys.contains($0) }
         for eventKey in newlyUpEventKeys {
             updateEventSubscribers(eventKey: eventKey, isEventOffline: false)
         }
 
-        // Save our state
         previouslyDownEventKeys = downEventKeys
     }
 
-    // MARK: - Status Notifications
+    // MARK: - Subscription Registration
 
     fileprivate func registerForStatusChanges(_ subscriber: StatusSubscribable) {
-        statusSubscribers.add(subscriber)
+        statusSubscribers.add(subscriber as AnyObject)
     }
 
     fileprivate func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {
-        fmsStatusSubscribers.add(subscriber)
+        fmsStatusSubscribers.add(subscriber as AnyObject)
     }
 
     fileprivate func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String) {
-        let subscribers = eventStatusSubscribers.object(forKey: eventKey as NSString) ?? NSHashTable.weakObjects()
-        subscribers.add(subscriber)
+        let subscribers = eventStatusSubscribers.object(forKey: eventKey as NSString) ?? NSHashTable<AnyObject>.weakObjects()
+        subscribers.add(subscriber as AnyObject)
         eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
     }
 
-    fileprivate func updateStatusSubscribers(_ status: Status) {
-        for subscriber in self.statusSubscribers.allObjects {
-            subscriber.statusChanged(status: status)
-        }
-    }
-
-    fileprivate func updateFMSSubscribers(isDatafeedDown: Bool) {
-        for subscriber in self.fmsStatusSubscribers.allObjects {
-            subscriber.fmsStatusChanged(isDatafeedDown: isDatafeedDown)
-        }
-    }
-
-    fileprivate func updateEventSubscribers(eventKey: String, isEventOffline: Bool) {
+    private func updateEventSubscribers(eventKey: String, isEventOffline: Bool) {
         guard let subscribersTable = eventStatusSubscribers.object(forKey: eventKey as NSString) else {
             return
         }
-        for subscriber in subscribersTable.allObjects {
-            subscriber.eventStatusChanged(isEventOffline: isEventOffline)
+        for obj in subscribersTable.allObjects {
+            (obj as? EventStatusSubscribable)?.eventStatusChanged(isEventOffline: isEventOffline)
         }
     }
 
@@ -155,21 +143,20 @@ public class StatusService: NSObject {
 extension StatusService: Retryable {
 
     var retryInterval: TimeInterval {
-        // Poll every... 5 mins for a new status object
+        // Poll every 5 minutes for a new status object.
         return 5 * 60
     }
 
     func retry() {
-        let op = fetchStatus()
-        operationQueue.addOperation(op)
+        Task { await fetchStatus() }
     }
 
 }
 
-@objc protocol StatusSubscribable {
+protocol StatusSubscribable: AnyObject {
     var statusService: StatusService { get }
 
-    func statusChanged(status: Status)
+    func statusChanged(status: AppStatus)
 }
 
 extension StatusSubscribable {
@@ -180,7 +167,7 @@ extension StatusSubscribable {
 
 }
 
-@objc protocol FMSStatusSubscribable {
+protocol FMSStatusSubscribable: AnyObject {
     var statusService: StatusService { get }
 
     func fmsStatusChanged(isDatafeedDown: Bool)
@@ -194,7 +181,7 @@ extension FMSStatusSubscribable {
 
 }
 
-@objc protocol EventStatusSubscribable {
+protocol EventStatusSubscribable: AnyObject {
     var statusService: StatusService { get }
 
     func eventStatusChanged(isEventOffline: Bool)
@@ -207,8 +194,7 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        let downEventKeys = statusService.status.downEvents.map({ $0.key })
-        return downEventKeys.contains(eventKey)
+        return statusService.status.downEventKeys.contains(eventKey)
     }
 
 }

@@ -1,48 +1,19 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
-class TeamStatsViewController: TBATableViewController, Observable {
+class TeamStatsViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let team: Team
-    private let event: Event
+    private let teamKey: String
+    private let eventKey: String
 
-    private var teamStat: EventTeamStat? {
-        didSet {
-            if let teamStat = teamStat {
-                contextObserver.observeObject(object: teamStat, state: .updated) { [weak self] (_, _) in
-                    DispatchQueue.main.async {
-                        self?.tableView.reloadData()
-                    }
-                }
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.reloadData()
-                }
-            } else {
-                contextObserver.observeInsertions { [weak self] (teamStats) in
-                    self?.teamStat = teamStats.first
-                }
-            }
-        }
-    }
-
-    // MARK: - Observable
-
-    typealias ManagedType = EventTeamStat
-    lazy var contextObserver: CoreDataContextObserver<EventTeamStat> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
-    lazy var observerPredicate: NSPredicate = {
-        return EventTeamStat.predicate(eventKey: event.key, teamKey: team.key)
-    }()
+    private var stats: TeamStats?
 
     // MARK: - Init
 
-    init(team: Team, event: Event, dependencies: Dependencies) {
-        self.team = team
-        self.event = event
+    init(teamKey: String, eventKey: String, dependencies: Dependencies) {
+        self.teamKey = teamKey
+        self.eventKey = eventKey
 
         super.init(dependencies: dependencies)
     }
@@ -56,15 +27,13 @@ class TeamStatsViewController: TBATableViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // TODO: Since we leverage didSet, we need to do this *after* initilization
-        teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
         tableView.registerReusableCell(EventTeamStatTableViewCell.self)
     }
 
     // MARK: Table View Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if teamStat == nil {
+        if stats == nil {
             showNoDataView()
             return 0
         }
@@ -76,68 +45,56 @@ class TeamStatsViewController: TBATableViewController, Observable {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
         cell.selectionStyle = .none
 
-        let (statName, statKey): (String, String) = {
+        let (statName, statValue): (String, Float?) = {
             switch indexPath.row {
-            case 0:
-                return ("OPR", EventTeamStat.oprKeyPath())
-            case 1:
-                return ("DPR", EventTeamStat.dprKeyPath())
-            case 2:
-                return ("CCWM", EventTeamStat.ccwmKeyPath())
-            default:
-                return ("", "")
+            case 0: return ("OPR", stats?.opr)
+            case 1: return ("DPR", stats?.dpr)
+            case 2: return ("CCWM", stats?.ccwm)
+            default: return ("", nil)
             }
         }()
-        cell.viewModel = EventTeamStatCellViewModel(eventTeamStat: teamStat, statName: statName, statKey: statKey)
-
+        cell.viewModel = EventTeamStatCellViewModel(statName: statName, value: statValue)
         return cell
     }
 
-}
+    // MARK: - Refreshable
 
-extension TeamStatsViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(event.key)_team_stats"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh team stats until the event is over
-        return event.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        return teamStat == nil
-    }
+    var refreshKey: String? { "\(eventKey)_team_stats" }
+    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
+    // Phase 3: event endDate isn't available without a separate fetch.
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { stats == nil }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventTeamStats(key: event.key) { [self] (result, notModified) in
-            guard case .success(let stats) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let oprs = try await dependencies.api.eventOPRs(key: eventKey)
+                stats = TeamStats(teamKey: teamKey, oprs: oprs)
+                tableView.reloadData()
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let event = context.object(with: self.event.objectID) as! Event
-                event.insert(stats)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
+    // MARK: - Stateful
+
+    var noDataText: String? { "No stats for team at event" }
 }
 
-extension TeamStatsViewController: Stateful {
+private struct TeamStats {
+    let opr: Float?
+    let dpr: Float?
+    let ccwm: Float?
 
-    var noDataText: String? {
-        return "No stats for team at event"
+    init?(teamKey: String, oprs: EventOPRs?) {
+        guard let oprs else { return nil }
+        let o = oprs.oprs?.additionalProperties[teamKey]
+        let d = oprs.dprs?.additionalProperties[teamKey]
+        let c = oprs.ccwms?.additionalProperties[teamKey]
+        if o == nil && d == nil && c == nil { return nil }
+        self.opr = o
+        self.dpr = d
+        self.ccwm = c
     }
-
 }

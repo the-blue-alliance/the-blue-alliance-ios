@@ -1,9 +1,6 @@
-import CoreData
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
 import UIKit
 
 protocol RootChildController {
@@ -57,28 +54,22 @@ enum RootType: CaseIterable {
 protocol RootController {
     var fcmTokenProvider: FCMTokenProvider { get }
     var myTBA: MyTBA { get }
+    var myTBAStores: MyTBAStores { get }
     var pasteboard: UIPasteboard? { get }
     var photoLibrary: PHPhotoLibrary? { get }
     var pushService: PushService { get }
-    var searchService: SearchService { get }
     var urlOpener: URLOpener { get }
     var statusService: StatusService { get }
     var dependencies: Dependencies { get }
-
-    // MARK: - Handoff Methods
-    func continueSearch(_ searchText: String) -> Bool
-
-    func show(event: Event) -> Bool
-    func show(team: Team) -> Bool
 }
 
 extension RootController {
 
     var eventsViewController: EventsContainerViewController {
         return EventsContainerViewController(myTBA: myTBA,
+                                             myTBAStores: myTBAStores,
                                              pasteboard: pasteboard,
                                              photoLibrary: photoLibrary,
-                                             searchService: searchService,
                                              statusService: statusService,
                                              urlOpener: urlOpener,
                                              dependencies: dependencies)
@@ -86,9 +77,9 @@ extension RootController {
 
     var teamsViewController: TeamsContainerViewController {
         return TeamsContainerViewController(myTBA: myTBA,
+                                            myTBAStores: myTBAStores,
                                             pasteboard: pasteboard,
                                             photoLibrary: photoLibrary,
-                                            searchService: searchService,
                                             statusService: statusService,
                                             urlOpener: urlOpener,
                                             dependencies: dependencies)
@@ -96,6 +87,7 @@ extension RootController {
 
     var districtsViewController: DistrictsContainerViewController {
         return DistrictsContainerViewController(myTBA: myTBA,
+                                                myTBAStores: myTBAStores,
                                                 statusService: statusService,
                                                 urlOpener: urlOpener,
                                                 dependencies: dependencies)
@@ -105,13 +97,13 @@ extension RootController {
         return SettingsViewController(fcmTokenProvider: fcmTokenProvider,
                                       myTBA: myTBA,
                                       pushService: pushService,
-                                      searchService: searchService,
                                       urlOpener: urlOpener,
                                       dependencies: dependencies)
     }
 
     var myTBAViewController: MyTBAViewController {
         return MyTBAViewController(myTBA: myTBA,
+                                   myTBAStores: myTBAStores,
                                    pasteboard: pasteboard,
                                    photoLibrary: photoLibrary,
                                    statusService: statusService,

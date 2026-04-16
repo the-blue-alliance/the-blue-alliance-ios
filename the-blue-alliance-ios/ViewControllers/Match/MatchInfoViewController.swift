@@ -1,14 +1,15 @@
-import CoreData
 import Foundation
 import PureLayout
-import TBAData
-import TBAKit
+import TBAAPI
+import TBAProtocols
 import UIKit
 
-class MatchInfoViewController: TBAViewController, Observable {
+class MatchInfoViewController: TBAViewController, Refreshable {
 
-    private let match: Match
-    private let team: Team?
+    private let matchKey: String
+    private let teamKey: String?
+
+    private var match: Match?
 
     // MARK: - UI
 
@@ -62,7 +63,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         videoStackView.translatesAutoresizingMaskIntoConstraints = false
         return videoStackView
     }()
-    
+
     public var matchSummaryDelegate: MatchSummaryViewDelegate? {
         get {
             return matchSummaryView.delegate
@@ -72,26 +73,11 @@ class MatchInfoViewController: TBAViewController, Observable {
         }
     }
 
-    // MARK: - Observable
-
-    typealias ManagedType = Match
-    lazy var contextObserver: CoreDataContextObserver<Match> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
-
-    // MARK: Class Methods
-
-    static func playerView(for matchVideo: MatchVideo) -> PlayerView {
-        let playerView = PlayerView(playable: matchVideo)
-        playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
-        return playerView
-    }
-
     // MARK: Init
 
-    init(match: Match, team: Team? = nil, dependencies: Dependencies) {
-        self.match = match
-        self.team = team
+    init(matchKey: String, teamKey: String? = nil, dependencies: Dependencies) {
+        self.matchKey = matchKey
+        self.teamKey = teamKey
 
         super.init(dependencies: dependencies)
     }
@@ -106,12 +92,6 @@ class MatchInfoViewController: TBAViewController, Observable {
         super.viewDidLoad()
 
         styleInterface()
-
-        contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
-            DispatchQueue.main.async {
-                self?.updateInterface()
-            }
-        }
     }
 
     // MARK: Interface Methods
@@ -133,18 +113,11 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         // Override our default background color to be white
         view.backgroundColor = .systemBackground
+    }
 
+    func apply(match: Match) {
+        self.match = match
         updateInterface()
-
-        if let viewModel = matchSummaryView.viewModel {
-            if viewModel.hasScores {
-                // Match the 'Score' label with the size of the score
-                scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.redScoreLabel)
-            } else {
-                // Match the 'Time' label to the size of the time
-                scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.timeLabel)
-            }
-        }
     }
 
     func updateInterface() {
@@ -153,16 +126,15 @@ class MatchInfoViewController: TBAViewController, Observable {
     }
 
     func updateMatchSummaryView() {
+        guard let match else { return }
         matchSummaryView.resetView()
 
-        let viewModel = MatchViewModel(match: match, team: team)
+        var baseTeamKeys: [String] = []
+        if let teamKey { baseTeamKeys.append(teamKey) }
+        let viewModel = MatchViewModel(apiMatch: match, baseTeamKeys: baseTeamKeys)
         matchSummaryView.viewModel = viewModel
 
-        if !viewModel.hasScores {
-            scoreTitleLabel.text = "Time"
-        } else {
-            scoreTitleLabel.text = "Score"
-        }
+        scoreTitleLabel.text = viewModel.hasScores ? "Score" : "Time"
     }
 
     func updateMatchVideos() {
@@ -171,80 +143,55 @@ class MatchInfoViewController: TBAViewController, Observable {
             view.removeFromSuperview()
         }
 
+        guard let match else { return }
         for video in match.videos {
-            let playerView = MatchInfoViewController.playerView(for: video)
+            let playerView = Self.playerView(for: video)
             videoStackView.addArrangedSubview(playerView)
         }
+    }
+
+    private static func playerView(for video: Match.VideosPayloadPayload) -> PlayerView {
+        let playerView = PlayerView(playable: MatchVideoPlayable(video: video))
+        playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
+        return playerView
     }
 
     override func reloadData() {
         // We'll always have a match, so we shouldn't need to show a no data state
     }
 
-}
+    // MARK: - Refreshable
 
-extension MatchInfoViewController: Refreshable {
-
-    var refreshKey: String? {
-        return match.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh the match info until a few days after the match has been played
-        // (Mostly looking for new videos)
-        guard let endDate = match.event.endDate else {
-            return nil
-        }
-        return Calendar.current.date(byAdding: DateComponents(day: 7), to: endDate)
-    }
-
+    var refreshKey: String? { matchKey }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
+    // Phase 2: match.event.endDate not available without an extra fetch.
+    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool {
-        // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
-        return match.videos.count == 0 || match.event.name == nil
+        // Match hasn't loaded yet, or it has loaded but has no videos.
+        (match?.videos.count ?? 0) == 0
     }
 
     @objc func refresh() {
-        var eventOperation: TBAKitOperation?
-        if match.event.name == nil {
-            eventOperation = tbaKit.fetchEvent(key: match.event.key, completion: { [self] (result, notModified) in
-                guard case .success(let object) = result, let event = object, !notModified else {
-                    return
+        Task { @MainActor in
+            do {
+                if let fetched = try await api.match(key: matchKey) {
+                    apply(match: fetched)
                 }
-
-                let context = persistentContainer.newBackgroundContext()
-                context.performChangesAndWait({
-                    Event.insert(event, in: context)
-                }, saved: { [unowned self] in
-                    self.markTBARefreshSuccessful(tbaKit, operation: eventOperation!)
-                }, errorRecorder: errorRecorder)
-            })
+            } catch {
+                errorRecorder.record(error)
+            }
         }
-
-        var matchOperation: TBAKitOperation!
-        matchOperation = tbaKit.fetchMatch(key: match.key, { [self] (result, notModified) in
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                switch result {
-                case .success(let match):
-                    if let match = match {
-                        Match.insert(match, in: context)
-                    } else if !notModified {
-                        // TODO: Delete match, bump back up navigation stack
-                    }
-                default:
-                    break
-                }
-
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: matchOperation)
-            }, errorRecorder: errorRecorder)
-        })
-        addRefreshOperations([eventOperation, matchOperation].compactMap({ $0 }))
     }
 
+}
+
+// Bridges the API's `Match.VideosPayloadPayload` to the existing `Playable`
+// contract that `PlayerView` consumes. Only YouTube videos are playable —
+// the old `MatchVideo.youtubeKey` mapped the same way.
+private struct MatchVideoPlayable: Playable {
+    let video: Match.VideosPayloadPayload
+
+    var youtubeKey: String? {
+        video._type == "youtube" ? video.key : nil
+    }
 }

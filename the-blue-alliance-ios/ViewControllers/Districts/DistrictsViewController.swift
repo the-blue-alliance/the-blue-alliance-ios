@@ -1,24 +1,22 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)
 }
 
-class DistrictsViewController: TBATableViewController {
+class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
 
     weak var delegate: DistrictsViewControllerDelegate?
     var year: Int {
         didSet {
-            updateDataSource()
+            refresh()
         }
     }
 
+    private var districts: [District] = []
     private var dataSource: TableViewDataSource<String, District>!
-    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<District>!
 
     // MARK: - Init
 
@@ -37,101 +35,61 @@ class DistrictsViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let district = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
+        guard let district = dataSource.itemIdentifier(for: indexPath) else { return }
         delegate?.districtSelected(district)
     }
 
     // MARK: Table View Data Source
 
-    private func setupDataSource () {
-        dataSource = TableViewDataSource<String, District>(tableView: tableView) { (tableView, indexPath, district) -> UITableViewCell? in
+    private func setupDataSource() {
+        dataSource = TableViewDataSource<String, District>(tableView: tableView) { tableView, indexPath, district in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
-            cell.textLabel?.text = district.name
+            cell.textLabel?.text = district.displayName
             cell.accessoryType = .disclosureIndicator
-            // TODO: Convert to some custom cell... show # of events if non-zero
             return cell
         }
         dataSource.statefulDelegate = self
-
-        let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
-        fetchRequest.sortDescriptors = [
-            District.nameSortDescriptor()
-        ]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }
 
-    private func updateDataSource() {
-        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
+    private func apply(_ districts: [District]) {
+        let sorted = districts.sorted { $0.displayName < $1.displayName }
+        self.districts = sorted
 
-        if shouldRefresh() {
-            refresh()
-        }
+        var snapshot = NSDiffableDataSourceSnapshot<String, District>()
+        snapshot.appendSections([""])
+        snapshot.appendItems(sorted, toSection: "")
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    private func setupFetchRequest(_ request: NSFetchRequest<District>) {
-        request.predicate = District.yearPredicate(year: year)
-    }
+    // MARK: - Refreshable
 
-}
-
-extension DistrictsViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(year)_districts"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
+    var refreshKey: String? { "\(year)_districts" }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
     var automaticRefreshEndDate: Date? {
-        // Automatically refresh districts until the start of the year
-        // Ex: 2019 Districts will automatically refresh until Jan 1st, 2019 (when districts should be all set)
-        return Calendar.current.date(from: DateComponents(year: year))
+        Calendar.current.date(from: DateComponents(year: year))
     }
-
-    var isDataSourceEmpty: Bool {
-        return fetchedResultsController.isDataSourceEmpty
-    }
+    var isDataSourceEmpty: Bool { districts.isEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistricts(year: year) { [self] (result, notModified) in
-            guard case .success(let districts) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.districtsByYear(year)
+                apply(fetched)
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({ [unowned self] in
-                District.insert(districts, year: self.year, in: context)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
+    // MARK: - Stateful
 
-extension DistrictsViewController: Stateful {
-
-    var noDataText: String? {
-        return "No districts for year"
-    }
-
+    var noDataText: String? { "No districts for year" }
 }

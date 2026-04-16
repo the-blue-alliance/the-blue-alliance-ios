@@ -1,5 +1,5 @@
 import Foundation
-import TBAData
+import TBAAPI
 
 struct EventAllianceCellViewModel {
 
@@ -7,15 +7,22 @@ struct EventAllianceCellViewModel {
     let allianceName: String
     let picks: [String]
 
-    init(alliance: EventAlliance, allianceNumber: Int) {
-        allianceLevel = alliance.status?.allianceLevel
+    init(alliance: EliminationAlliance, allianceNumber: Int) {
+        allianceLevel = Self.allianceLevel(status: alliance.status)
         allianceName = alliance.name ?? "Alliance \(allianceNumber)"
-
-        picks = (alliance.picks.array as? [Team] ?? []).map { $0.key }
+        picks = alliance.picks
     }
 
     var hasAllianceLevel: Bool {
         return allianceLevel != nil
+    }
+
+    private static func allianceLevel(status: EliminationAlliance.StatusPayload?) -> String? {
+        guard let level = status?.level else { return nil }
+        if level == "f", let s = status?.status {
+            return s == "won" ? "W" : "F"
+        }
+        return level.uppercased()
     }
 
 }

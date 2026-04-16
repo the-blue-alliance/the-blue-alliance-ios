@@ -1,15 +1,14 @@
-import CoreData
-import Firebase
+import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 class EventAwardsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
     private let myTBA: MyTBA
+    private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
@@ -17,15 +16,16 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Event, teamKey: String? = nil, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let awardsViewController = EventAwardsViewController(event: event, team: team, dependencies: dependencies)
+        let awardsViewController = EventAwardsViewController(eventKey: event.key, teamKey: teamKey, dependencies: dependencies)
 
         super.init(viewControllers: [awardsViewController],
                    navigationTitle: "Awards",
@@ -51,32 +51,32 @@ class EventAwardsContainerViewController: ContainerViewController {
 
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func teamSelected(teamKey: String) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAwardsViewControllerDelegate: AnyObject {
-    func teamSelected(_ team: Team)
+    func teamSelected(teamKey: String)
 }
 
-class EventAwardsViewController: TBATableViewController {
+class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
 
     weak var delegate: EventAwardsViewControllerDelegate?
 
-    private let event: Event
-    private let team: Team?
+    private let eventKey: String
+    private let teamKey: String?
 
     private var dataSource: TableViewDataSource<String, Award>!
-    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Award>!
+    private var awards: [Award] = []
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, dependencies: Dependencies) {
-        self.event = event
-        self.team = team
+    init(eventKey: String, teamKey: String? = nil, dependencies: Dependencies) {
+        self.eventKey = eventKey
+        self.teamKey = teamKey
 
         super.init(dependencies: dependencies)
     }
@@ -91,90 +91,64 @@ class EventAwardsViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.registerReusableCell(AwardTableViewCell.self)
-
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Award>(tableView: tableView) { (tableView, indexPath, award) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Award>(tableView: tableView) { [weak self] tableView, indexPath, award in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as AwardTableViewCell
             cell.selectionStyle = .none
             cell.viewModel = AwardCellViewModel(award: award)
             cell.teamKeySelected = { [weak self] (teamKey) in
-                guard let context = self?.persistentContainer.viewContext else {
-                    return
-                }
-                let team = Team.insert(teamKey, in: context)
-                self?.delegate?.teamSelected(team)
+                self?.delegate?.teamSelected(teamKey: teamKey)
             }
+            _ = self
             return cell
         }
         dataSource.statefulDelegate = self
-
-        let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
-        fetchRequest.sortDescriptors = [
-            Award.typeSortDescriptor()
-        ]
-        if let team = team {
-            fetchRequest.predicate = Award.teamEventPredicate(teamKey: team.key, eventKey: event.key)
-        } else {
-            fetchRequest.predicate = Award.eventPredicate(eventKey: event.key)
-        }
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }
 
-}
+    private func applyAwards(_ awards: [Award]) {
+        let filtered: [Award]
+        if let teamKey {
+            filtered = awards.filter { $0.recipientList.contains(where: { $0.teamKey == teamKey }) }
+        } else {
+            filtered = awards
+        }
+        let sorted = filtered.sorted { $0.awardType < $1.awardType }
+        self.awards = sorted
 
-extension EventAwardsViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(event.key)_awards"
+        var snapshot = NSDiffableDataSourceSnapshot<String, Award>()
+        snapshot.appendSections([""])
+        snapshot.appendItems(sorted, toSection: "")
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
+    // MARK: - Refreshable
 
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return fetchedResultsController.isDataSourceEmpty
-    }
+    var refreshKey: String? { "\(eventKey)_awards" }
+    var automaticRefreshInterval: DateComponents? { nil }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { awards.isEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventAwards(key: event.key) { [self] (result, notModified) in
-            guard case .success(let awards) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.eventAwards(key: eventKey)
+                applyAwards(fetched)
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let event = context.object(with: self.event.objectID) as! Event
-                event.insert(awards)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
-
-extension EventAwardsViewController: Stateful {
+    // MARK: - Stateful
 
     var noDataText: String? {
-        return "No awards for \(team != nil ? "team at event" : "event")"
+        "No awards for \(teamKey != nil ? "team at event" : "event")"
     }
-
 }

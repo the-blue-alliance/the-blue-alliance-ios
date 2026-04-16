@@ -1,54 +1,50 @@
-import CoreData
 import Firebase
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
 
-    private(set) var event: Event
+    private let eventKey: String
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private(set) var statusService: StatusService
     private(set) var urlOpener: URLOpener
 
-    private lazy var contextObserver: CoreDataContextObserver<Event> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    // Loaded from TBAAPI after init; used for nav title + for the event struct
+    // passed to the detail container VCs (alliances/awards/etc.).
+    private var event: Event?
 
     private(set) var infoViewController: EventInfoViewController
     private(set) var teamsViewController: EventTeamsViewController
     private(set) var rankingsViewController: EventRankingsViewController
     private(set) var matchesViewController: MatchesViewController
 
-    private var activity: NSUserActivity?
-
     override var subscribableModel: MyTBASubscribable {
-        return event
+        EventSubscribable(modelKey: eventKey)
     }
 
     // MARK: - Init
 
-    init(event: Event, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
-        self.event = event
+    init(eventKey: String, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, myTBAStores: MyTBAStores, dependencies: Dependencies) {
+        self.eventKey = eventKey
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        infoViewController = EventInfoViewController(event: event, urlOpener: urlOpener, dependencies: dependencies)
-        teamsViewController = EventTeamsViewController(event: event, dependencies: dependencies)
-        rankingsViewController = EventRankingsViewController(event: event, dependencies: dependencies)
-        matchesViewController = MatchesViewController(event: event, myTBA: myTBA, dependencies: dependencies)
+        infoViewController = EventInfoViewController(eventKey: eventKey, urlOpener: urlOpener, dependencies: dependencies)
+        teamsViewController = EventTeamsViewController(eventKey: eventKey, dependencies: dependencies)
+        rankingsViewController = EventRankingsViewController(eventKey: eventKey, dependencies: dependencies)
+        matchesViewController = MatchesViewController(eventKey: eventKey, myTBA: myTBA, favoritesStore: myTBAStores.favorites, dependencies: dependencies)
 
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
+                   navigationTitle: eventKey,
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
                    myTBA: myTBA,
+                   myTBAStores: myTBAStores,
                    dependencies: dependencies)
-
-        title = event.friendlyNameWithYear
 
         infoViewController.delegate = self
         teamsViewController.delegate = self
@@ -67,37 +63,23 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
-        if isEventDown(eventKey: event.key) {
+        if isEventDown(eventKey: eventKey) {
             showOfflineEventMessage(shouldShow: true, animated: false)
         }
-        registerForEventStatusChanges(eventKey: event.key)
+        registerForEventStatusChanges(eventKey: eventKey)
 
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.title = event.friendlyNameWithYear
+        Task { @MainActor in
+            if let fetched = try? await api.event(key: eventKey) {
+                event = fetched
+                title = fetched.friendlyNameWithYear
             }
         }
-
-        activity = event.userActivity
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        errorRecorder.log("Event: %@", [event.key])
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        activity?.becomeCurrent()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        activity?.resignCurrent()
+        errorRecorder.log("Event: %@", [eventKey])
     }
 
     // MARK: - Interface Methods
@@ -110,43 +92,59 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
 }
 
+private struct EventSubscribable: MyTBASubscribable {
+    let modelKey: String
+    var modelType: MyTBAModelType { .event }
+    static var notificationTypes: [NotificationType] {
+        [.upcomingMatch, .matchScore, .levelStarting, .allianceSelection, .awards, .scheduleUpdated, .finalResults]
+    }
+}
+
 extension EventViewController: EventInfoViewControllerDelegate {
 
     func showAlliances() {
-        let eventAlliancesViewController = EventAlliancesContainerViewController(event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        guard let event else { return }
+        let eventAlliancesViewController = EventAlliancesContainerViewController(event: event, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(eventAlliancesViewController, animated: true)
     }
 
     func showAwards() {
-        let eventAwardsViewController = EventAwardsContainerViewController(event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        guard let event else { return }
+        let eventAwardsViewController = EventAwardsContainerViewController(event: event, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(eventAwardsViewController, animated: true)
     }
 
     func showDistrictPoints() {
-        let eventDistrictPointsViewController = EventDistrictPointsContainerViewController(event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        guard let event else { return }
+        let eventDistrictPointsViewController = EventDistrictPointsContainerViewController(event: event, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(eventDistrictPointsViewController, animated: true)
     }
 
     func showInsights() {
-        let eventInsightsContainerViewController = EventInsightsContainerViewController(event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        guard let event else { return }
+        let eventInsightsContainerViewController = EventInsightsContainerViewController(event: event, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(eventInsightsContainerViewController, animated: true)
     }
 
 }
 
-extension EventViewController: TeamsViewControllerDelegate {
+extension EventViewController: TeamsListViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
-        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+    func teamSelected(teamKey: String) {
+        pushTeamAtEvent(teamKey: teamKey)
     }
 
 }
 
 extension EventViewController: EventRankingsViewControllerDelegate {
 
-    func rankingSelected(_ ranking: EventRanking) {
-        let teamAtEventViewController = TeamAtEventViewController(team: ranking.team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func rankingSelected(_ ranking: EventRanking.RankingsPayloadPayload) {
+        pushTeamAtEvent(teamKey: ranking.teamKey)
+    }
+
+    private func pushTeamAtEvent(teamKey: String) {
+        let year = event?.year ?? Int(eventKey.prefix(4)) ?? 0
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -154,8 +152,8 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 
 extension EventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable {
 
-    func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+    func matchSelected(matchKey: String) {
+        let matchViewController = MatchViewController(matchKey: matchKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 

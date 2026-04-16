@@ -1,39 +1,29 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
+import TBAUtils
 
-/**
- Although the weekEvent can be set via a YearSelect in the EventsContainerViewController, we need
- this delegate because on an initial load the weekEvent isn't set yet, and we have to set it and have
- the EventsContainerViewController respond to setting weekEvent in WeekEventsViewController.
- */
 protocol WeekEventsDelegate: AnyObject {
     func weekEventUpdated()
 }
 
-class WeekEventsViewController: EventsViewController {
+class WeekEventsViewController: EventsListViewController {
 
     private let year: Int
     weak var weekEventsDelegate: WeekEventsDelegate?
 
-    // The selected Event from the weekEvents array to represent the Week to show
-    // We need a full object as opposed to a number because of CMP, off-season, etc.
-    var weekEvent: Event? {
+    // Full year load — kept so changing `weekEvent` doesn't require a re-fetch.
+    private var allEvents: [APIEvent] = []
+
+    var weekEvent: APIEvent? {
         didSet {
-            updateDataSource()
-            DispatchQueue.main.async {
-                // TODO: Scroll to top
-            }
+            guard weekEvent != oldValue else { return }
+            applyEvents(allEvents)
             weekEventsDelegate?.weekEventUpdated()
         }
     }
-    var weeks: [Event] = []
 
     init(year: Int, dependencies: Dependencies) {
         self.year = year
-        self.weekEvent = WeekEventsViewController.weekEvent(for: year, in: dependencies.persistentContainer.viewContext)
-
         super.init(dependencies: dependencies)
     }
 
@@ -41,134 +31,103 @@ class WeekEventsViewController: EventsViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
+    // MARK: - EventsListViewController
 
-    override var refreshKey: String? {
-        return "\(year)_events"
+    override func filter(_ events: [APIEvent]) -> [APIEvent] {
+        guard let weekEvent else { return [] }
+
+        let sameYear = events.filter { $0.year == weekEvent.year }
+        guard let weekEventType = weekEvent.eventTypeEnum else {
+            // Selected week has an unknown event type — group all unknown-type events together.
+            let valid = Set(APIEventType.allCases.map { $0.rawValue })
+            return sameYear.filter { !valid.contains($0.eventType) }
+        }
+
+        if let week = weekEvent.week {
+            return sameYear.filter { $0.week == week }
+        }
+        switch weekEventType {
+        case .championshipFinals:
+            // Group the CMP finals event together with its CMP divisions.
+            return sameYear.filter {
+                $0.isChampionshipEvent && ($0.key == weekEvent.key || $0.parentEventKey == weekEvent.key)
+            }
+        case .offseason:
+            guard let start = weekEvent.startDateParsed, let end = weekEvent.endDateParsed else { return [] }
+            let firstOfMonth = start.startOfMonth()
+            let lastOfMonth = end.endOfMonth()
+            return sameYear.filter {
+                guard $0.isOffseason, let d = $0.startDateParsed else { return false }
+                return d >= firstOfMonth && d <= lastOfMonth
+            }
+        default:
+            return sameYear.filter { $0.eventTypeEnum == weekEventType }
+        }
     }
 
-    override var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 7)
-    }
-
-    override var automaticRefreshEndDate: Date? {
-        // Automatically refresh the events for the duration of the year
-        // Ex: 2019 events will stop automatically refreshing on Jan 1st, 2020
-        return Calendar.current.date(from: DateComponents(year: year + 1))
-    }
+    // MARK: - Refresh
 
     @objc override func refresh() {
-        // Default to refreshing the currently selected year
-        // Fall back to the init'd year (used during initial refresh)
-        var year = self.year
-        if let weekEventYear = weekEvent?.year {
-            year = Int(weekEventYear)
-        }
-
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvents(year: year) { [unowned self] (result, notModified) in
-            guard case .success(let events) = result, !notModified else {
-                return
-            }
-
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Event.insert(events, year: year, in: context)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
-
-            // Only setup weeks if we don't have a currently selected week
-            if self.weekEvent == nil {
-                context.perform {
-                    guard let we = WeekEventsViewController.weekEvent(for: year, in: context) else {
-                        return
-                    }
-                    self.persistentContainer.viewContext.perform {
-                        self.weekEvent = self.persistentContainer.viewContext.object(with: we.objectID) as? Event
-                    }
-                }
-            }
-        }
-        addRefreshOperations([operation])
-    }
-
-    // MARK: - Stateful
-
-    override var noDataText: String? {
-        return "No events for year"
-    }
-
-    // MARK: - EventsViewControllerDataSourceConfiguration
-
-    override var fetchRequestPredicate: NSPredicate {
-        if let weekEvent = weekEvent {
-            guard let eventType = weekEvent.eventType else {
-                return Event.unknownYearPredicate(year: weekEvent.year)
-            }
-
-            if let week = weekEvent.week {
-                // Event has a week - filter based on the week
-                return Event.weekYearPredicate(week: week, year: weekEvent.year)
-            } else {
-                if eventType == .championshipFinals {
-                    return Event.champsYearPredicate(key: weekEvent.key, year: weekEvent.year)
-                } else if eventType == .offseason {
-                    // Get all off season events for selected month
-                    return Event.offseasonYearPredicate(startDate: weekEvent.startDate!, endDate: weekEvent.endDate!, year: weekEvent.year)
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.eventsByYear(currentYear)
+                allEvents = fetched
+                if weekEvent == nil {
+                    weekEvent = WeekEventsViewController.initialWeekEvent(for: currentYear, from: fetched)
                 } else {
-                    return Event.eventTypeYearPredicate(eventType: eventType, year: weekEvent.year)
+                    applyEvents(allEvents)
                 }
+            } catch {
+                errorRecorder.record(error)
             }
         }
-        return Event.nonePredicate()
     }
 
-    // MARK: - Private
-
-    private static func weekEvent(for year: Int, in context: NSManagedObjectContext) -> Event? {
-        let weekEvents = Event.weekEvents(for: year, in: context)
-
-        if year == Calendar.current.year {
-            // If it's the current year, setup the current week for this year
-            return currentSeasonWeekEvent(for: year, in: context)
-        } else if let firstWeekEvent = weekEvents.first {
-            // Otherwise, default to the first week for this years
-            return firstWeekEvent
-        }
-        return nil
+    private var currentYear: Int {
+        // If the user has switched to a different week-event (via the year/week
+        // picker), follow that year. Otherwise fall back to the init'd year.
+        weekEvent.map { $0.year } ?? year
     }
 
-    private static func currentSeasonWeekEvent(for year: Int, in context: NSManagedObjectContext) -> Event? {
-        // Find the first non-finished event for the selected year
-        let event = Event.fetchSingleObject(in: context) { (fetchRequest) in
-            let predicate = Event.unplayedEventPredicate(date: Date().startOfDay(), year: year)
-            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                predicate,
-                Event.populatedEventsPredicate()
-            ])
-            fetchRequest.sortDescriptors = [
-                Event.endDateSortDescriptor()
-            ]
-        }
-        // Find the first overall event for the selected year
-        let firstEvent = Event.fetchSingleObject(in: context) { (fetchRequest) in
-            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                Event.yearPredicate(year: year),
-                Event.populatedEventsPredicate()
-            ])
-            fetchRequest.sortDescriptors = [
-                Event.startDateSortDescriptor()
-            ]
-        }
+    // MARK: - Initial week-event selection
 
-        if let event = event {
-            return event
-        } else if let firstEvent = firstEvent {
-            return firstEvent
+    private static func initialWeekEvent(for year: Int, from events: [APIEvent]) -> APIEvent? {
+        if year == Calendar.current.component(.year, from: Date()) {
+            if let current = currentSeasonWeekEvent(year: year, from: events) {
+                return current
+            }
         }
-        return nil
+        return WeekEventsGrouping.weekEvents(for: year, from: events).first
     }
 
+    private static func currentSeasonWeekEvent(year: Int, from events: [APIEvent]) -> APIEvent? {
+        let today = Calendar.current.startOfDay(for: Date())
+        // First non-finished event (endDate today or later) that's not a CMP division.
+        let unplayed = events
+            .filter { $0.year == year }
+            .filter { !$0.isChampionshipDivision }
+            .filter { ($0.endDateParsed ?? .distantPast) >= today }
+            .sorted { ($0.endDateParsed ?? .distantPast) < ($1.endDateParsed ?? .distantPast) }
+            .first
+        if let unplayed { return unplayed }
 
+        // Otherwise first overall event for the year.
+        return events
+            .filter { $0.year == year }
+            .sorted { ($0.startDateParsed ?? .distantPast) < ($1.startDateParsed ?? .distantPast) }
+            .first
+    }
+
+    // MARK: - Refreshable / Stateful
+
+    override var refreshKey: String? { "\(year)_events" }
+
+    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
+
+    override var automaticRefreshEndDate: Date? {
+        Calendar.current.date(from: DateComponents(year: year + 1))
+    }
+
+    override var noDataText: String? { "No events for year" }
 }
+

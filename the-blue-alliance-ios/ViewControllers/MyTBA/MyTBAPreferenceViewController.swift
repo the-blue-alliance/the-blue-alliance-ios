@@ -1,12 +1,7 @@
-import CoreData
 import MyTBAKit
-import TBAData
 import TBAUtils
 import UIKit
 
-// Two sections are a single no-title section for "Favorite" cell,
-// and a "Notification Settings" section with option cells
-// This view assume it's bein
 class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentationControllerDelegate {
 
     var subscribableModel: MyTBASubscribable
@@ -16,7 +11,6 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         return subscribableModelClass.notificationTypes
     }()
 
-    var favorite: Favorite?
     let isFavoriteInitially: Bool
     var isFavorite: Bool {
         didSet {
@@ -24,7 +18,6 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         }
     }
 
-    var subscription: Subscription?
     let notificationsInitial: [NotificationType]
     var notifications: [NotificationType] {
         didSet {
@@ -34,7 +27,8 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
 
     private let errorRecorder: ErrorRecorder
     let myTBA: MyTBA
-    let persistentContainer: NSPersistentContainer
+    private let favoritesStore: FavoritesStore
+    private let subscriptionsStore: SubscriptionsStore
 
     var preferencesOperation: MyTBAOperation?
     let operationQueue = OperationQueue()
@@ -61,18 +55,19 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                                                           action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(errorRecorder: ErrorRecorder, subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+    init(errorRecorder: ErrorRecorder, subscribableModel: MyTBASubscribable, myTBA: MyTBA, myTBAStores: MyTBAStores) {
         self.errorRecorder = errorRecorder
         self.subscribableModel = subscribableModel
         self.myTBA = myTBA
-        self.persistentContainer = persistentContainer
+        self.favoritesStore = myTBAStores.favorites
+        self.subscriptionsStore = myTBAStores.subscriptions
 
-        favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
-        isFavorite = (favorite != nil)
+        let existingFavorite = favoritesStore.favorites.first { $0.modelKey == subscribableModel.modelKey && $0.modelType == subscribableModel.modelType }
+        isFavorite = (existingFavorite != nil)
         isFavoriteInitially = isFavorite
 
-        subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
-        notifications = subscription?.notifications ?? []
+        let existingSubscription = subscriptionsStore.subscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
+        notifications = existingSubscription?.notifications ?? []
         notificationsInitial = notifications
 
         super.init(style: .grouped)
@@ -108,7 +103,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     func updateInterface() {
         saveBarButtonItem.isEnabled = hasChanges
         isModalInPresentation = hasChanges
-        
+
         if isSaving {
             navigationItem.rightBarButtonItem = saveActivityIndicatorBarButtonItem
         } else {
@@ -128,36 +123,26 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     @objc func save() {
         preferencesOperation = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications) { [weak self] (favoriteResponse, subscriptionResponse, error) in
             guard let self = self else { return }
-            let context = self.persistentContainer.newBackgroundContext()
 
-            context.performChangesAndWait({
-                if let favoriteResponse = favoriteResponse, favoriteResponse.code < 500 {
-                    if !self.isFavorite, let favorite = self.favorite {
-                        // Delete
-                        context.delete(context.object(with: favorite.objectID))
-                    } else if self.isFavorite {
-                        // Insert
-                        Favorite.insert(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, in: context)
-                    }
+            if let favoriteResponse = favoriteResponse, favoriteResponse.code < 500 {
+                if self.isFavorite {
+                    self.favoritesStore.upsert(MyTBAFavorite(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType))
+                } else {
+                    self.favoritesStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
                 }
+            }
 
-                if let subscriptionResponse = subscriptionResponse, subscriptionResponse.code < 500 {
-                    let hasNotifications = !self.notifications.isEmpty
-                    if !hasNotifications, let subscription = self.subscription {
-                        // Delete
-                        context.delete(context.object(with: subscription.objectID))
-                    } else if hasNotifications {
-                        if let subscription = self.subscription {
-                            // Update
-                            let sub = context.object(with: subscription.objectID) as! Subscription
-                            sub.notifications = self.notifications
-                        } else {
-                            // Insert
-                            Subscription.insert(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, notifications: self.notifications, in: context)
-                        }
-                    }
+            if let subscriptionResponse = subscriptionResponse, subscriptionResponse.code < 500 {
+                if self.notifications.isEmpty {
+                    self.subscriptionsStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
+                } else {
+                    self.subscriptionsStore.upsert(MyTBASubscription(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, notifications: self.notifications))
                 }
-            }, errorRecorder: self.errorRecorder)
+            }
+
+            if let error {
+                self.errorRecorder.record(error)
+            }
         }
 
         let dismissOperation = BlockOperation(block: { [weak self] in
@@ -165,12 +150,6 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
 
             self.isSaving = false
             DispatchQueue.main.async {
-                if let favorite = self.favorite {
-                    self.persistentContainer.viewContext.refresh(favorite, mergeChanges: true)
-                }
-                if let subscription = self.subscription {
-                    self.persistentContainer.viewContext.refresh(subscription, mergeChanges: true)
-                }
                 self.dismiss(animated: true)
             }
         })

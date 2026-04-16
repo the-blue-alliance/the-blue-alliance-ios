@@ -1,17 +1,13 @@
-import CoreData
-import Firebase
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
 import UIKit
 
 class TeamsContainerViewController: ContainerViewController {
 
     private(set) var myTBA: MyTBA
+    private(set) var myTBAStores: MyTBAStores
     private(set) var pasteboard: UIPasteboard?
     private(set) var photoLibrary: PHPhotoLibrary?
-    private(set) var searchService: SearchService
     private(set) var statusService: StatusService
     private(set) var urlOpener: URLOpener
 
@@ -21,15 +17,15 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamsViewController = TeamsViewController(refreshProvider: searchService, showSearch: false, dependencies: dependencies)
+        teamsViewController = TeamsViewController(showSearch: false, dependencies: dependencies)
 
         super.init(viewControllers: [teamsViewController], dependencies: dependencies)
 
@@ -56,4 +52,5 @@ class TeamsContainerViewController: ContainerViewController {
 
 }
 
-extension TeamsContainerViewController: TeamsViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {
+}

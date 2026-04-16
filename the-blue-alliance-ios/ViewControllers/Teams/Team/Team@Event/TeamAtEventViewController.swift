@@ -1,47 +1,48 @@
-import CoreData
-import Firebase
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
-class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable {
+class TeamAtEventViewController: ContainerViewController {
 
-    let team: Team
-    let event: Event
-    lazy var contextObserver: CoreDataContextObserver<Event> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    let teamKey: String
+    let eventKey: String
 
     let myTBA: MyTBA
+    let myTBAStores: MyTBAStores
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let statusService: StatusService
     let urlOpener: URLOpener
     var matchesViewController: MatchesViewController
 
+    private let summaryViewController: TeamSummaryViewController
+    private let statsViewController: TeamStatsViewController
+    private let awardsViewController: EventAwardsViewController
+    private let mediaViewController: TeamMediaCollectionViewController
+
     // MARK: - Init
 
-    init(team: Team, event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.team = team
-        self.event = event
+    init(teamKey: String, eventKey: String, year: Int, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.teamKey = teamKey
+        self.eventKey = eventKey
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let summaryViewController = TeamSummaryViewController(team: team, event: event, dependencies: dependencies)
-        matchesViewController = MatchesViewController(event: event, team: team, myTBA: myTBA, dependencies: dependencies)
-        let mediaViewController = TeamMediaCollectionViewController(team: team, year: event.year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
-        let statsViewController = TeamStatsViewController(team: team, event: event, dependencies: dependencies)
-        let awardsViewController = EventAwardsViewController(event: event, team: team, dependencies: dependencies)
+        summaryViewController = TeamSummaryViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
+        matchesViewController = MatchesViewController(eventKey: eventKey, teamKey: teamKey, myTBA: myTBA, favoritesStore: myTBAStores.favorites, dependencies: dependencies)
+        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
+        statsViewController = TeamStatsViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
+        awardsViewController = EventAwardsViewController(eventKey: eventKey, teamKey: teamKey, dependencies: dependencies)
 
         super.init(viewControllers: [summaryViewController, matchesViewController, mediaViewController, statsViewController, awardsViewController],
-                   navigationTitle: team.teamNumberNickname,
-                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
+                   navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+                   navigationSubtitle: nil,
                    segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
                    dependencies: dependencies)
 
@@ -61,56 +62,82 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
     // MARK: - View Lifecycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        Task { @MainActor in
+            async let eventTask = try? await dependencies.api.event(key: eventKey)
+            async let teamTask = try? await dependencies.api.team(key: teamKey)
+            let (event, team) = await (eventTask, teamTask)
+
+            if let team = team ?? nil {
+                self.navigationTitle = team.teamNumberNickname
+            }
+            if let event = event ?? nil {
+                self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+            }
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        errorRecorder.log("Team@Event: Event %@ | Team %@", [event.key, team.key])
-
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
-            guard let self = self else { return }
-            self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
-        }
+        errorRecorder.log("Team@Event: Event %@ | Team %@", [eventKey, teamKey])
     }
 
     // MARK: - Private Methods
 
     @objc private func pushEvent() {
-        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        let eventViewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
         navigationController?.pushViewController(eventViewController, animated: true)
+    }
+
+    private func pushTeamAtEvent(teamKey: String, eventKey: String, year: Int) {
+        let vc = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    private func pushTeam(teamKey: String) {
+        let vc = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    private func pushMatch(matchKey: String) {
+        let matchViewController = MatchViewController(matchKey: matchKey, teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        navigationController?.pushViewController(matchViewController, animated: true)
     }
 
 }
 
 extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable, TeamSummaryViewControllerDelegate {
 
-    func teamInfoSelected(_ team: Team) {
-        pushTeam(team: team)
+    func teamInfoSelected(teamKey: String) {
+        pushTeam(teamKey: teamKey)
     }
 
-    func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
-        self.navigationController?.pushViewController(matchViewController, animated: true)
+    func matchSelected(matchKey: String) {
+        pushMatch(matchKey: matchKey)
     }
 
 }
 
 extension TeamAtEventViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {
 
-    func mediaSelected(_ media: TeamMedia) {
-        show(media: media)
+    func mediaSelected(image: UIImage?, directURL: URL?) {
+        show(image: image, directURL: directURL)
     }
 
 }
 
 extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        // Don't push to team@event for team we're already showing team@event for
-        if self.team == team {
+    func teamSelected(teamKey: String) {
+        // Don't push to team@event for the team we're already showing team@event for
+        if self.teamKey == teamKey {
             return
         }
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
-        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+        guard let year = Int(eventKey.prefix(4)) else { return }
+        pushTeamAtEvent(teamKey: teamKey, eventKey: eventKey, year: year)
     }
 
 }

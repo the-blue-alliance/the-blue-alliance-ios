@@ -1,19 +1,16 @@
-import CoreData
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
 import UIKit
 
 class PadRootViewController: UISplitViewController, RootController {
 
     let fcmTokenProvider: FCMTokenProvider
     let myTBA: MyTBA
+    let myTBAStores: MyTBAStores
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let pushService: PushService
-    let searchService: SearchService
     let urlOpener: URLOpener
     let statusService: StatusService
     let dependencies: Dependencies
@@ -21,10 +18,10 @@ class PadRootViewController: UISplitViewController, RootController {
     lazy fileprivate var masterViewController: PadMasterViewController = {
         return PadMasterViewController(fcmTokenProvider: fcmTokenProvider,
                                        myTBA: myTBA,
+                                       myTBAStores: myTBAStores,
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
                                        pushService: pushService,
-                                       searchService: searchService,
                                        statusService: statusService,
                                        urlOpener: urlOpener,
                                        dependencies: dependencies)
@@ -41,13 +38,13 @@ class PadRootViewController: UISplitViewController, RootController {
         return navigationController
     }()
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.pushService = pushService
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
         self.dependencies = dependencies
@@ -64,42 +61,28 @@ class PadRootViewController: UISplitViewController, RootController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - RootController
-
-    func continueSearch(_ searchText: String) -> Bool {
-        return masterViewController.continueSearch(searchText)
-    }
-
-    func show(event: Event) -> Bool {
-        return masterViewController.show(event: event)
-    }
-
-    func show(team: Team) -> Bool {
-        return masterViewController.show(team: team)
-    }
-
 }
 
 private class PadMasterViewController: ContainerViewController, RootController {
 
     let fcmTokenProvider: FCMTokenProvider
     let myTBA: MyTBA
+    let myTBAStores: MyTBAStores
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let pushService: PushService
-    let searchService: SearchService
     let statusService: StatusService
     let urlOpener: URLOpener
 
     var searchController: UISearchController!
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.pushService = pushService
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -122,56 +105,6 @@ private class PadMasterViewController: ContainerViewController, RootController {
         setupSearchController()
     }
 
-    // MARK: - RootController
-
-    func continueSearch(_ searchText: String) -> Bool {
-        // Pop to root tab, show search
-        // Dismiss existing modal view controller
-        if let presentedViewController = presentedViewController {
-            presentedViewController.dismiss(animated: false)
-        }
-
-        guard let navigationController = navigationController else {
-            return false
-        }
-
-        // Fix `popToRootViewController` clobbering our `isActive` animation
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/878
-        CATransaction.setCompletionBlock { [weak self] in
-            self?.searchController.isActive = true
-        }
-        CATransaction.begin()
-        navigationController.popToRootViewController(animated: false)
-        CATransaction.commit()
-
-        searchController.searchBar.text = searchText
-
-        return true
-    }
-
-    func show(event: Event) -> Bool {
-        let eventViewController = EventViewController(event: event,
-                                                      pasteboard: pasteboard,
-                                                      photoLibrary: photoLibrary,
-                                                      statusService: statusService,
-                                                      urlOpener: urlOpener,
-                                                      myTBA: myTBA,
-                                                      dependencies: dependencies)
-        _push(eventViewController)
-        return true
-    }
-
-    func show(team: Team) -> Bool {
-        let teamViewController = TeamViewController(team: team,
-                                                    pasteboard: pasteboard,
-                                                    photoLibrary: photoLibrary,
-                                                    statusService: statusService,
-                                                    urlOpener: urlOpener,
-                                                    myTBA: myTBA,
-                                                    dependencies: dependencies)
-        _push(teamViewController)
-        return true
-    }
 
     func _push(_ viewController: UIViewController) {
         let navigationController = UINavigationController(rootViewController: viewController)

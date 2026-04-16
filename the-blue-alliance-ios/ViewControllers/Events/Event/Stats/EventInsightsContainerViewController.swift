@@ -1,16 +1,14 @@
-import CoreData
-import Firebase
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 class EventInsightsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
     private let myTBA: MyTBA
+    private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
@@ -20,22 +18,23 @@ class EventInsightsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Event, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamStatsViewController = EventTeamStatsTableViewController(event: event, dependencies: dependencies)
+        teamStatsViewController = EventTeamStatsTableViewController(eventKey: event.key, dependencies: dependencies)
 
         var eventStatsViewController: EventInsightsViewController?
         // Only show event insights if year is 2016 or onward
         var titles = ["Team Stats"]
         if event.year >= 2016 {
             titles.append("Event Insights")
-            eventStatsViewController = EventInsightsViewController(event: event, dependencies: dependencies)
+            eventStatsViewController = EventInsightsViewController(eventKey: event.key, year: event.year, dependencies: dependencies)
         }
 
         super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
@@ -101,8 +100,8 @@ extension EventInsightsContainerViewController: EventTeamStatsSelectionDelegate 
         showFilter()
     }
 
-    func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func eventTeamStatSelected(teamKey: String) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

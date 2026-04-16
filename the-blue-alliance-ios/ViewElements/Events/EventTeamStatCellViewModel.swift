@@ -1,19 +1,13 @@
 import Foundation
-import TBAData
 
 struct EventTeamStatCellViewModel {
 
     let statName: String
     let statValue: String
 
-    init(eventTeamStat: EventTeamStat?, statName: String, statKey: String) {
-        statValue = {
-            guard let statValue = eventTeamStat?.value(forKey: statKey) as? Double else {
-                return "----"
-            }
-            return String(format: "%.2f", statValue)
-        }()
+    init(statName: String, value: Float?) {
         self.statName = statName.uppercased()
+        self.statValue = value.map { String(format: "%.2f", $0) } ?? "----"
     }
 
 }

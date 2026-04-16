@@ -1,7 +1,6 @@
-import CoreData
 import FirebaseAnalytics
-import TBAData
-import TBAKit
+import Foundation
+import TBAAPI
 import UIKit
 
 protocol EventInfoViewControllerDelegate: AnyObject {
@@ -31,26 +30,23 @@ private enum EventInfoItem: Hashable {
     case chiefDelphi
 }
 
-class EventInfoViewController: TBATableViewController, Observable {
+class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let event: Event
+    private let eventKey: String
     private let urlOpener: URLOpener
+
+    // Loaded from TBAAPI in `refresh()`. Until it's loaded the only row we
+    // can render is the title placeholder.
+    private var event: Event?
 
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
     weak var delegate: EventInfoViewControllerDelegate?
 
-    // MARK: - Observable
-
-    typealias ManagedType = Event
-    lazy var contextObserver: CoreDataContextObserver<Event> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
-
     // MARK: - Init
 
-    init(event: Event, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.event = event
+    init(eventKey: String, urlOpener: URLOpener, dependencies: Dependencies) {
+        self.eventKey = eventKey
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, dependencies: dependencies)
@@ -70,14 +66,6 @@ class EventInfoViewController: TBATableViewController, Observable {
 
         tableView.dataSource = dataSource
         setupDataSource()
-
-        updateEventInfo()
-
-        contextObserver.observeObject(object: event, state: .updated) { (_, _) in
-            DispatchQueue.main.async {
-                self.updateEventInfo()
-            }
-        }
     }
 
     private func setupDataSource() {
@@ -113,11 +101,11 @@ class EventInfoViewController: TBATableViewController, Observable {
                 return cell
             case .twitter:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "View \(self.event.key) on Twitter"
+                cell.textLabel?.text = "View \(self.eventKey) on Twitter"
                 return cell
             case .youtube:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "View \(self.event.key) on YouTube"
+                cell.textLabel?.text = "View \(self.eventKey) on YouTube"
                 return cell
             case .chiefDelphi:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
@@ -129,23 +117,25 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     private func updateEventInfo() {
         var snapshot = dataSource.snapshot()
-
         snapshot.deleteAllItems()
 
         // Info
         snapshot.appendSections([.title])
         snapshot.appendItems([.title], toSection: .title)
 
+        guard let event else {
+            dataSource.apply(snapshot, animatingDifferences: false)
+            return
+        }
+
         // Webcasts
         let webcasts = event.webcasts
             .sorted { $0.channel > $1.channel } // Sort by name lexicographically
             .filter { $0.urlString != nil } // Only show linkable webcasts
             // Only show webcasts with dates on the specified day
-            .filter { (webcast) -> Bool in
+            .filter { webcast in
                 // If webcast is date-less, we can display it
-                guard let date = webcast.date else {
-                    return true
-                }
+                guard let date = webcast.dateParsed else { return true }
                 return Calendar.current.isDateInToday(date)
             }
             .map { EventInfoItem.webcast($0) }
@@ -177,7 +167,11 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
-        cell.viewModel = InfoCellViewModel(event: event)
+        if let event {
+            cell.viewModel = InfoCellViewModel(event: event)
+        } else {
+            cell.viewModel = InfoCellViewModel(nameString: eventKey, subtitleStrings: [])
+        }
 
         cell.accessoryType = .none
         cell.selectionStyle = .none
@@ -213,67 +207,49 @@ class EventInfoViewController: TBATableViewController, Observable {
         case .webcast(let webcast):
             urlString = webcast.urlString
         case .website:
-            urlString = event.website
+            urlString = event?.website
         case .twitter:
-            urlString = "https://twitter.com/search?q=%23\(event.key)"
+            urlString = "https://twitter.com/search?q=%23\(eventKey)"
         case .youtube:
-            urlString = "https://www.youtube.com/results?search_query=\(event.key)"
+            urlString = "https://www.youtube.com/results?search_query=\(eventKey)"
         case .chiefDelphi:
-            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(event.key)"
+            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(eventKey)"
         default:
             break
         }
 
-        if let urlString = urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
-            switch item {
-            case .webcast(let webcast):
+        if let urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+            if case .webcast(let webcast) = item {
                 Analytics.logEvent("watch_webcast", parameters: [
-                    "event": event.key,
+                    "event": eventKey,
                     "webcast_channel": webcast.channel,
-                    "webcast_type": webcast.type
+                    "webcast_type": webcast.typeString
                 ])
-            default:
-                break
             }
             urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
 
-}
+    // MARK: - Refreshable
 
-extension EventInfoViewController: Refreshable {
-
-    var refreshKey: String? {
-        return event.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return event.name == nil
-    }
+    var refreshKey: String? { eventKey }
+    var automaticRefreshInterval: DateComponents? { nil }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { event == nil }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvent(key: event.key) { [self] (result, notModified) in
-            guard case .success(let object) = result, let event = object, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.event(key: eventKey)
+                event = fetched
+                updateEventInfo()
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Event.insert(event, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
+    // MARK: - Stateful
+
+    var noDataText: String? { nil }
 }
