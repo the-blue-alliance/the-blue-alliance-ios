@@ -83,22 +83,15 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, St
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(districtKey)_rankings" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { eventPoints.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.districtRankings(key: districtKey)
-                // Pull out this team's ranking from the response.
-                if let updated = fetched.first(where: { $0.teamKey == teamKey }) {
-                    ranking = updated
-                    tableView.reloadData()
-                }
-            } catch {
-                errorRecorder.record(error)
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey)
+            if let updated = fetched.first(where: { $0.teamKey == self.teamKey }) {
+                self.ranking = updated
+                self.tableView.reloadData()
             }
         }
     }

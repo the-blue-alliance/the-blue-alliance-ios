@@ -83,21 +83,14 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(districtKey)_rankings" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    // Phase 4: district endDate isn't directly available via TBAAPI; using nil here.
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { allRankings.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.districtRankings(key: districtKey)
-                allRankings = fetched
-                applyRankings(fetched)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey)
+            self.allRankings = fetched
+            self.applyRankings(fetched)
         }
     }
 

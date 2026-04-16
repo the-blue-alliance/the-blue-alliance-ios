@@ -162,23 +162,16 @@ class MatchInfoViewController: TBAViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { matchKey }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    // Phase 2: match.event.endDate not available without an extra fetch.
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool {
         // Match hasn't loaded yet, or it has loaded but has no videos.
         (match?.videos.count ?? 0) == 0
     }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                if let fetched = try await api.match(key: matchKey) {
-                    apply(match: fetched)
-                }
-            } catch {
-                errorRecorder.record(error)
+        runRefresh { [weak self] in
+            guard let self else { return }
+            if let fetched = try await self.api.match(key: self.matchKey) {
+                self.apply(match: fetched)
             }
         }
     }

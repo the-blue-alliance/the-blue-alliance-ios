@@ -126,19 +126,13 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { fatalError("subclass must override") }
-    var automaticRefreshInterval: DateComponents? { nil }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { events.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let loaded = try await loadEvents()
-                applyEvents(loaded)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let loaded = try await self.loadEvents()
+            self.applyEvents(loaded)
         }
     }
 

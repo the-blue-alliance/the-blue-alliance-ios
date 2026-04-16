@@ -27,7 +27,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         didSet {
             if oldValue != year {
                 applyMedia([])
-                if shouldRefresh() { refresh() }
+                refresh()
             }
         }
     }
@@ -188,44 +188,26 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 
 extension TeamMediaCollectionViewController: Refreshable {
 
-    var refreshKey: String? {
-        guard let year = year else { return nil }
-        return "\(year)_\(teamKey)_media"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(month: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        guard let year = year else { return nil }
-        return Calendar.current.date(from: DateComponents(year: year + 1))
-    }
-
     var isDataSourceEmpty: Bool {
         return media.isEmpty
     }
 
     @objc func refresh() {
         guard let year = year else { return }
-        Task { @MainActor in
-            do {
-                let apiMedia = try await dependencies.api.teamMediaByYear(teamKey: teamKey, year: year)
-                let items: [TeamMediaItem] = apiMedia
-                    .filter { Self.imageTypes.contains($0._type.rawValue) }
-                    .map { m in
-                        TeamMediaItem(foreignKey: m.foreignKey,
-                                      type: m._type.rawValue,
-                                      directURL: m.directUrl.flatMap { URL(string: $0) },
-                                      viewURL: m.viewUrl.flatMap { URL(string: $0) })
-                    }
-                imageErrors.removeAll()
-                applyMedia(items)
-                markRefreshSuccessful()
-                for item in items { downloadImage(for: item) }
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let apiMedia = try await self.dependencies.api.teamMediaByYear(teamKey: self.teamKey, year: year)
+            let items: [TeamMediaItem] = apiMedia
+                .filter { Self.imageTypes.contains($0._type.rawValue) }
+                .map { m in
+                    TeamMediaItem(foreignKey: m.foreignKey,
+                                  type: m._type.rawValue,
+                                  directURL: m.directUrl.flatMap { URL(string: $0) },
+                                  viewURL: m.viewUrl.flatMap { URL(string: $0) })
+                }
+            self.imageErrors.removeAll()
+            self.applyMedia(items)
+            for item in items { self.downloadImage(for: item) }
         }
     }
 

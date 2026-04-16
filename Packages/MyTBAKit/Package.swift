@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "MyTBAKit",
+    platforms: [
+        .iOS(.v15),
+        .macOS(.v12)
+    ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -13,7 +17,6 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(name: "TBAOperation", path: "../TBAOperation"),
         .package(name: "TBAUtils", path: "../TBAUtils"),
         .package(name: "TBATestingMocks", path: "../TBATestingMocks")
     ],
@@ -22,7 +25,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "MyTBAKit",
-            dependencies: ["TBAOperation", "TBAUtils"]),
+            dependencies: ["TBAUtils"]),
         .testTarget(
             name: "MyTBAKitTests",
             dependencies: ["MyTBAKit", "TBATestingMocks"],

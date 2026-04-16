@@ -93,22 +93,13 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(eventKey)_rankings" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
-    // Phase 1b: event end date not available without fetching the event struct
-    // separately; matching the old "refresh until event over" behavior is
-    // deferred to a later pass.
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { rankings.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let response = try await dependencies.api.eventRankings(key: eventKey)
-                applyRanking(response)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let response = try await self.dependencies.api.eventRankings(key: self.eventKey)
+            self.applyRanking(response)
         }
     }
 

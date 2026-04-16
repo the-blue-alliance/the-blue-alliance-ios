@@ -13,7 +13,7 @@ class PushService: NSObject {
     private var myTBA: MyTBA
     internal var retryService: RetryService
 
-    private let operationQueue = OperationQueue()
+    private var registerTask: Task<Void, Never>?
 
     init(errorRecorder: ErrorRecorder, myTBA: MyTBA, retryService: RetryService) {
         self.errorRecorder = errorRecorder
@@ -28,27 +28,26 @@ class PushService: NSObject {
             // Not authenticated to myTBA - we'll try again when we're auth'd
             return
         }
-        guard operationQueue.operationCount == 0 else {
+        guard registerTask == nil else {
             // Hack-y fix for register being called twice during app startup -
             // Once from MyTBAAuthenticationObservable.authenticated and once from
             // MessagingDelegate.didReceiveRegistrationToken
             // We should look to fix this properly some other time
             return
         }
-        let registerOperation = myTBA.register { (_, error) in
-            if let error = error {
+        registerTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.myTBA.register()
+                self.unregisterRetryable()
+            } catch {
                 self.errorRecorder.record(error)
                 if !self.retryService.isRetryRegistered {
-                    DispatchQueue.main.async {
-                        self.registerRetryable()
-                    }
+                    await MainActor.run { self.registerRetryable() }
                 }
-            } else {
-                self.unregisterRetryable()
             }
+            self.registerTask = nil
         }
-        guard let op = registerOperation else { return }
-        operationQueue.addOperation(op)
     }
 
     static func requestAuthorizationForNotifications(_ completion: ((Bool, Error?) -> Void)?) {

@@ -3,28 +3,21 @@ import XCTest
 
 class MyTBARegisterTests: MyTBATestCase {
 
-    func test_register() {
+    func test_register() async throws {
         fcmTokenProvider.fcmToken = "abc"
-
-        let ex = expectation(description: "Register called")
-        let operation = myTBA.register { (_, error) in
-            XCTAssertNil(error)
-            ex.fulfill()
-        }
-        myTBA.sendStub(for: operation!)
-        wait(for: [ex], timeout: 1.0)
+        myTBA.stub(for: "register")
+        _ = try await myTBA.register()
     }
 
-    func test_register_error() {
+    func test_register_error() async {
         fcmTokenProvider.fcmToken = "abc"
-
-        let ex = expectation(description: "Register called")
-        let operation = myTBA.register { (_, error) in
-            XCTAssertNotNil(error)
-            ex.fulfill()
+        myTBA.stub(for: "register", code: 401)
+        do {
+            _ = try await myTBA.register()
+            XCTFail("Expected register to throw on 401")
+        } catch {
+            // expected
         }
-        myTBA.sendStub(for: operation!, code: 401)
-        wait(for: [ex], timeout: 1.0)
     }
 
 }

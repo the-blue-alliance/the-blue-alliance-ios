@@ -30,8 +30,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     private let favoritesStore: FavoritesStore
     private let subscriptionsStore: SubscriptionsStore
 
-    var preferencesOperation: MyTBAOperation?
-    let operationQueue = OperationQueue()
+    private var preferencesTask: Task<Void, Never>?
 
     var hasChanges: Bool {
         return (notifications != notificationsInitial) || (isFavorite != isFavoriteInitially)
@@ -90,7 +89,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        operationQueue.cancelAllOperations()
+        preferencesTask?.cancel()
     }
 
     // MARK: - Interface Methods
@@ -121,43 +120,37 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     }
 
     @objc func save() {
-        preferencesOperation = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications) { [weak self] (favoriteResponse, subscriptionResponse, error) in
-            guard let self = self else { return }
-
-            if let favoriteResponse = favoriteResponse, favoriteResponse.code < 500 {
-                if self.isFavorite {
-                    self.favoritesStore.upsert(MyTBAFavorite(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType))
-                } else {
-                    self.favoritesStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
-                }
+        isSaving = true
+        preferencesTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            defer {
+                self.preferencesTask = nil
+                self.isSaving = false
+                self.dismiss(animated: true)
             }
-
-            if let subscriptionResponse = subscriptionResponse, subscriptionResponse.code < 500 {
-                if self.notifications.isEmpty {
-                    self.subscriptionsStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
-                } else {
-                    self.subscriptionsStore.upsert(MyTBASubscription(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, notifications: self.notifications))
+            do {
+                let response = try await self.myTBA.updatePreferences(modelKey: self.subscribableModel.modelKey,
+                                                                      modelType: self.subscribableModel.modelType,
+                                                                      favorite: self.isFavorite,
+                                                                      notifications: self.notifications)
+                if response.favorite.code < 500 {
+                    if self.isFavorite {
+                        self.favoritesStore.upsert(MyTBAFavorite(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType))
+                    } else {
+                        self.favoritesStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
+                    }
                 }
-            }
-
-            if let error {
+                if response.subscription.code < 500 {
+                    if self.notifications.isEmpty {
+                        self.subscriptionsStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
+                    } else {
+                        self.subscriptionsStore.upsert(MyTBASubscription(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, notifications: self.notifications))
+                    }
+                }
+            } catch {
                 self.errorRecorder.record(error)
             }
         }
-
-        let dismissOperation = BlockOperation(block: { [weak self] in
-            guard let self = self else { return }
-
-            self.isSaving = false
-            DispatchQueue.main.async {
-                self.dismiss(animated: true)
-            }
-        })
-        guard let op = preferencesOperation else { return }
-
-        isSaving = true
-        dismissOperation.addDependency(op)
-        operationQueue.addOperations([op, dismissOperation], waitUntilFinished: false)
     }
 
     @objc func close() {

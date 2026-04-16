@@ -1,8 +1,6 @@
 import Foundation
 import TBAUtils
 
-public typealias MyTBARequestCompletionBlock = (_ data: Data?, _ error: Error?) -> Void
-
 private struct Constants {
     struct APIConstants {
         static let baseURL = URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!
@@ -30,6 +28,12 @@ extension MyTBAError: LocalizedError {
     }
 }
 
+public protocol MyTBAURLSession {
+    func data(for request: URLRequest) async throws -> (Data, URLResponse)
+}
+
+extension URLSession: MyTBAURLSession {}
+
 open class MyTBA {
 
     // This is public, which is terrible, because it shouldn't be. But we need it so in TBA
@@ -55,7 +59,7 @@ open class MyTBA {
         return authToken != nil
     }
 
-    public init(uuid: String, deviceName: String, fcmTokenProvider: FCMTokenProvider, urlSession: URLSession? = nil) {
+    public init(uuid: String, deviceName: String, fcmTokenProvider: FCMTokenProvider, urlSession: MyTBAURLSession? = nil) {
         self.uuid = uuid
         self.deviceName = deviceName
         self.fcmTokenProvider = fcmTokenProvider
@@ -68,7 +72,7 @@ open class MyTBA {
         return fcmTokenProvider.fcmToken
     }
 
-    internal var urlSession: URLSession
+    internal var urlSession: MyTBAURLSession
     internal var uuid: String
     internal var deviceName: String
     private var fcmTokenProvider: FCMTokenProvider
@@ -105,8 +109,27 @@ open class MyTBA {
         return request
     }
 
-    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil, completion: @escaping (T?, Error?) -> Void) -> MyTBAOperation {
-        return MyTBAOperation(myTBA: self, method: method, bodyData: bodyData, completion: completion)
+    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil) async throws -> T {
+        let request = createRequest(method, bodyData)
+        let (data, response) = try await urlSession.data(for: request)
+
+        if let http = response as? HTTPURLResponse, http.statusCode == 500 {
+            throw MyTBAError.error(500, "Internal server error")
+        }
+
+        #if DEBUG
+        if let dataString = try? JSONSerialization.jsonObject(with: data, options: []) {
+            print(dataString)
+        }
+        #endif
+
+        let decoded = try MyTBA.jsonDecoder.decode(T.self, from: data)
+
+        if let base = decoded as? MyTBABaseResponse, let error = base.error {
+            throw error
+        }
+
+        return decoded
     }
 
 }

@@ -279,40 +279,33 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(teamKey)@\(eventKey)_status" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { eventStatus == nil }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                async let teamTask = try? await dependencies.api.team(key: teamKey)
-                async let eventTask = try? await dependencies.api.event(key: eventKey)
-                async let statusTask = try? await dependencies.api.teamEventStatus(teamKey: teamKey, eventKey: eventKey)
+        runRefresh { [weak self] in
+            guard let self else { return }
+            async let teamTask = try? await self.dependencies.api.team(key: self.teamKey)
+            async let eventTask = try? await self.dependencies.api.event(key: self.eventKey)
+            async let statusTask = try? await self.dependencies.api.teamEventStatus(teamKey: self.teamKey, eventKey: self.eventKey)
 
-                let (team, event, statusResult) = await (teamTask, eventTask, statusTask)
-                self.team = team ?? nil
-                self.event = event ?? nil
-                self.eventStatus = statusResult ?? nil
+            let (team, event, statusResult) = await (teamTask, eventTask, statusTask)
+            self.team = team ?? nil
+            self.event = event ?? nil
+            self.eventStatus = statusResult ?? nil
 
-                // Fetch next/last match if we have keys. Fire in parallel.
-                async let nextTask: Match?? = {
-                    guard let key = self.eventStatus?.nextMatchKey else { return Optional<Match?>.none }
-                    return try? await dependencies.api.match(key: key)
-                }()
-                async let lastTask: Match?? = {
-                    guard let key = self.eventStatus?.lastMatchKey else { return Optional<Match?>.none }
-                    return try? await dependencies.api.match(key: key)
-                }()
-                let (nextResult, lastResult) = await (nextTask, lastTask)
-                self.nextMatch = (nextResult ?? nil) ?? nil
-                self.lastMatch = (lastResult ?? nil) ?? nil
+            async let nextTask: Match?? = {
+                guard let key = self.eventStatus?.nextMatchKey else { return Optional<Match?>.none }
+                return try? await self.dependencies.api.match(key: key)
+            }()
+            async let lastTask: Match?? = {
+                guard let key = self.eventStatus?.lastMatchKey else { return Optional<Match?>.none }
+                return try? await self.dependencies.api.match(key: key)
+            }()
+            let (nextResult, lastResult) = await (nextTask, lastTask)
+            self.nextMatch = (nextResult ?? nil) ?? nil
+            self.lastMatch = (lastResult ?? nil) ?? nil
 
-                rebuildSnapshot()
-            } catch {
-                errorRecorder.record(error)
-            }
+            self.rebuildSnapshot()
         }
     }
 

@@ -59,21 +59,14 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(eventKey)_team_stats" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
-    // Phase 3: event endDate isn't available without a separate fetch.
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { stats == nil }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let oprs = try await dependencies.api.eventOPRs(key: eventKey)
-                stats = TeamStats(teamKey: teamKey, oprs: oprs)
-                tableView.reloadData()
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let oprs = try await self.dependencies.api.eventOPRs(key: self.eventKey)
+            self.stats = TeamStats(teamKey: self.teamKey, oprs: oprs)
+            self.tableView.reloadData()
         }
     }
 

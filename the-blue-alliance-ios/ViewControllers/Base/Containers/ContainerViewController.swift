@@ -267,9 +267,7 @@ class ContainerViewController: UIViewController, Alertable {
                 // Kickoff a reload to make sure our states match up.
                 reloadViewController(refreshViewController)
 
-                if refreshViewController.shouldRefresh() {
-                    refreshViewController.refresh()
-                }
+                refreshViewController.refresh()
                 switchedIndex = index
             }
             containedView.isHidden = shouldHide

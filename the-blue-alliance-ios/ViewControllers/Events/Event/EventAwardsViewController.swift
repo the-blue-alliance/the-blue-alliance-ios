@@ -130,19 +130,13 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(eventKey)_awards" }
-    var automaticRefreshInterval: DateComponents? { nil }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { awards.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.eventAwards(key: eventKey)
-                applyAwards(fetched)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.eventAwards(key: self.eventKey)
+            self.applyAwards(fetched)
         }
     }
 

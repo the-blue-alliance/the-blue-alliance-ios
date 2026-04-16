@@ -19,7 +19,7 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
 
     // MARK: - Refreshable
 
-    var refreshOperationQueue: OperationQueue = OperationQueue()
+    var currentRefreshTask: Task<Void, Never>?
 
     // MARK: - Stateful
 

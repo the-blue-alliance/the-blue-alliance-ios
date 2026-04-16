@@ -118,20 +118,14 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable,
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(eventKey)_alliances" }
-    var automaticRefreshInterval: DateComponents? { nil }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { alliances.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.eventAlliances(key: eventKey)
-                alliances = fetched ?? []
-                tableView.reloadData()
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.eventAlliances(key: self.eventKey)
+            self.alliances = fetched ?? []
+            self.tableView.reloadData()
         }
     }
 

@@ -104,19 +104,13 @@ class TeamsListViewController: TBASearchableTableViewController, Refreshable, St
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { fatalError("subclass must override") }
-    var automaticRefreshInterval: DateComponents? { nil }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { teams.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await loadTeams()
-                applyTeams(fetched)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.loadTeams()
+            self.applyTeams(fetched)
         }
     }
 

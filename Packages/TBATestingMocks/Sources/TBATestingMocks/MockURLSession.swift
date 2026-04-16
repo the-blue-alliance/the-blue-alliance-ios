@@ -1,47 +1,24 @@
-import XCTest
+import Foundation
 
-public class MockURLSession: URLSession {
-    
-    public var resumeExpectation: XCTestExpectation?
-    public var cancelExpectation: XCTestExpectation?
+public final class MockURLSession {
 
-    var tasksToVend: [MockURLSessionDataTask] = []
+    public var stubbedData: Data?
+    public var stubbedResponse: URLResponse?
+    public var stubbedError: Error?
+    public private(set) var lastRequest: URLRequest?
 
-    public override init() {
-        // Pass
-    }
+    public init() {}
 
-    override public func dataTask(with request: URLRequest) -> URLSessionDataTask {
-        return createTask(with: request)
-    }
-    
-    override public func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        return createTask(with: request, completionHandler: completionHandler)
-    }
-    
-    func createTask(with request: URLRequest, completionHandler: ((Data?, URLResponse?, Error?) -> ())? = nil) -> URLSessionDataTask {
-        let task = dequeueTaskToVend()
-        task.completionHandler = completionHandler
-        task.resumeExpectation = resumeExpectation
-        task.cancelExpectation = cancelExpectation
-        task.testRequest = request
-        
-        return task
-    }
-    
-    func clearTasksToVend() {
-        tasksToVend.removeAll()
-    }
-    
-    func enqueueTaskToVend(task: MockURLSessionDataTask) {
-        tasksToVend.append(task)
-    }
-    
-    func dequeueTaskToVend() -> MockURLSessionDataTask {
-        if let task = tasksToVend.first {
-            return task
+    public func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        lastRequest = request
+        if let stubbedError {
+            throw stubbedError
         }
-        return MockURLSessionDataTask()
+        let response = stubbedResponse ?? HTTPURLResponse(url: request.url!,
+                                                          statusCode: 200,
+                                                          httpVersion: nil,
+                                                          headerFields: nil)!
+        return (stubbedData ?? Data(), response)
     }
-    
+
 }

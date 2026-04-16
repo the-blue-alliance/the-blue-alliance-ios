@@ -129,25 +129,15 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
 
     // MARK: - Refreshable
 
-    var refreshKey: String? {
-        if eventStatsConfigurator == nil { return nil }
-        return "\(eventKey)_insights"
-    }
-    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
-    // Phase 1b: event endDate not available without a separate fetch.
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
     @objc func refresh() {
         guard eventStatsConfigurator != nil else { return }
-        Task { @MainActor in
-            do {
-                let insights = try await dependencies.api.eventInsights(key: eventKey)
-                configureDataSource(qual: Self.toAnyDict(insights?.qual),
-                                    playoff: Self.toAnyDict(insights?.playoff))
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let insights = try await self.dependencies.api.eventInsights(key: self.eventKey)
+            self.configureDataSource(qual: Self.toAnyDict(insights?.qual),
+                                     playoff: Self.toAnyDict(insights?.playoff))
         }
     }
 
