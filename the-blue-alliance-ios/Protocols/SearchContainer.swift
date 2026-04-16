@@ -55,22 +55,12 @@ extension SearchContainerDelegate where Self: ContainerViewController {
 
     func eventSelected(eventKey: String) {
         let eventViewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
-        if let splitViewController = splitViewController {
-            let navigationController = UINavigationController(rootViewController: eventViewController)
-            splitViewController.showDetailViewController(navigationController, sender: nil)
-        } else if let navigationController = navigationController {
-            navigationController.pushViewController(eventViewController, animated: true)
-        }
+        navigationController?.pushViewController(eventViewController, animated: true)
     }
 
     func teamSelected(teamKey: String) {
         let teamViewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
-        if let splitViewController = splitViewController {
-            let navigationController = UINavigationController(rootViewController: teamViewController)
-            splitViewController.showDetailViewController(navigationController, sender: nil)
-        } else if let navigationController = navigationController {
-            navigationController.pushViewController(teamViewController, animated: true)
-        }
+        navigationController?.pushViewController(teamViewController, animated: true)
     }
 
 }

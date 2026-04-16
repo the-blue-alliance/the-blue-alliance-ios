@@ -3,7 +3,6 @@ import UIKit
 
 private enum SettingsSection: Int, CaseIterable {
     case info
-    case icons
     case debug
 }
 
@@ -53,70 +52,47 @@ class SettingsViewController: TBATableViewController {
         tableView.registerReusableCell(IconTableViewCell.self)
     }
 
-    // MARK: - Private Methods
-
-    private func normalizedSection(_ section: Int) -> SettingsSection? {
-        var section = section
-        if !UIApplication.shared.supportsAlternateIcons, section >= SettingsSection.icons.rawValue {
-            section += 1
-        }
-        return SettingsSection(rawValue: section)!
-    }
-
     // MARK: - Table View Data Source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        var sections = SettingsSection.allCases.count
-        // Remove our Icons section if they're not supported
-        if !UIApplication.shared.supportsAlternateIcons {
-            sections -= 1
-        }
-        return sections
+        return SettingsSection.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Remove our Icons section if they're not supported
-        guard let section = normalizedSection(section) else {
+        guard let section = SettingsSection(rawValue: section) else {
             return 0
         }
 
         switch section {
         case .info:
             return InfoRow.allCases.count
-        case .icons:
-            return alternateAppIcons.count + 1 // +1 for default icon
         case .debug:
             return DebugRow.allCases.count
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let section = normalizedSection(section) else {
+        guard let section = SettingsSection(rawValue: section) else {
             return nil
         }
 
         switch section {
         case .info:
             return "Info"
-        case .icons:
-            return "App Icon"
         case .debug:
             return "Debug"
         }
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        guard let section = normalizedSection(section) else {
-            return nil
-        }
-        guard section == .debug else {
+        guard SettingsSection(rawValue: section) == .debug else {
             return nil
         }
         return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = normalizedSection(indexPath.section) else {
+        guard let section = SettingsSection(rawValue: indexPath.section) else {
             fatalError("This section does not exist")
         }
 
@@ -138,31 +114,6 @@ class SettingsViewController: TBATableViewController {
 
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = titleString
-
-            return cell
-        case .icons:
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as IconTableViewCell
-
-            let viewModel: IconCellViewModel = {
-                if indexPath.row == 0 {
-                    return IconCellViewModel(name: "The Blue Alliance", imageName: primaryAppIconName ?? "AppIcon")
-                } else {
-                    let alternateName = Array(alternateAppIcons.keys)[indexPath.row - 1]
-                    guard let alternateIconName = alternateAppIcons[alternateName] else {
-                        fatalError("Unable to find alternate icon for \(alternateName)")
-                    }
-                    return IconCellViewModel(name: alternateName, imageName: alternateIconName)
-                }
-            }()
-
-            cell.viewModel = viewModel
-
-            // Show currently-selected app icon
-            if isCurrentAppIcon(viewModel.name) || (isCurrentAppIcon(nil) && indexPath.row == 0) {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
 
             return cell
         case .debug:
@@ -193,7 +144,7 @@ class SettingsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let section = normalizedSection(indexPath.section) else {
+        guard let section = SettingsSection(rawValue: indexPath.section) else {
             fatalError("This section does not exist")
         }
 
@@ -202,13 +153,6 @@ class SettingsViewController: TBATableViewController {
             let infoRow = InfoRow.allCases[indexPath.row]
             if let url = URL(string: infoRow.rawValue) {
                 openURL(url: url)
-            }
-        case .icons:
-            if indexPath.row == 0 {
-                setDefaultAppIcon()
-            } else {
-                let alternateName = Array(alternateAppIcons.keys)[indexPath.row - 1]
-                setAlternateAppIcon(alternateName)
             }
         case .debug:
             let debugRow = DebugRow.allCases[indexPath.row]
@@ -301,7 +245,7 @@ class SettingsViewController: TBATableViewController {
 
     private func reloadIconsSection() {
         DispatchQueue.main.async {
-            self.tableView.reloadSections(IndexSet(integer: SettingsSection.icons.rawValue), with: .automatic)
+            self.tableView.reloadData()
         }
     }
 

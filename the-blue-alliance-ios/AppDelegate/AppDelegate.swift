@@ -11,36 +11,14 @@ import TBAUtils
 import UIKit
 import UserNotifications
 
-let kNoSelectionNavigationController = "NoSelectionNavigationController"
-
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     // MARK: - View Hierarchy
 
-    // Root VC on iPhone: a tab bar controller, iPad: a split view controller
-    lazy private var rootViewController: UIViewController & RootController = {
-        if UIDevice.isPhone {
-            return rootViewControllerPhone
-        } else if UIDevice.isPad {
-            return rootViewControllerPad
-        }
-        fatalError("userInterfaceIdiom \(UIDevice.current.userInterfaceIdiom) unsupported")
-    }()
-    lazy private var rootViewControllerPhone: PhoneRootViewController = {
+    lazy private var rootViewController: PhoneRootViewController = {
         return PhoneRootViewController(fcmTokenProvider: messaging,
-                                       myTBA: myTBA,
-                                       myTBAStores: myTBAStores,
-                                       pasteboard: pasteboard,
-                                       photoLibrary: photoLibrary,
-                                       pushService: pushService,
-                                       statusService: statusService,
-                                       urlOpener: urlOpener,
-                                       dependencies: dependencies)
-    }()
-    lazy private var rootViewControllerPad: PadRootViewController = {
-        return PadRootViewController(fcmTokenProvider: messaging,
                                        myTBA: myTBA,
                                        myTBAStores: myTBAStores,
                                        pasteboard: pasteboard,

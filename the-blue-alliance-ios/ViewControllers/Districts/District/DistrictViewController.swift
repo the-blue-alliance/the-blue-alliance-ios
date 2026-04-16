@@ -55,8 +55,6 @@ class DistrictViewController: ContainerViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
     }
 
     override func viewWillAppear(_ animated: Bool) {

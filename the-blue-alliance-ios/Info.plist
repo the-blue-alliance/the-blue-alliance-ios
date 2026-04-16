@@ -10,52 +10,6 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
 	<dict>
-		<key>CFBundleAlternateIcons</key>
-		<dict>
-			<key>CRESCENDO</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>2024Crescendo</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-		</dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconName</key>
-			<string>AppIcon</string>
-			<key>UIPrerenderedIcon</key>
-			<false/>
-		</dict>
-	</dict>
-	<key>CFBundleIcons~ipad</key>
-	<dict>
-		<key>CFBundleAlternateIcons</key>
-		<dict>
-			<key>CRESCENDO</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>2024Crescendo</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-		</dict>
-		<key>CFBundleIcons~ipad</key>
-		<dict>
-			<key>CRESCENDO</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>2024Crescendo</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
 			<key>CFBundleIconName</key>
@@ -121,13 +75,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>

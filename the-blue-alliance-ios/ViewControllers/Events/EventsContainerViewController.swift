@@ -54,10 +54,7 @@ class EventsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Only show Search in container view on iPhone
-        if UIDevice.isPhone {
-            setupSearchController()
-        }
+        setupSearchController()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -128,11 +125,6 @@ extension EventsContainerViewController: EventsListViewControllerDelegate {
                                                       myTBA: myTBA,
                                                       myTBAStores: myTBAStores,
                                                       dependencies: dependencies)
-        if let splitViewController = splitViewController {
-            let nav = UINavigationController(rootViewController: eventViewController)
-            splitViewController.showDetailViewController(nav, sender: nil)
-        } else if let navigationController = navigationController {
-            navigationController.pushViewController(eventViewController, animated: true)
-        }
+        navigationController?.pushViewController(eventViewController, animated: true)
     }
 }

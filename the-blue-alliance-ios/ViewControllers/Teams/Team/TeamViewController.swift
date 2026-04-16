@@ -84,8 +84,6 @@ class TeamViewController: HeaderContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
-
         loadTeamData()
     }
 
