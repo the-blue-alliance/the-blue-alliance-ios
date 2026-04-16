@@ -31,7 +31,16 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
     // MARK: - Init
 
-    init(event: Event, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
+    init(eventKey: String, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
+        // Phase 1a: detail sub-VCs still consume a managed `Event`, so we look
+        // it up from Core Data by key. Callers from API-driven screens rely
+        // on the list refresh's parallel `tbaKit.fetchEvents → Event.insert`
+        // path having populated the store. Phase 1b rewrites the sub-VCs to
+        // take `eventKey` too and removes this lookup.
+        guard let event = Event.findOrFetch(in: dependencies.persistentContainer.viewContext,
+                                            matching: Event.predicate(key: eventKey)) else {
+            fatalError("Event \(eventKey) not found in Core Data — list refresh may not have completed")
+        }
         self.event = event
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary

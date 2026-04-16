@@ -1,19 +1,17 @@
-import CoreData
 import Firebase
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 protocol YearSelectViewControllerDelegate: AnyObject {
-    func weekEventSelected(year: Int, weekEvent: Event)
+    func weekEventSelected(year: Int, weekEvent: Components.Schemas.Event)
 }
 
 class YearSelectViewController: ContainerViewController {
 
     private(set) var year: Int
     private(set) var years: [Int]
-    private(set) var week: Event?
+    private(set) var week: Components.Schemas.Event?
 
     private let selectViewController: SelectTableViewController<YearSelectViewController>
     private var eventWeekSelectViewController: EventWeekSelectViewController?
@@ -26,7 +24,7 @@ class YearSelectViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(year: Int, years: [Int], week: Event?, dependencies: Dependencies) {
+    init(year: Int, years: [Int], week: Components.Schemas.Event?, dependencies: Dependencies) {
         self.year = year
         self.years = years
         self.week = week
@@ -99,6 +97,8 @@ extension YearSelectViewController: SelectTableViewControllerDelegate {
 
 }
 
+// MARK: - Inner week select
+
 private class EventWeekSelectViewController: ContainerViewController {
 
     private let year: Int
@@ -106,14 +106,12 @@ private class EventWeekSelectViewController: ContainerViewController {
 
     weak var delegate: YearSelectViewControllerDelegate?
 
-    init(year: Int, week: Event?, dependencies: Dependencies) {
+    init(year: Int, week: Components.Schemas.Event?, dependencies: Dependencies) {
         self.year = year
-
-        let weeks = Event.weekEvents(for: year, in: dependencies.persistentContainer.viewContext)
 
         selectViewController = WeeksSelectTableViewController(year: year,
                                                               current: week,
-                                                              options: weeks,
+                                                              options: [],
                                                               dependencies: dependencies)
 
         super.init(viewControllers: [selectViewController], dependencies: dependencies)
@@ -140,7 +138,7 @@ private class EventWeekSelectViewController: ContainerViewController {
 
 extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
 
-    typealias OptionType = Event
+    typealias OptionType = Components.Schemas.Event
 
     func optionSelected(_ option: OptionType) {
         delegate?.weekEventSelected(year: year, weekEvent: option)
@@ -155,12 +153,10 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
 private class WeeksSelectTableViewController: SelectTableViewController<EventWeekSelectViewController> {
 
     private let year: Int
-
     fileprivate var hasRefreshed: Bool = false
 
-    init(year: Int, current: Event?, options: [Event], dependencies: Dependencies) {
+    init(year: Int, current: Components.Schemas.Event?, options: [Components.Schemas.Event], dependencies: Dependencies) {
         self.year = year
-
         super.init(current: current, options: options, dependencies: dependencies)
     }
 
@@ -170,42 +166,24 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     // MARK: - Refreshable
 
-    override var refreshKey: String? {
-        return "\(year)_events"
-    }
+    override var refreshKey: String? { "\(year)_events" }
 
-    override var isDataSourceEmpty: Bool {
-        return options.isEmpty
-    }
+    override var isDataSourceEmpty: Bool { options.isEmpty }
 
     @objc override func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvents(year: year) { [self] (result, notModified) in
-            guard case .success(let events) = result, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({ [unowned self] in
-                Event.insert(events, year: self.year, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-                self.hasRefreshed = true
-                OperationQueue.main.addOperation {
-                    self.updateWeeks(in: self.persistentContainer.viewContext)
+        Task { @MainActor in
+            do {
+                let events = try await dependencies.api.eventsByYear(year)
+                options = WeekEventsGrouping.weekEvents(for: year, from: events)
+                hasRefreshed = true
+                if isDataSourceEmpty {
+                    self.showNoDataView()
                 }
-            }, errorRecorder: errorRecorder)
-        }
-        addRefreshOperations([operation])
-    }
-
-    func updateWeeks(in context: NSManagedObjectContext) {
-        options = Event.weekEvents(for: year, in: context)
-        if isDataSourceEmpty && hasRefreshed {
-            self.showNoDataView()
+            } catch {
+                errorRecorder.record(error)
+            }
         }
     }
-    
 }
 
 extension WeeksSelectTableViewController: Stateful {
