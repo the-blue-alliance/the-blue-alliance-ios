@@ -9,6 +9,7 @@ import GoogleSignIn
 import MyTBAKit
 import Photos
 import Search
+import TBAAPI
 import TBAData
 import TBAKit
 import TBAUtils
@@ -59,7 +60,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var dependencies = Dependencies(errorRecorder: errorRecorder,
                                                  persistentContainer: persistentContainer,
                                                  tbaKit: tbaKit,
+                                                 api: api,
                                                  userDefaults: userDefaults)
+    // Owned here and passed explicitly to myTBA view controllers when they're
+    // migrated off Core Data — not in Dependencies, since only a handful of
+    // screens need them.
+    let favoritesStore = FavoritesStore()
+    let subscriptionsStore = SubscriptionsStore()
     private let errorRecorder = TBAErrorRecorder()
     lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
         let description = persistentContainer.persistentStoreDescriptions.first!
@@ -87,6 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let photoLibrary = PHPhotoLibrary.shared()
     lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
     var tbaKit: TBAKit!
+    var api: TBAAPI!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
@@ -154,6 +162,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let secrets = Secrets()
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
+        api = TBAAPI(apiKey: secrets.tbaAPIKey)
 
         // Listen for changes to FMS availability
         registerForFMSStatusChanges()
