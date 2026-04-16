@@ -1,11 +1,7 @@
-import CoreData
-import Firebase
 import Foundation
 import MyTBAKit
 import Photos
 import TBAAPI
-import TBAData
-import TBAKit
 import UIKit
 
 class EventAlliancesContainerViewController: ContainerViewController {
@@ -57,15 +53,15 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.key, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func teamSelected(teamKey: String) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAlliancesViewControllerDelegate: AnyObject {
-    func teamSelected(_ team: Team)
+    func teamSelected(teamKey: String)
 }
 
 private class EventAlliancesViewController: TBATableViewController, Refreshable, Stateful {
@@ -114,10 +110,7 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable,
 
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: indexPath.row + 1)
         cell.teamKeySelected = { [weak self] (teamKey) in
-            // Team lookup is still managed — Phase 3 swaps this for an API-driven path.
-            guard let context = self?.persistentContainer.viewContext else { return }
-            let team = Team.insert(teamKey, in: context)
-            self?.delegate?.teamSelected(team)
+            self?.delegate?.teamSelected(teamKey: teamKey)
         }
 
         return cell

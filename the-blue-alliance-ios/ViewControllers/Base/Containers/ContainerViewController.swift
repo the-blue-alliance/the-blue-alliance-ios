@@ -1,8 +1,5 @@
-import CoreData
 import Foundation
 import TBAAPI
-import TBAData
-import TBAKit
 import TBAUtils
 import UIKit
 
@@ -15,9 +12,9 @@ protocol Navigatable {
     var additionalRightBarButtonItems: [UIBarButtonItem] { get }
 }
 
-typealias ContainableViewController = UIViewController & Refreshable & Persistable & Navigatable
+typealias ContainableViewController = UIViewController & Refreshable & Navigatable
 
-class ContainerViewController: UIViewController, Persistable, Alertable {
+class ContainerViewController: UIViewController, Alertable {
 
     // MARK: - Public Properties
 
@@ -47,12 +44,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     var errorRecorder: ErrorRecorder {
         return dependencies.errorRecorder
-    }
-    var persistentContainer: NSPersistentContainer {
-        return dependencies.persistentContainer
-    }
-    var tbaKit: TBAKit {
-        return dependencies.tbaKit
     }
     var api: TBAAPI {
         return dependencies.api

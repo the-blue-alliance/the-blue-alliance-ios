@@ -1,21 +1,17 @@
-import CoreData
 import Foundation
-import TBAKit
+import TBAAPI
 import TBAUtils
 import UIKit
 
 class TBACollectionViewController: UICollectionViewController, DataController, Navigatable {
 
-    private let dependencies: Dependencies
+    let dependencies: Dependencies
 
     var errorRecorder: ErrorRecorder {
         return dependencies.errorRecorder
     }
-    var persistentContainer: NSPersistentContainer {
-        return dependencies.persistentContainer
-    }
-    var tbaKit: TBAKit {
-        return dependencies.tbaKit
+    var api: TBAAPI {
+        return dependencies.api
     }
     var userDefaults: UserDefaults {
         return dependencies.userDefaults

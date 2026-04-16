@@ -1,5 +1,4 @@
 import Foundation
-import TBAKit
 import UIKit
 
 protocol RefreshView {
@@ -112,14 +111,6 @@ extension Refreshable {
             }
         }
         return (!hasSuccessfullyRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
-    }
-
-    /**
-     Set our LastModified in TBAKit as well as setting our last successful refresh data for Refreshable.
-     */
-    func markTBARefreshSuccessful(_ tbaKit: TBAKit, operation: TBAKitOperation, lastRefresh: Date = Date()) {
-        tbaKit.storeCacheHeaders(operation)
-        markRefreshSuccessful()
     }
 
     /**
