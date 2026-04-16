@@ -12,7 +12,6 @@ class TeamsContainerViewController: ContainerViewController {
     private(set) var myTBAStores: MyTBAStores
     private(set) var pasteboard: UIPasteboard?
     private(set) var photoLibrary: PHPhotoLibrary?
-    private(set) var searchService: SearchService
     private(set) var statusService: StatusService
     private(set) var urlOpener: URLOpener
 
@@ -22,12 +21,11 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -59,14 +57,4 @@ class TeamsContainerViewController: ContainerViewController {
 }
 
 extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {
-
-    // Navigation from the new API-driven top-level teams list.
-    func teamSelected(teamKey: String) {
-        // TODO(phase-3b): push TeamViewController(teamKey:) directly.
-        // Phase 3a still lands a managed Team via `Team.insert` so the legacy
-        // TeamViewController can display. Phase 3b rewrites TeamViewController
-        // to take `teamKey: String` and removes this bridge.
-        let team = Team.insert(teamKey, in: persistentContainer.viewContext)
-        teamSelected(team)
-    }
 }

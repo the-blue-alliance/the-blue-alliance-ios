@@ -1,18 +1,16 @@
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
 import UIKit
 
 protocol SearchContainer: ContainerViewController {
-    var searchService: SearchService { get }
     var searchController: UISearchController! { get set }
 }
 
 extension SearchContainer where Self: SearchViewControllerDelegate {
 
     func setupSearchController() {
-        let searchViewController = SearchViewController(searchService: searchService, dependencies: dependencies)
+        let searchViewController = SearchViewController(dependencies: dependencies)
         searchViewController.delegate = self
 
         searchController = UISearchController(searchResultsController: searchViewController)
@@ -55,9 +53,8 @@ protocol SearchContainerDelegate {
 
 extension SearchContainerDelegate where Self: ContainerViewController {
 
-    func eventSelected(_ event: Event) {
-        // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(eventKey: event.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+    func eventSelected(eventKey: String) {
+        let eventViewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: eventViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)
@@ -66,9 +63,8 @@ extension SearchContainerDelegate where Self: ContainerViewController {
         }
     }
 
-    func teamSelected(_ team: Team) {
-        // Show detail wrapped in a UINavigationController for our split view controller
-        let teamViewController = TeamViewController(teamKey: team.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+    func teamSelected(teamKey: String) {
+        let teamViewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: teamViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

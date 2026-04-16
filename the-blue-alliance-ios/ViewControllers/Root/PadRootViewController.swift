@@ -1,9 +1,6 @@
-import CoreData
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
 import UIKit
 
 class PadRootViewController: UISplitViewController, RootController {
@@ -14,7 +11,6 @@ class PadRootViewController: UISplitViewController, RootController {
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let pushService: PushService
-    let searchService: SearchService
     let urlOpener: URLOpener
     let statusService: StatusService
     let dependencies: Dependencies
@@ -26,7 +22,6 @@ class PadRootViewController: UISplitViewController, RootController {
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
                                        pushService: pushService,
-                                       searchService: searchService,
                                        statusService: statusService,
                                        urlOpener: urlOpener,
                                        dependencies: dependencies)
@@ -43,14 +38,13 @@ class PadRootViewController: UISplitViewController, RootController {
         return navigationController
     }()
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.pushService = pushService
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
         self.dependencies = dependencies
@@ -77,20 +71,18 @@ private class PadMasterViewController: ContainerViewController, RootController {
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let pushService: PushService
-    let searchService: SearchService
     let statusService: StatusService
     let urlOpener: URLOpener
 
     var searchController: UISearchController!
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.pushService = pushService
-        self.searchService = searchService
         self.statusService = statusService
         self.urlOpener = urlOpener
 

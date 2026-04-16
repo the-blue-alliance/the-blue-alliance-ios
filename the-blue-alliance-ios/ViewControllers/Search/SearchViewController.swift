@@ -1,8 +1,5 @@
-import CoreData
-import CoreSpotlight
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 enum SearchScope: CaseIterable {
@@ -12,23 +9,14 @@ enum SearchScope: CaseIterable {
 
     var title: String {
         switch self {
-        case .all:
-            return "All"
-        case .events:
-            return "Events"
-        case .teams:
-            return "Teams"
+        case .all: return "All"
+        case .events: return "Events"
+        case .teams: return "Teams"
         }
     }
 
-    var shouldShowTeams: Bool {
-        return self == .all || self == .teams
-    }
-
-    var shouldShowEvents: Bool {
-        return self == .all || self == .events
-    }
-
+    var shouldShowTeams: Bool { self == .all || self == .teams }
+    var shouldShowEvents: Bool { self == .all || self == .events }
 }
 
 enum SearchSection: String {
@@ -37,43 +25,30 @@ enum SearchSection: String {
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
-    func eventSelected(_ event: Event)
-    func teamSelected(_ team: Team)
+    func eventSelected(eventKey: String)
+    func teamSelected(teamKey: String)
+}
+
+enum SearchItem: Hashable {
+    case event(key: String, name: String)
+    case team(key: String, nickname: String)
 }
 
 class SearchViewController: TBATableViewController {
 
-    private let searchService: SearchService
-
     weak var delegate: SearchViewControllerDelegate?
 
     var scope = SearchScope.all {
-        didSet {
-            updateQueue.addOperation {
-                self.updateDataSource()
-            }
-        }
+        didSet { updateSnapshot() }
     }
     var searchText: String? = nil {
-        didSet {
-            search()
-        }
+        didSet { updateSnapshot() }
     }
-    var searchQuery: CSSearchQuery?
 
-    var teams: Set<CSSearchableItem> = Set()
-    var events: Set<CSSearchableItem> = Set()
+    private var index: Components.Schemas.SearchIndex?
+    private var dataSource: TableViewDataSource<SearchSection, SearchItem>!
 
-    private let updateQueue: OperationQueue = {
-        var queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        return queue
-    }()
-    private var dataSource: TableViewDataSource<SearchSection, CSSearchableItem>!
-
-    init(searchService: SearchService, dependencies: Dependencies) {
-        self.searchService = searchService
-
+    init(dependencies: Dependencies) {
         super.init(dependencies: dependencies)
     }
 
@@ -89,301 +64,153 @@ class SearchViewController: TBATableViewController {
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
 
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
 
         enableRefreshing()
+
+        loadIndex()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        // If our search service is refreshing, show our refresh indicator
-        if let refreshOperation = searchService.refreshOperation {
-            if refreshOperationQueue.operations.isEmpty {
-                let operation = Operation()
-                operation.addDependency(refreshOperation)
-                addRefreshOperations([operation])
-            } else {
-                // Manually update our refresh control
-                self.refreshControl?.endRefreshing()
-                self.refreshControl?.beginRefreshing()
-            }
-        }
-    }
-
-    // MARK: Private Methods
+    // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<SearchSection, CSSearchableItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
-            let contentType = item.attributeSet.contentType
-            if contentType == Event.entityName {
-                let name = item.attributeSet.displayName ?? item.attributeSet.alternateNames?.first ?? "---"
-                let vm = EventCellViewModel(name: name, location: item.locationString, dateString: item.dateString)
-                return SearchViewController.tableView(tableView, cellForEventModel: vm, at: indexPath)
-            } else if contentType == Team.entityName {
-                let teamNumber = item.attributeSet.teamNumber ?? item.attributeSet.alternateNames?.first ?? "---"
-                let nickname = item.attributeSet.nickname ?? item.attributeSet.displayName ?? item.attributeSet.alternateNames?.last ?? "---"
-                let vm = TeamCellViewModel(teamNumber: teamNumber, nickname: nickname, location: item.locationString)
-                return SearchViewController.tableView(tableView, cellForTeamModel: vm, at: indexPath)
+        dataSource = TableViewDataSource<SearchSection, SearchItem>(tableView: tableView) { tableView, indexPath, item in
+            switch item {
+            case .event(let key, let name):
+                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
+                cell.viewModel = EventCellViewModel(name: name.isEmpty ? key : name, location: nil, dateString: nil)
+                return cell
+            case .team(let key, let nickname):
+                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
+                let teamNumber = TeamKey.trimFRCPrefix(key)
+                cell.viewModel = TeamCellViewModel(teamNumber: teamNumber,
+                                                   nickname: nickname.isEmpty ? "Team \(teamNumber)" : nickname,
+                                                   location: nil)
+                return cell
             }
-            return UITableViewCell()
-        })
+        }
         dataSource.delegate = self
         dataSource.statefulDelegate = self
     }
 
-    private func search() {
-        searchQuery?.cancel() // Cancel ongoing query
-        updateQueue.cancelAllOperations()
+    // MARK: - Search
 
-        // If our search text is nil or empty, show an empty table view
-        guard let searchText = searchText, !searchText.isEmpty else {
-            updateQueue.addOperation {
-                self.clearDataSource()
+    private func loadIndex() {
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.getSearchIndex()
+                index = fetched
+                updateSnapshot()
+            } catch {
+                errorRecorder.record(error)
             }
+        }
+    }
+
+    private func updateSnapshot() {
+        let query = (searchText ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        var snapshot = NSDiffableDataSourceSnapshot<SearchSection, SearchItem>()
+
+        guard !query.isEmpty, let index else {
+            dataSource.apply(snapshot, animatingDifferences: false)
             return
         }
 
-        // Escape user query
-        let escapedSearchText = searchText.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-
-        // Basic attributes
-        var attributes = [
-            #keyPath(CSSearchableItemAttributeSet.displayName),
-            #keyPath(CSSearchableItemAttributeSet.alternateNames)
-        ]
-        // Content type, so we can identify the searchablte item as an Event or Team
-        attributes.append(#keyPath(CSSearchableItemAttributeSet.contentType))
-        // Location-related information, for Event and Team
-        attributes.append(contentsOf: [
-            #keyPath(CSSearchableItemAttributeSet.city),
-            #keyPath(CSSearchableItemAttributeSet.country),
-            #keyPath(CSSearchableItemAttributeSet.stateOrProvince),
-            #keyPath(CSSearchableItemAttributeSet.namedLocation)
-        ])
-        // Date-related information, for Event
-        attributes.append(contentsOf: [
-            #keyPath(CSSearchableItemAttributeSet.startDate),
-            #keyPath(CSSearchableItemAttributeSet.endDate)
-        ])
-        // Custom keys for Team
-        attributes.append(contentsOf: [
-            #keyPath(CSSearchableItemAttributeSet.teamNumber),
-            #keyPath(CSSearchableItemAttributeSet.nickname)
-        ])
-
-        // Teams
-        let teamsQuery = [
-            "\(#keyPath(CSSearchableItemAttributeSet.teamNumber)) == \"\(escapedSearchText)*\"", // team number begins with
-            "\(#keyPath(CSSearchableItemAttributeSet.nickname)) == \"\(escapedSearchText)*\"cdwt",  // nickname contains
-            "\(#keyPath(CSSearchableItemAttributeSet.city)) == \"\(escapedSearchText)*\"cdwt",      // city contains
-        ]
-        let teamsQueryString = "\(#keyPath(CSSearchableItemAttributeSet.contentType)) == '\(Team.entityName)' && (\(teamsQuery.joined(separator: " || ")))"
-
-        // Events
-        let eventsQuery = [
-            "\(#keyPath(CSSearchableItemAttributeSet.alternateNames)) == \"\(escapedSearchText)*\"cdwt", // team key/short name/name contains
-        ]
-        let eventsQueryString = "\(#keyPath(CSSearchableItemAttributeSet.contentType)) == '\(Event.entityName)' && (\(eventsQuery.joined(separator: " || ")))"
-
-        let queryString = "(\(teamsQueryString)) || (\(eventsQueryString))"
-        let newQuery = CSSearchQuery(queryString: queryString, attributes: attributes)
-        searchQuery = newQuery
-
-        var teams: [CSSearchableItem] = []
-        var events: [CSSearchableItem] = []
-
-        newQuery.foundItemsHandler = { (items: [CSSearchableItem]) in
-            teams.append(contentsOf: items.filter { $0.attributeSet.contentType == Team.entityName })
-            events.append(contentsOf: items.filter { $0.attributeSet.contentType == Event.entityName })
-        }
-
-        newQuery.completionHandler = { (error: Error?) in
-            self.teams = Set(teams)
-            self.events = Set(events)
-
-            self.updateQueue.addOperation {
-                self.updateDataSource()
+        if scope.shouldShowTeams {
+            let teams = (index.teams ?? [])
+                .filter { matches(team: $0, query: query) }
+                .sorted { lhs, rhs in
+                    let l = Int(TeamKey.trimFRCPrefix(lhs.key)) ?? .max
+                    let r = Int(TeamKey.trimFRCPrefix(rhs.key)) ?? .max
+                    return l < r
+                }
+                .map { SearchItem.team(key: $0.key, nickname: $0.nickname) }
+            if !teams.isEmpty {
+                snapshot.appendSections([.teams])
+                snapshot.appendItems(teams, toSection: .teams)
             }
         }
 
-        newQuery.start()
-    }
-
-    private func updateDataSource() {
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteAllItems()
-
-        if scope.shouldShowTeams, !teams.isEmpty {
-            snapshot.appendSections([.teams])
-            snapshot.appendItems(teams.sorted(by: { (lhs: CSSearchableItem, rhs: CSSearchableItem) -> Bool in
-                guard let lhsTeamNumber = lhs.attributeSet.teamNumber, let lhsInt = Int(lhsTeamNumber) else {
-                    return true
+        if scope.shouldShowEvents {
+            let events = (index.events ?? [])
+                .filter { matches(event: $0, query: query) }
+                .sorted { lhs, rhs in
+                    let lYear = Int(lhs.key.prefix(4)) ?? 0
+                    let rYear = Int(rhs.key.prefix(4)) ?? 0
+                    if lYear != rYear { return lYear > rYear }
+                    return lhs.name < rhs.name
                 }
-                guard let rhsTeamNumber = rhs.attributeSet.teamNumber, let rhsInt = Int(rhsTeamNumber) else {
-                    return true
-                }
-                return lhsInt < rhsInt
-            }), toSection: .teams)
+                .map { SearchItem.event(key: $0.key, name: $0.name) }
+            if !events.isEmpty {
+                snapshot.appendSections([.events])
+                snapshot.appendItems(events, toSection: .events)
+            }
         }
 
-        if scope.shouldShowEvents, !events.isEmpty {
-            snapshot.appendSections([.events])
-            snapshot.appendItems(events.sorted(by: { (lhs: CSSearchableItem, rhs: CSSearchableItem) -> Bool in
-                guard let lhsStartDate = lhs.startDate, let rhsStartDate = rhs.startDate else {
-                    return false
-                }
-                // Reverse sort events so newer events are at the start
-                guard lhsStartDate.year == rhsStartDate.year else {
-                    return lhsStartDate.year > rhsStartDate.year
-                }
-                guard lhsStartDate == rhsStartDate else {
-                    return lhsStartDate < rhsStartDate
-                }
-                guard let lhsDisplayName = lhs.attributeSet.displayName, let rhsDisplayName = rhs.attributeSet.displayName else {
-                    return false
-                }
-                return lhsDisplayName < rhsDisplayName
-            }), toSection: .events)
-        }
-
-        DispatchQueue.main.async {
-            self.dataSource.apply(snapshot, animatingDifferences: false)
-        }
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    private func clearDataSource() {
-        self.teams = Set()
-        self.events = Set()
-
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteAllItems()
-
-        DispatchQueue.main.async {
-            self.dataSource.apply(snapshot, animatingDifferences: false)
-        }
+    private func matches(team: Components.Schemas.SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
+        let number = TeamKey.trimFRCPrefix(team.key)
+        return number.hasPrefix(query) || team.nickname.lowercased().contains(query) || team.key.lowercased().contains(query)
     }
 
-    // MARK: - Cell Methods
-
-    private static func tableView(_ tableView: UITableView, cellForEventModel vm: EventCellViewModel, at indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-        cell.viewModel = vm
-        return cell
-    }
-
-    private static func tableView(_ tableView: UITableView, cellForTeamModel vm: TeamCellViewModel, at indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
-        cell.viewModel = vm
-        return cell
+    private func matches(event: Components.Schemas.SearchIndex.EventsPayloadPayload, query: String) -> Bool {
+        event.name.lowercased().contains(query) || event.key.lowercased().contains(query)
     }
 
     // MARK: - Table View Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
-
-        guard let uri = URL(string: item.uniqueIdentifier) else {
-            return
-        }
-
-        guard let objectID = persistentContainer.persistentStoreCoordinator.managedObjectID(forURIRepresentation: uri) else {
-            return
-        }
-
-        let object = persistentContainer.viewContext.object(with: objectID)
-        if let team = object as? Team {
-            delegate?.teamSelected(team)
-        } else if let event = object as?  Event {
-            delegate?.eventSelected(event)
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        switch item {
+        case .event(let key, _): delegate?.eventSelected(eventKey: key)
+        case .team(let key, _): delegate?.teamSelected(teamKey: key)
         }
     }
 
-    // MARK: - TableViewDataSourceDelegate
-
     override func title(forSection section: Int) -> String? {
-        let snapshot = dataSource.snapshot()
-        let section = snapshot.sectionIdentifiers[section]
-        return section.rawValue
+        dataSource.snapshot().sectionIdentifiers[section].rawValue
     }
 
 }
 
 extension SearchViewController: UISearchControllerDelegate {
-
     func didDismissSearchController(_ searchController: UISearchController) {
-        searchQuery?.cancel()
-        updateQueue.cancelAllOperations()
+        searchText = nil
     }
-
 }
 
 extension SearchViewController: UISearchResultsUpdating {
-
     public func updateSearchResults(for searchController: UISearchController) {
         searchText = searchController.searchBar.text
     }
-
 }
 
 extension SearchViewController: UISearchBarDelegate {
-
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         let cases = SearchScope.allCases
-        guard selectedScope < cases.count else {
-            return
-        }
-        scope = SearchScope.allCases[selectedScope]
+        guard selectedScope < cases.count else { return }
+        scope = cases[selectedScope]
     }
-
 }
 
 extension SearchViewController: Refreshable {
-
-    var refreshKey: String? {
-        return nil
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return dataSource.isDataSourceEmpty
-    }
+    var refreshKey: String? { "search_index" }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
     @objc func refresh() {
-        let refreshOperation = searchService.refresh(userInitiated: true)
-
-        let operation = Operation()
-        operation.addDependency(refreshOperation)
-
-        addRefreshOperations([operation])
+        loadIndex()
     }
-
 }
 
 extension SearchViewController: Stateful {
-
     var noDataText: String? {
-        // If we have no search text - don't show a no data view
-        guard let searchText = searchText, !searchText.isEmpty else {
-            return nil
-        }
-        // If we're between states while searching, don't show a no data view
-        guard let searchQuery = searchQuery, !searchQuery.isCancelled else {
-            return nil
-        }
+        guard let searchText = searchText, !searchText.isEmpty else { return nil }
         return "No results found"
     }
-
 }
