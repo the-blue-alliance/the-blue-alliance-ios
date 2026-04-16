@@ -1,11 +1,6 @@
 import Foundation
 import TBAAPI
 
-// Port of TBAData.Event's week-event grouping + Comparable logic against
-// the API `Components.Schemas.Event` type. Matches the original semantics —
-// see `Packages/TBAData/Sources/TBAData/Event/Event.swift` (`weekEvents(for:in:)`
-// and the `Comparable` conformance) for cross-checks.
-
 enum WeekEventsGrouping {
 
     // Picks a single representative event per week / event-type / offseason-month

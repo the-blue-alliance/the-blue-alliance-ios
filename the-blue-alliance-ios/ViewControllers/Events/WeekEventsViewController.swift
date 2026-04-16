@@ -5,9 +5,6 @@ import TBAData
 import TBAKit
 import TBAUtils
 
-/// Driven off `TBAAPI.eventsByYear` — the list state is fully in-memory.
-/// Still kicks off the legacy `TBAKit + Event.insert` path so detail screens
-/// (which haven't migrated yet) can find the tapped event in Core Data.
 protocol WeekEventsDelegate: AnyObject {
     func weekEventUpdated()
 }

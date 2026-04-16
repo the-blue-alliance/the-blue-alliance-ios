@@ -10,14 +10,6 @@ extension EventsListViewControllerDelegate {
     func title(for event: Components.Schemas.Event) -> String? { nil }
 }
 
-// Abstract base for API-driven event list screens. Replaces the Core Data
-// `EventsViewController` base for the subclasses that have migrated off
-// Core Data. The old base stays in place until every subclass (Team,
-// District, …) has migrated.
-//
-// Subclasses must override `loadEvents()` and `refreshKey` (Refreshable)
-// and `noDataText` (Stateful). Optional overrides: `filter(_:)`,
-// `sectionKey(for:)`, `applySection(_:)` to customize grouping.
 class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     typealias APIEvent = Components.Schemas.Event

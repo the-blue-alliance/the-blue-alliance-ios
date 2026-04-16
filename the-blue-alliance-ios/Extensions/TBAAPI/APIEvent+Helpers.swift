@@ -1,13 +1,6 @@
 import Foundation
 import TBAAPI
 
-// Conveniences on the TBAAPI-generated `Components.Schemas.Event` that mirror
-// the ones previously defined on the Core Data `Event` managed-object
-// subclass in TBAData. Kept here (app target) so `Components.Schemas.Event`
-// stays a pure generated type and we can delete TBAData without touching
-// these helpers. Semantics match the originals — see
-// `Packages/TBAData/Sources/TBAData/Event/Event.swift` for cross-checks.
-
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
 enum APIEventType: Int, CaseIterable {
     case regional = 0
@@ -97,6 +90,9 @@ extension Components.Schemas.Event {
     var isRegional: Bool { eventTypeEnum == .regional }
     var isUnlabeled: Bool { eventTypeEnum == .unlabeled }
 
+    // Sort key used in place of the Core Data `hybridType` attribute — groups
+    // events by their "conceptual bucket" within a season so the weekly
+    // section headers stack in a sensible order.
     // Sort key used in place of the Core Data `hybridType` attribute — groups
     // events by their "conceptual bucket" within a season so the weekly
     // section headers stack in a sensible order.
