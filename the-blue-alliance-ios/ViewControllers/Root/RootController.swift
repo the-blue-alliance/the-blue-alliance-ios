@@ -64,12 +64,6 @@ protocol RootController {
     var urlOpener: URLOpener { get }
     var statusService: StatusService { get }
     var dependencies: Dependencies { get }
-
-    // MARK: - Handoff Methods
-    func continueSearch(_ searchText: String) -> Bool
-
-    func show(event: Event) -> Bool
-    func show(team: Team) -> Bool
 }
 
 extension RootController {

@@ -104,14 +104,8 @@ extension MatchViewController: MatchSummaryViewDelegate {
     func teamPressed(teamNumber: Int) {
         let targetKey = "frc\(teamNumber)"
         guard let match, match.allTeamKeys.contains(targetKey) else { return }
-        // Team / Event lookups are still managed — Phase 3 swaps this for an
-        // API-driven path.
-        let team = Team.insert(targetKey, in: persistentContainer.viewContext)
-        guard let event = Event.findOrFetch(in: persistentContainer.viewContext,
-                                            matching: Event.predicate(key: match.eventKey)) else {
-            return
-        }
-        let teamAtEventVC = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let year = match.year ?? 0
+        let teamAtEventVC = TeamAtEventViewController(teamKey: targetKey, eventKey: match.eventKey, year: year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
 

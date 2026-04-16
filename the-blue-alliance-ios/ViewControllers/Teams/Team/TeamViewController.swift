@@ -3,19 +3,22 @@ import CoreData
 import Firebase
 import MyTBAKit
 import Photos
+import TBAAPI
 import TBAData
 import TBAKit
 import UIKit
 
-class TeamViewController: HeaderContainerViewController, Observable {
+class TeamViewController: HeaderContainerViewController {
 
-    private(set) var team: Team
+    private let teamKey: String
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
-    private let operationQueue = OperationQueue()
+    // Loaded from TBAAPI after init. Nil until the async load completes.
+    private var team: Components.Schemas.Team?
+    private var yearsParticipated: [Int] = []
 
     private let teamHeaderView: TeamHeaderView
 
@@ -27,52 +30,47 @@ class TeamViewController: HeaderContainerViewController, Observable {
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
 
-    private var activity: NSUserActivity?
-
     override var subscribableModel: MyTBASubscribable {
-        return team
+        TeamSubscribable(modelKey: teamKey)
     }
 
     private var year: Int? {
         didSet {
-            if let year = year {
-                eventsViewController.year = year
-                mediaViewController.year = year
-
-                fetchTeaMedia(year: year)
-            }
-
+            if oldValue == year { return }
+            eventsViewController.year = year
+            mediaViewController.year = year ?? Calendar.current.component(.year, from: Date())
             updateInterface()
         }
     }
 
-    // MARK: - Observable
-
-    typealias ManagedType = Team
-    lazy var contextObserver: CoreDataContextObserver<Team> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
-
     // MARK: Init
 
-    init(team: Team, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
-        self.team = team
+    init(teamKey: String, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
+        self.teamKey = teamKey
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: dependencies.persistentContainer.viewContext)
-        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(team: team, year: year))
+        // Header starts empty; it's populated once the team struct loads.
+        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(teamNumber: Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0,
+                                                                 avatar: nil,
+                                                                 nickname: nil,
+                                                                 teamNumberNickname: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+                                                                 year: nil))
 
-        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, dependencies: dependencies)
-        eventsViewController = TeamEventsViewController(team: team, year: year, dependencies: dependencies)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
+        infoViewController = TeamInfoViewController(teamKey: teamKey, urlOpener: urlOpener, dependencies: dependencies)
+        eventsViewController = TeamEventsViewController(teamKey: teamKey, year: nil, dependencies: dependencies)
+
+        // TeamMediaCollectionViewController is still on managed `Team` (Phase 3c).
+        // Look it up / insert a stub so the sub-VC has something to render against.
+        let managedTeam = Team.insert(teamKey, in: dependencies.persistentContainer.viewContext)
+        mediaViewController = TeamMediaCollectionViewController(team: managedTeam, year: Calendar.current.component(.year, from: Date()), pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
-            navigationTitle: team.teamNumberNickname,
-            navigationSubtitle: year?.description ?? "----",
+            navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+            navigationSubtitle: "----",
             segmentedControlTitles: ["Info", "Events", "Media"],
             myTBA: myTBA,
             dependencies: dependencies
@@ -95,99 +93,60 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
-        setupObservers()
-
-        activity = team.userActivity
+        loadTeamData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        errorRecorder.log("Team: %@", [team.key])
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        activity?.becomeCurrent()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        operationQueue.cancelAllOperations()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        activity?.resignCurrent()
+        errorRecorder.log("Team: %@", [teamKey])
     }
 
     // MARK: - Private
 
-    private func setupObservers() {
-        contextObserver.observeObject(object: team, state: .updated) { [weak self] (team, _) in
-            guard let self = self else {
-                return
+    private func loadTeamData() {
+        Task { @MainActor in
+            async let teamTask = try? await dependencies.api.team(key: teamKey)
+            async let yearsTask = try? await dependencies.api.teamYearsParticipated(key: teamKey)
+            let (team, years) = await (teamTask, yearsTask)
+
+            if let team = team ?? nil {
+                self.team = team
+                self.navigationTitle = team.teamNumberNickname
+                self.infoViewController.apply(team: team)
             }
-            guard let context = team.managedObjectContext else {
-                fatalError("No context for Team.")
-            }
-            if self.year == nil {
-                self.year = TeamViewController.latestYear(
-                    currentSeason: self.statusService.currentSeason,
-                    years: team.yearsParticipated,
-                    in: context
-                )
-            } else {
-                self.updateInterface()
+            if let years = years ?? nil {
+                self.yearsParticipated = years.sorted().reversed()
+                if year == nil {
+                    year = Self.latestYear(currentSeason: statusService.currentSeason, years: yearsParticipated)
+                }
             }
         }
     }
 
-    private static func latestYear(currentSeason: Int, years: [Int]?, in context: NSManagedObjectContext) -> Int? {
-        if let years = years, !years.isEmpty {
-            // Limit default year set to be <= currentSeason
-            let latestYear = years.first!
-            if latestYear > currentSeason, years.count > 1 {
-                // Find the next year before the current season
-                return years.first(where: { $0 <= currentSeason })
-            } else {
-                // Otherwise, the first year is fine (for new teams)
-                return years.first
-            }
+    private static func latestYear(currentSeason: Int, years: [Int]) -> Int? {
+        guard !years.isEmpty else { return nil }
+        let latestYear = years.first!
+        if latestYear > currentSeason, years.count > 1 {
+            // Find the next year before the current season
+            return years.first(where: { $0 <= currentSeason })
         }
-        return nil
+        return years.first
     }
 
     private func updateInterface() {
-        teamHeaderView.viewModel = TeamHeaderViewModel(team: team, year: year)
+        if let team {
+            teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: team.teamNumber,
+                                                           avatar: nil,
+                                                           nickname: team.nickname.isEmpty ? nil : team.nickname,
+                                                           teamNumberNickname: team.teamNumberNickname,
+                                                           year: year)
+        }
         navigationSubtitle = year?.description ?? "----"
     }
 
-    private func fetchTeaMedia(year: Int) {
-        var mediaOperation: TBAKitOperation!
-        mediaOperation = tbaKit.fetchTeamMedia(key: team.key, year: year, completion: { [self] (result, notModified) in
-            guard case .success(let media) = result, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let team = context.object(with: self.team.objectID) as! Team
-                team.insert(media, year: year)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(mediaOperation)
-            }, errorRecorder: errorRecorder)
-        })
-        operationQueue.addOperation(mediaOperation)
-    }
-
     @objc private func showSelectYear() {
-        guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty else {
-            return
-        }
+        guard !yearsParticipated.isEmpty else { return }
 
         let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, dependencies: dependencies)
         selectTableViewController.title = "Select Year"
@@ -206,6 +165,14 @@ class TeamViewController: HeaderContainerViewController, Observable {
 
 }
 
+private struct TeamSubscribable: MyTBASubscribable {
+    let modelKey: String
+    var modelType: MyTBAModelType { .team }
+    static var notificationTypes: [NotificationType] {
+        [.upcomingMatch, .matchScore, .allianceSelection, .awards, .mediaPosted]
+    }
+}
+
 extension TeamViewController: SelectTableViewControllerDelegate {
 
     typealias OptionType = Int
@@ -220,13 +187,12 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 
 }
 
-extension TeamViewController: EventsViewControllerDelegate {
+extension TeamViewController: EventsListViewControllerDelegate {
 
-    func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func eventSelected(_ event: Components.Schemas.Event) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
-
 }
 
 extension TeamViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {

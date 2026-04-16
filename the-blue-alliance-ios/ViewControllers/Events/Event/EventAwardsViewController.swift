@@ -9,7 +9,7 @@ import UIKit
 
 class EventAwardsContainerViewController: ContainerViewController {
 
-    private(set) var event: Event
+    private(set) var event: Components.Schemas.Event
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
@@ -18,7 +18,7 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Components.Schemas.Event, teamKey: String? = nil, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.event = event
         self.myTBA = myTBA
         self.pasteboard = pasteboard
@@ -26,7 +26,7 @@ class EventAwardsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let awardsViewController = EventAwardsViewController(eventKey: event.key, teamKey: team?.key, dependencies: dependencies)
+        let awardsViewController = EventAwardsViewController(eventKey: event.key, teamKey: teamKey, dependencies: dependencies)
 
         super.init(viewControllers: [awardsViewController],
                    navigationTitle: "Awards",
@@ -53,7 +53,7 @@ class EventAwardsContainerViewController: ContainerViewController {
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.key, eventKey: event.key, year: event.year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

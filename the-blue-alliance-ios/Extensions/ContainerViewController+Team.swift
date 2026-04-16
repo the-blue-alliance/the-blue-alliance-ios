@@ -17,7 +17,7 @@ protocol ContainerTeamPushable {
 extension ContainerTeamPushable where Self: ContainerViewController {
 
     func pushTeam(team: Team) {
-        let teamViewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        let teamViewController = TeamViewController(teamKey: team.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

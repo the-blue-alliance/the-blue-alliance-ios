@@ -28,4 +28,12 @@ struct TeamHeaderViewModel {
         }
     }
 
+    init(teamNumber: Int, avatar: UIImage?, nickname: String?, teamNumberNickname: String, year: Int?) {
+        self.teamNumber = teamNumber
+        self.avatar = avatar
+        self.nickname = nickname
+        self.teamNumberNickname = teamNumberNickname
+        self.year = year
+    }
+
 }

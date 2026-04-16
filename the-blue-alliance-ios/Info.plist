@@ -104,11 +104,6 @@
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>com.the-blue-alliance.tba.Team</string>
-		<string>com.the-blue-alliance.tba.Event</string>
-	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

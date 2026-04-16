@@ -1,67 +1,30 @@
-import CoreData
-import TBAData
 import Foundation
-import TBAKit
+import TBAAPI
 
-class EventTeamsViewController: TeamsViewController {
+class EventTeamsViewController: TeamsListViewController {
 
-    let event: Event
+    let eventKey: String
 
     // MARK: Init
 
-    init(event: Event, dependencies: Dependencies) {
-        self.event = event
+    init(eventKey: String, dependencies: Dependencies) {
+        self.eventKey = eventKey
 
-        super.init(dependencies: dependencies)
+        super.init(showSearch: false, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
-
-    override var refreshKey: String? {
-        return "\(event.key)_teams"
+    override func loadTeams() async throws -> [APITeam] {
+        try await dependencies.api.eventTeams(key: eventKey)
     }
 
-    override var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
+    override var refreshKey: String? { "\(eventKey)_teams" }
+    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
+    // Phase 3: event.endDate isn't available without a separate fetch.
+    override var automaticRefreshEndDate: Date? { nil }
 
-    override var automaticRefreshEndDate: Date? {
-        // Refresh event teams until the event is over
-        return event.endDate?.endOfDay()
-    }
-
-    @objc override func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventTeams(key: event.key) { [self] (result, notModified) in
-            guard case .success(let teams) = result, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let event = context.object(with: self.event.objectID) as! Event
-                event.insert(teams)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
-        }
-        addRefreshOperations([operation])
-    }
-
-    // MARK: - Stateful
-
-    override var noDataText: String? {
-        return "No teams for event"
-    }
-
-    // MARK: - EventsViewControllerDataSourceConfiguration
-
-    override var fetchRequestPredicate: NSPredicate? {
-        return Team.eventPredicate(eventKey: event.key)
-    }
-
+    override var noDataText: String? { "No teams for event" }
 }

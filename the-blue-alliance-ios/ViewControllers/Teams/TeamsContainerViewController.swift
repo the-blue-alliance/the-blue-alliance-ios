@@ -29,7 +29,7 @@ class TeamsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        teamsViewController = TeamsViewController(refreshProvider: searchService, showSearch: false, dependencies: dependencies)
+        teamsViewController = TeamsViewController(showSearch: false, dependencies: dependencies)
 
         super.init(viewControllers: [teamsViewController], dependencies: dependencies)
 
@@ -56,4 +56,15 @@ class TeamsContainerViewController: ContainerViewController {
 
 }
 
-extension TeamsContainerViewController: TeamsViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {
+
+    // Navigation from the new API-driven top-level teams list.
+    func teamSelected(teamKey: String) {
+        // TODO(phase-3b): push TeamViewController(teamKey:) directly.
+        // Phase 3a still lands a managed Team via `Team.insert` so the legacy
+        // TeamViewController can display. Phase 3b rewrites TeamViewController
+        // to take `teamKey: String` and removes this bridge.
+        let team = Team.insert(teamKey, in: persistentContainer.viewContext)
+        teamSelected(team)
+    }
+}

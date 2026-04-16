@@ -177,7 +177,7 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
     }
 
     func teamSelected(_ team: Team) {
-        let viewController = TeamViewController(team: team, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        let viewController = TeamViewController(teamKey: team.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: viewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)
