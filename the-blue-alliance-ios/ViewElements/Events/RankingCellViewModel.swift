@@ -1,4 +1,5 @@
 import Foundation
+import TBAAPI
 import TBAData
 
 struct RankingCellViewModel {
@@ -10,6 +11,35 @@ struct RankingCellViewModel {
 
     let detailText: String?
     let wltText: String?
+
+    init(rank: String, apiTeamKey teamKey: String, points: Int) {
+        self.rankText = rank
+        self.teamNumber = Self.teamNumber(from: teamKey)
+        self.teamName = "Team \(self.teamNumber ?? teamKey)"
+        self.detailText = "\(points) Points"
+        self.wltText = nil
+    }
+
+    init(apiRanking ranking: Components.Schemas.EventRanking.RankingsPayloadPayload, detailText: String?) {
+        self.rankText = "Rank \(ranking.rank)"
+        self.teamNumber = Self.teamNumber(from: ranking.teamKey)
+        self.teamName = "Team \(self.teamNumber ?? ranking.teamKey)"
+        self.detailText = detailText
+        self.wltText = {
+            if let qualAverage = ranking.qualAverage {
+                return "\(qualAverage)"
+            } else if let record = ranking.record {
+                return "\(record.wins)-\(record.losses)-\(record.ties)"
+            } else {
+                return nil
+            }
+        }()
+    }
+
+    // Parses "frc254" → "254". Phase 3 will add nickname lookup.
+    private static func teamNumber(from key: String) -> String? {
+        key.hasPrefix("frc") ? String(key.dropFirst(3)) : key
+    }
 
     init(districtRanking: DistrictRanking) {
         rankText = "Rank \(districtRanking.rank)"

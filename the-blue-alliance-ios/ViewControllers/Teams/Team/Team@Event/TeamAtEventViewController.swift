@@ -37,7 +37,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         matchesViewController = MatchesViewController(event: event, team: team, myTBA: myTBA, dependencies: dependencies)
         let mediaViewController = TeamMediaCollectionViewController(team: team, year: event.year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
         let statsViewController = TeamStatsViewController(team: team, event: event, dependencies: dependencies)
-        let awardsViewController = EventAwardsViewController(event: event, team: team, dependencies: dependencies)
+        let awardsViewController = EventAwardsViewController(eventKey: event.key, teamKey: team.key, dependencies: dependencies)
 
         super.init(viewControllers: [summaryViewController, matchesViewController, mediaViewController, statsViewController, awardsViewController],
                    navigationTitle: team.teamNumberNickname,

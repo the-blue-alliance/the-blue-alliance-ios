@@ -3,6 +3,7 @@ import Firebase
 import Foundation
 import MyTBAKit
 import Photos
+import TBAAPI
 import TBAData
 import TBAKit
 import UIKit
@@ -28,7 +29,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let alliancesViewController = EventAlliancesViewController(event: event, dependencies: dependencies)
+        let alliancesViewController = EventAlliancesViewController(eventKey: event.key, dependencies: dependencies)
 
         super.init(viewControllers: [alliancesViewController],
                    navigationTitle: "Alliances",
@@ -65,24 +66,17 @@ protocol EventAlliancesViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-private class EventAlliancesViewController: TBATableViewController {
+private class EventAlliancesViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let event: Event
-
-    // MARK: - Observable
-
-    typealias ManagedType = DistrictRanking
-    lazy var contextObserver: CoreDataContextObserver<Event> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    private let eventKey: String
+    private var alliances: [Components.Schemas.EliminationAlliance] = []
 
     weak var delegate: EventAlliancesViewControllerDelegate?
 
     // MARK: - Init
 
-    init(event: Event, dependencies: Dependencies) {
-        self.event = event
-
+    init(eventKey: String, dependencies: Dependencies) {
+        self.eventKey = eventKey
         super.init(dependencies: dependencies)
     }
 
@@ -96,36 +90,30 @@ private class EventAlliancesViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.registerReusableCell(EventAllianceTableViewCell.self)
-
         // Override automatic rowHeight - these will be smaller than 44 by default, and we want to open them up
         tableView.rowHeight = 44
-
-        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
-        }
     }
 
     // MARK: Table View Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let rows = event.alliances.count
+        let rows = alliances.count
         if rows == 0 {
             showNoDataView()
+        } else {
+            removeNoDataView()
         }
         return rows
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventAllianceTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventAllianceTableViewCell
-        let alliance = event.alliances.object(at: indexPath.row) as! EventAlliance
+        let alliance = alliances[indexPath.row]
 
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: indexPath.row + 1)
         cell.teamKeySelected = { [weak self] (teamKey) in
-            guard let context = self?.persistentContainer.viewContext else {
-                return
-            }
+            // Team lookup is still managed — Phase 3 swaps this for an API-driven path.
+            guard let context = self?.persistentContainer.viewContext else { return }
             let team = Team.insert(teamKey, in: context)
             self?.delegate?.teamSelected(team)
         }
@@ -133,50 +121,26 @@ private class EventAlliancesViewController: TBATableViewController {
         return cell
     }
 
-}
+    // MARK: - Refreshable
 
-extension EventAlliancesViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(event.key)_alliances"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return event.alliances.count == 0
-    }
+    var refreshKey: String? { "\(eventKey)_alliances" }
+    var automaticRefreshInterval: DateComponents? { nil }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { alliances.isEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventAlliances(key: event.key) { [self] (result, notModified) in
-            guard case .success(let alliances) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.eventAlliances(key: eventKey)
+                alliances = fetched ?? []
+                tableView.reloadData()
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let event = context.object(with: self.event.objectID) as! Event
-                event.insert(alliances)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
+    // MARK: - Stateful
 
-extension EventAlliancesViewController: Stateful {
-
-    var noDataText: String? {
-        return "No alliances for event"
-    }
-
+    var noDataText: String? { "No alliances for event" }
 }

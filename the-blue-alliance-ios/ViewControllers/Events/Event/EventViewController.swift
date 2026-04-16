@@ -2,6 +2,7 @@ import CoreData
 import Firebase
 import MyTBAKit
 import Photos
+import TBAAPI
 import TBAData
 import TBAKit
 import UIKit
@@ -49,7 +50,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
         infoViewController = EventInfoViewController(event: event, urlOpener: urlOpener, dependencies: dependencies)
         teamsViewController = EventTeamsViewController(event: event, dependencies: dependencies)
-        rankingsViewController = EventRankingsViewController(event: event, dependencies: dependencies)
+        rankingsViewController = EventRankingsViewController(eventKey: event.key, dependencies: dependencies)
         matchesViewController = MatchesViewController(event: event, myTBA: myTBA, dependencies: dependencies)
 
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
@@ -154,8 +155,10 @@ extension EventViewController: TeamsViewControllerDelegate {
 
 extension EventViewController: EventRankingsViewControllerDelegate {
 
-    func rankingSelected(_ ranking: EventRanking) {
-        let teamAtEventViewController = TeamAtEventViewController(team: ranking.team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+    func rankingSelected(_ ranking: Components.Schemas.EventRanking.RankingsPayloadPayload) {
+        // Team lookup is still managed — Phase 3 swaps this for an API-driven path.
+        let team = Team.insert(ranking.teamKey, in: persistentContainer.viewContext)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
