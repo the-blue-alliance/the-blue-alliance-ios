@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import TBAAPI
 import TBAData
 import TBAKit
 import TBAUtils
@@ -52,6 +53,9 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     }
     var tbaKit: TBAKit {
         return dependencies.tbaKit
+    }
+    var api: TBAAPI {
+        return dependencies.api
     }
     var userDefaults: UserDefaults {
         return dependencies.userDefaults

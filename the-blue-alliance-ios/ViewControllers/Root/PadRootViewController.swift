@@ -162,7 +162,7 @@ private class PadMasterViewController: ContainerViewController, RootController {
     }
 
     func show(team: Team) -> Bool {
-        let teamViewController = TeamViewController(team: team,
+        let teamViewController = TeamViewController(teamKey: team.key,
                                                     pasteboard: pasteboard,
                                                     photoLibrary: photoLibrary,
                                                     statusService: statusService,

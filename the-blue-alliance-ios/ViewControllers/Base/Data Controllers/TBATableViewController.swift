@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import TBAAPI
 import TBAKit
 import TBAUtils
 import UIKit
@@ -16,6 +17,9 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
     }
     var tbaKit: TBAKit {
         return dependencies.tbaKit
+    }
+    var api: TBAAPI {
+        return dependencies.api
     }
     var userDefaults: UserDefaults {
         return dependencies.userDefaults

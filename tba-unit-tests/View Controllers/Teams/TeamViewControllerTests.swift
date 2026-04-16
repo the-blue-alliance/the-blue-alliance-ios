@@ -16,7 +16,7 @@ class TeamViewControllerTests: TBATestCase {
 
         let team = insertTeam()
 
-        teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        teamViewController = TeamViewController(teamKey: team.key, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
     }
 
     override func tearDown() {
