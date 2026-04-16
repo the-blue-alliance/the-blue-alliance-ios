@@ -97,14 +97,11 @@ class SearchViewController: TBATableViewController {
     // MARK: - Search
 
     private func loadIndex() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.getSearchIndex()
-                index = fetched
-                updateSnapshot()
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.getSearchIndex()
+            self.index = fetched
+            self.updateSnapshot()
         }
     }
 
@@ -198,9 +195,6 @@ extension SearchViewController: UISearchBarDelegate {
 }
 
 extension SearchViewController: Refreshable {
-    var refreshKey: String? { "search_index" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
     @objc func refresh() {

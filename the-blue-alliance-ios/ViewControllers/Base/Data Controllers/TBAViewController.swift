@@ -28,7 +28,7 @@ class TBAViewController: UIViewController, DataController, Navigatable {
 
     // MARK: - Refreshable
 
-    var refreshOperationQueue: OperationQueue = OperationQueue()
+    var currentRefreshTask: Task<Void, Never>?
 
     // MARK: - Stateful
 

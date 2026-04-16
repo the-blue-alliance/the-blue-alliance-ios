@@ -106,22 +106,20 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logout() {
-        let signOutOperation = myTBA.unregister { [weak self] (_, error) in
-            self?.isLoggingOut = false
-
-            if let error = error as? MyTBAError, error.code != 404 {
-                self?.errorRecorder.record(error)
-                self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
-            } else {
-                DispatchQueue.main.async {
-                    self?.logoutSuccessful()
-                }
+        isLoggingOut = true
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            defer { self.isLoggingOut = false }
+            do {
+                _ = try await self.myTBA.unregister()
+                self.logoutSuccessful()
+            } catch let error as MyTBAError where error.code == 404 {
+                self.logoutSuccessful()
+            } catch {
+                self.errorRecorder.record(error)
+                self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             }
         }
-        guard let op = signOutOperation else { return }
-
-        isLoggingOut = true
-        OperationQueue.main.addOperation(op)
     }
 
     private func logoutSuccessful() {

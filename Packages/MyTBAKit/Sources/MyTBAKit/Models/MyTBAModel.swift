@@ -14,9 +14,6 @@ public enum MyTBAModelType: Int, Codable {
 
 public protocol MyTBAResponse: Codable {}
 
-// TODO: Remove when we move to Result
-public typealias MyTBABaseCompletionBlock = (MyTBABaseResponse?, Error?) -> ()
-
 public struct MyTBABaseResponse: MyTBAResponse, Codable {
     public var code: Int
     public var message: String
@@ -41,6 +38,4 @@ public protocol MyTBAModel: Codable {
 
     var modelKey: String { get set }
     var modelType: MyTBAModelType { get set }
-
-    static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation { get }
 }

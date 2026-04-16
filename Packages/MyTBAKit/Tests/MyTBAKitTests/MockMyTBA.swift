@@ -2,6 +2,8 @@ import TBATestingMocks
 import XCTest
 @testable import MyTBAKit
 
+extension MockURLSession: MyTBAURLSession {}
+
 public class MockFCMTokenProvider: FCMTokenProvider {
     public var fcmToken: String?
 
@@ -12,7 +14,7 @@ public class MockFCMTokenProvider: FCMTokenProvider {
 
 public class MockMyTBA: MyTBA {
 
-    let session: MockURLSession
+    public let session: MockURLSession
 
     public init(fcmTokenProvider: FCMTokenProvider) {
         self.session = MockURLSession()
@@ -23,21 +25,8 @@ public class MockMyTBA: MyTBA {
                    urlSession: session)
     }
 
-    public func sendStub(for operation: MyTBAOperation, code: Int = 200) {
-        guard let mockRequest = operation.task as? MockURLSessionDataTask else {
-            XCTFail()
-            return
-        }
-        guard let requestURL = mockRequest.testRequest?.url else {
-            XCTFail()
-            return
-        }
-        guard let components = URLComponents(string: requestURL.absoluteString) else {
-            XCTFail()
-            return
-        }
-
-        var filepath = components.path.replacingOccurrences(of: "/clientapi/tbaClient/v9/", with: "").replacingOccurrences(of: "/", with: "_")
+    public func stub(for method: String, code: Int = 200) {
+        var filepath = method.replacingOccurrences(of: "/", with: "_")
         if code != 200 {
             filepath.append("_\(code)")
         }
@@ -48,14 +37,11 @@ public class MockMyTBA: MyTBA {
         }
 
         do {
-            let data = try Data(contentsOf: resourceURL)
-            let response = HTTPURLResponse(url: requestURL, statusCode: code, httpVersion: nil, headerFields: nil)
-            mockRequest.testResponse = response
-            if let completionHandler = mockRequest.completionHandler {
-                completionHandler(data, response, nil)
-            }
+            session.stubbedData = try Data(contentsOf: resourceURL)
+            let url = URL(string: method, relativeTo: URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!)!
+            session.stubbedResponse = HTTPURLResponse(url: url, statusCode: code, httpVersion: nil, headerFields: nil)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
 

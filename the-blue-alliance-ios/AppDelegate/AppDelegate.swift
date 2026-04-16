@@ -101,6 +101,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // before anything else touches the app group.
         LegacyCoreDataCleanup.run(userDefaults: userDefaults)
 
+        userDefaults.removeObject(forKey: "successful_refresh_keys")
+
         AppDelegate.setupAppearance()
 
         // Setup a dummy launch screen in our window while we're doing setup tasks

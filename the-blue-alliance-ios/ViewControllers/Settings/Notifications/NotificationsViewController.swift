@@ -44,11 +44,11 @@ class NotificationsViewController: TBATableViewController {
     private var fetchingDeviceAuthorizationStatus = false
     private var deviceAuthorizationStatus: UNAuthorizationStatus?
 
-    private var myTBARegisterOperation: MyTBAOperation?
+    private var myTBARegisterTask: Task<Void, Never>?
     private var myTBARegisterResponse: MyTBABaseResponse?
     private var myTBARegisterError: Error?
 
-    private var myTBAPingOperation: MyTBAOperation?
+    private var myTBAPingTask: Task<Void, Never>?
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: Error?
 
@@ -85,8 +85,8 @@ class NotificationsViewController: TBATableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        myTBARegisterOperation?.cancel()
-        myTBAPingOperation?.cancel()
+        myTBARegisterTask?.cancel()
+        myTBAPingTask?.cancel()
     }
 
     // MARK: - Table View Data Source
@@ -131,14 +131,14 @@ class NotificationsViewController: TBATableViewController {
                 }()
                 return NotificationStatusCellViewModel(title: "Firebase Token", notificationStatus: status)
             case .myTBA:
-                if myTBARegisterOperation == nil {
+                if myTBARegisterTask == nil {
                     let status = self.myTBARegistrationNotificationStatus()
                     return NotificationStatusCellViewModel(title: "myTBA Registration", notificationStatus: status)
                 } else {
                     return NotificationStatusCellViewModel(title: "Checking myTBA Registration...", notificationStatus: .loading)
                 }
             case .ping:
-                if myTBAPingOperation == nil {
+                if myTBAPingTask == nil {
                     let status = self.myTBAPingNotificationStatus()
                     return NotificationStatusCellViewModel(title: "Ping Device", notificationStatus: status)
                 } else {
@@ -279,7 +279,7 @@ class NotificationsViewController: TBATableViewController {
 
     private func checkMyTBARegistration() {
         // Already checking myTBA registration
-        guard myTBARegisterOperation == nil else {
+        guard myTBARegisterTask == nil else {
             return
         }
 
@@ -287,16 +287,20 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBARegisterOperation = myTBA.register { [weak self] (response, error) in
-            self?.myTBARegisterOperation = nil
-            self?.myTBARegisterResponse = response
-            self?.myTBARegisterError = error
-
-            self?.sendPing()
-            self?.reloadMain()
+        myTBARegisterTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let response = try await self.myTBA.register()
+                self.myTBARegisterResponse = response
+                self.myTBARegisterError = nil
+            } catch {
+                self.myTBARegisterResponse = nil
+                self.myTBARegisterError = error
+            }
+            self.myTBARegisterTask = nil
+            self.sendPing()
+            self.reloadMain()
         }
-        guard let op = myTBARegisterOperation else { return }
-        refreshOperationQueue.addOperation(op)
 
         reloadMain()
     }
@@ -340,19 +344,23 @@ class NotificationsViewController: TBATableViewController {
         }
 
         // Already pinging device
-        guard myTBAPingOperation == nil else {
+        guard myTBAPingTask == nil else {
             return
         }
 
-        myTBAPingOperation = myTBA.ping { [weak self] (response, error) in
-            self?.myTBAPingOperation = nil
-            self?.myTBAPingResponse = response
-            self?.myTBAPingError = error
-
-            self?.reloadMain()
+        myTBAPingTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let response = try await self.myTBA.ping()
+                self.myTBAPingResponse = response
+                self.myTBAPingError = nil
+            } catch {
+                self.myTBAPingResponse = nil
+                self.myTBAPingError = error
+            }
+            self.myTBAPingTask = nil
+            self.reloadMain()
         }
-        guard let op = myTBAPingOperation else { return }
-        refreshOperationQueue.addOperation(op)
 
         reloadMain()
     }

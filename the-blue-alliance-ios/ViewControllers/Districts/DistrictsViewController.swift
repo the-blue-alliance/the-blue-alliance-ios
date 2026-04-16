@@ -71,21 +71,13 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(year)_districts" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
-    var automaticRefreshEndDate: Date? {
-        Calendar.current.date(from: DateComponents(year: year))
-    }
     var isDataSourceEmpty: Bool { districts.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.districtsByYear(year)
-                apply(fetched)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.districtsByYear(self.year)
+            self.apply(fetched)
         }
     }
 

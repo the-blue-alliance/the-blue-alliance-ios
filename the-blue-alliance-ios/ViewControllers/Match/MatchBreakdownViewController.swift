@@ -115,23 +115,14 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
 
     // MARK: - Refreshable
 
-    var refreshKey: String? {
-        if breakdownConfigurator == nil { return nil }
-        return matchKey
-    }
-    var automaticRefreshInterval: DateComponents? { nil }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
     @objc func refresh() {
         guard breakdownConfigurator != nil else { return }
-        Task { @MainActor in
-            do {
-                if let fetched = try await dependencies.api.match(key: matchKey) {
-                    apply(match: fetched)
-                }
-            } catch {
-                errorRecorder.record(error)
+        runRefresh { [weak self] in
+            guard let self else { return }
+            if let fetched = try await self.dependencies.api.match(key: self.matchKey) {
+                self.apply(match: fetched)
             }
         }
     }

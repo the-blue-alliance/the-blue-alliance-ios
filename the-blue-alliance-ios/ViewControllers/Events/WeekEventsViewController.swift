@@ -68,17 +68,14 @@ class WeekEventsViewController: EventsListViewController {
     // MARK: - Refresh
 
     @objc override func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.eventsByYear(currentYear)
-                allEvents = fetched
-                if weekEvent == nil {
-                    weekEvent = WeekEventsViewController.initialWeekEvent(for: currentYear, from: fetched)
-                } else {
-                    applyEvents(allEvents)
-                }
-            } catch {
-                errorRecorder.record(error)
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.eventsByYear(self.currentYear)
+            self.allEvents = fetched
+            if self.weekEvent == nil {
+                self.weekEvent = WeekEventsViewController.initialWeekEvent(for: self.currentYear, from: fetched)
+            } else {
+                self.applyEvents(self.allEvents)
             }
         }
     }
@@ -118,15 +115,7 @@ class WeekEventsViewController: EventsListViewController {
             .first
     }
 
-    // MARK: - Refreshable / Stateful
-
-    override var refreshKey: String? { "\(year)_events" }
-
-    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
-
-    override var automaticRefreshEndDate: Date? {
-        Calendar.current.date(from: DateComponents(year: year + 1))
-    }
+    // MARK: - Stateful
 
     override var noDataText: String? { "No events for year" }
 }

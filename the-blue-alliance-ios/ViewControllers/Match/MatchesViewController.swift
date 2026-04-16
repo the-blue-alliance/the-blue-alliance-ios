@@ -146,24 +146,17 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(eventKey)_matches" }
-    var automaticRefreshInterval: DateComponents? { DateComponents(hour: 1) }
-    // Phase 2: event endDate not available without a separate fetch; deferred.
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool {
         if !query.filter.isDefault { return false }
         return allMatches.isEmpty
     }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.eventMatches(key: eventKey)
-                allMatches = fetched
-                applyMatches(fetched)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.eventMatches(key: self.eventKey)
+            self.allMatches = fetched
+            self.applyMatches(fetched)
         }
     }
 

@@ -225,16 +225,12 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
         rebuildSnapshot()
     }
 
-    func refreshFromRemote(onSuccess: @escaping () -> Void) {
-        Task { @MainActor in
-            do {
-                try await performRemoteRefresh()
-                await fetchMissingItems()
-                rebuildSnapshot()
-                onSuccess()
-            } catch {
-                errorRecorder.record(error)
-            }
+    func refreshFromRemote() {
+        (self as? Refreshable)?.runRefresh { [weak self] in
+            guard let self else { return }
+            try await self.performRemoteRefresh()
+            await self.fetchMissingItems()
+            self.rebuildSnapshot()
         }
     }
 
@@ -302,26 +298,17 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
     }
 
     override func performRemoteRefresh() async throws {
-        let favorites: [MyTBAFavorite] = try await withCheckedThrowingContinuation { continuation in
-            let operation = myTBA.fetchFavorites { models, error in
-                if let error { continuation.resume(throwing: error); return }
-                continuation.resume(returning: models ?? [])
-            }
-            refreshOperationQueue.addOperation(operation)
-        }
+        let favorites = try await myTBA.fetchFavorites()
         await MainActor.run { favoritesStore.replaceAll(with: favorites) }
     }
 
     @objc func refresh() {
         guard myTBA.isAuthenticated else { return }
-        refreshFromRemote { [weak self] in self?.markRefreshSuccessful() }
+        refreshFromRemote()
     }
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { MyTBAFavorite.arrayKey }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { myTBA.isAuthenticated && favoritesStore.favorites.isEmpty }
 
     // MARK: - Stateful
@@ -369,26 +356,17 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
     }
 
     override func performRemoteRefresh() async throws {
-        let subs: [MyTBASubscription] = try await withCheckedThrowingContinuation { continuation in
-            let operation = myTBA.fetchSubscriptions { models, error in
-                if let error { continuation.resume(throwing: error); return }
-                continuation.resume(returning: models ?? [])
-            }
-            refreshOperationQueue.addOperation(operation)
-        }
+        let subs = try await myTBA.fetchSubscriptions()
         await MainActor.run { subscriptionsStore.replaceAll(with: subs) }
     }
 
     @objc func refresh() {
         guard myTBA.isAuthenticated else { return }
-        refreshFromRemote { [weak self] in self?.markRefreshSuccessful() }
+        refreshFromRemote()
     }
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { MyTBASubscription.arrayKey }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { myTBA.isAuthenticated && subscriptionsStore.subscriptions.isEmpty }
 
     // MARK: - Stateful

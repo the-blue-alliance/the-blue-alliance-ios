@@ -137,19 +137,13 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { "\(eventKey)_district_points" }
-    var automaticRefreshInterval: DateComponents? { nil }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { rows.isEmpty }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let response = try await dependencies.api.eventDistrictPoints(key: eventKey)
-                apply(points: response)
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let response = try await self.dependencies.api.eventDistrictPoints(key: self.eventKey)
+            self.apply(points: response)
         }
     }
 

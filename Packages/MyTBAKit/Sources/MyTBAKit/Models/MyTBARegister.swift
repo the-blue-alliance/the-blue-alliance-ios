@@ -9,24 +9,21 @@ public struct MyTBARegisterRequest: Codable {
 
 extension MyTBA {
 
-    public func register(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
-        return registerUnregister("register", completion: completion)
+    public func register() async throws -> MyTBABaseResponse {
+        return try await registerUnregister("register")
     }
 
-    public func unregister(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
-        return registerUnregister("unregister", completion: completion)
+    public func unregister() async throws -> MyTBABaseResponse {
+        return try await registerUnregister("unregister")
     }
 
-    private func registerUnregister(_ method: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+    private func registerUnregister(_ method: String) async throws -> MyTBABaseResponse {
         guard let token = fcmToken else {
-            return nil
+            throw MyTBAError.error(nil, "Missing FCM token")
         }
         let registration = MyTBARegisterRequest(deviceUuid: uuid, mobileId: token, name: deviceName)
-
-        guard let encodedRegistration = try? MyTBA.jsonEncoder.encode(registration) else {
-            return nil
-        }
-        return callApi(method: method, bodyData: encodedRegistration, completion: completion)
+        let encoded = try MyTBA.jsonEncoder.encode(registration)
+        return try await callApi(method: method, bodyData: encoded)
     }
 
 }

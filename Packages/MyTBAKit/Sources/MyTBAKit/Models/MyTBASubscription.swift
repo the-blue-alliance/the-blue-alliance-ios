@@ -71,18 +71,13 @@ public struct MyTBASubscription: MyTBAModel, Equatable, Codable {
     public var modelKey: String
     public var modelType: MyTBAModelType
     public var notifications: [NotificationType]
-
-    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchSubscriptions
 }
 
 extension MyTBA {
 
-    public func fetchSubscriptions(_ completion: @escaping (_ subscriptions: [MyTBASubscription]?, _ error: Error?) -> Void) -> MyTBAOperation {
-        let method = "\(MyTBASubscription.arrayKey)/list"
-
-        return callApi(method: method, completion: { (favoritesResponse: MyTBASubscriptionsResponse?, error) in
-            completion(favoritesResponse?.subscriptions, error)
-        })
+    public func fetchSubscriptions() async throws -> [MyTBASubscription] {
+        let response: MyTBASubscriptionsResponse = try await callApi(method: "\(MyTBASubscription.arrayKey)/list")
+        return response.subscriptions ?? []
     }
 
 }

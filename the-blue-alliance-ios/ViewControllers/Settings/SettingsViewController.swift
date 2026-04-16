@@ -310,9 +310,8 @@ class SettingsViewController: TBATableViewController {
     private func showDeleteNetworkCache() {
         let alertController = UIAlertController(title: "Delete Network Cache", message: "Are you sure you want to delete all the network cache data?", preferredStyle: .alert)
 
-        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [unowned self] (deleteAction) in
+        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
             URLCache.shared.removeAllCachedResponses()
-            self.userDefaults.clearSuccessfulRefreshes()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 

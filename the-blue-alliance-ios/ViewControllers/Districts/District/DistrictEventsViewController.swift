@@ -20,11 +20,5 @@ class DistrictEventsViewController: EventsListViewController {
         try await dependencies.api.districtEvents(key: districtKey)
     }
 
-    override var refreshKey: String? { "\(districtKey)_events" }
-    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
-    override var automaticRefreshEndDate: Date? {
-        Calendar.current.date(from: DateComponents(year: year + 1))
-    }
-
     override var noDataText: String? { "No events for district" }
 }

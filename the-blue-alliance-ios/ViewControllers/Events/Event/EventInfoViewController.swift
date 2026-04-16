@@ -232,20 +232,14 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { eventKey }
-    var automaticRefreshInterval: DateComponents? { nil }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { event == nil }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                let fetched = try await dependencies.api.event(key: eventKey)
-                event = fetched
-                updateEventInfo()
-            } catch {
-                errorRecorder.record(error)
-            }
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let fetched = try await self.dependencies.api.event(key: self.eventKey)
+            self.event = fetched
+            self.updateEventInfo()
         }
     }
 

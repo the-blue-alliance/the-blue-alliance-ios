@@ -21,11 +21,5 @@ class DistrictTeamsViewController: TeamsListViewController {
         try await dependencies.api.districtTeams(key: districtKey)
     }
 
-    override var refreshKey: String? { "\(districtKey)_teams" }
-    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    override var automaticRefreshEndDate: Date? {
-        Calendar.current.date(from: DateComponents(year: year))
-    }
-
     override var noDataText: String? { "No teams for district" }
 }

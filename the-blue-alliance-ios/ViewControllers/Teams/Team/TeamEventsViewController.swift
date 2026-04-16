@@ -29,16 +29,6 @@ class TeamEventsViewController: EventsListViewController {
         return try await dependencies.api.teamEventsByYear(key: teamKey, year: year)
     }
 
-    // MARK: - Refreshable
-
-    override var refreshKey: String? { "\(teamKey)_events" }
-    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
-    override var automaticRefreshEndDate: Date? {
-        guard let year else { return nil }
-        // Keep refreshing this team's events until the year rolls over.
-        return Calendar.current.date(from: DateComponents(year: year + 1))
-    }
-
     // MARK: - Stateful
 
     override var noDataText: String? { "No events for team" }

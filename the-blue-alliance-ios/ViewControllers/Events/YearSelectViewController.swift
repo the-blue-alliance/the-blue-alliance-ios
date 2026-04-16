@@ -166,21 +166,16 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     // MARK: - Refreshable
 
-    override var refreshKey: String? { "\(year)_events" }
-
     override var isDataSourceEmpty: Bool { options.isEmpty }
 
     @objc override func refresh() {
-        Task { @MainActor in
-            do {
-                let events = try await dependencies.api.eventsByYear(year)
-                options = WeekEventsGrouping.weekEvents(for: year, from: events)
-                hasRefreshed = true
-                if isDataSourceEmpty {
-                    self.showNoDataView()
-                }
-            } catch {
-                errorRecorder.record(error)
+        runRefresh { [weak self] in
+            guard let self else { return }
+            let events = try await self.dependencies.api.eventsByYear(self.year)
+            self.options = WeekEventsGrouping.weekEvents(for: self.year, from: events)
+            self.hasRefreshed = true
+            if self.isDataSourceEmpty {
+                self.showNoDataView()
             }
         }
     }

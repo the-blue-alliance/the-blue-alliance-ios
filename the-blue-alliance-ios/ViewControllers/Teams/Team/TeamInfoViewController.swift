@@ -208,19 +208,13 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var refreshKey: String? { teamKey }
-    var automaticRefreshInterval: DateComponents? { DateComponents(day: 7) }
-    var automaticRefreshEndDate: Date? { nil }
     var isDataSourceEmpty: Bool { team == nil }
 
     @objc func refresh() {
-        Task { @MainActor in
-            do {
-                if let fetched = try await api.team(key: teamKey) {
-                    apply(team: fetched)
-                }
-            } catch {
-                errorRecorder.record(error)
+        runRefresh { [weak self] in
+            guard let self else { return }
+            if let fetched = try await self.api.team(key: self.teamKey) {
+                self.apply(team: fetched)
             }
         }
     }

@@ -106,22 +106,19 @@ class MyTBATests: MyTBATestCase {
         XCTAssertNotNil(jsonDecoder)
     }
 
-    func test_callApi_hasBearer() {
+    func test_callApi_hasBearer() async throws {
         myTBA.authToken = "abcd123"
-        let operation = myTBA.callApi(method: "test") { (registerResponse: MyTBABaseResponse?, error: Error?) in
-            // NOP
-        }
-        guard let request = operation.task.currentRequest else {
+        myTBA.stub(for: "favorites/list")
+        _ = try await myTBA.fetchFavorites()
+
+        guard let request = myTBA.session.lastRequest else {
             XCTFail()
             return
         }
         XCTAssertEqual(request.httpMethod, "POST")
 
-        guard let headers = request.allHTTPHeaderFields else {
-            XCTFail()
-            return
-        }
-        guard let authorizationHeader = headers["Authorization"] else {
+        guard let headers = request.allHTTPHeaderFields,
+              let authorizationHeader = headers["Authorization"] else {
             XCTFail()
             return
         }

@@ -21,10 +21,5 @@ class EventTeamsViewController: TeamsListViewController {
         try await dependencies.api.eventTeams(key: eventKey)
     }
 
-    override var refreshKey: String? { "\(eventKey)_teams" }
-    override var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
-    // Phase 3: event.endDate isn't available without a separate fetch.
-    override var automaticRefreshEndDate: Date? { nil }
-
     override var noDataText: String? { "No teams for event" }
 }

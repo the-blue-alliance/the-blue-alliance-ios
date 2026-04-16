@@ -19,7 +19,7 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
 
     // MARK: - Refreshable
 
-    var refreshOperationQueue: OperationQueue = OperationQueue()
+    var currentRefreshTask: Task<Void, Never>?
 
     // MARK: - Stateful
 
