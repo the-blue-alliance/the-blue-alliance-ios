@@ -17,7 +17,7 @@ class EventViewControllerTests: TBATestCase {
 
         let event = insertDistrictEvent()
 
-        eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        eventViewController = EventViewController(eventKey: event.key, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         navigationController = MockNavigationController(rootViewController: eventViewController)
     }
 

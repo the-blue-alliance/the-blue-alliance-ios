@@ -3,6 +3,7 @@ import Firebase
 import Foundation
 import MyTBAKit
 import Photos
+import TBAAPI
 import TBAData
 import TBAKit
 import UIKit
@@ -71,7 +72,7 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
-    private static func eventsTitle(_ event: Event?) -> String {
+    private static func eventsTitle(_ event: Components.Schemas.Event?) -> String {
         if let event = event {
             return "\(event.weekString) Events"
         } else {
@@ -101,7 +102,7 @@ extension EventsContainerViewController: NavigationTitleDelegate {
 
 extension EventsContainerViewController: YearSelectViewControllerDelegate {
 
-    func weekEventSelected(year: Int, weekEvent: Event) {
+    func weekEventSelected(year: Int, weekEvent: Components.Schemas.Event) {
         self.year = year
         eventsViewController.weekEvent = weekEvent
     }
@@ -116,4 +117,29 @@ extension EventsContainerViewController: WeekEventsDelegate {
 
 }
 
-extension EventsContainerViewController: EventsViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+extension EventsContainerViewController: SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+
+// MARK: - EventsListViewControllerDelegate
+
+extension EventsContainerViewController: EventsListViewControllerDelegate {
+
+    func eventSelected(_ event: Components.Schemas.Event) {
+        // Push the legacy EventViewController using the event key. Phase 1b
+        // rewrites EventViewController to fetch from TBAAPI; until then the
+        // detail stack still reads from Core Data, which the WeekEvents
+        // refresh keeps warm via tbaKit.fetchEvents.
+        let eventViewController = EventViewController(eventKey: event.key,
+                                                      pasteboard: pasteboard,
+                                                      photoLibrary: photoLibrary,
+                                                      statusService: statusService,
+                                                      urlOpener: urlOpener,
+                                                      myTBA: myTBA,
+                                                      dependencies: dependencies)
+        if let splitViewController = splitViewController {
+            let nav = UINavigationController(rootViewController: eventViewController)
+            splitViewController.showDetailViewController(nav, sender: nil)
+        } else if let navigationController = navigationController {
+            navigationController.pushViewController(eventViewController, animated: true)
+        }
+    }
+}

@@ -56,7 +56,7 @@ extension SearchContainerDelegate where Self: ContainerViewController {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        let eventViewController = EventViewController(eventKey: event.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
         if let splitViewController = splitViewController {
             let navigationController = UINavigationController(rootViewController: eventViewController)
             splitViewController.showDetailViewController(navigationController, sender: nil)

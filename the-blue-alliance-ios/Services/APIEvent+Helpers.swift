@@ -9,7 +9,7 @@ import TBAAPI
 // `Packages/TBAData/Sources/TBAData/Event/Event.swift` for cross-checks.
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
-enum APIEventType: Int {
+enum APIEventType: Int, CaseIterable {
     case regional = 0
     case district = 1
     case districtChampionship = 2

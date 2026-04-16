@@ -150,7 +150,7 @@ private class PadMasterViewController: ContainerViewController, RootController {
     }
 
     func show(event: Event) -> Bool {
-        let eventViewController = EventViewController(event: event,
+        let eventViewController = EventViewController(eventKey: event.key,
                                                       pasteboard: pasteboard,
                                                       photoLibrary: photoLibrary,
                                                       statusService: statusService,
