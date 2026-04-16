@@ -3,7 +3,7 @@ import TBAAPI
 
 extension TBAAPI {
 
-    func getSearchIndex() async throws -> Components.Schemas.SearchIndex {
+    func getSearchIndex() async throws -> SearchIndex {
         let response = try await client.getSearchIndex()
         switch response {
         case .ok(let ok):

@@ -6,11 +6,11 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
 
     private let teamKey: String
     private let districtKey: String
-    private var ranking: Components.Schemas.DistrictRanking
+    private var ranking: DistrictRanking
 
     // MARK: - Init
 
-    init(ranking: Components.Schemas.DistrictRanking, districtKey: String, dependencies: Dependencies) {
+    init(ranking: DistrictRanking, districtKey: String, dependencies: Dependencies) {
         self.ranking = ranking
         self.teamKey = ranking.teamKey
         self.districtKey = districtKey
@@ -32,7 +32,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
 
     // MARK: Table View Data Source
 
-    private var eventPoints: [Components.Schemas.DistrictRanking.EventPointsPayloadPayload] {
+    private var eventPoints: [DistrictRanking.EventPointsPayloadPayload] {
         ranking.eventPoints ?? []
     }
 

@@ -14,7 +14,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
     // Loaded from TBAAPI after init; used for nav title + for the event struct
     // passed to the detail container VCs (alliances/awards/etc.).
-    private var event: Components.Schemas.Event?
+    private var event: Event?
 
     private(set) var infoViewController: EventInfoViewController
     private(set) var teamsViewController: EventTeamsViewController
@@ -138,7 +138,7 @@ extension EventViewController: TeamsListViewControllerDelegate {
 
 extension EventViewController: EventRankingsViewControllerDelegate {
 
-    func rankingSelected(_ ranking: Components.Schemas.EventRanking.RankingsPayloadPayload) {
+    func rankingSelected(_ ranking: EventRanking.RankingsPayloadPayload) {
         pushTeamAtEvent(teamKey: ranking.teamKey)
     }
 

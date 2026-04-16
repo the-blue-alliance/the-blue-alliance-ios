@@ -17,14 +17,14 @@ private enum TeamSummarySection: Int {
 }
 
 private enum TeamSummaryItem: Hashable {
-    case teamInfo(team: Components.Schemas.Team)
+    case teamInfo(team: Team)
     case status(status: String)
     case rank(rank: Int, total: Int)
     case record(wins: Int, losses: Int, ties: Int, dqs: Int? = nil)
     case average(average: Double)
     case breakdown(rankingInfo: String)
     case alliance(allianceStatus: String)
-    case match(match: Components.Schemas.Match, baseTeamKey: String?)
+    case match(match: Match, baseTeamKey: String?)
 }
 
 class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
@@ -34,11 +34,11 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
     private let teamKey: String
     private let eventKey: String
 
-    private var team: Components.Schemas.Team?
-    private var event: Components.Schemas.Event?
-    private var eventStatus: Components.Schemas.TeamEventStatus?
-    private var nextMatch: Components.Schemas.Match?
-    private var lastMatch: Components.Schemas.Match?
+    private var team: Team?
+    private var event: Event?
+    private var eventStatus: TeamEventStatus?
+    private var nextMatch: Match?
+    private var lastMatch: Match?
 
     private var dataSource: TableViewDataSource<TeamSummarySection, TeamSummaryItem>!
 
@@ -223,7 +223,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Cells
 
-    private func cellForTeam(_ team: Components.Schemas.Team, in tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+    private func cellForTeam(_ team: Team, in tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
         cell.viewModel = InfoCellViewModel(nameString: team.displayNickname, subtitleStrings: [team.locationString].compactMap { $0 })
         cell.accessoryType = .disclosureIndicator
@@ -242,7 +242,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         return cell
     }
 
-    private static func cellForMatch(_ match: Components.Schemas.Match, baseTeamKey: String?, in tableView: UITableView, at indexPath: IndexPath) -> MatchTableViewCell {
+    private static func cellForMatch(_ match: Match, baseTeamKey: String?, in tableView: UITableView, at indexPath: IndexPath) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
         cell.viewModel = MatchViewModel(apiMatch: match, baseTeamKeys: baseTeamKey.map { [$0] } ?? [])
         return cell
@@ -297,12 +297,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                 self.eventStatus = statusResult ?? nil
 
                 // Fetch next/last match if we have keys. Fire in parallel.
-                async let nextTask: Components.Schemas.Match?? = {
-                    guard let key = self.eventStatus?.nextMatchKey else { return Optional<Components.Schemas.Match?>.none }
+                async let nextTask: Match?? = {
+                    guard let key = self.eventStatus?.nextMatchKey else { return Optional<Match?>.none }
                     return try? await dependencies.api.match(key: key)
                 }()
-                async let lastTask: Components.Schemas.Match?? = {
-                    guard let key = self.eventStatus?.lastMatchKey else { return Optional<Components.Schemas.Match?>.none }
+                async let lastTask: Match?? = {
+                    guard let key = self.eventStatus?.lastMatchKey else { return Optional<Match?>.none }
                     return try? await dependencies.api.match(key: key)
                 }()
                 let (nextResult, lastResult) = await (nextTask, lastTask)

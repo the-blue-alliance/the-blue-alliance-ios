@@ -3,7 +3,7 @@ import TBAAPI
 
 extension TBAAPI {
 
-    func getStatus() async throws -> Components.Schemas.APIStatus {
+    func getStatus() async throws -> APIStatus {
         let response = try await client.getStatus()
         switch response {
         case .ok(let ok):

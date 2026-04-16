@@ -9,7 +9,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     private let matchKey: String
     private let teamKey: String?
 
-    private var match: Components.Schemas.Match?
+    private var match: Match?
 
     // MARK: - UI
 
@@ -115,7 +115,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         view.backgroundColor = .systemBackground
     }
 
-    func apply(match: Components.Schemas.Match) {
+    func apply(match: Match) {
         self.match = match
         updateInterface()
     }
@@ -150,7 +150,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         }
     }
 
-    private static func playerView(for video: Components.Schemas.Match.VideosPayloadPayload) -> PlayerView {
+    private static func playerView(for video: Match.VideosPayloadPayload) -> PlayerView {
         let playerView = PlayerView(playable: MatchVideoPlayable(video: video))
         playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
         return playerView
@@ -189,7 +189,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
 // contract that `PlayerView` consumes. Only YouTube videos are playable —
 // the old `MatchVideo.youtubeKey` mapped the same way.
 private struct MatchVideoPlayable: Playable {
-    let video: Components.Schemas.Match.VideosPayloadPayload
+    let video: Match.VideosPayloadPayload
 
     var youtubeKey: String? {
         video._type == "youtube" ? video.key : nil

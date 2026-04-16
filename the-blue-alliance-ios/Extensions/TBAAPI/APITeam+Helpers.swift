@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-extension Components.Schemas.Team {
+extension Team {
 
     // Matches the TBAData.Team.teamNumberNickname ("Team 254").
     var teamNumberNickname: String { "Team \(teamNumber)" }

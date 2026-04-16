@@ -63,9 +63,9 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
 
     private var dataSource: TableViewDataSource<MyTBASection, MyTBAItem>!
 
-    private var eventsCache: [String: Components.Schemas.Event] = [:]
-    private var teamsCache: [String: Components.Schemas.Team] = [:]
-    private var matchesCache: [String: Components.Schemas.Match] = [:]
+    private var eventsCache: [String: Event] = [:]
+    private var teamsCache: [String: Team] = [:]
+    private var matchesCache: [String: Match] = [:]
 
     // MARK: Init
 

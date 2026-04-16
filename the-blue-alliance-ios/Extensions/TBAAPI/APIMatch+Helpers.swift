@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-extension Components.Schemas.Match.CompLevelPayload {
+extension Match.CompLevelPayload {
 
     var sortOrder: Int {
         switch self {
@@ -34,7 +34,7 @@ extension Components.Schemas.Match.CompLevelPayload {
     }
 }
 
-extension Components.Schemas.Match {
+extension Match {
 
     var compLevelString: String { compLevel.rawValue }
 

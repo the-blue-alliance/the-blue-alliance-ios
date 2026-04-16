@@ -68,7 +68,7 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
-    private static func eventsTitle(_ event: Components.Schemas.Event?) -> String {
+    private static func eventsTitle(_ event: Event?) -> String {
         if let event = event {
             return "\(event.weekString) Events"
         } else {
@@ -98,7 +98,7 @@ extension EventsContainerViewController: NavigationTitleDelegate {
 
 extension EventsContainerViewController: YearSelectViewControllerDelegate {
 
-    func weekEventSelected(year: Int, weekEvent: Components.Schemas.Event) {
+    func weekEventSelected(year: Int, weekEvent: Event) {
         self.year = year
         eventsViewController.weekEvent = weekEvent
     }
@@ -119,7 +119,7 @@ extension EventsContainerViewController: SearchContainer, SearchContainerDelegat
 
 extension EventsContainerViewController: EventsListViewControllerDelegate {
 
-    func eventSelected(_ event: Components.Schemas.Event) {
+    func eventSelected(_ event: Event) {
         let eventViewController = EventViewController(eventKey: event.key,
                                                       pasteboard: pasteboard,
                                                       photoLibrary: photoLibrary,

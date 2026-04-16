@@ -7,7 +7,7 @@ struct EventAllianceCellViewModel {
     let allianceName: String
     let picks: [String]
 
-    init(alliance: Components.Schemas.EliminationAlliance, allianceNumber: Int) {
+    init(alliance: EliminationAlliance, allianceNumber: Int) {
         allianceLevel = Self.allianceLevel(status: alliance.status)
         allianceName = alliance.name ?? "Alliance \(allianceNumber)"
         picks = alliance.picks
@@ -17,7 +17,7 @@ struct EventAllianceCellViewModel {
         return allianceLevel != nil
     }
 
-    private static func allianceLevel(status: Components.Schemas.EliminationAlliance.StatusPayload?) -> String? {
+    private static func allianceLevel(status: EliminationAlliance.StatusPayload?) -> String? {
         guard let level = status?.level else { return nil }
         if level == "f", let s = status?.status {
             return s == "won" ? "W" : "F"

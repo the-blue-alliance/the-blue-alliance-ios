@@ -9,7 +9,7 @@ class TeamAtDistrictViewController: ContainerViewController {
     private let teamKey: String
     private let districtKey: String
     private let year: Int
-    private var ranking: Components.Schemas.DistrictRanking
+    private var ranking: DistrictRanking
 
     let myTBA: MyTBA
     let myTBAStores: MyTBAStores
@@ -22,7 +22,7 @@ class TeamAtDistrictViewController: ContainerViewController {
 
     // MARK: Init
 
-    init(ranking: Components.Schemas.DistrictRanking, district: Components.Schemas.District, year: Int, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(ranking: DistrictRanking, district: District, year: Int, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.ranking = ranking
         self.teamKey = ranking.teamKey
         self.districtKey = district.key

@@ -18,9 +18,9 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     private var myTBA: MyTBA
     private let favoritesStore: FavoritesStore
 
-    private var dataSource: TableViewDataSource<String, Components.Schemas.Match>!
+    private var dataSource: TableViewDataSource<String, Match>!
 
-    private var allMatches: [Components.Schemas.Match] = []
+    private var allMatches: [Match] = []
     private var favoriteTeamKeys: [String] = []
 
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
@@ -68,7 +68,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Components.Schemas.Match>(tableView: tableView) { [weak self] tableView, indexPath, match in
+        dataSource = TableViewDataSource<String, Match>(tableView: tableView) { [weak self] tableView, indexPath, match in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
             var baseTeamKeys: Set<String> = Set()
@@ -85,14 +85,14 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         dataSource.delegate = self
     }
 
-    private func applyMatches(_ matches: [Components.Schemas.Match]) {
+    private func applyMatches(_ matches: [Match]) {
         let filtered = matches.filter(for: teamKey, favoriteTeamKeys: query.filter.favorites ? favoriteTeamKeys : nil)
         let sorted = filtered.sorted(ascending: !query.sort.reverse)
 
-        var snapshot = NSDiffableDataSourceSnapshot<String, Components.Schemas.Match>()
+        var snapshot = NSDiffableDataSourceSnapshot<String, Match>()
         // Group by comp-level string so sections mirror the old FRC behavior.
         var sectionOrder: [String] = []
-        var grouped: [String: [Components.Schemas.Match]] = [:]
+        var grouped: [String: [Match]] = [:]
         for match in sorted {
             let key = match.compLevelString
             if grouped[key] == nil {
@@ -182,8 +182,8 @@ extension MatchesViewController {
     // Placeholder so `MatchesViewControllerQueryable`'s `showFilter()` still compiles.
 }
 
-private extension Array where Element == Components.Schemas.Match {
-    func filter(for teamKey: String?, favoriteTeamKeys: [String]?) -> [Components.Schemas.Match] {
+private extension Array where Element == Match {
+    func filter(for teamKey: String?, favoriteTeamKeys: [String]?) -> [Match] {
         var results = self
         if let teamKey {
             results = results.filter { $0.allTeamKeys.contains(teamKey) }
@@ -197,7 +197,7 @@ private extension Array where Element == Components.Schemas.Match {
         return results
     }
 
-    func sorted(ascending: Bool) -> [Components.Schemas.Match] {
+    func sorted(ascending: Bool) -> [Match] {
         sorted { lhs, rhs in
             if lhs.compLevelSortOrder != rhs.compLevelSortOrder {
                 return ascending

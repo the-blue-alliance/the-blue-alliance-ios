@@ -5,7 +5,7 @@ enum WeekEventsGrouping {
 
     // Picks a single representative event per week / event-type / offseason-month
     // so the UI can render one row per bucket in the year/week selector.
-    static func weekEvents(for year: Int, from events: [Components.Schemas.Event]) -> [Components.Schemas.Event] {
+    static func weekEvents(for year: Int, from events: [Event]) -> [Event] {
         let candidates = events
             .filter { $0.year == year }
             // Exclude CMP divisions — we keep those out of the week picker.
@@ -26,7 +26,7 @@ enum WeekEventsGrouping {
         var handledOffseasonMonths: Set<String> = []
         var handledUnknown = false
 
-        var picked: [Components.Schemas.Event] = []
+        var picked: [Event] = []
         for event in candidates {
             guard let type = event.eventTypeEnum else {
                 // Unknown event type — keep one representative.
@@ -62,11 +62,11 @@ enum WeekEventsGrouping {
 
 // MARK: - Comparable port
 
-extension Components.Schemas.Event: Comparable {
+extension Event: Comparable {
 
     // Port of TBAData.Event's `Comparable` ordering:
     //   Preseason, Week 1, Week 2, …, Week 7, CMP divisions, CMP finals, FoC, Offseason, Unlabeled
-    public static func < (lhs: Components.Schemas.Event, rhs: Components.Schemas.Event) -> Bool {
+    public static func < (lhs: Event, rhs: Event) -> Bool {
         if lhs.year != rhs.year {
             return lhs.year < rhs.year
         }

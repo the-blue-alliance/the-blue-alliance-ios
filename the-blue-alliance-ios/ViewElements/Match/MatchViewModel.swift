@@ -40,7 +40,7 @@ struct MatchViewModel {
         return rpCount
     }
 
-    init(apiMatch match: Components.Schemas.Match, baseTeamKeys: [String] = []) {
+    init(apiMatch match: Match, baseTeamKeys: [String] = []) {
         matchName = match.friendlyName
         hasVideos = match.videos.isEmpty
 

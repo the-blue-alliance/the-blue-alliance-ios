@@ -3,7 +3,7 @@ import TBAAPI
 import UIKit
 
 protocol DistrictRankingsViewControllerDelegate: AnyObject {
-    func districtRankingSelected(_ ranking: Components.Schemas.DistrictRanking)
+    func districtRankingSelected(_ ranking: DistrictRanking)
 }
 
 class DistrictRankingsViewController: TBASearchableTableViewController, Refreshable, Stateful {
@@ -12,8 +12,8 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
 
     private let districtKey: String
 
-    private var dataSource: TableViewDataSource<String, Components.Schemas.DistrictRanking>!
-    private var allRankings: [Components.Schemas.DistrictRanking] = []
+    private var dataSource: TableViewDataSource<String, DistrictRanking>!
+    private var allRankings: [DistrictRanking] = []
 
     // MARK: - Init
 
@@ -49,7 +49,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Components.Schemas.DistrictRanking>(tableView: tableView) { tableView, indexPath, ranking in
+        dataSource = TableViewDataSource<String, DistrictRanking>(tableView: tableView) { tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             cell.viewModel = RankingCellViewModel(apiDistrictRanking: ranking)
             return cell
@@ -62,9 +62,9 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
         applyRankings(allRankings)
     }
 
-    private func applyRankings(_ rankings: [Components.Schemas.DistrictRanking]) {
+    private func applyRankings(_ rankings: [DistrictRanking]) {
         let query = searchController.searchBar.text?.lowercased() ?? ""
-        let filtered: [Components.Schemas.DistrictRanking]
+        let filtered: [DistrictRanking]
         if query.isEmpty {
             filtered = rankings
         } else {
@@ -75,7 +75,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
         }
         let sorted = filtered.sorted { $0.rank < $1.rank }
 
-        var snapshot = NSDiffableDataSourceSnapshot<String, Components.Schemas.DistrictRanking>()
+        var snapshot = NSDiffableDataSourceSnapshot<String, DistrictRanking>()
         snapshot.appendSections([""])
         snapshot.appendItems(sorted, toSection: "")
         dataSource.apply(snapshot, animatingDifferences: false)

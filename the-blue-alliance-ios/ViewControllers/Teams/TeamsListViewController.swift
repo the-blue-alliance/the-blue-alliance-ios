@@ -7,7 +7,7 @@ protocol TeamsListViewControllerDelegate: AnyObject {
 
 class TeamsListViewController: TBASearchableTableViewController, Refreshable, Stateful {
 
-    typealias APITeam = Components.Schemas.Team
+    typealias APITeam = Team
 
     weak var delegate: TeamsListViewControllerDelegate?
 

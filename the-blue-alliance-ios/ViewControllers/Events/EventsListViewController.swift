@@ -2,17 +2,17 @@ import TBAAPI
 import UIKit
 
 protocol EventsListViewControllerDelegate: AnyObject {
-    func eventSelected(_ event: Components.Schemas.Event)
-    func title(for event: Components.Schemas.Event) -> String?
+    func eventSelected(_ event: Event)
+    func title(for event: Event) -> String?
 }
 
 extension EventsListViewControllerDelegate {
-    func title(for event: Components.Schemas.Event) -> String? { nil }
+    func title(for event: Event) -> String? { nil }
 }
 
 class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
-    typealias APIEvent = Components.Schemas.Event
+    typealias APIEvent = Event
 
     weak var delegate: EventsListViewControllerDelegate?
 

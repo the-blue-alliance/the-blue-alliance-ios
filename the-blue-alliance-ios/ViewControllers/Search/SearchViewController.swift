@@ -45,7 +45,7 @@ class SearchViewController: TBATableViewController {
         didSet { updateSnapshot() }
     }
 
-    private var index: Components.Schemas.SearchIndex?
+    private var index: SearchIndex?
     private var dataSource: TableViewDataSource<SearchSection, SearchItem>!
 
     init(dependencies: Dependencies) {
@@ -151,12 +151,12 @@ class SearchViewController: TBATableViewController {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    private func matches(team: Components.Schemas.SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
+    private func matches(team: SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
         let number = TeamKey.trimFRCPrefix(team.key)
         return number.hasPrefix(query) || team.nickname.lowercased().contains(query) || team.key.lowercased().contains(query)
     }
 
-    private func matches(event: Components.Schemas.SearchIndex.EventsPayloadPayload, query: String) -> Bool {
+    private func matches(event: SearchIndex.EventsPayloadPayload, query: String) -> Bool {
         event.name.lowercased().contains(query) || event.key.lowercased().contains(query)
     }
 

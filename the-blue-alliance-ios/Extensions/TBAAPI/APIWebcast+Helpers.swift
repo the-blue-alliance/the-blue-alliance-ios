@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-extension Components.Schemas.Webcast {
+extension Webcast {
 
     // Matches the string enum in TBAData's `Webcast.type`.
     var typeString: String { _type.rawValue }

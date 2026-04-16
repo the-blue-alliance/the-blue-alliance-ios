@@ -6,7 +6,7 @@ struct InfoCellViewModel {
     let nameString: String
     let subtitleStrings: [String]
 
-    init(event: Components.Schemas.Event) {
+    init(event: Event) {
         nameString = event.name.isEmpty ? event.key : event.name
         subtitleStrings = [event.locationString, event.dateString, event.weekString].compactMap { $0 }
     }

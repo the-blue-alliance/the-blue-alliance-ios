@@ -22,7 +22,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
     private let teamKey: String
     private let urlOpener: URLOpener
 
-    private var team: Components.Schemas.Team?
+    private var team: Team?
 
     private var dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
 
@@ -55,7 +55,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - External
 
-    func apply(team: Components.Schemas.Team) {
+    func apply(team: Team) {
         self.team = team
         updateTeamInfo()
     }

@@ -11,7 +11,7 @@ struct RankingCellViewModel {
     let detailText: String?
     let wltText: String?
 
-    init(apiDistrictRanking ranking: Components.Schemas.DistrictRanking) {
+    init(apiDistrictRanking ranking: DistrictRanking) {
         self.rankText = "Rank \(ranking.rank)"
         self.teamNumber = Self.teamNumber(from: ranking.teamKey)
         self.teamName = "Team \(self.teamNumber ?? ranking.teamKey)"
@@ -35,7 +35,7 @@ struct RankingCellViewModel {
         self.wltText = nil
     }
 
-    init(apiRanking ranking: Components.Schemas.EventRanking.RankingsPayloadPayload, detailText: String?) {
+    init(apiRanking ranking: EventRanking.RankingsPayloadPayload, detailText: String?) {
         self.rankText = "Rank \(ranking.rank)"
         self.teamNumber = Self.teamNumber(from: ranking.teamKey)
         self.teamName = "Team \(self.teamNumber ?? ranking.teamKey)"

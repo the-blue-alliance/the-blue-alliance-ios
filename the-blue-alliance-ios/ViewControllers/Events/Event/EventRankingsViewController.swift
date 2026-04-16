@@ -3,7 +3,7 @@ import TBAAPI
 import UIKit
 
 protocol EventRankingsViewControllerDelegate: AnyObject {
-    func rankingSelected(_ ranking: Components.Schemas.EventRanking.RankingsPayloadPayload)
+    func rankingSelected(_ ranking: EventRanking.RankingsPayloadPayload)
 }
 
 class EventRankingsViewController: TBATableViewController, Refreshable, Stateful {
@@ -12,10 +12,10 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     private let eventKey: String
 
-    private var dataSource: TableViewDataSource<String, Components.Schemas.EventRanking.RankingsPayloadPayload>!
-    private var rankings: [Components.Schemas.EventRanking.RankingsPayloadPayload] = []
-    private var extraStatsInfo: [Components.Schemas.EventRanking.ExtraStatsInfoPayloadPayload] = []
-    private var sortOrderInfo: [Components.Schemas.EventRanking.SortOrderInfoPayloadPayload] = []
+    private var dataSource: TableViewDataSource<String, EventRanking.RankingsPayloadPayload>!
+    private var rankings: [EventRanking.RankingsPayloadPayload] = []
+    private var extraStatsInfo: [EventRanking.ExtraStatsInfoPayloadPayload] = []
+    private var sortOrderInfo: [EventRanking.SortOrderInfoPayloadPayload] = []
 
     // MARK: - Init
 
@@ -48,7 +48,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Components.Schemas.EventRanking.RankingsPayloadPayload>(tableView: tableView) { [weak self] tableView, indexPath, ranking in
+        dataSource = TableViewDataSource<String, EventRanking.RankingsPayloadPayload>(tableView: tableView) { [weak self] tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             let detail = self?.rankingInfoString(for: ranking)
             cell.viewModel = RankingCellViewModel(apiRanking: ranking, detailText: detail)
@@ -58,14 +58,14 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
         dataSource.delegate = self
     }
 
-    private func applyRanking(_ response: Components.Schemas.EventRanking?) {
+    private func applyRanking(_ response: EventRanking?) {
         let rankings = response?.rankings ?? []
         let sorted = rankings.sorted { $0.rank < $1.rank }
         self.rankings = sorted
         self.extraStatsInfo = response?.extraStatsInfo ?? []
         self.sortOrderInfo = response?.sortOrderInfo ?? []
 
-        var snapshot = NSDiffableDataSourceSnapshot<String, Components.Schemas.EventRanking.RankingsPayloadPayload>()
+        var snapshot = NSDiffableDataSourceSnapshot<String, EventRanking.RankingsPayloadPayload>()
         snapshot.appendSections([""])
         snapshot.appendItems(sorted, toSection: "")
         dataSource.apply(snapshot, animatingDifferences: false)
@@ -73,7 +73,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     // MARK: Ranking info string
 
-    private func rankingInfoString(for ranking: Components.Schemas.EventRanking.RankingsPayloadPayload) -> String? {
+    private func rankingInfoString(for ranking: EventRanking.RankingsPayloadPayload) -> String? {
         var parts: [String] = []
         parts.append(contentsOf: Self.formattedPairs(values: ranking.extraStats, info: extraStatsInfo.map { (name: $0.name, precision: Int($0.precision)) }))
         parts.append(contentsOf: Self.formattedPairs(values: ranking.sortOrders ?? [], info: sortOrderInfo.map { (name: $0.name, precision: $0.precision) }))

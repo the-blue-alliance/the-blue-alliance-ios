@@ -3,7 +3,7 @@ import TBAAPI
 import UIKit
 
 protocol DistrictsViewControllerDelegate: AnyObject {
-    func districtSelected(_ district: Components.Schemas.District)
+    func districtSelected(_ district: District)
 }
 
 class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
@@ -15,8 +15,8 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
         }
     }
 
-    private var districts: [Components.Schemas.District] = []
-    private var dataSource: TableViewDataSource<String, Components.Schemas.District>!
+    private var districts: [District] = []
+    private var dataSource: TableViewDataSource<String, District>!
 
     // MARK: - Init
 
@@ -49,7 +49,7 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Components.Schemas.District>(tableView: tableView) { tableView, indexPath, district in
+        dataSource = TableViewDataSource<String, District>(tableView: tableView) { tableView, indexPath, district in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
             cell.textLabel?.text = district.displayName
             cell.accessoryType = .disclosureIndicator
@@ -59,11 +59,11 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
         dataSource.delegate = self
     }
 
-    private func apply(_ districts: [Components.Schemas.District]) {
+    private func apply(_ districts: [District]) {
         let sorted = districts.sorted { $0.displayName < $1.displayName }
         self.districts = sorted
 
-        var snapshot = NSDiffableDataSourceSnapshot<String, Components.Schemas.District>()
+        var snapshot = NSDiffableDataSourceSnapshot<String, District>()
         snapshot.appendSections([""])
         snapshot.appendItems(sorted, toSection: "")
         dataSource.apply(snapshot, animatingDifferences: false)
