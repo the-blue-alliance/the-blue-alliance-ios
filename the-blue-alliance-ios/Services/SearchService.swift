@@ -13,7 +13,7 @@ private struct SearchConstants {
     static let lastRefreshTeamsAllKey = "kLastRefreshAllTeams"
 }
 
-public class SearchService: NSObject, TeamsRefreshProvider {
+public class SearchService: NSObject {
 
     let batchSize = 1000
 

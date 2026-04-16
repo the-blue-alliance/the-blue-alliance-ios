@@ -1,24 +1,19 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
-class DistrictBreakdownViewController: TBATableViewController, Observable {
+class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let ranking: DistrictRanking
-
-    // MARK: - Observable
-
-    typealias ManagedType = DistrictRanking
-    lazy var contextObserver: CoreDataContextObserver<DistrictRanking> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
-    }()
+    private let teamKey: String
+    private let districtKey: String
+    private var ranking: Components.Schemas.DistrictRanking
 
     // MARK: - Init
 
-    init(ranking: DistrictRanking, dependencies: Dependencies) {
+    init(ranking: Components.Schemas.DistrictRanking, districtKey: String, dependencies: Dependencies) {
         self.ranking = ranking
+        self.teamKey = ranking.teamKey
+        self.districtKey = districtKey
 
         super.init(dependencies: dependencies)
     }
@@ -33,21 +28,20 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
         super.viewDidLoad()
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
-
-        contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
-        }
     }
-
 
     // MARK: Table View Data Source
 
+    private var eventPoints: [Components.Schemas.DistrictRanking.EventPointsPayloadPayload] {
+        ranking.eventPoints ?? []
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
-        let sections = ranking.sortedEventPoints.count
+        let sections = eventPoints.count
         if sections == 0 {
             showNoDataView()
+        } else {
+            removeNoDataView()
         }
         return sections
     }
@@ -59,32 +53,21 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
-        let eventPoints = ranking.sortedEventPoints[indexPath.section]
+        let points = eventPoints[indexPath.section]
 
-        var pointsType = ""
-        var points = 0
-
-        switch indexPath.row {
-        case 0:
-            pointsType = "Qualification"
-            points = eventPoints.qualPoints
-        case 1:
-            pointsType = "Elimination"
-            points = eventPoints.elimPoints
-        case 2:
-            pointsType = "Alliance"
-            points = eventPoints.alliancePoints
-        case 3:
-            pointsType = "Award"
-            points = eventPoints.awardPoints
-        case 4:
-            pointsType = "Total"
-            points = eventPoints.total
-        default: break
-        }
+        let (pointsType, pointsValue): (String, Int) = {
+            switch indexPath.row {
+            case 0: return ("Qualification", points.qualPoints)
+            case 1: return ("Elimination", points.elimPoints)
+            case 2: return ("Alliance", points.alliancePoints)
+            case 3: return ("Award", points.awardPoints)
+            case 4: return ("Total", points.total)
+            default: return ("", 0)
+            }
+        }()
 
         cell.titleLabel.text = "\(pointsType) Points"
-        cell.subtitleLabel.text = "\(points) Points"
+        cell.subtitleLabel.text = "\(pointsValue) Points"
 
         return cell
     }
@@ -92,56 +75,31 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let eventPoints = ranking.sortedEventPoints[section]
-        return eventPoints.event.name ?? eventPoints.event.key
+        eventPoints[section].eventKey
     }
 
-}
+    // MARK: - Refreshable
 
-extension DistrictBreakdownViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(ranking.district.key)_breakdown"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh team's district breakdown until district is over
-        return ranking.district.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        // This should never fire
-        return ranking.sortedEventPoints.count == 0
-    }
+    var refreshKey: String? { "\(districtKey)_breakdown" }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { eventPoints.isEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictRankings(key: ranking.district.key) { [self] (result, notModified) in
-            guard case .success(let rankings) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.districtRankings(key: districtKey)
+                if let updated = fetched.first(where: { $0.teamKey == teamKey }) {
+                    ranking = updated
+                    tableView.reloadData()
+                }
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({ [unowned self] in
-                let district = context.object(with: self.ranking.district.objectID) as! District
-                district.insert(rankings)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation!)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
+    // MARK: - Stateful
 
-extension DistrictBreakdownViewController: Stateful {
-
-    var noDataText: String? {
-        return "No district points for team"
-    }
-
+    var noDataText: String? { "No district points for team" }
 }

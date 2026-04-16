@@ -1,26 +1,24 @@
-import CoreData
 import Foundation
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
 protocol DistrictRankingsViewControllerDelegate: AnyObject {
-    func districtRankingSelected(_ districtRanking: DistrictRanking)
+    func districtRankingSelected(_ ranking: Components.Schemas.DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBASearchableTableViewController {
+class DistrictRankingsViewController: TBASearchableTableViewController, Refreshable, Stateful {
 
     weak var delegate: DistrictRankingsViewControllerDelegate?
 
-    private let district: District
+    private let districtKey: String
 
-    private var dataSource: TableViewDataSource<String, DistrictRanking>!
-    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<DistrictRanking>!
+    private var dataSource: TableViewDataSource<String, Components.Schemas.DistrictRanking>!
+    private var allRankings: [Components.Schemas.DistrictRanking] = []
 
     // MARK: - Init
 
-    init(district: District, dependencies: Dependencies) {
-        self.district = district
+    init(districtKey: String, dependencies: Dependencies) {
+        self.districtKey = districtKey
 
         super.init(dependencies: dependencies)
     }
@@ -37,106 +35,73 @@ class DistrictRankingsViewController: TBASearchableTableViewController {
         setupSearch()
 
         tableView.registerReusableCell(RankingTableViewCell.self)
-
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let ranking = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
+        guard let ranking = dataSource.itemIdentifier(for: indexPath) else { return }
         delegate?.districtRankingSelected(ranking)
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, DistrictRanking>(tableView: tableView) { (tableView, indexPath, districtRanking) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, Components.Schemas.DistrictRanking>(tableView: tableView) { tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
-            cell.viewModel = RankingCellViewModel(districtRanking: districtRanking)
+            cell.viewModel = RankingCellViewModel(apiDistrictRanking: ranking)
             return cell
         }
         dataSource.statefulDelegate = self
-
-        let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [
-            DistrictRanking.rankSortDescriptor()
-        ]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
         dataSource.delegate = self
     }
 
     override func updateDataSource() {
-        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
+        applyRankings(allRankings)
     }
 
-    private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
-        let searchPredicate: NSPredicate? = {
-            guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
-                return nil
+    private func applyRankings(_ rankings: [Components.Schemas.DistrictRanking]) {
+        let query = searchController.searchBar.text?.lowercased() ?? ""
+        let filtered: [Components.Schemas.DistrictRanking]
+        if query.isEmpty {
+            filtered = rankings
+        } else {
+            filtered = rankings.filter { ranking in
+                let number = TeamKey.trimFRCPrefix(ranking.teamKey).lowercased()
+                return number.contains(query) || ranking.teamKey.lowercased().contains(query)
             }
-            return DistrictRanking.teamSearchPredicate(searchText: searchText)
-        }()
-        let predicate = DistrictRanking.districtPredicate(districtKey: district.key)
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            predicate,
-            searchPredicate
-        ].compactMap({ $0 }))
+        }
+        let sorted = filtered.sorted { $0.rank < $1.rank }
+
+        var snapshot = NSDiffableDataSourceSnapshot<String, Components.Schemas.DistrictRanking>()
+        snapshot.appendSections([""])
+        snapshot.appendItems(sorted, toSection: "")
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-}
+    // MARK: - Refreshable
 
-extension DistrictRankingsViewController: Refreshable {
-
-    var refreshKey: String? {
-        return "\(district.key)_rankings"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh district rankings until DCMP is over
-        return district.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        return fetchedResultsController.isDataSourceEmpty
-    }
+    var refreshKey: String? { "\(districtKey)_rankings" }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
+    // Phase 4: district endDate isn't directly available via TBAAPI; using nil here.
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { allRankings.isEmpty }
 
     @objc func refresh() {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictRankings(key: district.key) { [self] (result, notModified) in
-            guard case .success(let rankings) = result, !notModified else {
-                return
+        Task { @MainActor in
+            do {
+                let fetched = try await dependencies.api.districtRankings(key: districtKey)
+                allRankings = fetched
+                applyRankings(fetched)
+            } catch {
+                errorRecorder.record(error)
             }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                let district = context.object(with: self.district.objectID) as! District
-                district.insert(rankings)
-            }, saved: { [unowned self] in
-                markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            }, errorRecorder: errorRecorder)
         }
-        addRefreshOperations([operation])
     }
 
-}
+    // MARK: - Stateful
 
-extension DistrictRankingsViewController: Stateful {
-
-    var noDataText: String? {
-        return "No rankings for district"
-    }
-
+    var noDataText: String? { "No rankings for district" }
 }
