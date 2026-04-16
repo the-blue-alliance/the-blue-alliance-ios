@@ -23,14 +23,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Install project dependencies
 
-### ios test_unit
-
-```sh
-[bundle exec] fastlane ios test_unit
-```
-
-Run TBA unit tests
-
 ### ios test_mytbakit
 
 ```sh
@@ -38,30 +30,6 @@ Run TBA unit tests
 ```
 
 Run MyTBAKit unit tests
-
-### ios test_search
-
-```sh
-[bundle exec] fastlane ios test_search
-```
-
-Run Search unit tests
-
-### ios test_tbadata
-
-```sh
-[bundle exec] fastlane ios test_tbadata
-```
-
-Run TBAData unit tests
-
-### ios test_tbakit
-
-```sh
-[bundle exec] fastlane ios test_tbakit
-```
-
-Run TBAKit unit tests
 
 ### ios test_tbaoperation
 
