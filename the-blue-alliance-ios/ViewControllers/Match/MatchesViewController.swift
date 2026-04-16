@@ -1,8 +1,6 @@
-import CoreData
 import Foundation
 import MyTBAKit
 import TBAAPI
-import TBAData
 import UIKit
 
 protocol MatchesViewControllerDelegate: AnyObject {
@@ -18,6 +16,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     private let eventKey: String
     private let teamKey: String?
     private var myTBA: MyTBA
+    private let favoritesStore: FavoritesStore
 
     private var dataSource: TableViewDataSource<String, Components.Schemas.Match>!
 
@@ -33,10 +32,11 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, teamKey: String? = nil, myTBA: MyTBA, dependencies: Dependencies) {
+    init(eventKey: String, teamKey: String? = nil, myTBA: MyTBA, favoritesStore: FavoritesStore, dependencies: Dependencies) {
         self.eventKey = eventKey
         self.teamKey = teamKey
         self.myTBA = myTBA
+        self.favoritesStore = favoritesStore
 
         super.init(dependencies: dependencies)
     }
@@ -132,9 +132,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     func updateWithQuery(query: MatchQueryOptions) {
         self.query = query
-        // Favorite team keys are still on Core Data through Phase 5 — Phase 5
-        // swaps this for a read against `FavoritesStore`.
-        favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
+        favoriteTeamKeys = favoritesStore.favoriteTeamKeys()
 
         updateInterface()
         applyMatches(allMatches)

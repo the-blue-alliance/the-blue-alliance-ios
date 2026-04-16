@@ -8,6 +8,7 @@ class DistrictViewController: ContainerViewController {
     private(set) var district: Components.Schemas.District
     private let year: Int
     private let myTBA: MyTBA
+    private let myTBAStores: MyTBAStores
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
@@ -19,12 +20,13 @@ class DistrictViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(district: Components.Schemas.District, year: Int? = nil, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(district: Components.Schemas.District, year: Int? = nil, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.district = district
         // District keys look like `2023fim` — year is the first 4 chars.
         let parsedYear = year ?? Int(district.key.prefix(4)) ?? statusService.currentSeason
         self.year = parsedYear
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.statusService = statusService
@@ -68,7 +70,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Components.Schemas.Event) {
-        let eventViewController = EventViewController(eventKey: event.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        let eventViewController = EventViewController(eventKey: event.key, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -81,7 +83,7 @@ extension DistrictViewController: EventsListViewControllerDelegate {
 extension DistrictViewController: TeamsListViewControllerDelegate {
 
     func teamSelected(teamKey: String) {
-        let teamViewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, dependencies: dependencies)
+        let teamViewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
         self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 
@@ -90,7 +92,7 @@ extension DistrictViewController: TeamsListViewControllerDelegate {
 extension DistrictViewController: DistrictRankingsViewControllerDelegate {
 
     func districtRankingSelected(_ ranking: Components.Schemas.DistrictRanking) {
-        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: ranking, district: district, year: year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: ranking, district: district, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
     }
 

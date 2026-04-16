@@ -45,7 +45,7 @@ class TeamViewController: HeaderContainerViewController {
 
     // MARK: Init
 
-    init(teamKey: String, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, dependencies: Dependencies) {
+    init(teamKey: String, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, myTBAStores: MyTBAStores, dependencies: Dependencies) {
         self.teamKey = teamKey
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
@@ -73,6 +73,7 @@ class TeamViewController: HeaderContainerViewController {
             navigationSubtitle: "----",
             segmentedControlTitles: ["Info", "Events", "Media"],
             myTBA: myTBA,
+            myTBAStores: myTBAStores,
             dependencies: dependencies
         )
 
@@ -190,7 +191,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Components.Schemas.Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 }

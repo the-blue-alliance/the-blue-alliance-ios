@@ -1,46 +1,71 @@
-import CoreData
 import Foundation
 import MyTBAKit
-import TBAData
-import TBAKit
+import TBAAPI
 import UIKit
 
-public enum MyTBASection {
+public enum MyTBASection: Int {
     case event
     case team
     case match
 
     static func section(for modelType: MyTBAModelType) -> MyTBASection? {
         switch modelType {
-        case .event:
-            return .event
-        case .team:
-            return .team
-        case .match:
-            return .match
-        default:
-            return nil
+        case .event: return .event
+        case .team: return .team
+        case .match: return .match
+        default: return nil
+        }
+    }
+
+    var headerTitle: String {
+        switch self {
+        case .event: return "Events"
+        case .team: return "Teams"
+        case .match: return "Matches"
         }
     }
 }
 
 protocol MyTBATableViewControllerDelegate: AnyObject {
-    func eventSelected(_ event: Event)
-    func teamSelected(_ team: Team)
-    func matchSelected(_ match: Match)
+    func eventSelected(eventKey: String)
+    func teamSelected(teamKey: String)
+    func matchSelected(matchKey: String)
 }
 
-/**
- MyTBATableViewController implements it's own NSFetchedResultsControllerDelegate, since we need to convert
- from a MyTBA model (Favorite, Subscription) in to a MyTBAEntity (Event, Team, Match)
- */
-class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
+enum MyTBAItem: Hashable {
+    case event(key: String)
+    case team(key: String)
+    case match(key: String)
+
+    var section: MyTBASection {
+        switch self {
+        case .event: return .event
+        case .team: return .team
+        case .match: return .match
+        }
+    }
+
+    var modelKey: String {
+        switch self {
+        case .event(let key), .team(let key), .match(let key):
+            return key
+        }
+    }
+}
+
+// Abstract base. Two concrete subclasses below bind to FavoritesStore or
+// SubscriptionsStore, then pass their entries through the common rendering
+// pipeline (per-type caches populated lazily from TBAAPI).
+class MyTBATableViewController: TBATableViewController, NotificationObservable {
 
     let myTBA: MyTBA
     weak var delegate: MyTBATableViewControllerDelegate?
 
-    private var dataSource: TableViewDataSource<MyTBASection, NSManagedObject>!
-    private var fetchedResultsController: NSFetchedResultsController<T>!
+    private var dataSource: TableViewDataSource<MyTBASection, MyTBAItem>!
+
+    private var eventsCache: [String: Components.Schemas.Event] = [:]
+    private var teamsCache: [String: Components.Schemas.Team] = [:]
+    private var matchesCache: [String: Components.Schemas.Match] = [:]
 
     // MARK: Init
 
@@ -63,348 +88,329 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
-        tableView.dataSource = dataSource
         setupDataSource()
+        tableView.dataSource = dataSource
 
-        // Disable subscriptions
-        setupFetchedResultsController()
+        registerForStoreChanges()
+
+        rebuildSnapshot()
+    }
+
+    // MARK: Subclass Hooks
+
+    /// The entries to display, grouped by `MyTBASection` order.
+    var currentItems: [MyTBAItem] {
+        fatalError("Subclasses must override currentItems")
+    }
+
+    /// Kicks off a remote refresh, writes the result into the backing store.
+    func performRemoteRefresh() async throws {
+        fatalError("Subclasses must override performRemoteRefresh()")
+    }
+
+    /// Registers for the NotificationCenter name that the backing store posts on change.
+    func registerForStoreChanges() {
+        fatalError("Subclasses must override registerForStoreChanges()")
     }
 
     // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<MyTBASection, NSManagedObject>(tableView: tableView, cellProvider: { (tableView, indexPath, obj) -> UITableViewCell? in
-            let fallbackCell = UITableViewCell()
-            fallbackCell.textLabel?.text = obj.description
-
-            // TODO: All Cell subclasses need gear icons
-            // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/179
-
-            if let event = obj as? Event {
-                return MyTBATableViewController.tableView(tableView, cellForEvent: event, at: indexPath)
-            } else if let team = obj as? Team {
-                return MyTBATableViewController.tableView(tableView, cellForTeam: team, at: indexPath)
-            } else if let match = obj as? Match {
-                return MyTBATableViewController.tableView(tableView, cellForMatch: match, at: indexPath)
-            } else {
-                return fallbackCell
+        dataSource = TableViewDataSource<MyTBASection, MyTBAItem>(tableView: tableView, cellProvider: { [weak self] tableView, indexPath, item in
+            guard let self = self else { return UITableViewCell() }
+            switch item {
+            case .event(let key):
+                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
+                if let event = self.eventsCache[key] {
+                    cell.viewModel = EventCellViewModel(name: event.safeShortName, location: event.locationString, dateString: event.dateString)
+                } else {
+                    cell.viewModel = EventCellViewModel(name: key, location: nil, dateString: nil)
+                }
+                return cell
+            case .team(let key):
+                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
+                if let team = self.teamsCache[key] {
+                    cell.viewModel = TeamCellViewModel(teamNumber: "\(team.teamNumber)", nickname: team.displayNickname, location: team.locationString)
+                } else {
+                    cell.viewModel = TeamCellViewModel(teamNumber: TeamKey.trimFRCPrefix(key), nickname: "Team \(TeamKey.trimFRCPrefix(key))", location: nil)
+                }
+                return cell
+            case .match(let key):
+                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
+                if let match = self.matchesCache[key] {
+                    cell.viewModel = MatchViewModel(apiMatch: match)
+                } else {
+                    cell.textLabel?.text = key
+                }
+                return cell
             }
         })
         dataSource.delegate = self
-        dataSource.statefulDelegate = self
     }
 
-    // MARK: NSFetchedResultsController
-
-    private func setupFetchedResultsController() {
-        let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
-
-        // Only show supported myTBA entities (basically, exclude team@event)
-        fetchRequest.predicate = T.supportedModelTypePredicate()
-        fetchRequest.sortDescriptors = T.sortDescriptors()
-
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                              managedObjectContext: persistentContainer.viewContext,
-                                                              sectionNameKeyPath: T.modelTypeKeyPath(),
-                                                              cacheName: nil)
-        fetchedResultsController!.delegate = self
-        try! fetchedResultsController!.performFetch()
-    }
-
-    // MARK: NSFetchedResultsControllerDelegate
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        var s = NSDiffableDataSourceSnapshot<MyTBASection, NSManagedObject>()
-        for section in snapshot.sectionIdentifiers.compactMap({ $0 as? String }) {
-            var items = snapshot.itemIdentifiersInSection(withIdentifier: section)
-                .compactMap { $0 as? NSManagedObjectID }
-                .compactMap { fetchedResultsController.managedObjectContext.object(with: $0) }
-                .compactMap { $0 as? T }
-                .compactMap { $0.tbaObject }
-            // Only add our section if we have items in the section
-            if items.isEmpty {
-                continue
-            }
-
-            guard let modelTypeRaw = Int(section) else {
-                continue
-            }
-            guard let modelType = MyTBAModelType(rawValue: modelTypeRaw) else {
-                continue
-            }
-            guard let sectionType = MyTBASection.section(for: modelType) else {
-                continue
-            }
-
-            // Sort our items before inserting
-            if let events = items as? [Event] {
-                items = events.sorted().sorted(by: { (lhs, rhs) -> Bool in
-                    // Second pass - sort by years in reverse order
-                    return lhs.year > rhs.year
-                })
-            } else if let teams = items as? [Team] {
-                items = teams.sorted()
-            } else if let matches = items as? [Match] {
-                items = matches.sorted()
-            }
-
-            s.appendSections([sectionType])
-            s.appendItems(items, toSection: sectionType)
+    private func rebuildSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<MyTBASection, MyTBAItem>()
+        let items = currentItems
+        let grouped = Dictionary(grouping: items, by: { $0.section })
+        for section in [MyTBASection.event, .team, .match] {
+            guard let sectionItems = grouped[section], !sectionItems.isEmpty else { continue }
+            let sorted = sortItems(sectionItems, in: section)
+            snapshot.appendSections([section])
+            snapshot.appendItems(sorted, toSection: section)
         }
-        dataSource.apply(s, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    // MARK: Table View Cells
-
-    private static func tableView(_ tableView: UITableView, cellForEvent event: Event, at indexPath: IndexPath) -> EventTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-        cell.viewModel = EventCellViewModel(name: event.safeNameYear, location: event.locationString, dateString: event.dateString)
-        return cell
-    }
-
-    private static func tableView(_ tableView: UITableView, cellForTeam team: Team, at indexPath: IndexPath) -> TeamTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
-        cell.viewModel = TeamCellViewModel(team: team)
-        return cell
-    }
-
-    private static func tableView(_ tableView: UITableView, cellForMatch match: Match, at indexPath: IndexPath) -> MatchTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-        cell.viewModel = MatchViewModel(match: match)
-        return cell
+    private func sortItems(_ items: [MyTBAItem], in section: MyTBASection) -> [MyTBAItem] {
+        switch section {
+        case .event:
+            return items.sorted { lhs, rhs in
+                let lEvent = eventsCache[lhs.modelKey]
+                let rEvent = eventsCache[rhs.modelKey]
+                let lYear = lEvent.flatMap { Int($0.key.prefix(4)) } ?? 0
+                let rYear = rEvent.flatMap { Int($0.key.prefix(4)) } ?? 0
+                if lYear != rYear { return lYear > rYear }
+                if let l = lEvent, let r = rEvent { return l < r }
+                return lhs.modelKey < rhs.modelKey
+            }
+        case .team:
+            return items.sorted { lhs, rhs in
+                let l = teamsCache[lhs.modelKey].map { $0.teamNumber } ?? Int(TeamKey.trimFRCPrefix(lhs.modelKey)) ?? 0
+                let r = teamsCache[rhs.modelKey].map { $0.teamNumber } ?? Int(TeamKey.trimFRCPrefix(rhs.modelKey)) ?? 0
+                return l < r
+            }
+        case .match:
+            return items.sorted { lhs, rhs in
+                if let l = matchesCache[lhs.modelKey], let r = matchesCache[rhs.modelKey] {
+                    if l.compLevelSortOrder != r.compLevelSortOrder { return l.compLevelSortOrder < r.compLevelSortOrder }
+                    if l.setNumber != r.setNumber { return l.setNumber < r.setNumber }
+                    return l.matchNumber < r.matchNumber
+                }
+                return lhs.modelKey < rhs.modelKey
+            }
+        }
     }
 
     // MARK: TableViewDataSourceDelegate
 
     override func title(forSection sectionIndex: Int) -> String? {
-        let indexPath = IndexPath(item: 0, section: sectionIndex)
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
-            return nil
-        }
-        if item is Event {
-            return "Events"
-        } else if item is Team {
-            return "Teams"
-        } else if item is Match {
-            return "Matches"
-        } else {
-            return nil
-        }
+        let sections = dataSource.snapshot().sectionIdentifiers
+        guard sectionIndex < sections.count else { return nil }
+        return sections[sectionIndex].headerTitle
     }
 
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let obj = dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
-        if let event = obj as? Event {
-            delegate?.eventSelected(event)
-        } else if let team = obj as? Team {
-            delegate?.teamSelected(team)
-        } else if let match = obj as? Match {
-            delegate?.matchSelected(match)
-        } else {
-            tableView.deselectRow(at: indexPath, animated: true)
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        switch item {
+        case .event(let key): delegate?.eventSelected(eventKey: key)
+        case .team(let key): delegate?.teamSelected(teamKey: key)
+        case .match(let key): delegate?.matchSelected(matchKey: key)
         }
     }
 
-    // MARK: - Fetch Methods
+    // MARK: Stateful wiring
+
+    /// Concrete subclasses call this from `viewDidLoad` (after `super`) to
+    /// hook the no-data view into the data source. Declared on the base but
+    /// walked via an Obj-C cast so the base doesn't have to conform.
+    func attachStatefulDelegate() {
+        dataSource.statefulDelegate = self as? (Refreshable & Stateful)
+    }
+
+    // MARK: Refresh
+
+    func storeDidChange() {
+        rebuildSnapshot()
+    }
+
+    func refreshFromRemote(onSuccess: @escaping () -> Void) {
+        Task { @MainActor in
+            do {
+                try await performRemoteRefresh()
+                await fetchMissingItems()
+                rebuildSnapshot()
+                onSuccess()
+            } catch {
+                errorRecorder.record(error)
+            }
+        }
+    }
+
+    private func fetchMissingItems() async {
+        let items = currentItems
+        await withTaskGroup(of: Void.self) { group in
+            for item in items {
+                switch item {
+                case .event(let key) where eventsCache[key] == nil:
+                    group.addTask { [weak self] in
+                        guard let self = self else { return }
+                        if let event = try? await self.dependencies.api.event(key: key) {
+                            await MainActor.run { self.eventsCache[key] = event }
+                        }
+                    }
+                case .team(let key) where teamsCache[key] == nil:
+                    group.addTask { [weak self] in
+                        guard let self = self else { return }
+                        if let team = try? await self.dependencies.api.team(key: key) ?? nil {
+                            await MainActor.run { self.teamsCache[key] = team }
+                        }
+                    }
+                case .match(let key) where matchesCache[key] == nil:
+                    group.addTask { [weak self] in
+                        guard let self = self else { return }
+                        if let match = try? await self.dependencies.api.match(key: key) ?? nil {
+                            await MainActor.run { self.matchesCache[key] = match }
+                        }
+                    }
+                default: break
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Favorites
+
+class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, Stateful {
+
+    private let favoritesStore: FavoritesStore
+
+    init(myTBA: MyTBA, favoritesStore: FavoritesStore, dependencies: Dependencies) {
+        self.favoritesStore = favoritesStore
+        super.init(myTBA: myTBA, dependencies: dependencies)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        attachStatefulDelegate()
+    }
+
+    override var currentItems: [MyTBAItem] {
+        favoritesStore.favorites.compactMap { Self.item(for: $0.modelType, key: $0.modelKey) }
+    }
+
+    override func registerForStoreChanges() {
+        observeNotification(name: .favoritesStoreDidChange) { [weak self] _ in
+            Task { @MainActor in self?.storeDidChange() }
+        }
+    }
+
+    override func performRemoteRefresh() async throws {
+        let favorites: [MyTBAFavorite] = try await withCheckedThrowingContinuation { continuation in
+            let operation = myTBA.fetchFavorites { models, error in
+                if let error { continuation.resume(throwing: error); return }
+                continuation.resume(returning: models ?? [])
+            }
+            refreshOperationQueue.addOperation(operation)
+        }
+        await MainActor.run { favoritesStore.replaceAll(with: favorites) }
+    }
 
     @objc func refresh() {
-        if !myTBA.isAuthenticated {
-            return
-        }
-
-        var finalOperation: Operation!
-
-        var operation: MyTBAOperation!
-        operation = J.fetch(myTBA)() { [unowned self] (models, error) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                if let models = models as? [T.RemoteType] {
-                    T.insert(models, in: context)
-                    // Kickoff fetch for myTBA objects that don't exist
-                    models.forEach({
-                        self.fetchMyTBAObject($0, finalOperation)
-                    })
-                } else if error == nil {
-                    // If we don't get any models and we don't have an error, we probably don't have any models upstream
-                    context.deleteAllObjectsForEntity(entity: T.entity())
-                }
-            }, saved: {
-                self.markRefreshSuccessful()
-            }, errorRecorder: errorRecorder)
-        }
-        finalOperation = addRefreshOperations([operation])
+        guard myTBA.isAuthenticated else { return }
+        refreshFromRemote { [weak self] in self?.markRefreshSuccessful() }
     }
 
-    private func fetchMyTBAObject(_ myTBAModel: MyTBAModel, _ dependentOperation: Operation) {
-        guard let tbaKitOperation: TBAKitOperation = {
-            switch myTBAModel.modelType {
-            case .event:
-                return self.fetchEvent(myTBAModel)
-            case .team:
-                return self.fetchTeam(myTBAModel)
-            case .match:
-                return self.fetchMatch(myTBAModel)
-            default:
-                return nil
-            }
-        }() else { return }
-        dependentOperation.addDependency(tbaKitOperation)
-        refreshOperationQueue.addOperation(tbaKitOperation)
-    }
+    // MARK: - Refreshable
 
-    func fetchEvent(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvent(key: myTBAModel.modelKey) { [self] (result, notModified) in
-            guard case .success(let object) = result, let event = object, !notModified else {
-                return
-            }
+    var refreshKey: String? { MyTBAFavorite.arrayKey }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { myTBA.isAuthenticated && favoritesStore.favorites.isEmpty }
 
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Event.insert(event, in: context)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
-            }, errorRecorder: errorRecorder)
-        }
-        return operation
-    }
+    // MARK: - Stateful
 
-    func fetchTeam(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchTeam(key: myTBAModel.modelKey) { [self] (result, notModified) in
-            guard case .success(let object) = result, let team = object, !notModified else {
-                return
-            }
+    var noDataText: String? { "No favorites" }
 
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Team.insert(team, in: context)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
-            }, errorRecorder: errorRecorder)
-        }
-        return operation
-    }
-
-    func fetchMatch(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: myTBAModel.modelKey) { [self] (result, notModified) in
-            guard case .success(let object) = result, let match = object, !notModified else {
-                return
-            }
-
-            let context = persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Match.insert(match, in: context)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
-            }, errorRecorder: errorRecorder)
-        }
-        return operation
-    }
-
-    internal func executeUpdate(_ myTBAModel: MyTBAModel) {
-        let key = myTBAModel.modelKey
-        guard let op: Operation = { [self] in
-            switch myTBAModel.modelType {
-            case .event:
-                if let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: Event.predicate(key: key)) {
-                    return updateObject(event, for: myTBAModel)
-                }
-                return nil
-            case .team:
-                if let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: Team.predicate(key: key)) {
-                    return updateObject(team, for: myTBAModel)
-                }
-                return nil
-            case .match:
-                if let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: key)) {
-                    return updateObject(match, for: myTBAModel)
-                }
-                return nil
-            default:
-                return nil
-            }
-        }() else { return }
-
-        OperationQueue.main.addOperation(op)
-    }
-
-    private func updateObject(_ object: NSManagedObject, for model: MyTBAModel) -> Operation? {
-        guard let section = MyTBASection.section(for: model.modelType) else {
-            return nil
-        }
-        return BlockOperation {
-            var snapshot = self.dataSource.snapshot()
-
-            if !snapshot.sectionIdentifiers.contains(section) {
-                if snapshot.numberOfSections <= model.modelType.rawValue {
-                    snapshot.appendSections([section])
-                } else {
-                    let s = snapshot.sectionIdentifiers[model.modelType.rawValue]
-                    snapshot.insertSections([section], beforeSection: s)
-                }
-            }
-
-            if !snapshot.itemIdentifiers(inSection: section).contains(object) {
-                snapshot.appendItems([object], toSection: section)
-            }
-
-            var items = snapshot.itemIdentifiers(inSection: section)
-            // Sort our items before inserting
-            if let events = items as? [Event] {
-                items = events.sorted().sorted(by: { (lhs, rhs) -> Bool in
-                    // Second pass - sort by years in reverse order
-                    return lhs.year > rhs.year
-                })
-            } else if let teams = items as? [Team] {
-                items = teams.sorted()
-            } else if let matches = items as? [Match] {
-                items = matches.sorted()
-            }
-            snapshot.deleteItems(items)
-            snapshot.appendItems(items, toSection: section)
-
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+    private static func item(for type: MyTBAModelType, key: String) -> MyTBAItem? {
+        switch type {
+        case .event: return .event(key: key)
+        case .team: return .team(key: key)
+        case .match: return .match(key: key)
+        default: return nil
         }
     }
-
 }
 
-extension MyTBATableViewController: Refreshable {
+// MARK: - Subscriptions
 
-    var refreshKey: String? {
-        return J.arrayKey
+class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, Stateful {
+
+    private let subscriptionsStore: SubscriptionsStore
+
+    init(myTBA: MyTBA, subscriptionsStore: SubscriptionsStore, dependencies: Dependencies) {
+        self.subscriptionsStore = subscriptionsStore
+        super.init(myTBA: myTBA, dependencies: dependencies)
     }
 
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    var automaticRefreshEndDate: Date? {
-        return nil
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        attachStatefulDelegate()
     }
 
-    var isDataSourceEmpty: Bool {
-        if myTBA.isAuthenticated, dataSource.isDataSourceEmpty {
-            return true
+    override var currentItems: [MyTBAItem] {
+        subscriptionsStore.subscriptions.compactMap { Self.item(for: $0.modelType, key: $0.modelKey) }
+    }
+
+    override func registerForStoreChanges() {
+        observeNotification(name: .subscriptionsStoreDidChange) { [weak self] _ in
+            Task { @MainActor in self?.storeDidChange() }
         }
-        return false
     }
 
+    override func performRemoteRefresh() async throws {
+        let subs: [MyTBASubscription] = try await withCheckedThrowingContinuation { continuation in
+            let operation = myTBA.fetchSubscriptions { models, error in
+                if let error { continuation.resume(throwing: error); return }
+                continuation.resume(returning: models ?? [])
+            }
+            refreshOperationQueue.addOperation(operation)
+        }
+        await MainActor.run { subscriptionsStore.replaceAll(with: subs) }
+    }
+
+    @objc func refresh() {
+        guard myTBA.isAuthenticated else { return }
+        refreshFromRemote { [weak self] in self?.markRefreshSuccessful() }
+    }
+
+    // MARK: - Refreshable
+
+    var refreshKey: String? { MyTBASubscription.arrayKey }
+    var automaticRefreshInterval: DateComponents? { DateComponents(day: 1) }
+    var automaticRefreshEndDate: Date? { nil }
+    var isDataSourceEmpty: Bool { myTBA.isAuthenticated && subscriptionsStore.subscriptions.isEmpty }
+
+    // MARK: - Stateful
+
+    var noDataText: String? { "No subscriptions" }
+
+    private static func item(for type: MyTBAModelType, key: String) -> MyTBAItem? {
+        switch type {
+        case .event: return .event(key: key)
+        case .team: return .team(key: key)
+        case .match: return .match(key: key)
+        default: return nil
+        }
+    }
 }
 
-extension MyTBATableViewController: Stateful {
+// MARK: - NotificationObservable helper
 
-    var noDataText: String? {
-        return "No \(J.arrayKey)"
+protocol NotificationObservable: AnyObject {}
+
+extension NotificationObservable {
+    func observeNotification(name: Notification.Name, handler: @escaping (Notification) -> Void) {
+        NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main, using: handler)
     }
-
 }

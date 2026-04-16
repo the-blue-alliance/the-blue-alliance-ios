@@ -19,6 +19,18 @@ enum MyTBALocalStore {
     }
 }
 
+extension Notification.Name {
+    static let favoritesStoreDidChange = Notification.Name("favoritesStoreDidChange")
+    static let subscriptionsStoreDidChange = Notification.Name("subscriptionsStoreDidChange")
+}
+
+// Passed explicitly to the handful of view controllers that care about myTBA
+// state. Kept out of `Dependencies` since only myTBA-adjacent screens use it.
+struct MyTBAStores {
+    let favorites: FavoritesStore
+    let subscriptions: SubscriptionsStore
+}
+
 @Observable
 final class FavoritesStore {
 
@@ -34,15 +46,38 @@ final class FavoritesStore {
 
     func replaceAll(with favorites: [MyTBAFavorite]) {
         self.favorites = favorites
-        try? FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(),
-                                                 withIntermediateDirectories: true)
-        guard let data = try? JSONEncoder().encode(favorites) else { return }
-        try? data.write(to: fileURL, options: .atomic)
+        persist()
+    }
+
+    func upsert(_ favorite: MyTBAFavorite) {
+        var copy = favorites.filter { !($0.modelKey == favorite.modelKey && $0.modelType == favorite.modelType) }
+        copy.append(favorite)
+        favorites = copy
+        persist()
+    }
+
+    func remove(modelKey: String, modelType: MyTBAModelType) {
+        favorites = favorites.filter { !($0.modelKey == modelKey && $0.modelType == modelType) }
+        persist()
     }
 
     func clear() {
         favorites = []
         try? FileManager.default.removeItem(at: fileURL)
+        NotificationCenter.default.post(name: .favoritesStoreDidChange, object: self)
+    }
+
+    func favoriteTeamKeys() -> [String] {
+        favorites.filter { $0.modelType == .team }.map { $0.modelKey }
+    }
+
+    private func persist() {
+        try? FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(),
+                                                 withIntermediateDirectories: true)
+        if let data = try? JSONEncoder().encode(favorites) {
+            try? data.write(to: fileURL, options: .atomic)
+        }
+        NotificationCenter.default.post(name: .favoritesStoreDidChange, object: self)
     }
 }
 
@@ -61,14 +96,37 @@ final class SubscriptionsStore {
 
     func replaceAll(with subscriptions: [MyTBASubscription]) {
         self.subscriptions = subscriptions
-        try? FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(),
-                                                 withIntermediateDirectories: true)
-        guard let data = try? JSONEncoder().encode(subscriptions) else { return }
-        try? data.write(to: fileURL, options: .atomic)
+        persist()
+    }
+
+    func upsert(_ subscription: MyTBASubscription) {
+        var copy = subscriptions.filter { !($0.modelKey == subscription.modelKey && $0.modelType == subscription.modelType) }
+        copy.append(subscription)
+        subscriptions = copy
+        persist()
+    }
+
+    func remove(modelKey: String, modelType: MyTBAModelType) {
+        subscriptions = subscriptions.filter { !($0.modelKey == modelKey && $0.modelType == modelType) }
+        persist()
     }
 
     func clear() {
         subscriptions = []
         try? FileManager.default.removeItem(at: fileURL)
+        NotificationCenter.default.post(name: .subscriptionsStoreDidChange, object: self)
+    }
+
+    func subscription(modelKey: String, modelType: MyTBAModelType) -> MyTBASubscription? {
+        subscriptions.first { $0.modelKey == modelKey && $0.modelType == modelType }
+    }
+
+    private func persist() {
+        try? FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(),
+                                                 withIntermediateDirectories: true)
+        if let data = try? JSONEncoder().encode(subscriptions) {
+            try? data.write(to: fileURL, options: .atomic)
+        }
+        NotificationCenter.default.post(name: .subscriptionsStoreDidChange, object: self)
     }
 }

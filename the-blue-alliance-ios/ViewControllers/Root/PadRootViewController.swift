@@ -10,6 +10,7 @@ class PadRootViewController: UISplitViewController, RootController {
 
     let fcmTokenProvider: FCMTokenProvider
     let myTBA: MyTBA
+    let myTBAStores: MyTBAStores
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let pushService: PushService
@@ -21,6 +22,7 @@ class PadRootViewController: UISplitViewController, RootController {
     lazy fileprivate var masterViewController: PadMasterViewController = {
         return PadMasterViewController(fcmTokenProvider: fcmTokenProvider,
                                        myTBA: myTBA,
+                                       myTBAStores: myTBAStores,
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
                                        pushService: pushService,
@@ -41,9 +43,10 @@ class PadRootViewController: UISplitViewController, RootController {
         return navigationController
     }()
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.pushService = pushService
@@ -70,6 +73,7 @@ private class PadMasterViewController: ContainerViewController, RootController {
 
     let fcmTokenProvider: FCMTokenProvider
     let myTBA: MyTBA
+    let myTBAStores: MyTBAStores
     let pasteboard: UIPasteboard?
     let photoLibrary: PHPhotoLibrary?
     let pushService: PushService
@@ -79,9 +83,10 @@ private class PadMasterViewController: ContainerViewController, RootController {
 
     var searchController: UISearchController!
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard?, photoLibrary: PHPhotoLibrary?, pushService: PushService, searchService: SearchService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
         self.pushService = pushService
