@@ -79,12 +79,6 @@ class TeamAtEventViewController: ContainerViewController {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        errorRecorder.log("Team@Event: Event %@ | Team %@", [eventKey, teamKey])
-    }
-
     // MARK: - Private Methods
 
     @objc private func pushEvent() {

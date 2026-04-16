@@ -149,13 +149,11 @@ extension Event {
     var startDateParsed: Date? { APIEventDateFormatter.shared.date(from: startDate) }
     var endDateParsed: Date? { APIEventDateFormatter.shared.date(from: endDate) }
 
-    // Ported from TBAProtocols.Locatable (same formula as the old Event entity).
     var locationString: String? {
         let parts = [city, stateProv, country].compactMap { $0 }.filter { !$0.isEmpty }
         return parts.isEmpty ? locationName : parts.joined(separator: ", ")
     }
 
-    // Ported from TBAProtocols.Dateable.
     var dateString: String? {
         guard let start = startDateParsed, let end = endDateParsed else { return nil }
         let calendar = Calendar.current

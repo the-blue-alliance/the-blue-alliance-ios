@@ -57,12 +57,6 @@ class EventsContainerViewController: ContainerViewController {
         setupSearchController()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        errorRecorder.log("Events: %ld", [year])
-    }
-
     // MARK: - Private Methods
 
     private static func eventsTitle(_ event: Event?) -> String {

@@ -1,4 +1,3 @@
-import Firebase
 import MyTBAKit
 import Photos
 import TBAAPI
@@ -72,12 +71,6 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
                 title = fetched.friendlyNameWithYear
             }
         }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        errorRecorder.log("Event: %@", [eventKey])
     }
 
     // MARK: - Interface Methods

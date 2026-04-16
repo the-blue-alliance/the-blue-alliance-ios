@@ -1,6 +1,6 @@
-import Firebase
 import FirebaseAnalytics
 import FirebaseAuth
+import FirebaseCore
 import FirebaseCrashlytics
 import FirebaseMessaging
 import GoogleSignIn
@@ -48,7 +48,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     let pasteboard = UIPasteboard.general
     let photoLibrary = PHPhotoLibrary.shared()
-    lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
     var api: TBAAPI!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
@@ -57,11 +56,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return PushService(errorRecorder: errorRecorder,
                            myTBA: myTBA,
                            retryService: RetryService())
-    }()
-    lazy var remoteConfigService: RemoteConfigService = {
-        return RemoteConfigService(errorRecorder: errorRecorder,
-                                   remoteConfig: remoteConfig,
-                                   retryService: RetryService())
     }()
     lazy var statusService: StatusService = {
         return StatusService(errorRecorder: errorRecorder,
@@ -79,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // before anything else touches the app group.
         LegacyCoreDataCleanup.run(userDefaults: userDefaults)
 
+        // Delete our old Refreshable keys - not important to us anymore
         userDefaults.removeObject(forKey: "successful_refresh_keys")
 
         AppDelegate.setupAppearance()
@@ -128,7 +123,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Kickoff background myTBA, along with setting up delegates
         setupPreviousAuthentication()
 
-        remoteConfigService.registerRetryable(initiallyRetry: true)
         statusService.registerRetryable(initiallyRetry: true)
 
         // Check our minimum app version
@@ -330,14 +324,6 @@ extension AppDelegate: FMSStatusSubscribable {
 extension Messaging: FCMTokenProvider {}
 
 private class TBAErrorRecorder: ErrorRecorder {
-
-    func log(_ format: String, _ args: [CVarArg]) {
-        #if DEBUG
-        print(String(format: format, arguments: args))
-        #else
-        Crashlytics.crashlytics().log(format: format, arguments: getVaList(args))
-        #endif
-    }
 
     func record(_ error: Error) {
         #if DEBUG

@@ -93,22 +93,8 @@ extension PushService: MessagingDelegate {
 extension PushService: UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // Called when we're in the foreground and we recieve a notification
-        // Show all notifications in the foreground
-        print("Foreground push notification")
-        print(notification.request.content.userInfo)
+        // Show all notifications in the foreground.
         completionHandler([.alert, .badge, .sound])
-    }
-
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        // Called when we click a notification
-        // TODO: Push to view controllers from notification
-        let userInfo = response.notification.request.content.userInfo
-        print("Push notification")
-        print(userInfo)
-
-        // Handle being launched from a push notification
-        completionHandler()
     }
 
 }
