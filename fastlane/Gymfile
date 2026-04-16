@@ -1,3 +1,4 @@
 scheme("The Blue Alliance")
 configuration("Release")
 silent(true)
+xcargs("-skipPackagePluginValidation OTHER_SWIFT_FLAGS='$(inherited) -Xllvm -sil-disable-pass=copy-propagation'")

@@ -66,6 +66,7 @@ platform :ios do
       match(
         git_url: "#{ENV["MATCH_GIT_REPO"]}",
         keychain_name: "fastlane_tmp_keychain",
+        keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"],
         app_identifier: ["com.the-blue-alliance.tba", "com.the-blue-alliance.tba.spotlight-index"]
       )
     else
