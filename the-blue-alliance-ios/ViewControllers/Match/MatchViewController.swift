@@ -62,12 +62,6 @@ class MatchViewController: MyTBAContainerViewController {
         loadMatchAndEvent()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        errorRecorder.log("Match: %@", [matchKey])
-    }
-
     private func loadMatchAndEvent() {
         Task { @MainActor in
             async let matchTask = try? await dependencies.api.match(key: matchKey)

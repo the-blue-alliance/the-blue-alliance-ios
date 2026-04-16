@@ -1,4 +1,3 @@
-import Firebase
 import Foundation
 import TBAAPI
 import UIKit
@@ -55,18 +54,6 @@ class YearSelectViewController: ContainerViewController {
         eventWeekSelectViewController?.delegate = delegate
 
         navigationController?.viewControllers = [self, eventWeekSelectViewController!]
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        var logString = "Years: Year: %ld | Years: %@"
-        var parameters: [CVarArg] = [year, years]
-        if let week = week {
-            logString.append(" | Week: %@")
-            parameters.append(week.key)
-        }
-        errorRecorder.log(logString, parameters)
     }
 
     // MARK: - Private Methods

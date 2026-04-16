@@ -57,14 +57,6 @@ class TeamAtDistrictViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        errorRecorder.log("Team@District: District %@ | Team %@", [districtKey, teamKey])
-    }
-
     // MARK: - Private Methods
 
     @objc private func pushTeam() {

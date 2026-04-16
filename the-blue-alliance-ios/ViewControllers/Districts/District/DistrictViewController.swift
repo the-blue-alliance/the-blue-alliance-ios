@@ -57,12 +57,6 @@ class DistrictViewController: ContainerViewController {
         super.viewDidLoad()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        errorRecorder.log("District: %@", [district.key])
-    }
-
 }
 
 extension DistrictViewController: EventsListViewControllerDelegate {

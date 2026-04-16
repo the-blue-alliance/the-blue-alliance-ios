@@ -1,4 +1,3 @@
-import FirebaseAnalytics
 import Foundation
 import TBAAPI
 import UIKit
@@ -219,13 +218,6 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         }
 
         if let urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
-            if case .webcast(let webcast) = item {
-                Analytics.logEvent("watch_webcast", parameters: [
-                    "event": eventKey,
-                    "webcast_channel": webcast.channel,
-                    "webcast_type": webcast.typeString
-                ])
-            }
             urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }

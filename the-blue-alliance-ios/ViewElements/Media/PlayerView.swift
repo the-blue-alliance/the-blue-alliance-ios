@@ -1,9 +1,12 @@
 import AVKit
 import Foundation
 import PureLayout
-import TBAProtocols
 import UIKit
 import YouTubeiOSPlayerHelper
+
+protocol Playable {
+    var youtubeKey: String? { get }
+}
 
 class PlayerView: UIView {
 

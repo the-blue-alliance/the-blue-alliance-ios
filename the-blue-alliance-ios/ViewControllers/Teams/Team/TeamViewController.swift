@@ -87,12 +87,6 @@ class TeamViewController: HeaderContainerViewController {
         loadTeamData()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        errorRecorder.log("Team: %@", [teamKey])
-    }
-
     // MARK: - Private
 
     private func loadTeamData() {

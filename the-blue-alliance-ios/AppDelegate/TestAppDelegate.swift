@@ -1,4 +1,4 @@
-import Firebase
+import FirebaseCore
 import Foundation
 import UIKit
 

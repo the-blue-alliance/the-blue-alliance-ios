@@ -1,7 +1,6 @@
 import Foundation
 import PureLayout
 import TBAAPI
-import TBAProtocols
 import UIKit
 
 class MatchInfoViewController: TBAViewController, Refreshable {
