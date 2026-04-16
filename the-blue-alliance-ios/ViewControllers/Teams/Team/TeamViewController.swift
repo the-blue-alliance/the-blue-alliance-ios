@@ -204,15 +204,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Components.Schemas.Event) {
-        // Phase 3b: TeamAtEventViewController is still managed. Look up the
-        // managed event and a managed Team for it — Phase 3b-next rewrites
-        // TeamAtEventViewController to take keys and removes this bridge.
-        guard let managedEvent = Event.findOrFetch(in: persistentContainer.viewContext,
-                                                   matching: Event.predicate(key: event.key)) else {
-            return
-        }
-        let managedTeam = Team.insert(teamKey, in: persistentContainer.viewContext)
-        let teamAtEventViewController = TeamAtEventViewController(team: managedTeam, event: managedEvent, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 }

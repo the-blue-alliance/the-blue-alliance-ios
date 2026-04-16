@@ -147,8 +147,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
 extension EventViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
-        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+        pushTeamAtEvent(teamKey: team.key)
     }
 
 }
@@ -156,9 +155,11 @@ extension EventViewController: TeamsViewControllerDelegate {
 extension EventViewController: EventRankingsViewControllerDelegate {
 
     func rankingSelected(_ ranking: Components.Schemas.EventRanking.RankingsPayloadPayload) {
-        // Team lookup is still managed — Phase 3 swaps this for an API-driven path.
-        let team = Team.insert(ranking.teamKey, in: persistentContainer.viewContext)
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        pushTeamAtEvent(teamKey: ranking.teamKey)
+    }
+
+    private func pushTeamAtEvent(teamKey: String) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: Int(event.year), myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

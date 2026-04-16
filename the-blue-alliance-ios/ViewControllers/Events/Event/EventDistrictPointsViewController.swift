@@ -53,9 +53,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func teamSelected(teamKey: String) {
-        // Team lookup is still managed — Phase 3 swaps this for an API-driven path.
-        let team = Team.insert(teamKey, in: persistentContainer.viewContext)
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: Int(event.year), myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

@@ -73,7 +73,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
     func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.team.key, eventKey: eventPoints.event.key, year: Int(eventPoints.event.year), myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

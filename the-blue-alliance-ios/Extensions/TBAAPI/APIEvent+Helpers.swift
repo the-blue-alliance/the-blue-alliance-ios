@@ -95,6 +95,14 @@ extension Components.Schemas.Event {
         return !website.isEmpty
     }
 
+    // Event is currently going on, based on its start and end dates.
+    var isHappeningNow: Bool {
+        guard let start = startDateParsed, let end = endDateParsed else { return false }
+        let now = Date()
+        let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: end) ?? end
+        return now >= start && now <= endOfDay
+    }
+
     // Ported from TBAData.Event.isHappeningThisWeek: the event is going on
     // now or starts within the next week.
     var isHappeningThisWeek: Bool {
