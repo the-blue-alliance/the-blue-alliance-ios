@@ -1,9 +1,6 @@
-import CoreData
 import Foundation
 import MyTBAKit
 import Photos
-import TBAData
-import TBAKit
 import UIKit
 
 protocol RootChildController {
@@ -61,7 +58,6 @@ protocol RootController {
     var pasteboard: UIPasteboard? { get }
     var photoLibrary: PHPhotoLibrary? { get }
     var pushService: PushService { get }
-    var searchService: SearchService { get }
     var urlOpener: URLOpener { get }
     var statusService: StatusService { get }
     var dependencies: Dependencies { get }
@@ -74,7 +70,6 @@ extension RootController {
                                              myTBAStores: myTBAStores,
                                              pasteboard: pasteboard,
                                              photoLibrary: photoLibrary,
-                                             searchService: searchService,
                                              statusService: statusService,
                                              urlOpener: urlOpener,
                                              dependencies: dependencies)
@@ -85,7 +80,6 @@ extension RootController {
                                             myTBAStores: myTBAStores,
                                             pasteboard: pasteboard,
                                             photoLibrary: photoLibrary,
-                                            searchService: searchService,
                                             statusService: statusService,
                                             urlOpener: urlOpener,
                                             dependencies: dependencies)
@@ -103,7 +97,6 @@ extension RootController {
         return SettingsViewController(fcmTokenProvider: fcmTokenProvider,
                                       myTBA: myTBA,
                                       pushService: pushService,
-                                      searchService: searchService,
                                       urlOpener: urlOpener,
                                       dependencies: dependencies)
     }

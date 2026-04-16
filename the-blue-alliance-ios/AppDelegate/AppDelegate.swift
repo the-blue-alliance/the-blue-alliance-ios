@@ -1,5 +1,4 @@
 import CoreData
-import CoreSpotlight
 import Firebase
 import FirebaseAnalytics
 import FirebaseAuth
@@ -8,7 +7,6 @@ import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
 import Photos
-import Search
 import TBAAPI
 import TBAData
 import TBAKit
@@ -40,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
                                        pushService: pushService,
-                                       searchService: searchService,
                                        statusService: statusService,
                                        urlOpener: urlOpener,
                                        dependencies: dependencies)
@@ -52,7 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                        pasteboard: pasteboard,
                                        photoLibrary: photoLibrary,
                                        pushService: pushService,
-                                       searchService: searchService,
                                        statusService: statusService,
                                        urlOpener: urlOpener,
                                        dependencies: dependencies)
@@ -71,14 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let subscriptionsStore = SubscriptionsStore()
     lazy var myTBAStores: MyTBAStores = MyTBAStores(favorites: favoritesStore, subscriptions: subscriptionsStore)
     private let errorRecorder = TBAErrorRecorder()
-    lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
-        let description = persistentContainer.persistentStoreDescriptions.first!
-        let coordinator = persistentContainer.persistentStoreCoordinator
-        let spotlightDelegate = TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
-                                                                 coordinator: coordinator)
-        spotlightDelegate.startSpotlightIndexing()
-        return spotlightDelegate
-    }()
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
         return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
@@ -111,21 +99,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                    remoteConfig: remoteConfig,
                                    retryService: RetryService())
     }()
-    lazy var searchService: SearchService = {
-        return SearchService(application: UIApplication.shared,
-                             errorRecorder: errorRecorder,
-                             indexDelegate: indexDelegate,
-                             persistentContainer: persistentContainer,
-                             searchIndex: CSSearchableIndex.default(),
-                             statusService: statusService,
-                             tbaKit: tbaKit,
-                             userDefaults: userDefaults)
-    }()
     lazy var statusService: StatusService = {
         return StatusService(errorRecorder: errorRecorder,
-                             persistentContainer: persistentContainer,
-                             retryService: RetryService(),
-                             tbaKit: tbaKit)
+                             api: api,
+                             retryService: RetryService())
     }()
 
     // A completion block for registering for remote notifications
@@ -192,8 +169,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     AppDelegate.showFatalError(error, in: window)
                 }
             } else {
-                self.searchService.refresh()
-
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
                     self.remoteConfigService.registerRetryable(initiallyRetry: true)
@@ -403,7 +378,7 @@ extension AppDelegate {
 
 extension AppDelegate: StatusSubscribable {
 
-    func statusChanged(status: Status) {
+    func statusChanged(status: AppStatus) {
         if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
             showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
         }

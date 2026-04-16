@@ -1,6 +1,5 @@
 import CoreData
 import Foundation
-import Search
 import TBAOperation
 
 class PersistentContainerOperation: TBAOperation {

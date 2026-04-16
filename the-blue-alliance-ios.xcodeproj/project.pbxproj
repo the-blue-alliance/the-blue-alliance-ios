@@ -18,18 +18,15 @@
 		1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */; };
 		1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */; };
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
-		14F51704239AA70A00D9240F /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F51703239AA70A00D9240F /* SearchService.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
 		514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */; };
 		920240072AEB6AAD0003D118 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 920240062AEB6AAD0003D118 /* PureLayout */; };
 		920240092AEB6AC30003D118 /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 920240082AEB6AC30003D118 /* TBAOperation */; };
-		9202400B2AEB6ACF0003D118 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400A2AEB6ACF0003D118 /* Search */; };
 		9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400C2AEB6ADC0003D118 /* MyTBAKit */; };
 		9202400F2AEB6ADC0003D118 /* TBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400E2AEB6ADC0003D118 /* TBAKit */; };
 		920240112AEB6AE60003D118 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 920240102AEB6AE60003D118 /* TBAData */; };
-		9204401526D2B65D00B94661 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 9204401426D2B65D00B94661 /* Search */; };
 		9204401726D2B68A00B94661 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 9204401626D2B68A00B94661 /* TBAData */; };
 		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
@@ -75,13 +72,13 @@
 		9263922A27F10A53003C302A /* EventInsightsConfigurator2022.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263922927F10A53003C302A /* EventInsightsConfigurator2022.swift */; };
 		926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */; };
 		927246C32AFFFC9300EF7796 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927246C22AFFFC9300EF7796 /* AuthHelper.swift */; };
-		927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041800000003 /* TBAAPIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000002 /* TBAAPIError.swift */; };
 		5EC0D41A2C26041800000005 /* TBAAPI+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */; };
 		5EC0D41A2C26041800000007 /* APIWebcast+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041800000006 /* APIWebcast+Helpers.swift */; };
 		5EC0D41A2C26041900000002 /* APIMatch+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041900000001 /* APIMatch+Helpers.swift */; };
+		5EC0D41A2C26041C00000002 /* TBAAPI+Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000001 /* TBAAPI+Status.swift */; };
+		5EC0D41A2C26041C00000004 /* TBAAPI+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000003 /* TBAAPI+Search.swift */; };
 		5EC0D41A2C26041A00000002 /* APITeam+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000001 /* APITeam+Helpers.swift */; };
 		5EC0D41A2C26041A00000004 /* TBAAPI+Teams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000003 /* TBAAPI+Teams.swift */; };
 		5EC0D41A2C26041B00000002 /* TBAAPI+Districts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* TBAAPI+Districts.swift */; };
@@ -208,7 +205,6 @@
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63E9A2BA91B4F0025CC03 /* MyTBAKit */; };
-		92F63E9E2BA91BCA0025CC03 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63E9D2BA91BCA0025CC03 /* Search */; };
 		92F63EA12BA91BD80025CC03 /* TBAData in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EA02BA91BD80025CC03 /* TBAData */; };
 		92F63EA42BA91BEC0025CC03 /* TBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EA32BA91BEC0025CC03 /* TBAKit */; };
 		92F63EA72BA91BFB0025CC03 /* TBAOperation in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EA62BA91BFB0025CC03 /* TBAOperation */; };
@@ -255,13 +251,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		927309A123DC0F26006145E0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9273099B23DC0F26006145E0;
-			remoteInfo = "TBA Spotlight Index Extension";
-		};
 		92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
@@ -271,19 +260,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		927309A323DC0F26006145E0 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
@@ -297,7 +273,6 @@
 		14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModel.swift; sourceTree = "<group>"; };
 		1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatCellViewModel.swift; sourceTree = "<group>"; };
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
-		14F51703239AA70A00D9240F /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
@@ -327,7 +302,6 @@
 		924AFD782171AB1A00D7BE7E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
 		924BDD7E26D2A95D008BE7D2 /* MyTBAKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MyTBAKit; sourceTree = "<group>"; };
 		924BDD7F26D2ABAF008BE7D2 /* TBAData */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TBAData; sourceTree = "<group>"; };
-		924BDD8026D2AD29008BE7D2 /* Search */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Search; sourceTree = "<group>"; };
 		925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCell.swift; sourceTree = "<group>"; };
 		925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventAllianceTableViewCell.xib; sourceTree = "<group>"; };
 		9255EB6C209AC9760006A745 /* RetryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryService.swift; sourceTree = "<group>"; };
@@ -342,16 +316,14 @@
 		9263922927F10A53003C302A /* EventInsightsConfigurator2022.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2022.swift; sourceTree = "<group>"; };
 		926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA.swift"; sourceTree = "<group>"; };
 		927246C22AFFFC9300EF7796 /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
-		9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TBA Spotlight Index Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		927309A823DC0F5F006145E0 /* spotlight-index.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "spotlight-index.entitlements"; sourceTree = "<group>"; };
-		927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
-		927309AB23DC0F68006145E0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		927309B023DCD69D006145E0 /* miket.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = miket.gpx; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041800000002 /* TBAAPIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAAPIError.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TBAAPI+Events.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041800000006 /* APIWebcast+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIWebcast+Helpers.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041900000001 /* APIMatch+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIMatch+Helpers.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26041C00000001 /* TBAAPI+Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TBAAPI+Status.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26041C00000003 /* TBAAPI+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TBAAPI+Search.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041A00000001 /* APITeam+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APITeam+Helpers.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041A00000003 /* TBAAPI+Teams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TBAAPI+Teams.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26041B00000001 /* TBAAPI+Districts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TBAAPI+Districts.swift"; sourceTree = "<group>"; };
@@ -527,20 +499,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9273099923DC0F26006145E0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9204401726D2B68A00B94661 /* TBAData in Frameworks */,
-				9204401526D2B65D00B94661 /* Search in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92942D8F1E2154DA008E79CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9202400B2AEB6ACF0003D118 /* Search in Frameworks */,
 				92C5FBDC2B0037E10006AE48 /* YouTubeiOSPlayerHelper in Frameworks */,
 				924BDD8C26D2B366008BE7D2 /* FirebaseAuth in Frameworks */,
 				924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */,
@@ -556,7 +518,6 @@
 				92F63EAD2BA91C170025CC03 /* TBAUtils in Frameworks */,
 				9202400F2AEB6ADC0003D118 /* TBAKit in Frameworks */,
 				92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */,
-				92F63E9E2BA91BCA0025CC03 /* Search in Frameworks */,
 				92C5FBDF2B0038250006AE48 /* Agrume in Frameworks */,
 				92F63EAA2BA91C070025CC03 /* TBAProtocols in Frameworks */,
 				92F63EA42BA91BEC0025CC03 /* TBAKit in Frameworks */,
@@ -754,15 +715,6 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		927309A923DC0F68006145E0 /* spotlight-index */ = {
-			isa = PBXGroup;
-			children = (
-				927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */,
-				927309AB23DC0F68006145E0 /* Info.plist */,
-			);
-			path = "spotlight-index";
-			sourceTree = SOURCE_ROOT;
-		};
 		927309AF23DCD69D006145E0 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
@@ -838,9 +790,7 @@
 			children = (
 				92A7B62E26D01B9E00EECCC9 /* Packages */,
 				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
-				927309A823DC0F5F006145E0 /* spotlight-index.entitlements */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
-				927309A923DC0F68006145E0 /* spotlight-index */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
 				927309AF23DCD69D006145E0 /* Debug */,
 				92942D931E2154DA008E79CA /* Products */,
@@ -852,7 +802,6 @@
 			children = (
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
 				92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */,
-				9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1058,6 +1007,8 @@
 				5EC0D41A2C26041A00000001 /* APITeam+Helpers.swift */,
 				5EC0D41A2C26041A00000003 /* TBAAPI+Teams.swift */,
 				5EC0D41A2C26041B00000001 /* TBAAPI+Districts.swift */,
+				5EC0D41A2C26041C00000001 /* TBAAPI+Status.swift */,
+				5EC0D41A2C26041C00000003 /* TBAAPI+Search.swift */,
 			);
 			path = TBAAPI;
 			sourceTree = "<group>";
@@ -1065,7 +1016,6 @@
 		92A7B62E26D01B9E00EECCC9 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				924BDD8026D2AD29008BE7D2 /* Search */,
 				924BDD7F26D2ABAF008BE7D2 /* TBAData */,
 				924BDD7E26D2A95D008BE7D2 /* MyTBAKit */,
 				92775E3A26D0209800539304 /* TBAKit */,
@@ -1282,7 +1232,6 @@
 				5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */,
 				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
 				92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */,
-				14F51703239AA70A00D9240F /* SearchService.swift */,
 				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
@@ -1438,27 +1387,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9273099B23DC0F26006145E0 /* TBA Spotlight Index Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 927309A523DC0F26006145E0 /* Build configuration list for PBXNativeTarget "TBA Spotlight Index Extension" */;
-			buildPhases = (
-				9273099823DC0F26006145E0 /* Sources */,
-				9273099923DC0F26006145E0 /* Frameworks */,
-				9273099A23DC0F26006145E0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "TBA Spotlight Index Extension";
-			packageProductDependencies = (
-				9204401426D2B65D00B94661 /* Search */,
-				9204401626D2B68A00B94661 /* TBAData */,
-			);
-			productName = "TBA Spotlight Index Extension";
-			productReference = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		92942D911E2154DA008E79CA /* The Blue Alliance */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
@@ -1466,13 +1394,11 @@
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
-				927309A323DC0F26006145E0 /* Embed App Extensions */,
 				924E826C208FE7D20053247C /* Run FirebaseCrashlytics */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				927309A223DC0F26006145E0 /* PBXTargetDependency */,
 			);
 			name = "The Blue Alliance";
 			packageProductDependencies = (
@@ -1484,14 +1410,12 @@
 				924BDD9426D2B391008BE7D2 /* GoogleSignIn */,
 				920240062AEB6AAD0003D118 /* PureLayout */,
 				920240082AEB6AC30003D118 /* TBAOperation */,
-				9202400A2AEB6ACF0003D118 /* Search */,
 				9202400C2AEB6ADC0003D118 /* MyTBAKit */,
 				9202400E2AEB6ADC0003D118 /* TBAKit */,
 				920240102AEB6AE60003D118 /* TBAData */,
 				92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */,
 				92C5FBDE2B0038250006AE48 /* Agrume */,
 				92F63E9A2BA91B4F0025CC03 /* MyTBAKit */,
-				92F63E9D2BA91BCA0025CC03 /* Search */,
 				92F63EA02BA91BD80025CC03 /* TBAData */,
 				92F63EA32BA91BEC0025CC03 /* TBAKit */,
 				92F63EA62BA91BFB0025CC03 /* TBAOperation */,
@@ -1572,7 +1496,6 @@
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
 				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
-				92F63E9C2BA91BCA0025CC03 /* XCLocalSwiftPackageReference "Packages/Search" */,
 				92F63E9F2BA91BD80025CC03 /* XCLocalSwiftPackageReference "Packages/TBAData" */,
 				92F63EA22BA91BEC0025CC03 /* XCLocalSwiftPackageReference "Packages/TBAKit" */,
 				92F63EA52BA91BFB0025CC03 /* XCLocalSwiftPackageReference "Packages/TBAOperation" */,
@@ -1585,20 +1508,12 @@
 			projectRoot = "";
 			targets = (
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
-				9273099B23DC0F26006145E0 /* TBA Spotlight Index Extension */,
 				92D6483920BE4CB8008F0DB3 /* tba-unit-tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		9273099A23DC0F26006145E0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92942D901E2154DA008E79CA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1671,14 +1586,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		9273099823DC0F26006145E0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92942D8E1E2154DA008E79CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1691,6 +1598,8 @@
 				5EC0D41A2C26041A00000002 /* APITeam+Helpers.swift in Sources */,
 				5EC0D41A2C26041A00000004 /* TBAAPI+Teams.swift in Sources */,
 				5EC0D41A2C26041B00000002 /* TBAAPI+Districts.swift in Sources */,
+				5EC0D41A2C26041C00000002 /* TBAAPI+Status.swift in Sources */,
+				5EC0D41A2C26041C00000004 /* TBAAPI+Search.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
 				5EC0D41A2C26041700000002 /* APIEvent+Helpers.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
@@ -1762,7 +1671,6 @@
 				9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */,
 				928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */,
 				304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */,
-				14F51704239AA70A00D9240F /* SearchService.swift in Sources */,
 				92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
 				92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */,
@@ -1883,11 +1791,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		927309A223DC0F26006145E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9273099B23DC0F26006145E0 /* TBA Spotlight Index Extension */;
-			targetProxy = 927309A123DC0F26006145E0 /* PBXContainerItemProxy */;
-		};
 		92D6484020BE4CB8008F0DB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
@@ -1908,70 +1811,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		927309A623DC0F26006145E0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "spotlight-index.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "spotlight-index/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.spotlight-index";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Debug;
-		};
-		927309A723DC0F26006145E0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "spotlight-index.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "spotlight-index/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.spotlight-index";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Release;
-		};
 		92942DA41E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2220,15 +2059,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		927309A523DC0F26006145E0 /* Build configuration list for PBXNativeTarget "TBA Spotlight Index Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				927309A623DC0F26006145E0 /* Debug */,
-				927309A723DC0F26006145E0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2266,10 +2096,6 @@
 		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/MyTBAKit;
-		};
-		92F63E9C2BA91BCA0025CC03 /* XCLocalSwiftPackageReference "Packages/Search" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/Search;
 		};
 		92F63E9F2BA91BD80025CC03 /* XCLocalSwiftPackageReference "Packages/TBAData" */ = {
 			isa = XCLocalSwiftPackageReference;
@@ -2346,10 +2172,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TBAOperation;
 		};
-		9202400A2AEB6ACF0003D118 /* Search */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Search;
-		};
 		9202400C2AEB6ADC0003D118 /* MyTBAKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MyTBAKit;
@@ -2359,14 +2181,6 @@
 			productName = TBAKit;
 		};
 		920240102AEB6AE60003D118 /* TBAData */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TBAData;
-		};
-		9204401426D2B65D00B94661 /* Search */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Search;
-		};
-		9204401626D2B68A00B94661 /* TBAData */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TBAData;
 		};
@@ -2417,10 +2231,6 @@
 		92F63E9A2BA91B4F0025CC03 /* MyTBAKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MyTBAKit;
-		};
-		92F63E9D2BA91BCA0025CC03 /* Search */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Search;
 		};
 		92F63EA02BA91BD80025CC03 /* TBAData */ = {
 			isa = XCSwiftPackageProductDependency;
