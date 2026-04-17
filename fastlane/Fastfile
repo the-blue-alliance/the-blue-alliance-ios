@@ -30,6 +30,17 @@ platform :ios do
     set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV["TBA_API_KEY"])
   end
 
+  desc "Download dSYMs for a specific build. Usage: fastlane dsyms version:3.2.3 build:2"
+  lane :dsyms do |options|
+    setup_api
+    download_dsyms(
+      version: options[:version],
+      build_number: options[:build],
+      app_identifier: "com.the-blue-alliance.tba",
+      output_directory: options[:output] || "./dsyms"
+    )
+  end
+
   desc "Configure code signing"
   private_lane :configure_code_signing do
     if is_ci?
@@ -142,7 +153,10 @@ platform :ios do
       code_signing_identity: "iPhone Distribution"
     )
     gym(buildlog_path: "logs")
-    # upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
+    upload_symbols_to_crashlytics(
+      dsym_path: lane_context[SharedValues::DSYM_OUTPUT_PATH],
+      gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist"
+    )
   end
 
   ## End Shipping Lanes for Release Lanes ##
