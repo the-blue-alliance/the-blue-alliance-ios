@@ -1,1 +1,1 @@
-Hey y'all - this update fixes a launch-time crash on iOS 26.4 and a crash when viewing teams with no rookie year on file. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes a crash in v3.2.3 in some views like matches. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
