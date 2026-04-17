@@ -54,13 +54,11 @@ extension DistrictsContainerViewController: NavigationTitleDelegate {
 
         let nav = UINavigationController(rootViewController: selectTableViewController)
         nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
+            self?.navigationController?.dismiss(animated: true)
+        })
 
-        navigationController?.present(nav, animated: true, completion: nil)
-    }
-
-    @objc private func dismissSelectYear() {
-        navigationController?.dismiss(animated: true, completion: nil)
+        navigationController?.present(nav, animated: true)
     }
 
 }

@@ -64,7 +64,9 @@ class TeamViewController: HeaderContainerViewController {
         eventsViewController.delegate = self
         mediaViewController.delegate = self
 
-        teamHeaderView.yearButton.addTarget(self, action: #selector(showSelectYear), for: .touchUpInside)
+        teamHeaderView.yearButton.addAction(UIAction { [weak self] _ in
+            self?.showSelectYear()
+        }, for: .touchUpInside)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -122,7 +124,7 @@ class TeamViewController: HeaderContainerViewController {
         navigationSubtitle = year?.description ?? "----"
     }
 
-    @objc private func showSelectYear() {
+    private func showSelectYear() {
         guard !yearsParticipated.isEmpty else { return }
 
         let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, dependencies: dependencies)
@@ -131,13 +133,11 @@ class TeamViewController: HeaderContainerViewController {
 
         let nav = UINavigationController(rootViewController: selectTableViewController)
         nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
+            self?.navigationController?.dismiss(animated: true)
+        })
 
-        navigationController?.present(nav, animated: true, completion: nil)
-    }
-
-    @objc private func dismissSelectYear() {
-        navigationController?.dismiss(animated: true, completion: nil)
+        navigationController?.present(nav, animated: true)
     }
 
 }

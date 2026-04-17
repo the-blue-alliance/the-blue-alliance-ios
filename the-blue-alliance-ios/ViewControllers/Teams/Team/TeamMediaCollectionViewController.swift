@@ -188,7 +188,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         return media.isEmpty
     }
 
-    @objc func refresh() {
+    func refresh() {
         guard let year = year else { return }
         runRefresh { [weak self] in
             guard let self else { return }

@@ -281,7 +281,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     var isDataSourceEmpty: Bool { eventStatus == nil }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             async let teamTask = try? await self.dependencies.api.team(key: self.teamKey)

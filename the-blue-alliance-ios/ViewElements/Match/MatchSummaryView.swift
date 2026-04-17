@@ -205,7 +205,10 @@ class MatchSummaryView: UIView {
 
         button.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
 
-        button.addTarget(self, action: #selector(teamPressed(sender:)), for: .touchUpInside)
+        button.addAction(UIAction { [weak self, weak button] _ in
+            guard let button, button.tag != 0 else { return }
+            self?.delegate?.teamPressed(teamNumber: button.tag)
+        }, for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }
@@ -217,11 +220,6 @@ class MatchSummaryView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.label
         return label
-    }
-    
-    @objc private func teamPressed(sender: UIButton) {
-        if sender.tag == 0 { return }
-        delegate?.teamPressed(teamNumber: sender.tag)
     }
     
     private func customAttributedString(text: String, isBold: Bool, isStrikethrough: Bool = false) -> NSMutableAttributedString {
