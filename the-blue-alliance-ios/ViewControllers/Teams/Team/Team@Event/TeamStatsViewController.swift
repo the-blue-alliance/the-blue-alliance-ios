@@ -61,7 +61,7 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Stateful {
 
     var isDataSourceEmpty: Bool { stats == nil }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             let oprs = try await self.dependencies.api.eventOPRs(key: self.eventKey)

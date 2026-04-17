@@ -85,7 +85,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
 
     var isDataSourceEmpty: Bool { allRankings.isEmpty }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey)

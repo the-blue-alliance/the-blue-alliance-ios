@@ -47,15 +47,11 @@ class EventInsightsContainerViewController: ContainerViewController {
 
         let nav = UINavigationController(rootViewController: selectTableViewController)
         nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissFilter))
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
+            self?.navigationController?.dismiss(animated: true)
+        })
 
-        navigationController?.present(nav, animated: true, completion: nil)
-    }
-
-    // MARK: - Interface Actions
-
-    @objc private func dismissFilter() {
-        navigationController?.dismiss(animated: true, completion: nil)
+        navigationController?.present(nav, animated: true)
     }
 
 }

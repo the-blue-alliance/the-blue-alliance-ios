@@ -208,7 +208,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     var isDataSourceEmpty: Bool { team == nil }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             if let fetched = try await self.api.team(key: self.teamKey) {

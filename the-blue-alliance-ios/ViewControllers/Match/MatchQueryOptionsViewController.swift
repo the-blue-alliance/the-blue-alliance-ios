@@ -78,7 +78,9 @@ class MatchQueryOptionsViewController: TBATableViewController {
 
         title = "Match Sort/Filter"
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissMatchQuery))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
+            self?.dismiss(animated: true)
+        })
     }
 
     required init?(coder aDecoder: NSCoder) {
