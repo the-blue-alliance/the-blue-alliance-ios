@@ -67,7 +67,7 @@ class WeekEventsViewController: EventsListViewController {
 
     // MARK: - Refresh
 
-    @objc override func refresh() {
+    override func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             let fetched = try await self.dependencies.api.eventsByYear(self.currentYear)

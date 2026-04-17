@@ -16,9 +16,9 @@ class MyTBAViewController: ContainerViewController {
     private var signInView: UIView! {
         return signInViewController.view
     }
-    private lazy var signOutBarButtonItem: UIBarButtonItem = {
-         return UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(logoutTapped))
-    }()
+    private lazy var signOutBarButtonItem = UIBarButtonItem(title: "Sign Out", primaryAction: UIAction { [weak self] _ in
+        self?.confirmLogout()
+    })
     private var signOutActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
     var isLoggingOut: Bool = false {
@@ -127,13 +127,13 @@ class MyTBAViewController: ContainerViewController {
 
     // MARK: - Interface Methods
 
-    @objc func logoutTapped() {
+    private func confirmLogout() {
         let signOutAlertController = UIAlertController(title: "Log Out?", message: "Are you sure you want to sign out of myTBA?", preferredStyle: .alert)
-        signOutAlertController.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { (_) in
-            self.logout()
+        signOutAlertController.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { [weak self] _ in
+            self?.logout()
         }))
-        signOutAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(signOutAlertController, animated: true, completion: nil)
+        signOutAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(signOutAlertController, animated: true)
     }
 
 }

@@ -280,7 +280,7 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
         await MainActor.run { favoritesStore.replaceAll(with: favorites) }
     }
 
-    @objc func refresh() {
+    func refresh() {
         guard myTBA.isAuthenticated else { return }
         refreshFromRemote()
     }
@@ -329,7 +329,7 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
         await MainActor.run { subscriptionsStore.replaceAll(with: subs) }
     }
 
-    @objc func refresh() {
+    func refresh() {
         guard myTBA.isAuthenticated else { return }
         refreshFromRemote()
     }

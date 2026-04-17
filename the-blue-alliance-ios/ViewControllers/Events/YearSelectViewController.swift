@@ -36,7 +36,9 @@ class YearSelectViewController: ContainerViewController {
 
         selectViewController.delegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction { [weak self] _ in
+            self?.dismiss(animated: true)
+        })
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -57,10 +59,6 @@ class YearSelectViewController: ContainerViewController {
     }
 
     // MARK: - Private Methods
-
-    @objc private func cancelButtonTapped() {
-        dismiss(animated: true, completion: nil)
-    }
 
     private func pushToEventWeekSelect(year: Int) {
         eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, dependencies: dependencies)
@@ -108,17 +106,13 @@ private class EventWeekSelectViewController: ContainerViewController {
         selectViewController.delegate = self
         selectViewController.enableRefreshing()
 
-        rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))]
+        rightBarButtonItems = [UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
+            self?.dismiss(animated: true)
+        })]
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Private Methods
-
-    @objc private func doneButtonTapped() {
-        dismiss(animated: true, completion: nil)
     }
 
 }
@@ -155,7 +149,7 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     override var isDataSourceEmpty: Bool { options.isEmpty }
 
-    @objc override func refresh() {
+    override func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             let events = try await self.dependencies.api.eventsByYear(self.year)

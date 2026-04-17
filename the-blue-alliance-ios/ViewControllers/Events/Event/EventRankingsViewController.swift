@@ -95,7 +95,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     var isDataSourceEmpty: Bool { rankings.isEmpty }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             let response = try await self.dependencies.api.eventRankings(key: self.eventKey)

@@ -70,7 +70,9 @@ extension Refreshable {
 
     func enableRefreshing() {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: Selector(("refresh")), for: .valueChanged)
+        refreshControl.addAction(UIAction { [weak self] _ in
+            self?.refresh()
+        }, for: .valueChanged)
 
         self.refreshControl = refreshControl
     }

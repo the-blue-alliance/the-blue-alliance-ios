@@ -42,14 +42,16 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
             }
         }
     }
-    internal lazy var closeBarButtonItem = UIBarButtonItem(title: "Close",
-                                                           style: .plain,
-                                                           target: self,
-                                                           action: #selector(close))
-    internal lazy var saveBarButtonItem = UIBarButtonItem(title: "Save",
-                                                          style: .done,
-                                                          target: self,
-                                                          action: #selector(save))
+    internal lazy var closeBarButtonItem = UIBarButtonItem(title: "Close", primaryAction: UIAction { [weak self] _ in
+        self?.close()
+    })
+    internal lazy var saveBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(title: "Save", primaryAction: UIAction { [weak self] _ in
+            self?.save()
+        })
+        item.style = .done
+        return item
+    }()
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
     init(subscribableModel: MyTBASubscribable, dependencies: Dependencies) {
@@ -113,7 +115,7 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         confirmClose()
     }
 
-    @objc func save() {
+    func save() {
         isSaving = true
         preferencesTask = Task { @MainActor [weak self] in
             guard let self else { return }
@@ -147,7 +149,7 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         }
     }
 
-    @objc func close() {
+    func close() {
         dismiss(animated: true)
     }
 
