@@ -85,16 +85,22 @@ class TeamViewController: HeaderContainerViewController {
 
     private func loadTeamData() {
         Task { @MainActor in
-            async let teamTask = try? await dependencies.api.team(key: teamKey)
-            async let yearsTask = try? await dependencies.api.teamYearsParticipated(key: teamKey)
-            let (team, years) = await (teamTask, yearsTask)
+            async let teamTask = dependencies.api.team(key: teamKey)
+            async let yearsTask = dependencies.api.teamYearsParticipated(key: teamKey)
 
-            if let team = team ?? nil {
+            // Await in reverse declaration order so async let child tasks are torn
+            // down LIFO; otherwise swift_task_dealloc traps. Workaround for a Swift
+            // 6.1 codegen bug — remove once Swift 6.3 is our minimum.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let years = try? await yearsTask
+            let team = (try? await teamTask) ?? nil
+
+            if let team {
                 self.team = team
                 self.navigationTitle = team.teamNumberNickname
                 self.infoViewController.apply(team: team)
             }
-            if let years = years ?? nil {
+            if let years {
                 self.yearsParticipated = years.sorted().reversed()
                 if year == nil {
                     year = Self.latestYear(currentSeason: statusService.currentSeason, years: yearsParticipated)

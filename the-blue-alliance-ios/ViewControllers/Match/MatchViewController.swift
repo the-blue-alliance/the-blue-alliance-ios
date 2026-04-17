@@ -56,17 +56,23 @@ class MatchViewController: MyTBAContainerViewController {
 
     private func loadMatchAndEvent() {
         Task { @MainActor in
-            async let matchTask = try? await dependencies.api.match(key: matchKey)
-            async let eventTask = try? await dependencies.api.event(key: MatchKey.eventKey(from: matchKey))
-            let (match, event) = await (matchTask, eventTask)
+            async let matchTask = dependencies.api.match(key: matchKey)
+            async let eventTask = dependencies.api.event(key: MatchKey.eventKey(from: matchKey))
 
-            if let match = match ?? nil {
+            // Await in reverse declaration order so async let child tasks are torn
+            // down LIFO; otherwise swift_task_dealloc traps. Workaround for a Swift
+            // 6.1 codegen bug — remove once Swift 6.3 is our minimum.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let event = try? await eventTask
+            let match = (try? await matchTask) ?? nil
+
+            if let match {
                 self.match = match
                 self.navigationTitle = match.friendlyName
                 self.infoViewController.apply(match: match)
                 self.breakdownViewController.apply(match: match)
             }
-            if let event = event ?? nil {
+            if let event {
                 self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
             }
         }
