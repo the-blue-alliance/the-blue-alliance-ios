@@ -6,9 +6,6 @@ import UIKit
 class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
 
     private let eventKey: String
-
-    // Loaded from TBAAPI after init; used for nav title + for the event struct
-    // passed to the detail container VCs (alliances/awards/etc.).
     private var event: Event?
 
     private(set) var infoViewController: EventInfoViewController
@@ -22,20 +19,36 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
     // MARK: - Init
 
-    init(eventKey: String, dependencies: Dependencies) {
-        self.eventKey = eventKey
+    convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
+        self.init(eventKey: eventKey, event: nil, eventName: name, dependencies: dependencies)
+    }
 
-        infoViewController = EventInfoViewController(eventKey: eventKey, dependencies: dependencies)
+    convenience init(event: Event, dependencies: Dependencies) {
+        self.init(eventKey: event.key, event: event, eventName: nil, dependencies: dependencies)
+    }
+
+    private init(eventKey: String, event: Event?, eventName: String?, dependencies: Dependencies) {
+        self.eventKey = eventKey
+        self.event = event
+
+        if let event {
+            infoViewController = EventInfoViewController(event: event, dependencies: dependencies)
+        } else {
+            infoViewController = EventInfoViewController(eventKey: eventKey, name: eventName, dependencies: dependencies)
+        }
         teamsViewController = EventTeamsViewController(eventKey: eventKey, dependencies: dependencies)
         rankingsViewController = EventRankingsViewController(eventKey: eventKey, dependencies: dependencies)
         matchesViewController = MatchesViewController(eventKey: eventKey, dependencies: dependencies)
 
+        let navTitle = event?.friendlyNameWithYear ?? eventKey
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
-                   navigationTitle: eventKey,
+                   navigationTitle: navTitle,
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
-                   
-                   
                    dependencies: dependencies)
+
+        if let event {
+            title = event.friendlyNameWithYear
+        }
 
         infoViewController.delegate = self
         teamsViewController.delegate = self
@@ -61,6 +74,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
             if let fetched = try? await api.event(key: eventKey) {
                 event = fetched
                 title = fetched.friendlyNameWithYear
+                navigationTitle = fetched.friendlyNameWithYear
             }
         }
     }
@@ -113,8 +127,8 @@ extension EventViewController: EventInfoViewControllerDelegate {
 
 extension EventViewController: TeamsListViewControllerDelegate {
 
-    func teamSelected(teamKey: String) {
-        pushTeamAtEvent(teamKey: teamKey)
+    func teamSelected(_ team: Team) {
+        pushTeamAtEvent(teamKey: team.key)
     }
 
 }

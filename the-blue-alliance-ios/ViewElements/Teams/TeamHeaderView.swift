@@ -58,9 +58,8 @@ class TeamHeaderView: UIView {
 
         let stackView = UIStackView(arrangedSubviews: [spacerView, yearButton])
         stackView.axis = .vertical
-        yearButton.autoSetDimension(.width, toSize: 60, relation: .greaterThanOrEqual)
-        yearButton.autoSetDimension(.height, toSize: 30, relation: .greaterThanOrEqual)
         yearButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        yearButton.setContentHuggingPriority(.required, for: .vertical)
         return stackView
     }()
 
@@ -70,6 +69,7 @@ class TeamHeaderView: UIView {
         super.init(frame: .zero)
 
         backgroundColor = UIColor.navigationBarTintColor
+        clipsToBounds = true
         configureView()
 
         addSubview(rootStackView)
@@ -92,22 +92,28 @@ class TeamHeaderView: UIView {
     // MARK: Private Methods
 
     private func configureView() {
-        avatarImageView.image = viewModel.avatar
-        avatarImageView.isHidden = viewModel.avatar == nil
+        let newAvatar = viewModel.avatar
+        let shouldHide = newAvatar == nil
+        let avatarChanged = avatarImageView.image != newAvatar || avatarImageView.isHidden != shouldHide
+
+        if window != nil, avatarChanged {
+            UIView.transition(with: avatarImageView, duration: 0.25, options: .transitionCrossDissolve, animations: {
+                self.avatarImageView.image = newAvatar
+            })
+            UIView.animate(withDuration: 0.25) {
+                self.avatarImageView.isHidden = shouldHide
+            }
+        } else {
+            avatarImageView.image = newAvatar
+            avatarImageView.isHidden = shouldHide
+        }
 
         teamNumberLabel.text = viewModel.teamNumberNickname
 
         teamNameLabel.text = viewModel.nickname
         teamNumberLabel.isHidden = viewModel.nickname == nil
 
-        let yearString: String = {
-            if let year = viewModel.year {
-                return String(year)
-            } else {
-                return "----"
-            }
-        }()
-        yearButton.setTitle(yearString, for: .normal)
+        yearButton.year = viewModel.year
     }
 
     static func teamHeaderLabel() -> UILabel {
@@ -174,11 +180,15 @@ private class AvatarImageView: UIView {
 
 class YearButton: UIButton {
 
-    override open var isHighlighted: Bool {
+    // HIG minimum touch target (44pt) — expanded via hitTest so the visible
+    // button stays compact without making the tappable area too small.
+    private static let minimumTouchTarget: CGFloat = 44
+
+    var year: Int? {
         didSet {
-            UIView.animate(withDuration: 0.125) {
-                self.backgroundColor = self.isHighlighted ? UIColor.lightGray : UIColor.white
-            }
+            var updated = configuration
+            updated?.title = year.map(String.init) ?? "----"
+            configuration = updated
         }
     }
 
@@ -187,36 +197,38 @@ class YearButton: UIButton {
 
         var config = UIButton.Configuration.plain()
         config.baseForegroundColor = UIColor.navigationBarTintColor
+        config.background.backgroundColor = UIColor.white
+        config.cornerStyle = .capsule
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 6)
         config.image = UIImage(systemName: "chevron.down")
+        config.imagePlacement = .trailing
+        config.imagePadding = 2
         config.title = "----"
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
+            let base = UIFont.preferredFont(forTextStyle: .callout).pointSize
+            outgoing.font = UIFont.monospacedDigitSystemFont(ofSize: base, weight: .bold)
             return outgoing
         }
         configuration = config
 
-        tintColor = UIColor.navigationBarTintColor
-        backgroundColor = UIColor.white
-        setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.background.backgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.white
+            button.configuration = updated
+        }
 
-        layer.masksToBounds = true
+        setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        let inset = frame.size.height * 0.5
-        if var config = configuration, config.contentInsets.leading != inset {
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
-            configuration = config
-        }
-
-        layer.cornerRadius = frame.size.height * 0.5
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let dx = max(0, (Self.minimumTouchTarget - bounds.width) / 2)
+        let dy = max(0, (Self.minimumTouchTarget - bounds.height) / 2)
+        return bounds.insetBy(dx: -dx, dy: -dy).contains(point)
     }
 
 }

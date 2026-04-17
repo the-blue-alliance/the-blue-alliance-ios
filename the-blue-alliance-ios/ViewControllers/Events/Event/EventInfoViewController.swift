@@ -32,9 +32,8 @@ private enum EventInfoItem: Hashable {
 class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     private let eventKey: String
+    private let eventName: String?
 
-    // Loaded from TBAAPI in `refresh()`. Until it's loaded the only row we
-    // can render is the title placeholder.
     private var event: Event?
 
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
@@ -43,8 +42,18 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, dependencies: Dependencies) {
+    convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
+        self.init(eventKey: eventKey, event: nil, eventName: name, dependencies: dependencies)
+    }
+
+    convenience init(event: Event, dependencies: Dependencies) {
+        self.init(eventKey: event.key, event: event, eventName: nil, dependencies: dependencies)
+    }
+
+    private init(eventKey: String, event: Event?, eventName: String?, dependencies: Dependencies) {
         self.eventKey = eventKey
+        self.event = event
+        self.eventName = eventName
 
         super.init(style: .grouped, dependencies: dependencies)
     }
@@ -63,6 +72,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
         tableView.dataSource = dataSource
         setupDataSource()
+
+        updateEventInfo()
     }
 
     private func setupDataSource() {
@@ -116,42 +127,36 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
 
-        // Info
         snapshot.appendSections([.title])
         snapshot.appendItems([.title], toSection: .title)
 
-        guard let event else {
-            dataSource.apply(snapshot, animatingDifferences: false)
-            return
-        }
-
-        // Webcasts
-        let webcasts = event.webcasts
-            .sorted { $0.channel > $1.channel } // Sort by name lexicographically
-            .filter { $0.urlString != nil } // Only show linkable webcasts
-            // Only show webcasts with dates on the specified day
-            .filter { webcast in
-                // If webcast is date-less, we can display it
-                guard let date = webcast.dateParsed else { return true }
-                return Calendar.current.isDateInToday(date)
+        if let event {
+            let webcasts = event.webcasts
+                .sorted { $0.channel > $1.channel }
+                .filter { $0.urlString != nil }
+                .filter { webcast in
+                    guard let date = webcast.dateParsed else { return true }
+                    return Calendar.current.isDateInToday(date)
+                }
+                .map { EventInfoItem.webcast($0) }
+            if !webcasts.isEmpty, event.isHappeningThisWeek {
+                snapshot.appendSections([.webcast])
+                snapshot.appendItems(webcasts, toSection: .webcast)
             }
-            .map { EventInfoItem.webcast($0) }
-        if !webcasts.isEmpty, event.isHappeningThisWeek {
-            snapshot.appendSections([.webcast])
-            snapshot.appendItems(webcasts, toSection: .webcast)
         }
 
-        // Details
+        // Detail rows render even before the event loads so the view isn't
+        // a single-row ghost during push. districtPoints is event-dependent
+        // so it only appears once we know the event has a district.
         var detailItems: [EventInfoItem] = [.alliances, .insights, .awards]
-        if event.district != nil {
+        if event?.district != nil {
             detailItems.insert(.districtPoints, at: 1)
         }
         snapshot.appendSections([.detail])
         snapshot.appendItems(detailItems, toSection: .detail)
 
-        // Links
         var linkItems: [EventInfoItem] = [.twitter, .youtube, .chiefDelphi]
-        if event.hasWebsite {
+        if event?.hasWebsite == true {
             linkItems.insert(.website, at: 0)
         }
         snapshot.appendSections([.link])
@@ -166,6 +171,10 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
         if let event {
             cell.viewModel = InfoCellViewModel(event: event)
+        } else if let eventName, !eventName.isEmpty {
+            let year = String(eventKey.prefix(4))
+            let name = year.allSatisfy(\.isNumber) ? "\(year) \(eventName)" : eventName
+            cell.viewModel = InfoCellViewModel(nameString: name, subtitleStrings: [])
         } else {
             cell.viewModel = InfoCellViewModel(nameString: eventKey, subtitleStrings: [])
         }
@@ -227,7 +236,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.event(key: self.eventKey)
+            let fetched = try await self.api.event(key: self.eventKey)
             self.event = fetched
             self.updateEventInfo()
         }

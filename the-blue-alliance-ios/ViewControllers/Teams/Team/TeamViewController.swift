@@ -8,9 +8,9 @@ class TeamViewController: HeaderContainerViewController {
 
     private let teamKey: String
 
-    // Loaded from TBAAPI after init. Nil until the async load completes.
     private var team: Team?
     private var yearsParticipated: [Int] = []
+    private var avatarImage: UIImage?
 
     private let teamHeaderView: TeamHeaderView
 
@@ -31,33 +31,52 @@ class TeamViewController: HeaderContainerViewController {
             if oldValue == year { return }
             eventsViewController.year = year
             mediaViewController.year = year ?? Calendar.current.component(.year, from: Date())
+            avatarImage = nil
             updateInterface()
+            if let year { loadAvatar(year: year) }
         }
     }
 
     // MARK: Init
 
-    init(teamKey: String, dependencies: Dependencies) {
-        self.teamKey = teamKey
+    convenience init(teamKey: String, nickname: String? = nil, dependencies: Dependencies) {
+        self.init(teamKey: teamKey, team: nil, partialNickname: nickname, dependencies: dependencies)
+    }
 
-        // Header starts empty; it's populated once the team struct loads.
-        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(teamNumber: Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0,
+    convenience init(team: Team, dependencies: Dependencies) {
+        self.init(teamKey: team.key, team: team, partialNickname: nil, dependencies: dependencies)
+    }
+
+    private init(teamKey: String, team: Team?, partialNickname: String?, dependencies: Dependencies) {
+        self.teamKey = teamKey
+        self.team = team
+
+        let teamNumber = team?.teamNumber ?? Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0
+        let nickname: String? = {
+            if let team, !team.nickname.isEmpty { return team.nickname }
+            return partialNickname
+        }()
+        let teamNumberNickname = team?.teamNumberNickname ?? "Team \(teamNumber)"
+
+        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(teamNumber: teamNumber,
                                                                  avatar: nil,
-                                                                 nickname: nil,
-                                                                 teamNumberNickname: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+                                                                 nickname: nickname,
+                                                                 teamNumberNickname: teamNumberNickname,
                                                                  year: nil))
 
-        infoViewController = TeamInfoViewController(teamKey: teamKey, dependencies: dependencies)
+        if let team {
+            infoViewController = TeamInfoViewController(team: team, dependencies: dependencies)
+        } else {
+            infoViewController = TeamInfoViewController(teamKey: teamKey, dependencies: dependencies)
+        }
         eventsViewController = TeamEventsViewController(teamKey: teamKey, year: nil, dependencies: dependencies)
         mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: Calendar.current.component(.year, from: Date()), dependencies: dependencies)
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
-            navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+            navigationTitle: teamNumberNickname,
             navigationSubtitle: "----",
             segmentedControlTitles: ["Info", "Events", "Media"],
-            
-            
             dependencies: dependencies
         )
 
@@ -98,7 +117,7 @@ class TeamViewController: HeaderContainerViewController {
             if let team {
                 self.team = team
                 self.navigationTitle = team.teamNumberNickname
-                self.infoViewController.apply(team: team)
+                updateInterface()
             }
             if let years {
                 self.yearsParticipated = years.sorted().reversed()
@@ -122,12 +141,28 @@ class TeamViewController: HeaderContainerViewController {
     private func updateInterface() {
         if let team {
             teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: team.teamNumber,
-                                                           avatar: nil,
+                                                           avatar: avatarImage,
                                                            nickname: team.nickname.isEmpty ? nil : team.nickname,
                                                            teamNumberNickname: team.teamNumberNickname,
                                                            year: year)
         }
         navigationSubtitle = year?.description ?? "----"
+    }
+
+    private func loadAvatar(year: Int) {
+        Task { @MainActor in
+            guard let media = try? await dependencies.api.teamMediaByYear(teamKey: teamKey, year: year) else { return }
+            guard self.year == year else { return }
+            let avatar = media.first(where: { $0._type == .avatar })
+            avatarImage = Self.decodeAvatar(from: avatar)
+            updateInterface()
+        }
+    }
+
+    private static func decodeAvatar(from media: Media?) -> UIImage? {
+        guard let base64 = media?.details?.additionalProperties.value["base64Image"] as? String,
+              let data = Data(base64Encoded: base64) else { return nil }
+        return UIImage(data: data)
     }
 
     private func showSelectYear() {

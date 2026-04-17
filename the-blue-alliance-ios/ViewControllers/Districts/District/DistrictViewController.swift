@@ -50,7 +50,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(eventKey: event.key, dependencies: dependencies)
+        let eventViewController = EventViewController(event: event, dependencies: dependencies)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -62,8 +62,8 @@ extension DistrictViewController: EventsListViewControllerDelegate {
 
 extension DistrictViewController: TeamsListViewControllerDelegate {
 
-    func teamSelected(teamKey: String) {
-        let teamViewController = TeamViewController(teamKey: teamKey, dependencies: dependencies)
+    func teamSelected(_ team: Team) {
+        let teamViewController = TeamViewController(team: team, dependencies: dependencies)
         self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 

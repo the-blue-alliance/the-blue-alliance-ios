@@ -99,14 +99,7 @@ extension EventsContainerViewController: SearchContainer, SearchContainerDelegat
 extension EventsContainerViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(eventKey: event.key,
-                                                      
-                                                      
-                                                      
-                                                      
-                                                      
-                                                      
-                                                      dependencies: dependencies)
+        let eventViewController = EventViewController(event: event, dependencies: dependencies)
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 }

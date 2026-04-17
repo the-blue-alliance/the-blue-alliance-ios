@@ -2,7 +2,7 @@ import TBAAPI
 import UIKit
 
 protocol TeamsListViewControllerDelegate: AnyObject {
-    func teamSelected(teamKey: String)
+    func teamSelected(_ team: Team)
 }
 
 class TeamsListViewController: TBASearchableTableViewController, Refreshable, Stateful {
@@ -93,7 +93,7 @@ class TeamsListViewController: TBASearchableTableViewController, Refreshable, St
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let team = dataSource.itemIdentifier(for: indexPath) else { return }
-        delegate?.teamSelected(teamKey: team.key)
+        delegate?.teamSelected(team)
     }
 
     // MARK: - SearchableController
