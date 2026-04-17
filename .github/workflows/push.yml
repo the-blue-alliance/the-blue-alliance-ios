@@ -12,6 +12,12 @@ jobs:
   test-publish:
     name: Test + Publish
     runs-on: macos-latest
+    env:
+      # Fastlane gym runs `xcodebuild -showBuildSettings` with a tight timeout
+      # (3s → 6s → 12s → 24s, then gives up). On fresh CI runners that's not
+      # enough when there's a large SPM graph to resolve. Bump to 180s first
+      # try so package resolution has room to breathe.
+      FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "180"
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
