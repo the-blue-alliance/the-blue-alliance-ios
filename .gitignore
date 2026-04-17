@@ -104,9 +104,6 @@ fastlane/metadata/trade_representative_contact_information
 fastlane/metadata/review_information
 !fastlane/metadata/review_information/notes.txt
 
-# rbenv
-.ruby-version
-
 ## Environment normalization:
 /.bundle/
 /vendor/bundle
