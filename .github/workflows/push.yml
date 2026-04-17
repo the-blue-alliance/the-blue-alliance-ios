@@ -12,24 +12,10 @@ jobs:
   test-publish:
     name: Test + Publish
     runs-on: macos-latest
-    env:
-      # Fastlane gym runs `xcodebuild -showBuildSettings` with a tight timeout
-      # (3s → 6s → 12s → 24s, then gives up). On fresh CI runners that's not
-      # enough when there's a large SPM graph to resolve. Bump to 180s first
-      # try so package resolution has room to breathe.
-      FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "180"
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          # Pinned to Xcode 16.2 (Swift 6.0) to avoid the Swift 6.1+ async-let
-          # codegen bug (swiftlang/swift#81771) that traps
-          # swift_task_dealloc → asyncLet_finish_after_task_completion on
-          # iOS 26.4+. Unpin once Swift 6.3 is the GH Actions stable.
-          xcode-version: '16.2'
-      - name: Install iOS platform
-        # Xcode 16+ decoupled the iOS platform from the Xcode app bundle.
-        # macos-latest runners don't include it for the pinned Xcode version.
-        run: sudo xcodebuild -downloadPlatform iOS
+          xcode-version: latest-stable
       - name: Checkout
         uses: actions/checkout@v4
       - uses: actions/cache@v4

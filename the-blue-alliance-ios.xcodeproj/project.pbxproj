@@ -57,7 +57,7 @@
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
 		924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */; };
 		924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924AFD782171AB1A00D7BE7E /* NoDataView.xib */; };
-		924BDD8A26D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8926D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		924BDD8A26D2B366008BE7D2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */; };
 		924BDD8C26D2B366008BE7D2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8B26D2B366008BE7D2 /* FirebaseAuth */; };
 		924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */; };
 		924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */; };
@@ -534,7 +534,7 @@
 				920240072AEB6AAD0003D118 /* PureLayout in Frameworks */,
 				92F63EA72BA91BFB0025CC03 /* TBAOperation in Frameworks */,
 				920240092AEB6AC30003D118 /* TBAOperation in Frameworks */,
-				924BDD8A26D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				924BDD8A26D2B366008BE7D2 /* FirebaseAnalytics in Frameworks */,
 				92F63EAD2BA91C170025CC03 /* TBAUtils in Frameworks */,
 				9202400F2AEB6ADC0003D118 /* TBAKit in Frameworks */,
 				92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */,
@@ -1441,7 +1441,7 @@
 			);
 			name = "The Blue Alliance";
 			packageProductDependencies = (
-				924BDD8926D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */,
 				924BDD8B26D2B366008BE7D2 /* FirebaseAuth */,
 				924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */,
 				924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */,
@@ -2255,7 +2255,7 @@
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
+				minimumVersion = 12.12.1;
 			};
 		};
 		924BDD9326D2B391008BE7D2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
@@ -2330,10 +2330,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TBAAPI;
 		};
-		924BDD8926D2B366008BE7D2 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+		924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsWithoutAdIdSupport;
+			productName = FirebaseAnalytics;
 		};
 		924BDD8B26D2B366008BE7D2 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
