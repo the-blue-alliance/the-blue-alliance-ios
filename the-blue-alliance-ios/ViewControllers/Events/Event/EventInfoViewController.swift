@@ -32,7 +32,6 @@ private enum EventInfoItem: Hashable {
 class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     private let eventKey: String
-    private let urlOpener: URLOpener
 
     // Loaded from TBAAPI in `refresh()`. Until it's loaded the only row we
     // can render is the title placeholder.
@@ -44,9 +43,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(eventKey: String, dependencies: Dependencies) {
         self.eventKey = eventKey
-        self.urlOpener = urlOpener
 
         super.init(style: .grouped, dependencies: dependencies)
     }

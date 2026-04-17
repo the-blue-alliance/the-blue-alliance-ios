@@ -8,12 +8,6 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
-    private let myTBA: MyTBA
-    private let myTBAStores: MyTBAStores
-    private let pasteboard: UIPasteboard?
-    private let photoLibrary: PHPhotoLibrary?
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
 
     private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
     private(set) var favoritesViewController: MyTBAFavoritesViewController
@@ -38,16 +32,10 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
+    init(dependencies: Dependencies) {
 
-        favoritesViewController = MyTBAFavoritesViewController(myTBA: myTBA, favoritesStore: myTBAStores.favorites, dependencies: dependencies)
-        subscriptionsViewController = MyTBASubscriptionsViewController(myTBA: myTBA, subscriptionsStore: myTBAStores.subscriptions, dependencies: dependencies)
+        favoritesViewController = MyTBAFavoritesViewController(dependencies: dependencies)
+        subscriptionsViewController = MyTBASubscriptionsViewController(dependencies: dependencies)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],
@@ -116,7 +104,6 @@ class MyTBAViewController: ContainerViewController {
             } catch let error as MyTBAError where error.code == 404 {
                 self.logoutSuccessful()
             } catch {
-                self.errorRecorder.record(error)
                 self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             }
         }
@@ -154,17 +141,17 @@ class MyTBAViewController: ContainerViewController {
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(eventKey: String) {
-        let viewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let viewController = EventViewController(eventKey: eventKey, dependencies: dependencies)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
     func teamSelected(teamKey: String) {
-        let viewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let viewController = TeamViewController(teamKey: teamKey, dependencies: dependencies)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
     func matchSelected(matchKey: String) {
-        let viewController = MatchViewController(matchKey: matchKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let viewController = MatchViewController(matchKey: matchKey, dependencies: dependencies)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -194,12 +181,11 @@ extension MyTBAViewController: MyTBAAuthenticationObservable {
 extension MyTBAViewController: SignInViewControllerDelegate {
 
     func signInError(error: Error) {
-         errorRecorder.record(error)
          showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
     }
 
     func pushRegistrationError(error: Error) {
-        errorRecorder.record(error)
+        showErrorAlert(with: "Error registering for push notifications - \(error.localizedDescription)")
     }
 
 }

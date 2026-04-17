@@ -5,7 +5,7 @@ extension TBAAPI {
 
     // TBA's `/teams/{page}` paginates at 500 per page. We keep fetching until
     // a page comes back empty — that's the API's signal that we're past the end.
-    func allTeams() async throws -> [Team] {
+    public func allTeams() async throws -> [Team] {
         var all: [Team] = []
         var page = 0
         while true {
@@ -26,7 +26,7 @@ extension TBAAPI {
         return all
     }
 
-    func team(key teamKey: String) async throws -> Team? {
+    public func team(key teamKey: String) async throws -> Team? {
         let response = try await client.getTeam(path: .init(teamKey: teamKey))
         switch response {
         case .ok(let ok):
@@ -42,7 +42,7 @@ extension TBAAPI {
         }
     }
 
-    func teamYearsParticipated(key teamKey: String) async throws -> [Int] {
+    public func teamYearsParticipated(key teamKey: String) async throws -> [Int] {
         let response = try await client.getTeamYearsParticipated(path: .init(teamKey: teamKey))
         switch response {
         case .ok(let ok):
@@ -58,7 +58,7 @@ extension TBAAPI {
         }
     }
 
-    func teamEventsByYear(key teamKey: String, year: Int) async throws -> [Event] {
+    public func teamEventsByYear(key teamKey: String, year: Int) async throws -> [Event] {
         let response = try await client.getTeamEventsByYear(path: .init(teamKey: teamKey, year: year))
         switch response {
         case .ok(let ok):
@@ -74,7 +74,7 @@ extension TBAAPI {
         }
     }
 
-    func teamEventMatches(teamKey: String, eventKey: String) async throws -> [Match] {
+    public func teamEventMatches(teamKey: String, eventKey: String) async throws -> [Match] {
         let response = try await client.getTeamEventMatches(path: .init(teamKey: teamKey, eventKey: eventKey))
         switch response {
         case .ok(let ok):
@@ -90,7 +90,7 @@ extension TBAAPI {
         }
     }
 
-    func teamEventAwards(teamKey: String, eventKey: String) async throws -> [Award] {
+    public func teamEventAwards(teamKey: String, eventKey: String) async throws -> [Award] {
         let response = try await client.getTeamEventAwards(path: .init(teamKey: teamKey, eventKey: eventKey))
         switch response {
         case .ok(let ok):
@@ -106,7 +106,7 @@ extension TBAAPI {
         }
     }
 
-    func teamEventStatus(teamKey: String, eventKey: String) async throws -> TeamEventStatus? {
+    public func teamEventStatus(teamKey: String, eventKey: String) async throws -> TeamEventStatus? {
         let response = try await client.getTeamEventStatus(path: .init(teamKey: teamKey, eventKey: eventKey))
         switch response {
         case .ok(let ok):
@@ -122,7 +122,7 @@ extension TBAAPI {
         }
     }
 
-    func teamMediaByYear(teamKey: String, year: Int) async throws -> [Media] {
+    public func teamMediaByYear(teamKey: String, year: Int) async throws -> [Media] {
         let response = try await client.getTeamMediaByYear(path: .init(teamKey: teamKey, year: year))
         switch response {
         case .ok(let ok):

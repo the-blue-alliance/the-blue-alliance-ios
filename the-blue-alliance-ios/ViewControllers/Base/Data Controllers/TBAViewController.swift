@@ -1,4 +1,5 @@
 import Foundation
+import MyTBAKit
 import TBAAPI
 import TBAUtils
 import UIKit
@@ -9,15 +10,11 @@ class TBAViewController: UIViewController, DataController, Navigatable {
 
     let dependencies: Dependencies
 
-    var errorRecorder: ErrorRecorder {
-        return dependencies.errorRecorder
-    }
-    var api: TBAAPI {
-        return dependencies.api
-    }
-    var userDefaults: UserDefaults {
-        return dependencies.userDefaults
-    }
+    var api: any TBAAPIProtocol { dependencies.api }
+    var myTBA: any MyTBAProtocol { dependencies.myTBA }
+    var myTBAStores: MyTBAStores { dependencies.myTBAStores }
+    var statusService: any StatusServiceProtocol { dependencies.statusService }
+    var urlOpener: any URLOpener { dependencies.urlOpener }
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())

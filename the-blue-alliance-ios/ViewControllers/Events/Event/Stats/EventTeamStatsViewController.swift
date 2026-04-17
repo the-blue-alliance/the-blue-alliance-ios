@@ -34,11 +34,8 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
     private var dataSource: TableViewDataSource<String, TeamStatRow>!
     private var rows: [TeamStatRow] = []
 
-    var filter: EventTeamStatFilter {
+    var filter: EventTeamStatFilter = .opr {
         didSet {
-            userDefaults.set(filter.rawValue, forKey: "EventTeamStatFilter")
-            userDefaults.synchronize()
-
             applyRows(rows)
         }
     }
@@ -58,12 +55,6 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
 
     init(eventKey: String, dependencies: Dependencies) {
         self.eventKey = eventKey
-
-        if let savedFilter = dependencies.userDefaults.string(forKey: "EventTeamStatFilter"), !savedFilter.isEmpty, let filter = EventTeamStatFilter(rawValue: savedFilter) {
-            self.filter = filter
-        } else {
-            self.filter = EventTeamStatFilter.opr
-        }
 
         super.init(dependencies: dependencies)
     }

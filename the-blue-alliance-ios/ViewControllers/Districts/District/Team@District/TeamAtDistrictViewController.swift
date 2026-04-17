@@ -11,28 +11,16 @@ class TeamAtDistrictViewController: ContainerViewController {
     private let year: Int
     private var ranking: DistrictRanking
 
-    let myTBA: MyTBA
-    let myTBAStores: MyTBAStores
-    let pasteboard: UIPasteboard?
-    let photoLibrary: PHPhotoLibrary?
-    let statusService: StatusService
-    let urlOpener: URLOpener
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, district: District, year: Int, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(ranking: DistrictRanking, district: District, year: Int, dependencies: Dependencies) {
         self.ranking = ranking
         self.teamKey = ranking.teamKey
         self.districtKey = district.key
         self.year = year
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
 
         let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, districtKey: district.key, dependencies: dependencies)
         let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, districtKey: district.key, dependencies: dependencies)
@@ -60,7 +48,7 @@ class TeamAtDistrictViewController: ContainerViewController {
     // MARK: - Private Methods
 
     @objc private func pushTeam() {
-        let vc = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let vc = TeamViewController(teamKey: teamKey, dependencies: dependencies)
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -70,7 +58,7 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
 
     func eventPointsSelected(eventKey: String) {
         let year = Int(eventKey.prefix(4)) ?? self.year
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

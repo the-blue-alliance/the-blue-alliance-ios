@@ -9,12 +9,6 @@ class TeamAtEventViewController: ContainerViewController {
     let teamKey: String
     let eventKey: String
 
-    let myTBA: MyTBA
-    let myTBAStores: MyTBAStores
-    let pasteboard: UIPasteboard?
-    let photoLibrary: PHPhotoLibrary?
-    let statusService: StatusService
-    let urlOpener: URLOpener
     var matchesViewController: MatchesViewController
 
     private let summaryViewController: TeamSummaryViewController
@@ -24,19 +18,13 @@ class TeamAtEventViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(teamKey: String, eventKey: String, year: Int, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(teamKey: String, eventKey: String, year: Int, dependencies: Dependencies) {
         self.teamKey = teamKey
         self.eventKey = eventKey
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
 
         summaryViewController = TeamSummaryViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
-        matchesViewController = MatchesViewController(eventKey: eventKey, teamKey: teamKey, myTBA: myTBA, favoritesStore: myTBAStores.favorites, dependencies: dependencies)
-        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: year, pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
+        matchesViewController = MatchesViewController(eventKey: eventKey, teamKey: teamKey, dependencies: dependencies)
+        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: year, dependencies: dependencies)
         statsViewController = TeamStatsViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
         awardsViewController = EventAwardsViewController(eventKey: eventKey, teamKey: teamKey, dependencies: dependencies)
 
@@ -82,22 +70,22 @@ class TeamAtEventViewController: ContainerViewController {
     // MARK: - Private Methods
 
     @objc private func pushEvent() {
-        let eventViewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let eventViewController = EventViewController(eventKey: eventKey, dependencies: dependencies)
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
     private func pushTeamAtEvent(teamKey: String, eventKey: String, year: Int) {
-        let vc = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let vc = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, dependencies: dependencies)
         navigationController?.pushViewController(vc, animated: true)
     }
 
     private func pushTeam(teamKey: String) {
-        let vc = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let vc = TeamViewController(teamKey: teamKey, dependencies: dependencies)
         navigationController?.pushViewController(vc, animated: true)
     }
 
     private func pushMatch(matchKey: String) {
-        let matchViewController = MatchViewController(matchKey: matchKey, teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let matchViewController = MatchViewController(matchKey: matchKey, teamKey: teamKey, dependencies: dependencies)
         navigationController?.pushViewController(matchViewController, animated: true)
     }
 

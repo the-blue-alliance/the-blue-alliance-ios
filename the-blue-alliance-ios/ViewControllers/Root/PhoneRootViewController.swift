@@ -1,30 +1,17 @@
 import Foundation
 import MyTBAKit
-import Photos
 import UIKit
 
 class PhoneRootViewController: UITabBarController, RootController {
 
-    let fcmTokenProvider: FCMTokenProvider
-    let myTBA: MyTBA
-    let myTBAStores: MyTBAStores
-    let pasteboard: UIPasteboard?
-    let photoLibrary: PHPhotoLibrary?
-    let pushService: PushService
-    let statusService: StatusService
-    let urlOpener: URLOpener
     let dependencies: Dependencies
+    let fcmTokenProvider: any FCMTokenProvider
+    let pushService: any PushServiceProtocol
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, pushService: PushService, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.fcmTokenProvider = fcmTokenProvider
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.pushService = pushService
-        self.statusService = statusService
-        self.urlOpener = urlOpener
+    init(fcmTokenProvider: any FCMTokenProvider, pushService: any PushServiceProtocol, dependencies: Dependencies) {
         self.dependencies = dependencies
+        self.fcmTokenProvider = fcmTokenProvider
+        self.pushService = pushService
 
         super.init(nibName: nil, bundle: nil)
 

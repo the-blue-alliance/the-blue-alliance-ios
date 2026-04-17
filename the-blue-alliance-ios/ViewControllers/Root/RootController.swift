@@ -1,6 +1,5 @@
 import Foundation
 import MyTBAKit
-import Photos
 import UIKit
 
 enum RootType: CaseIterable {
@@ -43,63 +42,31 @@ enum RootType: CaseIterable {
 }
 
 protocol RootController {
-    var fcmTokenProvider: FCMTokenProvider { get }
-    var myTBA: MyTBA { get }
-    var myTBAStores: MyTBAStores { get }
-    var pasteboard: UIPasteboard? { get }
-    var photoLibrary: PHPhotoLibrary? { get }
-    var pushService: PushService { get }
-    var urlOpener: URLOpener { get }
-    var statusService: StatusService { get }
     var dependencies: Dependencies { get }
+    var fcmTokenProvider: any FCMTokenProvider { get }
+    var pushService: any PushServiceProtocol { get }
 }
 
 extension RootController {
 
     var eventsViewController: EventsContainerViewController {
-        return EventsContainerViewController(myTBA: myTBA,
-                                             myTBAStores: myTBAStores,
-                                             pasteboard: pasteboard,
-                                             photoLibrary: photoLibrary,
-                                             statusService: statusService,
-                                             urlOpener: urlOpener,
-                                             dependencies: dependencies)
+        return EventsContainerViewController(dependencies: dependencies)
     }
 
     var teamsViewController: TeamsContainerViewController {
-        return TeamsContainerViewController(myTBA: myTBA,
-                                            myTBAStores: myTBAStores,
-                                            pasteboard: pasteboard,
-                                            photoLibrary: photoLibrary,
-                                            statusService: statusService,
-                                            urlOpener: urlOpener,
-                                            dependencies: dependencies)
+        return TeamsContainerViewController(dependencies: dependencies)
     }
 
     var districtsViewController: DistrictsContainerViewController {
-        return DistrictsContainerViewController(myTBA: myTBA,
-                                                myTBAStores: myTBAStores,
-                                                statusService: statusService,
-                                                urlOpener: urlOpener,
-                                                dependencies: dependencies)
+        return DistrictsContainerViewController(dependencies: dependencies)
     }
 
     var settingsViewController: SettingsViewController {
-        return SettingsViewController(fcmTokenProvider: fcmTokenProvider,
-                                      myTBA: myTBA,
-                                      pushService: pushService,
-                                      urlOpener: urlOpener,
-                                      dependencies: dependencies)
+        return SettingsViewController(fcmTokenProvider: fcmTokenProvider, pushService: pushService, dependencies: dependencies)
     }
 
     var myTBAViewController: MyTBAViewController {
-        return MyTBAViewController(myTBA: myTBA,
-                                   myTBAStores: myTBAStores,
-                                   pasteboard: pasteboard,
-                                   photoLibrary: photoLibrary,
-                                   statusService: statusService,
-                                   urlOpener: urlOpener,
-                                   dependencies: dependencies)
+        return MyTBAViewController(dependencies: dependencies)
     }
 
 }

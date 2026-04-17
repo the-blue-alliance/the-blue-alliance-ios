@@ -2,7 +2,7 @@ import MyTBAKit
 import TBAUtils
 import UIKit
 
-class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentationControllerDelegate {
+class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentationControllerDelegate {
 
     var subscribableModel: MyTBASubscribable
 
@@ -25,10 +25,8 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         }
     }
 
-    private let errorRecorder: ErrorRecorder
-    let myTBA: MyTBA
-    private let favoritesStore: FavoritesStore
-    private let subscriptionsStore: SubscriptionsStore
+    private var favoritesStore: FavoritesStore { myTBAStores.favorites }
+    private var subscriptionsStore: SubscriptionsStore { myTBAStores.subscriptions }
 
     private var preferencesTask: Task<Void, Never>?
 
@@ -54,22 +52,18 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                                                           action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(errorRecorder: ErrorRecorder, subscribableModel: MyTBASubscribable, myTBA: MyTBA, myTBAStores: MyTBAStores) {
-        self.errorRecorder = errorRecorder
+    init(subscribableModel: MyTBASubscribable, dependencies: Dependencies) {
         self.subscribableModel = subscribableModel
-        self.myTBA = myTBA
-        self.favoritesStore = myTBAStores.favorites
-        self.subscriptionsStore = myTBAStores.subscriptions
 
-        let existingFavorite = favoritesStore.favorites.first { $0.modelKey == subscribableModel.modelKey && $0.modelType == subscribableModel.modelType }
+        let existingFavorite = dependencies.myTBAStores.favorites.favorites.first { $0.modelKey == subscribableModel.modelKey && $0.modelType == subscribableModel.modelType }
         isFavorite = (existingFavorite != nil)
         isFavoriteInitially = isFavorite
 
-        let existingSubscription = subscriptionsStore.subscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
+        let existingSubscription = dependencies.myTBAStores.subscriptions.subscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
         notifications = existingSubscription?.notifications ?? []
         notificationsInitial = notifications
 
-        super.init(style: .grouped)
+        super.init(style: .grouped, dependencies: dependencies)
 
         title = "myTBA Preferences"
     }
@@ -123,11 +117,6 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         isSaving = true
         preferencesTask = Task { @MainActor [weak self] in
             guard let self else { return }
-            defer {
-                self.preferencesTask = nil
-                self.isSaving = false
-                self.dismiss(animated: true)
-            }
             do {
                 let response = try await self.myTBA.updatePreferences(modelKey: self.subscribableModel.modelKey,
                                                                       modelType: self.subscribableModel.modelType,
@@ -147,8 +136,13 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                         self.subscriptionsStore.upsert(MyTBASubscription(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, notifications: self.notifications))
                     }
                 }
+                self.preferencesTask = nil
+                self.isSaving = false
+                self.dismiss(animated: true)
             } catch {
-                self.errorRecorder.record(error)
+                self.preferencesTask = nil
+                self.isSaving = false
+                self.showErrorAlert(with: "Unable to save myTBA preferences - \(error.localizedDescription)")
             }
         }
     }

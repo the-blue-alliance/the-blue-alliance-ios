@@ -43,23 +43,18 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
 }
 
 protocol SearchContainerDelegate {
-    var myTBA: MyTBA { get }
-    var myTBAStores: MyTBAStores { get }
-    var pasteboard: UIPasteboard? { get }
-    var photoLibrary: PHPhotoLibrary? { get }
-    var statusService: StatusService { get }
-    var urlOpener: URLOpener { get }
+    var dependencies: Dependencies { get }
 }
 
 extension SearchContainerDelegate where Self: ContainerViewController {
 
     func eventSelected(eventKey: String) {
-        let eventViewController = EventViewController(eventKey: eventKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let eventViewController = EventViewController(eventKey: eventKey, dependencies: dependencies)
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
     func teamSelected(teamKey: String) {
-        let teamViewController = TeamViewController(teamKey: teamKey, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, myTBAStores: myTBAStores, dependencies: dependencies)
+        let teamViewController = TeamViewController(teamKey: teamKey, dependencies: dependencies)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

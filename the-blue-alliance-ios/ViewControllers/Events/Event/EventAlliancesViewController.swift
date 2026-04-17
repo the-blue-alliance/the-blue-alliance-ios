@@ -7,25 +7,13 @@ import UIKit
 class EventAlliancesContainerViewController: ContainerViewController {
 
     private(set) var event: Event
-    private let myTBA: MyTBA
-    private let myTBAStores: MyTBAStores
-    private let pasteboard: UIPasteboard?
-    private let photoLibrary: PHPhotoLibrary?
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
 
     private var alliancesViewController: EventAlliancesViewController!
 
     // MARK: - Init
 
-    init(event: Event, myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(event: Event, dependencies: Dependencies) {
         self.event = event
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
 
         let alliancesViewController = EventAlliancesViewController(eventKey: event.key, dependencies: dependencies)
 
@@ -46,7 +34,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

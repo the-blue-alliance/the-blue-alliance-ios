@@ -39,12 +39,25 @@ struct AppStatus {
     }
 }
 
-public class StatusService: NSObject {
+protocol StatusServiceProtocol: AnyObject {
+    var status: AppStatus { get }
+    var currentSeason: Int { get }
+    var maxSeason: Int { get }
+
+    func registerForStatusChanges(_ subscriber: StatusSubscribable)
+    func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable)
+    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String)
+
+    func registerRetryable(initiallyRetry: Bool)
+    func unregisterRetryable()
+}
+
+public class StatusService: NSObject, StatusServiceProtocol {
 
     var retryService: RetryService
 
     private let errorRecorder: ErrorRecorder
-    private let api: TBAAPI
+    private let api: any TBAAPIProtocol
 
     private(set) var status: AppStatus = .default
 
@@ -58,7 +71,7 @@ public class StatusService: NSObject {
     var currentSeason: Int { status.currentSeason }
     var maxSeason: Int { status.maxSeason }
 
-    init(errorRecorder: ErrorRecorder, api: TBAAPI, retryService: RetryService) {
+    init(errorRecorder: ErrorRecorder, api: any TBAAPIProtocol, retryService: RetryService) {
         self.errorRecorder = errorRecorder
         self.api = api
         self.retryService = retryService
@@ -115,15 +128,15 @@ public class StatusService: NSObject {
 
     // MARK: - Subscription Registration
 
-    fileprivate func registerForStatusChanges(_ subscriber: StatusSubscribable) {
+    func registerForStatusChanges(_ subscriber: StatusSubscribable) {
         statusSubscribers.add(subscriber as AnyObject)
     }
 
-    fileprivate func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {
+    func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {
         fmsStatusSubscribers.add(subscriber as AnyObject)
     }
 
-    fileprivate func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String) {
+    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String) {
         let subscribers = eventStatusSubscribers.object(forKey: eventKey as NSString) ?? NSHashTable<AnyObject>.weakObjects()
         subscribers.add(subscriber as AnyObject)
         eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
@@ -154,7 +167,7 @@ extension StatusService: Retryable {
 }
 
 protocol StatusSubscribable: AnyObject {
-    var statusService: StatusService { get }
+    var statusService: any StatusServiceProtocol { get }
 
     func statusChanged(status: AppStatus)
 }
@@ -168,7 +181,7 @@ extension StatusSubscribable {
 }
 
 protocol FMSStatusSubscribable: AnyObject {
-    var statusService: StatusService { get }
+    var statusService: any StatusServiceProtocol { get }
 
     func fmsStatusChanged(isDatafeedDown: Bool)
 }
@@ -182,7 +195,7 @@ extension FMSStatusSubscribable {
 }
 
 protocol EventStatusSubscribable: AnyObject {
-    var statusService: StatusService { get }
+    var statusService: any StatusServiceProtocol { get }
 
     func eventStatusChanged(isEventOffline: Bool)
 }

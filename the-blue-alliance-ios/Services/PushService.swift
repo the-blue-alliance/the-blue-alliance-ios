@@ -5,20 +5,30 @@ import TBAUtils
 import UserNotifications
 import UIKit
 
+protocol RemoteNotificationRegistering: AnyObject {
+    func registerForRemoteNotifications(completion: ((Error?) -> Void)?)
+}
+
+protocol PushServiceProtocol: AnyObject {
+    func registerForRemoteNotifications(_ completion: ((Error?) -> Void)?)
+}
+
 // PushService handles registering push notification tokens with TBA and handling APNS messages
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
-class PushService: NSObject {
+class PushService: NSObject, PushServiceProtocol {
 
     private let errorRecorder: ErrorRecorder
-    private var myTBA: MyTBA
+    private var myTBA: any MyTBAProtocol
     internal var retryService: RetryService
+    private let registrar: any RemoteNotificationRegistering
 
     private var registerTask: Task<Void, Never>?
 
-    init(errorRecorder: ErrorRecorder, myTBA: MyTBA, retryService: RetryService) {
+    init(errorRecorder: ErrorRecorder, myTBA: any MyTBAProtocol, retryService: RetryService, registrar: any RemoteNotificationRegistering) {
         self.errorRecorder = errorRecorder
         self.myTBA = myTBA
         self.retryService = retryService
+        self.registrar = registrar
 
         super.init()
     }
@@ -57,13 +67,8 @@ class PushService: NSObject {
         }
     }
 
-    static func registerForRemoteNotifications(_ completion: ((Error?) -> ())?) {
-        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("Unable to get application delegate in PushService registerForRemoteNotifications")
-        }
-
-        delegate.registerForRemoteNotificationsCompletion = completion
-        UIApplication.shared.registerForRemoteNotifications()
+    func registerForRemoteNotifications(_ completion: ((Error?) -> Void)?) {
+        registrar.registerForRemoteNotifications(completion: completion)
     }
 
 }

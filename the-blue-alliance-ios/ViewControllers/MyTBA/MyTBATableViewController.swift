@@ -58,7 +58,6 @@ enum MyTBAItem: Hashable {
 // pipeline (per-type caches populated lazily from TBAAPI).
 class MyTBATableViewController: TBATableViewController, NotificationObservable {
 
-    let myTBA: MyTBA
     weak var delegate: MyTBATableViewControllerDelegate?
 
     private var dataSource: TableViewDataSource<MyTBASection, MyTBAItem>!
@@ -66,18 +65,6 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
     private var eventsCache: [String: Event] = [:]
     private var teamsCache: [String: Team] = [:]
     private var matchesCache: [String: Match] = [:]
-
-    // MARK: Init
-
-    init(myTBA: MyTBA, dependencies: Dependencies) {
-        self.myTBA = myTBA
-
-        super.init(dependencies: dependencies)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     // MARK: View Lifecycle
 
@@ -271,16 +258,7 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
 
 class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, Stateful {
 
-    private let favoritesStore: FavoritesStore
-
-    init(myTBA: MyTBA, favoritesStore: FavoritesStore, dependencies: Dependencies) {
-        self.favoritesStore = favoritesStore
-        super.init(myTBA: myTBA, dependencies: dependencies)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var favoritesStore: FavoritesStore { myTBAStores.favorites }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -329,16 +307,7 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
 
 class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, Stateful {
 
-    private let subscriptionsStore: SubscriptionsStore
-
-    init(myTBA: MyTBA, subscriptionsStore: SubscriptionsStore, dependencies: Dependencies) {
-        self.subscriptionsStore = subscriptionsStore
-        super.init(myTBA: myTBA, dependencies: dependencies)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var subscriptionsStore: SubscriptionsStore { myTBAStores.subscriptions }
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -5,10 +5,6 @@ import UIKit
 
 class DistrictsContainerViewController: ContainerViewController {
 
-    private let myTBA: MyTBA
-    private let myTBAStores: MyTBAStores
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
 
     private(set) var year: Int {
         didSet {
@@ -20,13 +16,9 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, myTBAStores: MyTBAStores, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.statusService = statusService
-        self.urlOpener = urlOpener
+    init(dependencies: Dependencies) {
 
-        year = statusService.currentSeason
+        year = dependencies.statusService.currentSeason
         districtsViewController = DistrictsViewController(year: year, dependencies: dependencies)
 
         super.init(viewControllers: [districtsViewController],
@@ -90,7 +82,7 @@ extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
 extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
-        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, myTBAStores: myTBAStores, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let districtViewController = DistrictViewController(district: district, dependencies: dependencies)
         navigationController?.pushViewController(districtViewController, animated: true)
     }
 

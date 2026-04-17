@@ -20,7 +20,6 @@ private enum TeamInfoItem {
 class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     private let teamKey: String
-    private let urlOpener: URLOpener
 
     private var team: Team?
 
@@ -30,9 +29,8 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(teamKey: String, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(teamKey: String, dependencies: Dependencies) {
         self.teamKey = teamKey
-        self.urlOpener = urlOpener
 
         super.init(style: .grouped, dependencies: dependencies)
     }
