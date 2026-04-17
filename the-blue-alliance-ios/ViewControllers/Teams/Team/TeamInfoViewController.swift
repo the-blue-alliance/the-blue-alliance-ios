@@ -29,7 +29,15 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(teamKey: String, team: Team? = nil, dependencies: Dependencies) {
+    convenience init(teamKey: String, dependencies: Dependencies) {
+        self.init(teamKey: teamKey, team: nil, dependencies: dependencies)
+    }
+
+    convenience init(team: Team, dependencies: Dependencies) {
+        self.init(teamKey: team.key, team: team, dependencies: dependencies)
+    }
+
+    private init(teamKey: String, team: Team?, dependencies: Dependencies) {
         self.teamKey = teamKey
         self.team = team
 
@@ -51,18 +59,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         tableView.dataSource = dataSource
         setupDataSource()
 
-        if team != nil {
-            updateTeamInfo()
-        }
-    }
-
-    // MARK: - External
-
-    func apply(team: Team) {
-        self.team = team
-        if isViewLoaded {
-            updateTeamInfo()
-        }
+        updateTeamInfo()
     }
 
     // MARK: - Private Methods
@@ -219,7 +216,8 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         runRefresh { [weak self] in
             guard let self else { return }
             if let fetched = try await self.api.team(key: self.teamKey) {
-                self.apply(team: fetched)
+                self.team = fetched
+                self.updateTeamInfo()
             }
         }
     }

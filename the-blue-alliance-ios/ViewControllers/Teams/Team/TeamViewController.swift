@@ -39,11 +39,7 @@ class TeamViewController: HeaderContainerViewController {
 
     // MARK: Init
 
-    convenience init(teamKey: String, dependencies: Dependencies) {
-        self.init(teamKey: teamKey, team: nil, partialNickname: nil, dependencies: dependencies)
-    }
-
-    convenience init(teamKey: String, nickname: String?, dependencies: Dependencies) {
+    convenience init(teamKey: String, nickname: String? = nil, dependencies: Dependencies) {
         let trimmed = nickname?.trimmingCharacters(in: .whitespacesAndNewlines)
         let partial = (trimmed?.isEmpty == false) ? trimmed : nil
         self.init(teamKey: teamKey, team: nil, partialNickname: partial, dependencies: dependencies)
@@ -70,7 +66,11 @@ class TeamViewController: HeaderContainerViewController {
                                                                  teamNumberNickname: teamNumberNickname,
                                                                  year: nil))
 
-        infoViewController = TeamInfoViewController(teamKey: teamKey, team: team, dependencies: dependencies)
+        if let team {
+            infoViewController = TeamInfoViewController(team: team, dependencies: dependencies)
+        } else {
+            infoViewController = TeamInfoViewController(teamKey: teamKey, dependencies: dependencies)
+        }
         eventsViewController = TeamEventsViewController(teamKey: teamKey, year: nil, dependencies: dependencies)
         mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: Calendar.current.component(.year, from: Date()), dependencies: dependencies)
 
@@ -113,7 +113,7 @@ class TeamViewController: HeaderContainerViewController {
             if let team = team ?? nil {
                 self.team = team
                 self.navigationTitle = team.teamNumberNickname
-                self.infoViewController.apply(team: team)
+                updateInterface()
             }
             if let years = years ?? nil {
                 self.yearsParticipated = years.sorted().reversed()

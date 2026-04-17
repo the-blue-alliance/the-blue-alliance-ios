@@ -32,7 +32,7 @@ private enum EventInfoItem: Hashable {
 class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     private let eventKey: String
-    private let partialName: String?
+    private let eventName: String?
 
     private var event: Event?
 
@@ -42,10 +42,18 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, event: Event? = nil, partialName: String? = nil, dependencies: Dependencies) {
+    convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
+        self.init(eventKey: eventKey, event: nil, eventName: name, dependencies: dependencies)
+    }
+
+    convenience init(event: Event, dependencies: Dependencies) {
+        self.init(eventKey: event.key, event: event, eventName: nil, dependencies: dependencies)
+    }
+
+    private init(eventKey: String, event: Event?, eventName: String?, dependencies: Dependencies) {
         self.eventKey = eventKey
         self.event = event
-        self.partialName = partialName
+        self.eventName = eventName
 
         super.init(style: .grouped, dependencies: dependencies)
     }
@@ -163,9 +171,9 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
         if let event {
             cell.viewModel = InfoCellViewModel(event: event)
-        } else if let partialName, !partialName.isEmpty {
+        } else if let eventName, !eventName.isEmpty {
             let year = String(eventKey.prefix(4))
-            let name = year.allSatisfy(\.isNumber) ? "\(year) \(partialName)" : partialName
+            let name = year.allSatisfy(\.isNumber) ? "\(year) \(eventName)" : eventName
             cell.viewModel = InfoCellViewModel(nameString: name, subtitleStrings: [])
         } else {
             cell.viewModel = InfoCellViewModel(nameString: eventKey, subtitleStrings: [])

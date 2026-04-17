@@ -58,9 +58,8 @@ class TeamHeaderView: UIView {
 
         let stackView = UIStackView(arrangedSubviews: [spacerView, yearButton])
         stackView.axis = .vertical
-        yearButton.autoSetDimension(.width, toSize: 60, relation: .greaterThanOrEqual)
-        yearButton.autoSetDimension(.height, toSize: 30, relation: .greaterThanOrEqual)
         yearButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        yearButton.setContentHuggingPriority(.required, for: .vertical)
         return stackView
     }()
 
@@ -113,14 +112,7 @@ class TeamHeaderView: UIView {
         teamNameLabel.text = viewModel.nickname
         teamNumberLabel.isHidden = viewModel.nickname == nil
 
-        let yearString: String = {
-            if let year = viewModel.year {
-                return String(year)
-            } else {
-                return "----"
-            }
-        }()
-        yearButton.setTitle(yearString, for: .normal)
+        yearButton.year = viewModel.year
     }
 
     static func teamHeaderLabel() -> UILabel {
@@ -187,11 +179,15 @@ private class AvatarImageView: UIView {
 
 class YearButton: UIButton {
 
-    override open var isHighlighted: Bool {
+    // HIG minimum touch target (44pt) — expanded via hitTest so the visible
+    // button stays compact without making the tappable area too small.
+    private static let minimumTouchTarget: CGFloat = 44
+
+    var year: Int? {
         didSet {
-            UIView.animate(withDuration: 0.125) {
-                self.backgroundColor = self.isHighlighted ? UIColor.lightGray : UIColor.white
-            }
+            var updated = configuration
+            updated?.title = year.map(String.init) ?? "----"
+            configuration = updated
         }
     }
 
@@ -200,32 +196,38 @@ class YearButton: UIButton {
 
         var config = UIButton.Configuration.plain()
         config.baseForegroundColor = UIColor.navigationBarTintColor
+        config.background.backgroundColor = UIColor.white
+        config.cornerStyle = .capsule
+        config.buttonSize = .small
         config.image = UIImage(systemName: "chevron.down")
-        config.title = "----"
+        config.imagePlacement = .trailing
         config.imagePadding = 4
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12)
+        config.title = "----"
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
+            let base = UIFont.preferredFont(forTextStyle: .callout).pointSize
+            outgoing.font = UIFont.monospacedDigitSystemFont(ofSize: base, weight: .bold)
             return outgoing
         }
         configuration = config
 
-        tintColor = UIColor.navigationBarTintColor
-        backgroundColor = UIColor.white
-        setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        setContentHuggingPriority(.defaultHigh, for: .vertical)
+        configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.background.backgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.white
+            button.configuration = updated
+        }
 
-        layer.masksToBounds = true
+        setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layer.cornerRadius = bounds.height * 0.5
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let dx = max(0, (Self.minimumTouchTarget - bounds.width) / 2)
+        let dy = max(0, (Self.minimumTouchTarget - bounds.height) / 2)
+        return bounds.insetBy(dx: -dx, dy: -dy).contains(point)
     }
 
 }
