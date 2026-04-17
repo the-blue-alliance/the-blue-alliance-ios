@@ -35,7 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        var services = UIApplication.shared.appServices
+        let services = UIApplication.shared.appServices
         let queued = services.pendingAlerts
         services.pendingAlerts.removeAll()
         queued.forEach { present($0) }

@@ -77,8 +77,8 @@ class ContainerViewController: UIViewController, Alertable {
         segmentedControlView.backgroundColor = UIColor.navigationBarTintColor
         segmentedControlView.addSubview(segmentedControl)
         segmentedControl.autoAlignAxis(toSuperviewAxis: .horizontal)
-        segmentedControl.autoPinEdge(toSuperviewEdge: .leading, withInset: 16.0)
-        segmentedControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16.0)
+        segmentedControl.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16.0)
+        segmentedControl.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16.0)
         return segmentedControlView
     }()
     private var segmentedControl: UISegmentedControl

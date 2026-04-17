@@ -74,7 +74,9 @@ class TeamHeaderView: UIView {
         configureView()
 
         addSubview(rootStackView)
-        rootStackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16), excludingEdge: .top)
+        rootStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
+        rootStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
+        rootStackView.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16)
         rootStackView.autoSetDimension(.height, toSize: 55, relation: .greaterThanOrEqual)
         let topConstraint = rootStackView.autoPinEdge(toSuperviewEdge: .top, withInset: 16)
         // Allow our top spacing constraint to be unsatisfied - this will allow the view to glide under the navigation bar while scrolling

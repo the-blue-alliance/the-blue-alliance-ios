@@ -28,8 +28,9 @@ class HeaderContainerViewController: MyTBAContainerViewController {
         let maximumHeaderHeight = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         headerView.autoSetDimension(.height, toSize: maximumHeaderHeight)
 
-        // Hide our navigation title view
-        navigationItem.titleView?.isHidden = true
+        // Drop the two-line title view entirely; the header view is the title now.
+        // Nil-ing (vs. hiding) also removes its stale zero-width layout constraints.
+        navigationItem.titleView = nil
     }
 
 }
