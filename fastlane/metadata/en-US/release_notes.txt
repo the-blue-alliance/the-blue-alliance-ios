@@ -1,1 +1,1 @@
-Hey y'all - this update adds support for the 2026 match breakdown. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes a crash when viewing a team due to a rookie year loading bug. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance

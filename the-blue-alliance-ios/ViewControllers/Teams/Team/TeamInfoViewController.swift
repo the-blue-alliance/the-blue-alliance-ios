@@ -110,9 +110,11 @@ class TeamInfoViewController: TBATableViewController, Observable {
         if team.hasLocation {
             infoItems.append(.location)
         }
-        if team.name != nil {
+        if team.rookieYear != nil {
             infoItems.append(.rookieYear)
-            infoItems.append(.sponsors)            
+        }
+        if team.name != nil {
+            infoItems.append(.sponsors)
         }
 
         if !infoItems.isEmpty {
@@ -155,7 +157,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
 
         cell.titleLabel?.text = "Rookie Year"
-        cell.subtitleLabel?.text = String(team.rookieYear!)
+        cell.subtitleLabel?.text = team.rookieYear.map(String.init) ?? ""
 
         cell.accessoryType = .none
         cell.selectionStyle = .none
