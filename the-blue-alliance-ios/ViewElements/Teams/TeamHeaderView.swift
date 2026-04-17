@@ -70,6 +70,7 @@ class TeamHeaderView: UIView {
         super.init(frame: .zero)
 
         backgroundColor = UIColor.navigationBarTintColor
+        clipsToBounds = true
         configureView()
 
         addSubview(rootStackView)
@@ -94,19 +95,18 @@ class TeamHeaderView: UIView {
     private func configureView() {
         let newAvatar = viewModel.avatar
         let shouldHide = newAvatar == nil
-        let avatarChanged = avatarImageView.image != newAvatar || avatarImageView.isHidden != shouldHide
 
-        if window != nil, avatarChanged {
+        // Crossfade the image in place but snap the stack slot. Animating
+        // `isHidden` on the stack view was what would briefly render outside
+        // the header bounds during a push transition.
+        if window != nil, avatarImageView.image != newAvatar {
             UIView.transition(with: avatarImageView, duration: 0.25, options: .transitionCrossDissolve, animations: {
                 self.avatarImageView.image = newAvatar
             })
-            UIView.animate(withDuration: 0.25) {
-                self.avatarImageView.isHidden = shouldHide
-            }
         } else {
             avatarImageView.image = newAvatar
-            avatarImageView.isHidden = shouldHide
         }
+        avatarImageView.isHidden = shouldHide
 
         teamNumberLabel.text = viewModel.teamNumberNickname
 
@@ -202,6 +202,8 @@ class YearButton: UIButton {
         config.baseForegroundColor = UIColor.navigationBarTintColor
         config.image = UIImage(systemName: "chevron.down")
         config.title = "----"
+        config.imagePadding = 4
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12)
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
@@ -212,6 +214,7 @@ class YearButton: UIButton {
         tintColor = UIColor.navigationBarTintColor
         backgroundColor = UIColor.white
         setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         layer.masksToBounds = true
     }
@@ -222,14 +225,7 @@ class YearButton: UIButton {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        let inset = frame.size.height * 0.5
-        if var config = configuration, config.contentInsets.leading != inset {
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
-            configuration = config
-        }
-
-        layer.cornerRadius = frame.size.height * 0.5
+        layer.cornerRadius = bounds.height * 0.5
     }
 
 }

@@ -63,7 +63,6 @@ extension SearchContainerDelegate where Self: ContainerViewController {
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 
-    // Default for TeamsListViewControllerDelegate, which has the full team.
     func teamSelected(_ team: Team) {
         let teamViewController = TeamViewController(team: team, dependencies: dependencies)
         navigationController?.pushViewController(teamViewController, animated: true)

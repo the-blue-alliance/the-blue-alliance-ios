@@ -32,14 +32,9 @@ private enum EventInfoItem: Hashable {
 class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     private let eventKey: String
+    private let partialName: String?
 
-    // Loaded from TBAAPI in `refresh()`. Until it's loaded the only row we
-    // can render is the title placeholder.
     private var event: Event?
-
-    // Name-only hint (e.g. from search), used for the title cell until the
-    // full event loads.
-    private var partialName: String?
 
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
@@ -47,30 +42,16 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, dependencies: Dependencies) {
+    init(eventKey: String, event: Event? = nil, partialName: String? = nil, dependencies: Dependencies) {
         self.eventKey = eventKey
+        self.event = event
+        self.partialName = partialName
 
         super.init(style: .grouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - External
-
-    func apply(event: Event) {
-        self.event = event
-        if isViewLoaded {
-            updateEventInfo()
-        }
-    }
-
-    func applyPartial(name: String?) {
-        partialName = name
-        if isViewLoaded, event == nil {
-            updateEventInfo()
-        }
     }
 
     // MARK: - View Lifecycle
@@ -84,9 +65,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         tableView.dataSource = dataSource
         setupDataSource()
 
-        if event != nil || partialName != nil {
-            updateEventInfo()
-        }
+        updateEventInfo()
     }
 
     private func setupDataSource() {
@@ -140,42 +119,36 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
 
-        // Info
         snapshot.appendSections([.title])
         snapshot.appendItems([.title], toSection: .title)
 
-        guard let event else {
-            dataSource.apply(snapshot, animatingDifferences: false)
-            return
-        }
-
-        // Webcasts
-        let webcasts = event.webcasts
-            .sorted { $0.channel > $1.channel } // Sort by name lexicographically
-            .filter { $0.urlString != nil } // Only show linkable webcasts
-            // Only show webcasts with dates on the specified day
-            .filter { webcast in
-                // If webcast is date-less, we can display it
-                guard let date = webcast.dateParsed else { return true }
-                return Calendar.current.isDateInToday(date)
+        if let event {
+            let webcasts = event.webcasts
+                .sorted { $0.channel > $1.channel }
+                .filter { $0.urlString != nil }
+                .filter { webcast in
+                    guard let date = webcast.dateParsed else { return true }
+                    return Calendar.current.isDateInToday(date)
+                }
+                .map { EventInfoItem.webcast($0) }
+            if !webcasts.isEmpty, event.isHappeningThisWeek {
+                snapshot.appendSections([.webcast])
+                snapshot.appendItems(webcasts, toSection: .webcast)
             }
-            .map { EventInfoItem.webcast($0) }
-        if !webcasts.isEmpty, event.isHappeningThisWeek {
-            snapshot.appendSections([.webcast])
-            snapshot.appendItems(webcasts, toSection: .webcast)
         }
 
-        // Details
+        // Detail rows render even before the event loads so the view isn't
+        // a single-row ghost during push. districtPoints is event-dependent
+        // so it only appears once we know the event has a district.
         var detailItems: [EventInfoItem] = [.alliances, .insights, .awards]
-        if event.district != nil {
+        if event?.district != nil {
             detailItems.insert(.districtPoints, at: 1)
         }
         snapshot.appendSections([.detail])
         snapshot.appendItems(detailItems, toSection: .detail)
 
-        // Links
         var linkItems: [EventInfoItem] = [.twitter, .youtube, .chiefDelphi]
-        if event.hasWebsite {
+        if event?.hasWebsite == true {
             linkItems.insert(.website, at: 0)
         }
         snapshot.appendSections([.link])

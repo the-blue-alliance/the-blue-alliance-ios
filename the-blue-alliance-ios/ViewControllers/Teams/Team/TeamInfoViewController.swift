@@ -29,8 +29,9 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(teamKey: String, dependencies: Dependencies) {
+    init(teamKey: String, team: Team? = nil, dependencies: Dependencies) {
         self.teamKey = teamKey
+        self.team = team
 
         super.init(style: .grouped, dependencies: dependencies)
     }
@@ -49,13 +50,19 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
         tableView.dataSource = dataSource
         setupDataSource()
+
+        if team != nil {
+            updateTeamInfo()
+        }
     }
 
     // MARK: - External
 
     func apply(team: Team) {
         self.team = team
-        updateTeamInfo()
+        if isViewLoaded {
+            updateTeamInfo()
+        }
     }
 
     // MARK: - Private Methods

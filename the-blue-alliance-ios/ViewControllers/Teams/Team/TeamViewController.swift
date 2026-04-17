@@ -8,7 +8,6 @@ class TeamViewController: HeaderContainerViewController {
 
     private let teamKey: String
 
-    // Loaded from TBAAPI after init. Nil until the async load completes.
     private var team: Team?
     private var yearsParticipated: [Int] = []
     private var avatarImage: UIImage?
@@ -38,33 +37,48 @@ class TeamViewController: HeaderContainerViewController {
         }
     }
 
-    // Pre-fetched team data passed via init(team:). Applied to the info VC in
-    // viewDidLoad once its data source is wired up.
-    private var pendingInitialTeam: Team?
-
     // MARK: Init
 
-    init(teamKey: String, dependencies: Dependencies) {
-        self.teamKey = teamKey
+    convenience init(teamKey: String, dependencies: Dependencies) {
+        self.init(teamKey: teamKey, team: nil, partialNickname: nil, dependencies: dependencies)
+    }
 
-        // Header starts empty; it's populated once the team struct loads.
-        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(teamNumber: Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0,
+    convenience init(teamKey: String, nickname: String?, dependencies: Dependencies) {
+        let trimmed = nickname?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let partial = (trimmed?.isEmpty == false) ? trimmed : nil
+        self.init(teamKey: teamKey, team: nil, partialNickname: partial, dependencies: dependencies)
+    }
+
+    convenience init(team: Team, dependencies: Dependencies) {
+        self.init(teamKey: team.key, team: team, partialNickname: nil, dependencies: dependencies)
+    }
+
+    private init(teamKey: String, team: Team?, partialNickname: String?, dependencies: Dependencies) {
+        self.teamKey = teamKey
+        self.team = team
+
+        let teamNumber = team?.teamNumber ?? Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0
+        let nickname: String? = {
+            if let team, !team.nickname.isEmpty { return team.nickname }
+            return partialNickname
+        }()
+        let teamNumberNickname = team?.teamNumberNickname ?? "Team \(teamNumber)"
+
+        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(teamNumber: teamNumber,
                                                                  avatar: nil,
-                                                                 nickname: nil,
-                                                                 teamNumberNickname: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+                                                                 nickname: nickname,
+                                                                 teamNumberNickname: teamNumberNickname,
                                                                  year: nil))
 
-        infoViewController = TeamInfoViewController(teamKey: teamKey, dependencies: dependencies)
+        infoViewController = TeamInfoViewController(teamKey: teamKey, team: team, dependencies: dependencies)
         eventsViewController = TeamEventsViewController(teamKey: teamKey, year: nil, dependencies: dependencies)
         mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: Calendar.current.component(.year, from: Date()), dependencies: dependencies)
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
-            navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+            navigationTitle: teamNumberNickname,
             navigationSubtitle: "----",
             segmentedControlTitles: ["Info", "Events", "Media"],
-
-
             dependencies: dependencies
         )
 
@@ -76,32 +90,6 @@ class TeamViewController: HeaderContainerViewController {
         }, for: .touchUpInside)
     }
 
-    // Partial data from a list view (e.g. search): populates the header label
-    // so it doesn't sit blank while the full team loads.
-    convenience init(teamKey: String, nickname: String?, dependencies: Dependencies) {
-        self.init(teamKey: teamKey, dependencies: dependencies)
-        guard let nickname, !nickname.isEmpty else { return }
-        let teamNumber = Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0
-        teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: teamNumber,
-                                                       avatar: nil,
-                                                       nickname: nickname,
-                                                       teamNumberNickname: "Team \(teamNumber)",
-                                                       year: nil)
-    }
-
-    // Full team from a list view: seed header + info now, still refresh in
-    // viewDidLoad to pick up any newer data.
-    convenience init(team: Team, dependencies: Dependencies) {
-        self.init(teamKey: team.key, dependencies: dependencies)
-        self.team = team
-        self.pendingInitialTeam = team
-        teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: team.teamNumber,
-                                                       avatar: nil,
-                                                       nickname: team.nickname.isEmpty ? nil : team.nickname,
-                                                       teamNumberNickname: team.teamNumberNickname,
-                                                       year: nil)
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -111,10 +99,6 @@ class TeamViewController: HeaderContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let pendingInitialTeam {
-            infoViewController.apply(team: pendingInitialTeam)
-            self.pendingInitialTeam = nil
-        }
         loadTeamData()
     }
 

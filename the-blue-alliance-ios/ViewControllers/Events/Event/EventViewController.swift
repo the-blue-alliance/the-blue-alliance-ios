@@ -6,9 +6,6 @@ import UIKit
 class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
 
     private let eventKey: String
-
-    // Loaded from TBAAPI after init; used for nav title + for the event struct
-    // passed to the detail container VCs (alliances/awards/etc.).
     private var event: Event?
 
     private(set) var infoViewController: EventInfoViewController
@@ -22,46 +19,43 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
     // MARK: - Init
 
-    // Key-only: nothing known about the event yet.
-    init(eventKey: String, dependencies: Dependencies) {
-        self.eventKey = eventKey
+    convenience init(eventKey: String, dependencies: Dependencies) {
+        self.init(eventKey: eventKey, event: nil, partialName: nil, dependencies: dependencies)
+    }
 
-        infoViewController = EventInfoViewController(eventKey: eventKey, dependencies: dependencies)
+    convenience init(eventKey: String, name: String?, dependencies: Dependencies) {
+        let trimmedName = name?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let partialName = (trimmedName?.isEmpty == false) ? trimmedName : nil
+        self.init(eventKey: eventKey, event: nil, partialName: partialName, dependencies: dependencies)
+    }
+
+    convenience init(event: Event, dependencies: Dependencies) {
+        self.init(eventKey: event.key, event: event, partialName: nil, dependencies: dependencies)
+    }
+
+    private init(eventKey: String, event: Event?, partialName: String?, dependencies: Dependencies) {
+        self.eventKey = eventKey
+        self.event = event
+
+        infoViewController = EventInfoViewController(eventKey: eventKey, event: event, partialName: partialName, dependencies: dependencies)
         teamsViewController = EventTeamsViewController(eventKey: eventKey, dependencies: dependencies)
         rankingsViewController = EventRankingsViewController(eventKey: eventKey, dependencies: dependencies)
         matchesViewController = MatchesViewController(eventKey: eventKey, dependencies: dependencies)
 
+        let navTitle = event?.friendlyNameWithYear ?? eventKey
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
-                   navigationTitle: eventKey,
+                   navigationTitle: navTitle,
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
-
-
                    dependencies: dependencies)
+
+        if let event {
+            title = event.friendlyNameWithYear
+        }
 
         infoViewController.delegate = self
         teamsViewController.delegate = self
         rankingsViewController.delegate = self
         matchesViewController.delegate = self
-    }
-
-    // Partial data from the search index (`Event.name` — the raw, verbose name).
-    // Only seeds the info cell; the nav title stays as the key until the full
-    // event loads, since the verbose name usually truncates there anyway.
-    convenience init(eventKey: String, name: String?, dependencies: Dependencies) {
-        self.init(eventKey: eventKey, dependencies: dependencies)
-        let trimmedName = name?.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let trimmedName, !trimmedName.isEmpty {
-            infoViewController.applyPartial(name: trimmedName)
-        }
-    }
-
-    // Full event from a list view: seed info now, still refresh in viewDidLoad.
-    convenience init(event: Event, dependencies: Dependencies) {
-        self.init(eventKey: event.key, dependencies: dependencies)
-        self.event = event
-        title = event.friendlyNameWithYear
-        navigationTitle = event.friendlyNameWithYear
-        infoViewController.apply(event: event)
     }
 
     required init?(coder aDecoder: NSCoder) {
