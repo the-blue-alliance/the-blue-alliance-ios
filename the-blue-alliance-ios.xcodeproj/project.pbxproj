@@ -1042,6 +1042,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		924E826C208FE7D20053247C /* Run FirebaseCrashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1058,7 +1059,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    \"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nelse\n    echo \"Skipping Crashlytics dSYM upload for ${CONFIGURATION} build\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
