@@ -236,7 +236,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.event(key: self.eventKey)
+            let fetched = try await self.api.event(key: self.eventKey)
             self.event = fetched
             self.updateEventInfo()
         }
