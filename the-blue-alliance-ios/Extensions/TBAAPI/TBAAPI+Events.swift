@@ -51,7 +51,7 @@ extension TBAAPI {
         }
     }
 
-    public func eventRankings(key eventKey: String) async throws -> EventRanking? {
+    public func eventRankings(key eventKey: String) async throws -> EventRanking {
         let response = try await client.getEventRankings(path: .init(eventKey: eventKey))
         switch response {
         case .ok(let ok):
@@ -99,7 +99,7 @@ extension TBAAPI {
         }
     }
 
-    public func eventDistrictPoints(key eventKey: String) async throws -> EventDistrictPoints? {
+    public func eventDistrictPoints(key eventKey: String) async throws -> EventDistrictPoints {
         let response = try await client.getEventDistrictPoints(path: .init(eventKey: eventKey))
         switch response {
         case .ok(let ok):
@@ -115,7 +115,7 @@ extension TBAAPI {
         }
     }
 
-    public func eventInsights(key eventKey: String) async throws -> EventInsights? {
+    public func eventInsights(key eventKey: String) async throws -> EventInsights {
         let response = try await client.getEventInsights(path: .init(eventKey: eventKey))
         switch response {
         case .ok(let ok):
@@ -147,7 +147,7 @@ extension TBAAPI {
         }
     }
 
-    public func match(key matchKey: String) async throws -> Match? {
+    public func match(key matchKey: String) async throws -> Match {
         let response = try await client.getMatch(path: .init(matchKey: matchKey))
         switch response {
         case .ok(let ok):
@@ -163,7 +163,7 @@ extension TBAAPI {
         }
     }
 
-    public func eventOPRs(key eventKey: String) async throws -> EventOPRs? {
+    public func eventOPRs(key eventKey: String) async throws -> EventOPRs {
         let response = try await client.getEventOPRs(path: .init(eventKey: eventKey))
         switch response {
         case .ok(let ok):

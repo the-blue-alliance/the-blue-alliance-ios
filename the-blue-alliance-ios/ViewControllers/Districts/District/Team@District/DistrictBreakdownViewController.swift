@@ -86,7 +86,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
         runRefresh { [weak self] in
             guard let self else { return }
             let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey)
-            if let updated = fetched.first(where: { $0.teamKey == self.teamKey }) {
+            if let updated = fetched?.first(where: { $0.teamKey == self.teamKey }) {
                 self.ranking = updated
                 self.tableView.reloadData()
             }

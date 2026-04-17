@@ -64,7 +64,8 @@ class MatchViewController: MyTBAContainerViewController {
             // 6.1 codegen bug — remove once Swift 6.3 is our minimum.
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
             let event = try? await eventTask
-            let match = (try? await matchTask) ?? nil
+            let match = try? await matchTask
+
 
             if let match {
                 self.match = match

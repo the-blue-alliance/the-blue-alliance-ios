@@ -236,14 +236,14 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
                 case .team(let key) where teamsCache[key] == nil:
                     group.addTask { [weak self] in
                         guard let self = self else { return }
-                        if let team = try? await self.dependencies.api.team(key: key) ?? nil {
+                        if let team = try? await self.dependencies.api.team(key: key) {
                             await MainActor.run { self.teamsCache[key] = team }
                         }
                     }
                 case .match(let key) where matchesCache[key] == nil:
                     group.addTask { [weak self] in
                         guard let self = self else { return }
-                        if let match = try? await self.dependencies.api.match(key: key) ?? nil {
+                        if let match = try? await self.dependencies.api.match(key: key) {
                             await MainActor.run { self.matchesCache[key] = match }
                         }
                     }

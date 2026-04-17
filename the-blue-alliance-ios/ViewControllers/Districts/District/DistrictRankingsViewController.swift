@@ -88,7 +88,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey)
+            let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey) ?? []
             self.allRankings = fetched
             self.applyRankings(fetched)
         }

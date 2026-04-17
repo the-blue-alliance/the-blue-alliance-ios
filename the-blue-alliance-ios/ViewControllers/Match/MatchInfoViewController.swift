@@ -169,9 +169,8 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            if let fetched = try await self.api.match(key: self.matchKey) {
-                self.apply(match: fetched)
-            }
+            let fetched = try await self.api.match(key: self.matchKey)
+            self.apply(match: fetched)
         }
     }
 

@@ -112,7 +112,8 @@ class TeamViewController: HeaderContainerViewController {
             // 6.1 codegen bug — remove once Swift 6.3 is our minimum.
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
             let years = try? await yearsTask
-            let team = (try? await teamTask) ?? nil
+            let team = try? await teamTask
+
 
             if let team {
                 self.team = team
