@@ -26,6 +26,10 @@ jobs:
           # swift_task_dealloc → asyncLet_finish_after_task_completion on
           # iOS 26.4+. Unpin once Swift 6.3 is the GH Actions stable.
           xcode-version: '16.2'
+      - name: Install iOS platform
+        # Xcode 16+ decoupled the iOS platform from the Xcode app bundle.
+        # macos-latest runners don't include it for the pinned Xcode version.
+        run: sudo xcodebuild -downloadPlatform iOS
       - name: Checkout
         uses: actions/checkout@v4
       - uses: actions/cache@v4
