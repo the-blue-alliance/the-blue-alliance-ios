@@ -404,6 +404,9 @@ class NotificationsViewController: TBATableViewController {
             self?.copyFCMTokenToPasteboard(fcmToken)
         })
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        if let notificationTokenFooter = notificationTokenFooter {
+            actionSheet.popoverPresentationController?.sourceView = notificationTokenFooter
+        }
 
         DispatchQueue.main.async { [weak self] in
             self?.present(actionSheet, animated: true, completion: nil)

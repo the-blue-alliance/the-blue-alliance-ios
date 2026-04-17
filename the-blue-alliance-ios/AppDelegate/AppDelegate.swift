@@ -241,7 +241,7 @@ extension AppDelegate {
     static func setupAppearance() {
         if #available(iOS 15.0, *) {
             let navigationBarAppearance = UINavigationBarAppearance()
-            navigationBarAppearance.configureWithDefaultBackground()
+            navigationBarAppearance.configureWithOpaqueBackground()
             navigationBarAppearance.backgroundColor = UIColor.navigationBarTintColor
             navigationBarAppearance.shadowColor = nil
             navigationBarAppearance.shadowImage = UIImage()

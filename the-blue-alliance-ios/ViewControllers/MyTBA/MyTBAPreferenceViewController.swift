@@ -163,6 +163,8 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
+        alert.popoverPresentationController?.barButtonItem = closeBarButtonItem
+
         present(alert, animated: true, completion: nil)
     }
 
