@@ -49,6 +49,16 @@
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D3DE56FA27D7ECD14AEBE10A"
+               BuildableName = "TBAScreenshotUITests.xctest"
+               BlueprintName = "TBAScreenshotUITests"
+               ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
