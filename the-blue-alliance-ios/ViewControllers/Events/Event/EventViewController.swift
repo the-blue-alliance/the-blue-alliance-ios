@@ -31,10 +31,8 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         rankingsViewController = EventRankingsViewController(eventKey: eventKey, dependencies: dependencies)
         matchesViewController = MatchesViewController(eventKey: eventKey, dependencies: dependencies)
 
-        // Raw key ("2026miket") is ugly; "2026" prefix is the best guess until the event loads.
-        let initialTitle = Self.yearPrefixedTitle(eventKey: eventKey, name: nil) ?? eventKey
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
-                   navigationTitle: initialTitle,
+                   navigationTitle: eventKey,
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
 
 
@@ -46,12 +44,13 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         matchesViewController.delegate = self
     }
 
-    // Partial data (e.g. key + name from search).
+    // Partial data from the search index (`Event.name` — the raw, verbose name).
+    // Only seeds the info cell; the nav title stays as the key until the full
+    // event loads, since the verbose name usually truncates there anyway.
     convenience init(eventKey: String, name: String?, dependencies: Dependencies) {
         self.init(eventKey: eventKey, dependencies: dependencies)
         let trimmedName = name?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let trimmedName, !trimmedName.isEmpty {
-            navigationTitle = Self.yearPrefixedTitle(eventKey: eventKey, name: trimmedName)
             infoViewController.applyPartial(name: trimmedName)
         }
     }
@@ -67,15 +66,6 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    private static func yearPrefixedTitle(eventKey: String, name: String?) -> String? {
-        let year = String(eventKey.prefix(4))
-        guard year.allSatisfy(\.isNumber) else { return name }
-        if let name, !name.isEmpty {
-            return "\(year) \(name)"
-        }
-        return year
     }
 
     // MARK: - View Lifecycle
