@@ -60,6 +60,17 @@ platform :ios do
     set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV["TBA_API_KEY"])
   end
 
+  desc "Download dSYMs for a specific build. Usage: fastlane dsyms version:3.2.3 build:2"
+  lane :dsyms do |options|
+    setup_api
+    download_dsyms(
+      version: options[:version],
+      build_number: options[:build],
+      app_identifier: "com.the-blue-alliance.tba",
+      output_directory: options[:output] || "./dsyms"
+    )
+  end
+
   desc "Configure code signing"
   private_lane :configure_code_signing do
     if is_ci?

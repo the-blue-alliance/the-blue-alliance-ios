@@ -95,6 +95,14 @@ Run all of our tests
 
 Setup Secrets.plist file (used by CI)
 
+### ios dsyms
+
+```sh
+[bundle exec] fastlane ios dsyms
+```
+
+Download dSYMs for a specific build. Usage: fastlane dsyms version:3.2.3 build:2
+
 ### ios beta_ci
 
 ```sh
