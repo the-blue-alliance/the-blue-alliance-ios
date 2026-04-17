@@ -60,6 +60,10 @@ class TeamHeaderView: UIView {
         stackView.axis = .vertical
         yearButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         yearButton.setContentHuggingPriority(.required, for: .vertical)
+        // Rational default cap. Dynamic Type can push past this if the text
+        // needs more room (hugging/compression priorities are required) but
+        // at standard sizing this keeps the capsule tight.
+        yearButton.autoSetDimension(.width, toSize: 80, relation: .lessThanOrEqual)
         return stackView
     }()
 
@@ -69,7 +73,6 @@ class TeamHeaderView: UIView {
         super.init(frame: .zero)
 
         backgroundColor = UIColor.navigationBarTintColor
-        clipsToBounds = true
         configureView()
 
         addSubview(rootStackView)
@@ -94,18 +97,19 @@ class TeamHeaderView: UIView {
     private func configureView() {
         let newAvatar = viewModel.avatar
         let shouldHide = newAvatar == nil
+        let avatarChanged = avatarImageView.image != newAvatar || avatarImageView.isHidden != shouldHide
 
-        // Crossfade the image in place but snap the stack slot. Animating
-        // `isHidden` on the stack view was what would briefly render outside
-        // the header bounds during a push transition.
-        if window != nil, avatarImageView.image != newAvatar {
+        if window != nil, avatarChanged {
             UIView.transition(with: avatarImageView, duration: 0.25, options: .transitionCrossDissolve, animations: {
                 self.avatarImageView.image = newAvatar
             })
+            UIView.animate(withDuration: 0.25) {
+                self.avatarImageView.isHidden = shouldHide
+            }
         } else {
             avatarImageView.image = newAvatar
+            avatarImageView.isHidden = shouldHide
         }
-        avatarImageView.isHidden = shouldHide
 
         teamNumberLabel.text = viewModel.teamNumberNickname
 
@@ -198,10 +202,10 @@ class YearButton: UIButton {
         config.baseForegroundColor = UIColor.navigationBarTintColor
         config.background.backgroundColor = UIColor.white
         config.cornerStyle = .capsule
-        config.buttonSize = .small
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 8)
         config.image = UIImage(systemName: "chevron.down")
         config.imagePlacement = .trailing
-        config.imagePadding = 4
+        config.imagePadding = 2
         config.title = "----"
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
