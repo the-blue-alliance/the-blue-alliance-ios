@@ -13,10 +13,6 @@ import UserNotifications
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    // MARK: - Window
-
-    var window: UIWindow?
-
     // MARK: - Owned services
 
     private let errorRecorder = TBAErrorRecorder()
@@ -24,8 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let subscriptionsStore = SubscriptionsStore()
     let urlOpener: URLOpener = UIApplication.shared
 
-    // Set in `application(_:didFinishLaunchingWithOptions:)` once `Secrets`
-    // are loaded.
+    // Set in `application(_:didFinishLaunchingWithOptions:)` once `Secrets` are loaded.
     var api: TBAAPI!
 
     lazy var messaging: Messaging = .messaging()
@@ -42,25 +37,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                       api: api,
                                                                       retryService: RetryService())
 
-    // MARK: - View hierarchy
+    lazy var dependencies = Dependencies(api: api,
+                                         myTBA: myTBA,
+                                         myTBAStores: myTBAStores,
+                                         statusService: statusService,
+                                         urlOpener: urlOpener)
 
-    private lazy var dependencies = Dependencies(api: api,
-                                                 myTBA: myTBA,
-                                                 myTBAStores: myTBAStores,
-                                                 statusService: statusService,
-                                                 urlOpener: urlOpener)
+    // MARK: - AppServicesProviding state
 
-    private lazy var rootViewController = PhoneRootViewController(fcmTokenProvider: messaging,
-                                                                  pushService: pushService,
-                                                                  dependencies: dependencies)
-
-    private var launchViewController: UIViewController {
-        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        guard let vc = storyboard.instantiateInitialViewController() else {
-            fatalError("Unable to load launch view controller")
-        }
-        return vc
-    }
+    var pendingAlerts: [PendingAlert] = []
 
     // MARK: - Push registration callback
 
@@ -73,7 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         runLegacyCleanup()
         Self.setupAppearance()
-        showLaunchScreen()
 
         configureFirebase()
         configureAPI()
@@ -81,17 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureAuth()
         configureStatusService()
 
-        guard isMinimumAppVersionSupported else {
-            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
-            return true
-        }
-
-        installRootViewController()
         return true
-    }
-
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        return GIDSignIn.sharedInstance.handle(url)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -117,13 +91,6 @@ private extension AppDelegate {
         LegacyCoreDataCleanup.run()
         // Old Refreshable cache key, no longer used.
         UserDefaults.standard.removeObject(forKey: "successful_refresh_keys")
-    }
-
-    func showLaunchScreen() {
-        let window = UIWindow()
-        self.window = window
-        window.rootViewController = launchViewController
-        window.makeKeyAndVisible()
     }
 
     func configureFirebase() {
@@ -170,22 +137,6 @@ private extension AppDelegate {
         statusService.registerRetryable(initiallyRetry: true)
     }
 
-    func installRootViewController() {
-        guard let window = window,
-              let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-            fatalError("Unable to snapshot launch screen")
-        }
-        rootViewController.view.addSubview(snapshot)
-        window.rootViewController = rootViewController
-
-        // 0.35 is an iOS animation magic number... for now
-        UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-            snapshot.layer.opacity = 0
-        }, completion: { _ in
-            snapshot.removeFromSuperview()
-        })
-    }
-
     func restorePreviousSignIn() {
         guard Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() else {
             return
@@ -214,29 +165,13 @@ private extension AppDelegate {
 
 // MARK: - Minimum app version
 
-private extension AppDelegate {
-
-    var isMinimumAppVersionSupported: Bool {
-        Self.isAppVersionSupported(minimumAppVersion: statusService.status.minAppVersion)
-    }
+extension AppDelegate {
 
     static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
         if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
             return true
         }
         return Bundle.main.buildVersionNumber >= minimumAppVersion
-    }
-
-    func showMinimumAppVersionAlert(currentAppVersion: Int) {
-        guard let window = window else { return }
-        DispatchQueue.main.async {
-            let alert = UIAlertController(
-                title: "Unsupported App Version",
-                message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
-                preferredStyle: .alert
-            )
-            window.rootViewController?.present(alert, animated: true)
-        }
     }
 
 }
@@ -247,7 +182,7 @@ extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: AppStatus) {
         if !Self.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
+            showAlert(.minVersion(currentAppVersion: statusService.status.latestAppVersion))
         }
     }
 
@@ -256,14 +191,30 @@ extension AppDelegate: StatusSubscribable {
 extension AppDelegate: FMSStatusSubscribable {
 
     func fmsStatusChanged(isDatafeedDown: Bool) {
-        guard isDatafeedDown else { return }
+        showAlert(.fmsStatus(isDatafeedDown: isDatafeedDown))
+    }
 
-        let alert = UIAlertController(
-            title: "FIRST's servers are down",
-            message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
-            preferredStyle: .alert
-        )
-        window?.rootViewController?.present(alert, animated: true)
+}
+
+// MARK: - AppServicesProviding
+
+extension AppDelegate: AppServicesProviding {
+
+    var fcmTokenProvider: any FCMTokenProvider { messaging }
+
+}
+
+private extension AppDelegate {
+
+    func showAlert(_ alert: PendingAlert) {
+        let presenter = UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.delegate as? SceneAlertPresenting }
+            .first
+        if let presenter {
+            presenter.present(alert)
+        } else {
+            pendingAlerts.append(alert)
+        }
     }
 
 }
