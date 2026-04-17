@@ -103,7 +103,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             snapshot.appendSections([section])
             snapshot.appendItems(grouped[section] ?? [], toSection: section)
         }
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: TableViewDataSourceDelegate

@@ -68,7 +68,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
         var snapshot = NSDiffableDataSourceSnapshot<String, EventRanking.RankingsPayloadPayload>()
         snapshot.appendSections([""])
         snapshot.appendItems(sorted, toSection: "")
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: Ranking info string

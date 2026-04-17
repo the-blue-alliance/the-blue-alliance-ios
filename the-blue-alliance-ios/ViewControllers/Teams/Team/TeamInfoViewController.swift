@@ -99,7 +99,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         snapshot.deleteAllItems()
 
         guard let team else {
-            dataSource.apply(snapshot, animatingDifferences: false)
+            dataSource.applySnapshotUsingReloadData(snapshot)
             return
         }
 
@@ -125,7 +125,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         snapshot.appendSections([.link])
         snapshot.appendItems(linkItems, toSection: .link)
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     private func reloadSponsors() {

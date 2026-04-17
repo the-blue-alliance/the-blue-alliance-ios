@@ -117,7 +117,7 @@ class SearchViewController: TBATableViewController {
         var snapshot = NSDiffableDataSourceSnapshot<SearchSection, SearchItem>()
 
         guard !query.isEmpty, let index else {
-            dataSource.apply(snapshot, animatingDifferences: false)
+            dataSource.applySnapshotUsingReloadData(snapshot)
             return
         }
 
@@ -152,7 +152,7 @@ class SearchViewController: TBATableViewController {
             }
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     private func matches(team: SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
