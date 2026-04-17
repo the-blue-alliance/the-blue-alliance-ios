@@ -11,6 +11,7 @@ class TeamViewController: HeaderContainerViewController {
     // Loaded from TBAAPI after init. Nil until the async load completes.
     private var team: Team?
     private var yearsParticipated: [Int] = []
+    private var avatarImage: UIImage?
 
     private let teamHeaderView: TeamHeaderView
 
@@ -31,7 +32,9 @@ class TeamViewController: HeaderContainerViewController {
             if oldValue == year { return }
             eventsViewController.year = year
             mediaViewController.year = year ?? Calendar.current.component(.year, from: Date())
+            avatarImage = nil
             updateInterface()
+            if let year { loadAvatar(year: year) }
         }
     }
 
@@ -114,12 +117,28 @@ class TeamViewController: HeaderContainerViewController {
     private func updateInterface() {
         if let team {
             teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: team.teamNumber,
-                                                           avatar: nil,
+                                                           avatar: avatarImage,
                                                            nickname: team.nickname.isEmpty ? nil : team.nickname,
                                                            teamNumberNickname: team.teamNumberNickname,
                                                            year: year)
         }
         navigationSubtitle = year?.description ?? "----"
+    }
+
+    private func loadAvatar(year: Int) {
+        Task { @MainActor in
+            guard let media = try? await dependencies.api.teamMediaByYear(teamKey: teamKey, year: year) else { return }
+            guard self.year == year else { return }
+            let avatar = media.first(where: { $0._type == .avatar })
+            avatarImage = Self.decodeAvatar(from: avatar)
+            updateInterface()
+        }
+    }
+
+    private static func decodeAvatar(from media: Media?) -> UIImage? {
+        guard let base64 = media?.details?.additionalProperties.value["base64Image"] as? String,
+              let data = Data(base64Encoded: base64) else { return nil }
+        return UIImage(data: data)
     }
 
     @objc private func showSelectYear() {

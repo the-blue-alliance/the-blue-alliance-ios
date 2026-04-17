@@ -25,7 +25,6 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         // Style our search bar
         searchController.searchBar.backgroundColor = UIColor.navigationBarTintColor
         searchController.searchBar.autocapitalizationType = .words
-        searchController.searchBar.placeholder = "Search teams and events"
         searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map { $0.title }
         searchController.searchBar.delegate = searchViewController
 
@@ -33,7 +32,11 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         searchController.searchBar.searchTextField.textColor = UIColor.white
         searchController.searchBar.searchTextField.tintColor = UIColor.white
         searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.white
-        searchController.searchBar.searchTextField.backgroundColor = UIColor.tableViewHeaderColor
+        searchController.searchBar.searchTextField.backgroundColor = UIColor.searchFieldBackgroundColor
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "Search teams and events",
+            attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
+        )
 
         navigationItem.hidesSearchBarWhenScrolling = false
 

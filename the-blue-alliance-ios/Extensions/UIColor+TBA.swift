@@ -47,6 +47,14 @@ extension UIColor {
         return dynamicColor(UIColor.darkModePrimaryBlue, UIColor.darkModePrimaryBlue, UIColor.systemGray5, UIColor.systemGray5)
     }
 
+    public class var searchFieldBackgroundColor: UIColor {
+        return UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor.systemGray5
+                : UIColor.white.withAlphaComponent(0.22)
+        }
+    }
+
     public class var segmentedControlSelectedColor: UIColor {
         return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.white, UIColor.white)
     }

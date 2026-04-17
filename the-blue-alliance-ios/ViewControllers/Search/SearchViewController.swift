@@ -61,6 +61,9 @@ class SearchViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = UIColor.navigationBarTintColor
+        tableView.backgroundColor = .systemGroupedBackground
+
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
 
@@ -79,7 +82,11 @@ class SearchViewController: TBATableViewController {
             switch item {
             case .event(let key, let name):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-                cell.viewModel = EventCellViewModel(name: name.isEmpty ? key : name, location: nil, dateString: nil)
+                let year = String(key.prefix(4))
+                let shortCode = String(key.dropFirst(4))
+                cell.viewModel = EventCellViewModel(name: name.isEmpty ? key : name,
+                                                    location: "[\(shortCode)]",
+                                                    dateString: year)
                 return cell
             case .team(let key, let nickname):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
