@@ -57,8 +57,10 @@ class TeamAtEventViewController: ContainerViewController {
             async let eventTask = dependencies.api.event(key: eventKey)
             async let teamTask = dependencies.api.team(key: teamKey)
 
-            // Await in reverse declaration order so async let child tasks are
-            // torn down LIFO — otherwise swift_task_dealloc traps.
+            // Await in reverse declaration order so async let child tasks are torn
+            // down LIFO; otherwise swift_task_dealloc traps. Workaround for a Swift
+            // 6.1 codegen bug — remove once Swift 6.3 is our minimum.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
             let team = (try? await teamTask) ?? nil
             let event = try? await eventTask
 
