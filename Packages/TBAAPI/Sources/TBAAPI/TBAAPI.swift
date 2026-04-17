@@ -25,16 +25,15 @@ public struct TBAAPI {
 
     public let client: Client
 
-    public init(apiKey: String) {
+    public init(apiKey: String, configuration: URLSessionConfiguration = .ephemeral) {
         let serverURL = (try? Servers.Server1.url()) ?? APIConstants.baseURL
 
-        let configuration = URLSessionConfiguration.ephemeral
         configuration.httpAdditionalHeaders = [
             "X-TBA-Auth-Key": apiKey,
         ]
 
         #if DEBUG
-        configuration.urlCache!.removeAllCachedResponses()
+        configuration.urlCache?.removeAllCachedResponses()
         #endif
 
         self.client = Client(
