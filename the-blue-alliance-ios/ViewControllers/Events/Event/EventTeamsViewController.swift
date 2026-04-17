@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-class EventTeamsViewController: TeamsListViewController {
+class EventTeamsViewController: TeamsListViewController<Team> {
 
     let eventKey: String
 
@@ -17,7 +17,7 @@ class EventTeamsViewController: TeamsListViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadTeams() async throws -> [APITeam] {
+    override func loadTeams() async throws -> [Team] {
         try await dependencies.api.eventTeams(key: eventKey)
     }
 

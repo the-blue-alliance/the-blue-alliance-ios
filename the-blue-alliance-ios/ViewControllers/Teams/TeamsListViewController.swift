@@ -2,12 +2,10 @@ import TBAAPI
 import UIKit
 
 protocol TeamsListViewControllerDelegate: AnyObject {
-    func teamSelected(_ team: Team)
+    func teamSelected(_ team: any TeamDisplayable)
 }
 
-class TeamsListViewController: TBASearchableTableViewController, Refreshable, Stateful {
-
-    typealias APITeam = Team
+class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>: TBASearchableTableViewController, Refreshable, Stateful {
 
     weak var delegate: TeamsListViewControllerDelegate?
 

@@ -9,6 +9,7 @@ public protocol TBAAPIProtocol {
 
     // Teams
     func allTeams() async throws -> [Team]
+    func allTeamsSimple() async throws -> [TeamSimple]
     func team(key teamKey: String) async throws -> Team?
     func teamYearsParticipated(key teamKey: String) async throws -> [Int]
     func teamEventsByYear(key teamKey: String, year: Int) async throws -> [Event]
@@ -34,5 +35,6 @@ public protocol TBAAPIProtocol {
     func districtsByYear(_ year: Int) async throws -> [District]
     func districtEvents(key districtKey: String) async throws -> [Event]
     func districtTeams(key districtKey: String) async throws -> [Team]
+    func districtTeamsSimple(key districtKey: String) async throws -> [TeamSimple]
     func districtRankings(key districtKey: String) async throws -> [DistrictRanking]
 }

@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-class DistrictTeamsViewController: TeamsListViewController {
+class DistrictTeamsViewController: TeamsListViewController<TeamSimple> {
 
     let districtKey: String
     let year: Int
@@ -17,8 +17,8 @@ class DistrictTeamsViewController: TeamsListViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadTeams() async throws -> [APITeam] {
-        try await dependencies.api.districtTeams(key: districtKey)
+    override func loadTeams() async throws -> [TeamSimple] {
+        try await dependencies.api.districtTeamsSimple(key: districtKey)
     }
 
     override var noDataText: String? { "No teams for district" }

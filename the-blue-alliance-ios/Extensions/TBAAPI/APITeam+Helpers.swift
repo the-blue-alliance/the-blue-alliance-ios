@@ -1,8 +1,17 @@
 import Foundation
 import TBAAPI
 
-extension Team {
+protocol TeamDisplayable {
+    var key: String { get }
+    var teamNumber: Int { get }
+    var nickname: String { get }
+    var name: String { get }
+    var city: String? { get }
+    var stateProv: String? { get }
+    var country: String? { get }
+}
 
+extension TeamDisplayable {
     // Matches the TBAData.Team.teamNumberNickname ("Team 254").
     var teamNumberNickname: String { "Team \(teamNumber)" }
 
@@ -11,11 +20,23 @@ extension Team {
         nickname.isEmpty ? teamNumberNickname : nickname
     }
 
+    var locationString: String? {
+        let parts = [city, stateProv, country].compactMap { $0 }.filter { !$0.isEmpty }
+        return parts.isEmpty ? nil : parts.joined(separator: ", ")
+    }
+}
+
+extension TeamSimple: TeamDisplayable {}
+
+extension Team: TeamDisplayable {
+
     var hasWebsite: Bool {
         guard let website else { return false }
         return !website.isEmpty
     }
 
+    // `Team` carries the parsed `locationName` field; use it as a fallback when
+    // city/state/country are all empty. `TeamSimple` lacks this field.
     var locationString: String? {
         let parts = [city, stateProv, country].compactMap { $0 }.filter { !$0.isEmpty }
         return parts.isEmpty ? locationName : parts.joined(separator: ", ")
