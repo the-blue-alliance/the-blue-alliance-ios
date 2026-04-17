@@ -1,9 +1,9 @@
 import Foundation
 import TBAAPI
 
-class TeamsViewController: TeamsListViewController {
+class TeamsViewController: TeamsListViewController<TeamSimple> {
 
-    override func loadTeams() async throws -> [APITeam] {
-        try await dependencies.api.allTeams()
+    override func loadTeams() async throws -> [TeamSimple] {
+        try await dependencies.api.allTeamsSimple()
     }
 }

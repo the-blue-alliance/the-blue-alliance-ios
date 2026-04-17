@@ -63,8 +63,8 @@ extension SearchContainerDelegate where Self: ContainerViewController {
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 
-    func teamSelected(_ team: Team) {
-        let teamViewController = TeamViewController(team: team, dependencies: dependencies)
+    func teamSelected(_ team: any TeamDisplayable) {
+        let teamViewController = TeamViewController(teamKey: team.key, nickname: team.nickname, dependencies: dependencies)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

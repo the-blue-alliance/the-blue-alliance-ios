@@ -62,8 +62,8 @@ extension DistrictViewController: EventsListViewControllerDelegate {
 
 extension DistrictViewController: TeamsListViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        let teamViewController = TeamViewController(team: team, dependencies: dependencies)
+    func teamSelected(_ team: any TeamDisplayable) {
+        let teamViewController = TeamViewController(teamKey: team.key, nickname: team.nickname, dependencies: dependencies)
         self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 

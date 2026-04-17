@@ -26,6 +26,27 @@ extension TBAAPI {
         return all
     }
 
+    public func allTeamsSimple() async throws -> [TeamSimple] {
+        var all: [TeamSimple] = []
+        var page = 0
+        while true {
+            let response = try await client.getTeamsSimple(path: .init(pageNum: page))
+            let batch: [TeamSimple]
+            switch response {
+            case .ok(let ok):
+                batch = try ok.body.json
+            case .notModified, .unauthorized, .notFound:
+                return all
+            case .undocumented(let statusCode, _):
+                throw TBAAPIError.unexpectedStatus(statusCode)
+            }
+            if batch.isEmpty { break }
+            all.append(contentsOf: batch)
+            page += 1
+        }
+        return all
+    }
+
     public func team(key teamKey: String) async throws -> Team? {
         let response = try await client.getTeam(path: .init(teamKey: teamKey))
         switch response {

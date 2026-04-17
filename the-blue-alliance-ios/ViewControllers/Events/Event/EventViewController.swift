@@ -127,7 +127,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
 
 extension EventViewController: TeamsListViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
+    func teamSelected(_ team: any TeamDisplayable) {
         pushTeamAtEvent(teamKey: team.key)
     }
 
