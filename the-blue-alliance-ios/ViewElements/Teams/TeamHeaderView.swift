@@ -60,10 +60,6 @@ class TeamHeaderView: UIView {
         stackView.axis = .vertical
         yearButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         yearButton.setContentHuggingPriority(.required, for: .vertical)
-        // Rational default cap. Dynamic Type can push past this if the text
-        // needs more room (hugging/compression priorities are required) but
-        // at standard sizing this keeps the capsule tight.
-        yearButton.autoSetDimension(.width, toSize: 80, relation: .lessThanOrEqual)
         return stackView
     }()
 
@@ -203,7 +199,7 @@ class YearButton: UIButton {
         config.baseForegroundColor = UIColor.navigationBarTintColor
         config.background.backgroundColor = UIColor.white
         config.cornerStyle = .capsule
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 8)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 6)
         config.image = UIImage(systemName: "chevron.down")
         config.imagePlacement = .trailing
         config.imagePadding = 2
