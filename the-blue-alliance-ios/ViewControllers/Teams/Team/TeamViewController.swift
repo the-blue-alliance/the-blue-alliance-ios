@@ -7,10 +7,6 @@ import UIKit
 class TeamViewController: HeaderContainerViewController {
 
     private let teamKey: String
-    private let pasteboard: UIPasteboard?
-    private let photoLibrary: PHPhotoLibrary?
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
 
     // Loaded from TBAAPI after init. Nil until the async load completes.
     private var team: Team?
@@ -41,12 +37,8 @@ class TeamViewController: HeaderContainerViewController {
 
     // MARK: Init
 
-    init(teamKey: String, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, myTBAStores: MyTBAStores, dependencies: Dependencies) {
+    init(teamKey: String, dependencies: Dependencies) {
         self.teamKey = teamKey
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
 
         // Header starts empty; it's populated once the team struct loads.
         self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(teamNumber: Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0,
@@ -55,17 +47,17 @@ class TeamViewController: HeaderContainerViewController {
                                                                  teamNumberNickname: "Team \(TeamKey.trimFRCPrefix(teamKey))",
                                                                  year: nil))
 
-        infoViewController = TeamInfoViewController(teamKey: teamKey, urlOpener: urlOpener, dependencies: dependencies)
+        infoViewController = TeamInfoViewController(teamKey: teamKey, dependencies: dependencies)
         eventsViewController = TeamEventsViewController(teamKey: teamKey, year: nil, dependencies: dependencies)
-        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: Calendar.current.component(.year, from: Date()), pasteboard: pasteboard, photoLibrary: photoLibrary, urlOpener: urlOpener, dependencies: dependencies)
+        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: Calendar.current.component(.year, from: Date()), dependencies: dependencies)
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
             navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
             navigationSubtitle: "----",
             segmentedControlTitles: ["Info", "Events", "Media"],
-            myTBA: myTBA,
-            myTBAStores: myTBAStores,
+            
+            
             dependencies: dependencies
         )
 
@@ -175,7 +167,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, dependencies: dependencies)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 }

@@ -29,10 +29,6 @@ enum NotificationStatus {
 
 class NotificationsViewController: TBATableViewController {
 
-    private let fcmTokenProvider: FCMTokenProvider
-    private let myTBA: MyTBA
-    private let pushService: PushService
-    private let urlOpener: URLOpener
 
     private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showCopyFCMToken))
     private var notificationTokenFooter: UIView?
@@ -52,11 +48,12 @@ class NotificationsViewController: TBATableViewController {
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: Error?
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, dependencies: Dependencies) {
+    private let fcmTokenProvider: any FCMTokenProvider
+    private let pushService: any PushServiceProtocol
+
+    init(fcmTokenProvider: any FCMTokenProvider, pushService: any PushServiceProtocol, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
-        self.myTBA = myTBA
         self.pushService = pushService
-        self.urlOpener = urlOpener
 
         super.init(style: .grouped, dependencies: dependencies)
 
@@ -227,7 +224,7 @@ class NotificationsViewController: TBATableViewController {
         }
 
         fetchingRemoteNotificationRegistrationStatus = true
-        PushService.registerForRemoteNotifications { [weak self] (error) in
+        pushService.registerForRemoteNotifications { [weak self] (error) in
             self?.fetchingRemoteNotificationRegistrationStatus = false
             self?.hasCheckedRemoteNotificationRegistration = true
             self?.remoteNotificationRegistrationError = error

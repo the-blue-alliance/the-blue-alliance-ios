@@ -15,8 +15,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     private let eventKey: String
     private let teamKey: String?
-    private var myTBA: MyTBA
-    private let favoritesStore: FavoritesStore
 
     private var dataSource: TableViewDataSource<String, Match>!
 
@@ -32,14 +30,14 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, teamKey: String? = nil, myTBA: MyTBA, favoritesStore: FavoritesStore, dependencies: Dependencies) {
+    init(eventKey: String, teamKey: String? = nil, dependencies: Dependencies) {
         self.eventKey = eventKey
         self.teamKey = teamKey
-        self.myTBA = myTBA
-        self.favoritesStore = favoritesStore
 
         super.init(dependencies: dependencies)
     }
+
+    private var favoritesStore: FavoritesStore { myTBAStores.favorites }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -206,7 +204,7 @@ private extension Array where Element == Match {
 }
 
 protocol MatchesViewControllerQueryable: ContainerViewController, MatchQueryOptionsDelegate {
-    var myTBA: MyTBA { get }
+    var myTBA: any MyTBAProtocol { get }
     var matchesViewController: MatchesViewController { get }
 
     func showFilter()
@@ -215,7 +213,7 @@ protocol MatchesViewControllerQueryable: ContainerViewController, MatchQueryOpti
 extension MatchesViewControllerQueryable {
 
     func showFilter() {
-        let queryViewController = MatchQueryOptionsViewController(query: matchesViewController.query, myTBA: myTBA, dependencies: dependencies)
+        let queryViewController = MatchQueryOptionsViewController(query: matchesViewController.query, dependencies: dependencies)
         queryViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: queryViewController)

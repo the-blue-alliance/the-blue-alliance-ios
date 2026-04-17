@@ -19,18 +19,14 @@ private enum DebugRow: Int, CaseIterable {
 
 class SettingsViewController: TBATableViewController {
 
-    private let fcmTokenProvider: FCMTokenProvider
-    private let myTBA: MyTBA
-    private let pushService: PushService
-    private let urlOpener: URLOpener
+    private let fcmTokenProvider: any FCMTokenProvider
+    private let pushService: any PushServiceProtocol
 
     // MARK: - Init
 
-    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, dependencies: Dependencies) {
+    init(fcmTokenProvider: any FCMTokenProvider, pushService: any PushServiceProtocol, dependencies: Dependencies) {
         self.fcmTokenProvider = fcmTokenProvider
-        self.myTBA = myTBA
         self.pushService = pushService
-        self.urlOpener = urlOpener
 
         super.init(style: .grouped, dependencies: dependencies)
 
@@ -266,7 +262,7 @@ class SettingsViewController: TBATableViewController {
     }
 
     private func pushTroubleshootNotifications() {
-        let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, dependencies: dependencies)
+        let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, pushService: pushService, dependencies: dependencies)
         navigationController?.pushViewController(notificationsViewController, animated: true)
     }
 

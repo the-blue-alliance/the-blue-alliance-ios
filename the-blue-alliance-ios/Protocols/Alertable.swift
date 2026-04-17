@@ -4,7 +4,7 @@ import UIKit
 // Alertable describes a UIViewController that shows UIAlerts
 protocol Alertable {}
 
-extension Alertable where Self: ContainerViewController {
+extension Alertable where Self: UIViewController {
 
     func showErrorAlert(with message: String, okayAction: ((UIAlertAction) -> Swift.Void)? = nil) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)

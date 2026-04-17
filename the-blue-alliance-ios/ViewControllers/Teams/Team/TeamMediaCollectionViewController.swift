@@ -19,9 +19,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private static let imageTypes: Set<String> = ["imgur", "cdphotothread", "avatar", "instagram-image"]
 
     private let teamKey: String
-    private let pasteboard: UIPasteboard?
-    private let photoLibrary: PHPhotoLibrary?
-    private let urlOpener: URLOpener?
+    private let pasteboard: UIPasteboard
+    private let photoLibrary: PHPhotoLibrary
 
     var year: Int? {
         didSet {
@@ -42,12 +41,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Init
 
-    init(teamKey: String, year: Int? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, urlOpener: URLOpener? = nil, dependencies: Dependencies) {
+    init(teamKey: String, year: Int? = nil, pasteboard: UIPasteboard = .general, photoLibrary: PHPhotoLibrary = .shared(), dependencies: Dependencies) {
         self.teamKey = teamKey
         self.year = year
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
-        self.urlOpener = urlOpener
 
         super.init(dependencies: dependencies)
     }
@@ -95,23 +93,21 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             }
             var actions: [UIMenuElement] = [viewAction]
 
-            if let viewURL = item.viewURL, let urlOpener = self.urlOpener, urlOpener.canOpenURL(viewURL) {
+            if let viewURL = item.viewURL, self.urlOpener.canOpenURL(viewURL) {
                 let viewOnlineAction = UIAction(title: "View Online", image: UIImage(systemName: "safari.fill")) { _ in
-                    urlOpener.open(viewURL, options: [:], completionHandler: nil)
+                    self.urlOpener.open(viewURL, options: [:], completionHandler: nil)
                 }
                 actions.append(viewOnlineAction)
             }
 
-            if let image = cachedImage, let pasteboard = self.pasteboard {
+            if let image = cachedImage {
                 let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc.fill")) { _ in
-                    pasteboard.image = image
+                    self.pasteboard.image = image
                 }
                 actions.append(copyAction)
-            }
 
-            if let image = cachedImage, let photoLibrary = self.photoLibrary {
                 let saveAction = UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down.fill")) { _ in
-                    photoLibrary.performChanges({
+                    self.photoLibrary.performChanges({
                         PHAssetChangeRequest.creationRequestForAsset(from: image)
                     }, completionHandler: nil)
                 }

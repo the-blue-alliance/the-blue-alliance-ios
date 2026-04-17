@@ -4,20 +4,16 @@ import TBAUtils
 import UIKit
 
 protocol Subscribable {
-    var errorRecorder: ErrorRecorder { get }
-    var myTBA: MyTBA { get }
+    var dependencies: Dependencies { get }
     var favoriteBarButtonItem: UIBarButtonItem { get }
     var subscribableModel: MyTBASubscribable { get }
-    var myTBAStores: MyTBAStores { get }
 }
 
 extension Subscribable where Self: UIViewController {
 
     func presentMyTBAPreferences() {
-        let myTBAPreferencesViewController = MyTBAPreferenceViewController(errorRecorder: errorRecorder,
-                                                                           subscribableModel: subscribableModel,
-                                                                           myTBA: myTBA,
-                                                                           myTBAStores: myTBAStores)
+        let myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel,
+                                                                           dependencies: dependencies)
         let navigationController = UINavigationController(rootViewController: myTBAPreferencesViewController)
         navigationController.modalPresentationStyle = .formSheet
         navigationController.presentationController?.delegate = myTBAPreferencesViewController

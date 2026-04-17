@@ -67,14 +67,12 @@ struct MatchQueryOptions: QueryableOptions {
 
 class MatchQueryOptionsViewController: TBATableViewController {
 
-    private var myTBA: MyTBA
     private var query: MatchQueryOptions
 
     weak var delegate: MatchQueryOptionsDelegate?
 
-    init(query: MatchQueryOptions, myTBA: MyTBA, dependencies: Dependencies) {
+    init(query: MatchQueryOptions, dependencies: Dependencies) {
         self.query = query
-        self.myTBA = myTBA
 
         super.init(style: .plain, dependencies: dependencies)
 

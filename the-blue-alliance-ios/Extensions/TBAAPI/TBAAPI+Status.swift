@@ -1,9 +1,11 @@
 import Foundation
 import TBAAPI
 
+extension TBAAPI: TBAAPIProtocol {}
+
 extension TBAAPI {
 
-    func getStatus() async throws -> APIStatus {
+    public func getStatus() async throws -> APIStatus {
         let response = try await client.getStatus()
         switch response {
         case .ok(let ok):

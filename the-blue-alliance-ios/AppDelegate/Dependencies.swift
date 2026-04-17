@@ -1,17 +1,25 @@
 import Foundation
+import MyTBAKit
 import TBAAPI
 import TBAUtils
+import UIKit
 
 class Dependencies {
-    let errorRecorder: ErrorRecorder
-    let api: TBAAPI
-    let userDefaults: UserDefaults
+    let api: any TBAAPIProtocol
+    let myTBA: any MyTBAProtocol
+    let myTBAStores: MyTBAStores
+    let statusService: any StatusServiceProtocol
+    let urlOpener: any URLOpener
 
-    init(errorRecorder: ErrorRecorder,
-         api: TBAAPI,
-         userDefaults: UserDefaults) {
-        self.errorRecorder = errorRecorder
+    init(api: any TBAAPIProtocol,
+         myTBA: any MyTBAProtocol,
+         myTBAStores: MyTBAStores,
+         statusService: any StatusServiceProtocol,
+         urlOpener: any URLOpener = UIApplication.shared) {
         self.api = api
-        self.userDefaults = userDefaults
+        self.myTBA = myTBA
+        self.myTBAStores = myTBAStores
+        self.statusService = statusService
+        self.urlOpener = urlOpener
     }
 }

@@ -13,10 +13,6 @@ class MatchViewController: MyTBAContainerViewController {
     private(set) var infoViewController: MatchInfoViewController
     private let breakdownViewController: MatchBreakdownViewController
 
-    private let pasteboard: UIPasteboard?
-    private let photoLibrary: PHPhotoLibrary?
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
 
     override var subscribableModel: MyTBASubscribable {
         MatchSubscribable(modelKey: matchKey)
@@ -24,13 +20,9 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(matchKey: String, teamKey: String? = nil, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, myTBAStores: MyTBAStores, dependencies: Dependencies) {
+    init(matchKey: String, teamKey: String? = nil, dependencies: Dependencies) {
         self.matchKey = matchKey
         self.teamKey = teamKey
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
 
         infoViewController = MatchInfoViewController(matchKey: matchKey, teamKey: teamKey, dependencies: dependencies)
         breakdownViewController = MatchBreakdownViewController(matchKey: matchKey,
@@ -42,8 +34,8 @@ class MatchViewController: MyTBAContainerViewController {
             navigationTitle: "Match",
             navigationSubtitle: nil,
             segmentedControlTitles: ["Info", "Breakdown"],
-            myTBA: myTBA,
-            myTBAStores: myTBAStores,
+            
+            
             dependencies: dependencies
         )
 
@@ -96,7 +88,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         let targetKey = "frc\(teamNumber)"
         guard let match, match.allTeamKeys.contains(targetKey) else { return }
         let year = match.year ?? 0
-        let teamAtEventVC = TeamAtEventViewController(teamKey: targetKey, eventKey: match.eventKey, year: year, myTBA: myTBA, myTBAStores: myTBAStores, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
+        let teamAtEventVC = TeamAtEventViewController(teamKey: targetKey, eventKey: match.eventKey, year: year, dependencies: dependencies)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
 

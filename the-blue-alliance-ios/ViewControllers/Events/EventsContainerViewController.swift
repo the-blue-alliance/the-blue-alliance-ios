@@ -6,12 +6,6 @@ import UIKit
 
 class EventsContainerViewController: ContainerViewController {
 
-    private(set) var myTBA: MyTBA
-    private(set) var myTBAStores: MyTBAStores
-    private(set) var pasteboard: UIPasteboard?
-    private(set) var photoLibrary: PHPhotoLibrary?
-    private(set) var statusService: StatusService
-    private(set) var urlOpener: URLOpener
 
     private(set) var year: Int
     private(set) var eventsViewController: WeekEventsViewController
@@ -20,15 +14,9 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
+    init(dependencies: Dependencies) {
 
-        year = statusService.currentSeason
+        year = dependencies.statusService.currentSeason
         eventsViewController = WeekEventsViewController(year: year, dependencies: dependencies)
 
         super.init(viewControllers: [eventsViewController],
@@ -112,12 +100,12 @@ extension EventsContainerViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         let eventViewController = EventViewController(eventKey: event.key,
-                                                      pasteboard: pasteboard,
-                                                      photoLibrary: photoLibrary,
-                                                      statusService: statusService,
-                                                      urlOpener: urlOpener,
-                                                      myTBA: myTBA,
-                                                      myTBAStores: myTBAStores,
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
                                                       dependencies: dependencies)
         navigationController?.pushViewController(eventViewController, animated: true)
     }

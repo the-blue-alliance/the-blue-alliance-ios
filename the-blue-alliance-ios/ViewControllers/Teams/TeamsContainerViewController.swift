@@ -4,12 +4,6 @@ import UIKit
 
 class TeamsContainerViewController: ContainerViewController {
 
-    private(set) var myTBA: MyTBA
-    private(set) var myTBAStores: MyTBAStores
-    private(set) var pasteboard: UIPasteboard?
-    private(set) var photoLibrary: PHPhotoLibrary?
-    private(set) var statusService: StatusService
-    private(set) var urlOpener: URLOpener
 
     var searchController: UISearchController!
 
@@ -17,13 +11,7 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, myTBAStores: MyTBAStores, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, dependencies: Dependencies) {
-        self.myTBA = myTBA
-        self.myTBAStores = myTBAStores
-        self.pasteboard = pasteboard
-        self.photoLibrary = photoLibrary
-        self.statusService = statusService
-        self.urlOpener = urlOpener
+    init(dependencies: Dependencies) {
 
         teamsViewController = TeamsViewController(showSearch: false, dependencies: dependencies)
 

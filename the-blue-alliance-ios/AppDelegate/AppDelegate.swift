@@ -5,91 +5,129 @@ import FirebaseCrashlytics
 import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
-import Photos
 import TBAAPI
 import TBAUtils
 import UIKit
 import UserNotifications
 
+@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    // MARK: - Window
 
     var window: UIWindow?
 
-    // MARK: - View Hierarchy
+    // MARK: - Owned services
 
-    lazy private var rootViewController: PhoneRootViewController = {
-        return PhoneRootViewController(fcmTokenProvider: messaging,
-                                       myTBA: myTBA,
-                                       myTBAStores: myTBAStores,
-                                       pasteboard: pasteboard,
-                                       photoLibrary: photoLibrary,
-                                       pushService: pushService,
-                                       statusService: statusService,
-                                       urlOpener: urlOpener,
-                                       dependencies: dependencies)
-    }()
-
-    // MARK: - Services
-    private lazy var dependencies = Dependencies(errorRecorder: errorRecorder,
-                                                 api: api,
-                                                 userDefaults: userDefaults)
-    // Owned here and wrapped in a MyTBAStores bag so the myTBA-related screens
-    // can thread both stores as one init param. Not in Dependencies — only a
-    // handful of screens care.
+    private let errorRecorder = TBAErrorRecorder()
     let favoritesStore = FavoritesStore()
     let subscriptionsStore = SubscriptionsStore()
-    lazy var myTBAStores: MyTBAStores = MyTBAStores(favorites: favoritesStore, subscriptions: subscriptionsStore)
-    private let errorRecorder = TBAErrorRecorder()
-    lazy var messaging: Messaging = Messaging.messaging()
-    lazy var myTBA: MyTBA = {
-        return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
-                     deviceName: UIDevice.current.name,
-                     fcmTokenProvider: messaging)
-    }()
-    let pasteboard = UIPasteboard.general
-    let photoLibrary = PHPhotoLibrary.shared()
-    var api: TBAAPI!
-    let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
-    lazy var pushService: PushService = {
-        return PushService(errorRecorder: errorRecorder,
-                           myTBA: myTBA,
-                           retryService: RetryService())
-    }()
-    lazy var statusService: StatusService = {
-        return StatusService(errorRecorder: errorRecorder,
-                             api: api,
-                             retryService: RetryService())
-    }()
+    // Set in `application(_:didFinishLaunchingWithOptions:)` once `Secrets`
+    // are loaded.
+    var api: TBAAPI!
 
-    // A completion block for registering for remote notifications
+    lazy var messaging: Messaging = .messaging()
+    lazy var myTBAStores: MyTBAStores = MyTBAStores(favorites: favoritesStore,
+                                                    subscriptions: subscriptionsStore)
+    lazy var myTBA: any MyTBAProtocol = MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
+                                              deviceName: UIDevice.current.name,
+                                              fcmTokenProvider: messaging)
+    lazy var pushService: PushService = PushService(errorRecorder: errorRecorder,
+                                                    myTBA: myTBA,
+                                                    retryService: RetryService(),
+                                                    registrar: self)
+    lazy var statusService: any StatusServiceProtocol = StatusService(errorRecorder: errorRecorder,
+                                                                      api: api,
+                                                                      retryService: RetryService())
+
+    // MARK: - View hierarchy
+
+    private lazy var dependencies = Dependencies(api: api,
+                                                 myTBA: myTBA,
+                                                 myTBAStores: myTBAStores,
+                                                 statusService: statusService,
+                                                 urlOpener: urlOpener)
+
+    private lazy var rootViewController = PhoneRootViewController(fcmTokenProvider: messaging,
+                                                                  pushService: pushService,
+                                                                  dependencies: dependencies)
+
+    private var launchViewController: UIViewController {
+        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        guard let vc = storyboard.instantiateInitialViewController() else {
+            fatalError("Unable to load launch view controller")
+        }
+        return vc
+    }
+
+    // MARK: - Push registration callback
+
+    // Holds the completion passed to `registerForRemoteNotifications` until
+    // APNS calls back into one of our `application(_:didRegister...)` methods.
     var registerForRemoteNotificationsCompletion: ((Error?) -> ())?
 
     // MARK: - UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Wipe the legacy Core Data SQLite files once per upgrade. Must run
-        // before anything else touches the app group.
-        LegacyCoreDataCleanup.run(userDefaults: userDefaults)
+        runLegacyCleanup()
+        Self.setupAppearance()
+        showLaunchScreen()
 
-        // Delete our old Refreshable keys - not important to us anymore
-        userDefaults.removeObject(forKey: "successful_refresh_keys")
+        configureFirebase()
+        configureAPI()
+        configurePushNotifications()
+        configureAuth()
+        configureStatusService()
 
-        AppDelegate.setupAppearance()
-
-        // Setup a dummy launch screen in our window while we're doing setup tasks
-        window = UIWindow()
-        guard let window = window else {
-            fatalError("window should be window")
+        guard isMinimumAppVersionSupported else {
+            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
+            return true
         }
+
+        installRootViewController()
+        return true
+    }
+
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
+        return GIDSignIn.sharedInstance.handle(url)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        registerForRemoteNotificationsCompletion?(error)
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        registerForRemoteNotificationsCompletion?(nil)
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("Remote notification: \(userInfo)")
+        completionHandler(.noData)
+    }
+
+}
+
+// MARK: - Launch setup
+
+private extension AppDelegate {
+
+    func runLegacyCleanup() {
+        LegacyCoreDataCleanup.run()
+        // Old Refreshable cache key, no longer used.
+        UserDefaults.standard.removeObject(forKey: "successful_refresh_keys")
+    }
+
+    func showLaunchScreen() {
+        let window = UIWindow()
+        self.window = window
         window.rootViewController = launchViewController
         window.makeKeyAndVisible()
+    }
 
-        // Setup our Firebase app - make sure this is called before other Firebase setup
+    func configureFirebase() {
         FirebaseApp.configure()
-
-        // Disable Crashlytics during debug
         #if DEBUG
         Analytics.setAnalyticsCollectionEnabled(false)
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
@@ -97,42 +135,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Analytics.setAnalyticsCollectionEnabled(true)
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
         #endif
+    }
 
+    func configureAPI() {
         let secrets = Secrets()
         api = TBAAPI(apiKey: secrets.tbaAPIKey)
+    }
 
-        // Listen for changes to FMS availability
-        registerForFMSStatusChanges()
-        registerForStatusChanges()
+    func configurePushNotifications() {
+        messaging.delegate = pushService
+        UNUserNotificationCenter.current().delegate = pushService
+        myTBA.authenticationProvider.add(observer: pushService)
+        // Best-effort registration; failures will surface later.
+        pushService.registerForRemoteNotifications(nil)
+    }
 
-        // Assign our Push Service as a delegate to all push-related classes
-        setupPushServiceDelegates()
-        // Register for remote notifications - don't worry if we fail here
-        PushService.registerForRemoteNotifications(nil)
-
-        Auth.auth().addIDTokenDidChangeListener { (_, user) in
+    func configureAuth() {
+        Auth.auth().addIDTokenDidChangeListener { [weak self] _, user in
+            guard let self else { return }
             if let user = user {
-                user.getIDToken { (token, _) in
+                user.getIDToken { token, _ in
                     self.myTBA.authToken = token
                 }
             } else {
                 self.myTBA.authToken = nil
             }
         }
+        restorePreviousSignIn()
+    }
 
-        // Kickoff background myTBA, along with setting up delegates
-        setupPreviousAuthentication()
-
+    func configureStatusService() {
+        registerForFMSStatusChanges()
+        registerForStatusChanges()
         statusService.registerRetryable(initiallyRetry: true)
+    }
 
-        // Check our minimum app version
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: statusService.status.minAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
-            return true
-        }
-
-        guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-            fatalError("Unable to snapshot root view controller")
+    func installRootViewController() {
+        guard let window = window,
+              let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+            fatalError("Unable to snapshot launch screen")
         }
         rootViewController.view.addSubview(snapshot)
         window.rootViewController = rootViewController
@@ -143,77 +184,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }, completion: { _ in
             snapshot.removeFromSuperview()
         })
-
-        return true
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {}
+    func restorePreviousSignIn() {
+        guard Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() else {
+            return
+        }
+        GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
+            if let error = error {
+                errorRecorder.record(error)
+                return
+            }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {}
-
-    func applicationWillEnterForeground(_ application: UIApplication) {}
-
-    func applicationDidBecomeActive(_ application: UIApplication) {}
-
-    func applicationWillTerminate(_ application: UIApplication) {}
-
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        return GIDSignIn.sharedInstance.handle(url)
-    }
-
-    // MARK: Push Delegate Methods
-
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        registerForRemoteNotificationsCompletion?(error)
-    }
-
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        registerForRemoteNotificationsCompletion?(nil)
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("Remote notification: \(userInfo)")
-        completionHandler(.noData)
-    }
-
-    // MARK: Private
-
-    private static func showMinimumAppAlert(appStoreID: String, currentAppVersion: Int, in window: UIWindow) {
-        showRootAlertView(title: "Unsupported App Version", message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
-    }
-
-    private static func showRootAlertView(title: String, message: String, in window: UIWindow, handler: ((UIAlertAction) -> Void)?) {
-        let alertController = UIAlertController(title: title,
-                                                message: message,
-                                                preferredStyle: .alert)
-        window.rootViewController?.present(alertController, animated: true, completion: nil)
-    }
-
-    private func setupPushServiceDelegates() {
-        messaging.delegate = pushService
-        UNUserNotificationCenter.current().delegate = pushService
-        myTBA.authenticationProvider.add(observer: pushService)
-    }
-
-    private func setupPreviousAuthentication() {
-        if Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() {
-            GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
+            AuthHelper.signInToGoogle(user: user) { [unowned self] success, error in
                 if let error = error {
                     errorRecorder.record(error)
-                    return
                 }
-
-                AuthHelper.signInToGoogle(user: user) { [unowned self] success, error in
+                guard success else { return }
+                PushService.requestAuthorizationForNotifications { [unowned self] _, error in
                     if let error = error {
-                        errorRecorder.record(error)
-                    }
-                    guard success else {
-                        return
-                    }
-                    PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
-                        guard let error = error else {
-                            return
-                        }
                         errorRecorder.record(error)
                     }
                 }
@@ -221,23 +210,91 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    private var launchViewController: UIViewController {
-        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
-            fatalError("Unable to load launch view controller")
-        }
-        return launchViewController
+}
+
+// MARK: - Minimum app version
+
+private extension AppDelegate {
+
+    var isMinimumAppVersionSupported: Bool {
+        Self.isAppVersionSupported(minimumAppVersion: statusService.status.minAppVersion)
     }
+
+    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
+        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
+            return true
+        }
+        return Bundle.main.buildVersionNumber >= minimumAppVersion
+    }
+
+    func showMinimumAppVersionAlert(currentAppVersion: Int) {
+        guard let window = window else { return }
+        DispatchQueue.main.async {
+            let alert = UIAlertController(
+                title: "Unsupported App Version",
+                message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
+                preferredStyle: .alert
+            )
+            window.rootViewController?.present(alert, animated: true)
+        }
+    }
+
+}
+
+// MARK: - Status subscriptions
+
+extension AppDelegate: StatusSubscribable {
+
+    func statusChanged(status: AppStatus) {
+        if !Self.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
+            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
+        }
+    }
+
+}
+
+extension AppDelegate: FMSStatusSubscribable {
+
+    func fmsStatusChanged(isDatafeedDown: Bool) {
+        guard isDatafeedDown else { return }
+
+        let alert = UIAlertController(
+            title: "FIRST's servers are down",
+            message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
+            preferredStyle: .alert
+        )
+        window?.rootViewController?.present(alert, animated: true)
+    }
+
+}
+
+// MARK: - Remote notification registration
+
+extension AppDelegate: RemoteNotificationRegistering {
+
+    func registerForRemoteNotifications(completion: ((Error?) -> Void)?) {
+        registerForRemoteNotificationsCompletion = completion
+        UIApplication.shared.registerForRemoteNotifications()
+    }
+
+}
+
+// MARK: - FCMTokenProvider conformance for Firebase Messaging
+
+extension Messaging: FCMTokenProvider {}
+
+// MARK: - Appearance
+
+extension AppDelegate {
 
     static func setupAppearance() {
         if #available(iOS 15.0, *) {
             let navigationBarAppearance = UINavigationBarAppearance()
             navigationBarAppearance.configureWithDefaultBackground()
-
             navigationBarAppearance.backgroundColor = UIColor.navigationBarTintColor
             navigationBarAppearance.shadowColor = nil
             navigationBarAppearance.shadowImage = UIImage()
-            navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 
             UINavigationBar.appearance().standardAppearance = navigationBarAppearance
             UINavigationBar.appearance().compactAppearance = navigationBarAppearance
@@ -245,13 +302,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         let navigationBarAppearance = UINavigationBar.appearance()
-
         navigationBarAppearance.barTintColor = UIColor.navigationBarTintColor
         navigationBarAppearance.tintColor = UIColor.white
         navigationBarAppearance.shadowImage = UIImage()
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
-        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 
         if #available(iOS 15.0, *) {
             let tabBarAppearance = UITabBarAppearance()
@@ -267,61 +323,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarAppearance.tintColor = UIColor.tabBarTintColor
 
         let segmentedControlAppearance = UISegmentedControl.appearance()
-        segmentedControlAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-        segmentedControlAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.segmentedControlSelectedColor], for: .selected)
+        segmentedControlAppearance.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        segmentedControlAppearance.setTitleTextAttributes([.foregroundColor: UIColor.segmentedControlSelectedColor], for: .selected)
     }
 
 }
 
-extension AppDelegate {
-
-    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
-        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
-            return true
-        }
-
-        return Bundle.main.buildVersionNumber >= minimumAppVersion
-    }
-
-    func showMinimumAppVersionAlert(currentAppVersion: Int) {
-        guard let window = window else {
-            return
-        }
-
-        DispatchQueue.main.async {
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
-        }
-    }
-
-}
-
-extension AppDelegate: StatusSubscribable {
-
-    func statusChanged(status: AppStatus) {
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
-        }
-    }
-
-}
-
-extension AppDelegate: FMSStatusSubscribable {
-
-    func fmsStatusChanged(isDatafeedDown: Bool) {
-        if isDatafeedDown == false {
-            return
-        }
-
-        let alertController = UIAlertController(title: "FIRST's servers are down",
-                                                message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
-                                                preferredStyle: .alert)
-        window?.rootViewController?.present(alertController, animated: true, completion: nil)
-    }
-
-}
-
-// Make Messaging conform to FCMTokenProvider for MyTBAKit
-extension Messaging: FCMTokenProvider {}
+// MARK: - Error recorder
 
 private class TBAErrorRecorder: ErrorRecorder {
 
