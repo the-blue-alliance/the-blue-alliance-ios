@@ -40,9 +40,7 @@ class TeamViewController: HeaderContainerViewController {
     // MARK: Init
 
     convenience init(teamKey: String, nickname: String? = nil, dependencies: Dependencies) {
-        let trimmed = nickname?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let partial = (trimmed?.isEmpty == false) ? trimmed : nil
-        self.init(teamKey: teamKey, team: nil, partialNickname: partial, dependencies: dependencies)
+        self.init(teamKey: teamKey, team: nil, partialNickname: nickname, dependencies: dependencies)
     }
 
     convenience init(team: Team, dependencies: Dependencies) {

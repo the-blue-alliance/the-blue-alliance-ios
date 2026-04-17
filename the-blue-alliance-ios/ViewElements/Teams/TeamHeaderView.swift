@@ -73,6 +73,7 @@ class TeamHeaderView: UIView {
         super.init(frame: .zero)
 
         backgroundColor = UIColor.navigationBarTintColor
+        clipsToBounds = true
         configureView()
 
         addSubview(rootStackView)

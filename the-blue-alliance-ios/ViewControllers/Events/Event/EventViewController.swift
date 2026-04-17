@@ -20,9 +20,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     // MARK: - Init
 
     convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
-        let trimmed = name?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let eventName = (trimmed?.isEmpty == false) ? trimmed : nil
-        self.init(eventKey: eventKey, event: nil, eventName: eventName, dependencies: dependencies)
+        self.init(eventKey: eventKey, event: nil, eventName: name, dependencies: dependencies)
     }
 
     convenience init(event: Event, dependencies: Dependencies) {
