@@ -128,7 +128,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     var isDataSourceEmpty: Bool { events.isEmpty }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             let loaded = try await self.loadEvents()

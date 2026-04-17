@@ -131,7 +131,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
 
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
-    @objc func refresh() {
+    func refresh() {
         guard eventStatsConfigurator != nil else { return }
         runRefresh { [weak self] in
             guard let self else { return }

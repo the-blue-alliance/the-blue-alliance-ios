@@ -29,12 +29,11 @@ class SwitchTableViewCell: UITableViewCell {
 
     public lazy var switchView: UISwitch! = {
         let switchView = UISwitch(frame: .zero)
-        switchView.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
+        switchView.addAction(UIAction { [weak self] action in
+            guard let sender = action.sender as? UISwitch else { return }
+            self?.switchToggled(sender)
+        }, for: .valueChanged)
         return switchView
     }()
-
-    @objc func switchValueChanged(_ sender: UISwitch) {
-        self.switchToggled(sender)
-    }
 
 }

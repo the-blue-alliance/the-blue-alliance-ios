@@ -130,7 +130,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
 
     var isDataSourceEmpty: Bool { rows.isEmpty }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             let response = try await self.dependencies.api.eventOPRs(key: self.eventKey)

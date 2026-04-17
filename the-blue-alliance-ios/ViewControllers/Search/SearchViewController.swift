@@ -204,7 +204,7 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: Refreshable {
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
-    @objc func refresh() {
+    func refresh() {
         loadIndex()
     }
 }

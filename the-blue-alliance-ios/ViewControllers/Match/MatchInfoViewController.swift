@@ -166,7 +166,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         (match?.videos.count ?? 0) == 0
     }
 
-    @objc func refresh() {
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
             if let fetched = try await self.api.match(key: self.matchKey) {

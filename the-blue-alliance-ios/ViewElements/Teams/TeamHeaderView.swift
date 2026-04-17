@@ -185,15 +185,20 @@ class YearButton: UIButton {
     init() {
         super.init(frame: .zero)
 
+        var config = UIButton.Configuration.plain()
+        config.baseForegroundColor = UIColor.navigationBarTintColor
+        config.image = UIImage(systemName: "chevron.down")
+        config.title = "----"
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
+            return outgoing
+        }
+        configuration = config
+
         tintColor = UIColor.navigationBarTintColor
         backgroundColor = UIColor.white
-
-        setTitle("----", for: .normal)
-        setTitleColor(UIColor.navigationBarTintColor, for: .normal)
-        setImage(UIImage(systemName: "chevron.down"), for: .normal)
         setContentHuggingPriority(.defaultHigh, for: .horizontal)
-
-        titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
 
         layer.masksToBounds = true
     }
@@ -205,7 +210,11 @@ class YearButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        contentEdgeInsets = UIEdgeInsets(top: 0, left: frame.size.height * 0.5, bottom: 0, right: frame.size.height * 0.5)
+        let inset = frame.size.height * 0.5
+        if var config = configuration, config.contentInsets.leading != inset {
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
+            configuration = config
+        }
 
         layer.cornerRadius = frame.size.height * 0.5
     }

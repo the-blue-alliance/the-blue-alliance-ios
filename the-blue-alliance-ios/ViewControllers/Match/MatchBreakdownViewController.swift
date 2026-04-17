@@ -117,7 +117,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
 
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
-    @objc func refresh() {
+    func refresh() {
         guard breakdownConfigurator != nil else { return }
         runRefresh { [weak self] in
             guard let self else { return }
