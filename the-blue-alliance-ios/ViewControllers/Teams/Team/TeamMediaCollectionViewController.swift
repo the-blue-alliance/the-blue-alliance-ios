@@ -15,7 +15,7 @@ struct TeamMediaItem: Hashable {
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
-    private let spacerSize: CGFloat = 3.0
+    private static let spacerSize: CGFloat = 3.0
     private static let imageTypes: Set<String> = ["imgur", "cdphotothread", "avatar", "instagram-image"]
 
     private let teamKey: String
@@ -39,6 +39,17 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private var imageErrors: [String: Error] = [:]
     private var downloadTasks: [String: Task<Void, Never>] = [:]
 
+    private lazy var cellRegistration = UICollectionView.CellRegistration<MediaCollectionViewCell, TeamMediaItem> { [weak self] cell, _, item in
+        guard let self else { return }
+        if let image = self.imageCache[item.foreignKey] {
+            cell.state = .loaded(image)
+        } else if let error = self.imageErrors[item.foreignKey] {
+            cell.state = .error("Error loading media - \(error.localizedDescription)")
+        } else {
+            cell.state = .loading
+        }
+    }
+
     // MARK: Init
 
     init(teamKey: String, year: Int? = nil, pasteboard: UIPasteboard = .general, photoLibrary: PHPhotoLibrary = .shared(), dependencies: Dependencies) {
@@ -47,11 +58,36 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
 
-        super.init(dependencies: dependencies)
+        super.init(collectionViewLayout: Self.makeLayout(), dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Layout
+
+    private static func makeLayout() -> UICollectionViewLayout {
+        UICollectionViewCompositionalLayout { _, env in
+            let columns = env.traitCollection.horizontalSizeClass == .regular ? 3 : 2
+            let spacer = TeamMediaCollectionViewController.spacerSize
+            let containerWidth = env.container.effectiveContentSize.width
+            let itemWidth = (containerWidth - spacer * CGFloat(columns - 1) - 2 * spacer) / CGFloat(columns)
+
+            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth),
+                                                  heightDimension: .absolute(itemWidth))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                   heightDimension: .absolute(itemWidth))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+            group.interItemSpacing = .fixed(spacer)
+
+            let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = spacer
+            section.contentInsets = NSDirectionalEdgeInsets(top: spacer, leading: spacer, bottom: spacer, trailing: spacer)
+            return section
+        }
     }
 
     // MARK: - View Lifecycle
@@ -59,7 +95,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.registerReusableCell(MediaCollectionViewCell.self)
         setupDataSource()
         collectionView.dataSource = dataSource
     }
@@ -68,13 +103,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         super.viewWillDisappear(animated)
         downloadTasks.values.forEach { $0.cancel() }
         downloadTasks.removeAll()
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        DispatchQueue.main.async {
-            self.collectionView.collectionViewLayout.invalidateLayout()
-        }
     }
 
     // MARK: UICollectionView Delegate
@@ -127,18 +155,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = CollectionViewDataSource<String, TeamMediaItem>(collectionView: collectionView) { [weak self] collectionView, indexPath, item -> UICollectionViewCell? in
-            let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as MediaCollectionViewCell
-            if let image = self?.imageCache[item.foreignKey] {
-                cell.state = .loaded(image)
-            } else if let error = self?.imageErrors[item.foreignKey] {
-                cell.state = .error("Error loading media - \(error.localizedDescription)")
-            } else if self?.isRefreshing ?? false {
-                cell.state = .loading
-            } else {
-                cell.state = .loading
-            }
-            return cell
+        dataSource = CollectionViewDataSource<String, TeamMediaItem>(collectionView: collectionView) { [weak self] collectionView, indexPath, item in
+            guard let self else { return UICollectionViewCell() }
+            return collectionView.dequeueConfiguredReusableCell(using: self.cellRegistration, for: indexPath, item: item)
         }
         dataSource.delegate = self
     }
@@ -151,33 +170,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             snapshot.appendItems(items, toSection: "")
         }
         dataSource.apply(snapshot, animatingDifferences: false)
-    }
-
-}
-
-extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let horizontalSizeClass = traitCollection.horizontalSizeClass
-        var numberPerLine = 2
-        if horizontalSizeClass == .regular {
-            numberPerLine = 3
-        }
-        let viewWidth = collectionView.frame.size.width
-        let cellWidth = (viewWidth - CGFloat(Int(spacerSize) * (numberPerLine + 1))) / CGFloat(numberPerLine)
-        return CGSize(width: cellWidth, height: cellWidth)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: spacerSize, left: spacerSize, bottom: spacerSize, right: spacerSize)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return spacerSize
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return spacerSize
     }
 
 }
