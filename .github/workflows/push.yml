@@ -55,3 +55,13 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           SLACK_URL: ${{ secrets.SLACK_URL }}
+      - name: Archive dSYMs
+        if: ${{ always() && (contains(github.event.head_commit.message, '[beta]') || contains(github.event.head_commit.message, '[app_store]')) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsyms-${{ github.ref_name }}-${{ github.run_number }}
+          path: |
+            **/*.dSYM.zip
+            **/*.dSYM
+          if-no-files-found: warn
+          retention-days: 90
