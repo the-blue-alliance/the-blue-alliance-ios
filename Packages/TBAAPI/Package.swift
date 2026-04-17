@@ -1,5 +1,9 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
+// Downgraded from 6.1 so the package resolves under the Xcode 16.2 pin that
+// the release branch's CI uses to dodge the Swift 6.1+ async-let codegen bug.
+// Nothing in this manifest actually requires 6.1. Safe to bump back once the
+// Xcode pin is removed.
 
 import PackageDescription
 
