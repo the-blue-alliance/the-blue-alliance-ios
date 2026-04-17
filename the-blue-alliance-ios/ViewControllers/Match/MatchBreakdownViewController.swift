@@ -121,9 +121,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         guard breakdownConfigurator != nil else { return }
         runRefresh { [weak self] in
             guard let self else { return }
-            if let fetched = try await self.dependencies.api.match(key: self.matchKey) {
-                self.apply(match: fetched)
-            }
+            let fetched = try await self.dependencies.api.match(key: self.matchKey)
+            self.apply(match: fetched)
         }
     }
 

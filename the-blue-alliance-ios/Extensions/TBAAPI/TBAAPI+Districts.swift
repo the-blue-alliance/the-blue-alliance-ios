@@ -67,11 +67,11 @@ extension TBAAPI {
         }
     }
 
-    public func districtRankings(key districtKey: String) async throws -> [DistrictRanking] {
+    public func districtRankings(key districtKey: String) async throws -> [DistrictRanking]? {
         let response = try await client.getDistrictRankings(path: .init(districtKey: districtKey))
         switch response {
         case .ok(let ok):
-            return try ok.body.json ?? []
+            return try ok.body.json
         case .notModified:
             throw TBAAPIError.notModified
         case .unauthorized:

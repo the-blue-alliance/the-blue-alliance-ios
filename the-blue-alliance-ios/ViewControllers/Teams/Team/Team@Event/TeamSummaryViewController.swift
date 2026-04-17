@@ -293,17 +293,17 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             let eventHandle = Task { try? await self.dependencies.api.event(key: self.eventKey) }
             let statusHandle = Task { try? await self.dependencies.api.teamEventStatus(teamKey: self.teamKey, eventKey: self.eventKey) }
 
-            self.team = (await teamHandle.value) ?? nil
+            self.team = await teamHandle.value
             self.event = await eventHandle.value
-            self.eventStatus = (await statusHandle.value) ?? nil
+            self.eventStatus = await statusHandle.value
 
             let nextHandle = Task { () -> Match? in
                 guard let key = self.eventStatus?.nextMatchKey else { return nil }
-                return (try? await self.dependencies.api.match(key: key)) ?? nil
+                return try? await self.dependencies.api.match(key: key)
             }
             let lastHandle = Task { () -> Match? in
                 guard let key = self.eventStatus?.lastMatchKey else { return nil }
-                return (try? await self.dependencies.api.match(key: key)) ?? nil
+                return try? await self.dependencies.api.match(key: key)
             }
             self.nextMatch = await nextHandle.value
             self.lastMatch = await lastHandle.value

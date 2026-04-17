@@ -47,7 +47,7 @@ extension TBAAPI {
         return all
     }
 
-    public func team(key teamKey: String) async throws -> Team? {
+    public func team(key teamKey: String) async throws -> Team {
         let response = try await client.getTeam(path: .init(teamKey: teamKey))
         switch response {
         case .ok(let ok):
@@ -127,7 +127,7 @@ extension TBAAPI {
         }
     }
 
-    public func teamEventStatus(teamKey: String, eventKey: String) async throws -> TeamEventStatus? {
+    public func teamEventStatus(teamKey: String, eventKey: String) async throws -> TeamEventStatus {
         let response = try await client.getTeamEventStatus(path: .init(teamKey: teamKey, eventKey: eventKey))
         switch response {
         case .ok(let ok):

@@ -62,8 +62,9 @@ class TeamAtEventViewController: ContainerViewController {
             let eventHandle = Task { try? await self.dependencies.api.event(key: self.eventKey) }
             let teamHandle = Task { try? await self.dependencies.api.team(key: self.teamKey) }
 
-            let team = (await teamHandle.value) ?? nil
+            let team = await teamHandle.value
             let event = await eventHandle.value
+
 
             if let team {
                 self.navigationTitle = team.teamNumberNickname

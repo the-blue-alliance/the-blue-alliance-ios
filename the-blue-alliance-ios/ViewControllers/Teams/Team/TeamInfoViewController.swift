@@ -215,10 +215,9 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            if let fetched = try await self.api.team(key: self.teamKey) {
-                self.team = fetched
-                self.updateTeamInfo()
-            }
+            let fetched = try await self.api.team(key: self.teamKey)
+            self.team = fetched
+            self.updateTeamInfo()
         }
     }
 

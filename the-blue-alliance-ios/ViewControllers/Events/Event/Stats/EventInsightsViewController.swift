@@ -136,8 +136,8 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         runRefresh { [weak self] in
             guard let self else { return }
             let insights = try await self.dependencies.api.eventInsights(key: self.eventKey)
-            self.configureDataSource(qual: Self.toAnyDict(insights?.qual),
-                                     playoff: Self.toAnyDict(insights?.playoff))
+            self.configureDataSource(qual: Self.toAnyDict(insights.qual),
+                                     playoff: Self.toAnyDict(insights.playoff))
         }
     }
 
