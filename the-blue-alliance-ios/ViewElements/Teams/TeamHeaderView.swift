@@ -58,6 +58,7 @@ class TeamHeaderView: UIView {
 
         let stackView = UIStackView(arrangedSubviews: [spacerView, yearButton])
         stackView.axis = .vertical
+        stackView.alignment = .trailing
         yearButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         yearButton.setContentHuggingPriority(.required, for: .vertical)
         return stackView
@@ -199,7 +200,7 @@ class YearButton: UIButton {
         config.baseForegroundColor = UIColor.navigationBarTintColor
         config.background.backgroundColor = UIColor.white
         config.cornerStyle = .capsule
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 6)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 8)
         config.image = UIImage(systemName: "chevron.down")
         config.imagePlacement = .trailing
         config.imagePadding = 2
