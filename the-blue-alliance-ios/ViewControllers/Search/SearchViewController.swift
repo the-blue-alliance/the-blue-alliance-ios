@@ -25,8 +25,8 @@ enum SearchSection: String {
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
-    func eventSelected(eventKey: String)
-    func teamSelected(teamKey: String)
+    func eventSelected(eventKey: String, name: String?)
+    func teamSelected(teamKey: String, nickname: String?)
 }
 
 enum SearchItem: Hashable {
@@ -83,10 +83,10 @@ class SearchViewController: TBATableViewController {
             case .event(let key, let name):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
                 let year = String(key.prefix(4))
-                let shortCode = String(key.dropFirst(4))
-                cell.viewModel = EventCellViewModel(name: name.isEmpty ? key : name,
-                                                    location: "[\(shortCode)]",
-                                                    dateString: year)
+                let displayName = name.isEmpty ? key : "\(year) \(name)"
+                cell.viewModel = EventCellViewModel(name: displayName,
+                                                    location: nil,
+                                                    dateString: nil)
                 return cell
             case .team(let key, let nickname):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
@@ -170,8 +170,8 @@ class SearchViewController: TBATableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
-        case .event(let key, _): delegate?.eventSelected(eventKey: key)
-        case .team(let key, _): delegate?.teamSelected(teamKey: key)
+        case .event(let key, let name): delegate?.eventSelected(eventKey: key, name: name)
+        case .team(let key, let nickname): delegate?.teamSelected(teamKey: key, nickname: nickname)
         }
     }
 

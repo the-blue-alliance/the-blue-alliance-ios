@@ -37,6 +37,10 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     // can render is the title placeholder.
     private var event: Event?
 
+    // Name-only hint (e.g. from search), used for the title cell until the
+    // full event loads.
+    private var partialName: String?
+
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
     weak var delegate: EventInfoViewControllerDelegate?
@@ -53,6 +57,22 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - External
+
+    func apply(event: Event) {
+        self.event = event
+        if isViewLoaded {
+            updateEventInfo()
+        }
+    }
+
+    func applyPartial(name: String?) {
+        partialName = name
+        if isViewLoaded, event == nil {
+            updateEventInfo()
+        }
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -63,6 +83,10 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
         tableView.dataSource = dataSource
         setupDataSource()
+
+        if event != nil || partialName != nil {
+            updateEventInfo()
+        }
     }
 
     private func setupDataSource() {
@@ -166,6 +190,10 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
         if let event {
             cell.viewModel = InfoCellViewModel(event: event)
+        } else if let partialName, !partialName.isEmpty {
+            let year = String(eventKey.prefix(4))
+            let name = year.allSatisfy(\.isNumber) ? "\(year) \(partialName)" : partialName
+            cell.viewModel = InfoCellViewModel(nameString: name, subtitleStrings: [])
         } else {
             cell.viewModel = InfoCellViewModel(nameString: eventKey, subtitleStrings: [])
         }

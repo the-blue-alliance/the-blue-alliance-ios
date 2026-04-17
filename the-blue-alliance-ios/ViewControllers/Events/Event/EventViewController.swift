@@ -22,6 +22,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
     // MARK: - Init
 
+    // Key-only: nothing known about the event yet.
     init(eventKey: String, dependencies: Dependencies) {
         self.eventKey = eventKey
 
@@ -30,11 +31,13 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         rankingsViewController = EventRankingsViewController(eventKey: eventKey, dependencies: dependencies)
         matchesViewController = MatchesViewController(eventKey: eventKey, dependencies: dependencies)
 
+        // Raw key ("2026miket") is ugly; "2026" prefix is the best guess until the event loads.
+        let initialTitle = Self.yearPrefixedTitle(eventKey: eventKey, name: nil) ?? eventKey
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
-                   navigationTitle: eventKey,
+                   navigationTitle: initialTitle,
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
-                   
-                   
+
+
                    dependencies: dependencies)
 
         infoViewController.delegate = self
@@ -43,8 +46,36 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         matchesViewController.delegate = self
     }
 
+    // Partial data (e.g. key + name from search).
+    convenience init(eventKey: String, name: String?, dependencies: Dependencies) {
+        self.init(eventKey: eventKey, dependencies: dependencies)
+        let trimmedName = name?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let trimmedName, !trimmedName.isEmpty {
+            navigationTitle = Self.yearPrefixedTitle(eventKey: eventKey, name: trimmedName)
+            infoViewController.applyPartial(name: trimmedName)
+        }
+    }
+
+    // Full event from a list view: seed info now, still refresh in viewDidLoad.
+    convenience init(event: Event, dependencies: Dependencies) {
+        self.init(eventKey: event.key, dependencies: dependencies)
+        self.event = event
+        title = event.friendlyNameWithYear
+        navigationTitle = event.friendlyNameWithYear
+        infoViewController.apply(event: event)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private static func yearPrefixedTitle(eventKey: String, name: String?) -> String? {
+        let year = String(eventKey.prefix(4))
+        guard year.allSatisfy(\.isNumber) else { return name }
+        if let name, !name.isEmpty {
+            return "\(year) \(name)"
+        }
+        return year
     }
 
     // MARK: - View Lifecycle
@@ -61,6 +92,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
             if let fetched = try? await api.event(key: eventKey) {
                 event = fetched
                 title = fetched.friendlyNameWithYear
+                navigationTitle = fetched.friendlyNameWithYear
             }
         }
     }
@@ -113,8 +145,8 @@ extension EventViewController: EventInfoViewControllerDelegate {
 
 extension EventViewController: TeamsListViewControllerDelegate {
 
-    func teamSelected(teamKey: String) {
-        pushTeamAtEvent(teamKey: teamKey)
+    func teamSelected(_ team: Team) {
+        pushTeamAtEvent(teamKey: team.key)
     }
 
 }

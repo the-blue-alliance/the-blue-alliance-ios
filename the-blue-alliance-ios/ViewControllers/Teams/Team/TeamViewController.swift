@@ -38,6 +38,10 @@ class TeamViewController: HeaderContainerViewController {
         }
     }
 
+    // Pre-fetched team data passed via init(team:). Applied to the info VC in
+    // viewDidLoad once its data source is wired up.
+    private var pendingInitialTeam: Team?
+
     // MARK: Init
 
     init(teamKey: String, dependencies: Dependencies) {
@@ -72,6 +76,32 @@ class TeamViewController: HeaderContainerViewController {
         }, for: .touchUpInside)
     }
 
+    // Partial data from a list view (e.g. search): populates the header label
+    // so it doesn't sit blank while the full team loads.
+    convenience init(teamKey: String, nickname: String?, dependencies: Dependencies) {
+        self.init(teamKey: teamKey, dependencies: dependencies)
+        guard let nickname, !nickname.isEmpty else { return }
+        let teamNumber = Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0
+        teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: teamNumber,
+                                                       avatar: nil,
+                                                       nickname: nickname,
+                                                       teamNumberNickname: "Team \(teamNumber)",
+                                                       year: nil)
+    }
+
+    // Full team from a list view: seed header + info now, still refresh in
+    // viewDidLoad to pick up any newer data.
+    convenience init(team: Team, dependencies: Dependencies) {
+        self.init(teamKey: team.key, dependencies: dependencies)
+        self.team = team
+        self.pendingInitialTeam = team
+        teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: team.teamNumber,
+                                                       avatar: nil,
+                                                       nickname: team.nickname.isEmpty ? nil : team.nickname,
+                                                       teamNumberNickname: team.teamNumberNickname,
+                                                       year: nil)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -81,6 +111,10 @@ class TeamViewController: HeaderContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let pendingInitialTeam {
+            infoViewController.apply(team: pendingInitialTeam)
+            self.pendingInitialTeam = nil
+        }
         loadTeamData()
     }
 

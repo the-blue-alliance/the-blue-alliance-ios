@@ -92,8 +92,21 @@ class TeamHeaderView: UIView {
     // MARK: Private Methods
 
     private func configureView() {
-        avatarImageView.image = viewModel.avatar
-        avatarImageView.isHidden = viewModel.avatar == nil
+        let newAvatar = viewModel.avatar
+        let shouldHide = newAvatar == nil
+        let avatarChanged = avatarImageView.image != newAvatar || avatarImageView.isHidden != shouldHide
+
+        if window != nil, avatarChanged {
+            UIView.transition(with: avatarImageView, duration: 0.25, options: .transitionCrossDissolve, animations: {
+                self.avatarImageView.image = newAvatar
+            })
+            UIView.animate(withDuration: 0.25) {
+                self.avatarImageView.isHidden = shouldHide
+            }
+        } else {
+            avatarImageView.image = newAvatar
+            avatarImageView.isHidden = shouldHide
+        }
 
         teamNumberLabel.text = viewModel.teamNumberNickname
 
