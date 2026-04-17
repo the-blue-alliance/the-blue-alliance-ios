@@ -54,14 +54,18 @@ class TeamAtEventViewController: ContainerViewController {
         super.viewDidLoad()
 
         Task { @MainActor in
-            async let eventTask = try? await dependencies.api.event(key: eventKey)
-            async let teamTask = try? await dependencies.api.team(key: teamKey)
-            let (event, team) = await (eventTask, teamTask)
+            async let eventTask = dependencies.api.event(key: eventKey)
+            async let teamTask = dependencies.api.team(key: teamKey)
 
-            if let team = team ?? nil {
+            // Await in reverse declaration order so async let child tasks are
+            // torn down LIFO — otherwise swift_task_dealloc traps.
+            let team = (try? await teamTask) ?? nil
+            let event = try? await eventTask
+
+            if let team {
                 self.navigationTitle = team.teamNumberNickname
             }
-            if let event = event ?? nil {
+            if let event {
                 self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
             }
         }
