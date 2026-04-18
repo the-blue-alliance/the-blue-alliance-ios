@@ -21,7 +21,7 @@ extension EventInsightsConfigurator {
         guard highScoreData.count == 3 else {
             return nil
         }
-        return "\(highScoreData[0] as? Int ?? 0) in \(highScoreData[2] as? String ?? "")"
+        return "\((highScoreData[0] as? Int).map(String.init) ?? "--") in \(highScoreData[2] as? String ?? "")"
     }
 
     static func scoreRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
@@ -55,7 +55,7 @@ extension EventInsightsConfigurator {
             }
             return "--"
         }()
-        return "\(bonusData.safeItem(at: 0) as? Int ?? 0) / \(bonusData.safeItem(at: 1) as? Int ?? 0) = \(quotient)"
+        return "\((bonusData.safeItem(at: 0) as? Int).map(String.init) ?? "--") / \((bonusData.safeItem(at: 1) as? Int).map(String.init) ?? "--") = \(quotient)"
     }
 
     static func filterEmptyInsights(_ rows: [InsightRow]) -> [InsightRow] {
