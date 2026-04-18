@@ -1,5 +1,6 @@
 import Foundation
 import TBAAPI
+import TBAUtils
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
 enum APIEventType: Int, CaseIterable {
@@ -75,6 +76,7 @@ extension Event {
         guard let date = startDateParsed else { return nil }
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter.string(from: date)
     }
 
@@ -95,24 +97,30 @@ extension Event {
         return !website.isEmpty
     }
 
+    // Inclusive end of the event's final UTC day. Prefer this over raw
+    // `endDateParsed` for "is the event over?" checks — `endDateParsed` is
+    // UTC midnight of the end day, so comparing it directly to a wall-clock
+    // `Date()` clips the whole final day for users west of UTC.
+    var endOfEventDay: Date? {
+        endDateParsed?.endOfDay(calendar: .utc)
+    }
+
     // Event is currently going on, based on its start and end dates.
     var isHappeningNow: Bool {
-        guard let start = startDateParsed, let end = endDateParsed else { return false }
+        guard let start = startDateParsed, let end = endOfEventDay else { return false }
         let now = Date()
-        let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: end) ?? end
-        return now >= start && now <= endOfDay
+        return now >= start && now <= end
     }
 
     // Ported from TBAData.Event.isHappeningThisWeek: the event is going on
     // now or starts within the next week.
     var isHappeningThisWeek: Bool {
-        guard let start = startDateParsed, let end = endDateParsed else { return false }
-        let now = Date()
-        guard let startOfWeek = Calendar.current.date(byAdding: DateComponents(day: -7), to: start) else {
+        guard let start = startDateParsed, let end = endOfEventDay else { return false }
+        guard let startOfWeek = Calendar.utc.date(byAdding: .day, value: -7, to: start) else {
             return false
         }
-        let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: end) ?? end
-        return now >= startOfWeek && now <= endOfDay
+        let now = Date()
+        return now >= startOfWeek && now <= end
     }
 
     // Sort key used in place of the Core Data `hybridType` attribute — groups
@@ -134,6 +142,7 @@ extension Event {
         if eventTypeEnum == .offseason, let date = startDateParsed {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyyMM"
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)
             return "\(eventType).\(formatter.string(from: date))"
         }
         return "\(eventType)"
@@ -156,18 +165,20 @@ extension Event {
 
     var dateString: String? {
         guard let start = startDateParsed, let end = endDateParsed else { return nil }
-        let calendar = Calendar.current
-
+        // Dates are UTC-midnight; format and compare year components in UTC so
+        // users west of UTC don't see the range shifted back a day.
         let shortFormatter = DateFormatter()
         shortFormatter.dateFormat = "MMM dd"
+        shortFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 
         let longFormatter = DateFormatter()
         longFormatter.dateFormat = "MMM dd, y"
+        longFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 
         if start == end {
             return shortFormatter.string(from: end)
         }
-        if calendar.component(.year, from: start) == calendar.component(.year, from: end) {
+        if Calendar.utc.component(.year, from: start) == Calendar.utc.component(.year, from: end) {
             return "\(shortFormatter.string(from: start)) to \(shortFormatter.string(from: end))"
         }
         return "\(shortFormatter.string(from: start)) to \(longFormatter.string(from: end))"

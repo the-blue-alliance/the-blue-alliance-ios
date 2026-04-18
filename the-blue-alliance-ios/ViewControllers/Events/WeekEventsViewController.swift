@@ -54,8 +54,9 @@ class WeekEventsViewController: EventsListViewController {
             }
         case .offseason:
             guard let start = weekEvent.startDateParsed, let end = weekEvent.endDateParsed else { return [] }
-            let firstOfMonth = start.startOfMonth()
-            let lastOfMonth = end.endOfMonth()
+            // UTC-midnight dates need a UTC calendar or month boundaries shift a day.
+            let firstOfMonth = start.startOfMonth(calendar: .utc)
+            let lastOfMonth = end.endOfMonth(calendar: .utc)
             return sameYear.filter {
                 guard $0.isOffseason, let d = $0.startDateParsed else { return false }
                 return d >= firstOfMonth && d <= lastOfMonth
@@ -103,7 +104,7 @@ class WeekEventsViewController: EventsListViewController {
         let unplayed = events
             .filter { $0.year == year }
             .filter { !$0.isChampionshipDivision }
-            .filter { ($0.endDateParsed ?? .distantPast) >= today }
+            .filter { ($0.endOfEventDay ?? .distantPast) >= today }
             .sorted { ($0.endDateParsed ?? .distantPast) < ($1.endDateParsed ?? .distantPast) }
             .first
         if let unplayed { return unplayed }

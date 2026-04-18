@@ -11,6 +11,15 @@ public enum Weekday: Int {
 
 extension Calendar {
 
+    /// Gregorian calendar fixed to UTC. Use when the Date being operated on
+    /// was parsed in UTC (e.g. TBA's `yyyy-MM-dd` event dates), so day-level
+    /// math like `endOfDay` doesn't clip against the user's local offset.
+    public static let utc: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+        return calendar
+    }()
+
     /**
      Number of weeks the season is - safely hardcoded to 6.
      */
