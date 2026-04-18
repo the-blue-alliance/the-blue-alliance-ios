@@ -191,7 +191,9 @@ extension AppDelegate: StatusSubscribable {
 extension AppDelegate: FMSStatusSubscribable {
 
     func fmsStatusChanged(isDatafeedDown: Bool) {
-        showAlert(.fmsStatus(isDatafeedDown: isDatafeedDown))
+        if isDatafeedDown {
+            showAlert(.fmsStatus(isDatafeedDown: isDatafeedDown))
+        }
     }
 
 }
