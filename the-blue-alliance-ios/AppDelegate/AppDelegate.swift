@@ -20,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let subscriptionsStore = SubscriptionsStore()
     let urlOpener: URLOpener = UIApplication.shared
 
+    let appSettings = AppSettings()
+
     // Set in `application(_:didFinishLaunchingWithOptions:)` once `Secrets` are loaded.
     var api: TBAAPI!
 
@@ -41,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var dependencies = Dependencies.screenshotMocked()
     #else
     lazy var dependencies = Dependencies(api: api,
+                                         appSettings: appSettings,
                                          myTBA: myTBA,
                                          myTBAStores: myTBAStores,
                                          statusService: statusService,
@@ -110,7 +113,7 @@ private extension AppDelegate {
 
     func configureAPI() {
         let secrets = Secrets()
-        api = TBAAPI(apiKey: secrets.tbaAPIKey)
+        api = TBAAPI(apiKey: secrets.tbaAPIKey, cachePolicy: appSettings.cachePolicy.current)
     }
 
     func configurePushNotifications() {

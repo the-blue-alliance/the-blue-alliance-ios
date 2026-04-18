@@ -1,8 +1,10 @@
 import MyTBAKit
+import TBAAPI
 import UIKit
 
 private enum SettingsSection: Int, CaseIterable {
     case info
+    case networking
     case debug
 }
 
@@ -12,9 +14,22 @@ private enum InfoRow: String, CaseIterable {
     case testFlight = "https://testflight.apple.com/join/gz7RmdS7"
 }
 
-private enum DebugRow: Int, CaseIterable {
+private enum NetworkingRow: Int, CaseIterable {
+    case cachePolicy
     case deleteNetworkCache
+}
+
+private enum DebugRow: Int, CaseIterable {
     case troubleshootNotifications
+}
+
+private extension TBAAPI.CachePolicy {
+    var displayName: String {
+        switch self {
+        case .default: return "Default"
+        case .bypass:  return "Bypass Cache"
+        }
+    }
 }
 
 class SettingsViewController: TBATableViewController {
@@ -62,6 +77,8 @@ class SettingsViewController: TBATableViewController {
         switch section {
         case .info:
             return InfoRow.allCases.count
+        case .networking:
+            return NetworkingRow.allCases.count
         case .debug:
             return DebugRow.allCases.count
         }
@@ -75,6 +92,8 @@ class SettingsViewController: TBATableViewController {
         switch section {
         case .info:
             return "Info"
+        case .networking:
+            return "Networking"
         case .debug:
             return "Debug"
         }
@@ -112,14 +131,27 @@ class SettingsViewController: TBATableViewController {
             cell.textLabel?.text = titleString
 
             return cell
+        case .networking:
+            let networkingRow = NetworkingRow.allCases[indexPath.row]
+            switch networkingRow {
+            case .cachePolicy:
+                let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
+                cell.textLabel?.text = "Cache Policy"
+                cell.detailTextLabel?.text = api.cachePolicy.displayName
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            case .deleteNetworkCache:
+                let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+                cell.textLabel?.text = "Delete network cache"
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            }
         case .debug:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
             let debugRow = DebugRow.allCases[indexPath.row]
             let titleString: String = {
                 switch debugRow {
-                case .deleteNetworkCache:
-                    return "Delete network cache"
                 case .troubleshootNotifications:
                     return "Troubleshoot notifications"
                 }
@@ -150,11 +182,17 @@ class SettingsViewController: TBATableViewController {
             if let url = URL(string: infoRow.rawValue) {
                 openURL(url: url)
             }
+        case .networking:
+            let networkingRow = NetworkingRow.allCases[indexPath.row]
+            switch networkingRow {
+            case .cachePolicy:
+                showCachePolicyPicker(from: indexPath)
+            case .deleteNetworkCache:
+                showDeleteNetworkCache()
+            }
         case .debug:
             let debugRow = DebugRow.allCases[indexPath.row]
             switch debugRow {
-            case .deleteNetworkCache:
-                showDeleteNetworkCache()
             case .troubleshootNotifications:
                 pushTroubleshootNotifications()
             }
@@ -245,13 +283,39 @@ class SettingsViewController: TBATableViewController {
         }
     }
 
-    // MARK: - Debug Methods
+    // MARK: - Networking Methods
+
+    private func showCachePolicyPicker(from indexPath: IndexPath) {
+        let alertController = UIAlertController(title: "Cache Policy", message: nil, preferredStyle: .actionSheet)
+
+        for policy in TBAAPI.CachePolicy.allCases {
+            let action = UIAlertAction(title: policy.displayName, style: .default) { [weak self] _ in
+                guard let self else { return }
+                self.dependencies.appSettings.cachePolicy.current = policy
+                self.api.setCachePolicy(policy)
+                self.tableView.reloadRows(at: [indexPath], with: .none)
+            }
+            if api.cachePolicy == policy {
+                action.setValue(true, forKey: "checked")
+            }
+            alertController.addAction(action)
+        }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        if let popover = alertController.popoverPresentationController,
+           let cell = tableView.cellForRow(at: indexPath) {
+            popover.sourceView = cell
+            popover.sourceRect = cell.bounds
+        }
+
+        present(alertController, animated: true)
+    }
 
     private func showDeleteNetworkCache() {
         let alertController = UIAlertController(title: "Delete Network Cache", message: "Are you sure you want to delete all the network cache data?", preferredStyle: .alert)
 
-        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
-            URLCache.shared.removeAllCachedResponses()
+        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.api.clearCache()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
@@ -260,6 +324,8 @@ class SettingsViewController: TBATableViewController {
 
         self.present(alertController, animated: true, completion: nil)
     }
+
+    // MARK: - Debug Methods
 
     private func pushTroubleshootNotifications() {
         let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, pushService: pushService, dependencies: dependencies)
