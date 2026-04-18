@@ -442,6 +442,7 @@
 				CD2CBDB0173BACD6D862542C /* TBAScreenshotUITests.swift */,
 				F4218C0D7A6203D7784DD93A /* SnapshotHelper.swift */,
 			);
+			name = TBAScreenshotUITests;
 			path = TBAScreenshotUITests;
 			sourceTree = "<group>";
 		};
@@ -1051,9 +1052,9 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
-				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
-				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
-				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
+				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */,
+				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */,
+				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -1667,15 +1668,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
+		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAAPI;
 		};
-		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
+		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/MyTBAKit;
 		};
-		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
+		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAUtils;
 		};
