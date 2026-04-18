@@ -1,5 +1,6 @@
 import Foundation
 import TBAAPI
+import TBAUtils
 import UIKit
 
 protocol EventInfoViewControllerDelegate: AnyObject {
@@ -136,7 +137,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
                 .filter { $0.urlString != nil }
                 .filter { webcast in
                     guard let date = webcast.dateParsed else { return true }
-                    return Calendar.current.isDateInToday(date)
+                    // dateParsed is UTC-midnight; check "today" in UTC to match.
+                    return Calendar.utc.isDateInToday(date)
                 }
                 .map { EventInfoItem.webcast($0) }
             if !webcasts.isEmpty, event.isHappeningThisWeek {

@@ -11,9 +11,9 @@ private enum TeamSummarySection: Int {
     case teamInfo
     case eventInfo
     case nextMatch
+    case lastMatch
     case playoffInfo
     case qualInfo
-    case lastMatch
 }
 
 private enum TeamSummaryItem: Hashable {
@@ -120,6 +120,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             snapshot.appendItems([.match(match: nextMatch, baseTeamKey: teamKey)], toSection: .nextMatch)
         }
 
+        // Last match
+        if let lastMatch, event?.isHappeningNow == true {
+            snapshot.appendSections([.lastMatch])
+            snapshot.appendItems([.match(match: lastMatch, baseTeamKey: teamKey)], toSection: .lastMatch)
+        }
+
         // Playoff info
         let playoffItems = self.playoffItems()
         if !playoffItems.isEmpty {
@@ -134,13 +140,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             snapshot.appendItems(qualItems, toSection: .qualInfo)
         }
 
-        // Last match
-        if let lastMatch, event?.isHappeningNow == true {
-            snapshot.appendSections([.lastMatch])
-            snapshot.appendItems([.match(match: lastMatch, baseTeamKey: teamKey)], toSection: .lastMatch)
-        }
-
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     private func statusItem() -> TeamSummaryItem? {

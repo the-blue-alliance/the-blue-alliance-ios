@@ -150,7 +150,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             snapshot.appendSections([""])
             snapshot.appendItems(items, toSection: "")
         }
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
 }
