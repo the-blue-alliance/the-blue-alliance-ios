@@ -9,11 +9,11 @@ final class TBAScreenshotUITests: XCTestCase {
 
     @MainActor
     func testScreenshots() {
-        let app = XCUIApplication()
+        let app = XCUIApplication(bundleIdentifier: "com.the-blue-alliance.tba")
         setupSnapshot(app)
         app.launch()
         snapshot("01_events")
-        app.cells["cell.event.first"].tap()
+        app.cells["event.2026mimtp"].tap()
         snapshot("02_team")
     }
 

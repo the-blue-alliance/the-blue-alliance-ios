@@ -10,6 +10,5 @@
   "android": {
     "min_app_version": -1,
     "latest_app_version": -1
-  },
-  "max_team_page": 20
+  }
 }

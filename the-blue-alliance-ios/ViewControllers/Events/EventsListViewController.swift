@@ -46,11 +46,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
             cell.viewModel = EventCellViewModel(name: event.safeShortName,
                                                 location: event.locationString,
                                                 dateString: event.dateString)
-            if indexPath.section == 0 && indexPath.row == 0 {
-                cell.accessibilityIdentifier = "cell.event.first"
-            } else {
-                cell.accessibilityIdentifier = nil
-            }
+            cell.accessibilityIdentifier = "event.\(event.key)"
             _ = self
             return cell
         }
