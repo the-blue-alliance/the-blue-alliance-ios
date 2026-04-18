@@ -1,6 +1,11 @@
 import Foundation
 
 public protocol TBAAPIProtocol {
+    // Networking
+    var cachePolicy: TBAAPI.CachePolicy { get }
+    func setCachePolicy(_ policy: TBAAPI.CachePolicy)
+    func clearCache()
+
     // Status
     func getStatus() async throws -> APIStatus
 

@@ -13,7 +13,12 @@ private struct APIConstants {
     static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
 }
 
-public struct TBAAPI {
+public final class TBAAPI {
+
+    public enum CachePolicy: String, CaseIterable, Sendable {
+        case `default`
+        case bypass
+    }
 
     public static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -21,22 +26,47 @@ public struct TBAAPI {
         return dateFormatter
     }()
 
-    // TODO: Add a way to set/change the cache strategy for debugging
+    private final class Box {
+        var client: Client
+        init(client: Client) { self.client = client }
+    }
 
-    public let client: Client
+    private let apiKey: String
+    private let box: Box
+    public private(set) var cachePolicy: CachePolicy
 
-    public init(apiKey: String, configuration: URLSessionConfiguration = .ephemeral) {
+    // Exposed so the `TBAAPI+*.swift` extensions can call the generated
+    // OpenAPI client. Read-only — policy changes go through setCachePolicy(_:).
+    public var client: Client { box.client }
+
+    public init(apiKey: String, cachePolicy: CachePolicy = .default) {
+        self.apiKey = apiKey
+        self.cachePolicy = cachePolicy
+        self.box = Box(client: Self.makeClient(apiKey: apiKey, policy: cachePolicy))
+    }
+
+    public func setCachePolicy(_ policy: CachePolicy) {
+        guard policy != cachePolicy else { return }
+        cachePolicy = policy
+        box.client = Self.makeClient(apiKey: apiKey, policy: policy)
+    }
+
+    public func clearCache() {
+        URLCache.shared.removeAllCachedResponses()
+    }
+
+    private static func makeClient(apiKey: String, policy: CachePolicy) -> Client {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = ["X-TBA-Auth-Key": apiKey]
+        switch policy {
+        case .default:
+            configuration.requestCachePolicy = .useProtocolCachePolicy
+        case .bypass:
+            configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        }
+
         let serverURL = (try? Servers.Server1.url()) ?? APIConstants.baseURL
-
-        configuration.httpAdditionalHeaders = [
-            "X-TBA-Auth-Key": apiKey,
-        ]
-
-        #if DEBUG
-        configuration.urlCache?.removeAllCachedResponses()
-        #endif
-
-        self.client = Client(
+        return Client(
             serverURL: serverURL,
             transport: URLSessionTransport(configuration: .init(
                 session: URLSession(configuration: configuration)
