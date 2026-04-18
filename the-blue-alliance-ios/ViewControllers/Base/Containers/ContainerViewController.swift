@@ -60,12 +60,12 @@ class ContainerViewController: UIViewController, Alertable {
     }()
     private lazy var navigationTitleLabel: UILabel = {
         let navigationTitleLabel = ContainerViewController.createNavigationLabel()
-        navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
+        navigationTitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 17))
         return navigationTitleLabel
     }()
     private lazy var navigationSubtitleLabel: UILabel = {
         let navigationSubtitleLabel = ContainerViewController.createNavigationLabel()
-        navigationSubtitleLabel.font = UIFont.systemFont(ofSize: 11)
+        navigationSubtitleLabel.font = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: UIFont.systemFont(ofSize: 11))
         return navigationSubtitleLabel
     }()
     weak var navigationTitleDelegate: NavigationTitleDelegate?
@@ -306,6 +306,7 @@ class ContainerViewController: UIViewController, Alertable {
         let label = UILabel(forAutoLayout: ())
         label.textColor = UIColor.white
         label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
         return label
     }
 
