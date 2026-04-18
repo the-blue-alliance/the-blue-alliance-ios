@@ -124,7 +124,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
             eventStatsConfigurator.configureDataSource(&snapshot, qual, playoff)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Refreshable

@@ -110,7 +110,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
             breakdownConfigurator.configureDataSource(&snapshot, breakdown, red, blue)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Refreshable

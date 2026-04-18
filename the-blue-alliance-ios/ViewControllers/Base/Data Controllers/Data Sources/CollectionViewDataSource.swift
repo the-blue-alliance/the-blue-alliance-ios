@@ -14,24 +14,31 @@ class CollectionViewDataSource<Section: Hashable, Item: Hashable>: UICollectionV
         return snapshot.numberOfSections == 0 && snapshot.numberOfItems == 0
     }
 
-    // MARK: UICollectionViewDataSource
+    // MARK: - Snapshot apply
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let sections = super.numberOfSections(in: collectionView)
-        if sections == 0 {
-            delegate?.showNoDataView()
+    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
+                        animatingDifferences: Bool = true,
+                        completion: (() -> Void)? = nil) {
+        super.apply(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
+            self?.updateEmptyState()
+            completion?()
         }
-        return sections
     }
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let items = super.collectionView(collectionView, numberOfItemsInSection: section)
-        if items == 0 {
+    override func applySnapshotUsingReloadData(_ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
+                                                completion: (() -> Void)? = nil) {
+        super.applySnapshotUsingReloadData(snapshot) { [weak self] in
+            self?.updateEmptyState()
+            completion?()
+        }
+    }
+
+    private func updateEmptyState() {
+        if isDataSourceEmpty {
             delegate?.showNoDataView()
         } else {
             delegate?.removeNoDataView()
         }
-        return items
     }
 
 }

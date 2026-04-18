@@ -69,7 +69,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>: T
         var snapshot = NSDiffableDataSourceSnapshot<String, APITeam>()
         snapshot.appendSections([""])
         snapshot.appendItems(narrowed, toSection: "")
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     private func searchMatch(team: APITeam) -> Bool {

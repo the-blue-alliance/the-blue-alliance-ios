@@ -145,7 +145,7 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
             snapshot.appendSections([section])
             snapshot.appendItems(sorted, toSection: section)
         }
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     private func sortItems(_ items: [MyTBAItem], in section: MyTBASection) -> [MyTBAItem] {

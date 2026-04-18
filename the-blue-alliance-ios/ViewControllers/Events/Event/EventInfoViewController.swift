@@ -162,7 +162,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         snapshot.appendSections([.link])
         snapshot.appendItems(linkItems, toSection: .link)
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Table View Methods

@@ -117,7 +117,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
         var snapshot = NSDiffableDataSourceSnapshot<String, TeamStatRow>()
         snapshot.appendSections([""])
         snapshot.appendItems(sorted, toSection: "")
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Interface Actions

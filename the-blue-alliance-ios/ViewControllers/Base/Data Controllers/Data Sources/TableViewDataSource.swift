@@ -19,25 +19,34 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffabl
         return snapshot.itemIdentifiers.isEmpty
     }
 
-    // MARK: UITableViewDataSource
+    // MARK: - Snapshot apply
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        let sections = super.numberOfSections(in: tableView)
-        if sections == 0 {
-            statefulDelegate?.showNoDataView()
+    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
+                        animatingDifferences: Bool = true,
+                        completion: (() -> Void)? = nil) {
+        super.apply(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
+            self?.updateEmptyState()
+            completion?()
         }
-        return sections
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let rows = super.tableView(tableView, numberOfRowsInSection: section)
-        if rows == 0 {
+    override func applySnapshotUsingReloadData(_ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
+                                                completion: (() -> Void)? = nil) {
+        super.applySnapshotUsingReloadData(snapshot) { [weak self] in
+            self?.updateEmptyState()
+            completion?()
+        }
+    }
+
+    private func updateEmptyState() {
+        if isDataSourceEmpty {
             statefulDelegate?.showNoDataView()
         } else {
             statefulDelegate?.removeNoDataView()
         }
-        return rows
     }
+
+    // MARK: UITableViewDataSource
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return delegate?.title(forSection: section)

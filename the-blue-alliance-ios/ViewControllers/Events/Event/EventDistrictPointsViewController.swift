@@ -112,7 +112,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
         var snapshot = NSDiffableDataSourceSnapshot<String, TeamDistrictPointsRow>()
         snapshot.appendSections([""])
         snapshot.appendItems(sortedRows, toSection: "")
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Refreshable

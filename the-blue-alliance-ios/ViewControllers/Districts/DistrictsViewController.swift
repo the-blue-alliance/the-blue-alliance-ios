@@ -66,7 +66,7 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
         var snapshot = NSDiffableDataSourceSnapshot<String, District>()
         snapshot.appendSections([""])
         snapshot.appendItems(sorted, toSection: "")
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Refreshable
