@@ -140,7 +140,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             snapshot.appendItems([.match(match: lastMatch, baseTeamKey: teamKey)], toSection: .lastMatch)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     private func statusItem() -> TeamSummaryItem? {
