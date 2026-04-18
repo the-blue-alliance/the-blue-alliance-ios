@@ -22,6 +22,7 @@
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
 		514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */; };
+		51718D872F94167E00B7BC24 /* EventInsightsConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51718D862F94167E00B7BC24 /* EventInsightsConfigurator2026.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
 		5EC0D41A2C26041700000002 /* APIEvent+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000001 /* APIEvent+Helpers.swift */; };
@@ -214,6 +215,7 @@
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
 		514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2026.swift; sourceTree = "<group>"; };
+		51718D862F94167E00B7BC24 /* EventInsightsConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2026.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000001 /* APIEvent+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIEvent+Helpers.swift"; sourceTree = "<group>"; };
@@ -442,7 +444,6 @@
 				CD2CBDB0173BACD6D862542C /* TBAScreenshotUITests.swift */,
 				F4218C0D7A6203D7784DD93A /* SnapshotHelper.swift */,
 			);
-			name = TBAScreenshotUITests;
 			path = TBAScreenshotUITests;
 			sourceTree = "<group>";
 		};
@@ -495,6 +496,7 @@
 				9279737E23CFF3B100FF9B86 /* EventInsightsConfigurator2019.swift */,
 				92C079C623F99CA400AE2AFA /* EventInsightsConfigurator2020.swift */,
 				9263922927F10A53003C302A /* EventInsightsConfigurator2022.swift */,
+				51718D862F94167E00B7BC24 /* EventInsightsConfigurator2026.swift */,
 			);
 			path = Stats;
 			sourceTree = "<group>";
@@ -1052,9 +1054,9 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
-				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */,
-				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */,
-				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */,
+				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
+				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
+				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -1235,6 +1237,7 @@
 				9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
+				51718D872F94167E00B7BC24 /* EventInsightsConfigurator2026.swift in Sources */,
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
@@ -1668,15 +1671,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */ = {
+		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAAPI;
 		};
-		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */ = {
+		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/MyTBAKit;
 		};
-		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */ = {
+		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAUtils;
 		};
