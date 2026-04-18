@@ -29,7 +29,6 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         case 2019: eventStatsConfigurator = EventInsightsConfigurator2019.self
         case 2020, 2021: eventStatsConfigurator = EventInsightsConfigurator2020.self
         case 2022: eventStatsConfigurator = EventInsightsConfigurator2022.self
-        case 2026: eventStatsConfigurator = EventInsightsConfigurator2026.self
         default: eventStatsConfigurator = nil
         }
 
