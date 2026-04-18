@@ -35,8 +35,6 @@ public final class TBAAPI {
     private let box: Box
     public private(set) var cachePolicy: CachePolicy
 
-    // Exposed so the `TBAAPI+*.swift` extensions can call the generated
-    // OpenAPI client. Read-only — policy changes go through setCachePolicy(_:).
     public var client: Client { box.client }
 
     public init(apiKey: String, cachePolicy: CachePolicy = .default) {
