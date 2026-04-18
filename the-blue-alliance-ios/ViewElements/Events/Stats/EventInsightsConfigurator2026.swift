@@ -37,14 +37,5 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
             snapshot.appendSections(["Bonus Statistics"])
             snapshot.appendItems(bonusStats, toSection: "Bonus Statistics")
         }
-        var fuelStats: [InsightRow] = []
-
-        fuelStats.append(scoreRow(title: "Auto Fuel Scored", key: "auto_fuel_scored", qual: qual, playoff: playoff))
-        fuelStats = filterEmptyInsights(fuelStats)
-        if !fuelStats.isEmpty {
-            snapshot.appendSections(["Fuel Statiestics"])
-            snapshot.appendItems(fuelStats, toSection: "Fuel Statistics")
-        }
     }
-
 }
