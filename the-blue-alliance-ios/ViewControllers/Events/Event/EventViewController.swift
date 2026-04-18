@@ -46,9 +46,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
                    dependencies: dependencies)
 
-        if let event {
-            title = event.friendlyNameWithYear
-        }
+        title = navTitle
 
         infoViewController.delegate = self
         teamsViewController.delegate = self
