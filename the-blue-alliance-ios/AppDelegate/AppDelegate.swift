@@ -37,11 +37,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                       api: api,
                                                                       retryService: RetryService())
 
+    #if SCREENSHOT_MODE
+    lazy var dependencies = Dependencies.screenshotMocked()
+    #else
     lazy var dependencies = Dependencies(api: api,
                                          myTBA: myTBA,
                                          myTBAStores: myTBAStores,
                                          statusService: statusService,
                                          urlOpener: urlOpener)
+    #endif
 
     // MARK: - AppServicesProviding state
 

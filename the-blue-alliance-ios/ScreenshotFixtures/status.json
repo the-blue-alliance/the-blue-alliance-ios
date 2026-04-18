@@ -1,0 +1,14 @@
+{
+  "current_season": 2026,
+  "max_season": 2026,
+  "is_datafeed_down": false,
+  "down_events": [],
+  "ios": {
+    "min_app_version": -1,
+    "latest_app_version": -1
+  },
+  "android": {
+    "min_app_version": -1,
+    "latest_app_version": -1
+  }
+}

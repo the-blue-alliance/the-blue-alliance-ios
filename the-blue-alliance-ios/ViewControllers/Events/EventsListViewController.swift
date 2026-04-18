@@ -46,6 +46,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
             cell.viewModel = EventCellViewModel(name: event.safeShortName,
                                                 location: event.locationString,
                                                 dateString: event.dateString)
+            cell.accessibilityIdentifier = "event.\(event.key)"
             _ = self
             return cell
         }
