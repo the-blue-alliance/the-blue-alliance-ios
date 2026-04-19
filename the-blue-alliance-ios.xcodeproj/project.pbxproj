@@ -1715,17 +1715,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
+		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = TBAAPI;
+			relativePath = Packages/TBAAPI;
 		};
-		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
+		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = MyTBAKit;
+			relativePath = Packages/MyTBAKit;
 		};
-		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
+		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = TBAUtils;
+			relativePath = Packages/TBAUtils;
 		};
 /* End XCLocalSwiftPackageReference section */
 
