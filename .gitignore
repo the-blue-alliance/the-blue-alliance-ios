@@ -62,10 +62,15 @@ Dependencies/
 .accio/
 
 # fastlane
+#
+# It is recommended to not store the screenshots in the git repo.
+# Instead, use fastlane to re-generate the screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/#source-control
 
 fastlane/report.xml
 fastlane/Preview.html
-fastlane/screenshots/screenshots.html
+fastlane/screenshots/**/*.png
 fastlane/test_output
 
 # Code Injection
@@ -103,3 +108,6 @@ fastlane/metadata/review_information
 /.bundle/
 /vendor/bundle
 /lib/bundler/man/
+
+# Claude Code agent workspaces
+.claude/

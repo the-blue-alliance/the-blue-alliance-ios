@@ -77,6 +77,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
                 baseTeamKeys.formUnion(favoriteTeamKeys)
             }
             cell.viewModel = MatchViewModel(apiMatch: match, baseTeamKeys: Array(baseTeamKeys))
+            cell.accessibilityIdentifier = "match.\(match.key)"
             return cell
         }
         dataSource.statefulDelegate = self

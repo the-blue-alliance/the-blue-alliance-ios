@@ -53,6 +53,7 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
             cell.textLabel?.text = district.displayName
             cell.accessoryType = .disclosureIndicator
+            cell.accessibilityIdentifier = "district.\(district.key)"
             return cell
         }
         dataSource.statefulDelegate = self

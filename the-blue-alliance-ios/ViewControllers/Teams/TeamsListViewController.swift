@@ -54,6 +54,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>: T
             cell.viewModel = TeamCellViewModel(teamNumber: "\(team.teamNumber)",
                                                nickname: team.displayNickname,
                                                location: team.locationString)
+            cell.accessibilityIdentifier = "team.\(team.key)"
             return cell
         }
         dataSource.statefulDelegate = self
