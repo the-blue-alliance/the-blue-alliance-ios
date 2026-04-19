@@ -41,6 +41,10 @@ class MyTBASignInViewController: UIViewController, ASAuthorizationControllerPres
         super.viewDidLoad()
 
         styleInterface()
+
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: MyTBASignInViewController, previousTraitCollection) in
+            self.updateInterface(previousTraitCollection: previousTraitCollection)
+        }
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -56,12 +60,6 @@ class MyTBASignInViewController: UIViewController, ASAuthorizationControllerPres
                 $0.isHidden = shouldHideImages
             }
         })
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        updateInterface(previousTraitCollection: previousTraitCollection)
     }
 
     // MARK: - Interface Methods
