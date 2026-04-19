@@ -34,8 +34,8 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
 
         bonusStats = filterEmptyInsights(bonusStats)
         if !bonusStats.isEmpty {
-            snapshot.appendSections(["Bonus Stats (# successful / # opportunities)"])
-            snapshot.appendItems(bonusStats, toSection: "Bonus Stats (# successful / # opportunities)")
+            snapshot.appendSections(["Bonus Stats (Count / Opportunities / Sucess)"])
+            snapshot.appendItems(bonusStats, toSection: "Bonus Stats (Count / Opportunities / Sucess)")
         }
         
         var fuelStats: [InsightRow] = []
@@ -59,8 +59,8 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
         
         towerStats = filterEmptyInsights(towerStats)
         if !towerStats.isEmpty {
-            snapshot.appendSections(["Tower Stats (Count / Opportunities)"])
-            snapshot.appendItems(towerStats, toSection: "Tower Stats (Count / Opportunities)")
+            snapshot.appendSections(["Tower Stats (Count / Opportunities / Sucess)"])
+            snapshot.appendItems(towerStats, toSection: "Tower Stats (Count / Opportunities / Sucess)")
         }
 
         
