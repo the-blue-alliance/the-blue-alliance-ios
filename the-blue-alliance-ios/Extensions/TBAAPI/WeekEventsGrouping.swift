@@ -123,17 +123,34 @@ extension Event: @retroactive Comparable {
             }
             return lhsType.rawValue < rhsType.rawValue
         }
-        // Everything else — districts, regionals, DCMPs, DCMP divisions — sorted by week.
-        // Within a week: Regional < District < DCMP Division < DCMP (DCMP div is a higher raw value,
-        // so flip when both sides are district-CMP).
+        // Everything else — districts, regionals, DCMPs, DCMP divisions — has a
+        // week number. Order first by week, then by section within a week, then
+        // by event within a section.
         if let lWeek = lhs.week, let rWeek = rhs.week {
+            // Different weeks: earlier week comes first.
             if lWeek == rWeek {
-                if lhs.isDistrictChampionshipEvent && rhs.isDistrictChampionshipEvent {
-                    if let l = lhs.startDateParsed, let r = rhs.startDateParsed { return l < r }
-                    return lhsType.rawValue > rhsType.rawValue
+                // Same week. Group events into sections using hybridTypeSortKey so
+                // the Week view lays out as Regional → District(name) →
+                // DCMP/Divisions(name). Lexicographic ordering of the key drives
+                // the section order.
+                let lKey = lhs.hybridTypeSortKey
+                let rKey = rhs.hybridTypeSortKey
+                if lKey == rKey {
+                    // Same section. DCMP parents (type 2) and DCMP divisions
+                    // (type 5) share a section per district — within it, the
+                    // parent sorts first so it renders at the top of the
+                    // "{District} District Championship Divisions" list.
+                    if lhs.eventType == rhs.eventType {
+                        // Same section, same type. Break the tie by start date,
+                        // then by key, so the sort is deterministic across reloads.
+                        if let l = lhs.startDateParsed, let r = rhs.startDateParsed, l != r {
+                            return l < r
+                        }
+                        return lhs.key < rhs.key
+                    }
+                    return lhs.eventType < rhs.eventType
                 }
-                if let l = lhs.startDateParsed, let r = rhs.startDateParsed { return l < r }
-                return lhsType.rawValue < rhsType.rawValue
+                return lKey < rKey
             }
             return lWeek < rWeek
         }
