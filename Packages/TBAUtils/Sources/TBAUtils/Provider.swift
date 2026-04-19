@@ -1,16 +1,20 @@
 import Foundation
 
 private class Weak: Hashable {
-    let hashValue: Int
+    let identifier: ObjectIdentifier
     weak var value: AnyObject?
 
     init(value: AnyObject) {
         self.value = value
-        self.hashValue = ObjectIdentifier(value).hashValue
+        self.identifier = ObjectIdentifier(value)
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
     }
 
     static func ==(lhs: Weak, rhs: Weak) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.identifier == rhs.identifier
     }
 }
 

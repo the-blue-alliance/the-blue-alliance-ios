@@ -125,7 +125,7 @@ private extension AppDelegate {
     }
 
     func configureAuth() {
-        Auth.auth().addIDTokenDidChangeListener { [weak self] _, user in
+        _ = Auth.auth().addIDTokenDidChangeListener { [weak self] _, user in
             guard let self else { return }
             if let user = user {
                 user.getIDToken { token, _ in

@@ -34,7 +34,7 @@ class RetryService {
     }
 
     fileprivate func unregister() {
-        weak var retryTimer = self.retryTimer
+        let retryTimer = self.retryTimer
         retryRunLoop?.perform {
             retryTimer?.invalidate()
         }
