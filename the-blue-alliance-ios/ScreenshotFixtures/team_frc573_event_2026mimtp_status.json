@@ -1,0 +1,72 @@
+{
+  "alliance": {
+    "backup": null,
+    "name": "Alliance 2",
+    "number": 2,
+    "pick": 1
+  },
+  "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 2</b>",
+  "last_match_key": "2026mimtp_f1m2",
+  "next_match_key": null,
+  "overall_status_str": "Team 573 was <b>Rank 10/40</b> with a record of <b>7-5-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 2</b>, and was eliminated in the <b>Finals</b> with a playoff record of <b>3-3-0</b>.",
+  "pit_location": "A1",
+  "playoff": {
+    "current_level_record": {
+      "losses": 2,
+      "ties": 0,
+      "wins": 0
+    },
+    "double_elim_round": "Finals",
+    "level": "f",
+    "playoff_type": 10,
+    "record": {
+      "losses": 3,
+      "ties": 0,
+      "wins": 3
+    },
+    "status": "eliminated"
+  },
+  "playoff_status_str": "<b>Eliminated in the Finals</b> with a playoff record of <b>3-3-0</b>",
+  "qual": {
+    "num_teams": 40,
+    "ranking": {
+      "dq": 0,
+      "matches_played": 12,
+      "qual_average": null,
+      "rank": 10,
+      "record": {
+        "losses": 5,
+        "ties": 0,
+        "wins": 7
+      },
+      "sort_orders": [
+        2.33,
+        122.25,
+        25.5,
+        2.08,
+        0.0,
+        0.0
+      ],
+      "team_key": "frc573"
+    },
+    "sort_order_info": [
+      {
+        "name": "Ranking Score",
+        "precision": 2
+      },
+      {
+        "name": "Avg Match",
+        "precision": 2
+      },
+      {
+        "name": "Avg Auto Fuel",
+        "precision": 2
+      },
+      {
+        "name": "Avg Tower",
+        "precision": 2
+      }
+    ],
+    "status": "completed"
+  }
+}

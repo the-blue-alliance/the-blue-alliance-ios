@@ -1,0 +1,34 @@
+[
+  {
+    "award_type": 2,
+    "event_key": "2026mimtp",
+    "name": "District Event Finalist",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc4381"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc573"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc9673"
+      }
+    ],
+    "year": 2026
+  },
+  {
+    "award_type": 29,
+    "event_key": "2026mimtp",
+    "name": "Innovation in Control Award sponsored by nVent",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc573"
+      }
+    ],
+    "year": 2026
+  }
+]

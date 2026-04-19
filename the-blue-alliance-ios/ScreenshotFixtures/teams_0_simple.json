@@ -1,0 +1,402 @@
+[
+  {
+    "city": "West Branch",
+    "country": "USA",
+    "key": "frc10613",
+    "name": "Alternative Educational Academy of Ogemaw County",
+    "nickname": "AEA Alterbots",
+    "school_name": "Alternative Educational Academy of Ogemaw County",
+    "state_prov": "Michigan",
+    "team_number": 10613
+  },
+  {
+    "city": "Tawas City",
+    "country": "USA",
+    "key": "frc10614",
+    "name": "Alternative Educational Academy of Iosco County",
+    "nickname": "AEA Robolution",
+    "school_name": "Alternative Educational Academy of Iosco County",
+    "state_prov": "Michigan",
+    "team_number": 10614
+  },
+  {
+    "city": "Frankenmuth",
+    "country": "USA",
+    "key": "frc10978",
+    "name": "John Deere/Polymaker&The Complete Robotics Foundation",
+    "nickname": "Complete Robotics",
+    "school_name": "The Complete Robotics Foundation",
+    "state_prov": "Michigan",
+    "team_number": 10978
+  },
+  {
+    "city": "Traverse City",
+    "country": "USA",
+    "key": "frc1711",
+    "name": "Britten Inc./Strata Design/Cone Drive/RJG, Inc./Cox Machine/Northwestern Michigan College/Bill Marsh Buick GMC/DTE Energy Foundation/Great Lakes Stainless/American Solutions for Business/Jimmy Johns&Traverse City Central High Sch",
+    "nickname": "RAPTORS",
+    "school_name": "Traverse City Central High Sch",
+    "state_prov": "Michigan",
+    "team_number": 1711
+  },
+  {
+    "city": "Grand Blanc",
+    "country": "USA",
+    "key": "frc2337",
+    "name": "General Motors/Premier Tooling Systems/Cypress Integration Solutions/DTE Properties, LLC/Molex&Grand Blanc High School",
+    "nickname": "EngiNERDs",
+    "school_name": "Grand Blanc High School",
+    "state_prov": "Michigan",
+    "team_number": 2337
+  },
+  {
+    "city": "Fruitport",
+    "country": "USA",
+    "key": "frc2405",
+    "name": "Lions Club of Fruitport/Machine Ethics/Quality Tool and Stamping/Dominoes Pizza/Michigan Department of Education/Motion Dynamics Corporation/Toyota/Hazekamp's Premier meats&Fruitport High School",
+    "nickname": "Techno Trojans",
+    "school_name": "Fruitport High School",
+    "state_prov": "Michigan",
+    "team_number": 2405
+  },
+  {
+    "city": "Mason",
+    "country": "USA",
+    "key": "frc3655",
+    "name": "Kudan/John Deere/Mason Public Schools/Alro Steel/Gestamp/MSUFCU/Big Boy&Mason High School",
+    "nickname": "Tractor Technicians",
+    "school_name": "Mason High School",
+    "state_prov": "Michigan",
+    "team_number": 3655
+  },
+  {
+    "city": "Suttons Bay",
+    "country": "USA",
+    "key": "frc3688",
+    "name": "Suttons Bay Leelanau Rotary Club/Northern Building Supply/Sherwood Manufacturing Co./Shoreline Fruit/Insight Optometry/Enerdyne/Suttons Bay Bingham Fund/Caterpiller/Leelanau Family Practice/Ruland/John and Tina Bevington/Nicholas Collins/Spencer Seeley/State of Michigan/Northport Schools/Lake Leelanau St Marys School&Suttons Bay High School",
+    "nickname": "Norsemen",
+    "school_name": "Suttons Bay High School",
+    "state_prov": "Michigan",
+    "team_number": 3688
+  },
+  {
+    "city": "Traverse City",
+    "country": "USA",
+    "key": "frc3767",
+    "name": "Consensus/Boomerang Catapult/Grand Traverse Regional Community Foundation/Cone Drive/Traverse City Eye/DSuasion, Inc./Zany Consignment/Northwestern Michigan College/Sullivan Auto Clinic/Grand Traverse Stamping/Strata Design&Traverse City West Sr High Sch",
+    "nickname": "TC Titans",
+    "school_name": "Traverse City West Sr High Sch",
+    "state_prov": "Michigan",
+    "team_number": 3767
+  },
+  {
+    "city": "Richland",
+    "country": "USA",
+    "key": "frc4381",
+    "name": "Gull Lake Community Schools Foundation/Springfield Machine & Tool/Post Consumer Brands/Gull Lake Area Robotics&Gull Lake High School",
+    "nickname": "Twisted Devils",
+    "school_name": "Gull Lake High School",
+    "state_prov": "Michigan",
+    "team_number": 4381
+  },
+  {
+    "city": "Richland",
+    "country": "USA",
+    "key": "frc4422",
+    "name": "Gull Lake Community Schools Foundation/Springfield Machine & Tool/Post Consumer Brands/Gull Lake Area Robotics&Gull Lake High School",
+    "nickname": "Twisted Angels",
+    "school_name": "Gull Lake High School",
+    "state_prov": "Michigan",
+    "team_number": 4422
+  },
+  {
+    "city": "Corunna",
+    "country": "USA",
+    "key": "frc5084",
+    "name": "Autodesk /Chefs Choice Catering/4Th Rock Fabrications/FridgeBot Foundation /Stappywear Screenprinting&Corunna High School",
+    "nickname": "Team FridgeBot",
+    "school_name": "Corunna High School",
+    "state_prov": "Michigan",
+    "team_number": 5084
+  },
+  {
+    "city": "Elk Rapids",
+    "country": "USA",
+    "key": "frc5110",
+    "name": "Hobart Filler Metals/Thompson Retractor/Village Market/Flannery Tool/Cooke Sheet Metal/Lake Roots Beauty Studio/RJG/Star Cutter/GM/Elk Rapids Schools/Elk Rapids Rotary/Cone Drive/Grand Traverse Plastics/Swift Audio/Higgins/The Muffin Tin/Cherry Capital Communications/Donald Gutari and Linda Wapole&Elk Rapids High School",
+    "nickname": "Roboherd",
+    "school_name": "Elk Rapids High School",
+    "state_prov": "Michigan",
+    "team_number": 5110
+  },
+  {
+    "city": "Big Rapids",
+    "country": "USA",
+    "key": "frc5162",
+    "name": "State of Michigan&Big Rapids High School",
+    "nickname": "The Big Red Theory",
+    "school_name": "Big Rapids High School",
+    "state_prov": "Michigan",
+    "team_number": 5162
+  },
+  {
+    "city": "Shepherd",
+    "country": "USA",
+    "key": "frc5231",
+    "name": "First in Michigan/Shepherd Public Schools/Nexteer Automotive/Bill's Custom Fab, Inc./Great Lakes Bay Region (GLBR)/Argosy/Aircraft Precision Products (APPI)/Highland Plastics/WDS Enterprises, Inc./MLT Transport, L.L.C/Brink's Machine Company/Pleasant Optics&Shepherd High School",
+    "nickname": "The Radical Jays",
+    "school_name": "Shepherd High School",
+    "state_prov": "Michigan",
+    "team_number": 5231
+  },
+  {
+    "city": "Elsie",
+    "country": "USA",
+    "key": "frc5234",
+    "name": "Ovid-Elsie Area Schools/Kunz, Leigh, & Associates/SolidWorks/Powder Coat of Central Michigan/MAHLE Engine Components, USA/MAS Mechanical/Ovid-Elsie Lions Club/Ovid-Middlebury Twp Fire Department/Hemlock Semiconductor/Kimberly's Creations/Farm Bureau Insurance Aaron Bisson Agency/Jim's Place Deer Processing/Butler Financial Group/B + B Tax and Finacial Services/Back Alley Pet Grooming/Village Food Pride/Uncle Johns/American Legion Post 153/Unified Screening and Crushing/Gunthorpe Plumbing + Heating Inc./Applebee Oil/Postal Connections/Ovid Service Agency/Inspiration Station&Ovid-Elsie High School",
+    "nickname": "Marauder Bots",
+    "school_name": "Ovid-Elsie High School",
+    "state_prov": "Michigan",
+    "team_number": 5234
+  },
+  {
+    "city": "Chesaning",
+    "country": "USA",
+    "key": "frc5235",
+    "name": "Nexteer&Chesaning Union High School",
+    "nickname": "Gears of Fortune",
+    "school_name": "Chesaning Union High School",
+    "state_prov": "Michigan",
+    "team_number": 5235
+  },
+  {
+    "city": "Rochester Hills",
+    "country": "USA",
+    "key": "frc5436",
+    "name": "GM/Celenese/GSI Electrical/BAE Systems/Brose North America, Inc./David & Denise Carlson Charitable Foundation/State of MI Dept of Education/Norma Group/Stoney Creek Free and Accepted Masons Lodge #5/Friends & Families of the Cyber Cats&Stoney Creek High School",
+    "nickname": "Cyber Cats",
+    "school_name": "Stoney Creek High School",
+    "state_prov": "Michigan",
+    "team_number": 5436
+  },
+  {
+    "city": "Bridgeport",
+    "country": "USA",
+    "key": "frc5697",
+    "name": "Kurek Tool/Orchid Orthopedic Solutions/FP Horak/Saginaw Control and Engineering/Mid States Bolt and Screw&Bridgeport High School",
+    "nickname": "Bearcats",
+    "school_name": "Bridgeport High School",
+    "state_prov": "Michigan",
+    "team_number": 5697
+  },
+  {
+    "city": "Bloomfield Hills",
+    "country": "USA",
+    "key": "frc573",
+    "name": "General Motors/Michigan Department of Education/Aptiv Foundation/Ford/Magna/Allison Transmission/Gene Haas Foundation/SolidWorks/Lear/MathWorks/Superior Cam/BAE Systems/Lawrence Technological University/GraphX&Brother Rice High School&Marian High School",
+    "nickname": "Mech Warriors",
+    "school_name": "Marian High School & Brother Rice High School",
+    "state_prov": "Michigan",
+    "team_number": 573
+  },
+  {
+    "city": "Merrill",
+    "country": "USA",
+    "key": "frc5982",
+    "name": "Dow/FIRST in Great Lakes Bay Region/Michigan Department of Education/Hemlock Semiconductor&Merrill High School",
+    "nickname": "Merrill's Circuits of Destruction",
+    "school_name": "Merrill High School",
+    "state_prov": "Michigan",
+    "team_number": 5982
+  },
+  {
+    "city": "Beal City",
+    "country": "USA",
+    "key": "frc6033",
+    "name": "Dow/FIRST Great Lakes Bay Region/Beal City Village Store/Hanging By A Thread&Beal City Jr Sr High School",
+    "nickname": "Gadget Agents",
+    "school_name": "Beal City Jr Sr High School",
+    "state_prov": "Michigan",
+    "team_number": 6033
+  },
+  {
+    "city": "Bay City",
+    "country": "USA",
+    "key": "frc6071",
+    "name": "State of Michigan/GLBR - Great Lakes Bay Region/Bay City Public School District&Central High School",
+    "nickname": "The Aluminators",
+    "school_name": "Central High School",
+    "state_prov": "Michigan",
+    "team_number": 6071
+  },
+  {
+    "city": "Morley",
+    "country": "USA",
+    "key": "frc6100",
+    "name": "Dimoco Inc/AutoCast/Accurate Screen&Morley-Stanwood High School",
+    "nickname": "MS Mobots",
+    "school_name": "Morley-Stanwood High School",
+    "state_prov": "Michigan",
+    "team_number": 6100
+  },
+  {
+    "city": "Beaverton",
+    "country": "USA",
+    "key": "frc6533",
+    "name": "Gene Haas Foundation/Toyota/Burgess Robotics/AutoDesk&Beaverton Jr/Sr High School",
+    "nickname": "BeaverTech noducks",
+    "school_name": "Beaverton Jr/Sr High School",
+    "state_prov": "Michigan",
+    "team_number": 6533
+  },
+  {
+    "city": "Harrison",
+    "country": "USA",
+    "key": "frc6642",
+    "name": "Federal Broach/Biggby Coffee of Harrison/Nitro Computers/Harrison Eye Care/Sandra Steele/Members First Credit Union/Alro Steel of Clare&Harrison Cmty High School",
+    "nickname": "Stingers of Steel",
+    "school_name": "Harrison Cmty High School",
+    "state_prov": "Michigan",
+    "team_number": 6642
+  },
+  {
+    "city": "Clare",
+    "country": "USA",
+    "key": "frc7109",
+    "name": "Dow Chemical/Nexteer/Ford Motor Company/Toytota/Kiwanis International/Alro Steel/Gene Haas Foundation/Ace Hardware Clare/Clare Education Boosters/JD Metalworks/StageRight/JC Youth Foundation/Witbecks/MEARS&Clare High School",
+    "nickname": "Clare Chaos Theory",
+    "school_name": "Clare High School",
+    "state_prov": "Michigan",
+    "team_number": 7109
+  },
+  {
+    "city": "Laingsburg",
+    "country": "USA",
+    "key": "frc7166",
+    "name": "Gene Haas Foundation/Pro-MEC Engineering Services, Inc./Department of War (DoWSTEM)/Lions Club of Laingsburg/Tial Sport&Laingsburg High School",
+    "nickname": "Red Thunder Robotics",
+    "school_name": "Laingsburg High School",
+    "state_prov": "Michigan",
+    "team_number": 7166
+  },
+  {
+    "city": "Portland",
+    "country": "USA",
+    "key": "frc7195",
+    "name": "Homeworks/THK/PMA West Michigan/Portland Products/Portland Public Schools & Portland High School",
+    "nickname": "Twin River Robotics",
+    "school_name": "Portland High School",
+    "state_prov": "Michigan",
+    "team_number": 7195
+  },
+  {
+    "city": "Greenville",
+    "country": "USA",
+    "key": "frc7210",
+    "name": "Greenville Tool and Die (GTD)/Builders Glass of Greenville/Elenbass Steel Supply Company/Quality Collision/Arrow Swift/DiCastal North America&Greenville Senior High School",
+    "nickname": "RoboJackets  7210",
+    "school_name": "Greenville Senior High School",
+    "state_prov": "Michigan",
+    "team_number": 7210
+  },
+  {
+    "city": "Farwell",
+    "country": "USA",
+    "key": "frc8286",
+    "name": "&Farwell High School",
+    "nickname": "E.A.G.L.E.S. Robotics",
+    "school_name": "Farwell High School",
+    "state_prov": "Michigan",
+    "team_number": 8286
+  },
+  {
+    "city": "Mount Pleasant",
+    "country": "USA",
+    "key": "frc8873",
+    "name": "Mt Pleasant High School",
+    "nickname": "Rockefeller Robotics",
+    "school_name": "Mt Pleasant High School",
+    "state_prov": "Michigan",
+    "team_number": 8873
+  },
+  {
+    "city": "Leland",
+    "country": "USA",
+    "key": "frc9568",
+    "name": "Argosy&Leland Public School",
+    "nickname": "AstroBots",
+    "school_name": "Leland Public School",
+    "state_prov": "Michigan",
+    "team_number": 9568
+  },
+  {
+    "city": "Ashley",
+    "country": "USA",
+    "key": "frc9594",
+    "name": "Ashley Cmty School",
+    "nickname": "Ashley  Bears",
+    "school_name": "Ashley Cmty School",
+    "state_prov": "Michigan",
+    "team_number": 9594
+  },
+  {
+    "city": "Mio",
+    "country": "USA",
+    "key": "frc9650",
+    "name": "Whaley Steel Corp. & Mioausable High School",
+    "nickname": "Mio Thunderbotz",
+    "school_name": "Mioausable High School",
+    "state_prov": "Michigan",
+    "team_number": 9650
+  },
+  {
+    "city": "Breckenridge",
+    "country": "USA",
+    "key": "frc9661",
+    "name": "Boland Best One Tire- Breckenridge&Breckenridge Middle High Sch",
+    "nickname": "Huskie STEAM",
+    "school_name": "Breckenridge Middle High Sch",
+    "state_prov": "Michigan",
+    "team_number": 9661
+  },
+  {
+    "city": "Saginaw",
+    "country": "USA",
+    "key": "frc9662",
+    "name": "Kerkau Manufacturing/Saginaw Control and Engineering/Great Lakes Bay Robotics (Dow, Nexteer, Dupont)/Hemlock Semiconductor/Keel USA/MetroFab/Bierlein-Trombley Electric/Winford/BT Tech/Barnum/Fullerton Tool & Valley Lutheran High School",
+    "nickname": "Valley Lutheran Chargers",
+    "school_name": "Valley Lutheran High School",
+    "state_prov": "Michigan",
+    "team_number": 9662
+  },
+  {
+    "city": "Ithaca",
+    "country": "USA",
+    "key": "frc9673",
+    "name": "Ithaca Jr Sr High School",
+    "nickname": "Volt Vespids",
+    "school_name": "Ithaca Jr Sr High School",
+    "state_prov": "Michigan",
+    "team_number": 9673
+  },
+  {
+    "city": "Ironwood",
+    "country": "USA",
+    "key": "frc9755",
+    "name": "Luther L Wright K-12 School",
+    "nickname": "Red Devil Robotics",
+    "school_name": "Luther L Wright K-12 School",
+    "state_prov": "Michigan",
+    "team_number": 9755
+  },
+  {
+    "city": "Wakefield",
+    "country": "USA",
+    "key": "frc9773",
+    "name": "Wakefield Marenisco School",
+    "nickname": "Cardinal Robotics",
+    "school_name": "Wakefield Marenisco School",
+    "state_prov": "Michigan",
+    "team_number": 9773
+  }
+]

@@ -8,10 +8,10 @@ import UIKit
 extension Dependencies {
 
     static func screenshotMocked() -> Dependencies {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [FixtureURLProtocol.self]
-
-        let api = TBAAPI(apiKey: "fake", configuration: configuration)
+        let api = TBAAPI(apiKey: "fake",
+                         cachePolicy: .bypass,
+                         protocolClasses: [FixtureURLProtocol.self])
+        let appSettings = AppSettings()
         let myTBA = MockMyTBA()
         let myTBAStores = MyTBAStores(favorites: FavoritesStore(),
                                       subscriptions: SubscriptionsStore())
@@ -19,6 +19,7 @@ extension Dependencies {
         let urlOpener = MockURLOpener()
 
         return Dependencies(api: api,
+                            appSettings: appSettings,
                             myTBA: myTBA,
                             myTBAStores: myTBAStores,
                             statusService: statusService,

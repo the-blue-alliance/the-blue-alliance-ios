@@ -1,0 +1,142 @@
+[
+  {
+    "abbreviation": "ca",
+    "display_name": "FIRST California",
+    "key": "2026ca",
+    "official_advancement_counts": {
+      "cmp": 46,
+      "dcmp": 120
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "fch",
+    "display_name": "FIRST Chesapeake",
+    "key": "2026fch",
+    "official_advancement_counts": {
+      "cmp": 19,
+      "dcmp": 54
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "fim",
+    "display_name": "FIRST in Michigan",
+    "key": "2026fim",
+    "official_advancement_counts": {
+      "cmp": 83,
+      "dcmp": 160
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "fin",
+    "display_name": "FIRST Indiana Robotics",
+    "key": "2026fin",
+    "official_advancement_counts": {
+      "cmp": 12,
+      "dcmp": 38
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "fit",
+    "display_name": "FIRST In Texas",
+    "key": "2026fit",
+    "official_advancement_counts": {
+      "cmp": 28,
+      "dcmp": 90
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "fma",
+    "display_name": "FIRST Mid-Atlantic",
+    "key": "2026fma",
+    "official_advancement_counts": {
+      "cmp": 23,
+      "dcmp": 66
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "fnc",
+    "display_name": "FIRST North Carolina",
+    "key": "2026fnc",
+    "official_advancement_counts": {
+      "cmp": 15,
+      "dcmp": 50
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "fsc",
+    "display_name": "FIRST South Carolina",
+    "key": "2026fsc",
+    "official_advancement_counts": {
+      "cmp": 7,
+      "dcmp": 32
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "isr",
+    "display_name": "FIRST Israel",
+    "key": "2026isr",
+    "official_advancement_counts": {
+      "cmp": 12,
+      "dcmp": 42
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "ne",
+    "display_name": "New England",
+    "key": "2026ne",
+    "official_advancement_counts": {
+      "cmp": 32,
+      "dcmp": 100
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "ont",
+    "display_name": "FIRST Canada - Ontario",
+    "key": "2026ont",
+    "official_advancement_counts": {
+      "cmp": 21,
+      "dcmp": 100
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "pch",
+    "display_name": "Peachtree",
+    "key": "2026pch",
+    "official_advancement_counts": {
+      "cmp": 13,
+      "dcmp": 45
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "pnw",
+    "display_name": "Pacific Northwest",
+    "key": "2026pnw",
+    "official_advancement_counts": {
+      "cmp": 21,
+      "dcmp": 50
+    },
+    "year": 2026
+  },
+  {
+    "abbreviation": "win",
+    "display_name": "FIRST Wisconsin",
+    "key": "2026win",
+    "official_advancement_counts": {
+      "cmp": 12,
+      "dcmp": 36
+    },
+    "year": 2026
+  }
+]

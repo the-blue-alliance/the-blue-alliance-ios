@@ -47,6 +47,14 @@ Run TBAUtils unit tests
 
 Run all of our tests
 
+### ios screenshots
+
+```sh
+[bundle exec] fastlane ios screenshots
+```
+
+Capture App Store screenshots
+
 ### ios setup_secrets
 
 ```sh
@@ -54,6 +62,14 @@ Run all of our tests
 ```
 
 Setup Secrets.plist file (used by CI)
+
+### ios dsyms
+
+```sh
+[bundle exec] fastlane ios dsyms
+```
+
+Download dSYMs for a specific build. Usage: fastlane dsyms version:3.2.3 build:2
 
 ### ios beta_ci
 
