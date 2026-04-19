@@ -58,29 +58,29 @@ class MyTBASignInViewController: UIViewController, ASAuthorizationControllerPres
         })
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        updateInterface(previousTraitCollection: previousTraitCollection)
-    }
-
     // MARK: - Interface Methods
 
     private func styleInterface() {
         view.backgroundColor = UIColor.systemGroupedBackground
-        signInButton.setTitleColor(UIColor.googleSignInTextColor, for: .normal)
 
-        updateInterface(previousTraitCollection: nil)
-    }
+        var config = UIButton.Configuration.plain()
+        config.baseForegroundColor = UIColor.googleSignInTextColor
+        signInButton.configuration = config
 
-    private func updateInterface(previousTraitCollection: UITraitCollection?) {
-        if let previousTraitCollection = previousTraitCollection, previousTraitCollection.userInterfaceStyle != traitCollection.userInterfaceStyle {
-            // There's some bug (or - possibly misconfigured on my part) with stretching + the trait collection changing.
-            // As a workaround, we need to manually reset all the background images for the sign in button
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_normal"), for: .normal)
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_pressed"), for: .selected)
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_focus"), for: .focused)
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_disabled"), for: .disabled)
+        signInButton.configurationUpdateHandler = { button in
+            guard var config = button.configuration else { return }
+            let imageName: String
+            if button.state.contains(.disabled) {
+                imageName = "btn_google_signin_disabled"
+            } else if button.state.contains(.focused) {
+                imageName = "btn_google_signin_focus"
+            } else if button.state.contains(.highlighted) {
+                imageName = "btn_google_signin_pressed"
+            } else {
+                imageName = "btn_google_signin_normal"
+            }
+            config.background.image = UIImage(named: imageName)
+            button.configuration = config
         }
     }
 
