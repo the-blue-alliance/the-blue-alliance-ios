@@ -176,11 +176,6 @@ class FourColumnTableViewCell: UITableViewCell, Reusable {
         
         qualLabel.text = "Quals"
         playoffLabel.text = "Playoffs"
-        let width = ("Playoffs" as NSString).size(withAttributes: [
-            .font: UIFont.systemFont(ofSize: 17)
-        ]).width
-        qualLabel.widthAnchor.constraint(equalToConstant: width).isActive = true
-        playoffLabel.widthAnchor.constraint(equalToConstant: width).isActive = true
         
         let vertical = UIStackView(arrangedSubviews: [titleLabel, qualsView, playoffsView])
         vertical.axis = .vertical
