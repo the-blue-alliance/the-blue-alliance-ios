@@ -382,7 +382,7 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
-		B77F3C9F7AE703ECDB784F0D /* ScreenshotFixtures */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = ScreenshotFixtures; sourceTree = "<group>"; };
+		B77F3C9F7AE703ECDB784F0D /* ScreenshotFixtures */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = ScreenshotFixtures; path = ScreenshotFixtures; sourceTree = "<group>"; };
 		CD2CBDB0173BACD6D862542C /* TBAScreenshotUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TBAScreenshotUITests.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 		D9E2A5A3B4DBE3B42DDFA463 /* Dependencies+Screenshots.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Dependencies+Screenshots.swift"; sourceTree = "<group>"; };
@@ -426,6 +426,7 @@
 				D9E2A5A3B4DBE3B42DDFA463 /* Dependencies+Screenshots.swift */,
 				540FE5C4006E67F966B35347 /* MockMyTBA.swift */,
 			);
+			name = Screenshots;
 			path = Screenshots;
 			sourceTree = "<group>";
 		};
@@ -466,6 +467,7 @@
 				CD2CBDB0173BACD6D862542C /* TBAScreenshotUITests.swift */,
 				F4218C0D7A6203D7784DD93A /* SnapshotHelper.swift */,
 			);
+			name = TBAScreenshotUITests;
 			path = TBAScreenshotUITests;
 			sourceTree = "<group>";
 		};
@@ -1088,9 +1090,9 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
-				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
-				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
-				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
+				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */,
+				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */,
+				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -1715,15 +1717,15 @@
 /* Begin XCLocalSwiftPackageReference section */
 		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/TBAAPI;
+			relativePath = TBAAPI;
 		};
 		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/MyTBAKit;
+			relativePath = MyTBAKit;
 		};
 		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/TBAUtils;
+			relativePath = TBAUtils;
 		};
 /* End XCLocalSwiftPackageReference section */
 
