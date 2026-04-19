@@ -28,6 +28,7 @@ platform :ios do
     build_app(
       project: "the-blue-alliance-ios.xcodeproj",
       scheme: "The Blue Alliance",
+      configuration: "Debug",
       destination: "generic/platform=iOS Simulator",
       skip_archive: true,
       skip_codesigning: true,
