@@ -23,6 +23,20 @@ platform :ios do
     test_tbautils
   end
 
+  desc "Compile the main iOS app for CI (no code signing)"
+  lane :build_ci do
+    build_app(
+      project: "the-blue-alliance-ios.xcodeproj",
+      scheme: "The Blue Alliance",
+      configuration: "Debug",
+      destination: "generic/platform=iOS Simulator",
+      skip_archive: true,
+      skip_codesigning: true,
+      skip_package_ipa: true,
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+    )
+  end
+
   desc "Capture App Store screenshots"
   lane :screenshots do
     capture_screenshots

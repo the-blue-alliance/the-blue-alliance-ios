@@ -28,6 +28,9 @@ jobs:
           bundle exec fastlane setup_secrets
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
+      - name: fastlane build_ci
+        if: ${{ !contains(github.event.head_commit.message, '[clowntown]') }}
+        run: bundle exec fastlane build_ci
       - name: fastlane test
         if: ${{ !contains(github.event.head_commit.message, '[clowntown]') }}
         run: bundle exec fastlane test
