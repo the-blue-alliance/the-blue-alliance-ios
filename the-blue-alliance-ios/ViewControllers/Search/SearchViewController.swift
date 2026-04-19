@@ -122,7 +122,7 @@ class SearchViewController: TBATableViewController {
         }
 
         if scope.shouldShowTeams {
-            let teams = (index.teams ?? [])
+            let teams = index.teams
                 .filter { matches(team: $0, query: query) }
                 .sorted { lhs, rhs in
                     let l = Int(TeamKey.trimFRCPrefix(lhs.key)) ?? .max
@@ -137,7 +137,7 @@ class SearchViewController: TBATableViewController {
         }
 
         if scope.shouldShowEvents {
-            let events = (index.events ?? [])
+            let events = index.events
                 .filter { matches(event: $0, query: query) }
                 .sorted { lhs, rhs in
                     let lYear = Int(lhs.key.prefix(4)) ?? 0
