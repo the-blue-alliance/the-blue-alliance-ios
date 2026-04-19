@@ -52,6 +52,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
         dataSource = TableViewDataSource<String, DistrictRanking>(tableView: tableView) { tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             cell.viewModel = RankingCellViewModel(apiDistrictRanking: ranking)
+            cell.accessibilityIdentifier = "ranking.\(ranking.teamKey)"
             return cell
         }
         dataSource.statefulDelegate = self

@@ -48,6 +48,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         } else {
             cell.state = .loading
         }
+        cell.accessibilityIdentifier = "media.\(item.foreignKey)"
     }
 
     // MARK: Init
