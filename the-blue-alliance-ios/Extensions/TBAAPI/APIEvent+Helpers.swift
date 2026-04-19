@@ -123,21 +123,18 @@ extension Event {
         return now >= startOfWeek && now <= end
     }
 
-    // Sort key used in place of the Core Data `hybridType` attribute — groups
-    // events by their "conceptual bucket" within a season so the weekly
-    // section headers stack in a sensible order.
-    // Sort key used in place of the Core Data `hybridType` attribute — groups
-    // events by their "conceptual bucket" within a season so the weekly
-    // section headers stack in a sensible order.
+    // Section key used to group events in the Week view. Events sharing this
+    // key land in the same table section, and the lexicographic ordering of
+    // the key (Regional < District < DCMP, and within each type by district
+    // display name) drives the section order the user sees. We key off
+    // displayName rather than abbreviation so section order matches what the
+    // user reads on screen (and matches the Android app).
     var hybridTypeSortKey: String {
-        if isDistrictChampionshipEvent {
-            if eventTypeEnum == .districtChampionshipDivision, let abbrev = district?.abbreviation {
-                return "\(APIEventType.districtChampionship.rawValue)..\(abbrev).dcmpd"
-            }
-            return "\(eventType)"
+        if isDistrictChampionshipEvent, let district {
+            return "\(APIEventType.districtChampionship.rawValue)..\(district.displayName.lowercased()).dcmp"
         }
-        if let district, !isDistrictChampionshipEvent {
-            return "\(eventType).\(district.abbreviation)"
+        if let district {
+            return "\(eventType).\(district.displayName.lowercased())"
         }
         if eventTypeEnum == .offseason, let date = startDateParsed {
             let formatter = DateFormatter()
