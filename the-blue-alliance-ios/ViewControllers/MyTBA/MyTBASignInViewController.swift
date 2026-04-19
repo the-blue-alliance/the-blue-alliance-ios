@@ -41,6 +41,10 @@ class MyTBASignInViewController: UIViewController, ASAuthorizationControllerPres
         super.viewDidLoad()
 
         styleInterface()
+
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: MyTBASignInViewController, previousTraitCollection) in
+            self.updateInterface(previousTraitCollection: previousTraitCollection)
+        }
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
