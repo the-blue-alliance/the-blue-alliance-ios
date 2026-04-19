@@ -67,6 +67,8 @@
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
 		92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */; };
 		92598CC724A92AFE007E08CB /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92598CC624A92AFE007E08CB /* Dependencies.swift */; };
+		92AABBCC000000000000DD01 /* CachePolicyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD02 /* CachePolicyStore.swift */; };
+		92AABBCC000000000000DD11 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD12 /* AppSettings.swift */; };
 		92598CC924A92B00007E08CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92598CC824A92B00007E08CB /* SceneDelegate.swift */; };
 		92598CCB24A92B00007E08CB /* AppServicesProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92598CCA24A92B00007E08CB /* AppServicesProviding.swift */; };
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
@@ -255,6 +257,8 @@
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASearchableTableViewController.swift; sourceTree = "<group>"; };
 		92598CC624A92AFE007E08CB /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		92AABBCC000000000000DD02 /* CachePolicyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePolicyStore.swift; sourceTree = "<group>"; };
+		92AABBCC000000000000DD12 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		92598CC824A92B00007E08CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		92598CCA24A92B00007E08CB /* AppServicesProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppServicesProviding.swift; sourceTree = "<group>"; };
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
@@ -503,6 +507,15 @@
 			path = AppDelegate;
 			sourceTree = "<group>";
 		};
+		92AABBCC000000000000DD10 /* LocalStore */ = {
+			isa = PBXGroup;
+			children = (
+				92AABBCC000000000000DD12 /* AppSettings.swift */,
+				92AABBCC000000000000DD02 /* CachePolicyStore.swift */,
+			);
+			path = LocalStore;
+			sourceTree = "<group>";
+		};
 		92435E2A23CBC21300CDD2D4 /* Stats */ = {
 			isa = PBXGroup;
 			children = (
@@ -597,6 +610,7 @@
 			children = (
 				927246C12AFFFC8900EF7796 /* Auth */,
 				923AEE8F2165966C00EF50C8 /* AppDelegate */,
+				92AABBCC000000000000DD10 /* LocalStore */,
 				923A0D7620D21D3800BF5E31 /* LaunchViews */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				A11CF00E00000000000000FF /* AppIcon.icon */,
@@ -1278,6 +1292,8 @@
 				9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */,
 				1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */,
 				92598CC724A92AFE007E08CB /* Dependencies.swift in Sources */,
+				92AABBCC000000000000DD01 /* CachePolicyStore.swift in Sources */,
+				92AABBCC000000000000DD11 /* AppSettings.swift in Sources */,
 				92FF10F721A61AC2003BC5C4 /* MatchInfoViewController.swift in Sources */,
 				9279737D23CFF3A700FF9B86 /* EventInsightsConfigurator2018.swift in Sources */,
 				92564C6B21644AA30047917F /* Secrets.swift in Sources */,

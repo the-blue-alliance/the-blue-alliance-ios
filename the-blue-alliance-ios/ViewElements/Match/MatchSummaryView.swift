@@ -19,8 +19,8 @@ class MatchSummaryView: UIView {
     // change this variable so that the teams are shown as buttons
     private var teamsTappable: Bool = false
 
-    private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-    private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+    private let winnerFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 14, weight: .bold))
+    private let notWinnerFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 14, weight: .medium))
 
     // MARK: - IBOutlet
 
@@ -80,9 +80,11 @@ class MatchSummaryView: UIView {
     private func styleInterface() {
         redContainerView.backgroundColor = UIColor.redAllianceBackgroundColor
         redScoreLabel.backgroundColor = UIColor.redAllianceScoreBackgroundColor
+        redScoreLabel.adjustsFontForContentSizeCategory = true
 
         blueContainerView.backgroundColor = UIColor.blueAllianceBackgroundColor
         blueScoreLabel.backgroundColor = UIColor.blueAllianceScoreBackgroundColor
+        blueScoreLabel.adjustsFontForContentSizeCategory = true
     }
 
     // MARK: - Public Methods

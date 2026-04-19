@@ -49,7 +49,7 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         let item = UIBarButtonItem(title: "Save", primaryAction: UIAction { [weak self] _ in
             self?.save()
         })
-        item.style = .done
+        item.style = .prominent
         return item
     }()
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()

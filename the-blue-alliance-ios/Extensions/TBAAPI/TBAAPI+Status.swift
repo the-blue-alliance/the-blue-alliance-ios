@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-extension TBAAPI: TBAAPIProtocol {}
+extension TBAAPI: @retroactive TBAAPIProtocol {}
 
 extension TBAAPI {
 
