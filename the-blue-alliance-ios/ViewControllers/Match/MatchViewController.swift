@@ -56,15 +56,16 @@ class MatchViewController: MyTBAContainerViewController {
 
     private func loadMatchAndEvent() {
         Task { @MainActor in
-            async let matchTask = dependencies.api.match(key: matchKey)
-            async let eventTask = dependencies.api.event(key: MatchKey.eventKey(from: matchKey))
-
-            // Await in reverse declaration order so async let child tasks are torn
-            // down LIFO; otherwise swift_task_dealloc traps. Workaround for a Swift
-            // 6.1 codegen bug — remove once Swift 6.3 is our minimum.
+            // Unstructured Task handles instead of `async let`: Swift 6.1's
+            // async-let stack allocator trips swift_task_dealloc's LIFO check
+            // here even with reverse-order awaits (#995 didn't fully fix it).
+            // Task handles heap-allocate and sidestep the allocator entirely.
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
-            let event = try? await eventTask
-            let match = try? await matchTask
+            let matchHandle = Task { try? await self.dependencies.api.match(key: self.matchKey) }
+            let eventHandle = Task { try? await self.dependencies.api.event(key: MatchKey.eventKey(from: self.matchKey)) }
+
+            let match = await matchHandle.value
+            let event = await eventHandle.value
 
 
             if let match {
