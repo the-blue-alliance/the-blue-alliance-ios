@@ -7,6 +7,8 @@ struct InsightRow: Hashable {
     var title: String
     var qual: String?
     var playoff: String?
+    var contentRowOne: [String]?
+    var contentRowTwo: [String]?
 }
 
 class EventInsightsViewController: TBATableViewController, Refreshable, Stateful {
@@ -29,6 +31,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         case 2019: eventStatsConfigurator = EventInsightsConfigurator2019.self
         case 2020, 2021: eventStatsConfigurator = EventInsightsConfigurator2020.self
         case 2022: eventStatsConfigurator = EventInsightsConfigurator2022.self
+        case 2026: eventStatsConfigurator = EventInsightsConfigurator2026.self
         default: eventStatsConfigurator = nil
         }
 
@@ -47,6 +50,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         tableView.registerReusableCell(EventInsightsTableViewCell.self)
         tableView.registerReusableHeaderFooterView(EventInsightsHeaderView.self)
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
+        tableView.register(FourColumnTableViewCell.self, forCellReuseIdentifier: FourColumnTableViewCell.reuseIdentifier)
         tableView.insetsContentViewsToSafeArea = false
 
         tableView.dataSource = dataSource
@@ -102,13 +106,11 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                 cell.selectionStyle = .none
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
-                cell.titleLabel.text = row.title
-                let subtitle: [String] = [
-                    "Quals: \(row.qual ?? "----")",
-                    "Playoffs: \(row.playoff ?? "----")"
-                ]
-                cell.subtitleLabel.text = subtitle.joined(separator: "\n")
+                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as FourColumnTableViewCell
+                cell.title = row.title
+                cell.contentRowOne = row.contentRowOne ?? []
+                cell.contentRowTwo = row.contentRowTwo ?? []
+
                 return cell
             }
         }
@@ -161,3 +163,4 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         return "\(year) Event Insights are not supported - try updating your app via the App Store."
     }
 }
+

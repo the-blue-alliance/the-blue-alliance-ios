@@ -116,6 +116,92 @@ class EventInsightsHeaderView: UITableViewHeaderFooterView, Reusable {
 
 }
 
+class FourColumnTableViewCell: UITableViewCell, Reusable {
+    
+    private let titleLabel = UILabel()
+    private let qualsView = UIStackView()
+    private let playoffsView = UIStackView()
+    private let playoffLabel = UILabel()
+    private let qualLabel = UILabel()
+    private let label1 = UILabel()
+    private let label2 = UILabel()
+    private let label3 = UILabel()
+    private let label4 = UILabel()
+    private let label5 = UILabel()
+    private let label6 = UILabel()
+    
+    var title: String? {
+        didSet { titleLabel.text = title }
+    }
+    
+    var contentRowOne: [String] = [] {
+        didSet {
+            let labels = [label1, label2, label3]
+            for (i, label) in labels.enumerated() {
+                label.text = i < contentRowOne.count ? contentRowOne[i] : ""
+            }
+        }
+    }
+    var contentRowTwo: [String] = [] {
+        didSet {
+            let labels = [label4, label5, label6]
+            for (i, label) in labels.enumerated() {
+                label.text = i < contentRowTwo.count ? contentRowTwo[i] : ""
+            }
+        }
+    }
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        qualsView.axis = .horizontal
+        qualsView.distribution = .fillEqually
+        playoffsView.axis = .horizontal
+        playoffsView.distribution = .fillEqually
+        
+        titleLabel.textColor = UIColor.secondaryLabel
+        qualLabel.textColor = UIColor.tertiaryLabel
+        playoffLabel.textColor = UIColor.tertiaryLabel
+        
+        qualsView.addArrangedSubview(qualLabel)
+        playoffsView.addArrangedSubview(playoffLabel)
+        [label1, label2, label3].forEach {
+            $0.textAlignment = .center
+            qualsView.addArrangedSubview($0)
+        }
+        [label4, label5, label6].forEach {
+            $0.textAlignment = .center
+            playoffsView.addArrangedSubview($0)
+        }
+        
+        qualLabel.text = "Quals"
+        playoffLabel.text = "Playoffs"
+        let width = ("Playoffs" as NSString).size(withAttributes: [
+            .font: UIFont.systemFont(ofSize: 17)
+        ]).width
+        qualLabel.widthAnchor.constraint(equalToConstant: width).isActive = true
+        playoffLabel.widthAnchor.constraint(equalToConstant: width).isActive = true
+        
+        let vertical = UIStackView(arrangedSubviews: [titleLabel, qualsView, playoffsView])
+        vertical.axis = .vertical
+        vertical.spacing = 4
+        
+        contentView.addSubview(vertical)
+        vertical.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            vertical.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            vertical.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            vertical.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            vertical.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class EventInsightsTableViewCell: UITableViewCell, Reusable {
 
     private lazy var eventInsightsView = EventInsightsView()

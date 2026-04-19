@@ -24,6 +24,7 @@
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
 		4C783D151380A91E2AC7C673 /* Dependencies+Screenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E2A5A3B4DBE3B42DDFA463 /* Dependencies+Screenshots.swift */; };
 		514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */; };
+		51718D8D2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
 		5EC0D41A2C26041700000002 /* APIEvent+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000001 /* APIEvent+Helpers.swift */; };
@@ -219,6 +220,7 @@
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
 		467D6EFB347E5912BFB3E59F /* FixtureURLProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FixtureURLProtocol.swift; sourceTree = "<group>"; };
 		514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2026.swift; sourceTree = "<group>"; };
+		51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2026.swift; sourceTree = "<group>"; };
 		540FE5C4006E67F966B35347 /* MockMyTBA.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
@@ -376,7 +378,7 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
-		B77F3C9F7AE703ECDB784F0D /* ScreenshotFixtures */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = ScreenshotFixtures; path = ScreenshotFixtures; sourceTree = "<group>"; };
+		B77F3C9F7AE703ECDB784F0D /* ScreenshotFixtures */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = ScreenshotFixtures; sourceTree = "<group>"; };
 		CD2CBDB0173BACD6D862542C /* TBAScreenshotUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TBAScreenshotUITests.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 		D9E2A5A3B4DBE3B42DDFA463 /* Dependencies+Screenshots.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Dependencies+Screenshots.swift"; sourceTree = "<group>"; };
@@ -420,7 +422,6 @@
 				D9E2A5A3B4DBE3B42DDFA463 /* Dependencies+Screenshots.swift */,
 				540FE5C4006E67F966B35347 /* MockMyTBA.swift */,
 			);
-			name = Screenshots;
 			path = Screenshots;
 			sourceTree = "<group>";
 		};
@@ -461,7 +462,6 @@
 				CD2CBDB0173BACD6D862542C /* TBAScreenshotUITests.swift */,
 				F4218C0D7A6203D7784DD93A /* SnapshotHelper.swift */,
 			);
-			name = TBAScreenshotUITests;
 			path = TBAScreenshotUITests;
 			sourceTree = "<group>";
 		};
@@ -514,6 +514,7 @@
 				9279737E23CFF3B100FF9B86 /* EventInsightsConfigurator2019.swift */,
 				92C079C623F99CA400AE2AFA /* EventInsightsConfigurator2020.swift */,
 				9263922927F10A53003C302A /* EventInsightsConfigurator2022.swift */,
+				51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */,
 			);
 			path = Stats;
 			sourceTree = "<group>";
@@ -1073,9 +1074,9 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
-				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */,
-				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */,
-				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */,
+				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
+				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
+				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -1217,6 +1218,7 @@
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
 				92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */,
 				929F572C2092BB1C00E5313A /* Alertable.swift in Sources */,
+				51718D8D2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift in Sources */,
 				9280B54523CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
 				92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */,
@@ -1695,15 +1697,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */ = {
+		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAAPI;
 		};
-		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */ = {
+		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/MyTBAKit;
 		};
-		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */ = {
+		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAUtils;
 		};
