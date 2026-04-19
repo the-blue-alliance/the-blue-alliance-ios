@@ -62,7 +62,7 @@ enum WeekEventsGrouping {
 
 // MARK: - Comparable port
 
-extension Event: Comparable {
+extension Event: @retroactive Comparable {
 
     // Port of TBAData.Event's `Comparable` ordering:
     //   Preseason, Week 1, Week 2, …, Week 7, CMP divisions, CMP finals, FoC, Offseason, Unlabeled

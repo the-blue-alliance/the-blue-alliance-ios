@@ -241,7 +241,7 @@ extension AppDelegate: RemoteNotificationRegistering {
 
 // MARK: - FCMTokenProvider conformance for Firebase Messaging
 
-extension Messaging: FCMTokenProvider {}
+extension Messaging: @retroactive FCMTokenProvider {}
 
 // MARK: - Appearance
 
