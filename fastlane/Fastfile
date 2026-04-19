@@ -37,11 +37,6 @@ platform :ios do
     )
   end
 
-  desc "Capture App Store screenshots"
-  lane :screenshots do
-    capture_screenshots
-  end
-
   ## CI Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"

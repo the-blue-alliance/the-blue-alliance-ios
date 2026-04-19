@@ -55,14 +55,6 @@ Run all of our tests
 
 Compile the main iOS app for CI (no code signing)
 
-### ios screenshots
-
-```sh
-[bundle exec] fastlane ios screenshots
-```
-
-Capture App Store screenshots
-
 ### ios setup_secrets
 
 ```sh

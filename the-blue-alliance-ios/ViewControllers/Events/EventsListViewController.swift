@@ -101,10 +101,10 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
         let districtName = event.district?.displayName
 
         if event.isDistrictChampionshipEvent {
-            guard let districtName, !event.eventTypeString.isEmpty else { return nil }
-            return event.isDistrictChampionshipDivision
-                ? "\(districtName) \(event.eventTypeString)s"
-                : "\(event.eventTypeString)s"
+            guard let districtName else {
+                return event.eventTypeString.isEmpty ? nil : "\(event.eventTypeString)s"
+            }
+            return "\(districtName) District Championship Divisions"
         } else if event.isChampionshipEvent {
             guard !event.eventTypeString.isEmpty else { return nil }
             // CMP Finals is already plural.
