@@ -135,11 +135,6 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
             let webcasts = event.webcasts
                 .sorted { $0.channel > $1.channel }
                 .filter { $0.urlString != nil }
-                .filter { webcast in
-                    guard let date = webcast.dateParsed else { return true }
-                    // dateParsed is UTC-midnight; check "today" in UTC to match.
-                    return Calendar.utc.isDateInToday(date)
-                }
                 .map { EventInfoItem.webcast($0) }
             if !webcasts.isEmpty, event.isHappeningThisWeek {
                 snapshot.appendSections([.webcast])
