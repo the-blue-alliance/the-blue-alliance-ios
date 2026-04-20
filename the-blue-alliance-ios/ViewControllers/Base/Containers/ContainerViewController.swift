@@ -52,20 +52,28 @@ class ContainerViewController: UIViewController, Alertable {
     // MARK: - Private View Elements
 
     private lazy var navigationStackView: UIStackView = {
-        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationSubtitleLabel])
+        let navigationStackView = UIStackView(arrangedSubviews: [
+            navigationTitleLabel, navigationSubtitleLabel,
+        ])
         navigationStackView.translatesAutoresizingMaskIntoConstraints = false
         navigationStackView.axis = .vertical
-        navigationStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(navigationTitleTapped)))
+        navigationStackView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(navigationTitleTapped))
+        )
         return navigationStackView
     }()
     private lazy var navigationTitleLabel: UILabel = {
         let navigationTitleLabel = ContainerViewController.createNavigationLabel()
-        navigationTitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 17))
+        navigationTitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(
+            for: UIFont.systemFont(ofSize: 17)
+        )
         return navigationTitleLabel
     }()
     private lazy var navigationSubtitleLabel: UILabel = {
         let navigationSubtitleLabel = ContainerViewController.createNavigationLabel()
-        navigationSubtitleLabel.font = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: UIFont.systemFont(ofSize: 11))
+        navigationSubtitleLabel.font = UIFontMetrics(forTextStyle: .caption2).scaledFont(
+            for: UIFont.systemFont(ofSize: 11)
+        )
         return navigationSubtitleLabel
     }()
     weak var navigationTitleDelegate: NavigationTitleDelegate?
@@ -89,7 +97,8 @@ class ContainerViewController: UIViewController, Alertable {
 
     private lazy var offlineEventView: UIView = {
         let offlineEventLabel = UILabel(forAutoLayout: ())
-        offlineEventLabel.text = "It looks like this event hasn't posted any results recently. It's possible that the internet connection at the event is down. The event's information might be out of date."
+        offlineEventLabel.text =
+            "It looks like this event hasn't posted any results recently. It's possible that the internet connection at the event is down. The event's information might be out of date."
         offlineEventLabel.textColor = UIColor.dangerDarkRed
         offlineEventLabel.numberOfLines = 0
         offlineEventLabel.textAlignment = .center
@@ -97,12 +106,20 @@ class ContainerViewController: UIViewController, Alertable {
 
         let offlineEventView = UIView(forAutoLayout: ())
         offlineEventView.addSubview(offlineEventLabel)
-        offlineEventLabel.autoPinEdgesToSuperviewSafeArea(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+        offlineEventLabel.autoPinEdgesToSuperviewSafeArea(
+            with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        )
         offlineEventView.backgroundColor = UIColor.dangerRed
         return offlineEventView
     }()
 
-    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, dependencies: Dependencies) {
+    init(
+        viewControllers: [ContainableViewController],
+        navigationTitle: String? = nil,
+        navigationSubtitle: String? = nil,
+        segmentedControlTitles: [String]? = nil,
+        dependencies: Dependencies
+    ) {
         self.viewControllers = viewControllers
         self.dependencies = dependencies
 
@@ -115,7 +132,11 @@ class ContainerViewController: UIViewController, Alertable {
 
         super.init(nibName: nil, bundle: nil)
 
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+        segmentedControl.addTarget(
+            self,
+            action: #selector(segmentedControlValueChanged),
+            for: .valueChanged
+        )
 
         if let navigationTitle = navigationTitle, let navigationSubtitle = navigationSubtitle {
             navigationTitleLabel.text = navigationTitle
@@ -185,7 +206,9 @@ class ContainerViewController: UIViewController, Alertable {
     public func currentViewController() -> ContainableViewController? {
         if viewControllers.count == 1, let viewController = viewControllers.first {
             return viewController
-        } else if viewControllers.count > 0, viewControllers.count > segmentedControl.selectedSegmentIndex {
+        } else if viewControllers.count > 0,
+            viewControllers.count > segmentedControl.selectedSegmentIndex
+        {
             return viewControllers[segmentedControl.selectedSegmentIndex]
         }
         return nil
@@ -217,15 +240,19 @@ class ContainerViewController: UIViewController, Alertable {
         } else {
             if animated {
                 if rootStackView.arrangedSubviews.contains(offlineEventView) {
-                    UIView.animate(withDuration: 0.35, animations: {
-                        self.offlineEventView.isHidden = true
-                    }, completion: { (_) in
-                        self.rootStackView.removeArrangedSubview(self.offlineEventView)
-                        if self.offlineEventView.superview != nil {
-                            self.offlineEventView.removeFromSuperview()
+                    UIView.animate(
+                        withDuration: 0.35,
+                        animations: {
+                            self.offlineEventView.isHidden = true
+                        },
+                        completion: { (_) in
+                            self.rootStackView.removeArrangedSubview(self.offlineEventView)
+                            if self.offlineEventView.superview != nil {
+                                self.offlineEventView.removeFromSuperview()
+                            }
+                            self.offlineEventView.isHidden = false
                         }
-                        self.offlineEventView.isHidden = false
-                    })
+                    )
                 }
             } else {
                 if rootStackView.arrangedSubviews.contains(offlineEventView) {

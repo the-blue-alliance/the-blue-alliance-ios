@@ -90,7 +90,13 @@ struct MatchViewModel {
         }
 
         let breakdownKeys: [String] = [rpName1, rpName2].compactMap { $0 }
-        redRPCount = MatchViewModel.calculateRP(breakdown: redBreakdown, breakdownKeys: breakdownKeys)
-        blueRPCount = MatchViewModel.calculateRP(breakdown: blueBreakdown, breakdownKeys: breakdownKeys)
+        redRPCount = MatchViewModel.calculateRP(
+            breakdown: redBreakdown,
+            breakdownKeys: breakdownKeys
+        )
+        blueRPCount = MatchViewModel.calculateRP(
+            breakdown: blueBreakdown,
+            breakdownKeys: breakdownKeys
+        )
     }
 }

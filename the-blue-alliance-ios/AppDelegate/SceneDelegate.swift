@@ -6,21 +6,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
     var window: UIWindow?
     private weak var fmsDownAlert: UIAlertController?
 
-    func scene(_ scene: UIScene,
-               willConnectTo session: UISceneSession,
-               options connectionOptions: UIScene.ConnectionOptions) {
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         let services = UIApplication.shared.appServices
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = PhoneRootViewController(fcmTokenProvider: services.fcmTokenProvider,
-                                                            pushService: services.pushService,
-                                                            dependencies: services.dependencies)
+        window.rootViewController = PhoneRootViewController(
+            fcmTokenProvider: services.fcmTokenProvider,
+            pushService: services.pushService,
+            dependencies: services.dependencies
+        )
         window.makeKeyAndVisible()
         self.window = window
 
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: services.dependencies.statusService.status.minAppVersion) {
-            present(.minVersion(currentAppVersion: services.dependencies.statusService.status.latestAppVersion))
+        if !AppDelegate.isAppVersionSupported(
+            minimumAppVersion: services.dependencies.statusService.status.minAppVersion
+        ) {
+            present(
+                .minVersion(
+                    currentAppVersion: services.dependencies.statusService.status.latestAppVersion
+                )
+            )
         }
 
         if !connectionOptions.urlContexts.isEmpty {
@@ -48,7 +58,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
             DispatchQueue.main.async {
                 let controller = UIAlertController(
                     title: "Unsupported App Version",
-                    message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
+                    message:
+                        "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
                     preferredStyle: .alert
                 )
                 root.present(controller, animated: true)
@@ -58,7 +69,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
                 guard fmsDownAlert == nil else { return }
                 let controller = UIAlertController(
                     title: "FIRST's servers are down",
-                    message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
+                    message:
+                        "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
                     preferredStyle: .alert
                 )
                 controller.addAction(UIAlertAction(title: "OK", style: .default))

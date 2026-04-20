@@ -24,7 +24,12 @@ class PushService: NSObject, PushServiceProtocol {
 
     private var registerTask: Task<Void, Never>?
 
-    init(errorRecorder: ErrorRecorder, myTBA: any MyTBAProtocol, retryService: RetryService, registrar: any RemoteNotificationRegistering) {
+    init(
+        errorRecorder: ErrorRecorder,
+        myTBA: any MyTBAProtocol,
+        retryService: RetryService,
+        registrar: any RemoteNotificationRegistering
+    ) {
         self.errorRecorder = errorRecorder
         self.myTBA = myTBA
         self.retryService = retryService
@@ -62,7 +67,8 @@ class PushService: NSObject, PushServiceProtocol {
 
     static func requestAuthorizationForNotifications(_ completion: ((Bool, Error?) -> Void)?) {
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) {
+            (granted, error) in
             completion?(granted, error)
         }
     }
@@ -97,7 +103,12 @@ extension PushService: MessagingDelegate {
 
 extension PushService: UNUserNotificationCenterDelegate {
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler:
+            @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
         // Show all notifications in the foreground.
         completionHandler([.banner, .list, .badge, .sound])
     }

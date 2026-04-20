@@ -29,7 +29,9 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     private lazy var infoStackView: UIStackView = {
         let labels = [teamsLabel, scoreTitleLabel]
         for label in labels {
-            label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 16, weight: .medium))
+            label.font = UIFontMetrics(forTextStyle: .body).scaledFont(
+                for: UIFont.systemFont(ofSize: 16, weight: .medium)
+            )
             label.adjustsFontForContentSizeCategory = true
             label.textAlignment = .center
             label.backgroundColor = UIColor.systemFill
@@ -103,7 +105,12 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         matchStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
         matchStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
 
-        infoStackView.autoMatch(.height, to: .height, of: matchStackView, withMultiplier: (1.0/3.0))
+        infoStackView.autoMatch(
+            .height,
+            to: .height,
+            of: matchStackView,
+            withMultiplier: (1.0 / 3.0)
+        )
 
         scrollView.addSubview(videoStackView)
         videoStackView.autoPinEdge(.top, to: .bottom, of: matchStackView, withOffset: 8)
@@ -152,7 +159,12 @@ class MatchInfoViewController: TBAViewController, Refreshable {
 
     private static func playerView(for video: Match.VideosPayloadPayload) -> PlayerView {
         let playerView = PlayerView(playable: MatchVideoPlayable(video: video))
-        playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
+        playerView.autoConstrainAttribute(
+            .width,
+            to: .height,
+            of: playerView,
+            withMultiplier: (16.0 / 9.0)
+        )
         return playerView
     }
 

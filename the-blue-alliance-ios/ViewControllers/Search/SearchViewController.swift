@@ -78,22 +78,29 @@ class SearchViewController: TBATableViewController {
     // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<SearchSection, SearchItem>(tableView: tableView) { tableView, indexPath, item in
+        dataSource = TableViewDataSource<SearchSection, SearchItem>(tableView: tableView) {
+            tableView,
+            indexPath,
+            item in
             switch item {
             case .event(let key, let name):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
                 let year = String(key.prefix(4))
                 let displayName = name.isEmpty ? key : "\(year) \(name)"
-                cell.viewModel = EventCellViewModel(name: displayName,
-                                                    location: nil,
-                                                    dateString: nil)
+                cell.viewModel = EventCellViewModel(
+                    name: displayName,
+                    location: nil,
+                    dateString: nil
+                )
                 return cell
             case .team(let key, let nickname):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
                 let teamNumber = TeamKey.trimFRCPrefix(key)
-                cell.viewModel = TeamCellViewModel(teamNumber: teamNumber,
-                                                   nickname: nickname.isEmpty ? "Team \(teamNumber)" : nickname,
-                                                   location: nil)
+                cell.viewModel = TeamCellViewModel(
+                    teamNumber: teamNumber,
+                    nickname: nickname.isEmpty ? "Team \(teamNumber)" : nickname,
+                    location: nil
+                )
                 return cell
             }
         }
@@ -157,7 +164,8 @@ class SearchViewController: TBATableViewController {
 
     private func matches(team: SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
         let number = TeamKey.trimFRCPrefix(team.key)
-        return number.hasPrefix(query) || team.nickname.lowercased().contains(query) || team.key.lowercased().contains(query)
+        return number.hasPrefix(query) || team.nickname.lowercased().contains(query)
+            || team.key.lowercased().contains(query)
     }
 
     private func matches(event: SearchIndex.EventsPayloadPayload, query: String) -> Bool {

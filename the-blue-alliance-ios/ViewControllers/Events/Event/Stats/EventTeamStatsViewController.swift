@@ -41,10 +41,12 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
     }
 
     lazy private var filerBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage.sortFilterIcon,
-                               style: .plain,
-                               target: self,
-                               action: #selector(showFilter))
+        return UIBarButtonItem(
+            image: UIImage.sortFilterIcon,
+            style: .plain,
+            target: self,
+            action: #selector(showFilter)
+        )
     }()
 
     override var additionalRightBarButtonItems: [UIBarButtonItem] {
@@ -84,9 +86,17 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, TeamStatRow>(tableView: tableView) { tableView, indexPath, row in
+        dataSource = TableViewDataSource<String, TeamStatRow>(tableView: tableView) {
+            tableView,
+            indexPath,
+            row in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
-            cell.viewModel = RankingCellViewModel(apiTeamKey: row.teamKey, opr: row.opr, dpr: row.dpr, ccwm: row.ccwm)
+            cell.viewModel = RankingCellViewModel(
+                apiTeamKey: row.teamKey,
+                opr: row.opr,
+                dpr: row.dpr,
+                ccwm: row.ccwm
+            )
             return cell
         }
         dataSource.statefulDelegate = self
@@ -100,7 +110,12 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
 
         let teamKeys = Set(oprs.keys).union(dprs.keys).union(ccwms.keys)
         let unsorted = teamKeys.map { key in
-            TeamStatRow(teamKey: key, opr: oprs[key] ?? 0, dpr: dprs[key] ?? 0, ccwm: ccwms[key] ?? 0)
+            TeamStatRow(
+                teamKey: key,
+                opr: oprs[key] ?? 0,
+                dpr: dprs[key] ?? 0,
+                ccwm: ccwms[key] ?? 0
+            )
         }
         applyRows(unsorted)
     }
@@ -108,8 +123,8 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
     private func applyRows(_ unsorted: [TeamStatRow]) {
         let sorted: [TeamStatRow]
         switch filter {
-        case .opr:  sorted = unsorted.sorted { $0.opr > $1.opr }
-        case .dpr:  sorted = unsorted.sorted { $0.dpr > $1.dpr }
+        case .opr: sorted = unsorted.sorted { $0.opr > $1.opr }
+        case .dpr: sorted = unsorted.sorted { $0.dpr > $1.dpr }
         case .ccwm: sorted = unsorted.sorted { $0.ccwm > $1.ccwm }
         }
         self.rows = sorted

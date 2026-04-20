@@ -4,7 +4,6 @@ import UIKit
 
 class TeamsContainerViewController: ContainerViewController {
 
-
     var searchController: UISearchController!
 
     private(set) var teamsViewController: TeamsViewController!
@@ -37,5 +36,8 @@ class TeamsContainerViewController: ContainerViewController {
 
 }
 
-extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {
+extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainer,
+    SearchContainerDelegate,
+    SearchViewControllerDelegate
+{
 }

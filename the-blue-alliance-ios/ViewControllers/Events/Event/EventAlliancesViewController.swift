@@ -15,12 +15,17 @@ class EventAlliancesContainerViewController: ContainerViewController {
     init(event: Event, dependencies: Dependencies) {
         self.event = event
 
-        let alliancesViewController = EventAlliancesViewController(eventKey: event.key, dependencies: dependencies)
+        let alliancesViewController = EventAlliancesViewController(
+            eventKey: event.key,
+            dependencies: dependencies
+        )
 
-        super.init(viewControllers: [alliancesViewController],
-                   navigationTitle: "Alliances",
-                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [alliancesViewController],
+            navigationTitle: "Alliances",
+            navigationSubtitle: "@ \(event.friendlyNameWithYear)",
+            dependencies: dependencies
+        )
 
         alliancesViewController.delegate = self
     }
@@ -34,7 +39,12 @@ class EventAlliancesContainerViewController: ContainerViewController {
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(
+            teamKey: teamKey,
+            eventKey: event.key,
+            year: event.year,
+            dependencies: dependencies
+        )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -84,11 +94,16 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable,
         return rows
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventAllianceTableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> EventAllianceTableViewCell
+    {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventAllianceTableViewCell
         let alliance = alliances[indexPath.row]
 
-        cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: indexPath.row + 1)
+        cell.viewModel = EventAllianceCellViewModel(
+            alliance: alliance,
+            allianceNumber: indexPath.row + 1
+        )
         cell.teamKeySelected = { [weak self] (teamKey) in
             self?.delegate?.teamSelected(teamKey: teamKey)
         }

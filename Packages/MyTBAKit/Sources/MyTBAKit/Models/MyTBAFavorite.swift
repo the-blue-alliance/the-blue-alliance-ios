@@ -26,7 +26,9 @@ public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
 extension MyTBA {
 
     public func fetchFavorites() async throws -> [MyTBAFavorite] {
-        let response: MyTBAFavoritesResponse = try await callApi(method: "\(MyTBAFavorite.arrayKey)/list")
+        let response: MyTBAFavoritesResponse = try await callApi(
+            method: "\(MyTBAFavorite.arrayKey)/list"
+        )
         return response.favorites ?? []
     }
 

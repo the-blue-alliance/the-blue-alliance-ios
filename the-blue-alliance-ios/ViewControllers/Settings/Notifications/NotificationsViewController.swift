@@ -29,8 +29,10 @@ enum NotificationStatus {
 
 class NotificationsViewController: TBATableViewController {
 
-
-    private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showCopyFCMToken))
+    private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(
+        target: self,
+        action: #selector(showCopyFCMToken)
+    )
     private var notificationTokenFooter: UIView?
 
     private var fetchingRemoteNotificationRegistrationStatus = false
@@ -51,7 +53,11 @@ class NotificationsViewController: TBATableViewController {
     private let fcmTokenProvider: any FCMTokenProvider
     private let pushService: any PushServiceProtocol
 
-    init(fcmTokenProvider: any FCMTokenProvider, pushService: any PushServiceProtocol, dependencies: Dependencies) {
+    init(
+        fcmTokenProvider: any FCMTokenProvider,
+        pushService: any PushServiceProtocol,
+        dependencies: Dependencies
+    ) {
         self.fcmTokenProvider = fcmTokenProvider
         self.pushService = pushService
 
@@ -60,10 +66,12 @@ class NotificationsViewController: TBATableViewController {
         title = "Troubleshoot Notifications"
         hidesBottomBarWhenPushed = true
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(checkDeviceAuthorization),
-                                               name: UIApplication.willEnterForegroundNotification,
-                                               object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(checkDeviceAuthorization),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -88,15 +96,22 @@ class NotificationsViewController: TBATableViewController {
 
     // MARK: - Table View Data Source
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = NotificationStatusTableViewCell.nib!.instantiate(withOwner: self, options: nil).first as! NotificationStatusTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell =
+            NotificationStatusTableViewCell.nib!.instantiate(withOwner: self, options: nil).first
+            as! NotificationStatusTableViewCell
 
         let row = NotificationRow(rawValue: indexPath.row)!
         let viewModel: NotificationStatusCellViewModel = {
             switch row {
             case .registration:
                 if fetchingRemoteNotificationRegistrationStatus {
-                    return NotificationStatusCellViewModel(title: "Checking Remote Notification Registration...", notificationStatus: .loading)
+                    return NotificationStatusCellViewModel(
+                        title: "Checking Remote Notification Registration...",
+                        notificationStatus: .loading
+                    )
                 } else {
                     var status = NotificationStatus.unknown
                     if hasCheckedRemoteNotificationRegistration {
@@ -106,17 +121,28 @@ class NotificationsViewController: TBATableViewController {
                             status = NotificationStatus.valid
                         }
                     }
-                    return NotificationStatusCellViewModel(title: "Remote Notification Registration", notificationStatus: status)
+                    return NotificationStatusCellViewModel(
+                        title: "Remote Notification Registration",
+                        notificationStatus: status
+                    )
                 }
             case .device:
                 if fetchingDeviceAuthorizationStatus {
-                    return NotificationStatusCellViewModel(title: "Checking Device Notification Settings...", notificationStatus: .loading)
+                    return NotificationStatusCellViewModel(
+                        title: "Checking Device Notification Settings...",
+                        notificationStatus: .loading
+                    )
                 } else {
                     var status = NotificationStatus.unknown
                     if let deviceAuthorizationStatus = deviceAuthorizationStatus {
-                        status = deviceAuthorizationNotificationStatus(forAuthorizationStatus: deviceAuthorizationStatus)
+                        status = deviceAuthorizationNotificationStatus(
+                            forAuthorizationStatus: deviceAuthorizationStatus
+                        )
                     }
-                    return NotificationStatusCellViewModel(title: "Device Notification Settings", notificationStatus: status)
+                    return NotificationStatusCellViewModel(
+                        title: "Device Notification Settings",
+                        notificationStatus: status
+                    )
                 }
             case .firebase:
                 let status: NotificationStatus = {
@@ -126,20 +152,35 @@ class NotificationsViewController: TBATableViewController {
                         return .valid
                     }
                 }()
-                return NotificationStatusCellViewModel(title: "Firebase Token", notificationStatus: status)
+                return NotificationStatusCellViewModel(
+                    title: "Firebase Token",
+                    notificationStatus: status
+                )
             case .myTBA:
                 if myTBARegisterTask == nil {
                     let status = self.myTBARegistrationNotificationStatus()
-                    return NotificationStatusCellViewModel(title: "myTBA Registration", notificationStatus: status)
+                    return NotificationStatusCellViewModel(
+                        title: "myTBA Registration",
+                        notificationStatus: status
+                    )
                 } else {
-                    return NotificationStatusCellViewModel(title: "Checking myTBA Registration...", notificationStatus: .loading)
+                    return NotificationStatusCellViewModel(
+                        title: "Checking myTBA Registration...",
+                        notificationStatus: .loading
+                    )
                 }
             case .ping:
                 if myTBAPingTask == nil {
                     let status = self.myTBAPingNotificationStatus()
-                    return NotificationStatusCellViewModel(title: "Ping Device", notificationStatus: status)
+                    return NotificationStatusCellViewModel(
+                        title: "Ping Device",
+                        notificationStatus: status
+                    )
                 } else {
-                    return NotificationStatusCellViewModel(title: "Pinging Device...", notificationStatus: .loading)
+                    return NotificationStatusCellViewModel(
+                        title: "Pinging Device...",
+                        notificationStatus: .loading
+                    )
                 }
             }
         }()
@@ -153,18 +194,26 @@ class NotificationsViewController: TBATableViewController {
 
     // MARK: - Table View Delegate
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)
+        -> CGFloat
+    {
         return 44.0
     }
 
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int)
+        -> String?
+    {
         if let fcmToken = fcmTokenProvider.fcmToken {
             return "FCM Token: \(fcmToken)"
         }
         return nil
     }
 
-    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplayFooterView view: UIView,
+        forSection section: Int
+    ) {
         if section == 0, !(view.gestureRecognizers?.contains(longPressGestureRecognizer) ?? false) {
             notificationTokenFooter = view
             view.addGestureRecognizer(longPressGestureRecognizer)
@@ -180,7 +229,9 @@ class NotificationsViewController: TBATableViewController {
             if let error = remoteNotificationRegistrationError {
                 showError(error.localizedDescription)
             } else {
-                showError("Unknown error registering for remote notifications - try force quitting and re-launching the app.")
+                showError(
+                    "Unknown error registering for remote notifications - try force quitting and re-launching the app."
+                )
             }
         case .device:
             if deviceAuthorizationStatus == .denied {
@@ -190,7 +241,9 @@ class NotificationsViewController: TBATableViewController {
                     self?.checkDeviceAuthorization()
                 })
             } else {
-                showError("Unable to resolve device settings - check push notification settings in Settings.app")
+                showError(
+                    "Unable to resolve device settings - check push notification settings in Settings.app"
+                )
             }
         case .firebase:
             showError("No FCM token from Firebase - try force quitting and re-launching the app.")
@@ -253,7 +306,11 @@ class NotificationsViewController: TBATableViewController {
         reloadMain()
     }
 
-    private func deviceAuthorizationNotificationStatus(forAuthorizationStatus status: UNAuthorizationStatus) -> NotificationStatus {
+    private func deviceAuthorizationNotificationStatus(
+        forAuthorizationStatus status: UNAuthorizationStatus
+    )
+        -> NotificationStatus
+    {
         return {
             switch status {
             case .authorized:
@@ -322,7 +379,10 @@ class NotificationsViewController: TBATableViewController {
         // We wouldn't get the ping, since our device isn't authorized to get push notifications
         let deviceAuthorizationStatusValid: Bool = {
             if let deviceAuthorizationStatus = self.deviceAuthorizationStatus {
-                return self.deviceAuthorizationNotificationStatus(forAuthorizationStatus: deviceAuthorizationStatus).isValid
+                return self.deviceAuthorizationNotificationStatus(
+                    forAuthorizationStatus: deviceAuthorizationStatus
+                )
+                .isValid
             }
             return false
         }()
@@ -400,9 +460,11 @@ class NotificationsViewController: TBATableViewController {
         }
 
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Copy Token", style: .default) { [weak self] _ in
-            self?.copyFCMTokenToPasteboard(fcmToken)
-        })
+        actionSheet.addAction(
+            UIAlertAction(title: "Copy Token", style: .default) { [weak self] _ in
+                self?.copyFCMTokenToPasteboard(fcmToken)
+            }
+        )
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         if let notificationTokenFooter = notificationTokenFooter {
             actionSheet.popoverPresentationController?.sourceView = notificationTokenFooter

@@ -18,13 +18,20 @@ class BreakdownStyle {
         return label
     }
 
-    static public func imageView(image: UIImage?, tintColor: UIColor = UIColor.label, contentMode: UIView.ContentMode = UIView.ContentMode.scaleToFill, forceSquare: Bool = true) -> UIImageView {
+    static public func imageView(
+        image: UIImage?,
+        tintColor: UIColor = UIColor.label,
+        contentMode: UIView.ContentMode = UIView.ContentMode.scaleToFill,
+        forceSquare: Bool = true
+    ) -> UIImageView {
         let imageView = UIImageView(image: image)
         if forceSquare {
             imageView.autoMatch(.width, to: .height, of: imageView)
         }
         imageView.contentMode = contentMode
-        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
+        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(
+            font: UIFont.preferredFont(forTextStyle: .subheadline).bold()
+        )
         imageView.tintColor = tintColor
         return imageView
     }
@@ -53,7 +60,9 @@ extension UIImage: BreakdownElement {
     func toView() -> UIView {
         let imageView = UIImageView(image: self)
         imageView.tintColor = UIColor.label
-        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(font: UIFont.preferredFont(forTextStyle: .subheadline).bold())
+        imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(
+            font: UIFont.preferredFont(forTextStyle: .subheadline).bold()
+        )
         return imageView
     }
 }
@@ -126,9 +135,10 @@ class MatchBreakdownTableViewCell: UITableViewCell, Reusable {
                 return defaultFont
             }
         }()
-        [breakdownView.redStackView.arrangedSubviews, breakdownView.blueStackView.arrangedSubviews].forEach {
-            $0.compactMap({ $0 as? UILabel }).forEach({ $0.font = font })
-        }
+        [breakdownView.redStackView.arrangedSubviews, breakdownView.blueStackView.arrangedSubviews]
+            .forEach {
+                $0.compactMap({ $0 as? UILabel }).forEach({ $0.font = font })
+            }
     }
 
 }
@@ -180,7 +190,9 @@ class MatchBreakdownView: UIView {
         view.backgroundColor = UIColor.redAllianceBackgroundColor
 
         view.addSubview(redInternalStackView)
-        redInternalStackView.autoPinEdgesToSuperviewSafeArea(with: .init(top: 8, left: 8, bottom: 8, right: 8))
+        redInternalStackView.autoPinEdgesToSuperviewSafeArea(
+            with: .init(top: 8, left: 8, bottom: 8, right: 8)
+        )
 
         return view
     }()
@@ -192,7 +204,9 @@ class MatchBreakdownView: UIView {
         view.backgroundColor = UIColor.blueAllianceBackgroundColor
 
         view.addSubview(blueInternalStackView)
-        blueInternalStackView.autoPinEdgesToSuperviewSafeArea(with: .init(top: 8, left: 8, bottom: 8, right: 8))
+        blueInternalStackView.autoPinEdgesToSuperviewSafeArea(
+            with: .init(top: 8, left: 8, bottom: 8, right: 8)
+        )
 
         return view
     }()
@@ -214,7 +228,7 @@ class MatchBreakdownView: UIView {
         stackView.autoPinEdgesToSuperviewEdges()
 
         // redView and blueView should make up 20/20 of the total size, title should be 60
-        redView.autoMatch(.width, to: .width, of: self, withMultiplier: 0.25) // Web is 1/6
+        redView.autoMatch(.width, to: .width, of: self, withMultiplier: 0.25)  // Web is 1/6
         blueView.autoMatch(.width, to: .width, of: redView)
     }
 

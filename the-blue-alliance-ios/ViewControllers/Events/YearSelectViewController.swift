@@ -3,7 +3,7 @@ import TBAAPI
 import UIKit
 
 protocol YearSelectViewControllerDelegate: AnyObject {
-    func weekEventSelected(year: Int, weekEvent: Event)
+    func weekEventSelected(_ weekEvent: Event)
 }
 
 class YearSelectViewController: ContainerViewController {
@@ -13,13 +13,8 @@ class YearSelectViewController: ContainerViewController {
     private(set) var week: Event?
 
     private let selectViewController: SelectTableViewController<YearSelectViewController>
-    private var eventWeekSelectViewController: EventWeekSelectViewController?
 
-    weak var delegate: YearSelectViewControllerDelegate? {
-        didSet {
-            eventWeekSelectViewController?.delegate = delegate
-        }
-    }
+    weak var delegate: YearSelectViewControllerDelegate?
 
     // MARK: - Init
 
@@ -28,7 +23,12 @@ class YearSelectViewController: ContainerViewController {
         self.years = years
         self.week = week
 
-        selectViewController = SelectTableViewController<YearSelectViewController>(current: year, options: years, willPush: true, dependencies: dependencies)
+        selectViewController = SelectTableViewController<YearSelectViewController>(
+            current: year,
+            options: years,
+            willPush: true,
+            dependencies: dependencies
+        )
 
         super.init(viewControllers: [selectViewController], dependencies: dependencies)
 
@@ -36,9 +36,12 @@ class YearSelectViewController: ContainerViewController {
 
         selectViewController.delegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction { [weak self] _ in
-            self?.dismiss(animated: true)
-        })
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            systemItem: .cancel,
+            primaryAction: UIAction { [weak self] _ in
+                self?.dismiss(animated: true)
+            }
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,18 +55,26 @@ class YearSelectViewController: ContainerViewController {
 
         selectViewController.disableRefreshing()
 
-        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, dependencies: dependencies)
-        eventWeekSelectViewController?.delegate = delegate
+        let eventWeekSelectViewController = EventWeekSelectViewController(
+            year: year,
+            week: week,
+            dependencies: dependencies
+        )
+        eventWeekSelectViewController.delegate = delegate
 
-        navigationController?.viewControllers = [self, eventWeekSelectViewController!]
+        navigationController?.viewControllers = [self, eventWeekSelectViewController]
     }
 
     // MARK: - Private Methods
 
     private func pushToEventWeekSelect(year: Int) {
-        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, dependencies: dependencies)
-        eventWeekSelectViewController?.delegate = delegate
-        navigationController?.pushViewController(eventWeekSelectViewController!, animated: true)
+        let eventWeekSelectViewController = EventWeekSelectViewController(
+            year: year,
+            week: week,
+            dependencies: dependencies
+        )
+        eventWeekSelectViewController.delegate = delegate
+        navigationController?.pushViewController(eventWeekSelectViewController, animated: true)
     }
 
 }
@@ -86,18 +97,17 @@ extension YearSelectViewController: SelectTableViewControllerDelegate {
 
 private class EventWeekSelectViewController: ContainerViewController {
 
-    private let year: Int
     private let selectViewController: WeeksSelectTableViewController
 
     weak var delegate: YearSelectViewControllerDelegate?
 
     init(year: Int, week: Event?, dependencies: Dependencies) {
-        self.year = year
-
-        selectViewController = WeeksSelectTableViewController(year: year,
-                                                              current: week,
-                                                              options: [],
-                                                              dependencies: dependencies)
+        selectViewController = WeeksSelectTableViewController(
+            year: year,
+            current: week,
+            options: [],
+            dependencies: dependencies
+        )
 
         super.init(viewControllers: [selectViewController], dependencies: dependencies)
 
@@ -106,9 +116,14 @@ private class EventWeekSelectViewController: ContainerViewController {
         selectViewController.delegate = self
         selectViewController.enableRefreshing()
 
-        rightBarButtonItems = [UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
-            self?.dismiss(animated: true)
-        })]
+        rightBarButtonItems = [
+            UIBarButtonItem(
+                systemItem: .done,
+                primaryAction: UIAction { [weak self] _ in
+                    self?.dismiss(animated: true)
+                }
+            )
+        ]
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -122,7 +137,7 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
     typealias OptionType = Event
 
     func optionSelected(_ option: OptionType) {
-        delegate?.weekEventSelected(year: year, weekEvent: option)
+        delegate?.weekEventSelected(option)
     }
 
     func titleForOption(_ option: OptionType) -> String {
@@ -131,10 +146,12 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
 
 }
 
-private class WeeksSelectTableViewController: SelectTableViewController<EventWeekSelectViewController> {
+private class WeeksSelectTableViewController: SelectTableViewController<
+    EventWeekSelectViewController
+>
+{
 
     private let year: Int
-    fileprivate var hasRefreshed: Bool = false
 
     init(year: Int, current: Event?, options: [Event], dependencies: Dependencies) {
         self.year = year
@@ -154,7 +171,6 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
             guard let self else { return }
             let events = try await self.dependencies.api.eventsByYear(self.year)
             self.options = WeekEventsGrouping.weekEvents(for: self.year, from: events)
-            self.hasRefreshed = true
             if self.isDataSourceEmpty {
                 self.showNoDataView()
             }

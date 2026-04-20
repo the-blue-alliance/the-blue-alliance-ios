@@ -23,6 +23,16 @@ platform :ios do
     test_tbautils
   end
 
+  desc "Format all Swift files with swift-format"
+  lane :format do
+    sh("../scripts/swift-format-fix.sh")
+  end
+
+  desc "Lint Swift formatting (strict, used by CI)"
+  lane :lint do
+    sh("../scripts/swift-format-lint.sh --strict")
+  end
+
   desc "Compile the main iOS app for CI (no code signing)"
   lane :build_ci do
     build_app(

@@ -14,10 +14,13 @@ public final class MockURLSession {
         if let stubbedError {
             throw stubbedError
         }
-        let response = stubbedResponse ?? HTTPURLResponse(url: request.url!,
-                                                          statusCode: 200,
-                                                          httpVersion: nil,
-                                                          headerFields: nil)!
+        let response =
+            stubbedResponse ?? HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil
+            )!
         return (stubbedData ?? Data(), response)
     }
 

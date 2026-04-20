@@ -26,25 +26,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var api: TBAAPI!
 
     lazy var messaging: Messaging = .messaging()
-    lazy var myTBAStores: MyTBAStores = MyTBAStores(favorites: favoritesStore,
-                                                    subscriptions: subscriptionsStore)
-    lazy var myTBA: any MyTBAProtocol = MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
-                                              deviceName: UIDevice.current.name,
-                                              fcmTokenProvider: messaging)
-    lazy var pushService: PushService = PushService(errorRecorder: errorRecorder,
-                                                    myTBA: myTBA,
-                                                    retryService: RetryService(),
-                                                    registrar: self)
-    lazy var statusService: any StatusServiceProtocol = StatusService(errorRecorder: errorRecorder,
-                                                                      api: api,
-                                                                      retryService: RetryService())
+    lazy var myTBAStores: MyTBAStores = MyTBAStores(
+        favorites: favoritesStore,
+        subscriptions: subscriptionsStore
+    )
+    lazy var myTBA: any MyTBAProtocol = MyTBA(
+        uuid: UIDevice.current.identifierForVendor!.uuidString,
+        deviceName: UIDevice.current.name,
+        fcmTokenProvider: messaging
+    )
+    lazy var pushService: PushService = PushService(
+        errorRecorder: errorRecorder,
+        myTBA: myTBA,
+        retryService: RetryService(),
+        registrar: self
+    )
+    lazy var statusService: any StatusServiceProtocol = StatusService(
+        errorRecorder: errorRecorder,
+        api: api,
+        retryService: RetryService()
+    )
 
-    lazy var dependencies = Dependencies(api: api,
-                                         appSettings: appSettings,
-                                         myTBA: myTBA,
-                                         myTBAStores: myTBAStores,
-                                         statusService: statusService,
-                                         urlOpener: urlOpener)
+    lazy var dependencies = Dependencies(
+        api: api,
+        appSettings: appSettings,
+        myTBA: myTBA,
+        myTBAStores: myTBAStores,
+        statusService: statusService,
+        urlOpener: urlOpener
+    )
 
     // MARK: - AppServicesProviding state
 
@@ -58,7 +68,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - UIApplicationDelegate
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         runLegacyCleanup()
         Self.setupAppearance()
 
@@ -71,15 +84,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error
+    ) {
         registerForRemoteNotificationsCompletion?(error)
     }
 
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
         registerForRemoteNotificationsCompletion?(nil)
     }
 
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
         print("Remote notification: \(userInfo)")
         completionHandler(.noData)
     }
@@ -99,11 +122,11 @@ private extension AppDelegate {
     func configureFirebase() {
         FirebaseApp.configure()
         #if DEBUG
-        Analytics.setAnalyticsCollectionEnabled(false)
-        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
+            Analytics.setAnalyticsCollectionEnabled(false)
+            Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
         #else
-        Analytics.setAnalyticsCollectionEnabled(true)
-        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
+            Analytics.setAnalyticsCollectionEnabled(true)
+            Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
         #endif
     }
 
@@ -279,8 +302,14 @@ extension AppDelegate {
         tabBarAppearance.tintColor = UIColor.tabBarTintColor
 
         let segmentedControlAppearance = UISegmentedControl.appearance()
-        segmentedControlAppearance.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
-        segmentedControlAppearance.setTitleTextAttributes([.foregroundColor: UIColor.segmentedControlSelectedColor], for: .selected)
+        segmentedControlAppearance.setTitleTextAttributes(
+            [.foregroundColor: UIColor.white],
+            for: .normal
+        )
+        segmentedControlAppearance.setTitleTextAttributes(
+            [.foregroundColor: UIColor.segmentedControlSelectedColor],
+            for: .selected
+        )
     }
 
 }
@@ -291,9 +320,9 @@ private class TBAErrorRecorder: ErrorRecorder {
 
     func record(_ error: Error) {
         #if DEBUG
-        print(error)
+            print(error)
         #else
-        Crashlytics.crashlytics().record(error: error)
+            Crashlytics.crashlytics().record(error: error)
         #endif
     }
 

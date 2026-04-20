@@ -33,7 +33,9 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
     // MARK: - UI
 
-    private let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
+    private let underlineAttribute = [
+        NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+    ]
 
     // MARK: - Private Methods
 
@@ -54,7 +56,10 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
     private func underlinedLabelWithText(_ text: String) -> UILabel {
         let label = labelWithText(text)
-        let underlineAttributedString = NSAttributedString(string: text, attributes: underlineAttribute)
+        let underlineAttributedString = NSAttributedString(
+            string: text,
+            attributes: underlineAttribute
+        )
         label.attributedText = underlineAttributedString
         return label
     }
@@ -83,13 +88,16 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
             }
             label.tag = index
 
-            label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(teamTapped(gesture:))))
+            label.addGestureRecognizer(
+                UITapGestureRecognizer(target: self, action: #selector(teamTapped(gesture:)))
+            )
             allianceTeamsStackView.addArrangedSubview(label)
         }
     }
 
     @objc private func teamTapped(gesture: UITapGestureRecognizer) {
-        guard let index = gesture.view?.tag, let picks = viewModel?.picks, index < picks.count else {
+        guard let index = gesture.view?.tag, let picks = viewModel?.picks, index < picks.count
+        else {
             return
         }
 

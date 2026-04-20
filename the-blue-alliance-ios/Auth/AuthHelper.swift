@@ -18,8 +18,10 @@ class AuthHelper {
             return
         }
 
-        let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                       accessToken: user.accessToken.tokenString)
+        let credential = GoogleAuthProvider.credential(
+            withIDToken: idToken,
+            accessToken: user.accessToken.tokenString
+        )
 
         Auth.auth().signIn(with: credential) { (_, error) in
             if let error = error {

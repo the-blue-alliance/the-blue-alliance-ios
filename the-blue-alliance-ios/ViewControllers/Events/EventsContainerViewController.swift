@@ -6,8 +6,6 @@ import UIKit
 
 class EventsContainerViewController: ContainerViewController {
 
-
-    private(set) var year: Int
     private(set) var eventsViewController: WeekEventsViewController
 
     var searchController: UISearchController!
@@ -15,14 +13,20 @@ class EventsContainerViewController: ContainerViewController {
     // MARK: - Init
 
     init(dependencies: Dependencies) {
+        let initialYear = dependencies.statusService.currentSeason
+        eventsViewController = WeekEventsViewController(
+            year: initialYear,
+            dependencies: dependencies
+        )
 
-        year = dependencies.statusService.currentSeason
-        eventsViewController = WeekEventsViewController(year: year, dependencies: dependencies)
-
-        super.init(viewControllers: [eventsViewController],
-                   navigationTitle: EventsContainerViewController.eventsTitle(eventsViewController.weekEvent),
-                   navigationSubtitle: ContainerViewController.yearSubtitle(year),
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [eventsViewController],
+            navigationTitle: EventsContainerViewController.eventsTitle(
+                eventsViewController.weekEvent
+            ),
+            navigationSubtitle: ContainerViewController.yearSubtitle(initialYear),
+            dependencies: dependencies
+        )
 
         // TODO: We should be able to move this somewhere else and DRY this code
         title = RootType.events.title
@@ -47,6 +51,10 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
+    private var year: Int {
+        eventsViewController.weekEvent?.year ?? dependencies.statusService.currentSeason
+    }
+
     private static func eventsTitle(_ event: Event?) -> String {
         if let event = event {
             return "\(event.weekString) Events"
@@ -65,7 +73,12 @@ class EventsContainerViewController: ContainerViewController {
 extension EventsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...statusService.maxSeason).reversed(), week: eventsViewController.weekEvent, dependencies: dependencies)
+        let yearSelectViewController = YearSelectViewController(
+            year: year,
+            years: Array(1992...statusService.maxSeason).reversed(),
+            week: eventsViewController.weekEvent,
+            dependencies: dependencies
+        )
         yearSelectViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: yearSelectViewController)
@@ -77,8 +90,7 @@ extension EventsContainerViewController: NavigationTitleDelegate {
 
 extension EventsContainerViewController: YearSelectViewControllerDelegate {
 
-    func weekEventSelected(year: Int, weekEvent: Event) {
-        self.year = year
+    func weekEventSelected(_ weekEvent: Event) {
         eventsViewController.weekEvent = weekEvent
     }
 
@@ -92,7 +104,9 @@ extension EventsContainerViewController: WeekEventsDelegate {
 
 }
 
-extension EventsContainerViewController: SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+extension EventsContainerViewController: SearchContainer, SearchContainerDelegate,
+    SearchViewControllerDelegate
+{}
 
 // MARK: - EventsListViewControllerDelegate
 

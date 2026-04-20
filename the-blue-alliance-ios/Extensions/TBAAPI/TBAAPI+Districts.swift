@@ -52,7 +52,9 @@ extension TBAAPI {
     }
 
     public func districtTeamsSimple(key districtKey: String) async throws -> [TeamSimple] {
-        let response = try await client.getDistrictTeamsSimple(path: .init(districtKey: districtKey))
+        let response = try await client.getDistrictTeamsSimple(
+            path: .init(districtKey: districtKey)
+        )
         switch response {
         case .ok(let ok):
             return try ok.body.json

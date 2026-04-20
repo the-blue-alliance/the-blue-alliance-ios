@@ -18,7 +18,10 @@ extension Date {
     }
 
     public func endOfMonth(calendar: Calendar = Calendar.current) -> Date {
-        return calendar.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth())!
+        return calendar.date(
+            byAdding: DateComponents(month: 1, day: -1),
+            to: self.startOfMonth(calendar: calendar)
+        )!
     }
 
     /**
@@ -37,11 +40,15 @@ extension Date {
 
     /**
      Find the next weekday after the current date.
-
+    
      This method is not inclusive of the reciever. Ex: If reciever is a Monday, and we're looking for the next Monday, it will return reciever + 7, not reciever
      */
     public func next(_ weekday: Weekday, calendar: Calendar = Calendar.current) -> Date {
-        return calendar.nextDate(after: self, matching: DateComponents(weekday: weekday.rawValue), matchingPolicy: .strict)!
+        return calendar.nextDate(
+            after: self,
+            matching: DateComponents(weekday: weekday.rawValue),
+            matchingPolicy: .strict
+        )!
     }
 
 }

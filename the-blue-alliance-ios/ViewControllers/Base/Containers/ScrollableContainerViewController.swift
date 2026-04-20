@@ -25,7 +25,9 @@ class HeaderContainerViewController: MyTBAContainerViewController {
         headerView.setNeedsLayout()
         headerView.layoutIfNeeded()
 
-        let maximumHeaderHeight = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+        let maximumHeaderHeight = headerView.systemLayoutSizeFitting(
+            UIView.layoutFittingCompressedSize
+        ).height
         headerView.autoSetDimension(.height, toSize: maximumHeaderHeight)
 
         // Drop the two-line title view entirely; the header view is the title now.

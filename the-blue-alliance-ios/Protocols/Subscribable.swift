@@ -12,9 +12,13 @@ protocol Subscribable {
 extension Subscribable where Self: UIViewController {
 
     func presentMyTBAPreferences() {
-        let myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel,
-                                                                           dependencies: dependencies)
-        let navigationController = UINavigationController(rootViewController: myTBAPreferencesViewController)
+        let myTBAPreferencesViewController = MyTBAPreferenceViewController(
+            subscribableModel: subscribableModel,
+            dependencies: dependencies
+        )
+        let navigationController = UINavigationController(
+            rootViewController: myTBAPreferencesViewController
+        )
         navigationController.modalPresentationStyle = .formSheet
         navigationController.presentationController?.delegate = myTBAPreferencesViewController
 

@@ -9,7 +9,8 @@ import Observation
 
 enum MyTBALocalStore {
     static let directory: URL = {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+        let base =
+            FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? FileManager.default.temporaryDirectory
         return base.appendingPathComponent("tba-myTBA", isDirectory: true)
     }()
@@ -39,9 +40,10 @@ final class FavoritesStore {
 
     init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("favorites.json")) {
         self.fileURL = fileURL
-        self.favorites = (try? Data(contentsOf: fileURL)).flatMap {
-            try? JSONDecoder().decode([MyTBAFavorite].self, from: $0)
-        } ?? []
+        self.favorites =
+            (try? Data(contentsOf: fileURL)).flatMap {
+                try? JSONDecoder().decode([MyTBAFavorite].self, from: $0)
+            } ?? []
     }
 
     func replaceAll(with favorites: [MyTBAFavorite]) {
@@ -50,7 +52,9 @@ final class FavoritesStore {
     }
 
     func upsert(_ favorite: MyTBAFavorite) {
-        var copy = favorites.filter { !($0.modelKey == favorite.modelKey && $0.modelType == favorite.modelType) }
+        var copy = favorites.filter {
+            !($0.modelKey == favorite.modelKey && $0.modelType == favorite.modelType)
+        }
         copy.append(favorite)
         favorites = copy
         persist()
@@ -72,8 +76,10 @@ final class FavoritesStore {
     }
 
     private func persist() {
-        try? FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(),
-                                                 withIntermediateDirectories: true)
+        try? FileManager.default.createDirectory(
+            at: fileURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
         if let data = try? JSONEncoder().encode(favorites) {
             try? data.write(to: fileURL, options: .atomic)
         }
@@ -89,9 +95,10 @@ final class SubscriptionsStore {
 
     init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("subscriptions.json")) {
         self.fileURL = fileURL
-        self.subscriptions = (try? Data(contentsOf: fileURL)).flatMap {
-            try? JSONDecoder().decode([MyTBASubscription].self, from: $0)
-        } ?? []
+        self.subscriptions =
+            (try? Data(contentsOf: fileURL)).flatMap {
+                try? JSONDecoder().decode([MyTBASubscription].self, from: $0)
+            } ?? []
     }
 
     func replaceAll(with subscriptions: [MyTBASubscription]) {
@@ -100,14 +107,18 @@ final class SubscriptionsStore {
     }
 
     func upsert(_ subscription: MyTBASubscription) {
-        var copy = subscriptions.filter { !($0.modelKey == subscription.modelKey && $0.modelType == subscription.modelType) }
+        var copy = subscriptions.filter {
+            !($0.modelKey == subscription.modelKey && $0.modelType == subscription.modelType)
+        }
         copy.append(subscription)
         subscriptions = copy
         persist()
     }
 
     func remove(modelKey: String, modelType: MyTBAModelType) {
-        subscriptions = subscriptions.filter { !($0.modelKey == modelKey && $0.modelType == modelType) }
+        subscriptions = subscriptions.filter {
+            !($0.modelKey == modelKey && $0.modelType == modelType)
+        }
         persist()
     }
 
@@ -122,8 +133,10 @@ final class SubscriptionsStore {
     }
 
     private func persist() {
-        try? FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(),
-                                                 withIntermediateDirectories: true)
+        try? FileManager.default.createDirectory(
+            at: fileURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
         if let data = try? JSONEncoder().encode(subscriptions) {
             try? data.write(to: fileURL, options: .atomic)
         }

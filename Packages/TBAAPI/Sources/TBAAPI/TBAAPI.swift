@@ -23,6 +23,7 @@ public final class TBAAPI {
     public static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         return dateFormatter
     }()
 
@@ -66,9 +67,11 @@ public final class TBAAPI {
         let serverURL = (try? Servers.Server1.url()) ?? APIConstants.baseURL
         return Client(
             serverURL: serverURL,
-            transport: URLSessionTransport(configuration: .init(
-                session: URLSession(configuration: configuration)
-            ))
+            transport: URLSessionTransport(
+                configuration: .init(
+                    session: URLSession(configuration: configuration)
+                )
+            )
         )
     }
 }

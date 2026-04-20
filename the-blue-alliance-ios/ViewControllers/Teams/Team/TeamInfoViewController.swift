@@ -65,33 +65,36 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<TeamInfoSection, TeamInfoItem>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
-            guard let self = self else { return nil }
-            switch item {
-            case .location:
-                return self.tableView(tableView, locationCellForRowAt: indexPath)
-            case .rookieYear:
-                return self.tableView(tableView, rookieYearCellForRowAt: indexPath)
-            case .sponsors:
-                return self.tableView(tableView, sponsorCellForRowAt: indexPath)
-            case .website:
-                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                cell.textLabel?.text = "View team's website"
-                return cell
-            case .twitter:
-                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                cell.textLabel?.text = "View \(self.teamKey) on Twitter"
-                return cell
-            case .youtube:
-                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                cell.textLabel?.text = "View \(self.teamKey) on YouTube"
-                return cell
-            case .chiefDelphi:
-                let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                cell.textLabel?.text = "View photos on Chief Delphi"
-                return cell
+        dataSource = TableViewDataSource<TeamInfoSection, TeamInfoItem>(
+            tableView: tableView,
+            cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+                guard let self = self else { return nil }
+                switch item {
+                case .location:
+                    return self.tableView(tableView, locationCellForRowAt: indexPath)
+                case .rookieYear:
+                    return self.tableView(tableView, rookieYearCellForRowAt: indexPath)
+                case .sponsors:
+                    return self.tableView(tableView, sponsorCellForRowAt: indexPath)
+                case .website:
+                    let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                    cell.textLabel?.text = "View team's website"
+                    return cell
+                case .twitter:
+                    let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                    cell.textLabel?.text = "View \(self.teamKey) on Twitter"
+                    return cell
+                case .youtube:
+                    let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                    cell.textLabel?.text = "View \(self.teamKey) on YouTube"
+                    return cell
+                case .chiefDelphi:
+                    let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
+                    cell.textLabel?.text = "View photos on Chief Delphi"
+                    return cell
+                }
             }
-        })
+        )
     }
 
     private func updateTeamInfo() {
@@ -136,8 +139,11 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Table View Methods
 
-    private func tableView(_ tableView: UITableView, locationCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+    private func tableView(_ tableView: UITableView, locationCellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell =
+            tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel?.text = "Location"
         cell.subtitleLabel?.text = team?.locationString
         cell.accessoryType = .none
@@ -145,8 +151,11 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, rookieYearCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+    private func tableView(_ tableView: UITableView, rookieYearCellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell =
+            tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel?.text = "Rookie Year"
         cell.subtitleLabel?.text = team?.rookieYear.map(String.init) ?? ""
         cell.accessoryType = .none
@@ -154,7 +163,9 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         cell.textLabel?.text = team?.name
@@ -173,7 +184,9 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
         cell.accessoryType = .disclosureIndicator
         return cell

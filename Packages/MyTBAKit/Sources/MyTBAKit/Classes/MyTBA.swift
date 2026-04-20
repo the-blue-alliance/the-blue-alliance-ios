@@ -59,7 +59,12 @@ open class MyTBA {
         return authToken != nil
     }
 
-    public init(uuid: String, deviceName: String, fcmTokenProvider: FCMTokenProvider, urlSession: MyTBAURLSession? = nil) {
+    public init(
+        uuid: String,
+        deviceName: String,
+        fcmTokenProvider: FCMTokenProvider,
+        urlSession: MyTBAURLSession? = nil
+    ) {
         self.uuid = uuid
         self.deviceName = deviceName
         self.fcmTokenProvider = fcmTokenProvider
@@ -99,9 +104,11 @@ open class MyTBA {
         }
 
         #if DEBUG
-        if let bodyData = bodyData, let dataString = try? JSONSerialization.jsonObject(with: bodyData, options: []) {
-            print("POST \(method): \(dataString)")
-        }
+            if let bodyData = bodyData,
+                let dataString = try? JSONSerialization.jsonObject(with: bodyData, options: [])
+            {
+                print("POST \(method): \(dataString)")
+            }
         #endif
 
         request.httpBody = bodyData
@@ -118,9 +125,9 @@ open class MyTBA {
         }
 
         #if DEBUG
-        if let dataString = try? JSONSerialization.jsonObject(with: data, options: []) {
-            print(dataString)
-        }
+            if let dataString = try? JSONSerialization.jsonObject(with: data, options: []) {
+                print(dataString)
+            }
         #endif
 
         let decoded = try MyTBA.jsonDecoder.decode(T.self, from: data)

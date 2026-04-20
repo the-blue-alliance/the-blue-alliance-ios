@@ -53,12 +53,17 @@ class DateTBATestCase: XCTestCase {
         let calendar = Calendar.current
         let today = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
         let tomorrow = calendar.date(byAdding: DateComponents(day: 1), to: today)!
-        XCTAssertEqual(today.endOfDay(), calendar.date(byAdding: DateComponents(second: -1), to: tomorrow))
+        XCTAssertEqual(
+            today.endOfDay(),
+            calendar.date(byAdding: DateComponents(second: -1), to: tomorrow)
+        )
     }
 
     func test_next() {
         let calendar = Calendar.current
-        let monday = calendar.date(from: DateComponents(weekday: Weekday.Monday.rawValue, weekdayOrdinal: 1))!
+        let monday = calendar.date(
+            from: DateComponents(weekday: Weekday.Monday.rawValue, weekdayOrdinal: 1)
+        )!
         let wednesday = calendar.date(byAdding: DateComponents(day: 2), to: monday)!
         XCTAssertEqual(monday.next(.Wednesday), wednesday)
     }

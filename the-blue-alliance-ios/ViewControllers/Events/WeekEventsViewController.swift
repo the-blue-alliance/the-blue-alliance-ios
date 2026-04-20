@@ -17,7 +17,14 @@ class WeekEventsViewController: EventsListViewController {
     var weekEvent: APIEvent? {
         didSet {
             guard weekEvent != oldValue else { return }
-            applyEvents(allEvents)
+            if weekEvent?.year != oldValue?.year {
+                // Switched years — the cached allEvents are for the previous
+                // year, so filtering would drop everything. Refetch; the
+                // refresh path will call applyEvents once the new data lands.
+                refresh()
+            } else {
+                applyEvents(allEvents)
+            }
             weekEventsDelegate?.weekEventUpdated()
         }
     }
@@ -50,10 +57,13 @@ class WeekEventsViewController: EventsListViewController {
         case .championshipFinals:
             // Group the CMP finals event together with its CMP divisions.
             return sameYear.filter {
-                $0.isChampionshipEvent && ($0.key == weekEvent.key || $0.parentEventKey == weekEvent.key)
+                $0.isChampionshipEvent
+                    && ($0.key == weekEvent.key || $0.parentEventKey == weekEvent.key)
             }
         case .offseason:
-            guard let start = weekEvent.startDateParsed, let end = weekEvent.endDateParsed else { return [] }
+            guard let start = weekEvent.startDateParsed, let end = weekEvent.endDateParsed else {
+                return []
+            }
             // UTC-midnight dates need a UTC calendar or month boundaries shift a day.
             let firstOfMonth = start.startOfMonth(calendar: .utc)
             let lastOfMonth = end.endOfMonth(calendar: .utc)
@@ -74,7 +84,10 @@ class WeekEventsViewController: EventsListViewController {
             let fetched = try await self.dependencies.api.eventsByYear(self.currentYear)
             self.allEvents = fetched
             if self.weekEvent == nil {
-                self.weekEvent = WeekEventsViewController.initialWeekEvent(for: self.currentYear, from: fetched)
+                self.weekEvent = WeekEventsViewController.initialWeekEvent(
+                    for: self.currentYear,
+                    from: fetched
+                )
             } else {
                 self.applyEvents(self.allEvents)
             }
@@ -101,7 +114,8 @@ class WeekEventsViewController: EventsListViewController {
     private static func currentSeasonWeekEvent(year: Int, from events: [APIEvent]) -> APIEvent? {
         let today = Calendar.current.startOfDay(for: Date())
         // First non-finished event (endDate today or later) that's not a CMP division.
-        let unplayed = events
+        let unplayed =
+            events
             .filter { $0.year == year }
             .filter { !$0.isChampionshipDivision }
             .filter { ($0.endOfEventDay ?? .distantPast) >= today }
@@ -110,7 +124,8 @@ class WeekEventsViewController: EventsListViewController {
         if let unplayed { return unplayed }
 
         // Otherwise first overall event for the year.
-        return events
+        return
+            events
             .filter { $0.year == year }
             .sorted { ($0.startDateParsed ?? .distantPast) < ($1.startDateParsed ?? .distantPast) }
             .first
@@ -120,4 +135,3 @@ class WeekEventsViewController: EventsListViewController {
 
     override var noDataText: String? { "No events for year" }
 }
-

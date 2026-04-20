@@ -80,7 +80,9 @@ extension TBAAPI {
     }
 
     public func teamEventsByYear(key teamKey: String, year: Int) async throws -> [Event] {
-        let response = try await client.getTeamEventsByYear(path: .init(teamKey: teamKey, year: year))
+        let response = try await client.getTeamEventsByYear(
+            path: .init(teamKey: teamKey, year: year)
+        )
         switch response {
         case .ok(let ok):
             return try ok.body.json
@@ -96,7 +98,9 @@ extension TBAAPI {
     }
 
     public func teamEventMatches(teamKey: String, eventKey: String) async throws -> [Match] {
-        let response = try await client.getTeamEventMatches(path: .init(teamKey: teamKey, eventKey: eventKey))
+        let response = try await client.getTeamEventMatches(
+            path: .init(teamKey: teamKey, eventKey: eventKey)
+        )
         switch response {
         case .ok(let ok):
             return try ok.body.json
@@ -112,7 +116,9 @@ extension TBAAPI {
     }
 
     public func teamEventAwards(teamKey: String, eventKey: String) async throws -> [Award] {
-        let response = try await client.getTeamEventAwards(path: .init(teamKey: teamKey, eventKey: eventKey))
+        let response = try await client.getTeamEventAwards(
+            path: .init(teamKey: teamKey, eventKey: eventKey)
+        )
         switch response {
         case .ok(let ok):
             return try ok.body.json
@@ -128,7 +134,9 @@ extension TBAAPI {
     }
 
     public func teamEventStatus(teamKey: String, eventKey: String) async throws -> TeamEventStatus {
-        let response = try await client.getTeamEventStatus(path: .init(teamKey: teamKey, eventKey: eventKey))
+        let response = try await client.getTeamEventStatus(
+            path: .init(teamKey: teamKey, eventKey: eventKey)
+        )
         switch response {
         case .ok(let ok):
             return try ok.body.json
@@ -144,7 +152,9 @@ extension TBAAPI {
     }
 
     public func teamMediaByYear(teamKey: String, year: Int) async throws -> [Media] {
-        let response = try await client.getTeamMediaByYear(path: .init(teamKey: teamKey, year: year))
+        let response = try await client.getTeamMediaByYear(
+            path: .init(teamKey: teamKey, year: year)
+        )
         switch response {
         case .ok(let ok):
             return try ok.body.json

@@ -12,15 +12,24 @@ struct AppStatus {
 
     static var `default`: AppStatus {
         let year = Calendar.current.component(.year, from: Date())
-        return AppStatus(currentSeason: year,
-                         maxSeason: year,
-                         minAppVersion: -1,
-                         latestAppVersion: -1,
-                         isDatafeedDown: false,
-                         downEventKeys: [])
+        return AppStatus(
+            currentSeason: year,
+            maxSeason: year,
+            minAppVersion: -1,
+            latestAppVersion: -1,
+            isDatafeedDown: false,
+            downEventKeys: []
+        )
     }
 
-    init(currentSeason: Int, maxSeason: Int, minAppVersion: Int, latestAppVersion: Int, isDatafeedDown: Bool, downEventKeys: [String]) {
+    init(
+        currentSeason: Int,
+        maxSeason: Int,
+        minAppVersion: Int,
+        latestAppVersion: Int,
+        isDatafeedDown: Bool,
+        downEventKeys: [String]
+    ) {
         self.currentSeason = currentSeason
         self.maxSeason = maxSeason
         self.minAppVersion = minAppVersion
@@ -137,13 +146,16 @@ public class StatusService: NSObject, StatusServiceProtocol {
     }
 
     func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String) {
-        let subscribers = eventStatusSubscribers.object(forKey: eventKey as NSString) ?? NSHashTable<AnyObject>.weakObjects()
+        let subscribers =
+            eventStatusSubscribers.object(forKey: eventKey as NSString)
+            ?? NSHashTable<AnyObject>.weakObjects()
         subscribers.add(subscriber as AnyObject)
         eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
     }
 
     private func updateEventSubscribers(eventKey: String, isEventOffline: Bool) {
-        guard let subscribersTable = eventStatusSubscribers.object(forKey: eventKey as NSString) else {
+        guard let subscribersTable = eventStatusSubscribers.object(forKey: eventKey as NSString)
+        else {
             return
         }
         for obj in subscribersTable.allObjects {

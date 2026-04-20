@@ -96,7 +96,10 @@ class EventInsightsHeaderView: UITableViewHeaderFooterView, Reusable {
         super.init(reuseIdentifier: reuseIdentifier)
 
         eventInsightsView.titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        eventInsightsView.titleLabel.font = UIFont.systemFont(ofSize: eventInsightsView.titleLabel.font.pointSize, weight: .semibold)
+        eventInsightsView.titleLabel.font = UIFont.systemFont(
+            ofSize: eventInsightsView.titleLabel.font.pointSize,
+            weight: .semibold
+        )
         eventInsightsView.leftLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         eventInsightsView.rightLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
 

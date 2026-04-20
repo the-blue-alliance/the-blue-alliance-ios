@@ -53,9 +53,12 @@ extension Stateful where Self: Refreshable {
         noDataView.alpha = 0
         addNoDataView(noDataView)
 
-        UIView.animate(withDuration: 0.25, animations: {
-            noDataView.alpha = 1.0
-        })
+        UIView.animate(
+            withDuration: 0.25,
+            animations: {
+                noDataView.alpha = 1.0
+            }
+        )
     }
 
 }

@@ -18,7 +18,12 @@ extension UIColor {
         let lightModeDarkBlueHighContrast = UIColor.colorWithRGB(rgbValue: 0x283593)
         let darkModeDarkBlue = UIColor.colorWithRGB(rgbValue: 0x3F51B5)
         let darkModeDarkBlueHighContrast = UIColor.colorWithRGB(rgbValue: 0x5C6BC0)
-        return dynamicColor(lightModeDarkBlue, lightModeDarkBlueHighContrast, darkModeDarkBlue, darkModeDarkBlueHighContrast)
+        return dynamicColor(
+            lightModeDarkBlue,
+            lightModeDarkBlueHighContrast,
+            darkModeDarkBlue,
+            darkModeDarkBlueHighContrast
+        )
     }
 
     // MARK: Safe Colors - support light/dark mode, high contrast
@@ -28,23 +33,48 @@ extension UIColor {
         let lightModePrimaryBlueHighContrast = UIColor.colorWithRGB(rgbValue: 0x3949AB)
         let darkModePrimaryBlue = UIColor.colorWithRGB(rgbValue: 0x5C6BC0)
         let darkModePrimaryBlueHighContrast = UIColor.colorWithRGB(rgbValue: 0x7986CB)
-        return dynamicColor(lightModePrimaryBlue, lightModePrimaryBlueHighContrast, darkModePrimaryBlue, darkModePrimaryBlueHighContrast)
+        return dynamicColor(
+            lightModePrimaryBlue,
+            lightModePrimaryBlueHighContrast,
+            darkModePrimaryBlue,
+            darkModePrimaryBlueHighContrast
+        )
     }
 
     public class var highlightColor: UIColor {
-        return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.primaryYellow, UIColor.primaryYellowHighContrast)
+        return dynamicColor(
+            UIColor.primaryBlue,
+            UIColor.primaryBlue,
+            UIColor.primaryYellow,
+            UIColor.primaryYellowHighContrast
+        )
     }
 
     public class var navigationBarTintColor: UIColor {
-        return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.systemGray6, UIColor.systemGray6)
+        return dynamicColor(
+            UIColor.primaryBlue,
+            UIColor.primaryBlue,
+            UIColor.systemGray6,
+            UIColor.systemGray6
+        )
     }
 
     public class var tabBarTintColor: UIColor {
-        return dynamicColor(UIColor.systemBlue, UIColor.systemBlue, UIColor.primaryYellow, UIColor.primaryYellowHighContrast)
+        return dynamicColor(
+            UIColor.systemBlue,
+            UIColor.systemBlue,
+            UIColor.primaryYellow,
+            UIColor.primaryYellowHighContrast
+        )
     }
 
     public class var tableViewHeaderColor: UIColor {
-        return dynamicColor(UIColor.darkModePrimaryBlue, UIColor.darkModePrimaryBlue, UIColor.systemGray5, UIColor.systemGray5)
+        return dynamicColor(
+            UIColor.darkModePrimaryBlue,
+            UIColor.darkModePrimaryBlue,
+            UIColor.systemGray5,
+            UIColor.systemGray5
+        )
     }
 
     public class var searchFieldBackgroundColor: UIColor {
@@ -72,7 +102,12 @@ extension UIColor {
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xFFDDDD)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x660000)
         let darkModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0x770000)
-        return dynamicColor(lightModeColor, lightModeHighContrastColor, darkModeColor, darkModeHighContrastColor)
+        return dynamicColor(
+            lightModeColor,
+            lightModeHighContrastColor,
+            darkModeColor,
+            darkModeHighContrastColor
+        )
     }
 
     public class var redAllianceScoreBackgroundColor: UIColor {
@@ -80,7 +115,12 @@ extension UIColor {
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xFFCCCC)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x770000)
         let darkModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0x880000)
-        return dynamicColor(lightModeColor, lightModeHighContrastColor, darkModeColor, darkModeHighContrastColor)
+        return dynamicColor(
+            lightModeColor,
+            lightModeHighContrastColor,
+            darkModeColor,
+            darkModeHighContrastColor
+        )
     }
 
     public class var blueAllianceBackgroundColor: UIColor {
@@ -88,7 +128,12 @@ extension UIColor {
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xDDDDFF)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000066)
         let darkModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0x000077)
-        return dynamicColor(lightModeColor, lightModeHighContrastColor, darkModeColor, darkModeHighContrastColor)
+        return dynamicColor(
+            lightModeColor,
+            lightModeHighContrastColor,
+            darkModeColor,
+            darkModeHighContrastColor
+        )
     }
 
     public class var blueAllianceScoreBackgroundColor: UIColor {
@@ -96,7 +141,12 @@ extension UIColor {
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xCCCCFF)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000088)
         let darkModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0x0000AA)
-        return dynamicColor(lightModeColor, lightModeHighContrastColor, darkModeColor, darkModeHighContrastColor)
+        return dynamicColor(
+            lightModeColor,
+            lightModeHighContrastColor,
+            darkModeColor,
+            darkModeHighContrastColor
+        )
     }
 
     public class var avatarRed: UIColor {
@@ -143,21 +193,33 @@ extension UIColor {
 
     // MARK: - Private Methods
 
-    private static func dynamicColor(_ lightMode: UIColor, _ lightModeHighContrast: UIColor, _ darkMode: UIColor, _ darkModeHighContrast: UIColor) -> UIColor {
+    private static func dynamicColor(
+        _ lightMode: UIColor,
+        _ lightModeHighContrast: UIColor,
+        _ darkMode: UIColor,
+        _ darkModeHighContrast: UIColor
+    ) -> UIColor {
         return UIColor { (traitCollection: UITraitCollection) -> UIColor in
-            switch(traitCollection.userInterfaceStyle,
-                   traitCollection.accessibilityContrast)
+            switch (
+                traitCollection.userInterfaceStyle,
+                traitCollection.accessibilityContrast
+            )
             {
-                case (.dark, .high): return darkModeHighContrast
-                case (.dark, _):     return darkMode
-                case (_, .high):     return lightModeHighContrast
-                default:             return lightMode
+            case (.dark, .high): return darkModeHighContrast
+            case (.dark, _): return darkMode
+            case (_, .high): return lightModeHighContrast
+            default: return lightMode
             }
         }
     }
 
     private static func color(red: Double, green: Double, blue: Double) -> UIColor {
-        return UIColor(red: CGFloat(red/255.0), green: CGFloat(green/255.0), blue: CGFloat(blue/255.0), alpha: 1.0)
+        return UIColor(
+            red: CGFloat(red / 255.0),
+            green: CGFloat(green / 255.0),
+            blue: CGFloat(blue / 255.0),
+            alpha: 1.0
+        )
     }
 
     private static func colorWithRGB(rgbValue: UInt, alpha: CGFloat = 1.0) -> UIColor {

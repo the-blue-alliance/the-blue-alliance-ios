@@ -9,7 +9,13 @@ struct TeamHeaderViewModel {
     let teamNumberNickname: String
     let year: Int?
 
-    init(teamNumber: Int, avatar: UIImage?, nickname: String?, teamNumberNickname: String, year: Int?) {
+    init(
+        teamNumber: Int,
+        avatar: UIImage?,
+        nickname: String?,
+        teamNumberNickname: String,
+        year: Int?
+    ) {
         self.teamNumber = teamNumber
         self.avatar = avatar
         self.nickname = nickname

@@ -13,8 +13,10 @@ enum LegacyCoreDataCleanup {
     private static let storeFilename = "TBA.sqlite"
     private static let completedFlagKey = "has_removed_legacy_core_data_store_v1"
 
-    static func run(userDefaults: UserDefaults = .standard,
-                    fileManager: FileManager = .default) {
+    static func run(
+        userDefaults: UserDefaults = .standard,
+        fileManager: FileManager = .default
+    ) {
         guard !userDefaults.bool(forKey: completedFlagKey) else { return }
 
         for baseURL in legacyStoreBaseURLs(fileManager: fileManager) {
@@ -26,16 +28,22 @@ enum LegacyCoreDataCleanup {
 
     private static func legacyStoreBaseURLs(fileManager: FileManager) -> [URL] {
         var urls: [URL] = []
-        if let groupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) {
+        if let groupURL = fileManager.containerURL(
+            forSecurityApplicationGroupIdentifier: appGroupIdentifier
+        ) {
             urls.append(groupURL)
         }
-        urls.append(contentsOf: fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask))
+        urls.append(
+            contentsOf: fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+        )
         return urls
     }
 
     private static func removeStoreFiles(at baseURL: URL, fileManager: FileManager) {
         let storeURL = baseURL.appendingPathComponent(storeFilename)
-        let sidecarURLs = ["-wal", "-shm"].map { baseURL.appendingPathComponent(storeFilename + $0) }
+        let sidecarURLs = ["-wal", "-shm"].map {
+            baseURL.appendingPathComponent(storeFilename + $0)
+        }
         for url in [storeURL] + sidecarURLs where fileManager.fileExists(atPath: url.path) {
             try? fileManager.removeItem(at: url)
         }

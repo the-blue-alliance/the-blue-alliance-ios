@@ -33,7 +33,10 @@ struct MatchQueryOptions: QueryableOptions {
     var filter: MatchFilterOptions
 
     static func defaultQuery() -> MatchQueryOptions {
-        return MatchQueryOptions(sort: MatchQueryOptions.MatchSortOptions.defaultQuery(), filter: MatchQueryOptions.MatchFilterOptions.defaultQuery())
+        return MatchQueryOptions(
+            sort: MatchQueryOptions.MatchSortOptions.defaultQuery(),
+            filter: MatchQueryOptions.MatchFilterOptions.defaultQuery()
+        )
     }
 
     struct MatchSortOptions: QueryableOptions {
@@ -78,9 +81,12 @@ class MatchQueryOptionsViewController: TBATableViewController {
 
         title = "Match Sort/Filter"
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
-            self?.dismiss(animated: true)
-        })
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            systemItem: .done,
+            primaryAction: UIAction { [weak self] _ in
+                self?.dismiss(animated: true)
+            }
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -110,14 +116,17 @@ class MatchQueryOptionsViewController: TBATableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
         guard let querySection = querySection(index: indexPath.section) else {
             fatalError("Unsupported query section")
         }
         let cell: SwitchTableViewCell = {
             switch querySection {
             case .sort:
-                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                let switchCell = SwitchTableViewCell(switchToggled: {
+                    [weak self] (_ sender: UISwitch) in
                     guard let self = self else { return }
                     self.query.sort.reverse = sender.isOn
                     self.delegate?.updateQuery(query: self.query)
@@ -127,13 +136,15 @@ class MatchQueryOptionsViewController: TBATableViewController {
                 switchCell.switchView.isOn = self.query.sort.reverse
                 return switchCell
             case .filter:
-                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                let switchCell = SwitchTableViewCell(switchToggled: {
+                    [weak self] (_ sender: UISwitch) in
                     guard let self = self else { return }
                     self.query.filter.favorites = sender.isOn
                     self.delegate?.updateQuery(query: self.query)
                 })
                 switchCell.textLabel?.text = "Favorites"
-                switchCell.detailTextLabel?.text = "Show only matches with myTBA favorite teams playing"
+                switchCell.detailTextLabel?.text =
+                    "Show only matches with myTBA favorite teams playing"
                 switchCell.detailTextLabel?.numberOfLines = 0
                 switchCell.switchView.isOn = self.query.filter.favorites
                 return switchCell
@@ -146,7 +157,9 @@ class MatchQueryOptionsViewController: TBATableViewController {
 
     // MARK: - Table View Delegate
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
+        -> String?
+    {
         guard let querySection = querySection(index: section) else {
             fatalError("Unsupported query section")
         }

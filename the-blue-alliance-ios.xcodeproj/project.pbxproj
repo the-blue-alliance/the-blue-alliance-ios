@@ -94,6 +94,7 @@
 		928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
 		92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9E1E2154DA008E79CA /* Assets.xcassets */; };
+		92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */; };
 		92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92942DAE1E2158EC008E79CA /* Settings.bundle */; };
 		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
 		92943B08222E1DF700EA35B2 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92943B07222E1DF700EA35B2 /* SwitchTableViewCell.swift */; };
@@ -185,6 +186,7 @@
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		A11CF00E00000000000000BB /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A11CF00E00000000000000FF /* AppIcon.icon */; };
+		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
 /* End PBXBuildFile section */
 
@@ -274,6 +276,7 @@
 		92942D921E2154DA008E79CA /* The Blue Alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Blue Alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92942D9E1E2154DA008E79CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		92942DA11E2154DA008E79CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		92942DA31E2154DA008E79CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92942DAE1E2158EC008E79CA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAViewController.swift; sourceTree = "<group>"; };
@@ -364,6 +367,7 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -407,7 +411,6 @@
 			isa = PBXGroup;
 			children = (
 				5EC0D41A2C26041700000001 /* APIEvent+Helpers.swift */,
-				5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */,
 				5EC0D41A2C26041800000002 /* TBAAPIError.swift */,
 				5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */,
 				5EC0D41A2C26041800000006 /* APIWebcast+Helpers.swift */,
@@ -442,6 +445,7 @@
 		923A0D7620D21D3800BF5E31 /* LaunchViews */ = {
 			isa = PBXGroup;
 			children = (
+				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
 				92E9F0AA216C439700C1F916 /* NoDataViewController.swift */,
 				924AFD782171AB1A00D7BE7E /* NoDataView.xib */,
 			);
@@ -552,6 +556,7 @@
 				927246C12AFFFC8900EF7796 /* Auth */,
 				923AEE8F2165966C00EF50C8 /* AppDelegate */,
 				92AABBCC000000000000DD10 /* LocalStore */,
+				BA0000000000000000000010 /* ViewModels */,
 				923A0D7620D21D3800BF5E31 /* LaunchViews */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				A11CF00E00000000000000FF /* AppIcon.icon */,
@@ -637,6 +642,15 @@
 				92AF4D0B1E330790007E967D /* SelectTableViewController.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		929AACF32F95A8EA00587DEA /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				BA0000000000000000000001 /* EventSection.swift */,
+				5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */,
+			);
+			path = Event;
 			sourceTree = "<group>";
 		};
 		929BBB061EC55745006D3854 /* Info */ = {
@@ -939,6 +953,14 @@
 			path = Events;
 			sourceTree = "<group>";
 		};
+		BA0000000000000000000010 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				929AACF32F95A8EA00587DEA /* Event */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -947,6 +969,7 @@
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
 			buildPhases = (
 				92942D8E1E2154DA008E79CA /* Sources */,
+				92FC9BA32F95EF7B00771E04 /* Lint Swift (swift-format) */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
 				924E826C208FE7D20053247C /* Run FirebaseCrashlytics */,
@@ -997,10 +1020,6 @@
 							};
 						};
 					};
-					D3DE56FA27D7ECD14AEBE10A = {
-						CreatedOnToolsVersion = 15.0;
-						TestTargetID = 92942D911E2154DA008E79CA;
-					};
 				};
 			};
 			buildConfigurationList = 92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */;
@@ -1018,9 +1037,9 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
-				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */,
-				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */,
-				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */,
+				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
+				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
+				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -1042,6 +1061,7 @@
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
+				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
@@ -1083,6 +1103,24 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    \"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nelse\n    echo \"Skipping Crashlytics dSYM upload for ${CONFIGURATION} build\"\nfi\n";
 		};
+		92FC9BA32F95EF7B00771E04 /* Lint Swift (swift-format) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Lint Swift (swift-format)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    \"${SRCROOT}/scripts/swift-format-lint.sh\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1104,6 +1142,7 @@
 				5EC0D41A2C26041700000002 /* APIEvent+Helpers.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
 				5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */,
+				BA0000000000000000000002 /* EventSection.swift in Sources */,
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
 				514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */,
 				92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */,
@@ -1242,6 +1281,18 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				92942DA11E2154DA008E79CA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			path = .;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		92942DA41E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1276,7 +1327,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				EXCLUDED_ARCHS = "";
@@ -1300,7 +1351,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1355,7 +1406,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1381,7 +1432,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1406,7 +1457,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1435,15 +1486,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */ = {
+		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAAPI;
 		};
-		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */ = {
+		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/MyTBAKit;
 		};
-		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */ = {
+		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAUtils;
 		};

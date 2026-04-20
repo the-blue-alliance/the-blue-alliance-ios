@@ -2,13 +2,26 @@ import Foundation
 import UIKit
 
 protocol EventInsightsConfigurator {
-    static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String, InsightRow>, _ qual: [String: Any]?, _ playoff: [String: Any]?)
+    static func configureDataSource(
+        _ snapshot: inout NSDiffableDataSourceSnapshot<String, InsightRow>,
+        _ qual: [String: Any]?,
+        _ playoff: [String: Any]?
+    )
 }
 
 extension EventInsightsConfigurator {
 
-    static func highScoreRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
-        return InsightRow(title: title, qual: highScoreString(qual, key), playoff: highScoreString(playoff, key))
+    static func highScoreRow(
+        title: String,
+        key: String,
+        qual: [String: Any]?,
+        playoff: [String: Any]?
+    ) -> InsightRow {
+        return InsightRow(
+            title: title,
+            qual: highScoreString(qual, key),
+            playoff: highScoreString(playoff, key)
+        )
     }
 
     private static func highScoreString(_ dict: [String: Any]?, _ key: String) -> String? {
@@ -21,10 +34,13 @@ extension EventInsightsConfigurator {
         guard highScoreData.count == 3 else {
             return nil
         }
-        return "\((highScoreData[0] as? Int).map(String.init) ?? "--") in \(highScoreData[2] as? String ?? "")"
+        return
+            "\((highScoreData[0] as? Int).map(String.init) ?? "--") in \(highScoreData[2] as? String ?? "")"
     }
 
-    static func scoreRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
+    static func scoreRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?)
+        -> InsightRow
+    {
         return InsightRow(title: title, qual: scoreFor(qual, key), playoff: scoreFor(playoff, key))
     }
 

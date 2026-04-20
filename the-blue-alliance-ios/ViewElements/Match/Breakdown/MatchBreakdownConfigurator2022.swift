@@ -2,42 +2,87 @@ import Foundation
 import UIKit
 
 private class BreakdownStyle2022 {
-    public static let upperImage = UIImage(systemName: "chevron.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
-    public static let lowerImage = UIImage(systemName: "chevron.down", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
+    public static let upperImage = UIImage(
+        systemName: "chevron.up",
+        withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
+    )
+    public static let lowerImage = UIImage(
+        systemName: "chevron.down",
+        withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
+    )
 }
 
 struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
 
-    static func configureDataSource(_ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>, _ breakdown: [String: Any]?, _ red: [String: Any]?, _ blue: [String: Any]?) {
+    static func configureDataSource(
+        _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
+        _ breakdown: [String: Any]?,
+        _ red: [String: Any]?,
+        _ blue: [String: Any]?
+    ) {
 
         var rows: [BreakdownRow?] = []
 
         // Auto
         rows.append(taxi(red: red, blue: blue))
         rows.append(cargoRow(title: "Auto Cargo Count", period: "auto", red: red, blue: blue))
-        rows.append(boolImageRow(title: "Quintet", key: "quintetAchieved", red: red, blue: blue, type: .subtotal))
-        rows.append(row(title: "Auto Cargo Points", key: "autoCargoPoints", red: red, blue: blue, type: .subtotal))
+        rows.append(
+            boolImageRow(
+                title: "Quintet",
+                key: "quintetAchieved",
+                red: red,
+                blue: blue,
+                type: .subtotal
+            )
+        )
+        rows.append(
+            row(
+                title: "Auto Cargo Points",
+                key: "autoCargoPoints",
+                red: red,
+                blue: blue,
+                type: .subtotal
+            )
+        )
         rows.append(row(title: "Total Auto", key: "autoPoints", red: red, blue: blue, type: .total))
 
         // Teleop
         rows.append(cargoRow(title: "Teleop Cargo Count", period: "teleop", red: red, blue: blue))
-        rows.append(row(title: "Teleop Cargo Points", key: "teleopCargoPoints", red: red, blue: blue, type: .subtotal))
+        rows.append(
+            row(
+                title: "Teleop Cargo Points",
+                key: "teleopCargoPoints",
+                red: red,
+                blue: blue,
+                type: .subtotal
+            )
+        )
         for i in [1, 2, 3] {
             rows.append(endgameRow(i: i, red: red, blue: blue))
         }
-        rows.append(row(title: "Hangar Points", key: "endgamePoints", red: red, blue: blue, type: .subtotal))
-        rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
+        rows.append(
+            row(title: "Hangar Points", key: "endgamePoints", red: red, blue: blue, type: .subtotal)
+        )
+        rows.append(
+            row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total)
+        )
 
         rows.append(bonusRankingPointRow(title: "Cargo Bonus", key: "cargo", red: red, blue: blue))
-        rows.append(bonusRankingPointRow(title: "Hangar Bonus", key: "hangar", red: red, blue: blue))
+        rows.append(
+            bonusRankingPointRow(title: "Hangar Bonus", key: "hangar", red: red, blue: blue)
+        )
 
         // Match totals
         rows.append(foulRow(title: "Fouls / Tech Fouls", red: red, blue: blue))
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
-        rows.append(row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total))
+        rows.append(
+            row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
+        )
 
         // RP
-        rows.append(row(title: "Ranking Points", key: "rp", formatString: "+%@ RP", red: red, blue: blue))
+        rows.append(
+            row(title: "Ranking Points", key: "rp", formatString: "+%@ RP", red: red, blue: blue)
+        )
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
@@ -68,9 +113,17 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
             return taxiStrings.map { (taxi) -> AnyHashable in
                 switch taxi {
                 case "No":
-                    return BreakdownStyle.imageView(image: BreakdownStyle.xImage, contentMode: mode, forceSquare: false)
+                    return BreakdownStyle.imageView(
+                        image: BreakdownStyle.xImage,
+                        contentMode: mode,
+                        forceSquare: false
+                    )
                 case "Yes":
-                    return BreakdownStyle.imageView(image: BreakdownStyle.checkImage, contentMode: mode, forceSquare: false)
+                    return BreakdownStyle.imageView(
+                        image: BreakdownStyle.checkImage,
+                        contentMode: mode,
+                        forceSquare: false
+                    )
                 default:
                     return "?"
                 }
@@ -78,7 +131,9 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
         }
 
         let (redElements, blueElements) = (elements[0], elements[1])
-        guard let redBreakdownElements = redElements as? [BreakdownElement], let blueBreakdownElements = blueElements as? [BreakdownElement] else {
+        guard let redBreakdownElements = redElements as? [BreakdownElement],
+            let blueBreakdownElements = blueElements as? [BreakdownElement]
+        else {
             return nil
         }
 
@@ -96,10 +151,21 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
         let redTaxiPointsString = "(+\(redLinePoints ?? 0))"
         let blueTaxiPointsString = "(+\(blueLinePoints ?? 0))"
 
-        return BreakdownRow(title: "Taxi", red: [redStackView, redTaxiPointsString], blue: [blueStackView, blueTaxiPointsString])
+        return BreakdownRow(
+            title: "Taxi",
+            red: [redStackView, redTaxiPointsString],
+            blue: [blueStackView, blueTaxiPointsString]
+        )
     }
 
-    private static func cargoRow(title: String, period: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+    private static func cargoRow(
+        title: String,
+        period: String,
+        red: [String: Any]?,
+        blue: [String: Any]?
+    )
+        -> BreakdownRow?
+    {
         let heightKeys = ["Lower", "Upper"]
         let locationKeys = ["Blue", "Far", "Near", "Red"]
 
@@ -130,18 +196,26 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
         }
 
         let mode = UIView.ContentMode.scaleAspectFit
-        let redValues = zip((images).map {
-            return BreakdownStyle.imageView(image: $0, contentMode: mode)
-        }, redCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
+        let redValues = zip(
+            (images).map {
+                return BreakdownStyle.imageView(image: $0, contentMode: mode)
+            },
+            redCells
+        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
 
-        let blueValues = zip((images).map {
-            return BreakdownStyle.imageView(image: $0, contentMode: mode)
-        }, blueCells).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v) ] }
+        let blueValues = zip(
+            (images).map {
+                return BreakdownStyle.imageView(image: $0, contentMode: mode)
+            },
+            blueCells
+        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
 
         return BreakdownRow(title: title, red: redValues, blue: blueValues)
     }
 
-    private static func endgameRow(i: Int, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+    private static func endgameRow(i: Int, red: [String: Any]?, blue: [String: Any]?)
+        -> BreakdownRow?
+    {
         guard let endgameValues = values(key: "endgameRobot\(i)", red: red, blue: blue) else {
             return nil
         }
@@ -162,10 +236,16 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
             }
             return BreakdownStyle.xImage
         }
-        return BreakdownRow(title: "Robot \(i) Endgame", red: [elements.first], blue: [elements.last])
+        return BreakdownRow(
+            title: "Robot \(i) Endgame",
+            red: [elements.first],
+            blue: [elements.last]
+        )
     }
 
-    private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+    private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?)
+        -> BreakdownRow?
+    {
         guard let foulValues = values(key: "foulCount", red: red, blue: blue) else {
             return nil
         }
@@ -184,14 +264,28 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
 
         // NOTE: red and blue are passed in backwards here intentionally, because
         // the fouls returned are what the opposite alliance received
-        let elements = [(blueFouls, blueTechFouls), (redFouls, redTechFouls)].map { (fouls, techFouls) -> AnyHashable in
+        let elements = [(blueFouls, blueTechFouls), (redFouls, redTechFouls)].map {
+            (fouls, techFouls) -> AnyHashable in
             return "+\(fouls * 4) / +\(techFouls * 8)"
         }
         return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
 
-    private static func bonusRankingPointRow(title: String, key: String, red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        guard let bonusRankingPointValues = values(key: "\(key)BonusRankingPoint", red: red, blue: blue) else {
+    private static func bonusRankingPointRow(
+        title: String,
+        key: String,
+        red: [String: Any]?,
+        blue: [String: Any]?
+    )
+        -> BreakdownRow?
+    {
+        guard
+            let bonusRankingPointValues = values(
+                key: "\(key)BonusRankingPoint",
+                red: red,
+                blue: blue
+            )
+        else {
             return nil
         }
         let (rw, bw) = bonusRankingPointValues
@@ -199,9 +293,12 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
             return nil
         }
 
-        let elements = [redBonusRankingPoint, blueBonusRankingPoint].map { (bonusRankingPoint) -> [AnyHashable] in
+        let elements = [redBonusRankingPoint, blueBonusRankingPoint].map {
+            (bonusRankingPoint) -> [AnyHashable] in
             if bonusRankingPoint {
-                let result: [AnyHashable] = [BreakdownStyle.imageView(image: BreakdownStyle.checkImage), "(+1 RP)"]
+                let result: [AnyHashable] = [
+                    BreakdownStyle.imageView(image: BreakdownStyle.checkImage), "(+1 RP)",
+                ]
                 return result
             }
             let result: [AnyHashable] = [BreakdownStyle.imageView(image: BreakdownStyle.xImage)]

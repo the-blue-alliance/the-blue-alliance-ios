@@ -7,20 +7,24 @@ protocol MatchSummaryViewDelegate: AnyObject {
 }
 
 class MatchSummaryView: UIView {
-    
+
     public weak var delegate: MatchSummaryViewDelegate?
-    
+
     var viewModel: MatchViewModel? {
         didSet {
             configureView()
         }
     }
-    
+
     // change this variable so that the teams are shown as buttons
     private var teamsTappable: Bool = false
 
-    private let winnerFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 14, weight: .bold))
-    private let notWinnerFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.systemFont(ofSize: 14, weight: .medium))
+    private let winnerFont = UIFontMetrics(forTextStyle: .body).scaledFont(
+        for: UIFont.systemFont(ofSize: 14, weight: .bold)
+    )
+    private let notWinnerFont = UIFontMetrics(forTextStyle: .body).scaledFont(
+        for: UIFont.systemFont(ofSize: 14, weight: .medium)
+    )
 
     // MARK: - IBOutlet
 
@@ -51,13 +55,12 @@ class MatchSummaryView: UIView {
     @IBOutlet private weak var blueRPStackView: UIStackView!
 
     @IBOutlet weak var timeLabel: UILabel!
-    
 
     // MARK: - Init
 
     init(teamsTappable: Bool = false) {
         super.init(frame: .zero)
-        
+
         self.teamsTappable = teamsTappable
         initMatchView()
     }
@@ -69,7 +72,11 @@ class MatchSummaryView: UIView {
     }
 
     private func initMatchView() {
-        Bundle.main.loadNibNamed(String(describing: MatchSummaryView.self), owner: self, options: nil)
+        Bundle.main.loadNibNamed(
+            String(describing: MatchSummaryView.self),
+            owner: self,
+            options: nil
+        )
         summaryView.frame = self.bounds
         summaryView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.addSubview(summaryView)
@@ -110,7 +117,7 @@ class MatchSummaryView: UIView {
             }
         }
     }
-    
+
     private func removeRPs() {
         for stackView in [redRPStackView, blueRPStackView] as [UIStackView] {
             for view in stackView.arrangedSubviews {
@@ -132,11 +139,14 @@ class MatchSummaryView: UIView {
         removeRPs()
 
         let baseTeamKeys = viewModel.baseTeamKeys
-        for (alliance, stackView) in [(viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!)] {
+        for (alliance, stackView) in [
+            (viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!),
+        ] {
             for teamKey in alliance {
                 let dq = viewModel.dqs.contains(teamKey)
                 // if teams are tappable, load the team #s as buttons to link to the team page
-                let label = teamsTappable
+                let label =
+                    teamsTappable
                     ? teamButton(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
                     : teamLabel(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
                 // Insert each new stack view at the index just before the score view
@@ -174,43 +184,50 @@ class MatchSummaryView: UIView {
             blueScoreLabel.font = winnerFont
         }
     }
-    
+
     private func addRPToView(stackView: UIStackView, rpCount: Int) {
         for _ in 0..<rpCount {
             let rpLabel = label(text: "•", isBold: true)
             stackView.addArrangedSubview(rpLabel)
         }
     }
-    
+
     private func teamLabel(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UILabel {
         let text: String = "\(TeamKey.trimFRCPrefix(teamKey))"
         let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return label(text: text, isBold: isBold, isStrikethrough: dq)
     }
-    
+
     private func teamButton(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UIButton {
         let text: String = "\(TeamKey.trimFRCPrefix(teamKey))"
         let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return button(text: text, isBold: isBold, isStrikethrough: dq)
     }
-    
+
     private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(text, for: [])
         button.setTitleColor(UIColor.highlightColor, for: .normal)
-        
+
         if let teamNumber = Int(text) {
             button.tag = teamNumber
         }
 
-        button.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
+        button.titleLabel?.attributedText = customAttributedString(
+            text: text,
+            isBold: isBold,
+            isStrikethrough: isStrikethrough
+        )
 
-        button.addAction(UIAction { [weak self, weak button] _ in
-            guard let button, button.tag != 0 else { return }
-            self?.delegate?.teamPressed(teamNumber: button.tag)
-        }, for: .touchUpInside)
+        button.addAction(
+            UIAction { [weak self, weak button] _ in
+                guard let button, button.tag != 0 else { return }
+                self?.delegate?.teamPressed(teamNumber: button.tag)
+            },
+            for: .touchUpInside
+        )
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }
@@ -218,14 +235,20 @@ class MatchSummaryView: UIView {
     private func label(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UILabel {
         let label = UILabel()
         label.textAlignment = .center
-        label.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
+        label.attributedText = customAttributedString(
+            text: text,
+            isBold: isBold,
+            isStrikethrough: isStrikethrough
+        )
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.label
         return label
     }
-    
-    private func customAttributedString(text: String, isBold: Bool, isStrikethrough: Bool = false) -> NSMutableAttributedString {
-        let attributeString =  NSMutableAttributedString(string: text)
+
+    private func customAttributedString(text: String, isBold: Bool, isStrikethrough: Bool = false)
+        -> NSMutableAttributedString
+    {
+        let attributeString = NSMutableAttributedString(string: text)
         let attributedStringRange = NSMakeRange(0, attributeString.length)
 
         var font: UIFont = .systemFont(ofSize: 14)
@@ -235,9 +258,13 @@ class MatchSummaryView: UIView {
         attributeString.addAttribute(.font, value: font, range: attributedStringRange)
 
         if isStrikethrough {
-            attributeString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: attributedStringRange)
+            attributeString.addAttribute(
+                .strikethroughStyle,
+                value: NSUnderlineStyle.single.rawValue,
+                range: attributedStringRange
+            )
         }
-        
+
         return attributeString
     }
 

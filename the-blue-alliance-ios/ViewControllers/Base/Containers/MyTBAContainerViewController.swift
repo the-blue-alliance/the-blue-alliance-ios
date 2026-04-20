@@ -4,9 +4,13 @@ import UIKit
 
 class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
-
     lazy var favoriteBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage.starIcon, style: .plain, target: self, action: #selector(myTBAPreferencesTapped))
+        return UIBarButtonItem(
+            image: UIImage.starIcon,
+            style: .plain,
+            target: self,
+            action: #selector(myTBAPreferencesTapped)
+        )
     }()
 
     var subscribableModel: MyTBASubscribable {
@@ -15,9 +19,21 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     // MARK: - Init
 
-    override init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, dependencies: Dependencies) {
+    override init(
+        viewControllers: [ContainableViewController],
+        navigationTitle: String? = nil,
+        navigationSubtitle: String? = nil,
+        segmentedControlTitles: [String]? = nil,
+        dependencies: Dependencies
+    ) {
 
-        super.init(viewControllers: viewControllers, navigationTitle: navigationTitle, navigationSubtitle: navigationSubtitle, segmentedControlTitles: segmentedControlTitles, dependencies: dependencies)
+        super.init(
+            viewControllers: viewControllers,
+            navigationTitle: navigationTitle,
+            navigationSubtitle: navigationSubtitle,
+            segmentedControlTitles: segmentedControlTitles,
+            dependencies: dependencies
+        )
 
         updateFavoriteButton()
 

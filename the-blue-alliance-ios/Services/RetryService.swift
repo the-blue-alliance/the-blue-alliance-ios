@@ -14,9 +14,13 @@ class RetryService {
     }
 
     private static func createTimer(_ retryable: Retryable) -> Timer {
-        return Timer.scheduledTimer(withTimeInterval: retryable.retryInterval, repeats: true, block: { (_) in
-            retryable.retry()
-        })
+        return Timer.scheduledTimer(
+            withTimeInterval: retryable.retryInterval,
+            repeats: true,
+            block: { (_) in
+                retryable.retry()
+            }
+        )
     }
 
     fileprivate func register(_ retryable: Retryable, initiallyRetry: Bool = true) {

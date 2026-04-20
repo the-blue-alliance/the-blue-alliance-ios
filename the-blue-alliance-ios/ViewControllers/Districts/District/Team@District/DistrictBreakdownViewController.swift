@@ -51,8 +51,11 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
         return 5
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> ReverseSubtitleTableViewCell
+    {
+        let cell =
+            tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         let points = eventPoints[indexPath.section]
 
         let (pointsType, pointsValue): (String, Int) = {
@@ -74,7 +77,9 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
+        -> String?
+    {
         eventPoints[section].eventKey
     }
 

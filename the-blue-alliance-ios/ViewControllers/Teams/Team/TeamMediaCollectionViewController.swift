@@ -16,7 +16,9 @@ struct TeamMediaItem: Hashable {
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private static let spacerSize: CGFloat = 3.0
-    private static let imageTypes: Set<String> = ["imgur", "cdphotothread", "avatar", "instagram-image"]
+    private static let imageTypes: Set<String> = [
+        "imgur", "cdphotothread", "avatar", "instagram-image",
+    ]
 
     private let teamKey: String
     private let pasteboard: UIPasteboard
@@ -39,7 +41,10 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private var imageErrors: [String: Error] = [:]
     private var downloadTasks: [String: Task<Void, Never>] = [:]
 
-    private lazy var cellRegistration = UICollectionView.CellRegistration<MediaCollectionViewCell, TeamMediaItem> { [weak self] cell, _, item in
+    private lazy var cellRegistration = UICollectionView.CellRegistration<
+        MediaCollectionViewCell, TeamMediaItem
+    > {
+        [weak self] cell, _, item in
         guard let self else { return }
         if let image = self.imageCache[item.foreignKey] {
             cell.state = .loaded(image)
@@ -53,7 +58,13 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Init
 
-    init(teamKey: String, year: Int? = nil, pasteboard: UIPasteboard = .general, photoLibrary: PHPhotoLibrary = .shared(), dependencies: Dependencies) {
+    init(
+        teamKey: String,
+        year: Int? = nil,
+        pasteboard: UIPasteboard = .general,
+        photoLibrary: PHPhotoLibrary = .shared(),
+        dependencies: Dependencies
+    ) {
         self.teamKey = teamKey
         self.year = year
         self.pasteboard = pasteboard
@@ -73,20 +84,34 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             let columns = env.traitCollection.horizontalSizeClass == .regular ? 3 : 2
             let spacer = TeamMediaCollectionViewController.spacerSize
             let containerWidth = env.container.effectiveContentSize.width
-            let itemWidth = (containerWidth - spacer * CGFloat(columns - 1) - 2 * spacer) / CGFloat(columns)
+            let itemWidth =
+                (containerWidth - spacer * CGFloat(columns - 1) - 2 * spacer) / CGFloat(columns)
 
-            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth),
-                                                  heightDimension: .absolute(itemWidth))
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(itemWidth),
+                heightDimension: .absolute(itemWidth)
+            )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .absolute(itemWidth))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: columns)
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(itemWidth)
+            )
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                repeatingSubitem: item,
+                count: columns
+            )
             group.interItemSpacing = .fixed(spacer)
 
             let section = NSCollectionLayoutSection(group: group)
             section.interGroupSpacing = spacer
-            section.contentInsets = NSDirectionalEdgeInsets(top: spacer, leading: spacer, bottom: spacer, trailing: spacer)
+            section.contentInsets = NSDirectionalEdgeInsets(
+                top: spacer,
+                leading: spacer,
+                bottom: spacer,
+                trailing: spacer
+            )
             return section
         }
     }
@@ -108,37 +133,61 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: UICollectionView Delegate
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         delegate?.mediaSelected(image: imageCache[item.foreignKey], directURL: item.directURL)
     }
 
-    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    override func collectionView(
+        _ collectionView: UICollectionView,
+        contextMenuConfigurationForItemAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let cachedImage = imageCache[item.foreignKey]
-        let configuration = UIContextMenuConfiguration(identifier: item.foreignKey as NSString, previewProvider: nil) { _ in
+        let configuration = UIContextMenuConfiguration(
+            identifier: item.foreignKey as NSString,
+            previewProvider: nil
+        ) {
+            _ in
             let viewAction = UIAction(title: "View", image: UIImage(systemName: "eye.fill")) { _ in
                 self.delegate?.mediaSelected(image: cachedImage, directURL: item.directURL)
             }
             var actions: [UIMenuElement] = [viewAction]
 
             if let viewURL = item.viewURL, self.urlOpener.canOpenURL(viewURL) {
-                let viewOnlineAction = UIAction(title: "View Online", image: UIImage(systemName: "safari.fill")) { _ in
+                let viewOnlineAction = UIAction(
+                    title: "View Online",
+                    image: UIImage(systemName: "safari.fill")
+                ) { _ in
                     self.urlOpener.open(viewURL, options: [:], completionHandler: nil)
                 }
                 actions.append(viewOnlineAction)
             }
 
             if let image = cachedImage {
-                let copyAction = UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc.fill")) { _ in
+                let copyAction = UIAction(
+                    title: "Copy",
+                    image: UIImage(systemName: "doc.on.doc.fill")
+                ) { _ in
                     self.pasteboard.image = image
                 }
                 actions.append(copyAction)
 
-                let saveAction = UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down.fill")) { _ in
-                    self.photoLibrary.performChanges({
-                        PHAssetChangeRequest.creationRequestForAsset(from: image)
-                    }, completionHandler: nil)
+                let saveAction = UIAction(
+                    title: "Save",
+                    image: UIImage(systemName: "square.and.arrow.down.fill")
+                ) {
+                    _ in
+                    self.photoLibrary.performChanges(
+                        {
+                            PHAssetChangeRequest.creationRequestForAsset(from: image)
+                        },
+                        completionHandler: nil
+                    )
                 }
                 actions.append(saveAction)
             }
@@ -147,18 +196,29 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         return configuration
     }
 
-    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+    override func collectionView(
+        _ collectionView: UICollectionView,
+        willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
+        animator: UIContextMenuInteractionCommitAnimating
+    ) {
         guard let foreignKey = configuration.identifier as? String,
-              let item = media.first(where: { $0.foreignKey == foreignKey }) else { return }
+            let item = media.first(where: { $0.foreignKey == foreignKey })
+        else { return }
         delegate?.mediaSelected(image: imageCache[foreignKey], directURL: item.directURL)
     }
 
     // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = CollectionViewDataSource<String, TeamMediaItem>(collectionView: collectionView) { [weak self] collectionView, indexPath, item in
+        dataSource = CollectionViewDataSource<String, TeamMediaItem>(collectionView: collectionView)
+        {
+            [weak self] collectionView, indexPath, item in
             guard let self else { return UICollectionViewCell() }
-            return collectionView.dequeueConfiguredReusableCell(using: self.cellRegistration, for: indexPath, item: item)
+            return collectionView.dequeueConfiguredReusableCell(
+                using: self.cellRegistration,
+                for: indexPath,
+                item: item
+            )
         }
         dataSource.delegate = self
     }
@@ -185,14 +245,20 @@ extension TeamMediaCollectionViewController: Refreshable {
         guard let year = year else { return }
         runRefresh { [weak self] in
             guard let self else { return }
-            let apiMedia = try await self.dependencies.api.teamMediaByYear(teamKey: self.teamKey, year: year)
-            let items: [TeamMediaItem] = apiMedia
+            let apiMedia = try await self.dependencies.api.teamMediaByYear(
+                teamKey: self.teamKey,
+                year: year
+            )
+            let items: [TeamMediaItem] =
+                apiMedia
                 .filter { Self.imageTypes.contains($0._type.rawValue) }
                 .map { m in
-                    TeamMediaItem(foreignKey: m.foreignKey,
-                                  type: m._type.rawValue,
-                                  directURL: m.directUrl.flatMap { URL(string: $0) },
-                                  viewURL: m.viewUrl.flatMap { URL(string: $0) })
+                    TeamMediaItem(
+                        foreignKey: m.foreignKey,
+                        type: m._type.rawValue,
+                        directURL: m.directUrl.flatMap { URL(string: $0) },
+                        viewURL: m.viewUrl.flatMap { URL(string: $0) }
+                    )
                 }
             self.imageErrors.removeAll()
             self.applyMedia(items)
