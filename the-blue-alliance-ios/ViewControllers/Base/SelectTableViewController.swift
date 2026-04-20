@@ -2,7 +2,7 @@ import UIKit
 
 protocol SelectTableViewControllerDelegate: AnyObject {
 
-    associatedtype OptionType: Comparable
+    associatedtype OptionType: Equatable
 
     func optionSelected(_ option: OptionType)
     func titleForOption(_ option: OptionType) -> String
