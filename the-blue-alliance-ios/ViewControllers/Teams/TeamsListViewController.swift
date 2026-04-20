@@ -5,7 +5,10 @@ protocol TeamsListViewControllerDelegate: AnyObject {
     func teamSelected(_ team: any TeamDisplayable)
 }
 
-class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>: TBASearchableTableViewController, Refreshable, Stateful {
+class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
+    TBASearchableTableViewController,
+    Refreshable, Stateful
+{
 
     weak var delegate: TeamsListViewControllerDelegate?
 
@@ -49,11 +52,16 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>: T
     // MARK: - Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, APITeam>(tableView: tableView) { tableView, indexPath, team in
+        dataSource = TableViewDataSource<String, APITeam>(tableView: tableView) {
+            tableView,
+            indexPath,
+            team in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
-            cell.viewModel = TeamCellViewModel(teamNumber: "\(team.teamNumber)",
-                                               nickname: team.displayNickname,
-                                               location: team.locationString)
+            cell.viewModel = TeamCellViewModel(
+                teamNumber: "\(team.teamNumber)",
+                nickname: team.displayNickname,
+                location: team.locationString
+            )
             cell.accessibilityIdentifier = "team.\(team.key)"
             return cell
         }
@@ -75,8 +83,9 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>: T
 
     private func searchMatch(team: APITeam) -> Bool {
         guard showSearch,
-              let query = searchController.searchBar.text?.lowercased(),
-              !query.isEmpty else {
+            let query = searchController.searchBar.text?.lowercased(),
+            !query.isEmpty
+        else {
             return true
         }
         if "\(team.teamNumber)".contains(query) { return true }

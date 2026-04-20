@@ -69,32 +69,70 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<TeamSummarySection, TeamSummaryItem>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
-            guard let self else { return nil }
-            switch item {
-            case .teamInfo(let team):
-                return self.cellForTeam(team, in: tableView, at: indexPath)
-            case .status(let status):
-                return Self.reverseSubtitleCell(in: tableView, title: "Status", subtitle: status, at: indexPath)
-            case .rank(let rank, let total):
-                return Self.reverseSubtitleCell(in: tableView, title: "Rank", subtitle: "\(rank)\(rank.suffix) (of \(total))", at: indexPath)
-            case .record(let wins, let losses, let ties, let dqs):
-                let subtitle: String = {
-                    let base = "\(wins)-\(losses)-\(ties)"
-                    if let dqs, dqs > 0 { return "\(base) (\(dqs) DQ)" }
-                    return base
-                }()
-                return Self.reverseSubtitleCell(in: tableView, title: "Record", subtitle: subtitle, at: indexPath)
-            case .average(let average):
-                return Self.reverseSubtitleCell(in: tableView, title: "Average", subtitle: "\(average)", at: indexPath)
-            case .breakdown(let breakdown):
-                return Self.reverseSubtitleCell(in: tableView, title: "Ranking Breakdown", subtitle: breakdown, at: indexPath)
-            case .alliance(let allianceStatus):
-                return Self.reverseSubtitleCell(in: tableView, title: "Alliance", subtitle: allianceStatus, at: indexPath)
-            case .match(let match, let baseTeamKey):
-                return Self.cellForMatch(match, baseTeamKey: baseTeamKey, in: tableView, at: indexPath)
+        dataSource = TableViewDataSource<TeamSummarySection, TeamSummaryItem>(
+            tableView: tableView,
+            cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+                guard let self else { return nil }
+                switch item {
+                case .teamInfo(let team):
+                    return self.cellForTeam(team, in: tableView, at: indexPath)
+                case .status(let status):
+                    return Self.reverseSubtitleCell(
+                        in: tableView,
+                        title: "Status",
+                        subtitle: status,
+                        at: indexPath
+                    )
+                case .rank(let rank, let total):
+                    return Self.reverseSubtitleCell(
+                        in: tableView,
+                        title: "Rank",
+                        subtitle: "\(rank)\(rank.suffix) (of \(total))",
+                        at: indexPath
+                    )
+                case .record(let wins, let losses, let ties, let dqs):
+                    let subtitle: String = {
+                        let base = "\(wins)-\(losses)-\(ties)"
+                        if let dqs, dqs > 0 { return "\(base) (\(dqs) DQ)" }
+                        return base
+                    }()
+                    return Self.reverseSubtitleCell(
+                        in: tableView,
+                        title: "Record",
+                        subtitle: subtitle,
+                        at: indexPath
+                    )
+                case .average(let average):
+                    return Self.reverseSubtitleCell(
+                        in: tableView,
+                        title: "Average",
+                        subtitle: "\(average)",
+                        at: indexPath
+                    )
+                case .breakdown(let breakdown):
+                    return Self.reverseSubtitleCell(
+                        in: tableView,
+                        title: "Ranking Breakdown",
+                        subtitle: breakdown,
+                        at: indexPath
+                    )
+                case .alliance(let allianceStatus):
+                    return Self.reverseSubtitleCell(
+                        in: tableView,
+                        title: "Alliance",
+                        subtitle: allianceStatus,
+                        at: indexPath
+                    )
+                case .match(let match, let baseTeamKey):
+                    return Self.cellForMatch(
+                        match,
+                        baseTeamKey: baseTeamKey,
+                        in: tableView,
+                        at: indexPath
+                    )
+                }
             }
-        })
+        )
         dataSource.delegate = self
         dataSource.statefulDelegate = self
     }
@@ -117,13 +155,19 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         // Next match
         if let nextMatch, event?.isHappeningNow == true {
             snapshot.appendSections([.nextMatch])
-            snapshot.appendItems([.match(match: nextMatch, baseTeamKey: teamKey)], toSection: .nextMatch)
+            snapshot.appendItems(
+                [.match(match: nextMatch, baseTeamKey: teamKey)],
+                toSection: .nextMatch
+            )
         }
 
         // Last match
         if let lastMatch, event?.isHappeningNow == true {
             snapshot.appendSections([.lastMatch])
-            snapshot.appendItems([.match(match: lastMatch, baseTeamKey: teamKey)], toSection: .lastMatch)
+            snapshot.appendItems(
+                [.match(match: lastMatch, baseTeamKey: teamKey)],
+                toSection: .lastMatch
+            )
         }
 
         // Playoff info
@@ -152,13 +196,16 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             case .ef: return "Octofinals"
             case .qf: return "Quarterfinals"
             case .sf: return "Semifinals"
-            case .f:  return "Finals"
+            case .f: return "Finals"
             }
         }()
         switch playoff.status {
         case .playing:
             if let record = playoff.currentLevelRecord {
-                return .status(status: "Currently \(record.wins)-\(record.losses)-\(record.ties) in the \(compLevel)")
+                return .status(
+                    status:
+                        "Currently \(record.wins)-\(record.losses)-\(record.ties) in the \(compLevel)"
+                )
             }
             return nil
         case .eliminated:
@@ -175,7 +222,9 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     private func playoffItems() -> [TeamSummaryItem] {
         var items: [TeamSummaryItem] = []
-        if let allianceStatus = eventStatus?.allianceStatusStr, allianceStatus != "--", !allianceStatus.isEmpty {
+        if let allianceStatus = eventStatus?.allianceStatusStr, allianceStatus != "--",
+            !allianceStatus.isEmpty
+        {
             items.append(.alliance(allianceStatus: allianceStatus))
         }
         if let record = eventStatus?.playoff?.record {
@@ -193,7 +242,14 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             items.append(.rank(rank: rank, total: total))
         }
         if let record = eventStatus?.qual?.ranking?.record {
-            items.append(.record(wins: record.wins, losses: record.losses, ties: record.ties, dqs: eventStatus?.qual?.ranking?.dq))
+            items.append(
+                .record(
+                    wins: record.wins,
+                    losses: record.losses,
+                    ties: record.ties,
+                    dqs: eventStatus?.qual?.ranking?.dq
+                )
+            )
         }
         if let average = eventStatus?.qual?.ranking?.qualAverage {
             items.append(.average(average: average))
@@ -206,8 +262,9 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     private func rankingInfoString() -> String? {
         guard let ranking = eventStatus?.qual?.ranking,
-              let sortOrders = ranking.sortOrders,
-              let info = eventStatus?.qual?.sortOrderInfo else { return nil }
+            let sortOrders = ranking.sortOrders,
+            let info = eventStatus?.qual?.sortOrderInfo
+        else { return nil }
         let parts: [String] = zip(info, sortOrders).compactMap { info, value in
             guard let name = info.name else { return nil }
             let precision = info.precision ?? 0
@@ -223,28 +280,50 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Cells
 
-    private func cellForTeam(_ team: Team, in tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+    private func cellForTeam(_ team: Team, in tableView: UITableView, at indexPath: IndexPath)
+        -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
-        cell.viewModel = InfoCellViewModel(nameString: team.displayNickname, subtitleStrings: [team.locationString].compactMap { $0 })
+        cell.viewModel = InfoCellViewModel(
+            nameString: team.displayNickname,
+            subtitleStrings: [team.locationString].compactMap { $0 }
+        )
         cell.accessoryType = .disclosureIndicator
         cell.selectionStyle = .none
         return cell
     }
 
-    private static func reverseSubtitleCell(in tableView: UITableView, title: String, subtitle: String, at indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+    private static func reverseSubtitleCell(
+        in tableView: UITableView,
+        title: String,
+        subtitle: String,
+        at indexPath: IndexPath
+    ) -> ReverseSubtitleTableViewCell {
+        let cell =
+            tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel.text = title
         // Strip HTML tags — the status strings from TBA often include `<b>` markers.
-        let sanitized = subtitle.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+        let sanitized = subtitle.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(
+            of: "</b>",
+            with: ""
+        )
         cell.subtitleLabel.text = sanitized
         cell.accessoryType = .none
         cell.selectionStyle = .none
         return cell
     }
 
-    private static func cellForMatch(_ match: Match, baseTeamKey: String?, in tableView: UITableView, at indexPath: IndexPath) -> MatchTableViewCell {
+    private static func cellForMatch(
+        _ match: Match,
+        baseTeamKey: String?,
+        in tableView: UITableView,
+        at indexPath: IndexPath
+    ) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-        cell.viewModel = MatchViewModel(apiMatch: match, baseTeamKeys: baseTeamKey.map { [$0] } ?? [])
+        cell.viewModel = MatchViewModel(
+            apiMatch: match,
+            baseTeamKeys: baseTeamKey.map { [$0] } ?? []
+        )
         return cell
     }
 
@@ -291,7 +370,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
             let teamHandle = Task { try? await self.dependencies.api.team(key: self.teamKey) }
             let eventHandle = Task { try? await self.dependencies.api.event(key: self.eventKey) }
-            let statusHandle = Task { try? await self.dependencies.api.teamEventStatus(teamKey: self.teamKey, eventKey: self.eventKey) }
+            let statusHandle = Task {
+                try? await self.dependencies.api.teamEventStatus(
+                    teamKey: self.teamKey,
+                    eventKey: self.eventKey
+                )
+            }
 
             self.team = await teamHandle.value
             self.event = await eventHandle.value

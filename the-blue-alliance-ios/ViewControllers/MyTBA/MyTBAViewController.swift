@@ -8,7 +8,6 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
-
     private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
     private(set) var favoritesViewController: MyTBAFavoritesViewController
     private(set) var subscriptionsViewController: MyTBASubscriptionsViewController
@@ -16,10 +15,14 @@ class MyTBAViewController: ContainerViewController {
     private var signInView: UIView! {
         return signInViewController.view
     }
-    private lazy var signOutBarButtonItem = UIBarButtonItem(title: "Sign Out", primaryAction: UIAction { [weak self] _ in
-        self?.confirmLogout()
-    })
-    private var signOutActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
+    private lazy var signOutBarButtonItem = UIBarButtonItem(
+        title: "Sign Out",
+        primaryAction: UIAction { [weak self] _ in
+            self?.confirmLogout()
+        }
+    )
+    private var signOutActivityIndicatorBarButtonItem =
+        UIBarButtonItem.activityIndicatorBarButtonItem()
 
     var isLoggingOut: Bool = false {
         didSet {
@@ -37,9 +40,11 @@ class MyTBAViewController: ContainerViewController {
         favoritesViewController = MyTBAFavoritesViewController(dependencies: dependencies)
         subscriptionsViewController = MyTBASubscriptionsViewController(dependencies: dependencies)
 
-        super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
-                   segmentedControlTitles: ["Favorites", "Subscriptions"],
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [favoritesViewController, subscriptionsViewController],
+            segmentedControlTitles: ["Favorites", "Subscriptions"],
+            dependencies: dependencies
+        )
 
         title = RootType.myTBA.title
         tabBarItem.image = RootType.myTBA.icon
@@ -104,7 +109,9 @@ class MyTBAViewController: ContainerViewController {
             } catch let error as MyTBAError where error.code == 404 {
                 self.logoutSuccessful()
             } catch {
-                self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
+                self.showErrorAlert(
+                    with: "Unable to sign out of myTBA - \(error.localizedDescription)"
+                )
             }
         }
     }
@@ -128,10 +135,20 @@ class MyTBAViewController: ContainerViewController {
     // MARK: - Interface Methods
 
     private func confirmLogout() {
-        let signOutAlertController = UIAlertController(title: "Log Out?", message: "Are you sure you want to sign out of myTBA?", preferredStyle: .alert)
-        signOutAlertController.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { [weak self] _ in
-            self?.logout()
-        }))
+        let signOutAlertController = UIAlertController(
+            title: "Log Out?",
+            message: "Are you sure you want to sign out of myTBA?",
+            preferredStyle: .alert
+        )
+        signOutAlertController.addAction(
+            UIAlertAction(
+                title: "Log Out",
+                style: .default,
+                handler: { [weak self] _ in
+                    self?.logout()
+                }
+            )
+        )
         signOutAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(signOutAlertController, animated: true)
     }
@@ -181,11 +198,13 @@ extension MyTBAViewController: MyTBAAuthenticationObservable {
 extension MyTBAViewController: SignInViewControllerDelegate {
 
     func signInError(error: Error) {
-         showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
+        showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
     }
 
     func pushRegistrationError(error: Error) {
-        showErrorAlert(with: "Error registering for push notifications - \(error.localizedDescription)")
+        showErrorAlert(
+            with: "Error registering for push notifications - \(error.localizedDescription)"
+        )
     }
 
 }

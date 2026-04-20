@@ -9,7 +9,7 @@ extension Match.CompLevelPayload {
         case .ef: return 1
         case .qf: return 2
         case .sf: return 3
-        case .f:  return 4
+        case .f: return 4
         }
     }
 
@@ -19,7 +19,7 @@ extension Match.CompLevelPayload {
         case .ef: return "Octofinals"
         case .qf: return "Quarterfinals"
         case .sf: return "Semifinals"
-        case .f:  return "Finals"
+        case .f: return "Finals"
         }
     }
 
@@ -29,7 +29,7 @@ extension Match.CompLevelPayload {
         case .ef: return "Eighths"
         case .qf: return "Quarters"
         case .sf: return "Semis"
-        case .f:  return "Finals"
+        case .f: return "Finals"
         }
     }
 }
@@ -81,7 +81,8 @@ extension Match {
     var breakdownDict: [String: Any]? {
         guard let scoreBreakdown else { return nil }
         guard let data = try? JSONEncoder().encode(scoreBreakdown),
-              let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+        else {
             return nil
         }
         return obj

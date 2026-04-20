@@ -13,12 +13,17 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
     init(event: Event, dependencies: Dependencies) {
         self.event = event
 
-        let districtPointsViewController = EventDistrictPointsViewController(eventKey: event.key, dependencies: dependencies)
+        let districtPointsViewController = EventDistrictPointsViewController(
+            eventKey: event.key,
+            dependencies: dependencies
+        )
 
-        super.init(viewControllers: [districtPointsViewController],
-                   navigationTitle: "District Points",
-                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [districtPointsViewController],
+            navigationTitle: "District Points",
+            navigationSubtitle: "@ \(event.friendlyNameWithYear)",
+            dependencies: dependencies
+        )
 
         districtPointsViewController.delegate = self
     }
@@ -32,7 +37,12 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func teamSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(
+            teamKey: teamKey,
+            eventKey: event.key,
+            year: event.year,
+            dependencies: dependencies
+        )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -87,11 +97,16 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, TeamDistrictPointsRow>(tableView: tableView) { tableView, indexPath, row in
+        dataSource = TableViewDataSource<String, TeamDistrictPointsRow>(tableView: tableView) {
+            tableView,
+            indexPath,
+            row in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
-            cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)",
-                                                  apiTeamKey: row.teamKey,
-                                                  points: row.total)
+            cell.viewModel = RankingCellViewModel(
+                rank: "Rank \(indexPath.row + 1)",
+                apiTeamKey: row.teamKey,
+                points: row.total
+            )
             return cell
         }
         dataSource.statefulDelegate = self
@@ -101,7 +116,8 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
     private func apply(points: EventDistrictPoints?) {
         let sortedRows: [TeamDistrictPointsRow]
         if let dict = points?.points.additionalProperties {
-            sortedRows = dict
+            sortedRows =
+                dict
                 .map { TeamDistrictPointsRow(teamKey: $0.key, total: $0.value.total) }
                 .sorted { $0.total > $1.total }
         } else {

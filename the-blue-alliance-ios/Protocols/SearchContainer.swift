@@ -34,7 +34,8 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         searchController.searchBar.searchTextField.textColor = UIColor.white
         searchController.searchBar.searchTextField.tintColor = UIColor.white
         searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.white
-        searchController.searchBar.searchTextField.backgroundColor = UIColor.searchFieldBackgroundColor
+        searchController.searchBar.searchTextField.backgroundColor =
+            UIColor.searchFieldBackgroundColor
         searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
             string: "Search teams and events",
             attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
@@ -54,17 +55,29 @@ protocol SearchContainerDelegate {
 extension SearchContainerDelegate where Self: ContainerViewController {
 
     func eventSelected(eventKey: String, name: String?) {
-        let eventViewController = EventViewController(eventKey: eventKey, name: name, dependencies: dependencies)
+        let eventViewController = EventViewController(
+            eventKey: eventKey,
+            name: name,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
     func teamSelected(teamKey: String, nickname: String?) {
-        let teamViewController = TeamViewController(teamKey: teamKey, nickname: nickname, dependencies: dependencies)
+        let teamViewController = TeamViewController(
+            teamKey: teamKey,
+            nickname: nickname,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 
     func teamSelected(_ team: any TeamDisplayable) {
-        let teamViewController = TeamViewController(teamKey: team.key, nickname: team.nickname, dependencies: dependencies)
+        let teamViewController = TeamViewController(
+            teamKey: team.key,
+            nickname: team.nickname,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

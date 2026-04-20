@@ -58,7 +58,10 @@ extension Refreshable {
                 self.hideNoData()
 
                 let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0
-                self.refreshView.setContentOffset(CGPoint(x: 0, y: -refreshControlHeight), animated: true)
+                self.refreshView.setContentOffset(
+                    CGPoint(x: 0, y: -refreshControlHeight),
+                    animated: true
+                )
                 self.refreshControl?.beginRefreshing()
             } else {
                 self.refreshControl?.endRefreshing()
@@ -70,9 +73,12 @@ extension Refreshable {
 
     func enableRefreshing() {
         let refreshControl = UIRefreshControl()
-        refreshControl.addAction(UIAction { [weak self] _ in
-            self?.refresh()
-        }, for: .valueChanged)
+        refreshControl.addAction(
+            UIAction { [weak self] _ in
+                self?.refresh()
+            },
+            for: .valueChanged
+        )
 
         self.refreshControl = refreshControl
     }

@@ -14,7 +14,8 @@ struct CachePolicyStore {
     var current: TBAAPI.CachePolicy {
         get {
             guard let raw = defaults.string(forKey: kTBACachePolicy),
-                  let policy = TBAAPI.CachePolicy(rawValue: raw) else {
+                let policy = TBAAPI.CachePolicy(rawValue: raw)
+            else {
                 return .default
             }
             return policy

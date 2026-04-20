@@ -11,7 +11,6 @@ class TeamAtDistrictViewController: ContainerViewController {
     private let year: Int
     private var ranking: DistrictRanking
 
-
     private var summaryViewController: DistrictTeamSummaryViewController!
 
     // MARK: Init
@@ -22,8 +21,16 @@ class TeamAtDistrictViewController: ContainerViewController {
         self.districtKey = district.key
         self.year = year
 
-        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, districtKey: district.key, dependencies: dependencies)
-        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, districtKey: district.key, dependencies: dependencies)
+        let summaryViewController = DistrictTeamSummaryViewController(
+            ranking: ranking,
+            districtKey: district.key,
+            dependencies: dependencies
+        )
+        let breakdownViewController = DistrictBreakdownViewController(
+            ranking: ranking,
+            districtKey: district.key,
+            dependencies: dependencies
+        )
 
         let teamNumber = TeamKey.trimFRCPrefix(ranking.teamKey)
         super.init(
@@ -35,7 +42,12 @@ class TeamAtDistrictViewController: ContainerViewController {
         )
 
         rightBarButtonItems = [
-            UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+            UIBarButtonItem(
+                image: UIImage.teamIcon,
+                style: .plain,
+                target: self,
+                action: #selector(pushTeam)
+            )
         ].compactMap({ $0 })
 
         summaryViewController.delegate = self
@@ -58,7 +70,12 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
 
     func eventPointsSelected(eventKey: String) {
         let year = Int(eventKey.prefix(4)) ?? self.year
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(
+            teamKey: teamKey,
+            eventKey: eventKey,
+            year: year,
+            dependencies: dependencies
+        )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

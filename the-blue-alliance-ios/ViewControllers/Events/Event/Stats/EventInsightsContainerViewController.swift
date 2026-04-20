@@ -15,21 +15,30 @@ class EventInsightsContainerViewController: ContainerViewController {
     init(event: Event, dependencies: Dependencies) {
         self.event = event
 
-        teamStatsViewController = EventTeamStatsTableViewController(eventKey: event.key, dependencies: dependencies)
+        teamStatsViewController = EventTeamStatsTableViewController(
+            eventKey: event.key,
+            dependencies: dependencies
+        )
 
         var eventStatsViewController: EventInsightsViewController?
         // Only show event insights if year is 2016 or onward
         var titles = ["Team Stats"]
         if event.year >= 2016 {
             titles.append("Event Insights")
-            eventStatsViewController = EventInsightsViewController(eventKey: event.key, year: event.year, dependencies: dependencies)
+            eventStatsViewController = EventInsightsViewController(
+                eventKey: event.key,
+                year: event.year,
+                dependencies: dependencies
+            )
         }
 
-        super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
-                   navigationTitle: "Stats",
-                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   segmentedControlTitles: titles,
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
+            navigationTitle: "Stats",
+            navigationSubtitle: "@ \(event.friendlyNameWithYear)",
+            segmentedControlTitles: titles,
+            dependencies: dependencies
+        )
 
         teamStatsViewController.delegate = self
     }
@@ -41,15 +50,24 @@ class EventInsightsContainerViewController: ContainerViewController {
     // MARK: - Private Methods
 
     private func showFilter() {
-        let selectTableViewController = SelectTableViewController<EventInsightsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, dependencies: dependencies)
+        let selectTableViewController = SelectTableViewController<
+            EventInsightsContainerViewController
+        >(
+            current: teamStatsViewController.filter,
+            options: EventTeamStatFilter.allCases,
+            dependencies: dependencies
+        )
         selectTableViewController.title = "Sort stats by"
         selectTableViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: selectTableViewController)
         nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
-            self?.navigationController?.dismiss(animated: true)
-        })
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            systemItem: .done,
+            primaryAction: UIAction { [weak self] _ in
+                self?.navigationController?.dismiss(animated: true)
+            }
+        )
 
         navigationController?.present(nav, animated: true)
     }
@@ -77,7 +95,12 @@ extension EventInsightsContainerViewController: EventTeamStatsSelectionDelegate 
     }
 
     func eventTeamStatSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(
+            teamKey: teamKey,
+            eventKey: event.key,
+            year: event.year,
+            dependencies: dependencies
+        )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

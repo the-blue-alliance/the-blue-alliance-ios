@@ -7,7 +7,10 @@ protocol TableViewDataSourceDelegate: AnyObject {
 
 /// TableViewDataSource is a wrapper around a UITableViewDiffableDataSource that implements
 /// UITableViewDataSource for TBA where we manage no data states and whatnot for table views
-class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<Section, Item> {
+class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<
+    Section, Item
+>
+{
 
     weak var delegate: TableViewDataSourceDelegate?
     weak var statefulDelegate: (Stateful & Refreshable)?
@@ -21,17 +24,21 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffabl
 
     // MARK: - Snapshot apply
 
-    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
-                        animatingDifferences: Bool = true,
-                        completion: (() -> Void)? = nil) {
+    override func apply(
+        _ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
+        animatingDifferences: Bool = true,
+        completion: (() -> Void)? = nil
+    ) {
         super.apply(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
             self?.updateEmptyState()
             completion?()
         }
     }
 
-    override func applySnapshotUsingReloadData(_ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
-                                                completion: (() -> Void)? = nil) {
+    override func applySnapshotUsingReloadData(
+        _ snapshot: NSDiffableDataSourceSnapshot<Section, Item>,
+        completion: (() -> Void)? = nil
+    ) {
         super.applySnapshotUsingReloadData(snapshot) { [weak self] in
             self?.updateEmptyState()
             completion?()
@@ -48,7 +55,9 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffabl
 
     // MARK: UITableViewDataSource
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
+        -> String?
+    {
         return delegate?.title(forSection: section)
     }
 

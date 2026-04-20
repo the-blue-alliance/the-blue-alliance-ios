@@ -41,7 +41,9 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Stateful {
         return 3
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventTeamStatTableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> EventTeamStatTableViewCell
+    {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
         cell.selectionStyle = .none
 

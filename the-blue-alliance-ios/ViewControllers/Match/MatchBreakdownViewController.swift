@@ -14,7 +14,7 @@ struct BreakdownRow: Hashable {
     var red: [AnyHashable?] = []
     var blue: [AnyHashable?] = []
     var type: BreakdownRowType = .normal
-    var offset: Int = 0 // Used so we can have rows with duplicate titles
+    var offset: Int = 0  // Used so we can have rows with duplicate titles
 
     var redElements: [BreakdownElement] {
         return red.compactMap({ $0 as? BreakdownElement })
@@ -82,8 +82,10 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
     // MARK: - Methods
 
     func setupDataSource() {
-        dataSource = TableViewDataSource<String?, BreakdownRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchBreakdownTableViewCell
+        dataSource = TableViewDataSource<String?, BreakdownRow>(tableView: tableView) {
+            (tableView, indexPath, row) -> UITableViewCell? in
+            let cell =
+                tableView.dequeueReusableCell(indexPath: indexPath) as MatchBreakdownTableViewCell
             cell.titleText = row.title
             cell.redElements = row.redElements
             cell.blueElements = row.blueElements
@@ -132,7 +134,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         guard breakdownConfigurator == nil else {
             return "No breakdown for match"
         }
-        return "\(year) Match Breakdowns are not supported - try updating your app via the App Store."
+        return
+            "\(year) Match Breakdowns are not supported - try updating your app via the App Store."
     }
 
 }

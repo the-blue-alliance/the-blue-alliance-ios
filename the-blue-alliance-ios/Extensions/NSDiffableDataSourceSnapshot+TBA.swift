@@ -33,7 +33,11 @@ extension NSDiffableDataSourceSnapshot {
         }
     }
 
-    mutating func insertItem(_ identifier: ItemIdentifierType, inSection section: SectionIdentifierType, atIndex index: Int) {
+    mutating func insertItem(
+        _ identifier: ItemIdentifierType,
+        inSection section: SectionIdentifierType,
+        atIndex index: Int
+    ) {
         if index < 0 {
             fatalError("insertItem must be called with a positive index")
         }

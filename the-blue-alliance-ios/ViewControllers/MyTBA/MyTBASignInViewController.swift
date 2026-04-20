@@ -11,7 +11,9 @@ protocol SignInViewControllerDelegate: AnyObject {
     func pushRegistrationError(error: Error)
 }
 
-class MyTBASignInViewController: UIViewController, ASAuthorizationControllerPresentationContextProviding {
+class MyTBASignInViewController: UIViewController,
+    ASAuthorizationControllerPresentationContextProviding
+{
 
     @IBOutlet var starImageView: UIImageView! {
         didSet {
@@ -43,13 +45,18 @@ class MyTBASignInViewController: UIViewController, ASAuthorizationControllerPres
         styleInterface()
     }
 
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func willTransition(
+        to newCollection: UITraitCollection,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ) {
         super.willTransition(to: newCollection, with: coordinator)
 
         // Show/hide our images for compact size classes
         let shouldHideImages = newCollection.verticalSizeClass == .compact
         let newImageAlpha: CGFloat = shouldHideImages ? 0.0 : 1.0
-        let images = [starImageView, favoriteImageView, subscriptionImageView].filter({ $0.isHidden != shouldHideImages })
+        let images = [starImageView, favoriteImageView, subscriptionImageView].filter({
+            $0.isHidden != shouldHideImages
+        })
         coordinator.animate(alongsideTransition: { (_) in
             images.forEach {
                 $0.alpha = newImageAlpha
@@ -140,24 +147,24 @@ class MyTBASignInViewController: UIViewController, ASAuthorizationControllerPres
     }
 
     private func randomNonceString(length: Int = 32) -> String {
-      precondition(length > 0)
-      var randomBytes = [UInt8](repeating: 0, count: length)
-      let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-      if errorCode != errSecSuccess {
-        fatalError(
-          "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-        )
-      }
+        precondition(length > 0)
+        var randomBytes = [UInt8](repeating: 0, count: length)
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        if errorCode != errSecSuccess {
+            fatalError(
+                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+            )
+        }
 
-      let charset: [Character] =
-        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        let charset: [Character] =
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
 
-      let nonce = randomBytes.map { byte in
-        // Pick a random character from the set, wrapping around if needed.
-        charset[Int(byte) % charset.count]
-      }
+        let nonce = randomBytes.map { byte in
+            // Pick a random character from the set, wrapping around if needed.
+            charset[Int(byte) % charset.count]
+        }
 
-      return String(nonce)
+        return String(nonce)
     }
 
 }
@@ -168,23 +175,32 @@ extension MyTBASignInViewController: ASAuthorizationControllerDelegate {
         return view.window!
     }
 
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization
+    ) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             guard let nonce = currentNonce else {
-                fatalError("Invalid state: A login callback was received, but no login request was sent.")
+                fatalError(
+                    "Invalid state: A login callback was received, but no login request was sent."
+                )
             }
             guard let appleIDToken = appleIDCredential.identityToken else {
                 print("Unable to fetch identity token")
                 return
             }
             guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                print(
+                    "Unable to serialize token string from data: \(appleIDToken.debugDescription)"
+                )
                 return
             }
             // Initialize a Firebase credential, including the user's full name.
-            let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
-                                                           rawNonce: nonce,
-                                                           fullName: appleIDCredential.fullName)
+            let credential = OAuthProvider.appleCredential(
+                withIDToken: idTokenString,
+                rawNonce: nonce,
+                fullName: appleIDCredential.fullName
+            )
             // Sign in with Firebase.
             Auth.auth().signIn(with: credential) { (authResult, error) in
                 if let error {
@@ -200,7 +216,10 @@ extension MyTBASignInViewController: ASAuthorizationControllerDelegate {
         }
     }
 
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithError error: Error
+    ) {
         // Handle error.
         print("Sign in with Apple errored: \(error)")
     }

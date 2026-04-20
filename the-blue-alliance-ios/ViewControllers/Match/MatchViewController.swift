@@ -13,7 +13,6 @@ class MatchViewController: MyTBAContainerViewController {
     private(set) var infoViewController: MatchInfoViewController
     private let breakdownViewController: MatchBreakdownViewController
 
-
     override var subscribableModel: MyTBASubscribable {
         MatchSubscribable(modelKey: matchKey)
     }
@@ -24,18 +23,23 @@ class MatchViewController: MyTBAContainerViewController {
         self.matchKey = matchKey
         self.teamKey = teamKey
 
-        infoViewController = MatchInfoViewController(matchKey: matchKey, teamKey: teamKey, dependencies: dependencies)
-        breakdownViewController = MatchBreakdownViewController(matchKey: matchKey,
-                                                               year: MatchKey.year(from: matchKey) ?? 0,
-                                                               dependencies: dependencies)
+        infoViewController = MatchInfoViewController(
+            matchKey: matchKey,
+            teamKey: teamKey,
+            dependencies: dependencies
+        )
+        breakdownViewController = MatchBreakdownViewController(
+            matchKey: matchKey,
+            year: MatchKey.year(from: matchKey) ?? 0,
+            dependencies: dependencies
+        )
 
         super.init(
             viewControllers: [infoViewController, breakdownViewController],
             navigationTitle: "Match",
             navigationSubtitle: nil,
             segmentedControlTitles: ["Info", "Breakdown"],
-            
-            
+
             dependencies: dependencies
         )
 
@@ -62,11 +66,12 @@ class MatchViewController: MyTBAContainerViewController {
             // Task handles heap-allocate and sidestep the allocator entirely.
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
             let matchHandle = Task { try? await self.dependencies.api.match(key: self.matchKey) }
-            let eventHandle = Task { try? await self.dependencies.api.event(key: MatchKey.eventKey(from: self.matchKey)) }
+            let eventHandle = Task {
+                try? await self.dependencies.api.event(key: MatchKey.eventKey(from: self.matchKey))
+            }
 
             let match = await matchHandle.value
             let event = await eventHandle.value
-
 
             if let match {
                 self.match = match
@@ -96,7 +101,12 @@ extension MatchViewController: MatchSummaryViewDelegate {
         let targetKey = "frc\(teamNumber)"
         guard let match, match.allTeamKeys.contains(targetKey) else { return }
         let year = match.year ?? 0
-        let teamAtEventVC = TeamAtEventViewController(teamKey: targetKey, eventKey: match.eventKey, year: year, dependencies: dependencies)
+        let teamAtEventVC = TeamAtEventViewController(
+            teamKey: targetKey,
+            eventKey: match.eventKey,
+            year: year,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
 

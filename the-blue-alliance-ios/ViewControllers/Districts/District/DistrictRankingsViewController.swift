@@ -49,7 +49,10 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, DistrictRanking>(tableView: tableView) { tableView, indexPath, ranking in
+        dataSource = TableViewDataSource<String, DistrictRanking>(tableView: tableView) {
+            tableView,
+            indexPath,
+            ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             cell.viewModel = RankingCellViewModel(apiDistrictRanking: ranking)
             cell.accessibilityIdentifier = "ranking.\(ranking.teamKey)"
@@ -89,7 +92,8 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey) ?? []
+            let fetched =
+                try await self.dependencies.api.districtRankings(key: self.districtKey) ?? []
             self.allRankings = fetched
             self.applyRankings(fetched)
         }

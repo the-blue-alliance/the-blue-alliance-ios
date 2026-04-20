@@ -22,7 +22,9 @@ class TeamHeaderView: UIView {
     }
 
     private lazy var rootStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [avatarImageView, teamInfoStackView, yearStackView])
+        let stackView = UIStackView(arrangedSubviews: [
+            avatarImageView, teamInfoStackView, yearStackView,
+        ])
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.alignment = .center
@@ -35,7 +37,9 @@ class TeamHeaderView: UIView {
         let label = TeamHeaderView.teamHeaderLabel()
         let font = UIFont.preferredFont(forTextStyle: .title1)
         let fontMetrics = UIFontMetrics(forTextStyle: .title1)
-        label.font = fontMetrics.scaledFont(for: UIFont.systemFont(ofSize: font.pointSize, weight: .semibold))
+        label.font = fontMetrics.scaledFont(
+            for: UIFont.systemFont(ofSize: font.pointSize, weight: .semibold)
+        )
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -97,12 +101,18 @@ class TeamHeaderView: UIView {
     private func configureView() {
         let newAvatar = viewModel.avatar
         let shouldHide = newAvatar == nil
-        let avatarChanged = avatarImageView.image != newAvatar || avatarImageView.isHidden != shouldHide
+        let avatarChanged =
+            avatarImageView.image != newAvatar || avatarImageView.isHidden != shouldHide
 
         if window != nil, avatarChanged {
-            UIView.transition(with: avatarImageView, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                self.avatarImageView.image = newAvatar
-            })
+            UIView.transition(
+                with: avatarImageView,
+                duration: 0.25,
+                options: .transitionCrossDissolve,
+                animations: {
+                    self.avatarImageView.image = newAvatar
+                }
+            )
             UIView.animate(withDuration: 0.25) {
                 self.avatarImageView.isHidden = shouldHide
             }
@@ -163,7 +173,10 @@ private class AvatarImageView: UIView {
         layer.masksToBounds = true
         layer.cornerRadius = 5
 
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
+        let tapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(avatarTapped)
+        )
         addGestureRecognizer(tapGestureRecognizer)
     }
 
@@ -207,7 +220,8 @@ class YearButton: UIButton {
         config.imagePlacement = .trailing
         config.imagePadding = 2
         config.title = "----"
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
+            incoming in
             var outgoing = incoming
             let base = UIFont.preferredFont(forTextStyle: .callout).pointSize
             outgoing.font = UIFont.monospacedDigitSystemFont(ofSize: base, weight: .bold)
@@ -217,7 +231,8 @@ class YearButton: UIButton {
 
         configurationUpdateHandler = { button in
             var updated = button.configuration
-            updated?.background.backgroundColor = button.isHighlighted ? UIColor.lightGray : UIColor.white
+            updated?.background.backgroundColor =
+                button.isHighlighted ? UIColor.lightGray : UIColor.white
             button.configuration = updated
         }
 

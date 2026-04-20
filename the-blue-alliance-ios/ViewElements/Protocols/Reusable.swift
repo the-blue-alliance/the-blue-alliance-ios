@@ -26,7 +26,8 @@ extension UITableView {
         return self.dequeueReusableCell(withIdentifier: T.reuseIdentifier, for: indexPath) as! T
     }
 
-    func registerReusableHeaderFooterView<T: UITableViewHeaderFooterView>(_: T.Type) where T: Reusable {
+    func registerReusableHeaderFooterView<T: UITableViewHeaderFooterView>(_: T.Type)
+    where T: Reusable {
         if let nib = T.nib {
             self.register(nib, forHeaderFooterViewReuseIdentifier: T.reuseIdentifier)
         } else {
@@ -50,7 +51,8 @@ extension UICollectionView {
     }
 
     func dequeueReusableCell<T: UICollectionViewCell>(indexPath: IndexPath) -> T where T: Reusable {
-        return self.dequeueReusableCell(withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
+        return self.dequeueReusableCell(withReuseIdentifier: T.reuseIdentifier, for: indexPath)
+            as! T
     }
 
     /*
@@ -61,7 +63,7 @@ extension UICollectionView {
             self.register(T.self, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: T.reuseIdentifier)
         }
     }
-
+    
     func dequeueReusableSupplementaryView<T: UICollectionViewCell>(elementKind: String, indexPath: IndexPath) -> T where T: Reusable {
         return self.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
     }

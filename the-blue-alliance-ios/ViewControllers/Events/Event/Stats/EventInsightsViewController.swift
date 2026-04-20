@@ -61,11 +61,14 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int)
+        -> UIView?
+    {
         guard section == 0 else {
             return UITableViewHeaderFooterView()
         }
-        guard let headerView: EventInsightsHeaderView = tableView.dequeueReusableHeaderFooterView() else {
+        guard let headerView: EventInsightsHeaderView = tableView.dequeueReusableHeaderFooterView()
+        else {
             return nil
         }
 
@@ -93,20 +96,25 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, InsightRow>(tableView: tableView) { (tableView, indexPath, row) -> UITableViewCell? in
+        dataSource = TableViewDataSource<String, InsightRow>(tableView: tableView) {
+            (tableView, indexPath, row) -> UITableViewCell? in
             if indexPath.section == 0 {
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventInsightsTableViewCell
+                let cell =
+                    tableView.dequeueReusableCell(indexPath: indexPath)
+                    as EventInsightsTableViewCell
                 cell.title = row.title
                 cell.leftTitle = row.qual ?? "----"
                 cell.rightTitle = row.playoff ?? "----"
                 cell.selectionStyle = .none
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+                let cell =
+                    tableView.dequeueReusableCell(indexPath: indexPath)
+                    as ReverseSubtitleTableViewCell
                 cell.titleLabel.text = row.title
                 let subtitle: [String] = [
                     "Quals: \(row.qual ?? "----")",
-                    "Playoffs: \(row.playoff ?? "----")"
+                    "Playoffs: \(row.playoff ?? "----")",
                 ]
                 cell.subtitleLabel.text = subtitle.joined(separator: "\n")
                 return cell
@@ -136,8 +144,10 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         runRefresh { [weak self] in
             guard let self else { return }
             let insights = try await self.dependencies.api.eventInsights(key: self.eventKey)
-            self.configureDataSource(qual: Self.toAnyDict(insights.qual),
-                                     playoff: Self.toAnyDict(insights.playoff))
+            self.configureDataSource(
+                qual: Self.toAnyDict(insights.qual),
+                playoff: Self.toAnyDict(insights.playoff)
+            )
         }
     }
 

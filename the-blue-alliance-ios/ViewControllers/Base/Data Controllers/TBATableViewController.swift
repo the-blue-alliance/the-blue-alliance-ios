@@ -4,7 +4,9 @@ import TBAAPI
 import TBAUtils
 import UIKit
 
-class TBATableViewController: UITableViewController, TableViewDataSourceDelegate, DataController, Navigatable {
+class TBATableViewController: UITableViewController, TableViewDataSourceDelegate, DataController,
+    Navigatable
+{
 
     let dependencies: Dependencies
 
@@ -60,8 +62,14 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if type(of: view) == UITableViewHeaderFooterView.self, let view = view as? UITableViewHeaderFooterView {
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplayHeaderView view: UIView,
+        forSection section: Int
+    ) {
+        if type(of: view) == UITableViewHeaderFooterView.self,
+            let view = view as? UITableViewHeaderFooterView
+        {
             // Setup text
             view.textLabel?.textColor = UIColor.white
             view.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)

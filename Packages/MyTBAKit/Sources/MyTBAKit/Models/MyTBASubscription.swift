@@ -21,7 +21,6 @@ public enum NotificationType: String, Codable {
 
     case verification = "verification"
 
-
     public func displayString() -> String {
         switch self {
         case .upcomingMatch:
@@ -47,7 +46,7 @@ public enum NotificationType: String, Codable {
         case .eventMatchVideo:
             return "Match Video Added"
         default:
-            return "" // These shouldn't render
+            return ""  // These shouldn't render
         }
     }
 }
@@ -76,7 +75,9 @@ public struct MyTBASubscription: MyTBAModel, Equatable, Codable {
 extension MyTBA {
 
     public func fetchSubscriptions() async throws -> [MyTBASubscription] {
-        let response: MyTBASubscriptionsResponse = try await callApi(method: "\(MyTBASubscription.arrayKey)/list")
+        let response: MyTBASubscriptionsResponse = try await callApi(
+            method: "\(MyTBASubscription.arrayKey)/list"
+        )
         return response.subscriptions ?? []
     }
 

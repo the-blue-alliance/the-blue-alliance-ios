@@ -67,9 +67,11 @@ public final class TBAAPI {
         let serverURL = (try? Servers.Server1.url()) ?? APIConstants.baseURL
         return Client(
             serverURL: serverURL,
-            transport: URLSessionTransport(configuration: .init(
-                session: URLSession(configuration: configuration)
-            ))
+            transport: URLSessionTransport(
+                configuration: .init(
+                    session: URLSession(configuration: configuration)
+                )
+            )
         )
     }
 }

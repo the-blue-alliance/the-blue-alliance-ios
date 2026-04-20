@@ -78,50 +78,53 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     }
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<EventInfoSection, EventInfoItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
-            switch item {
-            case .title:
-                return self.tableView(tableView, titleCellForRowAt: indexPath)
-            case .webcast(let webcast):
-                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-                cell.textLabel?.text = "Watch on \(webcast.displayName)"
-                cell.detailTextLabel?.text = webcast.channel
-                cell.accessoryType = .disclosureIndicator
-                return cell
-            case .alliances:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "Alliances"
-                return cell
-            case .districtPoints:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "District Points"
-                return cell
-            case .insights:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "Insights"
-                return cell
-            case .awards:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "Awards"
-                return cell
-            case .website:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "View event's website"
-                return cell
-            case .twitter:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "View \(self.eventKey) on Twitter"
-                return cell
-            case .youtube:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "View \(self.eventKey) on YouTube"
-                return cell
-            case .chiefDelphi:
-                let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                cell.textLabel?.text = "View photos on Chief Delphi"
-                return cell
+        dataSource = TableViewDataSource<EventInfoSection, EventInfoItem>(
+            tableView: tableView,
+            cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
+                switch item {
+                case .title:
+                    return self.tableView(tableView, titleCellForRowAt: indexPath)
+                case .webcast(let webcast):
+                    let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+                    cell.textLabel?.text = "Watch on \(webcast.displayName)"
+                    cell.detailTextLabel?.text = webcast.channel
+                    cell.accessoryType = .disclosureIndicator
+                    return cell
+                case .alliances:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "Alliances"
+                    return cell
+                case .districtPoints:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "District Points"
+                    return cell
+                case .insights:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "Insights"
+                    return cell
+                case .awards:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "Awards"
+                    return cell
+                case .website:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "View event's website"
+                    return cell
+                case .twitter:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "View \(self.eventKey) on Twitter"
+                    return cell
+                case .youtube:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "View \(self.eventKey) on YouTube"
+                    return cell
+                case .chiefDelphi:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "View photos on Chief Delphi"
+                    return cell
+                }
             }
-        })
+        )
     }
 
     private func updateEventInfo() {
@@ -164,7 +167,9 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Table View Methods
 
-    func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
         if let event {
             cell.viewModel = InfoCellViewModel(event: event)
@@ -182,7 +187,9 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, detailCellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, detailCellForRowAtIndexPath indexPath: IndexPath)
+        -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
         cell.accessoryType = .disclosureIndicator
         return cell

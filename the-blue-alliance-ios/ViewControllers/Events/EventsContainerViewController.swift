@@ -14,12 +14,19 @@ class EventsContainerViewController: ContainerViewController {
 
     init(dependencies: Dependencies) {
         let initialYear = dependencies.statusService.currentSeason
-        eventsViewController = WeekEventsViewController(year: initialYear, dependencies: dependencies)
+        eventsViewController = WeekEventsViewController(
+            year: initialYear,
+            dependencies: dependencies
+        )
 
-        super.init(viewControllers: [eventsViewController],
-                   navigationTitle: EventsContainerViewController.eventsTitle(eventsViewController.weekEvent),
-                   navigationSubtitle: ContainerViewController.yearSubtitle(initialYear),
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [eventsViewController],
+            navigationTitle: EventsContainerViewController.eventsTitle(
+                eventsViewController.weekEvent
+            ),
+            navigationSubtitle: ContainerViewController.yearSubtitle(initialYear),
+            dependencies: dependencies
+        )
 
         // TODO: We should be able to move this somewhere else and DRY this code
         title = RootType.events.title
@@ -66,7 +73,12 @@ class EventsContainerViewController: ContainerViewController {
 extension EventsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...statusService.maxSeason).reversed(), week: eventsViewController.weekEvent, dependencies: dependencies)
+        let yearSelectViewController = YearSelectViewController(
+            year: year,
+            years: Array(1992...statusService.maxSeason).reversed(),
+            week: eventsViewController.weekEvent,
+            dependencies: dependencies
+        )
         yearSelectViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: yearSelectViewController)
@@ -92,7 +104,9 @@ extension EventsContainerViewController: WeekEventsDelegate {
 
 }
 
-extension EventsContainerViewController: SearchContainer, SearchContainerDelegate, SearchViewControllerDelegate {}
+extension EventsContainerViewController: SearchContainer, SearchContainerDelegate,
+    SearchViewControllerDelegate
+{}
 
 // MARK: - EventsListViewControllerDelegate
 
