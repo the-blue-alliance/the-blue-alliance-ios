@@ -23,6 +23,7 @@ public final class TBAAPI {
     public static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         return dateFormatter
     }()
 

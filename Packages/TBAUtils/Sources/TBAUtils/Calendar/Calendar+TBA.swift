@@ -16,7 +16,7 @@ extension Calendar {
     /// math like `endOfDay` doesn't clip against the user's local offset.
     public static let utc: Calendar = {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .current
+        calendar.timeZone = .utc
         return calendar
     }()
 

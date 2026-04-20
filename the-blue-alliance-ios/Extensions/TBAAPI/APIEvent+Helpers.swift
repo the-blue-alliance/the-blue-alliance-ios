@@ -76,7 +76,7 @@ extension Event {
         guard let date = startDateParsed else { return nil }
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM"
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.timeZone = .utc
         return formatter.string(from: date)
     }
 
@@ -112,8 +112,7 @@ extension Event {
         return now >= start && now <= end
     }
 
-    // Ported from TBAData.Event.isHappeningThisWeek: the event is going on
-    // now or starts within the next week.
+    // Event is going on now or starts within the next week.
     var isHappeningThisWeek: Bool {
         guard let start = startDateParsed, let end = endOfEventDay else { return false }
         guard let startOfWeek = Calendar.utc.date(byAdding: .day, value: -7, to: start) else {
@@ -128,11 +127,11 @@ extension Event {
 extension Event {
 
     // Parsed Date form of the API's string date fields. The generated struct
-    // stores `startDate` and `endDate` as ISO-ish `yyyy-MM-dd` strings; these
-    // use a matching formatter in UTC so our in-memory Date comparisons are
-    // consistent regardless of the user's locale.
-    var startDateParsed: Date? { APIEventDateFormatter.shared.date(from: startDate) }
-    var endDateParsed: Date? { APIEventDateFormatter.shared.date(from: endDate) }
+    // stores `startDate` and `endDate` as ISO-ish `yyyy-MM-dd` strings;
+    // `TBAAPI.dateFormatter` parses them in UTC so in-memory Date comparisons
+    // are consistent regardless of the user's locale.
+    var startDateParsed: Date? { TBAAPI.dateFormatter.date(from: startDate) }
+    var endDateParsed: Date? { TBAAPI.dateFormatter.date(from: endDate) }
 
     var locationString: String? {
         let parts = [city, stateProv, country].compactMap { $0 }.filter { !$0.isEmpty }
@@ -145,11 +144,11 @@ extension Event {
         // users west of UTC don't see the range shifted back a day.
         let shortFormatter = DateFormatter()
         shortFormatter.dateFormat = "MMM dd"
-        shortFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        shortFormatter.timeZone = .utc
 
         let longFormatter = DateFormatter()
         longFormatter.dateFormat = "MMM dd, y"
-        longFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        longFormatter.timeZone = .utc
 
         if start == end {
             return shortFormatter.string(from: end)
@@ -159,13 +158,4 @@ extension Event {
         }
         return "\(shortFormatter.string(from: start)) to \(longFormatter.string(from: end))"
     }
-}
-
-private enum APIEventDateFormatter {
-    static let shared: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        return formatter
-    }()
 }

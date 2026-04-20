@@ -18,7 +18,7 @@ extension Date {
     }
 
     public func endOfMonth(calendar: Calendar = Calendar.current) -> Date {
-        return calendar.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth())!
+        return calendar.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth(calendar: calendar))!
     }
 
     /**
