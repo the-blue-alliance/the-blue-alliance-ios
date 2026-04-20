@@ -54,12 +54,24 @@ extension EventInsightsConfigurator {
         return String(format: "%.2f", val)
     }
 
-    static func bonusRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
-        return InsightRow(title: title, contentRowOne: bonusStat(qual, key), contentRowTwo: bonusStat(playoff, key))
+    static func bonusRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?)
+        -> InsightRow
+    {
+        return InsightRow(
+            title: title,
+            contentRowOne: bonusStat(qual, key),
+            contentRowTwo: bonusStat(playoff, key)
+        )
     }
-    
-    static func totalsRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?) -> InsightRow {
-        return InsightRow(title: title, contentRowOne: (totalsStat(qual, key) ?? []).map { String(describing: $0) }, contentRowTwo: (totalsStat(playoff, key) ?? []).map { String(describing: $0) })
+
+    static func totalsRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?)
+        -> InsightRow
+    {
+        return InsightRow(
+            title: title,
+            contentRowOne: (totalsStat(qual, key) ?? []).map { String(describing: $0) },
+            contentRowTwo: (totalsStat(playoff, key) ?? []).map { String(describing: $0) }
+        )
     }
     private static func bonusStat(_ dict: [String: Any]?, _ key: String) -> [String]? {
         guard let dict = dict else {
@@ -74,33 +86,39 @@ extension EventInsightsConfigurator {
             }
             return "--"
         }()
-        return [((bonusData.safeItem(at: 0) as? Int).map(String.init) ?? "--"), ((bonusData.safeItem(at: 1) as? Int).map(String.init) ?? "--"), (quotient)]
+        return [
+            ((bonusData.safeItem(at: 0) as? Int).map(String.init) ?? "--"),
+            ((bonusData.safeItem(at: 1) as? Int).map(String.init) ?? "--"), (quotient),
+        ]
     }
 
     private static func totalsStat(_ dict: [String: Any]?, _ key: String) -> [String]? {
-            guard let dict = dict else {
-                return nil
-            }
-            guard let totalsData = dict[key] as? [Any] else {
-                return nil
-            }
-            let allianceAvg: String = {
-                if let val = totalsData.safeItem(at: 1) as? Double {
-                    return "\(String(format: "%.2f", val))"
-                }
-                return "--"
-            }()
-            let teamAvg: String = {
-                if let val = totalsData.safeItem(at: 2) as? Double {
-                    return "\(String(format: "%.2f", val))"
-                }
-                return "--"
-            }()
-        return [(totalsData.safeItem(at: 0) as? Int ?? 0).map(String.init) ?? "--", allianceAvg, teamAvg]
+        guard let dict = dict else {
+            return nil
         }
+        guard let totalsData = dict[key] as? [Any] else {
+            return nil
+        }
+        let allianceAvg: String = {
+            if let val = totalsData.safeItem(at: 1) as? Double {
+                return "\(String(format: "%.2f", val))"
+            }
+            return "--"
+        }()
+        let teamAvg: String = {
+            if let val = totalsData.safeItem(at: 2) as? Double {
+                return "\(String(format: "%.2f", val))"
+            }
+            return "--"
+        }()
+        return [
+            (totalsData.safeItem(at: 0) as? Int).map(String.init) ?? "--", allianceAvg,
+            teamAvg,
+        ]
+    }
 
     static func filterEmptyInsights(_ rows: [InsightRow]) -> [InsightRow] {
-        return rows.filter({ $0.qual != nil || $0.playoff != nil || $0.contentRowOne != nil})
+        return rows.filter({ $0.qual != nil || $0.playoff != nil || $0.contentRowOne != nil })
     }
 
 }

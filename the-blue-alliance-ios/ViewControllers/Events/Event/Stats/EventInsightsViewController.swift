@@ -49,8 +49,10 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
 
         tableView.registerReusableCell(EventInsightsTableViewCell.self)
         tableView.registerReusableHeaderFooterView(EventInsightsHeaderView.self)
-        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
-        tableView.register(FourColumnTableViewCell.self, forCellReuseIdentifier: FourColumnTableViewCell.reuseIdentifier)
+        tableView.register(
+            FourColumnTableViewCell.self,
+            forCellReuseIdentifier: FourColumnTableViewCell.reuseIdentifier
+        )
         tableView.insetsContentViewsToSafeArea = false
 
         tableView.dataSource = dataSource
@@ -112,7 +114,8 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                 cell.selectionStyle = .none
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as FourColumnTableViewCell
+                let cell =
+                    tableView.dequeueReusableCell(indexPath: indexPath) as FourColumnTableViewCell
                 cell.title = row.title
                 cell.contentRowOne = row.contentRowOne ?? []
                 cell.contentRowTwo = row.contentRowTwo ?? []
@@ -171,4 +174,3 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         return "\(year) Event Insights are not supported - try updating your app via the App Store."
     }
 }
-

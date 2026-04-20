@@ -47,6 +47,22 @@ Run TBAUtils unit tests
 
 Run all of our tests
 
+### ios format
+
+```sh
+[bundle exec] fastlane ios format
+```
+
+Format all Swift files with swift-format
+
+### ios lint
+
+```sh
+[bundle exec] fastlane ios lint
+```
+
+Lint Swift formatting (strict, used by CI)
+
 ### ios build_ci
 
 ```sh

@@ -120,7 +120,7 @@ class EventInsightsHeaderView: UITableViewHeaderFooterView, Reusable {
 }
 
 class FourColumnTableViewCell: UITableViewCell, Reusable {
-    
+
     private let titleLabel = UILabel()
     private let qualsView = UIStackView()
     private let playoffsView = UIStackView()
@@ -132,11 +132,11 @@ class FourColumnTableViewCell: UITableViewCell, Reusable {
     private let label4 = UILabel()
     private let label5 = UILabel()
     private let label6 = UILabel()
-    
+
     var title: String? {
         didSet { titleLabel.text = title }
     }
-    
+
     var contentRowOne: [String] = [] {
         didSet {
             let labels = [label1, label2, label3]
@@ -156,16 +156,16 @@ class FourColumnTableViewCell: UITableViewCell, Reusable {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         qualsView.axis = .horizontal
         qualsView.distribution = .fillEqually
         playoffsView.axis = .horizontal
         playoffsView.distribution = .fillEqually
-        
+
         titleLabel.textColor = UIColor.secondaryLabel
         qualLabel.textColor = UIColor.tertiaryLabel
         playoffLabel.textColor = UIColor.tertiaryLabel
-        
+
         qualsView.addArrangedSubview(qualLabel)
         playoffsView.addArrangedSubview(playoffLabel)
         [label1, label2, label3].forEach {
@@ -176,25 +176,25 @@ class FourColumnTableViewCell: UITableViewCell, Reusable {
             $0.textAlignment = .center
             playoffsView.addArrangedSubview($0)
         }
-        
+
         qualLabel.text = "Quals"
         playoffLabel.text = "Playoffs"
-        
+
         let vertical = UIStackView(arrangedSubviews: [titleLabel, qualsView, playoffsView])
         vertical.axis = .vertical
         vertical.spacing = 4
-        
+
         contentView.addSubview(vertical)
         vertical.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             vertical.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             vertical.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             vertical.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            vertical.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            vertical.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
