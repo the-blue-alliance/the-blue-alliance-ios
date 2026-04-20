@@ -12,7 +12,7 @@ protocol TeamDisplayable {
 }
 
 extension TeamDisplayable {
-    // Matches the TBAData.Team.teamNumberNickname ("Team 254").
+    // Ex: "Team 254"
     var teamNumberNickname: String { "Team \(teamNumber)" }
 
     // Prefer the FIRST-supplied nickname, fall back to "Team N".

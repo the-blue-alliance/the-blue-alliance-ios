@@ -52,7 +52,7 @@ extension Match {
     var dqTeamKeys: [String] { alliances.red.dqTeamKeys + alliances.blue.dqTeamKeys }
     var allTeamKeys: [String] { redAllianceTeamKeys + blueAllianceTeamKeys }
 
-    // Start time, actual or a guess — matches the TBAData precedence:
+    // Start time
     // actual > predicted > scheduled.
     var startTime: Int? {
         if let actual = actualTime { return Int(actual) }
