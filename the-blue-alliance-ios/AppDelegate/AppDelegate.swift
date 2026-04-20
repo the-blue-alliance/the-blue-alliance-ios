@@ -125,8 +125,10 @@ private extension AppDelegate {
             Analytics.setAnalyticsCollectionEnabled(false)
             Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
         #else
-            Analytics.setAnalyticsCollectionEnabled(true)
-            Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
+            Analytics.setAnalyticsCollectionEnabled(appSettings.firebaseCollection.analyticsEnabled)
+            Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(
+                appSettings.firebaseCollection.crashlyticsEnabled
+            )
         #endif
     }
 

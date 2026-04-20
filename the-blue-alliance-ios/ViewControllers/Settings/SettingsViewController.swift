@@ -1,3 +1,5 @@
+import FirebaseAnalytics
+import FirebaseCrashlytics
 import MyTBAKit
 import TBAAPI
 import UIKit
@@ -5,6 +7,7 @@ import UIKit
 private enum SettingsSection: Int, CaseIterable {
     case info
     case networking
+    case privacy
     case debug
 }
 
@@ -17,6 +20,11 @@ private enum InfoRow: String, CaseIterable {
 private enum NetworkingRow: Int, CaseIterable {
     case cachePolicy
     case deleteNetworkCache
+}
+
+private enum PrivacyRow: Int, CaseIterable {
+    case analytics
+    case crashlytics
 }
 
 private enum DebugRow: Int, CaseIterable {
@@ -83,6 +91,8 @@ class SettingsViewController: TBATableViewController {
             return InfoRow.allCases.count
         case .networking:
             return NetworkingRow.allCases.count
+        case .privacy:
+            return PrivacyRow.allCases.count
         case .debug:
             return DebugRow.allCases.count
         }
@@ -100,6 +110,8 @@ class SettingsViewController: TBATableViewController {
             return "Info"
         case .networking:
             return "Networking"
+        case .privacy:
+            return "Privacy"
         case .debug:
             return "Debug"
         }
@@ -108,10 +120,15 @@ class SettingsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int)
         -> String?
     {
-        guard SettingsSection(rawValue: section) == .debug else {
+        switch SettingsSection(rawValue: section) {
+        case .privacy:
+            return
+                "Analytics helps us understand how the app is used. Crash reports help us find and fix bugs. Both are sent to Firebase."
+        case .debug:
+            return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
+        default:
             return nil
         }
-        return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
@@ -156,6 +173,31 @@ class SettingsViewController: TBATableViewController {
                 cell.accessoryType = .disclosureIndicator
                 return cell
             }
+        case .privacy:
+            let privacyRow = PrivacyRow.allCases[indexPath.row]
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            let toggle = UISwitch()
+            switch privacyRow {
+            case .analytics:
+                cell.textLabel?.text = "Share Analytics"
+                toggle.isOn = dependencies.appSettings.firebaseCollection.analyticsEnabled
+                toggle.addTarget(
+                    self,
+                    action: #selector(analyticsToggleChanged(_:)),
+                    for: .valueChanged
+                )
+            case .crashlytics:
+                cell.textLabel?.text = "Share Crash Reports"
+                toggle.isOn = dependencies.appSettings.firebaseCollection.crashlyticsEnabled
+                toggle.addTarget(
+                    self,
+                    action: #selector(crashlyticsToggleChanged(_:)),
+                    for: .valueChanged
+                )
+            }
+            cell.accessoryView = toggle
+            cell.selectionStyle = .none
+            return cell
         case .debug:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
@@ -204,6 +246,8 @@ class SettingsViewController: TBATableViewController {
             case .deleteNetworkCache:
                 showDeleteNetworkCache()
             }
+        case .privacy:
+            break
         case .debug:
             let debugRow = DebugRow.allCases[indexPath.row]
             switch debugRow {
@@ -358,6 +402,44 @@ class SettingsViewController: TBATableViewController {
         alertController.addAction(cancelAction)
 
         self.present(alertController, animated: true, completion: nil)
+    }
+
+    // MARK: - Privacy Methods
+
+    @objc private func analyticsToggleChanged(_ sender: UISwitch) {
+        dependencies.appSettings.firebaseCollection.analyticsEnabled = sender.isOn
+        Analytics.setAnalyticsCollectionEnabled(sender.isOn)
+    }
+
+    @objc private func crashlyticsToggleChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            applyCrashlyticsEnabled(true)
+            return
+        }
+
+        let alert = UIAlertController(
+            title: "Turn off crash reports?",
+            message:
+                "If the app crashes, we won't receive a crash log to help us investigate and fix the issue.",
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                sender.setOn(true, animated: true)
+                self.applyCrashlyticsEnabled(true)
+            }
+        )
+        alert.addAction(
+            UIAlertAction(title: "Turn Off", style: .destructive) { _ in
+                self.applyCrashlyticsEnabled(false)
+            }
+        )
+        present(alert, animated: true)
+    }
+
+    private func applyCrashlyticsEnabled(_ enabled: Bool) {
+        dependencies.appSettings.firebaseCollection.crashlyticsEnabled = enabled
+        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(enabled)
     }
 
     // MARK: - Debug Methods
