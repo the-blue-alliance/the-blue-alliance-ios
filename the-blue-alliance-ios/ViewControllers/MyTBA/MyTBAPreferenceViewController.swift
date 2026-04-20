@@ -11,14 +11,14 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         return subscribableModelClass.notificationTypes
     }()
 
-    let isFavoriteInitially: Bool
+    private(set) var isFavoriteInitially: Bool
     var isFavorite: Bool {
         didSet {
             updateInterface()
         }
     }
 
-    let notificationsInitial: [NotificationType]
+    private(set) var notificationsInitial: [NotificationType]
     var notifications: [NotificationType] {
         didSet {
             updateInterface()
@@ -29,6 +29,19 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
     private var subscriptionsStore: SubscriptionsStore { myTBAStores.subscriptions }
 
     private var preferencesTask: Task<Void, Never>?
+    private var loadTask: Task<Void, Never>?
+
+    // Set while fetching current state from the server on sheet open. If the
+    // fetch fails we keep Save disabled so a stale empty toggle set can't
+    // silently wipe the user's real server-side subscriptions.
+    private var isLoading: Bool = false {
+        didSet {
+            DispatchQueue.main.async {
+                self.updateInterface()
+            }
+        }
+    }
+    private var loadFailed: Bool = false
 
     var hasChanges: Bool {
         return (notifications != notificationsInitial) || (isFavorite != isFavoriteInitially)
@@ -80,12 +93,14 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         super.viewDidLoad()
 
         styleInterface()
+        refresh()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         preferencesTask?.cancel()
+        loadTask?.cancel()
     }
 
     // MARK: - Interface Methods
@@ -96,13 +111,60 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
     }
 
     func updateInterface() {
-        saveBarButtonItem.isEnabled = hasChanges
+        saveBarButtonItem.isEnabled = hasChanges && !isLoading && !loadFailed
         isModalInPresentation = hasChanges
 
-        if isSaving {
+        if isSaving || isLoading {
             navigationItem.rightBarButtonItem = saveActivityIndicatorBarButtonItem
         } else {
             navigationItem.rightBarButtonItem = saveBarButtonItem
+        }
+    }
+
+    // The local myTBA stores are only populated when the user visits the
+    // corresponding tab in myTBA. Since this sheet can be opened directly from
+    // a team/event/match screen, pull the authoritative state from the server
+    // before letting the user edit — otherwise empty toggles could overwrite
+    // real subscriptions on Save.
+    private func refresh() {
+        guard myTBA.isAuthenticated else { return }
+
+        isLoading = true
+        loadFailed = false
+        loadTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                async let favorites = self.myTBA.fetchFavorites()
+                async let subscriptions = self.myTBA.fetchSubscriptions()
+                let (fetchedFavorites, fetchedSubscriptions) = try await (favorites, subscriptions)
+
+                self.favoritesStore.replaceAll(with: fetchedFavorites)
+                self.subscriptionsStore.replaceAll(with: fetchedSubscriptions)
+
+                let existingFavorite = fetchedFavorites.first {
+                    $0.modelKey == self.subscribableModel.modelKey && $0.modelType == self.subscribableModel.modelType
+                }
+                self.isFavorite = (existingFavorite != nil)
+                self.isFavoriteInitially = self.isFavorite
+
+                let existingSubscription = fetchedSubscriptions.first {
+                    $0.modelKey == self.subscribableModel.modelKey && $0.modelType == self.subscribableModel.modelType
+                }
+                self.notifications = existingSubscription?.notifications ?? []
+                self.notificationsInitial = self.notifications
+
+                self.loadTask = nil
+                self.isLoading = false
+                self.tableView.reloadData()
+            } catch is CancellationError {
+                self.loadTask = nil
+                self.isLoading = false
+            } catch {
+                self.loadTask = nil
+                self.loadFailed = true
+                self.isLoading = false
+                self.showErrorAlert(with: "Unable to load myTBA preferences - \(error.localizedDescription)")
+            }
         }
     }
 
@@ -211,7 +273,7 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
 
         }()
 
-        cell.switchView.isEnabled = !isSaving
+        cell.switchView.isEnabled = !isSaving && !isLoading
         cell.selectionStyle = .none
 
         return cell
@@ -236,6 +298,12 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
             return "Notification Settings"
         }
         return nil
+    }
+
+    // Modal grouped sheet — fall back to the iOS default header rendering
+    // instead of TBATableViewController's navy-on-white tab chrome.
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        // Intentionally not calling super.
     }
 
 }
