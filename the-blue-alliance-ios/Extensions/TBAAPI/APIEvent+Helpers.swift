@@ -85,7 +85,9 @@ extension Event {
     var isChampionshipEvent: Bool { isChampionshipDivision || isChampionshipFinals }
     var isDistrictChampionship: Bool { eventTypeEnum == .districtChampionship }
     var isDistrictChampionshipDivision: Bool { eventTypeEnum == .districtChampionshipDivision }
-    var isDistrictChampionshipEvent: Bool { isDistrictChampionship || isDistrictChampionshipDivision }
+    var isDistrictChampionshipEvent: Bool {
+        isDistrictChampionship || isDistrictChampionshipDivision
+    }
     var isFoC: Bool { eventTypeEnum == .festivalOfChampions }
     var isPreseason: Bool { eventTypeEnum == .preseason }
     var isOffseason: Bool { eventTypeEnum == .offseason }

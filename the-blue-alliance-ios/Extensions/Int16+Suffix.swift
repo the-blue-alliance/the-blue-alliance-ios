@@ -8,7 +8,7 @@ extension Int {
         let lastTwo = positive % 100
         let lastOne = lastTwo % 10
 
-        if 11 ... 20 ~= lastTwo {
+        if 11...20 ~= lastTwo {
             return "th"
         } else if lastOne == 1 {
             return "st"

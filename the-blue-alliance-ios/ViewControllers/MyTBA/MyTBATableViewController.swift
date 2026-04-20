@@ -103,33 +103,55 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
     // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<MyTBASection, MyTBAItem>(tableView: tableView, cellProvider: { [weak self] tableView, indexPath, item in
-            guard let self = self else { return UITableViewCell() }
-            switch item {
-            case .event(let key):
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-                if let event = self.eventsCache[key] {
-                    cell.viewModel = EventCellViewModel(name: event.safeShortName, location: event.locationString, dateString: event.dateString)
-                } else {
-                    cell.viewModel = EventCellViewModel(name: key, location: nil, dateString: nil)
+        dataSource = TableViewDataSource<MyTBASection, MyTBAItem>(
+            tableView: tableView,
+            cellProvider: { [weak self] tableView, indexPath, item in
+                guard let self = self else { return UITableViewCell() }
+                switch item {
+                case .event(let key):
+                    let cell =
+                        tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
+                    if let event = self.eventsCache[key] {
+                        cell.viewModel = EventCellViewModel(
+                            name: event.safeShortName,
+                            location: event.locationString,
+                            dateString: event.dateString
+                        )
+                    } else {
+                        cell.viewModel = EventCellViewModel(
+                            name: key,
+                            location: nil,
+                            dateString: nil
+                        )
+                    }
+                    return cell
+                case .team(let key):
+                    let cell =
+                        tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
+                    if let team = self.teamsCache[key] {
+                        cell.viewModel = TeamCellViewModel(
+                            teamNumber: "\(team.teamNumber)",
+                            nickname: team.displayNickname,
+                            location: team.locationString
+                        )
+                    } else {
+                        cell.viewModel = TeamCellViewModel(
+                            teamNumber: TeamKey.trimFRCPrefix(key),
+                            nickname: "Team \(TeamKey.trimFRCPrefix(key))",
+                            location: nil
+                        )
+                    }
+                    return cell
+                case .match(let key):
+                    let cell =
+                        tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
+                    if let match = self.matchesCache[key] {
+                        cell.viewModel = MatchViewModel(apiMatch: match)
+                    }
+                    return cell
                 }
-                return cell
-            case .team(let key):
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
-                if let team = self.teamsCache[key] {
-                    cell.viewModel = TeamCellViewModel(teamNumber: "\(team.teamNumber)", nickname: team.displayNickname, location: team.locationString)
-                } else {
-                    cell.viewModel = TeamCellViewModel(teamNumber: TeamKey.trimFRCPrefix(key), nickname: "Team \(TeamKey.trimFRCPrefix(key))", location: nil)
-                }
-                return cell
-            case .match(let key):
-                let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-                if let match = self.matchesCache[key] {
-                    cell.viewModel = MatchViewModel(apiMatch: match)
-                }
-                return cell
             }
-        })
+        )
         dataSource.delegate = self
     }
 
@@ -160,14 +182,22 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
             }
         case .team:
             return items.sorted { lhs, rhs in
-                let l = teamsCache[lhs.modelKey].map { $0.teamNumber } ?? Int(TeamKey.trimFRCPrefix(lhs.modelKey)) ?? 0
-                let r = teamsCache[rhs.modelKey].map { $0.teamNumber } ?? Int(TeamKey.trimFRCPrefix(rhs.modelKey)) ?? 0
+                let l =
+                    teamsCache[lhs.modelKey].map { $0.teamNumber } ?? Int(
+                        TeamKey.trimFRCPrefix(lhs.modelKey)
+                    ) ?? 0
+                let r =
+                    teamsCache[rhs.modelKey].map { $0.teamNumber } ?? Int(
+                        TeamKey.trimFRCPrefix(rhs.modelKey)
+                    ) ?? 0
                 return l < r
             }
         case .match:
             return items.sorted { lhs, rhs in
                 if let l = matchesCache[lhs.modelKey], let r = matchesCache[rhs.modelKey] {
-                    if l.compLevelSortOrder != r.compLevelSortOrder { return l.compLevelSortOrder < r.compLevelSortOrder }
+                    if l.compLevelSortOrder != r.compLevelSortOrder {
+                        return l.compLevelSortOrder < r.compLevelSortOrder
+                    }
                     if l.setNumber != r.setNumber { return l.setNumber < r.setNumber }
                     return l.matchNumber < r.matchNumber
                 }
@@ -313,7 +343,9 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
     }
 
     override var currentItems: [MyTBAItem] {
-        subscriptionsStore.subscriptions.compactMap { Self.item(for: $0.modelType, key: $0.modelKey) }
+        subscriptionsStore.subscriptions.compactMap {
+            Self.item(for: $0.modelType, key: $0.modelKey)
+        }
     }
 
     override func registerForStoreChanges() {
@@ -334,7 +366,9 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
 
     // MARK: - Refreshable
 
-    var isDataSourceEmpty: Bool { myTBA.isAuthenticated && subscriptionsStore.subscriptions.isEmpty }
+    var isDataSourceEmpty: Bool {
+        myTBA.isAuthenticated && subscriptionsStore.subscriptions.isEmpty
+    }
 
     // MARK: - Stateful
 
@@ -356,6 +390,11 @@ protocol NotificationObservable: AnyObject {}
 
 extension NotificationObservable {
     func observeNotification(name: Notification.Name, handler: @escaping (Notification) -> Void) {
-        NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main, using: handler)
+        NotificationCenter.default.addObserver(
+            forName: name,
+            object: nil,
+            queue: .main,
+            using: handler
+        )
     }
 }

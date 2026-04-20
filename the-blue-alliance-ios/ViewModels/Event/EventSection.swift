@@ -47,22 +47,36 @@ extension Event {
         case .regional:
             return .init(sortOrder: type.displayOrder, subOrder: 0, title: "Regional Events")
         case .district:
-            return .init(sortOrder: type.displayOrder, subOrder: 0, title: "\(districtSectionName) District Events")
+            return .init(
+                sortOrder: type.displayOrder,
+                subOrder: 0,
+                title: "\(districtSectionName) District Events"
+            )
         case .districtChampionship, .districtChampionshipDivision:
             // Parent + divisions share one section per district, keyed off the
             // parent's displayOrder so both types land on the same sortOrder.
-            return .init(sortOrder: APIEventType.districtChampionship.displayOrder,
-                         subOrder: 0,
-                         title: districtSectionName)
+            return .init(
+                sortOrder: APIEventType.districtChampionship.displayOrder,
+                subOrder: 0,
+                title: districtSectionName
+            )
         case .championshipDivision:
-            return .init(sortOrder: type.displayOrder, subOrder: 0, title: "\(championshipSectionLabel) Divisions")
+            return .init(
+                sortOrder: type.displayOrder,
+                subOrder: 0,
+                title: "\(championshipSectionLabel) Divisions"
+            )
         case .championshipFinals:
             return .init(sortOrder: type.displayOrder, subOrder: 0, title: championshipSectionLabel)
         case .festivalOfChampions:
             return .init(sortOrder: type.displayOrder, subOrder: 0, title: "Festival of Champions")
         case .offseason:
             let monthIdx = startDateParsed.map { Calendar.utc.component(.month, from: $0) } ?? 0
-            return .init(sortOrder: type.displayOrder, subOrder: monthIdx, title: "\(weekString) Events")
+            return .init(
+                sortOrder: type.displayOrder,
+                subOrder: monthIdx,
+                title: "\(weekString) Events"
+            )
         case .unlabeled:
             return .init(sortOrder: type.displayOrder, subOrder: 0, title: "Unknown Events")
         }
@@ -72,7 +86,8 @@ extension Event {
     // abbreviation (e.g. FIM) if the API didn't send a populated displayName.
     private var districtSectionName: String {
         guard let district else { return "District" }
-        return district.displayName.isEmpty ? district.abbreviation.uppercased() : district.displayName
+        return district.displayName.isEmpty
+            ? district.abbreviation.uppercased() : district.displayName
     }
 
     private var championshipSectionLabel: String {

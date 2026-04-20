@@ -49,7 +49,10 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, District>(tableView: tableView) { tableView, indexPath, district in
+        dataSource = TableViewDataSource<String, District>(tableView: tableView) {
+            tableView,
+            indexPath,
+            district in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
             cell.textLabel?.text = district.displayName
             cell.accessoryType = .disclosureIndicator

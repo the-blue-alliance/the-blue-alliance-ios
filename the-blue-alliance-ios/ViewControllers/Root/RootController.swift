@@ -62,7 +62,11 @@ extension RootController {
     }
 
     var settingsViewController: SettingsViewController {
-        return SettingsViewController(fcmTokenProvider: fcmTokenProvider, pushService: pushService, dependencies: dependencies)
+        return SettingsViewController(
+            fcmTokenProvider: fcmTokenProvider,
+            pushService: pushService,
+            dependencies: dependencies
+        )
     }
 
     var myTBAViewController: MyTBAViewController {

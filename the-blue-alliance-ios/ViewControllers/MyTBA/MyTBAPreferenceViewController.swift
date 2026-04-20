@@ -2,7 +2,9 @@ import MyTBAKit
 import TBAUtils
 import UIKit
 
-class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentationControllerDelegate {
+class MyTBAPreferenceViewController: TBATableViewController,
+    UIAdaptivePresentationControllerDelegate
+{
 
     var subscribableModel: MyTBASubscribable
 
@@ -55,26 +57,38 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
             }
         }
     }
-    internal lazy var closeBarButtonItem = UIBarButtonItem(title: "Close", primaryAction: UIAction { [weak self] _ in
-        self?.close()
-    })
+    internal lazy var closeBarButtonItem = UIBarButtonItem(
+        title: "Close",
+        primaryAction: UIAction { [weak self] _ in
+            self?.close()
+        }
+    )
     internal lazy var saveBarButtonItem: UIBarButtonItem = {
-        let item = UIBarButtonItem(title: "Save", primaryAction: UIAction { [weak self] _ in
-            self?.save()
-        })
+        let item = UIBarButtonItem(
+            title: "Save",
+            primaryAction: UIAction { [weak self] _ in
+                self?.save()
+            }
+        )
         item.style = .prominent
         return item
     }()
-    internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
+    internal var saveActivityIndicatorBarButtonItem =
+        UIBarButtonItem.activityIndicatorBarButtonItem()
 
     init(subscribableModel: MyTBASubscribable, dependencies: Dependencies) {
         self.subscribableModel = subscribableModel
 
-        let existingFavorite = dependencies.myTBAStores.favorites.favorites.first { $0.modelKey == subscribableModel.modelKey && $0.modelType == subscribableModel.modelType }
+        let existingFavorite = dependencies.myTBAStores.favorites.favorites.first {
+            $0.modelKey == subscribableModel.modelKey && $0.modelType == subscribableModel.modelType
+        }
         isFavorite = (existingFavorite != nil)
         isFavoriteInitially = isFavorite
 
-        let existingSubscription = dependencies.myTBAStores.subscriptions.subscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
+        let existingSubscription = dependencies.myTBAStores.subscriptions.subscription(
+            modelKey: subscribableModel.modelKey,
+            modelType: subscribableModel.modelType
+        )
         notifications = existingSubscription?.notifications ?? []
         notificationsInitial = notifications
 
@@ -142,13 +156,15 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
                 self.subscriptionsStore.replaceAll(with: fetchedSubscriptions)
 
                 let existingFavorite = fetchedFavorites.first {
-                    $0.modelKey == self.subscribableModel.modelKey && $0.modelType == self.subscribableModel.modelType
+                    $0.modelKey == self.subscribableModel.modelKey
+                        && $0.modelType == self.subscribableModel.modelType
                 }
                 self.isFavorite = (existingFavorite != nil)
                 self.isFavoriteInitially = self.isFavorite
 
                 let existingSubscription = fetchedSubscriptions.first {
-                    $0.modelKey == self.subscribableModel.modelKey && $0.modelType == self.subscribableModel.modelType
+                    $0.modelKey == self.subscribableModel.modelKey
+                        && $0.modelType == self.subscribableModel.modelType
                 }
                 self.notifications = existingSubscription?.notifications ?? []
                 self.notificationsInitial = self.notifications
@@ -163,14 +179,18 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
                 self.loadTask = nil
                 self.loadFailed = true
                 self.isLoading = false
-                self.showErrorAlert(with: "Unable to load myTBA preferences - \(error.localizedDescription)")
+                self.showErrorAlert(
+                    with: "Unable to load myTBA preferences - \(error.localizedDescription)"
+                )
             }
         }
     }
 
     // MARK: Navigation Methods
 
-    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+    func presentationControllerDidAttemptToDismiss(
+        _ presentationController: UIPresentationController
+    ) {
         if isSaving {
             return
         }
@@ -182,22 +202,41 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         preferencesTask = Task { @MainActor [weak self] in
             guard let self else { return }
             do {
-                let response = try await self.myTBA.updatePreferences(modelKey: self.subscribableModel.modelKey,
-                                                                      modelType: self.subscribableModel.modelType,
-                                                                      favorite: self.isFavorite,
-                                                                      notifications: self.notifications)
+                let response = try await self.myTBA.updatePreferences(
+                    modelKey: self.subscribableModel.modelKey,
+                    modelType: self.subscribableModel.modelType,
+                    favorite: self.isFavorite,
+                    notifications: self.notifications
+                )
                 if response.favorite.code < 500 {
                     if self.isFavorite {
-                        self.favoritesStore.upsert(MyTBAFavorite(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType))
+                        self.favoritesStore.upsert(
+                            MyTBAFavorite(
+                                modelKey: self.subscribableModel.modelKey,
+                                modelType: self.subscribableModel.modelType
+                            )
+                        )
                     } else {
-                        self.favoritesStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
+                        self.favoritesStore.remove(
+                            modelKey: self.subscribableModel.modelKey,
+                            modelType: self.subscribableModel.modelType
+                        )
                     }
                 }
                 if response.subscription.code < 500 {
                     if self.notifications.isEmpty {
-                        self.subscriptionsStore.remove(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType)
+                        self.subscriptionsStore.remove(
+                            modelKey: self.subscribableModel.modelKey,
+                            modelType: self.subscribableModel.modelType
+                        )
                     } else {
-                        self.subscriptionsStore.upsert(MyTBASubscription(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, notifications: self.notifications))
+                        self.subscriptionsStore.upsert(
+                            MyTBASubscription(
+                                modelKey: self.subscribableModel.modelKey,
+                                modelType: self.subscribableModel.modelType,
+                                notifications: self.notifications
+                            )
+                        )
                     }
                 }
                 self.preferencesTask = nil
@@ -206,7 +245,9 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
             } catch {
                 self.preferencesTask = nil
                 self.isSaving = false
-                self.showErrorAlert(with: "Unable to save myTBA preferences - \(error.localizedDescription)")
+                self.showErrorAlert(
+                    with: "Unable to save myTBA preferences - \(error.localizedDescription)"
+                )
             }
         }
     }
@@ -216,13 +257,21 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
     }
 
     func confirmClose() {
-        let alert = UIAlertController(title: "You have unsaved changes", message: "Do you want to save your myTBA preferences?", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Save", style: .default) { [weak self] _ in
-            self?.save()
-        })
-        alert.addAction(UIAlertAction(title: "Close", style: .destructive) { [weak self] _ in
-            self?.close()
-        })
+        let alert = UIAlertController(
+            title: "You have unsaved changes",
+            message: "Do you want to save your myTBA preferences?",
+            preferredStyle: .actionSheet
+        )
+        alert.addAction(
+            UIAlertAction(title: "Save", style: .default) { [weak self] _ in
+                self?.save()
+            }
+        )
+        alert.addAction(
+            UIAlertAction(title: "Close", style: .destructive) { [weak self] _ in
+                self?.close()
+            }
+        )
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
         alert.popoverPresentationController?.barButtonItem = closeBarButtonItem
@@ -240,19 +289,24 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
 
     // MARK: Table View Data Source
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
         let cell: SwitchTableViewCell = {
             if indexPath.section == 0 {
-                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                let switchCell = SwitchTableViewCell(switchToggled: {
+                    [weak self] (_ sender: UISwitch) in
                     self?.isFavorite = sender.isOn
                 })
                 switchCell.textLabel?.text = "Favorite"
-                switchCell.detailTextLabel?.text = "You can save teams, events, and matches for easy access in the myTBA tab by marking them as favorites"
+                switchCell.detailTextLabel?.text =
+                    "You can save teams, events, and matches for easy access in the myTBA tab by marking them as favorites"
                 switchCell.detailTextLabel?.numberOfLines = 0
                 switchCell.switchView.isOn = isFavorite
                 return switchCell
             } else {
-                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                let switchCell = SwitchTableViewCell(switchToggled: {
+                    [weak self] (_ sender: UISwitch) in
                     let index = sender.tag
                     guard let notificationType = self?.notificationTypes[index] else {
                         return
@@ -293,7 +347,9 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
         return rows
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
+        -> String?
+    {
         if section == 1 {
             return "Notification Settings"
         }
@@ -302,7 +358,11 @@ class MyTBAPreferenceViewController: TBATableViewController, UIAdaptivePresentat
 
     // Modal grouped sheet — fall back to the iOS default header rendering
     // instead of TBATableViewController's navy-on-white tab chrome.
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplayHeaderView view: UIView,
+        forSection section: Int
+    ) {
         // Intentionally not calling super.
     }
 

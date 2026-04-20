@@ -5,7 +5,6 @@ import UIKit
 
 class DistrictsContainerViewController: ContainerViewController {
 
-
     private(set) var year: Int {
         didSet {
             districtsViewController.year = year
@@ -21,10 +20,12 @@ class DistrictsContainerViewController: ContainerViewController {
         year = dependencies.statusService.currentSeason
         districtsViewController = DistrictsViewController(year: year, dependencies: dependencies)
 
-        super.init(viewControllers: [districtsViewController],
-                   navigationTitle: "Districts",
-                   navigationSubtitle: ContainerViewController.yearSubtitle(year),
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [districtsViewController],
+            navigationTitle: "Districts",
+            navigationSubtitle: ContainerViewController.yearSubtitle(year),
+            dependencies: dependencies
+        )
 
         title = RootType.districts.title
         tabBarItem.image = RootType.districts.icon
@@ -48,15 +49,22 @@ class DistrictsContainerViewController: ContainerViewController {
 extension DistrictsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...statusService.maxSeason).reversed(), dependencies: dependencies)
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(
+            current: year,
+            options: Array(2009...statusService.maxSeason).reversed(),
+            dependencies: dependencies
+        )
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: selectTableViewController)
         nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
-            self?.navigationController?.dismiss(animated: true)
-        })
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            systemItem: .done,
+            primaryAction: UIAction { [weak self] _ in
+                self?.navigationController?.dismiss(animated: true)
+            }
+        )
 
         navigationController?.present(nav, animated: true)
     }
@@ -80,7 +88,10 @@ extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
 extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
-        let districtViewController = DistrictViewController(district: district, dependencies: dependencies)
+        let districtViewController = DistrictViewController(
+            district: district,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(districtViewController, animated: true)
     }
 

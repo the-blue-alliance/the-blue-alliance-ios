@@ -8,7 +8,9 @@ struct InfoCellViewModel {
 
     init(event: Event) {
         nameString = event.name.isEmpty ? event.key : event.name
-        subtitleStrings = [event.locationString, event.dateString, event.weekString].compactMap { $0 }
+        subtitleStrings = [event.locationString, event.dateString, event.weekString].compactMap {
+            $0
+        }
     }
 
     init(nameString: String, subtitleStrings: [String]) {

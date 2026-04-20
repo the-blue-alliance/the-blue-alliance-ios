@@ -23,7 +23,12 @@ class YearSelectViewController: ContainerViewController {
         self.years = years
         self.week = week
 
-        selectViewController = SelectTableViewController<YearSelectViewController>(current: year, options: years, willPush: true, dependencies: dependencies)
+        selectViewController = SelectTableViewController<YearSelectViewController>(
+            current: year,
+            options: years,
+            willPush: true,
+            dependencies: dependencies
+        )
 
         super.init(viewControllers: [selectViewController], dependencies: dependencies)
 
@@ -31,9 +36,12 @@ class YearSelectViewController: ContainerViewController {
 
         selectViewController.delegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction { [weak self] _ in
-            self?.dismiss(animated: true)
-        })
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            systemItem: .cancel,
+            primaryAction: UIAction { [weak self] _ in
+                self?.dismiss(animated: true)
+            }
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -47,7 +55,11 @@ class YearSelectViewController: ContainerViewController {
 
         selectViewController.disableRefreshing()
 
-        let eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, dependencies: dependencies)
+        let eventWeekSelectViewController = EventWeekSelectViewController(
+            year: year,
+            week: week,
+            dependencies: dependencies
+        )
         eventWeekSelectViewController.delegate = delegate
 
         navigationController?.viewControllers = [self, eventWeekSelectViewController]
@@ -56,7 +68,11 @@ class YearSelectViewController: ContainerViewController {
     // MARK: - Private Methods
 
     private func pushToEventWeekSelect(year: Int) {
-        let eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, dependencies: dependencies)
+        let eventWeekSelectViewController = EventWeekSelectViewController(
+            year: year,
+            week: week,
+            dependencies: dependencies
+        )
         eventWeekSelectViewController.delegate = delegate
         navigationController?.pushViewController(eventWeekSelectViewController, animated: true)
     }
@@ -86,10 +102,12 @@ private class EventWeekSelectViewController: ContainerViewController {
     weak var delegate: YearSelectViewControllerDelegate?
 
     init(year: Int, week: Event?, dependencies: Dependencies) {
-        selectViewController = WeeksSelectTableViewController(year: year,
-                                                              current: week,
-                                                              options: [],
-                                                              dependencies: dependencies)
+        selectViewController = WeeksSelectTableViewController(
+            year: year,
+            current: week,
+            options: [],
+            dependencies: dependencies
+        )
 
         super.init(viewControllers: [selectViewController], dependencies: dependencies)
 
@@ -98,9 +116,14 @@ private class EventWeekSelectViewController: ContainerViewController {
         selectViewController.delegate = self
         selectViewController.enableRefreshing()
 
-        rightBarButtonItems = [UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
-            self?.dismiss(animated: true)
-        })]
+        rightBarButtonItems = [
+            UIBarButtonItem(
+                systemItem: .done,
+                primaryAction: UIAction { [weak self] _ in
+                    self?.dismiss(animated: true)
+                }
+            )
+        ]
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,7 +146,10 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
 
 }
 
-private class WeeksSelectTableViewController: SelectTableViewController<EventWeekSelectViewController> {
+private class WeeksSelectTableViewController: SelectTableViewController<
+    EventWeekSelectViewController
+>
+{
 
     private let year: Int
 

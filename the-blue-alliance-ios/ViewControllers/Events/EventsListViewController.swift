@@ -39,11 +39,14 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<EventSection, APIEvent>(tableView: tableView) { [weak self] tableView, indexPath, event in
+        dataSource = TableViewDataSource<EventSection, APIEvent>(tableView: tableView) {
+            [weak self] tableView, indexPath, event in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-            cell.viewModel = EventCellViewModel(name: event.safeShortName,
-                                                location: event.locationString,
-                                                dateString: event.dateString)
+            cell.viewModel = EventCellViewModel(
+                name: event.safeShortName,
+                location: event.locationString,
+                dateString: event.dateString
+            )
             cell.accessibilityIdentifier = "event.\(event.key)"
             _ = self
             return cell
@@ -78,7 +81,8 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - TableViewDataSourceDelegate
 
     override func title(forSection section: Int) -> String? {
-        guard let event = dataSource.itemIdentifier(for: IndexPath(item: 0, section: section)) else {
+        guard let event = dataSource.itemIdentifier(for: IndexPath(item: 0, section: section))
+        else {
             return "Events"
         }
         if let customTitle = delegate?.title(for: event) { return customTitle }

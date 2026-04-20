@@ -6,6 +6,18 @@ on:
       - main
 
 jobs:
+  swift-format:
+    name: swift-format
+    runs-on: macos-latest
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Lint
+        run: ./scripts/swift-format-lint.sh --strict
+
   test-publish:
     name: Test + Publish
     runs-on: macos-latest

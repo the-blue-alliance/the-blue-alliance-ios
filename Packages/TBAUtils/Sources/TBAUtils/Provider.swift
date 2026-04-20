@@ -13,7 +13,7 @@ private class Weak: Hashable {
         hasher.combine(identifier)
     }
 
-    static func ==(lhs: Weak, rhs: Weak) -> Bool {
+    static func == (lhs: Weak, rhs: Weak) -> Bool {
         return lhs.identifier == rhs.identifier
     }
 }

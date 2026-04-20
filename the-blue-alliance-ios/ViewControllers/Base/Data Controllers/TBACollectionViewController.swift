@@ -30,7 +30,10 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
 
     // MARK: - Init
 
-    init(collectionViewLayout: UICollectionViewLayout = UICollectionViewFlowLayout(), dependencies: Dependencies) {
+    init(
+        collectionViewLayout: UICollectionViewLayout = UICollectionViewFlowLayout(),
+        dependencies: Dependencies
+    ) {
         self.dependencies = dependencies
 
         super.init(collectionViewLayout: collectionViewLayout)

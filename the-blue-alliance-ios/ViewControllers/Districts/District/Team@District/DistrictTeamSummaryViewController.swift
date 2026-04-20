@@ -47,8 +47,11 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, St
         return 2 + eventPoints.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell =
+            tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         if isEventPointsRow(row: indexPath.row) {
             let points = eventPoints[indexPath.row - 1]
             cell.titleLabel.text = points.eventKey

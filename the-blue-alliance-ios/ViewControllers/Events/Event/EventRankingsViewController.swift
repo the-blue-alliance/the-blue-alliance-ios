@@ -48,7 +48,10 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, EventRanking.RankingsPayloadPayload>(tableView: tableView) { [weak self] tableView, indexPath, ranking in
+        dataSource = TableViewDataSource<String, EventRanking.RankingsPayloadPayload>(
+            tableView: tableView
+        ) {
+            [weak self] tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             let detail = self?.rankingInfoString(for: ranking)
             cell.viewModel = RankingCellViewModel(apiRanking: ranking, detailText: detail)
@@ -75,12 +78,24 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     private func rankingInfoString(for ranking: EventRanking.RankingsPayloadPayload) -> String? {
         var parts: [String] = []
-        parts.append(contentsOf: Self.formattedPairs(values: ranking.extraStats, info: extraStatsInfo.map { (name: $0.name, precision: Int($0.precision)) }))
-        parts.append(contentsOf: Self.formattedPairs(values: ranking.sortOrders ?? [], info: sortOrderInfo.map { (name: $0.name, precision: $0.precision) }))
+        parts.append(
+            contentsOf: Self.formattedPairs(
+                values: ranking.extraStats,
+                info: extraStatsInfo.map { (name: $0.name, precision: Int($0.precision)) }
+            )
+        )
+        parts.append(
+            contentsOf: Self.formattedPairs(
+                values: ranking.sortOrders ?? [],
+                info: sortOrderInfo.map { (name: $0.name, precision: $0.precision) }
+            )
+        )
         return parts.isEmpty ? nil : parts.joined(separator: ", ")
     }
 
-    private static func formattedPairs(values: [Double], info: [(name: String, precision: Int)]) -> [String] {
+    private static func formattedPairs(values: [Double], info: [(name: String, precision: Int)])
+        -> [String]
+    {
         zip(info, values).compactMap { info, value in
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal

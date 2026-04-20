@@ -47,7 +47,9 @@ class MediaCollectionViewCell: UICollectionViewCell, Reusable {
     private lazy var noDataView: UIView = {
         let noDataView = UIView(forAutoLayout: ())
         noDataView.addSubview(noDataLabel)
-        noDataLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+        noDataLabel.autoPinEdgesToSuperviewEdges(
+            with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        )
         return noDataView
     }()
     private let noDataLabel: UILabel = {

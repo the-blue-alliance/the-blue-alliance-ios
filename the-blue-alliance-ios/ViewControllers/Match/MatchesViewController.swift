@@ -22,7 +22,12 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     private var favoriteTeamKeys: [String] = []
 
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage.sortFilterIcon, style: .plain, target: self, action: #selector(showFilter))
+        return UIBarButtonItem(
+            image: UIImage.sortFilterIcon,
+            style: .plain,
+            target: self,
+            action: #selector(showFilter)
+        )
     }()
     override var additionalRightBarButtonItems: [UIBarButtonItem] {
         return [matchQueryBarButtonItem]
@@ -66,14 +71,17 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Match>(tableView: tableView) { [weak self] tableView, indexPath, match in
+        dataSource = TableViewDataSource<String, Match>(tableView: tableView) {
+            [weak self] tableView, indexPath, match in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
             var baseTeamKeys: Set<String> = Set()
             if let teamKey = self?.teamKey {
                 baseTeamKeys.insert(teamKey)
             }
-            if let query = self?.query, query.filter.favorites, let favoriteTeamKeys = self?.favoriteTeamKeys {
+            if let query = self?.query, query.filter.favorites,
+                let favoriteTeamKeys = self?.favoriteTeamKeys
+            {
                 baseTeamKeys.formUnion(favoriteTeamKeys)
             }
             cell.viewModel = MatchViewModel(apiMatch: match, baseTeamKeys: Array(baseTeamKeys))
@@ -85,7 +93,10 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     }
 
     private func applyMatches(_ matches: [Match]) {
-        let filtered = matches.filter(for: teamKey, favoriteTeamKeys: query.filter.favorites ? favoriteTeamKeys : nil)
+        let filtered = matches.filter(
+            for: teamKey,
+            favoriteTeamKeys: query.filter.favorites ? favoriteTeamKeys : nil
+        )
         let sorted = filtered.sorted(ascending: !query.sort.reverse)
 
         var snapshot = NSDiffableDataSourceSnapshot<String, Match>()
@@ -110,7 +121,8 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: TableViewDataSourceDelegate
 
     override func title(forSection section: Int) -> String? {
-        guard let firstMatch = dataSource.itemIdentifier(for: IndexPath(row: 0, section: section)) else {
+        guard let firstMatch = dataSource.itemIdentifier(for: IndexPath(row: 0, section: section))
+        else {
             return "Matches"
         }
         return "\(firstMatch.compLevel.level) Matches"
@@ -123,7 +135,9 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         delegate?.matchSelected(matchKey: match.key)
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int)
+        -> CGFloat
+    {
         return 30.0
     }
 
@@ -214,7 +228,10 @@ protocol MatchesViewControllerQueryable: ContainerViewController, MatchQueryOpti
 extension MatchesViewControllerQueryable {
 
     func showFilter() {
-        let queryViewController = MatchQueryOptionsViewController(query: matchesViewController.query, dependencies: dependencies)
+        let queryViewController = MatchQueryOptionsViewController(
+            query: matchesViewController.query,
+            dependencies: dependencies
+        )
         queryViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: queryViewController)

@@ -8,7 +8,9 @@ protocol SelectTableViewControllerDelegate: AnyObject {
     func titleForOption(_ option: OptionType) -> String
 }
 
-class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TBATableViewController, Refreshable {
+class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>:
+    TBATableViewController, Refreshable
+{
 
     private(set) var current: Delegate.OptionType?
     var options: [Delegate.OptionType] {
@@ -21,7 +23,12 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
     private let willPush: Bool
     weak var delegate: Delegate?
 
-    init(current: Delegate.OptionType?, options: [Delegate.OptionType], willPush: Bool = false, dependencies: Dependencies) {
+    init(
+        current: Delegate.OptionType?,
+        options: [Delegate.OptionType],
+        willPush: Bool = false,
+        dependencies: Dependencies
+    ) {
         self.current = current
         self.options = options
         self.willPush = willPush
@@ -32,7 +39,6 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     // MARK: - View Lifecycle
 
@@ -55,7 +61,9 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
         return options.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         let option = options[indexPath.row]
@@ -97,7 +105,7 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
     // MARK: - Private Methods
 
     @objc private func dismissModal(_ sender: UIBarButtonItem) {
-       dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 
 }

@@ -22,20 +22,51 @@ class TeamAtEventViewController: ContainerViewController {
         self.teamKey = teamKey
         self.eventKey = eventKey
 
-        summaryViewController = TeamSummaryViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
-        matchesViewController = MatchesViewController(eventKey: eventKey, teamKey: teamKey, dependencies: dependencies)
-        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: year, dependencies: dependencies)
-        statsViewController = TeamStatsViewController(teamKey: teamKey, eventKey: eventKey, dependencies: dependencies)
-        awardsViewController = EventAwardsViewController(eventKey: eventKey, teamKey: teamKey, dependencies: dependencies)
+        summaryViewController = TeamSummaryViewController(
+            teamKey: teamKey,
+            eventKey: eventKey,
+            dependencies: dependencies
+        )
+        matchesViewController = MatchesViewController(
+            eventKey: eventKey,
+            teamKey: teamKey,
+            dependencies: dependencies
+        )
+        mediaViewController = TeamMediaCollectionViewController(
+            teamKey: teamKey,
+            year: year,
+            dependencies: dependencies
+        )
+        statsViewController = TeamStatsViewController(
+            teamKey: teamKey,
+            eventKey: eventKey,
+            dependencies: dependencies
+        )
+        awardsViewController = EventAwardsViewController(
+            eventKey: eventKey,
+            teamKey: teamKey,
+            dependencies: dependencies
+        )
 
-        super.init(viewControllers: [summaryViewController, matchesViewController, mediaViewController, statsViewController, awardsViewController],
-                   navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
-                   navigationSubtitle: nil,
-                   segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [
+                summaryViewController, matchesViewController, mediaViewController,
+                statsViewController,
+                awardsViewController,
+            ],
+            navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+            navigationSubtitle: nil,
+            segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
+            dependencies: dependencies
+        )
 
         rightBarButtonItems = [
-            UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent))
+            UIBarButtonItem(
+                image: UIImage.eventIcon,
+                style: .plain,
+                target: self,
+                action: #selector(pushEvent)
+            )
         ]
 
         summaryViewController.delegate = self
@@ -65,7 +96,6 @@ class TeamAtEventViewController: ContainerViewController {
             let team = await teamHandle.value
             let event = await eventHandle.value
 
-
             if let team {
                 self.navigationTitle = team.teamNumberNickname
             }
@@ -78,12 +108,20 @@ class TeamAtEventViewController: ContainerViewController {
     // MARK: - Private Methods
 
     @objc private func pushEvent() {
-        let eventViewController = EventViewController(eventKey: eventKey, dependencies: dependencies)
+        let eventViewController = EventViewController(
+            eventKey: eventKey,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
     private func pushTeamAtEvent(teamKey: String, eventKey: String, year: Int) {
-        let vc = TeamAtEventViewController(teamKey: teamKey, eventKey: eventKey, year: year, dependencies: dependencies)
+        let vc = TeamAtEventViewController(
+            teamKey: teamKey,
+            eventKey: eventKey,
+            year: year,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -93,13 +131,19 @@ class TeamAtEventViewController: ContainerViewController {
     }
 
     private func pushMatch(matchKey: String) {
-        let matchViewController = MatchViewController(matchKey: matchKey, teamKey: teamKey, dependencies: dependencies)
+        let matchViewController = MatchViewController(
+            matchKey: matchKey,
+            teamKey: teamKey,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(matchViewController, animated: true)
     }
 
 }
 
-extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable, TeamSummaryViewControllerDelegate {
+extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable,
+    TeamSummaryViewControllerDelegate
+{
 
     func teamInfoSelected(teamKey: String) {
         pushTeam(teamKey: teamKey)

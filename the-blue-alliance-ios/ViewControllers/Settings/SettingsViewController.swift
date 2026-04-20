@@ -27,7 +27,7 @@ private extension TBAAPI.CachePolicy {
     var displayName: String {
         switch self {
         case .default: return "Default"
-        case .bypass:  return "Bypass Cache"
+        case .bypass: return "Bypass Cache"
         }
     }
 }
@@ -39,7 +39,11 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(fcmTokenProvider: any FCMTokenProvider, pushService: any PushServiceProtocol, dependencies: Dependencies) {
+    init(
+        fcmTokenProvider: any FCMTokenProvider,
+        pushService: any PushServiceProtocol,
+        dependencies: Dependencies
+    ) {
         self.fcmTokenProvider = fcmTokenProvider
         self.pushService = pushService
 
@@ -84,7 +88,9 @@ class SettingsViewController: TBATableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
+        -> String?
+    {
         guard let section = SettingsSection(rawValue: section) else {
             return nil
         }
@@ -99,14 +105,18 @@ class SettingsViewController: TBATableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int)
+        -> String?
+    {
         guard SettingsSection(rawValue: section) == .debug else {
             return nil
         }
         return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
         guard let section = SettingsSection(rawValue: indexPath.section) else {
             fatalError("This section does not exist")
         }
@@ -165,7 +175,11 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Table View Delegate
 
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(
+        _ tableView: UITableView,
+        willDisplayHeaderView view: UIView,
+        forSection section: Int
+    ) {
         // Override so we don't get colored headers
     }
 
@@ -213,7 +227,7 @@ class SettingsViewController: TBATableViewController {
 
     /**
      Check if the current app icon is the same as the passed app icon name.
-
+    
      Used to show which app icon we currently have set.
     */
     private func isCurrentAppIcon(_ icon: String?) -> Bool {
@@ -221,10 +235,11 @@ class SettingsViewController: TBATableViewController {
     }
 
     private var primaryAppIconName: String? {
-        guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String:Any],
-            let primaryIconsDictionary = iconsDictionary["CFBundlePrimaryIcon"] as? [String:Any],
+        guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+            let primaryIconsDictionary = iconsDictionary["CFBundlePrimaryIcon"] as? [String: Any],
             let iconFiles = primaryIconsDictionary["CFBundleIconFiles"] as? [String],
-            let lastIcon = iconFiles.last else { return nil }
+            let lastIcon = iconFiles.last
+        else { return nil }
         return lastIcon
     }
 
@@ -232,14 +247,17 @@ class SettingsViewController: TBATableViewController {
      Key is the name, value is the image name.
     */
     private lazy var alternateAppIcons: [String: String] = {
-        guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String:Any],
-            let alternateIconsDictionary = iconsDictionary["CFBundleAlternateIcons"] as? [String:Any] else { return [:] }
+        guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+            let alternateIconsDictionary = iconsDictionary["CFBundleAlternateIcons"]
+                as? [String: Any]
+        else { return [:] }
 
         var alternateAppIcons: [String: String] = [:]
         alternateIconsDictionary.forEach({ (key, value) in
-            guard let iconDictionary = value as? [String:Any],
+            guard let iconDictionary = value as? [String: Any],
                 let iconFiles = iconDictionary["CFBundleIconFiles"] as? [String],
-                let lastIcon = iconFiles.last else { return }
+                let lastIcon = iconFiles.last
+            else { return }
             alternateAppIcons[key] = lastIcon
         })
         return alternateAppIcons
@@ -256,9 +274,12 @@ class SettingsViewController: TBATableViewController {
             return
         }
 
-        UIApplication.shared.setAlternateIconName(nil, completionHandler: { _ in
-            self.reloadIconsSection()
-        })
+        UIApplication.shared.setAlternateIconName(
+            nil,
+            completionHandler: { _ in
+                self.reloadIconsSection()
+            }
+        )
     }
 
     private func setAlternateAppIcon(_ alternateName: String) {
@@ -272,9 +293,12 @@ class SettingsViewController: TBATableViewController {
             return
         }
 
-        UIApplication.shared.setAlternateIconName(alternateName, completionHandler: { _ in
-            self.reloadIconsSection()
-        })
+        UIApplication.shared.setAlternateIconName(
+            alternateName,
+            completionHandler: { _ in
+                self.reloadIconsSection()
+            }
+        )
     }
 
     private func reloadIconsSection() {
@@ -286,10 +310,15 @@ class SettingsViewController: TBATableViewController {
     // MARK: - Networking Methods
 
     private func showCachePolicyPicker(from indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "Cache Policy", message: nil, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(
+            title: "Cache Policy",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
 
         for policy in TBAAPI.CachePolicy.allCases {
-            let action = UIAlertAction(title: policy.displayName, style: .default) { [weak self] _ in
+            let action = UIAlertAction(title: policy.displayName, style: .default) {
+                [weak self] _ in
                 guard let self else { return }
                 self.dependencies.appSettings.cachePolicy.current = policy
                 self.api.setCachePolicy(policy)
@@ -303,7 +332,8 @@ class SettingsViewController: TBATableViewController {
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
         if let popover = alertController.popoverPresentationController,
-           let cell = tableView.cellForRow(at: indexPath) {
+            let cell = tableView.cellForRow(at: indexPath)
+        {
             popover.sourceView = cell
             popover.sourceRect = cell.bounds
         }
@@ -312,9 +342,14 @@ class SettingsViewController: TBATableViewController {
     }
 
     private func showDeleteNetworkCache() {
-        let alertController = UIAlertController(title: "Delete Network Cache", message: "Are you sure you want to delete all the network cache data?", preferredStyle: .alert)
+        let alertController = UIAlertController(
+            title: "Delete Network Cache",
+            message: "Are you sure you want to delete all the network cache data?",
+            preferredStyle: .alert
+        )
 
-        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) {
+            [weak self] _ in
             self?.api.clearCache()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -328,7 +363,11 @@ class SettingsViewController: TBATableViewController {
     // MARK: - Debug Methods
 
     private func pushTroubleshootNotifications() {
-        let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, pushService: pushService, dependencies: dependencies)
+        let notificationsViewController = NotificationsViewController(
+            fcmTokenProvider: fcmTokenProvider,
+            pushService: pushService,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(notificationsViewController, animated: true)
     }
 

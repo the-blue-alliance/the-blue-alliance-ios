@@ -9,7 +9,8 @@ enum WeekEventsGrouping {
     static func weekEvents(for year: Int, from events: [Event]) -> [Event] {
         let candidates = events.filter { $0.year == year && !$0.isChampionshipDivision }
         var seen = Set<String>()
-        return candidates
+        return
+            candidates
             .sorted(by: pickerOrder)
             .filter { seen.insert($0.weekPickerBucket).inserted }
     }

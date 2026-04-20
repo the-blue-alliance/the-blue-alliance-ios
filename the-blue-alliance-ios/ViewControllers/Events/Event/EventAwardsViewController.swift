@@ -13,12 +13,18 @@ class EventAwardsContainerViewController: ContainerViewController {
     init(event: Event, teamKey: String? = nil, dependencies: Dependencies) {
         self.event = event
 
-        let awardsViewController = EventAwardsViewController(eventKey: event.key, teamKey: teamKey, dependencies: dependencies)
+        let awardsViewController = EventAwardsViewController(
+            eventKey: event.key,
+            teamKey: teamKey,
+            dependencies: dependencies
+        )
 
-        super.init(viewControllers: [awardsViewController],
-                   navigationTitle: "Awards",
-                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   dependencies: dependencies)
+        super.init(
+            viewControllers: [awardsViewController],
+            navigationTitle: "Awards",
+            navigationSubtitle: "@ \(event.friendlyNameWithYear)",
+            dependencies: dependencies
+        )
 
         awardsViewController.delegate = self
     }
@@ -32,7 +38,12 @@ class EventAwardsContainerViewController: ContainerViewController {
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
     func teamSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(
+            teamKey: teamKey,
+            eventKey: event.key,
+            year: event.year,
+            dependencies: dependencies
+        )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -78,7 +89,8 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Award>(tableView: tableView) { [weak self] tableView, indexPath, award in
+        dataSource = TableViewDataSource<String, Award>(tableView: tableView) {
+            [weak self] tableView, indexPath, award in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as AwardTableViewCell
             cell.selectionStyle = .none
             cell.viewModel = AwardCellViewModel(award: award)

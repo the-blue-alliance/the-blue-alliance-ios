@@ -43,7 +43,9 @@ class AwardTableViewCell: UITableViewCell, Reusable {
             let stackView = UIStackView()
             stackView.axis = .vertical
             stackView.tag = index
-            stackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:))))
+            stackView.addGestureRecognizer(
+                UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:)))
+            )
             for text in recipient.awardText {
                 let label = boldLabelWithText(text)
                 stackView.addArrangedSubview(label)
@@ -62,7 +64,9 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     }
 
     @objc private func recipientTapped(gesture: UITapGestureRecognizer) {
-        guard let tag = gesture.view?.tag, let recipient = viewModel?.recipients[tag], let teamKey = recipient.teamKey else {
+        guard let tag = gesture.view?.tag, let recipient = viewModel?.recipients[tag],
+            let teamKey = recipient.teamKey
+        else {
             return
         }
         teamKeySelected?(teamKey)

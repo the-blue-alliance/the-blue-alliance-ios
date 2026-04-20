@@ -118,7 +118,8 @@ class MyTBATests: MyTBATestCase {
         XCTAssertEqual(request.httpMethod, "POST")
 
         guard let headers = request.allHTTPHeaderFields,
-              let authorizationHeader = headers["Authorization"] else {
+            let authorizationHeader = headers["Authorization"]
+        else {
             XCTFail()
             return
         }

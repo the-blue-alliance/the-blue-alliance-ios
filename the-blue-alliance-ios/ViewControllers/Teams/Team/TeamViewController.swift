@@ -40,14 +40,20 @@ class TeamViewController: HeaderContainerViewController {
     // MARK: Init
 
     convenience init(teamKey: String, nickname: String? = nil, dependencies: Dependencies) {
-        self.init(teamKey: teamKey, team: nil, partialNickname: nickname, dependencies: dependencies)
+        self.init(
+            teamKey: teamKey,
+            team: nil,
+            partialNickname: nickname,
+            dependencies: dependencies
+        )
     }
 
     convenience init(team: Team, dependencies: Dependencies) {
         self.init(teamKey: team.key, team: team, partialNickname: nil, dependencies: dependencies)
     }
 
-    private init(teamKey: String, team: Team?, partialNickname: String?, dependencies: Dependencies) {
+    private init(teamKey: String, team: Team?, partialNickname: String?, dependencies: Dependencies)
+    {
         self.teamKey = teamKey
         self.team = team
 
@@ -58,19 +64,34 @@ class TeamViewController: HeaderContainerViewController {
         }()
         let teamNumberNickname = team?.teamNumberNickname ?? "Team \(teamNumber)"
 
-        self.teamHeaderView = TeamHeaderView(TeamHeaderViewModel(teamNumber: teamNumber,
-                                                                 avatar: nil,
-                                                                 nickname: nickname,
-                                                                 teamNumberNickname: teamNumberNickname,
-                                                                 year: nil))
+        self.teamHeaderView = TeamHeaderView(
+            TeamHeaderViewModel(
+                teamNumber: teamNumber,
+                avatar: nil,
+                nickname: nickname,
+                teamNumberNickname: teamNumberNickname,
+                year: nil
+            )
+        )
 
         if let team {
             infoViewController = TeamInfoViewController(team: team, dependencies: dependencies)
         } else {
-            infoViewController = TeamInfoViewController(teamKey: teamKey, dependencies: dependencies)
+            infoViewController = TeamInfoViewController(
+                teamKey: teamKey,
+                dependencies: dependencies
+            )
         }
-        eventsViewController = TeamEventsViewController(teamKey: teamKey, year: nil, dependencies: dependencies)
-        mediaViewController = TeamMediaCollectionViewController(teamKey: teamKey, year: Calendar.current.component(.year, from: Date()), dependencies: dependencies)
+        eventsViewController = TeamEventsViewController(
+            teamKey: teamKey,
+            year: nil,
+            dependencies: dependencies
+        )
+        mediaViewController = TeamMediaCollectionViewController(
+            teamKey: teamKey,
+            year: Calendar.current.component(.year, from: Date()),
+            dependencies: dependencies
+        )
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
@@ -83,9 +104,12 @@ class TeamViewController: HeaderContainerViewController {
         eventsViewController.delegate = self
         mediaViewController.delegate = self
 
-        teamHeaderView.yearButton.addAction(UIAction { [weak self] _ in
-            self?.showSelectYear()
-        }, for: .touchUpInside)
+        teamHeaderView.yearButton.addAction(
+            UIAction { [weak self] _ in
+                self?.showSelectYear()
+            },
+            for: .touchUpInside
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -110,11 +134,12 @@ class TeamViewController: HeaderContainerViewController {
             // Task handles heap-allocate and sidestep the allocator entirely.
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
             let teamHandle = Task { try? await self.dependencies.api.team(key: self.teamKey) }
-            let yearsHandle = Task { try? await self.dependencies.api.teamYearsParticipated(key: self.teamKey) }
+            let yearsHandle = Task {
+                try? await self.dependencies.api.teamYearsParticipated(key: self.teamKey)
+            }
 
             let team = await teamHandle.value
             let years = await yearsHandle.value
-
 
             if let team {
                 self.team = team
@@ -124,7 +149,10 @@ class TeamViewController: HeaderContainerViewController {
             if let years {
                 self.yearsParticipated = years.sorted().reversed()
                 if year == nil {
-                    year = Self.latestYear(currentSeason: statusService.currentSeason, years: yearsParticipated)
+                    year = Self.latestYear(
+                        currentSeason: statusService.currentSeason,
+                        years: yearsParticipated
+                    )
                 }
             }
         }
@@ -142,18 +170,25 @@ class TeamViewController: HeaderContainerViewController {
 
     private func updateInterface() {
         if let team {
-            teamHeaderView.viewModel = TeamHeaderViewModel(teamNumber: team.teamNumber,
-                                                           avatar: avatarImage,
-                                                           nickname: team.nickname.isEmpty ? nil : team.nickname,
-                                                           teamNumberNickname: team.teamNumberNickname,
-                                                           year: year)
+            teamHeaderView.viewModel = TeamHeaderViewModel(
+                teamNumber: team.teamNumber,
+                avatar: avatarImage,
+                nickname: team.nickname.isEmpty ? nil : team.nickname,
+                teamNumberNickname: team.teamNumberNickname,
+                year: year
+            )
         }
         navigationSubtitle = year?.description ?? "----"
     }
 
     private func loadAvatar(year: Int) {
         Task { @MainActor in
-            guard let media = try? await dependencies.api.teamMediaByYear(teamKey: teamKey, year: year) else { return }
+            guard
+                let media = try? await dependencies.api.teamMediaByYear(
+                    teamKey: teamKey,
+                    year: year
+                )
+            else { return }
             guard self.year == year else { return }
             let avatar = media.first(where: { $0._type == .avatar })
             avatarImage = Self.decodeAvatar(from: avatar)
@@ -163,22 +198,30 @@ class TeamViewController: HeaderContainerViewController {
 
     private static func decodeAvatar(from media: Media?) -> UIImage? {
         guard let base64 = media?.details?.additionalProperties.value["base64Image"] as? String,
-              let data = Data(base64Encoded: base64) else { return nil }
+            let data = Data(base64Encoded: base64)
+        else { return nil }
         return UIImage(data: data)
     }
 
     private func showSelectYear() {
         guard !yearsParticipated.isEmpty else { return }
 
-        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, dependencies: dependencies)
+        let selectTableViewController = SelectTableViewController<TeamViewController>(
+            current: year,
+            options: yearsParticipated,
+            dependencies: dependencies
+        )
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: selectTableViewController)
         nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .done, primaryAction: UIAction { [weak self] _ in
-            self?.navigationController?.dismiss(animated: true)
-        })
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            systemItem: .done,
+            primaryAction: UIAction { [weak self] _ in
+                self?.navigationController?.dismiss(animated: true)
+            }
+        )
 
         navigationController?.present(nav, animated: true)
     }
@@ -210,7 +253,12 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, eventKey: event.key, year: event.year, dependencies: dependencies)
+        let teamAtEventViewController = TeamAtEventViewController(
+            teamKey: teamKey,
+            eventKey: event.key,
+            year: event.year,
+            dependencies: dependencies
+        )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 }
