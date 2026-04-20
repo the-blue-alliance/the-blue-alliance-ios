@@ -126,8 +126,6 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
                 if let match = self.matchesCache[key] {
                     cell.viewModel = MatchViewModel(apiMatch: match)
-                } else {
-                    cell.textLabel?.text = key
                 }
                 return cell
             }

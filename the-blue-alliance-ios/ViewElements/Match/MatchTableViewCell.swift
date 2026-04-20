@@ -25,6 +25,7 @@ class MatchTableViewCell: UITableViewCell, Reusable {
         super.prepareForReuse()
 
         matchSummaryView?.resetView()
+        textLabel?.text = nil
     }
 
 }
