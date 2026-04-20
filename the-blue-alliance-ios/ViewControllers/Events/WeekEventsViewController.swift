@@ -17,7 +17,14 @@ class WeekEventsViewController: EventsListViewController {
     var weekEvent: APIEvent? {
         didSet {
             guard weekEvent != oldValue else { return }
-            applyEvents(allEvents)
+            if weekEvent?.year != oldValue?.year {
+                // Switched years — the cached allEvents are for the previous
+                // year, so filtering would drop everything. Refetch; the
+                // refresh path will call applyEvents once the new data lands.
+                refresh()
+            } else {
+                applyEvents(allEvents)
+            }
             weekEventsDelegate?.weekEventUpdated()
         }
     }

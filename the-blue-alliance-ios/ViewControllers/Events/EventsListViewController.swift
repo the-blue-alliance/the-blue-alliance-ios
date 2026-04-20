@@ -17,7 +17,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     weak var delegate: EventsListViewControllerDelegate?
 
     private(set) var events: [APIEvent] = []
-    private var dataSource: TableViewDataSource<String, APIEvent>!
+    private var dataSource: TableViewDataSource<EventSection, APIEvent>!
 
     // MARK: - View Lifecycle
 
@@ -36,12 +36,10 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     func filter(_ events: [APIEvent]) -> [APIEvent] { events }
 
-    func sectionKey(for event: APIEvent) -> String { event.hybridTypeSortKey }
-
     // MARK: - Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, APIEvent>(tableView: tableView) { [weak self] tableView, indexPath, event in
+        dataSource = TableViewDataSource<EventSection, APIEvent>(tableView: tableView) { [weak self] tableView, indexPath, event in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
             cell.viewModel = EventCellViewModel(name: event.safeShortName,
                                                 location: event.locationString,
@@ -56,26 +54,16 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     }
 
     func applyEvents(_ apiEvents: [APIEvent]) {
-        let sorted = filter(apiEvents).sorted()
-        events = sorted
+        events = filter(apiEvents)
 
-        var snapshot = NSDiffableDataSourceSnapshot<String, APIEvent>()
-        // Preserve the order in which sections first appear in the sorted list —
-        // the sort is the "right" section ordering (preseason → weeks → CMP → …).
-        var sectionOrder: [String] = []
-        var grouped: [String: [APIEvent]] = [:]
-        for event in sorted {
-            let key = sectionKey(for: event)
-            if grouped[key] == nil {
-                sectionOrder.append(key)
-                grouped[key] = []
-            }
-            grouped[key]?.append(event)
-        }
-
-        for section in sectionOrder {
+        let grouped = Dictionary(grouping: events, by: \.section)
+        var snapshot = NSDiffableDataSourceSnapshot<EventSection, APIEvent>()
+        for section in grouped.keys.sorted() {
             snapshot.appendSections([section])
-            snapshot.appendItems(grouped[section] ?? [], toSection: section)
+            snapshot.appendItems(
+                (grouped[section] ?? []).sorted(by: Event.sectionAscending),
+                toSection: section
+            )
         }
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
@@ -93,36 +81,8 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
         guard let event = dataSource.itemIdentifier(for: IndexPath(item: 0, section: section)) else {
             return "Events"
         }
-
-        if let customTitle = delegate?.title(for: event) {
-            return customTitle
-        }
-
-        let districtName = event.district?.displayName
-
-        if event.isDistrictChampionshipEvent {
-            guard let districtName else {
-                return event.eventTypeString.isEmpty ? nil : "\(event.eventTypeString)s"
-            }
-            return districtName
-        } else if event.isChampionshipEvent {
-            guard !event.eventTypeString.isEmpty else { return nil }
-            // CMP Finals is already plural.
-            return event.isChampionshipFinals
-                ? event.eventTypeString
-                : "\(event.eventTypeString)s"
-        } else if let districtName {
-            return "\(districtName) District Events"
-        } else if event.isFoC {
-            return "Festival of Champions"
-        } else if event.isOffseason {
-            return "\(event.weekString) Events"
-        } else if event.isPreseason {
-            return "Preseason Events"
-        } else if event.isRegional {
-            return "Regional Events"
-        }
-        return "Unknown Events"
+        if let customTitle = delegate?.title(for: event) { return customTitle }
+        return event.section.title
     }
 
     // MARK: - Refreshable

@@ -157,7 +157,7 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
                 let lYear = lEvent.flatMap { Int($0.key.prefix(4)) } ?? 0
                 let rYear = rEvent.flatMap { Int($0.key.prefix(4)) } ?? 0
                 if lYear != rYear { return lYear > rYear }
-                if let l = lEvent, let r = rEvent { return l < r }
+                if let l = lEvent, let r = rEvent { return Event.sectionAscending(l, r) }
                 return lhs.modelKey < rhs.modelKey
             }
         case .team:

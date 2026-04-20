@@ -184,6 +184,7 @@
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		A11CF00E00000000000000BB /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A11CF00E00000000000000FF /* AppIcon.icon */; };
+		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
 /* End PBXBuildFile section */
 
@@ -361,6 +362,7 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -404,7 +406,6 @@
 			isa = PBXGroup;
 			children = (
 				5EC0D41A2C26041700000001 /* APIEvent+Helpers.swift */,
-				5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */,
 				5EC0D41A2C26041800000002 /* TBAAPIError.swift */,
 				5EC0D41A2C26041800000004 /* TBAAPI+Events.swift */,
 				5EC0D41A2C26041800000006 /* APIWebcast+Helpers.swift */,
@@ -548,6 +549,7 @@
 				927246C12AFFFC8900EF7796 /* Auth */,
 				923AEE8F2165966C00EF50C8 /* AppDelegate */,
 				92AABBCC000000000000DD10 /* LocalStore */,
+				BA0000000000000000000010 /* ViewModels */,
 				923A0D7620D21D3800BF5E31 /* LaunchViews */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				A11CF00E00000000000000FF /* AppIcon.icon */,
@@ -633,6 +635,15 @@
 				92AF4D0B1E330790007E967D /* SelectTableViewController.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		929AACF32F95A8EA00587DEA /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				BA0000000000000000000001 /* EventSection.swift */,
+				5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */,
+			);
+			path = Event;
 			sourceTree = "<group>";
 		};
 		929BBB061EC55745006D3854 /* Info */ = {
@@ -935,6 +946,14 @@
 			path = Events;
 			sourceTree = "<group>";
 		};
+		BA0000000000000000000010 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				929AACF32F95A8EA00587DEA /* Event */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -993,10 +1012,6 @@
 							};
 						};
 					};
-					D3DE56FA27D7ECD14AEBE10A = {
-						CreatedOnToolsVersion = 15.0;
-						TestTargetID = 92942D911E2154DA008E79CA;
-					};
 				};
 			};
 			buildConfigurationList = 92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */;
@@ -1014,9 +1029,9 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
-				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */,
-				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */,
-				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */,
+				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
+				92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */,
+				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
 			);
 			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
 			projectDirPath = "";
@@ -1100,6 +1115,7 @@
 				5EC0D41A2C26041700000002 /* APIEvent+Helpers.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
 				5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */,
+				BA0000000000000000000002 /* EventSection.swift in Sources */,
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
 				514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */,
 				92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */,
@@ -1430,15 +1446,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "TBAAPI" */ = {
+		921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAAPI;
 		};
-		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "MyTBAKit" */ = {
+		92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/MyTBAKit;
 		};
-		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "TBAUtils" */ = {
+		92F63EAB2BA91C170025CC03 /* XCLocalSwiftPackageReference "Packages/TBAUtils" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TBAUtils;
 		};
