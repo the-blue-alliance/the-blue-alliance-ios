@@ -3,7 +3,6 @@ import TBAAPI
 
 extension Webcast {
 
-    // Matches the string enum in TBAData's `Webcast.type`.
     var typeString: String { _type.rawValue }
 
     var displayName: String {
@@ -39,9 +38,6 @@ extension Webcast {
 
     var dateParsed: Date? {
         guard let date else { return nil }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        return formatter.date(from: date)
+        return TBAAPI.dateFormatter.date(from: date)
     }
 }
