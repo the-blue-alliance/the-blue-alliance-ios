@@ -12,17 +12,41 @@ public class MockFCMTokenProvider: FCMTokenProvider {
     }
 }
 
+public class MockIDTokenProvider: IDTokenProvider {
+    public var isSignedIn: Bool
+    public var stubbedToken: String
+    public var stubbedError: Error?
+
+    public init(isSignedIn: Bool = false, stubbedToken: String = "mock-id-token") {
+        self.isSignedIn = isSignedIn
+        self.stubbedToken = stubbedToken
+    }
+
+    public func idToken() async throws -> String {
+        if let stubbedError {
+            throw stubbedError
+        }
+        return stubbedToken
+    }
+}
+
 public class MockMyTBA: MyTBA {
 
     public let session: MockURLSession
+    public let idTokenProvider: MockIDTokenProvider
 
-    public init(fcmTokenProvider: FCMTokenProvider) {
+    public init(
+        fcmTokenProvider: FCMTokenProvider,
+        idTokenProvider: MockIDTokenProvider = MockIDTokenProvider()
+    ) {
         self.session = MockURLSession()
+        self.idTokenProvider = idTokenProvider
 
         super.init(
             uuid: "abcd123",
             deviceName: "MyTBATesting",
             fcmTokenProvider: fcmTokenProvider,
+            idTokenProvider: idTokenProvider,
             urlSession: session
         )
     }

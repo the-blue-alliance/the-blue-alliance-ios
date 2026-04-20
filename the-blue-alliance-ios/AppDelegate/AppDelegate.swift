@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let favoritesStore = FavoritesStore()
     let subscriptionsStore = SubscriptionsStore()
     let urlOpener: URLOpener = UIApplication.shared
+    let idTokenProvider = FirebaseIDTokenProvider()
 
     let appSettings = AppSettings()
 
@@ -33,7 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var myTBA: any MyTBAProtocol = MyTBA(
         uuid: UIDevice.current.identifierForVendor!.uuidString,
         deviceName: UIDevice.current.name,
-        fcmTokenProvider: messaging
+        fcmTokenProvider: messaging,
+        idTokenProvider: idTokenProvider
     )
     lazy var pushService: PushService = PushService(
         errorRecorder: errorRecorder,
@@ -144,15 +146,11 @@ private extension AppDelegate {
     }
 
     func configureAuth() {
-        _ = Auth.auth().addIDTokenDidChangeListener { [weak self] _, user in
-            guard let self else { return }
-            if let user = user {
-                user.getIDToken { token, _ in
-                    self.myTBA.authToken = token
-                }
-            } else {
-                self.myTBA.authToken = nil
-            }
+        // Coarse-grained auth state — fires on sign-in / sign-out only.
+        // The actual ID token is fetched per-request via `FirebaseIDTokenProvider`,
+        // so we no longer listen for (or care about) token refreshes here.
+        _ = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+            self?.myTBA.notifyAuthStateChanged(isAuthenticated: user != nil)
         }
         restorePreviousSignIn()
     }
@@ -261,6 +259,37 @@ extension AppDelegate: RemoteNotificationRegistering {
 // MARK: - FCMTokenProvider conformance for Firebase Messaging
 
 extension Messaging: @retroactive FCMTokenProvider {}
+
+// MARK: - IDTokenProvider
+
+// Wraps Firebase Auth's `currentUser.getIDToken(completion:)`, which returns
+// a cached token if it's still fresh and silently refreshes if it's expired.
+// Called on every myTBA request, so stale tokens never pile up.
+final class FirebaseIDTokenProvider: IDTokenProvider {
+
+    var isSignedIn: Bool {
+        Auth.auth().currentUser != nil
+    }
+
+    func idToken() async throws -> String {
+        guard let user = Auth.auth().currentUser else {
+            throw MyTBAError.error(401, "Not signed in")
+        }
+        return try await withCheckedThrowingContinuation { continuation in
+            user.getIDToken { token, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else if let token {
+                    continuation.resume(returning: token)
+                } else {
+                    continuation.resume(
+                        throwing: MyTBAError.error(401, "Firebase returned no ID token")
+                    )
+                }
+            }
+        }
+    }
+}
 
 // MARK: - Appearance
 

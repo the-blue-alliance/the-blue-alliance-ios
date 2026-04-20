@@ -2,9 +2,10 @@ import Foundation
 import TBAUtils
 
 public protocol MyTBAProtocol: AnyObject {
-    var authToken: String? { get set }
     var isAuthenticated: Bool { get }
     var authenticationProvider: Provider<MyTBAAuthenticationObservable> { get }
+
+    func notifyAuthStateChanged(isAuthenticated: Bool)
 
     func ping() async throws -> MyTBABaseResponse
     func register() async throws -> MyTBABaseResponse

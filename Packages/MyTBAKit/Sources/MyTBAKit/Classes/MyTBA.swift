@@ -36,38 +36,38 @@ extension URLSession: MyTBAURLSession {}
 
 open class MyTBA {
 
-    // This is public, which is terrible, because it shouldn't be. But we need it so in TBA
-    // when Firebase Auth changes, we can remove the token
-    public var authToken: String? {
-        didSet {
-            // Only disaptch on changed state
-            if oldValue == authToken {
-                return
-            }
-
-            authenticationProvider.post { (observer) in
-                if authToken == nil {
-                    observer.unauthenticated()
-                } else {
-                    observer.authenticated()
-                }
-            }
-        }
+    public var isAuthenticated: Bool {
+        return idTokenProvider.isSignedIn
     }
 
-    public var isAuthenticated: Bool {
-        return authToken != nil
+    // Called by the host app when the underlying auth identity changes
+    // (sign-in / sign-out). Token refreshes in between do not flow through
+    // here — they're picked up per-request via `idTokenProvider.idToken()`.
+    public func notifyAuthStateChanged(isAuthenticated: Bool) {
+        if lastPostedAuthState == isAuthenticated {
+            return
+        }
+        lastPostedAuthState = isAuthenticated
+        authenticationProvider.post { observer in
+            if isAuthenticated {
+                observer.authenticated()
+            } else {
+                observer.unauthenticated()
+            }
+        }
     }
 
     public init(
         uuid: String,
         deviceName: String,
         fcmTokenProvider: FCMTokenProvider,
+        idTokenProvider: IDTokenProvider,
         urlSession: MyTBAURLSession? = nil
     ) {
         self.uuid = uuid
         self.deviceName = deviceName
         self.fcmTokenProvider = fcmTokenProvider
+        self.idTokenProvider = idTokenProvider
         self.urlSession = urlSession ?? URLSession(configuration: .default)
     }
 
@@ -81,6 +81,8 @@ open class MyTBA {
     internal var uuid: String
     internal var deviceName: String
     private var fcmTokenProvider: FCMTokenProvider
+    private var idTokenProvider: IDTokenProvider
+    private var lastPostedAuthState: Bool?
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()
@@ -94,13 +96,14 @@ open class MyTBA {
         return jsonDecoder
     }
 
-    func createRequest(_ method: String, _ bodyData: Data? = nil) -> URLRequest {
+    func createRequest(_ method: String, _ bodyData: Data? = nil) async throws -> URLRequest {
         let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
 
-        if let authToken = authToken {
-            request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        if idTokenProvider.isSignedIn {
+            let token = try await idTokenProvider.idToken()
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
 
         #if DEBUG
@@ -117,7 +120,7 @@ open class MyTBA {
     }
 
     func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil) async throws -> T {
-        let request = createRequest(method, bodyData)
+        let request = try await createRequest(method, bodyData)
         let (data, response) = try await urlSession.data(for: request)
 
         if let http = response as? HTTPURLResponse, http.statusCode == 500 {
