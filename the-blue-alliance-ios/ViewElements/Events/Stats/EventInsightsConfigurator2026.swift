@@ -79,10 +79,10 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
 
         bonusStats = filterEmptyInsights(bonusStats)
         if !bonusStats.isEmpty {
-            snapshot.appendSections(["Bonus Stats (Count / Opportunities / Sucess)"])
+            snapshot.appendSections(["Bonus Stats (Count / Opportunities / Success)"])
             snapshot.appendItems(
                 bonusStats,
-                toSection: "Bonus Stats (Count / Opportunities / Sucess)"
+                toSection: "Bonus Stats (Count / Opportunities / Success)"
             )
         }
 
@@ -151,10 +151,10 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
 
         towerStats = filterEmptyInsights(towerStats)
         if !towerStats.isEmpty {
-            snapshot.appendSections(["Tower Stats (Count / Opportunities / Sucess)"])
+            snapshot.appendSections(["Tower Stats (Count / Opportunities / Success)"])
             snapshot.appendItems(
                 towerStats,
-                toSection: "Tower Stats (Count / Opportunities / Sucess)"
+                toSection: "Tower Stats (Count / Opportunities / Success)"
             )
         }
 
