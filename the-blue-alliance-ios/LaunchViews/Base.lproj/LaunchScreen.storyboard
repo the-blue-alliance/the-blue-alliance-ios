@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22690"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TBr-la-un1" userLabel="TopBar">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="169"/>
+                                <color key="backgroundColor" name="navigationBarTintColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MID-la-un1" userLabel="Middle">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BBr-la-un1" userLabel="BottomBar">
+                                <rect key="frame" x="0.0" y="818" width="393" height="34"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEP-la-un1" userLabel="Separator">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="0.5"/>
+                                        <color key="backgroundColor" systemColor="separatorColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="SEP-la-un1" firstAttribute="top" secondItem="BBr-la-un1" secondAttribute="top" id="sp1"/>
+                                    <constraint firstItem="SEP-la-un1" firstAttribute="leading" secondItem="BBr-la-un1" secondAttribute="leading" id="sp2"/>
+                                    <constraint firstItem="BBr-la-un1" firstAttribute="trailing" secondItem="SEP-la-un1" secondAttribute="trailing" id="sp3"/>
+                                    <constraint firstAttribute="height" constant="0.5" id="sp4" firstItem="SEP-la-un1"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="saF-e1-aRa"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="TBr-la-un1" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="c01"/>
+                            <constraint firstItem="TBr-la-un1" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="c02"/>
+                            <constraint firstItem="Ze5-6b-2t3" firstAttribute="trailing" secondItem="TBr-la-un1" secondAttribute="trailing" id="c03"/>
+                            <constraint firstItem="TBr-la-un1" firstAttribute="bottom" secondItem="saF-e1-aRa" secondAttribute="top" constant="44" id="c04"/>
+                            <constraint firstItem="MID-la-un1" firstAttribute="top" secondItem="TBr-la-un1" secondAttribute="bottom" id="c05"/>
+                            <constraint firstItem="MID-la-un1" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="c06"/>
+                            <constraint firstItem="Ze5-6b-2t3" firstAttribute="trailing" secondItem="MID-la-un1" secondAttribute="trailing" id="c07"/>
+                            <constraint firstItem="BBr-la-un1" firstAttribute="top" secondItem="MID-la-un1" secondAttribute="bottom" id="c08"/>
+                            <constraint firstItem="BBr-la-un1" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="c09"/>
+                            <constraint firstItem="Ze5-6b-2t3" firstAttribute="trailing" secondItem="BBr-la-un1" secondAttribute="trailing" id="c10"/>
+                            <constraint firstItem="Ze5-6b-2t3" firstAttribute="bottom" secondItem="BBr-la-un1" secondAttribute="bottom" id="c11"/>
+                            <constraint firstItem="saF-e1-aRa" firstAttribute="bottom" secondItem="BBr-la-un1" secondAttribute="top" constant="50" id="c12"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="navigationBarTintColor">
+            <color red="0.247" green="0.318" blue="0.71" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
