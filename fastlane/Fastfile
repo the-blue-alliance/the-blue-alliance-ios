@@ -12,15 +12,15 @@ platform :ios do
     spm(command: "test", package_path: "Packages/MyTBAKit")
   end
 
-  desc "Run TBAUtils unit tests"
-  lane :test_tbautils do
-    spm(command: "test", package_path: "Packages/TBAUtils")
-  end
-
   desc "Run all of our tests"
   lane :test do
     test_mytbakit
-    test_tbautils
+    run_tests(
+      project: "the-blue-alliance-ios.xcodeproj",
+      scheme: "The Blue Alliance",
+      only_testing: ["TBAUnitTests"],
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+    )
   end
 
   desc "Format all Swift files with swift-format"

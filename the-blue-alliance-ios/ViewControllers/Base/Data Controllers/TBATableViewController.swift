@@ -1,7 +1,6 @@
 import Foundation
 import MyTBAKit
 import TBAAPI
-import TBAUtils
 import UIKit
 
 class TBATableViewController: UITableViewController, TableViewDataSourceDelegate, DataController,

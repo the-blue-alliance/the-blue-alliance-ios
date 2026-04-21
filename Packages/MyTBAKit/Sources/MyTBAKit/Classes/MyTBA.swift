@@ -1,5 +1,4 @@
 import Foundation
-import TBAUtils
 
 private struct Constants {
     struct APIConstants {

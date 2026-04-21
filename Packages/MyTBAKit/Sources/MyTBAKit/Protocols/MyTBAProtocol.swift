@@ -1,5 +1,4 @@
 import Foundation
-import TBAUtils
 
 public protocol MyTBAProtocol: AnyObject {
     var isAuthenticated: Bool { get }

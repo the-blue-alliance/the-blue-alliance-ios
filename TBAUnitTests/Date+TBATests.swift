@@ -1,5 +1,5 @@
-import TBAUtils
 import XCTest
+@testable import The_Blue_Alliance
 
 class DateTBATestCase: XCTestCase {
 

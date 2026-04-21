@@ -31,14 +31,6 @@ Install project dependencies
 
 Run MyTBAKit unit tests
 
-### ios test_tbautils
-
-```sh
-[bundle exec] fastlane ios test_tbautils
-```
-
-Run TBAUtils unit tests
-
 ### ios test
 
 ```sh

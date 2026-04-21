@@ -1,6 +1,5 @@
 import Foundation
 import MyTBAKit
-import TBAUtils
 import UIKit
 
 protocol Subscribable {
