@@ -90,6 +90,9 @@ extension EventInsightsConfigurator {
             if let val = bonusData.safeItem(at: 2) as? Double {
                 return "\(String(format: "%.2f", val))%"
             }
+            if bonusData.safeItem(at: 0) as? Int == 0 && bonusData.safeItem(at: 1) as? Int != nil {
+                return "0.00%"
+            }
             return "--"
         }()
         return [
