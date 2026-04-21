@@ -1,5 +1,4 @@
 import Foundation
-import TBAUtils
 
 private struct Constants {
     struct APIConstants {
@@ -28,34 +27,34 @@ extension MyTBAError: LocalizedError {
     }
 }
 
-public protocol MyTBAURLSession {
+public protocol MyTBAURLSession: Sendable {
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
 extension URLSession: MyTBAURLSession {}
 
-open class MyTBA {
+public actor MyTBA {
 
-    public var isAuthenticated: Bool {
-        return idTokenProvider.isSignedIn
+    // Immutable after init — read freely from any isolation.
+    nonisolated public let uuid: String
+    nonisolated public let deviceName: String
+    nonisolated public let fcmTokenProvider: FCMTokenProvider
+    nonisolated public let idTokenProvider: IDTokenProvider
+    nonisolated let urlSession: MyTBAURLSession
+
+    // Synchronous UI guard — reads through the nonisolated provider. See
+    // the PR description for why this is intentionally not actor-isolated.
+    nonisolated public var isAuthenticated: Bool {
+        idTokenProvider.isSignedIn
     }
 
-    // Called by the host app when the underlying auth identity changes
-    // (sign-in / sign-out). Token refreshes in between do not flow through
-    // here — they're picked up per-request via `idTokenProvider.idToken()`.
-    public func notifyAuthStateChanged(isAuthenticated: Bool) {
-        if lastPostedAuthState == isAuthenticated {
-            return
-        }
-        lastPostedAuthState = isAuthenticated
-        authenticationProvider.post { observer in
-            if isAuthenticated {
-                observer.authenticated()
-            } else {
-                observer.unauthenticated()
-            }
-        }
+    nonisolated var fcmToken: String? {
+        fcmTokenProvider.fcmToken
     }
+
+    // Actor-isolated auth-state broadcast state.
+    private var authStateContinuations: [UUID: AsyncStream<Bool>.Continuation] = [:]
+    private var lastPostedAuthState: Bool?
 
     public init(
         uuid: String,
@@ -71,18 +70,34 @@ open class MyTBA {
         self.urlSession = urlSession ?? URLSession(configuration: .default)
     }
 
-    public var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
-
-    internal var fcmToken: String? {
-        return fcmTokenProvider.fcmToken
+    // Replay-on-subscribe multicast of auth-state changes. Emits the
+    // current value immediately, then every change driven by the host
+    // app's `notifyAuthStateChanged`.
+    public func authStateChanges() -> AsyncStream<Bool> {
+        AsyncStream { continuation in
+            let id = UUID()
+            authStateContinuations[id] = continuation
+            continuation.yield(isAuthenticated)
+        }
     }
 
-    internal var urlSession: MyTBAURLSession
-    internal var uuid: String
-    internal var deviceName: String
-    private var fcmTokenProvider: FCMTokenProvider
-    private var idTokenProvider: IDTokenProvider
-    private var lastPostedAuthState: Bool?
+    // Called by the host app when the underlying auth identity changes
+    // (sign-in / sign-out). Token refreshes in between do not flow through
+    // here — they're picked up per-request via `idTokenProvider.idToken()`.
+    //
+    // Also prunes any continuations whose consumers have cancelled:
+    // `yield` on a finished continuation is a safe no-op and returns
+    // `.terminated`, so we use the state change as a natural GC point.
+    public func notifyAuthStateChanged(isAuthenticated: Bool) {
+        guard lastPostedAuthState != isAuthenticated else { return }
+        lastPostedAuthState = isAuthenticated
+        authStateContinuations = authStateContinuations.filter { _, continuation in
+            if case .terminated = continuation.yield(isAuthenticated) {
+                return false
+            }
+            return true
+        }
+    }
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()
@@ -142,9 +157,4 @@ open class MyTBA {
         return decoded
     }
 
-}
-
-public protocol MyTBAAuthenticationObservable {
-    func authenticated()
-    func unauthenticated()
 }

@@ -4,7 +4,10 @@ import XCTest
 
 extension MockURLSession: MyTBAURLSession {}
 
-public class MockFCMTokenProvider: FCMTokenProvider {
+// `@unchecked Sendable` on the mocks below because they have mutable
+// stub state by design — tests set their seams during setup.
+
+public final class MockFCMTokenProvider: FCMTokenProvider, @unchecked Sendable {
     public var fcmToken: String?
 
     public init(fcmToken: String?) {
@@ -12,7 +15,7 @@ public class MockFCMTokenProvider: FCMTokenProvider {
     }
 }
 
-public class MockIDTokenProvider: IDTokenProvider {
+public final class MockIDTokenProvider: IDTokenProvider, @unchecked Sendable {
     public var isSignedIn: Bool
     public var stubbedToken: String
     public var stubbedError: Error?
@@ -30,8 +33,11 @@ public class MockIDTokenProvider: IDTokenProvider {
     }
 }
 
-public class MockMyTBA: MyTBA {
+// Composition, not subclassing — `MyTBA` is an actor and can't be
+// subclassed. This wrapper owns a real `MyTBA` plus the test seams.
+public final class MockMyTBA: @unchecked Sendable {
 
+    public let myTBA: MyTBA
     public let session: MockURLSession
     public let idTokenProvider: MockIDTokenProvider
 
@@ -39,10 +45,10 @@ public class MockMyTBA: MyTBA {
         fcmTokenProvider: FCMTokenProvider,
         idTokenProvider: MockIDTokenProvider = MockIDTokenProvider()
     ) {
-        self.session = MockURLSession()
+        let session = MockURLSession()
+        self.session = session
         self.idTokenProvider = idTokenProvider
-
-        super.init(
+        self.myTBA = MyTBA(
             uuid: "abcd123",
             deviceName: "MyTBATesting",
             fcmTokenProvider: fcmTokenProvider,

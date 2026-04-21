@@ -4,7 +4,7 @@ import XCTest
 class MyTBAPreferencesTests: MyTBATestCase {
 
     func test_preferences() async throws {
-        myTBA.stub(for: "model/setPreferences")
+        mockMyTBA.stub(for: "model/setPreferences")
         let response = try await myTBA.updatePreferences(
             modelKey: "2018ckw0",
             modelType: .event,
@@ -16,7 +16,7 @@ class MyTBAPreferencesTests: MyTBATestCase {
     }
 
     func test_preferences_error() async {
-        myTBA.stub(for: "model/setPreferences", code: 401)
+        mockMyTBA.stub(for: "model/setPreferences", code: 401)
         do {
             _ = try await myTBA.updatePreferences(
                 modelKey: "2018ckw0",

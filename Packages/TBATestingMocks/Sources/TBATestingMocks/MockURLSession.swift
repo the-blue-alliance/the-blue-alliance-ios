@@ -1,6 +1,9 @@
 import Foundation
 
-public final class MockURLSession {
+// `@unchecked Sendable` because this is test infrastructure with mutable
+// stub state by design — tests set stubbedData/stubbedResponse/stubbedError
+// before and between requests.
+public final class MockURLSession: @unchecked Sendable {
 
     public var stubbedData: Data?
     public var stubbedResponse: URLResponse?

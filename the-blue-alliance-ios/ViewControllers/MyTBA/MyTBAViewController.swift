@@ -35,6 +35,8 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
+    private var authStateTask: Task<Void, Never>?
+
     init(dependencies: Dependencies) {
 
         favoritesViewController = MyTBAFavoritesViewController(dependencies: dependencies)
@@ -66,7 +68,17 @@ class MyTBAViewController: ContainerViewController {
 
         styleInterface()
 
-        myTBA.authenticationProvider.add(observer: self)
+        authStateTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let stream = await self.myTBA.authStateChanges()
+            for await isAuthenticated in stream {
+                self.applyAuthState(isAuthenticated: isAuthenticated)
+            }
+        }
+    }
+
+    deinit {
+        authStateTask?.cancel()
     }
 
     // MARK: - Private Methods
@@ -174,23 +186,13 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
 }
 
-extension MyTBAViewController: MyTBAAuthenticationObservable {
+extension MyTBAViewController {
 
-    @objc func authenticated() {
-        if let viewController = currentViewController() {
+    fileprivate func applyAuthState(isAuthenticated: Bool) {
+        if isAuthenticated, let viewController = currentViewController() {
             viewController.refresh()
         }
-        updateInterfaceMain()
-    }
-
-    @objc func unauthenticated() {
-        updateInterfaceMain()
-    }
-
-    func updateInterfaceMain() {
-        DispatchQueue.main.async { [weak self] in
-            self?.updateInterface()
-        }
+        updateInterface()
     }
 
 }

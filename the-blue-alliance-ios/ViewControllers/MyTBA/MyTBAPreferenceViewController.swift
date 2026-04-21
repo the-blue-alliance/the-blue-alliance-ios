@@ -148,9 +148,8 @@ class MyTBAPreferenceViewController: TBATableViewController,
         loadTask = Task { @MainActor [weak self] in
             guard let self else { return }
             do {
-                async let favorites = self.myTBA.fetchFavorites()
-                async let subscriptions = self.myTBA.fetchSubscriptions()
-                let (fetchedFavorites, fetchedSubscriptions) = try await (favorites, subscriptions)
+                let fetchedFavorites = try await self.myTBA.fetchFavorites()
+                let fetchedSubscriptions = try await self.myTBA.fetchSubscriptions()
 
                 self.favoritesStore.replaceAll(with: fetchedFavorites)
                 self.subscriptionsStore.replaceAll(with: fetchedSubscriptions)

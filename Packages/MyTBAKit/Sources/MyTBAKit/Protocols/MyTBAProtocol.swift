@@ -1,11 +1,10 @@
 import Foundation
-import TBAUtils
 
-public protocol MyTBAProtocol: AnyObject {
-    var isAuthenticated: Bool { get }
-    var authenticationProvider: Provider<MyTBAAuthenticationObservable> { get }
+public protocol MyTBAProtocol: AnyObject, Sendable {
+    nonisolated var isAuthenticated: Bool { get }
 
-    func notifyAuthStateChanged(isAuthenticated: Bool)
+    func authStateChanges() async -> AsyncStream<Bool>
+    func notifyAuthStateChanged(isAuthenticated: Bool) async
 
     func ping() async throws -> MyTBABaseResponse
     func register() async throws -> MyTBABaseResponse
