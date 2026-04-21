@@ -1089,7 +1089,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		924E826C208FE7D20053247C /* Run FirebaseCrashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1103,10 +1102,11 @@
 			);
 			name = "Run FirebaseCrashlytics";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/crashlytics.stamp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    \"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nelse\n    echo \"Skipping Crashlytics dSYM upload for ${CONFIGURATION} build\"\nfi\n";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    \"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nfi\ntouch \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		92FC9BA32F95EF7B00771E04 /* Lint Swift (swift-format) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1528,8 +1528,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureLayout/PureLayout";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.9;
 			};
 		};
 		92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
