@@ -27,9 +27,6 @@ jobs:
           xcode-version: latest-stable
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          fetch-tags: true
       - uses: actions/cache@v4
         with:
           path: vendor/bundle
