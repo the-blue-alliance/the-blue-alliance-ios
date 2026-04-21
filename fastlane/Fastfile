@@ -32,7 +32,9 @@ platform :ios do
       scheme: "The Blue Alliance",
       only_testing: ["TBAUnitTests"],
       destination: "platform=iOS Simulator,id=#{iphone["udid"]}",
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation " \
+              "SWIFT_COMPILATION_MODE=wholemodule " \
+              "COMPILER_INDEX_STORE_ENABLE=NO"
     )
   end
 
