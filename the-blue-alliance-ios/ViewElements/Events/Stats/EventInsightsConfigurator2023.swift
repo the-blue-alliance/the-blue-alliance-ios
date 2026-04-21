@@ -52,20 +52,48 @@ class EventInsightsConfigurator2023: EventInsightsConfigurator {
         // Bonus Stats
         var bonusStats: [InsightRow] = []
 
-        bonusStats.append(bonusRow(title: "Mobility", key: "mobility_count", qual: qual, playoff: playoff))
-        bonusStats.append(bonusRow(title: "Auto Docked", key: "mobility_count", qual: qual, playoff: playoff))
-        bonusStats.append(bonusRow(title: "Auto Engaged", key: "mobility_count", qual: qual, playoff: playoff))
         bonusStats.append(
-            bonusRow(title: "Coopertition Criteria Met", key: "coopertition", qual: qual, playoff: playoff)
+            bonusRow(title: "Mobility", key: "mobility_count", qual: qual, playoff: playoff)
         )
         bonusStats.append(
-            bonusRow(title: "Sustainability Bonus RP", key: "sustainability_bonus_rp", qual: qual, playoff: nil)
+            bonusRow(title: "Auto Docked", key: "mobility_count", qual: qual, playoff: playoff)
         )
         bonusStats.append(
-            bonusRow(title: "Activation Bonus RP", key: "activation_bonus_rp", qual: qual, playoff: nil)
+            bonusRow(title: "Auto Engaged", key: "mobility_count", qual: qual, playoff: playoff)
         )
-        bonusStats.append(bonusRow(title: "\"Unicorn Matches\" (Win + Cargo Bonus + Hangar Bonus)", key: "unicorn_matches", qual: qual, playoff: nil))
-        
+        bonusStats.append(
+            bonusRow(
+                title: "Coopertition Criteria Met",
+                key: "coopertition",
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        bonusStats.append(
+            bonusRow(
+                title: "Sustainability Bonus RP",
+                key: "sustainability_bonus_rp",
+                qual: qual,
+                playoff: nil
+            )
+        )
+        bonusStats.append(
+            bonusRow(
+                title: "Activation Bonus RP",
+                key: "activation_bonus_rp",
+                qual: qual,
+                playoff: nil
+            )
+        )
+        bonusStats.append(
+            bonusRow(
+                title: "\"Unicorn Matches\" (Win + Cargo Bonus + Hangar Bonus)",
+                key: "unicorn_matches",
+                qual: qual,
+                playoff: nil
+            )
+        )
+
         bonusStats = filterEmptyInsights(bonusStats)
         if !bonusStats.isEmpty {
             snapshot.appendSections(["Bonus Stats (Count / Opportunities / Success)"])
