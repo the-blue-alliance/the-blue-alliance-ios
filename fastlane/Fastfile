@@ -119,9 +119,6 @@ platform :ios do
         add_id_info_uses_idfa: false
       }
     )
-
-    new_version(version_type: 'patch')
-    beta_ci
   end
 
   private_lane :ship_github do |options|
@@ -162,8 +159,13 @@ platform :ios do
 
   desc "Perform pre-App Store tasks"
   private_lane :preship do
-    # Set our build number to 99 for the App Store
-    increment_build_number(build_number: 99)
+    # Bump our build number based on the latest TestFlight build for this version
+    testflight_build_number = latest_testflight_build_number(
+      app_identifier: "com.the-blue-alliance.tba",
+      version: get_version_number(target: "The Blue Alliance"),
+      initial_build_number: 0
+    )
+    increment_build_number(build_number: testflight_build_number + 1)
   end
 
   desc "Perform codesign/build tasks"
