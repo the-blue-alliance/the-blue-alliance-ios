@@ -198,7 +198,7 @@ platform :ios do
   end
 
   private_lane :commit_changelog do
-    File.read("metadata/release_notes/beta.md").strip
+    File.read("release_notes/beta.md").strip
   end
 
   ## End Internal Lanes for Shipping Lanes ##
