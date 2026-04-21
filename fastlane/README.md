@@ -63,14 +63,6 @@ Format all Swift files with swift-format
 
 Lint Swift formatting (strict, used by CI)
 
-### ios build_ci
-
-```sh
-[bundle exec] fastlane ios build_ci
-```
-
-Compile the main iOS app for CI (no code signing)
-
 ### ios setup_secrets
 
 ```sh

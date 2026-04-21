@@ -33,20 +33,6 @@ platform :ios do
     sh("../scripts/swift-format-lint.sh --strict")
   end
 
-  desc "Compile the main iOS app for CI (no code signing)"
-  lane :build_ci do
-    build_app(
-      project: "the-blue-alliance-ios.xcodeproj",
-      scheme: "The Blue Alliance",
-      configuration: "Debug",
-      destination: "generic/platform=iOS Simulator",
-      skip_archive: true,
-      skip_codesigning: true,
-      skip_package_ipa: true,
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
-    )
-  end
-
   ## CI Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"
