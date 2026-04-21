@@ -9,6 +9,7 @@ protocol TeamSummaryViewControllerDelegate: AnyObject {
 
 private enum TeamSummarySection: Int {
     case teamInfo
+    case pitLocation
     case eventInfo
     case nextMatch
     case lastMatch
@@ -18,6 +19,7 @@ private enum TeamSummarySection: Int {
 
 private enum TeamSummaryItem: Hashable {
     case teamInfo(team: Team)
+    case pitLocation(location: String)
     case status(status: String)
     case rank(rank: Int, total: Int)
     case record(wins: Int, losses: Int, ties: Int, dqs: Int? = nil)
@@ -76,6 +78,16 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                 switch item {
                 case .teamInfo(let team):
                     return self.cellForTeam(team, in: tableView, at: indexPath)
+                case .pitLocation(let location):
+                    let cell = Self.reverseSubtitleCell(
+                        in: tableView,
+                        title: "Pit Location",
+                        subtitle: "\(location) · via FRC Nexus",
+                        at: indexPath
+                    )
+                    cell.accessoryType = .disclosureIndicator
+                    cell.selectionStyle = .default
+                    return cell
                 case .status(let status):
                     return Self.reverseSubtitleCell(
                         in: tableView,
@@ -144,6 +156,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         if let team {
             snapshot.appendSections([.teamInfo])
             snapshot.appendItems([.teamInfo(team: team)], toSection: .teamInfo)
+        }
+
+        // Pit location
+        if let pit = eventStatus?.pitLocation, !pit.isEmpty {
+            snapshot.appendSections([.pitLocation])
+            snapshot.appendItems([.pitLocation(location: pit)], toSection: .pitLocation)
         }
 
         // Status summary
@@ -345,12 +363,21 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - Table View Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
         case .teamInfo:
             delegate?.teamInfoSelected(teamKey: teamKey)
         case .match(let match, _):
             delegate?.matchSelected(matchKey: match.key)
+        case .pitLocation:
+            guard let event,
+                let teamNumber = team?.teamNumber,
+                let url = event.nexusTeamPitMapURL(teamNumber: teamNumber),
+                urlOpener.canOpenURL(url)
+            else { return }
+            urlOpener.open(url, options: [:], completionHandler: nil)
         default:
             break
         }

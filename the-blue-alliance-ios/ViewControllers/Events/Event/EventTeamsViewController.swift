@@ -5,6 +5,8 @@ class EventTeamsViewController: TeamsListViewController<Team> {
 
     let eventKey: String
 
+    private var pitLocations: [String: String] = [:]
+
     // MARK: Init
 
     init(eventKey: String, dependencies: Dependencies) {
@@ -18,7 +20,18 @@ class EventTeamsViewController: TeamsListViewController<Team> {
     }
 
     override func loadTeams() async throws -> [Team] {
-        try await dependencies.api.eventTeams(key: eventKey)
+        async let teams = dependencies.api.eventTeams(key: eventKey)
+        async let statuses = try? dependencies.api.eventTeamsStatuses(key: eventKey)
+
+        let loadedTeams = try await teams
+        let loadedStatuses = await statuses ?? [:]
+
+        pitLocations = loadedStatuses.compactMapValues { $0.pitLocation }
+        return loadedTeams
+    }
+
+    override func numberSubtitle(for team: Team) -> String? {
+        pitLocations[team.key].map { "Pit \($0)" }
     }
 
     override var noDataText: String? { "No teams for event" }
