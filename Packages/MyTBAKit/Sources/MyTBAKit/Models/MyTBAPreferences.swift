@@ -8,7 +8,7 @@ public struct MyTBAPreferences: Codable {
     var notifications: [NotificationType]
 }
 
-public struct MyTBAPreferencesMessageResponse: Codable {
+public struct MyTBAPreferencesMessageResponse: Codable, Sendable {
     public let favorite: MyTBABaseResponse
     public let subscription: MyTBABaseResponse
 }

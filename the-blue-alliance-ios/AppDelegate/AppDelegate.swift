@@ -142,7 +142,7 @@ private extension AppDelegate {
     func configurePushNotifications() {
         messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
-        myTBA.authenticationProvider.add(observer: pushService)
+        // PushService self-subscribes to myTBA auth-state changes in its init.
         // Best-effort registration; failures will surface later.
         pushService.registerForRemoteNotifications(nil)
     }
@@ -152,7 +152,10 @@ private extension AppDelegate {
         // The actual ID token is fetched per-request via `FirebaseIDTokenProvider`,
         // so we no longer listen for (or care about) token refreshes here.
         _ = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            self?.myTBA.notifyAuthStateChanged(isAuthenticated: user != nil)
+            guard let self else { return }
+            Task { [myTBA = self.myTBA] in
+                await myTBA.notifyAuthStateChanged(isAuthenticated: user != nil)
+            }
         }
         restorePreviousSignIn()
     }
@@ -260,6 +263,9 @@ extension AppDelegate: RemoteNotificationRegistering {
 
 // MARK: - FCMTokenProvider conformance for Firebase Messaging
 
+// `@unchecked Sendable` because `Messaging` is Firebase-controlled; per their
+// docs the instance is safe to access from any thread.
+extension Messaging: @retroactive @unchecked Sendable {}
 extension Messaging: @retroactive FCMTokenProvider {}
 
 // MARK: - IDTokenProvider
@@ -267,6 +273,9 @@ extension Messaging: @retroactive FCMTokenProvider {}
 // Wraps Firebase Auth's `currentUser.getIDToken(completion:)`, which returns
 // a cached token if it's still fresh and silently refreshes if it's expired.
 // Called on every myTBA request, so stale tokens never pile up.
+//
+// Structurally Sendable — no stored state, just forwards to Firebase Auth
+// (which is documented thread-safe for reads).
 final class FirebaseIDTokenProvider: IDTokenProvider {
 
     var isSignedIn: Bool {

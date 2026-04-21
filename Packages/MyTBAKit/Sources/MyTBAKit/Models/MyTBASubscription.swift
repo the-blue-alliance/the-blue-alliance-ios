@@ -1,7 +1,7 @@
 import Foundation
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/364d6da2f3fc464deef5ba580ea37b6cd2816c4a/consts/notification_type.py
-public enum NotificationType: String, Codable {
+public enum NotificationType: String, Codable, Sendable {
     case upcomingMatch = "upcoming_match"
     case matchScore = "match_score"
     case levelStarting = "starting_comp_level"
@@ -55,7 +55,7 @@ struct MyTBASubscriptionsResponse: MyTBAResponse, Codable {
     var subscriptions: [MyTBASubscription]?
 }
 
-public struct MyTBASubscription: MyTBAModel, Equatable, Codable {
+public struct MyTBASubscription: MyTBAModel, Equatable, Codable, Sendable {
 
     public init(modelKey: String, modelType: MyTBAModelType, notifications: [NotificationType]) {
         self.modelKey = modelKey

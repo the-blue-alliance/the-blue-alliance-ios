@@ -1,4 +1,4 @@
-public protocol IDTokenProvider: AnyObject {
+public protocol IDTokenProvider: AnyObject, Sendable {
     // True when a user is signed in, independent of token freshness.
     var isSignedIn: Bool { get }
 

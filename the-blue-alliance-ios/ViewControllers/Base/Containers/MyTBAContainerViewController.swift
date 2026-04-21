@@ -17,6 +17,8 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
         fatalError("Implement subscribableModel in subclass")
     }
 
+    private var authStateTask: Task<Void, Never>?
+
     // MARK: - Init
 
     override init(
@@ -37,11 +39,21 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
         updateFavoriteButton()
 
-        myTBA.authenticationProvider.add(observer: self)
+        authStateTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let stream = await self.myTBA.authStateChanges()
+            for await _ in stream {
+                self.updateFavoriteButton()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        authStateTask?.cancel()
     }
 
     // MARK: - Interface Methods
@@ -56,18 +68,6 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     @objc func myTBAPreferencesTapped() {
         presentMyTBAPreferences()
-    }
-
-}
-
-extension MyTBAContainerViewController: MyTBAAuthenticationObservable {
-
-    func authenticated() {
-        updateFavoriteButton()
-    }
-
-    func unauthenticated() {
-        updateFavoriteButton()
     }
 
 }

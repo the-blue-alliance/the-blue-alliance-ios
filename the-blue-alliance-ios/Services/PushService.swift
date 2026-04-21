@@ -23,6 +23,7 @@ class PushService: NSObject, PushServiceProtocol {
     private let registrar: any RemoteNotificationRegistering
 
     private var registerTask: Task<Void, Never>?
+    private var authStateTask: Task<Void, Never>?
 
     init(
         errorRecorder: ErrorRecorder,
@@ -36,6 +37,26 @@ class PushService: NSObject, PushServiceProtocol {
         self.registrar = registrar
 
         super.init()
+
+        authStateTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let stream = await self.myTBA.authStateChanges()
+            for await isAuthenticated in stream {
+                self.applyAuthState(isAuthenticated: isAuthenticated)
+            }
+        }
+    }
+
+    deinit {
+        authStateTask?.cancel()
+    }
+
+    private func applyAuthState(isAuthenticated: Bool) {
+        if isAuthenticated {
+            registerPushToken()
+        } else if retryService.isRetryRegistered {
+            unregisterRetryable()
+        }
     }
 
     fileprivate func registerPushToken() {
@@ -44,10 +65,9 @@ class PushService: NSObject, PushServiceProtocol {
             return
         }
         guard registerTask == nil else {
-            // Hack-y fix for register being called twice during app startup -
-            // Once from MyTBAAuthenticationObservable.authenticated and once from
-            // MessagingDelegate.didReceiveRegistrationToken
-            // We should look to fix this properly some other time
+            // Hack-y guard against register being called twice during app startup —
+            // once from the auth-state stream and once from MessagingDelegate's
+            // `didReceiveRegistrationToken`. Should be untangled some day.
             return
         }
         registerTask = Task { [weak self] in
@@ -77,19 +97,6 @@ class PushService: NSObject, PushServiceProtocol {
         registrar.registerForRemoteNotifications(completion: completion)
     }
 
-}
-
-extension PushService: MyTBAAuthenticationObservable {
-
-    func authenticated() {
-        registerPushToken()
-    }
-
-    func unauthenticated() {
-        if self.retryService.isRetryRegistered {
-            self.unregisterRetryable()
-        }
-    }
 }
 
 extension PushService: MessagingDelegate {

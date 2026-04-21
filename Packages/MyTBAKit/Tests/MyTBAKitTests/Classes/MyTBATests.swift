@@ -39,54 +39,75 @@ class MyTBATests: MyTBATestCase {
         XCTAssertEqual(zz.fcmToken, fcmToken)
     }
 
-    func test_authenticationProvider_authenticated() {
-        let authObserver = MockAuthObserver()
-        myTBA.authenticationProvider.add(observer: authObserver)
+    @MainActor
+    func test_authStateChanges_emitsInitialValue() async {
+        mockMyTBA.idTokenProvider.isSignedIn = true
 
-        XCTAssertFalse(myTBA.isAuthenticated)
-
-        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
-        authObserver.authenticatedExpectation = authenticatedExpectation
-        myTBA.idTokenProvider.isSignedIn = true
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
-        wait(for: [authenticatedExpectation], timeout: 1.0)
+        var iterator = await myTBA.authStateChanges().makeAsyncIterator()
+        let first = await iterator.next()
+        XCTAssertEqual(first, true)
     }
 
-    func test_authenticationProvider_noChange() {
-        let authObserver = MockAuthObserver()
-        myTBA.authenticationProvider.add(observer: authObserver)
+    @MainActor
+    func test_authStateChanges_emitsOnChange() async {
+        var iterator = await myTBA.authStateChanges().makeAsyncIterator()
+        let initial = await iterator.next()
+        XCTAssertEqual(initial, false)
 
-        myTBA.idTokenProvider.isSignedIn = true
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
+        mockMyTBA.idTokenProvider.isSignedIn = true
+        await myTBA.notifyAuthStateChanged(isAuthenticated: true)
 
-        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
-        authenticatedExpectation.isInverted = true
-        authObserver.authenticatedExpectation = authenticatedExpectation
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
-
-        wait(for: [authenticatedExpectation], timeout: 1.0)
+        let next = await iterator.next()
+        XCTAssertEqual(next, true)
     }
 
-    func test_authenticationProvider_unauthenticated() {
-        let authObserver = MockAuthObserver()
-        myTBA.authenticationProvider.add(observer: authObserver)
+    @MainActor
+    func test_authStateChanges_noEmitOnUnchanged() async {
+        mockMyTBA.idTokenProvider.isSignedIn = true
+        await myTBA.notifyAuthStateChanged(isAuthenticated: true)
 
-        myTBA.idTokenProvider.isSignedIn = true
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
+        var iterator = await myTBA.authStateChanges().makeAsyncIterator()
+        let initial = await iterator.next()
+        XCTAssertEqual(initial, true)
 
-        let unauthenticatedExpectation = expectation(description: "myTBA Unauthenticated")
-        authObserver.unauthenticatedExpectation = unauthenticatedExpectation
-        myTBA.idTokenProvider.isSignedIn = false
-        myTBA.notifyAuthStateChanged(isAuthenticated: false)
+        // Posting the same state a second time should NOT yield another value.
+        await myTBA.notifyAuthStateChanged(isAuthenticated: true)
 
-        wait(for: [unauthenticatedExpectation], timeout: 1.0)
+        let raceExpectation = expectation(description: "No second emit")
+        raceExpectation.isInverted = true
+        let task = Task {
+            _ = await iterator.next()
+            raceExpectation.fulfill()
+        }
+        await fulfillment(of: [raceExpectation], timeout: 0.25)
+        task.cancel()
+    }
+
+    @MainActor
+    func test_authStateChanges_cleansUpOnCancel() async {
+        let consumed = expectation(description: "Consumed initial value")
+        let task = Task {
+            for await _ in await myTBA.authStateChanges() {
+                consumed.fulfill()
+                break
+            }
+        }
+        await fulfillment(of: [consumed], timeout: 1.0)
+        task.cancel()
+
+        // Give the termination a moment, then post a new value. Terminated
+        // continuations are pruned on the next `notifyAuthStateChanged` call
+        // via the YieldResult check.
+        try? await Task.sleep(nanoseconds: 50_000_000)
+        mockMyTBA.idTokenProvider.isSignedIn = true
+        await myTBA.notifyAuthStateChanged(isAuthenticated: true)
     }
 
     func test_isAuthenticated() {
         XCTAssertFalse(myTBA.isAuthenticated)
-        myTBA.idTokenProvider.isSignedIn = true
+        mockMyTBA.idTokenProvider.isSignedIn = true
         XCTAssert(myTBA.isAuthenticated)
-        myTBA.idTokenProvider.isSignedIn = false
+        mockMyTBA.idTokenProvider.isSignedIn = false
         XCTAssertFalse(myTBA.isAuthenticated)
     }
 
@@ -101,12 +122,12 @@ class MyTBATests: MyTBATestCase {
     }
 
     func test_callApi_hasBearer() async throws {
-        myTBA.idTokenProvider.isSignedIn = true
-        myTBA.idTokenProvider.stubbedToken = "abcd123"
-        myTBA.stub(for: "favorites/list")
+        mockMyTBA.idTokenProvider.isSignedIn = true
+        mockMyTBA.idTokenProvider.stubbedToken = "abcd123"
+        mockMyTBA.stub(for: "favorites/list")
         _ = try await myTBA.fetchFavorites()
 
-        guard let request = myTBA.session.lastRequest else {
+        guard let request = mockMyTBA.session.lastRequest else {
             XCTFail()
             return
         }
@@ -121,18 +142,4 @@ class MyTBATests: MyTBATestCase {
         XCTAssertEqual(authorizationHeader, "Bearer abcd123")
     }
 
-}
-
-private class MockAuthObserver: MyTBAAuthenticationObservable {
-
-    var authenticatedExpectation: XCTestExpectation?
-    var unauthenticatedExpectation: XCTestExpectation?
-
-    func authenticated() {
-        authenticatedExpectation?.fulfill()
-    }
-
-    func unauthenticated() {
-        unauthenticatedExpectation?.fulfill()
-    }
 }

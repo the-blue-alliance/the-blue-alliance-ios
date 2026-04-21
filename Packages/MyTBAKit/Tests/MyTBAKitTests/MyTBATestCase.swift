@@ -1,19 +1,23 @@
 import XCTest
+@testable import MyTBAKit
 
 open class MyTBATestCase: XCTestCase {
 
-    public var myTBA: MockMyTBA!
+    public var mockMyTBA: MockMyTBA!
     public var fcmTokenProvider: MockFCMTokenProvider!
+
+    // Convenience alias — most tests just need the underlying actor.
+    public var myTBA: MyTBA { mockMyTBA.myTBA }
 
     override open func setUp() {
         super.setUp()
 
         fcmTokenProvider = MockFCMTokenProvider(fcmToken: nil)
-        myTBA = MockMyTBA(fcmTokenProvider: fcmTokenProvider)
+        mockMyTBA = MockMyTBA(fcmTokenProvider: fcmTokenProvider)
     }
 
     override open func tearDown() {
-        myTBA = nil
+        mockMyTBA = nil
         fcmTokenProvider = nil
 
         super.tearDown()

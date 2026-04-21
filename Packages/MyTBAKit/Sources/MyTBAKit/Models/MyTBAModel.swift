@@ -1,7 +1,7 @@
 import Foundation
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/364d6da2f3fc464deef5ba580ea37b6cd2816c4a/consts/model_type.py
-public enum MyTBAModelType: Int, Codable {
+public enum MyTBAModelType: Int, Codable, Sendable {
     case event
     case team
     case match
@@ -12,9 +12,9 @@ public enum MyTBAModelType: Int, Codable {
     case media
 }
 
-public protocol MyTBAResponse: Codable {}
+public protocol MyTBAResponse: Codable, Sendable {}
 
-public struct MyTBABaseResponse: MyTBAResponse, Codable {
+public struct MyTBABaseResponse: MyTBAResponse, Codable, Sendable {
     public var code: Int
     public var message: String
 
@@ -32,7 +32,7 @@ public struct MyTBABaseResponse: MyTBAResponse, Codable {
 }
 
 // Models for Favorite/Subscription
-public protocol MyTBAModel: Codable {
+public protocol MyTBAModel: Codable, Sendable {
 
     static var arrayKey: String { get }
 
