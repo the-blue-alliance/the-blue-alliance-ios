@@ -15,10 +15,20 @@ platform :ios do
   desc "Run all of our tests"
   lane :test do
     test_mytbakit
+
+    # Unit tests don't care which device runs them — pick whatever iPhone
+    # simulator the runner happens to have, so we don't chase device names
+    # as Xcode drops older simulators.
+    require "json"
+    sims = JSON.parse(`xcrun simctl list devices available --json`)
+    iphone = sims["devices"].values.flatten.find { |d| d["name"].start_with?("iPhone") }
+    UI.user_error!("No available iPhone simulator") unless iphone
+
     run_tests(
       project: "the-blue-alliance-ios.xcodeproj",
       scheme: "The Blue Alliance",
       only_testing: ["TBAUnitTests"],
+      destination: "platform=iOS Simulator,id=#{iphone["udid"]}",
       xcargs: "-skipPackagePluginValidation -skipMacroValidation"
     )
   end
