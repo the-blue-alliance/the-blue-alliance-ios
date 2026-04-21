@@ -6,7 +6,7 @@ import UIKit
 struct InsightRow: Hashable {
     var title: String
     var value: InsightValue
-    
+
     enum InsightValue: Hashable {
         case paired(qual: String?, playoff: String?)
         case columns(qual: [String], playoff: [String])
@@ -110,9 +110,9 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                 let cell =
                     tableView.dequeueReusableCell(indexPath: indexPath)
                     as EventInsightsTableViewCell
-                
+
                 cell.title = row.title
-                
+
                 switch row.value {
                 case .paired(let qual, let playoff):
                     cell.leftTitle = qual ?? "----"
@@ -121,15 +121,15 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                     cell.leftTitle = "----"
                     cell.rightTitle = "----"
                 }
-                
+
                 cell.selectionStyle = .none
                 return cell
             } else {
                 let cell =
                     tableView.dequeueReusableCell(indexPath: indexPath) as FourColumnTableViewCell
-                
+
                 cell.title = row.title
-                
+
                 switch row.value {
                 case .columns(let qual, let playoff):
                     cell.qualValues = qual
@@ -138,7 +138,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                     cell.qualValues = []
                     cell.playoffValues = []
                 }
-                
+
                 return cell
             }
         }
