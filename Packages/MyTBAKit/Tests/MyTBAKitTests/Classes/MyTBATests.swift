@@ -27,7 +27,13 @@ class MyTBATests: MyTBATestCase {
         let fcmToken = "abc"
 
         let mfcm = MockFCMTokenProvider(fcmToken: fcmToken)
-        let zz = MyTBA(uuid: uuid, deviceName: deviceName, fcmTokenProvider: mfcm)
+        let midTokenProvider = MockIDTokenProvider()
+        let zz = MyTBA(
+            uuid: uuid,
+            deviceName: deviceName,
+            fcmTokenProvider: mfcm,
+            idTokenProvider: midTokenProvider
+        )
         XCTAssertEqual(zz.uuid, uuid)
         XCTAssertEqual(zz.deviceName, deviceName)
         XCTAssertEqual(zz.fcmToken, fcmToken)
@@ -37,11 +43,12 @@ class MyTBATests: MyTBATestCase {
         let authObserver = MockAuthObserver()
         myTBA.authenticationProvider.add(observer: authObserver)
 
-        XCTAssertNil(myTBA.authToken)
+        XCTAssertFalse(myTBA.isAuthenticated)
 
         let authenticatedExpectation = expectation(description: "myTBA Authenticated")
         authObserver.authenticatedExpectation = authenticatedExpectation
-        myTBA.authToken = "abcd123"
+        myTBA.idTokenProvider.isSignedIn = true
+        myTBA.notifyAuthStateChanged(isAuthenticated: true)
         wait(for: [authenticatedExpectation], timeout: 1.0)
     }
 
@@ -49,27 +56,13 @@ class MyTBATests: MyTBATestCase {
         let authObserver = MockAuthObserver()
         myTBA.authenticationProvider.add(observer: authObserver)
 
-        XCTAssertNil(myTBA.authToken)
-        myTBA.authToken = "abcd123"
+        myTBA.idTokenProvider.isSignedIn = true
+        myTBA.notifyAuthStateChanged(isAuthenticated: true)
 
         let authenticatedExpectation = expectation(description: "myTBA Authenticated")
         authenticatedExpectation.isInverted = true
         authObserver.authenticatedExpectation = authenticatedExpectation
-        myTBA.authToken = "abcd123"
-
-        wait(for: [authenticatedExpectation], timeout: 1.0)
-    }
-
-    func test_authenticationProvider_changed() {
-        let authObserver = MockAuthObserver()
-        myTBA.authenticationProvider.add(observer: authObserver)
-
-        XCTAssertNil(myTBA.authToken)
-        myTBA.authToken = "abcd123"
-
-        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
-        authObserver.authenticatedExpectation = authenticatedExpectation
-        myTBA.authToken = "321dcba"
+        myTBA.notifyAuthStateChanged(isAuthenticated: true)
 
         wait(for: [authenticatedExpectation], timeout: 1.0)
     }
@@ -78,21 +71,22 @@ class MyTBATests: MyTBATestCase {
         let authObserver = MockAuthObserver()
         myTBA.authenticationProvider.add(observer: authObserver)
 
-        XCTAssertNil(myTBA.authToken)
-        myTBA.authToken = "abcd123"
+        myTBA.idTokenProvider.isSignedIn = true
+        myTBA.notifyAuthStateChanged(isAuthenticated: true)
 
         let unauthenticatedExpectation = expectation(description: "myTBA Unauthenticated")
         authObserver.unauthenticatedExpectation = unauthenticatedExpectation
-        myTBA.authToken = nil
+        myTBA.idTokenProvider.isSignedIn = false
+        myTBA.notifyAuthStateChanged(isAuthenticated: false)
 
         wait(for: [unauthenticatedExpectation], timeout: 1.0)
     }
 
     func test_isAuthenticated() {
         XCTAssertFalse(myTBA.isAuthenticated)
-        myTBA.authToken = "abcd123"
+        myTBA.idTokenProvider.isSignedIn = true
         XCTAssert(myTBA.isAuthenticated)
-        myTBA.authToken = nil
+        myTBA.idTokenProvider.isSignedIn = false
         XCTAssertFalse(myTBA.isAuthenticated)
     }
 
@@ -107,7 +101,8 @@ class MyTBATests: MyTBATestCase {
     }
 
     func test_callApi_hasBearer() async throws {
-        myTBA.authToken = "abcd123"
+        myTBA.idTokenProvider.isSignedIn = true
+        myTBA.idTokenProvider.stubbedToken = "abcd123"
         myTBA.stub(for: "favorites/list")
         _ = try await myTBA.fetchFavorites()
 
@@ -123,7 +118,7 @@ class MyTBATests: MyTBATestCase {
             XCTFail()
             return
         }
-        XCTAssert(authorizationHeader.contains("Bearer"))
+        XCTAssertEqual(authorizationHeader, "Bearer abcd123")
     }
 
 }
