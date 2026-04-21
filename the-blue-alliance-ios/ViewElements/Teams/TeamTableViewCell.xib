@@ -22,15 +22,26 @@
                             <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="QYQ-jO-saV">
                                 <rect key="frame" x="0.0" y="0.0" width="324.66666666666669" height="54"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="10000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxL-kB-K0K">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pit-VS-001">
                                         <rect key="frame" x="0.0" y="0.0" width="55" height="54"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="10000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxL-kB-K0K">
+                                                <rect key="frame" x="0.0" y="0.0" width="55" height="37"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Pit A1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pit-LB-001">
+                                                <rect key="frame" x="0.0" y="37" width="55" height="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="55" id="eAG-vi-jop"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6eP-Ga-gQh">
                                         <rect key="frame" x="69.999999999999986" y="0.0" width="254.66666666666663" height="54"/>
                                         <subviews>
@@ -64,6 +75,7 @@
                 <outlet property="locationLabel" destination="Ana-Js-nEd" id="JDn-0C-7yo"/>
                 <outlet property="nameLabel" destination="5pm-5N-rYU" id="g6B-eW-e1b"/>
                 <outlet property="numberLabel" destination="vxL-kB-K0K" id="ISd-rw-rp5"/>
+                <outlet property="numberSubtitleLabel" destination="pit-LB-001" id="pit-CO-001"/>
             </connections>
             <point key="canvasLocation" x="-72.799999999999997" y="15.292353823088456"/>
         </tableViewCell>

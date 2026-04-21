@@ -151,6 +151,24 @@ extension TBAAPI {
         }
     }
 
+    public func eventTeamsStatuses(key eventKey: String) async throws -> [String: TeamEventStatus] {
+        let response = try await client.getEventTeamsStatuses(
+            path: .init(eventKey: eventKey)
+        )
+        switch response {
+        case .ok(let ok):
+            return try ok.body.json.additionalProperties
+        case .notModified:
+            throw TBAAPIError.notModified
+        case .unauthorized:
+            throw TBAAPIError.unauthorized
+        case .notFound:
+            throw TBAAPIError.notFound
+        case .undocumented(let statusCode, _):
+            throw TBAAPIError.unexpectedStatus(statusCode)
+        }
+    }
+
     public func teamMediaByYear(teamKey: String, year: Int) async throws -> [Media] {
         let response = try await client.getTeamMediaByYear(
             path: .init(teamKey: teamKey, year: year)

@@ -23,6 +23,8 @@ public protocol TBAAPIProtocol {
     func teamEventStatus(teamKey: String, eventKey: String) async throws -> TeamEventStatus
     func teamMediaByYear(teamKey: String, year: Int) async throws -> [Media]
 
+    func eventTeamsStatuses(key eventKey: String) async throws -> [String: TeamEventStatus]
+
     // Events
     func eventsByYear(_ year: Int) async throws -> [Event]
     func event(key eventKey: String) async throws -> Event

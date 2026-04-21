@@ -18,6 +18,7 @@ class TeamTableViewCell: UITableViewCell, Reusable {
     // MARK: - Interface Builder
 
     @IBOutlet private weak var numberLabel: UILabel!
+    @IBOutlet private weak var numberSubtitleLabel: UILabel!
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var locationLabel: UILabel!
 
@@ -31,5 +32,9 @@ class TeamTableViewCell: UITableViewCell, Reusable {
         numberLabel.text = viewModel.teamNumber
         nameLabel.text = viewModel.nickname
         locationLabel.text = viewModel.location
+
+        let subtitle = viewModel.numberSubtitle?.isEmpty == false ? viewModel.numberSubtitle : nil
+        numberSubtitleLabel.text = subtitle
+        numberSubtitleLabel.isHidden = subtitle == nil
     }
 }
