@@ -25,7 +25,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         self.eventKey = eventKey
         self.year = year
 
-        // Supported event insights is 2016 through 2022 (2021 falls back to 2020).
+        // Supported event insights is 2016 through 2026 (2021 falls back to 2020).
         switch year {
         case 2016: eventStatsConfigurator = EventInsightsConfigurator2016.self
         case 2017: eventStatsConfigurator = EventInsightsConfigurator2017.self
@@ -33,6 +33,9 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         case 2019: eventStatsConfigurator = EventInsightsConfigurator2019.self
         case 2020, 2021: eventStatsConfigurator = EventInsightsConfigurator2020.self
         case 2022: eventStatsConfigurator = EventInsightsConfigurator2022.self
+        case 2023: eventStatsConfigurator = EventInsightsConfigurator2023.self
+        case 2024: eventStatsConfigurator = EventInsightsConfigurator2024.self
+        case 2025: eventStatsConfigurator = EventInsightsConfigurator2025.self
         case 2026: eventStatsConfigurator = EventInsightsConfigurator2026.self
         default: eventStatsConfigurator = nil
         }

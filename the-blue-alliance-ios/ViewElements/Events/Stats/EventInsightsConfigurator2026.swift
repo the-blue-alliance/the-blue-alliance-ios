@@ -25,7 +25,7 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
         matchStats.append(
             scoreRow(
                 title: "Average Winning Score",
-                key: "average_win_score",
+                key: "average_winning_score",
                 qual: qual,
                 playoff: playoff
             )
