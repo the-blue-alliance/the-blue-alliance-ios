@@ -19,10 +19,10 @@ struct EventAllianceCellViewModel {
 
     private static func allianceLevel(status: EliminationAlliance.StatusPayload?) -> String? {
         guard let level = status?.level else { return nil }
-        if level == "f", let s = status?.status {
-            return s == "won" ? "W" : "F"
+        if level == .f, let s = status?.status {
+            return s == .won ? "W" : "F"
         }
-        return level.uppercased()
+        return level.rawValue.uppercased()
     }
 
 }
