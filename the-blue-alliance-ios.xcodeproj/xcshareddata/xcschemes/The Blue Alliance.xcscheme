@@ -43,9 +43,9 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92D6483920BE4CB8008F0DB3"
-               BuildableName = "tba-unit-tests.xctest"
-               BlueprintName = "tba-unit-tests"
+               BlueprintIdentifier = "6859D167B239EF78DC94AEB7"
+               BuildableName = "TBAUnitTests.xctest"
+               BlueprintName = "TBAUnitTests"
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
             </BuildableReference>
          </TestableReference>

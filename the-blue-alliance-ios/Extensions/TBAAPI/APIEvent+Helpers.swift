@@ -1,6 +1,5 @@
 import Foundation
 import TBAAPI
-import TBAUtils
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
 enum APIEventType: Int, CaseIterable {
