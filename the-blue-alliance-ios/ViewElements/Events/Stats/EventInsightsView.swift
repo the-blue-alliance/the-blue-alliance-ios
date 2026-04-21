@@ -122,40 +122,37 @@ class EventInsightsHeaderView: UITableViewHeaderFooterView, Reusable {
 class FourColumnTableViewCell: UITableViewCell, Reusable {
 
     private let titleLabel = UILabel()
-    private let qualsView = UIStackView()
-    private let playoffsView = UIStackView()
     private let playoffLabel = UILabel()
     private let qualLabel = UILabel()
-    private let label1 = UILabel()
-    private let label2 = UILabel()
-    private let label3 = UILabel()
-    private let label4 = UILabel()
-    private let label5 = UILabel()
-    private let label6 = UILabel()
+    private let playoffValueLabels: [UILabel] = (0..<3).map { _ in UILabel() }
+    private let qualsValueLabels: [UILabel] = (0..<3).map { _ in UILabel() }
 
     var title: String? {
         didSet { titleLabel.text = title }
     }
 
-    var contentRowOne: [String] = [] {
+    var qualValues: [String] = [] {
         didSet {
-            let labels = [label1, label2, label3]
+            let labels = qualsValueLabels
             for (i, label) in labels.enumerated() {
-                label.text = i < contentRowOne.count ? contentRowOne[i] : ""
+                label.text = i < qualValues.count ? qualValues[i] : ""
             }
         }
     }
-    var contentRowTwo: [String] = [] {
+    var playoffValues: [String] = [] {
         didSet {
-            let labels = [label4, label5, label6]
+            let labels = playoffValueLabels
             for (i, label) in labels.enumerated() {
-                label.text = i < contentRowTwo.count ? contentRowTwo[i] : ""
+                label.text = i < playoffValues.count ? playoffValues[i] : ""
             }
         }
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        let qualsView = UIStackView()
+        let playoffsView = UIStackView()
 
         qualsView.axis = .horizontal
         qualsView.distribution = .fillEqually
@@ -168,11 +165,11 @@ class FourColumnTableViewCell: UITableViewCell, Reusable {
 
         qualsView.addArrangedSubview(qualLabel)
         playoffsView.addArrangedSubview(playoffLabel)
-        [label1, label2, label3].forEach {
+        qualsValueLabels.forEach {
             $0.textAlignment = .center
             qualsView.addArrangedSubview($0)
         }
-        [label4, label5, label6].forEach {
+        playoffValueLabels.forEach {
             $0.textAlignment = .center
             playoffsView.addArrangedSubview($0)
         }

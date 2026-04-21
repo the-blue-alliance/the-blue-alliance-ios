@@ -5,10 +5,12 @@ import UIKit
 
 struct InsightRow: Hashable {
     var title: String
-    var qual: String?
-    var playoff: String?
-    var contentRowOne: [String]?
-    var contentRowTwo: [String]?
+    var value: InsightValue
+    
+    enum InsightValue: Hashable {
+        case paired(qual: String?, playoff: String?)
+        case columns(qual: [String], playoff: [String])
+    }
 }
 
 class EventInsightsViewController: TBATableViewController, Refreshable, Stateful {
@@ -108,18 +110,35 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                 let cell =
                     tableView.dequeueReusableCell(indexPath: indexPath)
                     as EventInsightsTableViewCell
+                
                 cell.title = row.title
-                cell.leftTitle = row.qual ?? "----"
-                cell.rightTitle = row.playoff ?? "----"
+                
+                switch row.value {
+                case .paired(let qual, let playoff):
+                    cell.leftTitle = qual ?? "----"
+                    cell.rightTitle = playoff ?? "----"
+                default:
+                    cell.leftTitle = "----"
+                    cell.rightTitle = "----"
+                }
+                
                 cell.selectionStyle = .none
                 return cell
             } else {
                 let cell =
                     tableView.dequeueReusableCell(indexPath: indexPath) as FourColumnTableViewCell
+                
                 cell.title = row.title
-                cell.contentRowOne = row.contentRowOne ?? []
-                cell.contentRowTwo = row.contentRowTwo ?? []
-
+                
+                switch row.value {
+                case .columns(let qual, let playoff):
+                    cell.qualValues = qual
+                    cell.playoffValues = playoff
+                default:
+                    cell.qualValues = []
+                    cell.playoffValues = []
+                }
+                
                 return cell
             }
         }
