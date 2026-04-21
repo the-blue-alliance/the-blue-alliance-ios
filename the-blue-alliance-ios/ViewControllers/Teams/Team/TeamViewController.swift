@@ -197,8 +197,8 @@ class TeamViewController: HeaderContainerViewController {
     }
 
     private static func decodeAvatar(from media: Media?) -> UIImage? {
-        guard let base64 = media?.details?.additionalProperties.value["base64Image"] as? String,
-            let data = Data(base64Encoded: base64)
+        guard case let .case2(payload) = media?.details,
+            let data = Data(base64Encoded: payload.base64Image)
         else { return nil }
         return UIImage(data: data)
     }

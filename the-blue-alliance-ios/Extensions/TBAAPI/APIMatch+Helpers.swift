@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-extension Match.CompLevelPayload {
+extension CompLevel {
 
     var sortOrder: Int {
         switch self {
