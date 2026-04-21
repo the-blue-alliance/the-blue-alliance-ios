@@ -41,21 +41,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private var imageErrors: [String: Error] = [:]
     private var downloadTasks: [String: Task<Void, Never>] = [:]
 
-    private lazy var cellRegistration = UICollectionView.CellRegistration<
-        MediaCollectionViewCell, TeamMediaItem
-    > {
-        [weak self] cell, _, item in
-        guard let self else { return }
-        if let image = self.imageCache[item.foreignKey] {
-            cell.state = .loaded(image)
-        } else if let error = self.imageErrors[item.foreignKey] {
-            cell.state = .error("Error loading media - \(error.localizedDescription)")
-        } else {
-            cell.state = .loading
-        }
-        cell.accessibilityIdentifier = "media.\(item.foreignKey)"
-    }
-
     // MARK: Init
 
     init(
@@ -210,12 +195,27 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: Data Source
 
     private func setupDataSource() {
+        let cellRegistration = UICollectionView.CellRegistration<
+            MediaCollectionViewCell, TeamMediaItem
+        > {
+            [weak self] cell, _, item in
+            guard let self else { return }
+            if let image = self.imageCache[item.foreignKey] {
+                cell.state = .loaded(image)
+            } else if let error = self.imageErrors[item.foreignKey] {
+                cell.state = .error("Error loading media - \(error.localizedDescription)")
+            } else {
+                cell.state = .loading
+            }
+            cell.accessibilityIdentifier = "media.\(item.foreignKey)"
+        }
         dataSource = CollectionViewDataSource<String, TeamMediaItem>(collectionView: collectionView)
         {
-            [weak self] collectionView, indexPath, item in
-            guard let self else { return UICollectionViewCell() }
+            collectionView,
+            indexPath,
+            item in
             return collectionView.dequeueConfiguredReusableCell(
-                using: self.cellRegistration,
+                using: cellRegistration,
                 for: indexPath,
                 item: item
             )
