@@ -63,14 +63,6 @@ Format all Swift files with swift-format
 
 Lint Swift formatting (strict, used by CI)
 
-### ios build_ci
-
-```sh
-[bundle exec] fastlane ios build_ci
-```
-
-Compile the main iOS app for CI (no code signing)
-
 ### ios setup_secrets
 
 ```sh
@@ -110,14 +102,6 @@ Upload a new build to the App Store
 ```
 
 Create a new app version (major, minor, patch) by bumping the version number
-
-### ios refresh_dsyms
-
-```sh
-[bundle exec] fastlane ios refresh_dsyms
-```
-
-
 
 ----
 
