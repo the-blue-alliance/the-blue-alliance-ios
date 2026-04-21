@@ -5,6 +5,7 @@ import Foundation
 // main app target picks them up through `import TBAAPI`.
 public typealias APIStatus = Components.Schemas.APIStatus
 public typealias Award = Components.Schemas.Award
+public typealias CompLevel = Components.Schemas.CompLevel
 public typealias District = Components.Schemas.District
 public typealias DistrictRanking = Components.Schemas.DistrictRanking
 public typealias EliminationAlliance = Components.Schemas.EliminationAlliance

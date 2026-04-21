@@ -49,6 +49,8 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
 
     func filter(_ teams: [APITeam]) -> [APITeam] { teams }
 
+    func numberSubtitle(for team: APITeam) -> String? { nil }
+
     // MARK: - Data Source
 
     private func setupDataSource() {
@@ -60,7 +62,8 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
             cell.viewModel = TeamCellViewModel(
                 teamNumber: "\(team.teamNumber)",
                 nickname: team.displayNickname,
-                location: team.locationString
+                location: team.locationString,
+                numberSubtitle: self.numberSubtitle(for: team)
             )
             cell.accessibilityIdentifier = "team.\(team.key)"
             return cell

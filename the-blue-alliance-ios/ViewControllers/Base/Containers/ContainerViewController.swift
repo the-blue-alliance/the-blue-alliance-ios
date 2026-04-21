@@ -138,7 +138,7 @@ class ContainerViewController: UIViewController, Alertable {
             for: .valueChanged
         )
 
-        if let navigationTitle = navigationTitle, let navigationSubtitle = navigationSubtitle {
+        if navigationTitle != nil || navigationSubtitle != nil {
             navigationTitleLabel.text = navigationTitle
             navigationSubtitleLabel.text = navigationSubtitle
             navigationItem.titleView = navigationStackView
