@@ -211,7 +211,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
         dataSource = CollectionViewDataSource<String, TeamMediaItem>(collectionView: collectionView)
         {
-            collectionView, indexPath, item in
+            collectionView,
+            indexPath,
+            item in
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,
                 for: indexPath,
