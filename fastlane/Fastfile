@@ -214,13 +214,6 @@ platform :ios do
     increment_build_number(build_number: 1)
   end
 
-  lane :refresh_dsyms do
-    setup_api
-    download_dsyms(app_identifier: "com.the-blue-alliance.tba", min_version: "3.0.0")
-    upload_symbols_to_crashlytics(gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
-    clean_build_artifacts           # Delete the local dSYM files
-  end
-
   ## End Utility Lanes ##
 
 end
