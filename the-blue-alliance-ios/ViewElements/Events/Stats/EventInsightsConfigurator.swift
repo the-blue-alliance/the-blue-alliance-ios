@@ -73,7 +73,7 @@ extension EventInsightsConfigurator {
     {
         return InsightRow(
             title: title,
-            value: .paired(
+            value: .columns(
                 qual: (totalsStat(qual, key) ?? []).map { String(describing: $0) },
                 playoff: (totalsStat(playoff, key) ?? []).map { String(describing: $0) }
             )
