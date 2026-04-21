@@ -1,6 +1,5 @@
 import Foundation
 import TBAAPI
-import TBAUtils
 import UIKit
 
 protocol EventInfoViewControllerDelegate: AnyObject {

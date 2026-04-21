@@ -1,6 +1,6 @@
-import TBAUtils
 import Foundation
 import XCTest
+@testable import The_Blue_Alliance
 
 class CalendarTBATestCase: XCTestCase {
 

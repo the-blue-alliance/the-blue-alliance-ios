@@ -1,5 +1,4 @@
 import MyTBAKit
-import TBAUtils
 import UIKit
 
 class MyTBAPreferenceViewController: TBATableViewController,

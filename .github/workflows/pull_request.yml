@@ -29,13 +29,11 @@ jobs:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: ${{ runner.os }}-gems-
-      - name: Cache SwiftPM + DerivedData
+      - name: Cache SwiftPM clones
         uses: actions/cache@v4
         with:
-          path: |
-            ~/Library/Developer/Xcode/DerivedData
-            ~/Library/Caches/org.swift.swiftpm
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved', '**/Package.swift', '**/*.pbxproj') }}
+          path: ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.swift', '**/*.pbxproj') }}
           restore-keys: ${{ runner.os }}-spm-
       - name: Install
         run: |

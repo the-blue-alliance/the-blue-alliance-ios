@@ -1,6 +1,5 @@
 import Foundation
 import TBAAPI
-import TBAUtils
 
 struct AppStatus {
     let currentSeason: Int
