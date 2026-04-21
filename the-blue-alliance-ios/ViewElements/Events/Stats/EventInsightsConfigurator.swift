@@ -22,7 +22,7 @@ extension EventInsightsConfigurator {
             value: .paired(
                 qual: highScoreString(qual, key),
                 playoff: highScoreString(playoff, key)
-            ),
+            )
         )
     }
 
@@ -62,9 +62,12 @@ extension EventInsightsConfigurator {
     static func bonusRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?)
         -> InsightRow
     {
-        InsightRow(
+        return InsightRow(
             title: title,
-            value: .columns(qual: bonusStat(qual, key) ?? [], playoff: bonusStat(qual, key) ?? [])
+            value: .columns(
+                qual: bonusStat(qual, key) ?? [],
+                playoff: bonusStat(playoff, key) ?? []
+            )
         )
     }
 
