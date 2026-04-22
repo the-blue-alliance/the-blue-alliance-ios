@@ -1226,7 +1226,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    \"${SRCROOT}/scripts/swift-format-lint.sh\"\nfi\n";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    \"${SRCROOT}/scripts/swift-format.sh\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
