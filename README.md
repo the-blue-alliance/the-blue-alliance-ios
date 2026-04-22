@@ -13,12 +13,12 @@ Code Style
 Swift code is formatted with Apple's [`swift-format`](https://github.com/swiftlang/swift-format), which ships with Xcode 16+. CI runs `swift-format lint --strict` on every PR; violations block the build.
 
 To fix formatting locally:
-- **Whole tree:** `bundle exec fastlane format` (or `./scripts/swift-format-fix.sh`).
+- **Whole tree:** `bundle exec fastlane format` (or `./scripts/swift-format.sh --fix`).
 - **One file in Xcode:** Editor → Structure → Format File with swift-format. In Xcode Settings → Key Bindings, search "swift-format" and bind it (e.g. ⌃⌥⌘F) for one-keystroke formatting.
 
 To run the linter locally (same check CI runs):
-- **Strict (matches CI):** `bundle exec fastlane lint` (or `./scripts/swift-format-lint.sh --strict`). Exits non-zero on any violation.
-- **Non-strict (warnings only):** `./scripts/swift-format-lint.sh` — reports issues without failing.
+- **Strict (matches CI):** `bundle exec fastlane lint` (or `./scripts/swift-format.sh --strict`). Exits non-zero on any violation.
+- **Non-strict (warnings only):** `./scripts/swift-format.sh` — reports issues without failing.
 - **Ad-hoc:** `xcrun swift-format lint --recursive the-blue-alliance-ios Packages`.
 
 Configuration lives in `.swift-format` at the repo root.

@@ -40,12 +40,12 @@ platform :ios do
 
   desc "Format all Swift files with swift-format"
   lane :format do
-    sh("../scripts/swift-format-fix.sh")
+    sh("../scripts/swift-format.sh --fix")
   end
 
   desc "Lint Swift formatting (strict, used by CI)"
   lane :lint do
-    sh("../scripts/swift-format-lint.sh --strict")
+    sh("../scripts/swift-format.sh --strict")
   end
 
   ## CI Lanes ##
