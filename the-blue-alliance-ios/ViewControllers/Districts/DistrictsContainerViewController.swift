@@ -38,6 +38,14 @@ class DistrictsContainerViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Districts: \(year)")
+    }
+
     // MARK: - Private Methods
 
     private func updateInterface() {

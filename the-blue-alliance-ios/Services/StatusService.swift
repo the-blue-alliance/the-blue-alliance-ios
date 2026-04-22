@@ -65,7 +65,7 @@ public class StatusService: NSObject, StatusServiceProtocol {
 
     var retryService: RetryService
 
-    private let errorRecorder: ErrorRecorder
+    private let reporter: any Reporter
     private let api: any TBAAPIProtocol
 
     private(set) var status: AppStatus = .default
@@ -80,8 +80,8 @@ public class StatusService: NSObject, StatusServiceProtocol {
     var currentSeason: Int { status.currentSeason }
     var maxSeason: Int { status.maxSeason }
 
-    init(errorRecorder: ErrorRecorder, api: any TBAAPIProtocol, retryService: RetryService) {
-        self.errorRecorder = errorRecorder
+    init(reporter: any Reporter, api: any TBAAPIProtocol, retryService: RetryService) {
+        self.reporter = reporter
         self.api = api
         self.retryService = retryService
 
@@ -94,7 +94,7 @@ public class StatusService: NSObject, StatusServiceProtocol {
             let newStatus = AppStatus(apiStatus: apiStatus)
             await MainActor.run { apply(newStatus) }
         } catch {
-            errorRecorder.record(error)
+            reporter.record(error)
         }
     }
 

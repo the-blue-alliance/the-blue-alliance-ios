@@ -65,6 +65,16 @@ class YearSelectViewController: ContainerViewController {
         navigationController?.viewControllers = [self, eventWeekSelectViewController]
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        var message = "Years: Year: \(year) | Years: \(years)"
+        if let week = week {
+            message.append(" | Week: \(week.key)")
+        }
+        dependencies.reporter.log(message)
+    }
+
     // MARK: - Private Methods
 
     private func pushToEventWeekSelect(year: Int) {

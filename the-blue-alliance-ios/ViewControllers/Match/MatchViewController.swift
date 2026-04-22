@@ -96,6 +96,12 @@ class MatchViewController: MyTBAContainerViewController {
         loadMatchAndEvent()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Match: \(state.key)")
+    }
+
     private func loadMatchAndEvent() {
         Task { @MainActor in
             // Unstructured Task handles instead of `async let`: Swift 6.1's
