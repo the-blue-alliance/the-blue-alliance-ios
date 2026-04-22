@@ -127,8 +127,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.eventAwards(key: self.eventKey)
-            self.applyAwards(fetched)
+            self.applyAwards(try await self.dependencies.api.eventAwards(key: self.eventKey))
         }
     }
 
