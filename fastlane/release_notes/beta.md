@@ -1,19 +1,14 @@
-The Blue Alliance v3.3.0
-
-What's new:
-- Refreshed Liquid Glass app icon for iOS 26
-- Pit locations now show on Team@Event and Event → Teams screens, so you can find teams on the venue floor
-- 2026 Insights with an updated layout
-- District Championship events on the Week view now group by district (parent + divisions together), matching the Android app's sort
-- Team@Event Summary places Next Match and Most Recent Match side-by-side instead of splitting them across the screen
-- New Settings → Networking section with a cache policy toggle
-- New Settings → Privacy toggles to opt out of Firebase Analytics and Crashlytics
+The Blue Alliance v3.3.2
 
 Bug fixes:
-- Fixed a crash when changing the year on the Team Media tab
-- Corrected timezone handling across event date math — event date ranges, today-ending events in the Week picker, and related date-driven UI now use the event's own calendar day rather than the device's local timezone
-- Row spacing adjusted so 5-digit team numbers fit
+- Fixed a crash when opening a match from a match list
+- Fixed offseason event titles rendering as "20XX  Offseason" with the event name missing (e.g. 2024mmr)
+- Restored team nicknames on the Event Rankings screen
+- Opening a match from a list now seeds the detail view from the already-fetched match, so the title and score no longer flash blank before the background refresh lands
 
 Under the hood:
-- Migrated off Core Data, upgraded Firebase to 12.12.1, adopted UISceneDelegate, and a range of iOS API modernizations
-- Refreshed to the latest TBA API schema (v3.12.2)
+- Restored Crashlytics breadcrumbs so post-crash logs again show which screen the user was on
+- Removed the legacy Settings bundle (all toggles live in the in-app Settings tab)
+- Refactored Event/Team/Match detail view controllers to a single State enum so the key and the model can't drift
+- Split the TBAAPI display helpers back into their own package with ~90 unit tests restored
+- Switched GitHub release bodies to GitHub's auto-generated changelog so they no longer lag behind the TestFlight notes
