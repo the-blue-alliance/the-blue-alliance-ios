@@ -156,7 +156,7 @@ class EventInsightsConfigurator2023: EventInsightsConfigurator {
         )
         bonusStats.append(
             bonusRow(
-                title: "\"Unicorn Matches\" (Win + Cargo Bonus + Hangar Bonus)",
+                title: "\"Unicorn Matches\" (Win + Sustainability + Activation)",
                 key: "unicorn_matches",
                 qual: qual,
                 playoff: playoff
