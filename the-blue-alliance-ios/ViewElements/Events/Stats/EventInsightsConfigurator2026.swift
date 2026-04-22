@@ -53,7 +53,7 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
         var bonusStats: [InsightRow] = []
 
         bonusStats.append(
-            bonusRow(title: "Energized RP", key: "energized_rp_count", qual: qual, playoff: nil)
+            bonusRow(title: "Energized RP", key: "energized_rp_count", qual: qual, playoff: playoff)
         )
         bonusStats.append(
             bonusRow(
@@ -64,10 +64,10 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
             )
         )
         bonusStats.append(
-            bonusRow(title: "Traversal RP", key: "traversal_rp_count", qual: qual, playoff: nil)
+            bonusRow(title: "Traversal RP", key: "traversal_rp_count", qual: qual, playoff: playoff)
         )
-        bonusStats.append(bonusRow(title: "6 RP", key: "six_rp_count", qual: qual, playoff: nil))
-        bonusStats.append(bonusRow(title: "9 RP", key: "nine_rp_count", qual: qual, playoff: nil))
+        bonusStats.append(bonusRow(title: "6 RP", key: "six_rp_count", qual: qual, playoff: playoff))
+        bonusStats.append(bonusRow(title: "9 RP", key: "nine_rp_count", qual: qual, playoff: playoff))
         bonusStats.append(
             bonusRow(
                 title: "Auto Win Conversion",

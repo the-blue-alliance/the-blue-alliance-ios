@@ -143,7 +143,7 @@ class EventInsightsConfigurator2023: EventInsightsConfigurator {
                 title: "Sustainability Bonus RP",
                 key: "sustainability_bonus_rp",
                 qual: qual,
-                playoff: nil
+                playoff: playoff
             )
         )
         bonusStats.append(
@@ -151,7 +151,7 @@ class EventInsightsConfigurator2023: EventInsightsConfigurator {
                 title: "Activation Bonus RP",
                 key: "activation_bonus_rp",
                 qual: qual,
-                playoff: nil
+                playoff: playoff
             )
         )
         bonusStats.append(
@@ -159,7 +159,7 @@ class EventInsightsConfigurator2023: EventInsightsConfigurator {
                 title: "\"Unicorn Matches\" (Win + Cargo Bonus + Hangar Bonus)",
                 key: "unicorn_matches",
                 qual: qual,
-                playoff: nil
+                playoff: playoff
             )
         )
 
