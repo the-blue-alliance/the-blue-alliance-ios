@@ -16,6 +16,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
     private var rankings: [EventRanking.RankingsPayloadPayload] = []
     private var extraStatsInfo: [EventRanking.ExtraStatsInfoPayloadPayload] = []
     private var sortOrderInfo: [EventRanking.SortOrderInfoPayloadPayload] = []
+    private var teamsByKey: [String: TeamSimple] = [:]
 
     // MARK: - Init
 
@@ -54,7 +55,12 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
             [weak self] tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             let detail = self?.rankingInfoString(for: ranking)
-            cell.viewModel = RankingCellViewModel(apiRanking: ranking, detailText: detail)
+            let team = self?.teamsByKey[ranking.teamKey]
+            cell.viewModel = RankingCellViewModel(
+                apiRanking: ranking,
+                detailText: detail,
+                team: team
+            )
             return cell
         }
         dataSource.statefulDelegate = self
@@ -113,7 +119,25 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let response = try await self.dependencies.api.eventRankings(key: self.eventKey)
+            // Unstructured Task handles instead of `async let`: Swift 6.1's
+            // async-let stack allocator trips swift_task_dealloc's LIFO check
+            // here even with reverse-order awaits (#995 didn't fully fix it).
+            // Task handles heap-allocate and sidestep the allocator entirely.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let rankingsHandle = Task {
+                try await self.dependencies.api.eventRankings(key: self.eventKey)
+            }
+            let teamsHandle = Task {
+                try? await self.dependencies.api.eventTeamsSimple(key: self.eventKey)
+            }
+
+            // Persist teams before awaiting rankings so a rankings failure
+            // doesn't discard a successful teams response — the next refresh
+            // that succeeds on rankings will render using this team map.
+            let teams = await teamsHandle.value ?? []
+            self.teamsByKey = Dictionary(uniqueKeysWithValues: teams.map { ($0.key, $0) })
+
+            let response = try await rankingsHandle.value
             self.applyRanking(response)
         }
     }
