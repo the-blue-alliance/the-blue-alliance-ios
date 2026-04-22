@@ -133,6 +133,7 @@ class FourColumnTableViewCell: UITableViewCell, Reusable {
 
     var qualValues: [String] = [] {
         didSet {
+            qualValues = qualValues.map { "\($0.isEmpty ? "--" : $0)" }
             let labels = qualsValueLabels
             for (i, label) in labels.enumerated() {
                 label.text = i < qualValues.count ? qualValues[i] : ""
@@ -141,6 +142,7 @@ class FourColumnTableViewCell: UITableViewCell, Reusable {
     }
     var playoffValues: [String] = [] {
         didSet {
+            playoffValues = playoffValues.map { "\($0.isEmpty ? "--" : $0)" }
             let labels = playoffValueLabels
             for (i, label) in labels.enumerated() {
                 label.text = i < playoffValues.count ? playoffValues[i] : ""

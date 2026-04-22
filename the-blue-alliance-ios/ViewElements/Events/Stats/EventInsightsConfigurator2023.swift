@@ -38,10 +38,6 @@ class EventInsightsConfigurator2023: EventInsightsConfigurator {
                 playoff: playoff
             )
         )
-        // Note - this is not helpful, since we already show "Average Match Score"
-        // If we can show breakdowns by Auto/Teleop/Overall like on web, we can add this back
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/744
-        // matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
 
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {

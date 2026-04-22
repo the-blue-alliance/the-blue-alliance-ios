@@ -65,8 +65,8 @@ extension EventInsightsConfigurator {
         return InsightRow(
             title: title,
             value: .columns(
-                qual: bonusStat(qual, key) ?? [],
-                playoff: bonusStat(playoff, key) ?? []
+                qual: bonusStat(qual, key) ?? ["", "", ""],
+                playoff: bonusStat(playoff, key) ?? ["", "", ""]
             )
         )
     }
@@ -110,11 +110,11 @@ extension EventInsightsConfigurator {
             if bonusData.safeItem(at: 0) as? Int == 0 && bonusData.safeItem(at: 1) as? Int != nil {
                 return "0.00%"
             }
-            return "--"
+            return ""
         }()
         return [
-            ((bonusData.safeItem(at: 0) as? Int).map(String.init) ?? "--"),
-            ((bonusData.safeItem(at: 1) as? Int).map(String.init) ?? "--"), (quotient),
+            ((bonusData.safeItem(at: 0) as? Int).map(String.init) ?? ""),
+            ((bonusData.safeItem(at: 1) as? Int).map(String.init) ?? ""), (quotient),
         ]
     }
 
@@ -129,16 +129,16 @@ extension EventInsightsConfigurator {
             if let val = totalsData.safeItem(at: 1) as? Double {
                 return "\(String(format: "%.2f", val))"
             }
-            return "--"
+            return ""
         }()
         let teamAvg: String = {
             if let val = totalsData.safeItem(at: 2) as? Double {
                 return "\(String(format: "%.2f", val))"
             }
-            return "--"
+            return ""
         }()
         return [
-            (totalsData.safeItem(at: 0) as? Int).map(String.init) ?? "--", allianceAvg,
+            (totalsData.safeItem(at: 0) as? Int).map(String.init) ?? "", allianceAvg,
             teamAvg,
         ]
     }
@@ -160,7 +160,7 @@ extension EventInsightsConfigurator {
             if let number = value(for: 0) as? NSNumber {
                 return String(format: "%.2f", number.doubleValue)
             }
-            guard let v = value(for: 0) else { return "--" }
+            guard let v = value(for: 0) else { return "" }
             return String(describing: v)
         }()
 
@@ -171,7 +171,7 @@ extension EventInsightsConfigurator {
             if let number = value(for: 1) as? NSNumber {
                 return String(format: "%.2f", number.doubleValue)
             }
-            guard let v = value(for: 1) else { return "--" }
+            guard let v = value(for: 1) else { return "" }
             return String(describing: v)
         }()
 
@@ -182,7 +182,7 @@ extension EventInsightsConfigurator {
             if let number = value(for: 2) as? NSNumber {
                 return String(format: "%.2f", number.doubleValue)
             }
-            guard let v = value(for: 2) else { return "--" }
+            guard let v = value(for: 2) else { return "" }
             return String(describing: v)
         }()
 
