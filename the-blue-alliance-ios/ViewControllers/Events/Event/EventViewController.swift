@@ -3,10 +3,28 @@ import Photos
 import TBAAPI
 import UIKit
 
+enum EventState {
+    case key(String)
+    case event(Event)
+
+    var key: String {
+        switch self {
+        case .key(let key): return key
+        case .event(let event): return event.key
+        }
+    }
+
+    var event: Event? {
+        switch self {
+        case .key: return nil
+        case .event(let event): return event
+        }
+    }
+}
+
 class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
 
-    private let eventKey: String
-    private var event: Event?
+    private var state: EventState
 
     private(set) var infoViewController: EventInfoViewController
     private(set) var teamsViewController: EventTeamsViewController
@@ -14,46 +32,46 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     private(set) var matchesViewController: MatchesViewController
 
     override var subscribableModel: MyTBASubscribable {
-        EventSubscribable(modelKey: eventKey)
+        EventSubscribable(modelKey: state.key)
     }
 
     // MARK: - Init
 
     convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
-        self.init(eventKey: eventKey, event: nil, eventName: name, dependencies: dependencies)
+        self.init(state: .key(eventKey), eventName: name, dependencies: dependencies)
     }
 
     convenience init(event: Event, dependencies: Dependencies) {
-        self.init(eventKey: event.key, event: event, eventName: nil, dependencies: dependencies)
+        self.init(state: .event(event), eventName: nil, dependencies: dependencies)
     }
 
-    private init(eventKey: String, event: Event?, eventName: String?, dependencies: Dependencies) {
-        self.eventKey = eventKey
-        self.event = event
+    private init(state: EventState, eventName: String?, dependencies: Dependencies) {
+        self.state = state
 
-        if let event {
-            infoViewController = EventInfoViewController(event: event, dependencies: dependencies)
-        } else {
+        switch state {
+        case .key(let eventKey):
             infoViewController = EventInfoViewController(
                 eventKey: eventKey,
                 name: eventName,
                 dependencies: dependencies
             )
+        case .event(let event):
+            infoViewController = EventInfoViewController(event: event, dependencies: dependencies)
         }
         teamsViewController = EventTeamsViewController(
-            eventKey: eventKey,
+            eventKey: state.key,
             dependencies: dependencies
         )
         rankingsViewController = EventRankingsViewController(
-            eventKey: eventKey,
+            eventKey: state.key,
             dependencies: dependencies
         )
         matchesViewController = MatchesViewController(
-            eventKey: eventKey,
+            eventKey: state.key,
             dependencies: dependencies
         )
 
-        let navTitle = event?.friendlyNameWithYear ?? eventKey
+        let navTitle = state.event?.friendlyNameWithYear ?? state.key
         super.init(
             viewControllers: [
                 infoViewController, teamsViewController, rankingsViewController,
@@ -81,14 +99,14 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if isEventDown(eventKey: eventKey) {
+        if isEventDown(eventKey: state.key) {
             showOfflineEventMessage(shouldShow: true, animated: false)
         }
-        registerForEventStatusChanges(eventKey: eventKey)
+        registerForEventStatusChanges(eventKey: state.key)
 
         Task { @MainActor in
-            if let fetched = try? await api.event(key: eventKey) {
-                event = fetched
+            if let fetched = try? await api.event(key: state.key) {
+                state = .event(fetched)
                 title = fetched.friendlyNameWithYear
                 navigationTitle = fetched.friendlyNameWithYear
             }
@@ -119,7 +137,7 @@ private struct EventSubscribable: MyTBASubscribable {
 extension EventViewController: EventInfoViewControllerDelegate {
 
     func showAlliances() {
-        guard let event else { return }
+        guard let event = state.event else { return }
         let eventAlliancesViewController = EventAlliancesContainerViewController(
             event: event,
             dependencies: dependencies
@@ -128,7 +146,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
     }
 
     func showAwards() {
-        guard let event else { return }
+        guard let event = state.event else { return }
         let eventAwardsViewController = EventAwardsContainerViewController(
             event: event,
             dependencies: dependencies
@@ -137,7 +155,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
     }
 
     func showDistrictPoints() {
-        guard let event else { return }
+        guard let event = state.event else { return }
         let eventDistrictPointsViewController = EventDistrictPointsContainerViewController(
             event: event,
             dependencies: dependencies
@@ -149,7 +167,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
     }
 
     func showInsights() {
-        guard let event else { return }
+        guard let event = state.event else { return }
         let eventInsightsContainerViewController = EventInsightsContainerViewController(
             event: event,
             dependencies: dependencies
@@ -177,10 +195,10 @@ extension EventViewController: EventRankingsViewControllerDelegate {
     }
 
     private func pushTeamAtEvent(teamKey: String) {
-        let year = event?.year ?? Int(eventKey.prefix(4)) ?? 0
+        let year = state.event?.year ?? Int(state.key.prefix(4)) ?? 0
         let teamAtEventViewController = TeamAtEventViewController(
             teamKey: teamKey,
-            eventKey: eventKey,
+            eventKey: state.key,
             year: year,
             dependencies: dependencies
         )

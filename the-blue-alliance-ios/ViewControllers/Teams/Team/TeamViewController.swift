@@ -4,11 +4,28 @@ import Photos
 import TBAAPI
 import UIKit
 
+enum TeamState {
+    case key(String)
+    case team(Team)
+
+    var key: String {
+        switch self {
+        case .key(let key): return key
+        case .team(let team): return team.key
+        }
+    }
+
+    var team: Team? {
+        switch self {
+        case .key: return nil
+        case .team(let team): return team
+        }
+    }
+}
+
 class TeamViewController: HeaderContainerViewController {
 
-    private let teamKey: String
-
-    private var team: Team?
+    private var state: TeamState
     private var yearsParticipated: [Int] = []
     private var avatarImage: UIImage?
 
@@ -23,7 +40,7 @@ class TeamViewController: HeaderContainerViewController {
     private(set) var mediaViewController: TeamMediaCollectionViewController
 
     override var subscribableModel: MyTBASubscribable {
-        TeamSubscribable(modelKey: teamKey)
+        TeamSubscribable(modelKey: state.key)
     }
 
     private var year: Int? {
@@ -40,29 +57,22 @@ class TeamViewController: HeaderContainerViewController {
     // MARK: Init
 
     convenience init(teamKey: String, nickname: String? = nil, dependencies: Dependencies) {
-        self.init(
-            teamKey: teamKey,
-            team: nil,
-            partialNickname: nickname,
-            dependencies: dependencies
-        )
+        self.init(state: .key(teamKey), partialNickname: nickname, dependencies: dependencies)
     }
 
     convenience init(team: Team, dependencies: Dependencies) {
-        self.init(teamKey: team.key, team: team, partialNickname: nil, dependencies: dependencies)
+        self.init(state: .team(team), partialNickname: nil, dependencies: dependencies)
     }
 
-    private init(teamKey: String, team: Team?, partialNickname: String?, dependencies: Dependencies)
-    {
-        self.teamKey = teamKey
-        self.team = team
+    private init(state: TeamState, partialNickname: String?, dependencies: Dependencies) {
+        self.state = state
 
-        let teamNumber = team?.teamNumber ?? Int(TeamKey.trimFRCPrefix(teamKey)) ?? 0
+        let teamNumber = state.team?.teamNumber ?? Int(TeamKey.trimFRCPrefix(state.key)) ?? 0
         let nickname: String? = {
-            if let team, !team.nickname.isEmpty { return team.nickname }
+            if let team = state.team, !team.nickname.isEmpty { return team.nickname }
             return partialNickname
         }()
-        let teamNumberNickname = team?.teamNumberNickname ?? "Team \(teamNumber)"
+        let teamNumberNickname = state.team?.teamNumberNickname ?? "Team \(teamNumber)"
 
         self.teamHeaderView = TeamHeaderView(
             TeamHeaderViewModel(
@@ -74,21 +84,22 @@ class TeamViewController: HeaderContainerViewController {
             )
         )
 
-        if let team {
-            infoViewController = TeamInfoViewController(team: team, dependencies: dependencies)
-        } else {
+        switch state {
+        case .key(let teamKey):
             infoViewController = TeamInfoViewController(
                 teamKey: teamKey,
                 dependencies: dependencies
             )
+        case .team(let team):
+            infoViewController = TeamInfoViewController(team: team, dependencies: dependencies)
         }
         eventsViewController = TeamEventsViewController(
-            teamKey: teamKey,
+            teamKey: state.key,
             year: nil,
             dependencies: dependencies
         )
         mediaViewController = TeamMediaCollectionViewController(
-            teamKey: teamKey,
+            teamKey: state.key,
             year: Calendar.current.component(.year, from: Date()),
             dependencies: dependencies
         )
@@ -133,20 +144,17 @@ class TeamViewController: HeaderContainerViewController {
             // here even with reverse-order awaits (#995 didn't fully fix it).
             // Task handles heap-allocate and sidestep the allocator entirely.
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
-            let teamHandle = Task { try? await self.dependencies.api.team(key: self.teamKey) }
+            let teamHandle = Task { try? await self.dependencies.api.team(key: self.state.key) }
             let yearsHandle = Task {
-                try? await self.dependencies.api.teamYearsParticipated(key: self.teamKey)
+                try? await self.dependencies.api.teamYearsParticipated(key: self.state.key)
             }
 
-            let team = await teamHandle.value
-            let years = await yearsHandle.value
-
-            if let team {
-                self.team = team
+            if let team = await teamHandle.value {
+                self.state = .team(team)
                 self.navigationTitle = team.teamNumberNickname
                 updateInterface()
             }
-            if let years {
+            if let years = await yearsHandle.value {
                 self.yearsParticipated = years.sorted().reversed()
                 if year == nil {
                     year = Self.latestYear(
@@ -169,7 +177,7 @@ class TeamViewController: HeaderContainerViewController {
     }
 
     private func updateInterface() {
-        if let team {
+        if let team = state.team {
             teamHeaderView.viewModel = TeamHeaderViewModel(
                 teamNumber: team.teamNumber,
                 avatar: avatarImage,
@@ -185,7 +193,7 @@ class TeamViewController: HeaderContainerViewController {
         Task { @MainActor in
             guard
                 let media = try? await dependencies.api.teamMediaByYear(
-                    teamKey: teamKey,
+                    teamKey: state.key,
                     year: year
                 )
             else { return }
@@ -254,7 +262,7 @@ extension TeamViewController: EventsListViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         let teamAtEventViewController = TeamAtEventViewController(
-            teamKey: teamKey,
+            teamKey: state.key,
             eventKey: event.key,
             year: event.year,
             dependencies: dependencies
