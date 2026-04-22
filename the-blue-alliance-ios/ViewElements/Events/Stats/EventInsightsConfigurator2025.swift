@@ -64,8 +64,12 @@ class EventInsightsConfigurator2025: EventInsightsConfigurator {
         bonusStats.append(
             bonusRow(title: "Coopertition", key: "coopertition_count", qual: qual, playoff: playoff)
         )
-        bonusStats.append(bonusRow(title: "6 RP", key: "six_rp_count", qual: qual, playoff: playoff))
-        bonusStats.append(bonusRow(title: "9 RP", key: "nine_rp_count", qual: qual, playoff: playoff))
+        bonusStats.append(
+            bonusRow(title: "6 RP", key: "six_rp_count", qual: qual, playoff: playoff)
+        )
+        bonusStats.append(
+            bonusRow(title: "9 RP", key: "nine_rp_count", qual: qual, playoff: playoff)
+        )
         bonusStats = filterEmptyInsights(bonusStats)
         if !bonusStats.isEmpty {
             snapshot.appendSections(["Bonus Stats (Count / Opportunities / Success)"])
