@@ -22,32 +22,26 @@ platform :ios do
     spm(command: "test", package_path: "Packages/TBAAPI")
   end
 
+  desc "Build the iOS app (Debug) — a compile-only check for the main app target"
+  lane :build_debug do
+    xcodebuild(
+      project: "the-blue-alliance-ios.xcodeproj",
+      scheme: "The Blue Alliance",
+      configuration: "Debug",
+      destination: "generic/platform=iOS Simulator",
+      build: true,
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation " \
+              "SWIFT_COMPILATION_MODE=wholemodule " \
+              "COMPILER_INDEX_STORE_ENABLE=NO"
+    )
+  end
+
   desc "Run all of our tests"
   lane :test do
     test_mytbakit
     test_tbautils
     test_tbaapi
-
-    # Unit tests don't care which device runs them — pick whatever iPhone
-    # simulator the runner happens to have on the newest iOS runtime, so we
-    # don't chase device names as Xcode drops older simulators.
-    require "json"
-    sims = JSON.parse(`xcrun simctl list devices available --json`)
-    ios_runtime = sims["devices"].keys
-                                 .select { |k| k.include?("SimRuntime.iOS-") }
-                                 .max_by { |k| k.match(/iOS-(\d+)-(\d+)/)&.captures&.map(&:to_i) || [0, 0] }
-    iphone = (sims["devices"][ios_runtime] || []).find { |d| d["name"].start_with?("iPhone") }
-    UI.user_error!("No available iPhone simulator on iOS runtime") unless iphone
-
-    run_tests(
-      project: "the-blue-alliance-ios.xcodeproj",
-      scheme: "The Blue Alliance",
-      only_testing: ["TBAUnitTests"],
-      destination: "platform=iOS Simulator,id=#{iphone["udid"]}",
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation " \
-              "SWIFT_COMPILATION_MODE=wholemodule " \
-              "COMPILER_INDEX_STORE_ENABLE=NO"
-    )
+    build_debug
   end
 
   desc "Format all Swift files with swift-format"
