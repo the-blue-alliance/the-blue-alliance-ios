@@ -17,7 +17,7 @@ protocol PushServiceProtocol: AnyObject {
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
 class PushService: NSObject, PushServiceProtocol {
 
-    private let errorRecorder: ErrorRecorder
+    private let reporter: any Reporter
     private var myTBA: any MyTBAProtocol
     internal var retryService: RetryService
     private let registrar: any RemoteNotificationRegistering
@@ -25,12 +25,12 @@ class PushService: NSObject, PushServiceProtocol {
     private var registerTask: Task<Void, Never>?
 
     init(
-        errorRecorder: ErrorRecorder,
+        reporter: any Reporter,
         myTBA: any MyTBAProtocol,
         retryService: RetryService,
         registrar: any RemoteNotificationRegistering
     ) {
-        self.errorRecorder = errorRecorder
+        self.reporter = reporter
         self.myTBA = myTBA
         self.retryService = retryService
         self.registrar = registrar
@@ -56,7 +56,7 @@ class PushService: NSObject, PushServiceProtocol {
                 _ = try await self.myTBA.register()
                 self.unregisterRetryable()
             } catch {
-                self.errorRecorder.record(error)
+                self.reporter.record(error)
                 if !self.retryService.isRetryRegistered {
                     await MainActor.run { self.registerRetryable() }
                 }

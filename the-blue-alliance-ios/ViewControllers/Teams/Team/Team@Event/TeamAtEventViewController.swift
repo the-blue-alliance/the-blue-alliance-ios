@@ -105,6 +105,12 @@ class TeamAtEventViewController: ContainerViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Team@Event: Event \(eventKey) | Team \(teamKey)")
+    }
+
     // MARK: - Private Methods
 
     @objc private func pushEvent() {

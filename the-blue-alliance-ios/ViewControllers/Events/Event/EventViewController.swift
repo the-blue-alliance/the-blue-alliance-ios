@@ -113,6 +113,12 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Event: \(state.key)")
+    }
+
     // MARK: - Interface Methods
 
     func eventStatusChanged(isEventOffline: Bool) {

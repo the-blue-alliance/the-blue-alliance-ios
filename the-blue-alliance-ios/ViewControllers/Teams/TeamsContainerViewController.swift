@@ -34,6 +34,12 @@ class TeamsContainerViewController: ContainerViewController {
         setupSearchController()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Teams")
+    }
+
 }
 
 extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainer,

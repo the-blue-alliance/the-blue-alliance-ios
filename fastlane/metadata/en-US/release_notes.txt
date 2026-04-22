@@ -1,1 +1,1 @@
-Hey y'all - this update fixes a regression with match breakdowns not rendering properly. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes team nicknames missing from the Event Rankings screen, and offseason event titles rendering as "20XX  Offseason" with the event name missing. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
