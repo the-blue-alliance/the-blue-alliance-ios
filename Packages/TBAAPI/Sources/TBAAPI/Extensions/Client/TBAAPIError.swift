@@ -1,6 +1,6 @@
 import Foundation
 
-enum TBAAPIError: Error {
+public enum TBAAPIError: Error {
     case notModified
     case unauthorized
     case notFound

@@ -1,5 +1,4 @@
 import Foundation
-import TBAAPI
 
 extension TBAAPI {
 

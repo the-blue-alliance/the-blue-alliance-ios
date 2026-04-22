@@ -12,9 +12,21 @@ platform :ios do
     spm(command: "test", package_path: "Packages/MyTBAKit")
   end
 
+  desc "Run TBAUtils unit tests"
+  lane :test_tbautils do
+    spm(command: "test", package_path: "Packages/TBAUtils")
+  end
+
+  desc "Run TBAAPI unit tests"
+  lane :test_tbaapi do
+    spm(command: "test", package_path: "Packages/TBAAPI")
+  end
+
   desc "Run all of our tests"
   lane :test do
     test_mytbakit
+    test_tbautils
+    test_tbaapi
 
     # Unit tests don't care which device runs them — pick whatever iPhone
     # simulator the runner happens to have on the newest iOS runtime, so we

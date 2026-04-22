@@ -15,6 +15,7 @@ public typealias EventInsights = Components.Schemas.EventInsights
 public typealias EventOPRs = Components.Schemas.EventOPRs
 public typealias EventRanking = Components.Schemas.EventRanking
 public typealias Match = Components.Schemas.Match
+public typealias MatchAlliance = Components.Schemas.MatchAlliance
 public typealias Media = Components.Schemas.Media
 public typealias SearchIndex = Components.Schemas.SearchIndex
 public typealias Team = Components.Schemas.Team
