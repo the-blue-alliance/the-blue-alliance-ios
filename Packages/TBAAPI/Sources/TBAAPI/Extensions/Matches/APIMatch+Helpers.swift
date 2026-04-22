@@ -1,9 +1,8 @@
 import Foundation
-import TBAAPI
 
 extension CompLevel {
 
-    var sortOrder: Int {
+    public var sortOrder: Int {
         switch self {
         case .qm: return 0
         case .ef: return 1
@@ -13,7 +12,7 @@ extension CompLevel {
         }
     }
 
-    var level: String {
+    public var level: String {
         switch self {
         case .qm: return "Qualification"
         case .ef: return "Octofinals"
@@ -23,7 +22,7 @@ extension CompLevel {
         }
     }
 
-    var levelShort: String {
+    public var levelShort: String {
         switch self {
         case .qm: return "Quals"
         case .ef: return "Eighths"
@@ -36,32 +35,32 @@ extension CompLevel {
 
 extension Match {
 
-    var compLevelString: String { compLevel.rawValue }
+    public var compLevelString: String { compLevel.rawValue }
 
-    var compLevelSortOrder: Int { compLevel.sortOrder }
+    public var compLevelSortOrder: Int { compLevel.sortOrder }
 
-    var friendlyName: String {
+    public var friendlyName: String {
         if compLevel == .qm {
             return "\(compLevel.levelShort) \(matchNumber)"
         }
         return "\(compLevel.levelShort) \(setNumber)-\(matchNumber)"
     }
 
-    var redAllianceTeamKeys: [String] { alliances.red.teamKeys }
-    var blueAllianceTeamKeys: [String] { alliances.blue.teamKeys }
-    var dqTeamKeys: [String] { alliances.red.dqTeamKeys + alliances.blue.dqTeamKeys }
-    var allTeamKeys: [String] { redAllianceTeamKeys + blueAllianceTeamKeys }
+    public var redAllianceTeamKeys: [String] { alliances.red.teamKeys }
+    public var blueAllianceTeamKeys: [String] { alliances.blue.teamKeys }
+    public var dqTeamKeys: [String] { alliances.red.dqTeamKeys + alliances.blue.dqTeamKeys }
+    public var allTeamKeys: [String] { redAllianceTeamKeys + blueAllianceTeamKeys }
 
     // Start time
     // actual > predicted > scheduled.
-    var startTime: Int? {
+    public var startTime: Int? {
         if let actual = actualTime { return Int(actual) }
         if let predicted = predictedTime { return Int(predicted) }
         if let scheduled = time { return Int(scheduled) }
         return nil
     }
 
-    var startTimeString: String? {
+    public var startTimeString: String? {
         guard let startTime else { return nil }
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE h:mm a"
@@ -69,16 +68,16 @@ extension Match {
     }
 
     // Year parsed from the match key (first 4 chars of `yyyy[EVENT]_...`).
-    var year: Int? { Int(key.prefix(4)) }
+    public var year: Int? { Int(key.prefix(4)) }
 
     // Event key parsed from the match key (everything before the first `_`).
-    var eventKeyFromMatchKey: String {
+    public var eventKeyFromMatchKey: String {
         String(key.split(separator: "_").first ?? Substring(eventKey))
     }
 
     // Score breakdown serialized back to `[String: Any]` so the existing
     // per-year `MatchBreakdownConfigurator` helpers keep working unchanged.
-    var breakdownDict: [String: Any]? {
+    public var breakdownDict: [String: Any]? {
         guard let scoreBreakdown else { return nil }
         guard let data = try? JSONEncoder().encode(scoreBreakdown),
             let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
@@ -88,16 +87,16 @@ extension Match {
         return obj
     }
 
-    var winningAllianceString: String {
+    public var winningAllianceString: String {
         winningAlliance.rawValue
     }
 }
 
 // Convenience: parse year and event key from any match key (used before the
 // full match struct has been fetched).
-enum MatchKey {
-    static func year(from matchKey: String) -> Int? { Int(matchKey.prefix(4)) }
-    static func eventKey(from matchKey: String) -> String {
+public enum MatchKey {
+    public static func year(from matchKey: String) -> Int? { Int(matchKey.prefix(4)) }
+    public static func eventKey(from matchKey: String) -> String {
         String(matchKey.split(separator: "_").first ?? Substring(matchKey))
     }
 }

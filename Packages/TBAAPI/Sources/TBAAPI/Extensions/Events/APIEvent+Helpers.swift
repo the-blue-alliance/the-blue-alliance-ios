@@ -1,8 +1,8 @@
 import Foundation
-import TBAAPI
+import TBAUtils
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
-enum APIEventType: Int, CaseIterable {
+public enum APIEventType: Int, CaseIterable, Sendable {
     case regional = 0
     case district = 1
     case districtChampionship = 2
@@ -17,20 +17,20 @@ enum APIEventType: Int, CaseIterable {
 
 extension Event {
 
-    var eventTypeEnum: APIEventType? {
+    public var eventTypeEnum: APIEventType? {
         APIEventType(rawValue: eventType)
     }
 
-    var safeShortName: String {
+    public var safeShortName: String {
         guard let shortName, !shortName.isEmpty else { return name }
         return shortName
     }
 
-    var safeNameYear: String {
+    public var safeNameYear: String {
         name.isEmpty ? key : "\(year) \(name)"
     }
 
-    var friendlyNameWithYear: String {
+    public var friendlyNameWithYear: String {
         var parts = [String(year)]
         if let shortName, !shortName.isEmpty {
             parts.append(shortName)
@@ -41,7 +41,7 @@ extension Event {
         return parts.joined(separator: " ")
     }
 
-    var weekString: String {
+    public var weekString: String {
         guard let eventTypeEnum else { return "Unknown" }
 
         if eventTypeEnum == .championshipDivision || eventTypeEnum == .championshipFinals {
@@ -71,7 +71,7 @@ extension Event {
         }
     }
 
-    var month: String? {
+    public var month: String? {
         guard let date = startDateParsed else { return nil }
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM"
@@ -79,21 +79,23 @@ extension Event {
         return formatter.string(from: date)
     }
 
-    var isChampionshipDivision: Bool { eventTypeEnum == .championshipDivision }
-    var isChampionshipFinals: Bool { eventTypeEnum == .championshipFinals }
-    var isChampionshipEvent: Bool { isChampionshipDivision || isChampionshipFinals }
-    var isDistrictChampionship: Bool { eventTypeEnum == .districtChampionship }
-    var isDistrictChampionshipDivision: Bool { eventTypeEnum == .districtChampionshipDivision }
-    var isDistrictChampionshipEvent: Bool {
+    public var isChampionshipDivision: Bool { eventTypeEnum == .championshipDivision }
+    public var isChampionshipFinals: Bool { eventTypeEnum == .championshipFinals }
+    public var isChampionshipEvent: Bool { isChampionshipDivision || isChampionshipFinals }
+    public var isDistrictChampionship: Bool { eventTypeEnum == .districtChampionship }
+    public var isDistrictChampionshipDivision: Bool {
+        eventTypeEnum == .districtChampionshipDivision
+    }
+    public var isDistrictChampionshipEvent: Bool {
         isDistrictChampionship || isDistrictChampionshipDivision
     }
-    var isFoC: Bool { eventTypeEnum == .festivalOfChampions }
-    var isPreseason: Bool { eventTypeEnum == .preseason }
-    var isOffseason: Bool { eventTypeEnum == .offseason }
-    var isRegional: Bool { eventTypeEnum == .regional }
-    var isUnlabeled: Bool { eventTypeEnum == .unlabeled }
+    public var isFoC: Bool { eventTypeEnum == .festivalOfChampions }
+    public var isPreseason: Bool { eventTypeEnum == .preseason }
+    public var isOffseason: Bool { eventTypeEnum == .offseason }
+    public var isRegional: Bool { eventTypeEnum == .regional }
+    public var isUnlabeled: Bool { eventTypeEnum == .unlabeled }
 
-    var hasWebsite: Bool {
+    public var hasWebsite: Bool {
         guard let website else { return false }
         return !website.isEmpty
     }
@@ -102,19 +104,19 @@ extension Event {
     // `endDateParsed` for "is the event over?" checks — `endDateParsed` is
     // UTC midnight of the end day, so comparing it directly to a wall-clock
     // `Date()` clips the whole final day for users west of UTC.
-    var endOfEventDay: Date? {
+    public var endOfEventDay: Date? {
         endDateParsed?.endOfDay(calendar: .utc)
     }
 
     // Event is currently going on, based on its start and end dates.
-    var isHappeningNow: Bool {
+    public var isHappeningNow: Bool {
         guard let start = startDateParsed, let end = endOfEventDay else { return false }
         let now = Date()
         return now >= start && now <= end
     }
 
     // Event is going on now or starts within the next week.
-    var isHappeningThisWeek: Bool {
+    public var isHappeningThisWeek: Bool {
         guard let start = startDateParsed, let end = endOfEventDay else { return false }
         guard let startOfWeek = Calendar.utc.date(byAdding: .day, value: -7, to: start) else {
             return false
@@ -131,15 +133,15 @@ extension Event {
     // stores `startDate` and `endDate` as ISO-ish `yyyy-MM-dd` strings;
     // `TBAAPI.dateFormatter` parses them in UTC so in-memory Date comparisons
     // are consistent regardless of the user's locale.
-    var startDateParsed: Date? { TBAAPI.dateFormatter.date(from: startDate) }
-    var endDateParsed: Date? { TBAAPI.dateFormatter.date(from: endDate) }
+    public var startDateParsed: Date? { TBAAPI.dateFormatter.date(from: startDate) }
+    public var endDateParsed: Date? { TBAAPI.dateFormatter.date(from: endDate) }
 
-    var locationString: String? {
+    public var locationString: String? {
         let parts = [city, stateProv, country].compactMap { $0 }.filter { !$0.isEmpty }
         return parts.isEmpty ? locationName : parts.joined(separator: ", ")
     }
 
-    var dateString: String? {
+    public var dateString: String? {
         guard let start = startDateParsed, let end = endDateParsed else { return nil }
         // Dates are UTC-midnight; format and compare year components in UTC so
         // users west of UTC don't see the range shifted back a day.
