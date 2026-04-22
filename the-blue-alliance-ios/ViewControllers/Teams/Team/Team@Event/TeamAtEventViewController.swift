@@ -130,9 +130,9 @@ class TeamAtEventViewController: ContainerViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    private func pushMatch(matchKey: String) {
+    private func pushMatch(_ match: Match) {
         let matchViewController = MatchViewController(
-            matchKey: matchKey,
+            match: match,
             teamKey: teamKey,
             dependencies: dependencies
         )
@@ -149,8 +149,8 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
         pushTeam(teamKey: teamKey)
     }
 
-    func matchSelected(matchKey: String) {
-        pushMatch(matchKey: matchKey)
+    func matchSelected(_ match: Match) {
+        pushMatch(match)
     }
 
 }
