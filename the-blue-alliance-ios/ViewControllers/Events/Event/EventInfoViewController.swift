@@ -31,10 +31,8 @@ private enum EventInfoItem: Hashable {
 
 class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let eventKey: String
+    private var state: EventState
     private let eventName: String?
-
-    private var event: Event?
 
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
@@ -43,16 +41,15 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - Init
 
     convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
-        self.init(eventKey: eventKey, event: nil, eventName: name, dependencies: dependencies)
+        self.init(state: .key(eventKey), eventName: name, dependencies: dependencies)
     }
 
     convenience init(event: Event, dependencies: Dependencies) {
-        self.init(eventKey: event.key, event: event, eventName: nil, dependencies: dependencies)
+        self.init(state: .event(event), eventName: nil, dependencies: dependencies)
     }
 
-    private init(eventKey: String, event: Event?, eventName: String?, dependencies: Dependencies) {
-        self.eventKey = eventKey
-        self.event = event
+    private init(state: EventState, eventName: String?, dependencies: Dependencies) {
+        self.state = state
         self.eventName = eventName
 
         super.init(style: .grouped, dependencies: dependencies)
@@ -111,11 +108,11 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
                     return cell
                 case .twitter:
                     let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                    cell.textLabel?.text = "View \(self.eventKey) on Twitter"
+                    cell.textLabel?.text = "View \(self.state.key) on Twitter"
                     return cell
                 case .youtube:
                     let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                    cell.textLabel?.text = "View \(self.eventKey) on YouTube"
+                    cell.textLabel?.text = "View \(self.state.key) on YouTube"
                     return cell
                 case .chiefDelphi:
                     let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
@@ -133,7 +130,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         snapshot.appendSections([.title])
         snapshot.appendItems([.title], toSection: .title)
 
-        if let event {
+        if let event = state.event {
             let webcasts = event.webcasts
                 .sorted { $0.channel > $1.channel }
                 .filter { $0.urlString != nil }
@@ -148,14 +145,14 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         // a single-row ghost during push. districtPoints is event-dependent
         // so it only appears once we know the event has a district.
         var detailItems: [EventInfoItem] = [.alliances, .insights, .awards]
-        if event?.district != nil {
+        if state.event?.district != nil {
             detailItems.insert(.districtPoints, at: 1)
         }
         snapshot.appendSections([.detail])
         snapshot.appendItems(detailItems, toSection: .detail)
 
         var linkItems: [EventInfoItem] = [.twitter, .youtube, .chiefDelphi]
-        if event?.hasWebsite == true {
+        if state.event?.hasWebsite == true {
             linkItems.insert(.website, at: 0)
         }
         snapshot.appendSections([.link])
@@ -170,14 +167,14 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
-        if let event {
+        if let event = state.event {
             cell.viewModel = InfoCellViewModel(event: event)
         } else if let eventName, !eventName.isEmpty {
-            let year = String(eventKey.prefix(4))
+            let year = String(state.key.prefix(4))
             let name = year.allSatisfy(\.isNumber) ? "\(year) \(eventName)" : eventName
             cell.viewModel = InfoCellViewModel(nameString: name, subtitleStrings: [])
         } else {
-            cell.viewModel = InfoCellViewModel(nameString: eventKey, subtitleStrings: [])
+            cell.viewModel = InfoCellViewModel(nameString: state.key, subtitleStrings: [])
         }
 
         cell.accessoryType = .none
@@ -216,13 +213,13 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         case .webcast(let webcast):
             urlString = webcast.urlString
         case .website:
-            urlString = event?.website
+            urlString = state.event?.website
         case .twitter:
-            urlString = "https://twitter.com/search?q=%23\(eventKey)"
+            urlString = "https://twitter.com/search?q=%23\(state.key)"
         case .youtube:
-            urlString = "https://www.youtube.com/results?search_query=\(eventKey)"
+            urlString = "https://www.youtube.com/results?search_query=\(state.key)"
         case .chiefDelphi:
-            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(eventKey)"
+            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(state.key)"
         default:
             break
         }
@@ -234,13 +231,12 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var isDataSourceEmpty: Bool { event == nil }
+    var isDataSourceEmpty: Bool { state.event == nil }
 
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.api.event(key: self.eventKey)
-            self.event = fetched
+            self.state = .event(try await self.api.event(key: self.state.key))
             self.updateEventInfo()
         }
     }
