@@ -17,7 +17,11 @@ extension MatchBreakdownConfigurator {
     static func breakdownValueSupported(key: String, red: [String: Any], blue: [String: Any])
         -> Bool
     {
-        return red.keys.contains(key) && blue.keys.contains(key)
+        guard let redValue = red[key], let blueValue = blue[key] else { return false }
+        // TBA encodes "this stat doesn't apply to this match" as JSON null, which
+        // `JSONSerialization` surfaces as `NSNull`. Treat those like missing keys
+        // so rows are skipped instead of rendering `<null>`.
+        return !(redValue is NSNull) && !(blueValue is NSNull)
     }
 
     // Values

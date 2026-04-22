@@ -7068,40 +7068,9 @@
           },
           "score_breakdown": {
             "description": "Score breakdown for auto, teleop, etc. points. Varies from year to year. May be null.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2015"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2016"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2017"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2018"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2019"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2020"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2022"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2023"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2024"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2025"
-              },
-              {
-                "$ref": "#/components/schemas/Match_Score_Breakdown_2026"
-              }
+            "type": [
+              "object",
+              "null"
             ]
           },
           "videos": {
