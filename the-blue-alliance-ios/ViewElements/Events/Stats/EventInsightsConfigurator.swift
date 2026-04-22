@@ -65,8 +65,8 @@ extension EventInsightsConfigurator {
         return InsightRow(
             title: title,
             value: .columns(
-                qual: bonusStat(qual, key) ?? [],
-                playoff: bonusStat(playoff, key) ?? []
+                qual: bonusStat(qual, key) ?? ["--", "--", "--"],
+                playoff: bonusStat(playoff, key) ?? ["--", "--", "--"]
             )
         )
     }
