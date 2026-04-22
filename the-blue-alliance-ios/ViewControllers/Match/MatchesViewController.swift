@@ -167,9 +167,8 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.eventMatches(key: self.eventKey)
-            self.allMatches = fetched
-            self.applyMatches(fetched)
+            self.allMatches = try await self.dependencies.api.eventMatches(key: self.eventKey)
+            self.applyMatches(self.allMatches)
         }
     }
 

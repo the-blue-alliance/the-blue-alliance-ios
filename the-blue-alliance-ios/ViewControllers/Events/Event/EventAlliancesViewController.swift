@@ -118,8 +118,8 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable,
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.eventAlliances(key: self.eventKey)
-            self.alliances = fetched ?? []
+            self.alliances =
+                try await self.dependencies.api.eventAlliances(key: self.eventKey) ?? []
             self.tableView.reloadData()
         }
     }
