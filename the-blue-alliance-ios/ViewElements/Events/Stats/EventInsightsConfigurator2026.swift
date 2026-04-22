@@ -109,7 +109,7 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
                 title: "Total Fuel Scored",
                 key: "total_fuel_scored",
                 qual: qual,
-                playoff: playoff
+                playoff: qual
             )
         )
 

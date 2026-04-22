@@ -77,8 +77,8 @@ extension EventInsightsConfigurator {
         return InsightRow(
             title: title,
             value: .columns(
-                qual: (totalsStat(qual, key) ?? []).map { String(describing: $0) },
-                playoff: (totalsStat(playoff, key) ?? []).map { String(describing: $0) }
+                qual: (totalsStat(qual, key) ?? ["", "", ""]).map { String(describing: $0) },
+                playoff: (totalsStat(playoff, key) ?? ["", "", ""]).map { String(describing: $0) }
             )
         )
     }
@@ -91,8 +91,8 @@ extension EventInsightsConfigurator {
         return InsightRow(
             title: title,
             value: .columns(
-                qual: insightStat(qual, key) ?? [],
-                playoff: insightStat(playoff, key) ?? []
+                qual: insightStat(qual, key) ?? ["", "", ""],
+                playoff: insightStat(playoff, key) ?? ["", "", ""]
             )
         )
     }
@@ -190,6 +190,11 @@ extension EventInsightsConfigurator {
     }
 
     static func filterEmptyInsights(_ rows: [InsightRow]) -> [InsightRow] {
+        func hasNonEmpty(_ arr: [String]) -> Bool {
+            return arr.contains {
+                !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            }
+        }
         return rows.filter {
             // Check title is not empty (ignoring leading/trailing whitespace)
             guard !$0.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
@@ -199,7 +204,7 @@ extension EventInsightsConfigurator {
             case .paired(let qual, let playoff):
                 return (qual?.isEmpty == false) || (playoff?.isEmpty == false)
             case .columns(let qual, let playoff):
-                return !qual.isEmpty || !playoff.isEmpty
+                return hasNonEmpty(qual) || hasNonEmpty(playoff)
             }
         }
     }
