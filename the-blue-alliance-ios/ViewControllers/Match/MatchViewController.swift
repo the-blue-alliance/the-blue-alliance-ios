@@ -3,55 +3,85 @@ import Photos
 import TBAAPI
 import UIKit
 
+enum MatchState {
+    case key(String)
+    case match(Match)
+
+    var key: String {
+        switch self {
+        case .key(let key): return key
+        case .match(let match): return match.key
+        }
+    }
+
+    var match: Match? {
+        switch self {
+        case .key: return nil
+        case .match(let match): return match
+        }
+    }
+}
+
 class MatchViewController: MyTBAContainerViewController {
 
-    private let matchKey: String
+    private var state: MatchState
     private let teamKey: String?
-
-    private var match: Match?
 
     private(set) var infoViewController: MatchInfoViewController
     private let breakdownViewController: MatchBreakdownViewController
 
     override var subscribableModel: MyTBASubscribable {
-        MatchSubscribable(modelKey: matchKey)
+        MatchSubscribable(modelKey: state.key)
     }
 
     // MARK: Init
 
-    init(matchKey: String, teamKey: String? = nil, dependencies: Dependencies) {
-        self.matchKey = matchKey
+    convenience init(matchKey: String, teamKey: String? = nil, dependencies: Dependencies) {
+        self.init(state: .key(matchKey), teamKey: teamKey, dependencies: dependencies)
+    }
+
+    convenience init(match: Match, teamKey: String? = nil, dependencies: Dependencies) {
+        self.init(state: .match(match), teamKey: teamKey, dependencies: dependencies)
+    }
+
+    private init(state: MatchState, teamKey: String?, dependencies: Dependencies) {
+        self.state = state
         self.teamKey = teamKey
 
-        infoViewController = MatchInfoViewController(
-            matchKey: matchKey,
-            teamKey: teamKey,
-            dependencies: dependencies
-        )
-        breakdownViewController = MatchBreakdownViewController(
-            matchKey: matchKey,
-            year: MatchKey.year(from: matchKey) ?? 0,
-            dependencies: dependencies
-        )
+        switch state {
+        case .key(let matchKey):
+            infoViewController = MatchInfoViewController(
+                matchKey: matchKey,
+                teamKey: teamKey,
+                dependencies: dependencies
+            )
+            breakdownViewController = MatchBreakdownViewController(
+                matchKey: matchKey,
+                year: MatchKey.year(from: matchKey) ?? 0,
+                dependencies: dependencies
+            )
+        case .match(let match):
+            infoViewController = MatchInfoViewController(
+                match: match,
+                teamKey: teamKey,
+                dependencies: dependencies
+            )
+            breakdownViewController = MatchBreakdownViewController(
+                match: match,
+                dependencies: dependencies
+            )
+        }
 
+        let navTitle = state.match?.friendlyName ?? state.key
         super.init(
             viewControllers: [infoViewController, breakdownViewController],
-            navigationTitle: "Match",
+            navigationTitle: navTitle,
             navigationSubtitle: nil,
             segmentedControlTitles: ["Info", "Breakdown"],
-
             dependencies: dependencies
         )
 
         infoViewController.matchSummaryDelegate = self
-    }
-
-    convenience init(match: Match, teamKey: String? = nil, dependencies: Dependencies) {
-        self.init(matchKey: match.key, teamKey: teamKey, dependencies: dependencies)
-        self.match = match
-        self.navigationTitle = match.friendlyName
-        self.infoViewController.apply(match: match)
-        self.breakdownViewController.apply(match: match)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -73,21 +103,16 @@ class MatchViewController: MyTBAContainerViewController {
             // here even with reverse-order awaits (#995 didn't fully fix it).
             // Task handles heap-allocate and sidestep the allocator entirely.
             // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
-            let matchHandle = Task { try? await self.dependencies.api.match(key: self.matchKey) }
+            let matchHandle = Task { try? await self.dependencies.api.match(key: self.state.key) }
             let eventHandle = Task {
-                try? await self.dependencies.api.event(key: MatchKey.eventKey(from: self.matchKey))
+                try? await self.dependencies.api.event(key: MatchKey.eventKey(from: self.state.key))
             }
 
-            let match = await matchHandle.value
-            let event = await eventHandle.value
-
-            if let match {
-                self.match = match
+            if let match = await matchHandle.value {
+                self.state = .match(match)
                 self.navigationTitle = match.friendlyName
-                self.infoViewController.apply(match: match)
-                self.breakdownViewController.apply(match: match)
             }
-            if let event {
+            if let event = await eventHandle.value {
                 self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
             }
         }
@@ -107,7 +132,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
 
     func teamPressed(teamNumber: Int) {
         let targetKey = "frc\(teamNumber)"
-        guard let match, match.allTeamKeys.contains(targetKey) else { return }
+        guard let match = state.match, match.allTeamKeys.contains(targetKey) else { return }
         let year = match.year ?? 0
         let teamAtEventVC = TeamAtEventViewController(
             teamKey: targetKey,
