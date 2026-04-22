@@ -49,6 +49,12 @@ class EventsContainerViewController: ContainerViewController {
         setupSearchController()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Events: \(year)")
+    }
+
     // MARK: - Private Methods
 
     private var year: Int {

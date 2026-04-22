@@ -69,6 +69,12 @@ class MyTBAViewController: ContainerViewController {
         myTBA.authenticationProvider.add(observer: self)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("MyTBA")
+    }
+
     // MARK: - Private Methods
 
     private func styleInterface() {

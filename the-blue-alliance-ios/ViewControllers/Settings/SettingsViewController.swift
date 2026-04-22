@@ -75,6 +75,12 @@ class SettingsViewController: TBATableViewController {
         tableView.registerReusableCell(IconTableViewCell.self)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Settings")
+    }
+
     // MARK: - Table View Data Source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

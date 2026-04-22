@@ -59,6 +59,12 @@ class DistrictViewController: ContainerViewController {
         super.viewDidLoad()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("District: \(district.key)")
+    }
+
 }
 
 extension DistrictViewController: EventsListViewControllerDelegate {

@@ -1,6 +1,7 @@
 import Foundation
 import MyTBAKit
 import TBAAPI
+import TBAUtils
 import UIKit
 
 class Dependencies {
@@ -8,6 +9,7 @@ class Dependencies {
     let appSettings: AppSettings
     let myTBA: any MyTBAProtocol
     let myTBAStores: MyTBAStores
+    let reporter: any Reporter
     let statusService: any StatusServiceProtocol
     let urlOpener: any URLOpener
 
@@ -16,6 +18,7 @@ class Dependencies {
         appSettings: AppSettings,
         myTBA: any MyTBAProtocol,
         myTBAStores: MyTBAStores,
+        reporter: any Reporter,
         statusService: any StatusServiceProtocol,
         urlOpener: any URLOpener = UIApplication.shared
     ) {
@@ -23,6 +26,7 @@ class Dependencies {
         self.appSettings = appSettings
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores
+        self.reporter = reporter
         self.statusService = statusService
         self.urlOpener = urlOpener
     }

@@ -135,6 +135,12 @@ class TeamViewController: HeaderContainerViewController {
         loadTeamData()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Team: \(state.key)")
+    }
+
     // MARK: - Private
 
     private func loadTeamData() {

@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Owned services
 
-    private let errorRecorder = TBAErrorRecorder()
+    private let reporter = FirebaseReporter()
     let favoritesStore = FavoritesStore()
     let subscriptionsStore = SubscriptionsStore()
     let urlOpener: URLOpener = UIApplication.shared
@@ -38,13 +38,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         idTokenProvider: idTokenProvider
     )
     lazy var pushService: PushService = PushService(
-        errorRecorder: errorRecorder,
+        reporter: reporter,
         myTBA: myTBA,
         retryService: RetryService(),
         registrar: self
     )
     lazy var statusService: any StatusServiceProtocol = StatusService(
-        errorRecorder: errorRecorder,
+        reporter: reporter,
         api: api,
         retryService: RetryService()
     )
@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appSettings: appSettings,
         myTBA: myTBA,
         myTBAStores: myTBAStores,
+        reporter: reporter,
         statusService: statusService,
         urlOpener: urlOpener
     )
@@ -169,18 +170,18 @@ private extension AppDelegate {
         }
         GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
             if let error = error {
-                errorRecorder.record(error)
+                reporter.record(error)
                 return
             }
 
             AuthHelper.signInToGoogle(user: user) { [unowned self] success, error in
                 if let error = error {
-                    errorRecorder.record(error)
+                    reporter.record(error)
                 }
                 guard success else { return }
                 PushService.requestAuthorizationForNotifications { [unowned self] _, error in
                     if let error = error {
-                        errorRecorder.record(error)
+                        reporter.record(error)
                     }
                 }
             }
@@ -345,15 +346,23 @@ extension AppDelegate {
 
 }
 
-// MARK: - Error recorder
+// MARK: - Reporter
 
-private class TBAErrorRecorder: ErrorRecorder {
+private class FirebaseReporter: Reporter {
 
     func record(_ error: Error) {
         #if DEBUG
             print(error)
         #else
             Crashlytics.crashlytics().record(error: error)
+        #endif
+    }
+
+    func log(_ message: String) {
+        #if DEBUG
+            print(message)
+        #else
+            Crashlytics.crashlytics().log(message)
         #endif
     }
 
