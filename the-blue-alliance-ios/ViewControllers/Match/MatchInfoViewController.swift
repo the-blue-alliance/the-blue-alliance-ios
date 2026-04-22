@@ -5,10 +5,8 @@ import UIKit
 
 class MatchInfoViewController: TBAViewController, Refreshable {
 
-    private let matchKey: String
+    private var state: MatchState
     private let teamKey: String?
-
-    private var match: Match?
 
     // MARK: - UI
 
@@ -77,8 +75,16 @@ class MatchInfoViewController: TBAViewController, Refreshable {
 
     // MARK: Init
 
-    init(matchKey: String, teamKey: String? = nil, dependencies: Dependencies) {
-        self.matchKey = matchKey
+    convenience init(matchKey: String, teamKey: String? = nil, dependencies: Dependencies) {
+        self.init(state: .key(matchKey), teamKey: teamKey, dependencies: dependencies)
+    }
+
+    convenience init(match: Match, teamKey: String? = nil, dependencies: Dependencies) {
+        self.init(state: .match(match), teamKey: teamKey, dependencies: dependencies)
+    }
+
+    private init(state: MatchState, teamKey: String?, dependencies: Dependencies) {
+        self.state = state
         self.teamKey = teamKey
 
         super.init(dependencies: dependencies)
@@ -94,6 +100,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         super.viewDidLoad()
 
         styleInterface()
+        updateInterface()
     }
 
     // MARK: Interface Methods
@@ -122,18 +129,13 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         view.backgroundColor = .systemBackground
     }
 
-    func apply(match: Match) {
-        self.match = match
-        updateInterface()
-    }
-
     func updateInterface() {
         updateMatchSummaryView()
         updateMatchVideos()
     }
 
     func updateMatchSummaryView() {
-        guard let match else { return }
+        guard let match = state.match else { return }
         matchSummaryView.resetView()
 
         var baseTeamKeys: [String] = []
@@ -150,7 +152,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
             view.removeFromSuperview()
         }
 
-        guard let match else { return }
+        guard let match = state.match else { return }
         for video in match.videos {
             let playerView = Self.playerView(for: video)
             videoStackView.addArrangedSubview(playerView)
@@ -176,14 +178,14 @@ class MatchInfoViewController: TBAViewController, Refreshable {
 
     var isDataSourceEmpty: Bool {
         // Match hasn't loaded yet, or it has loaded but has no videos.
-        (match?.videos.count ?? 0) == 0
+        (state.match?.videos.count ?? 0) == 0
     }
 
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.api.match(key: self.matchKey)
-            self.apply(match: fetched)
+            self.state = .match(try await self.api.match(key: self.state.key))
+            self.updateInterface()
         }
     }
 
