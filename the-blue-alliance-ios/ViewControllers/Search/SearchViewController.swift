@@ -113,8 +113,7 @@ class SearchViewController: TBATableViewController {
     private func loadIndex() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.getSearchIndex()
-            self.index = fetched
+            self.index = try await self.dependencies.api.getSearchIndex()
             self.updateSnapshot()
         }
     }

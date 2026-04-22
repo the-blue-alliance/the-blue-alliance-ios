@@ -1,46 +1,46 @@
-import XCTest
-@testable import The_Blue_Alliance
+import Foundation
+import Testing
 
-class NSSetOnlyTestCase: XCTestCase {
+@testable import TBAUtils
 
-    func test_only() {
+struct NSSetOnlyTests {
+
+    @Test func only() {
         let object = NSString(string: "something")
         let objectSet = NSSet(array: [object])
-        XCTAssertTrue(objectSet.onlyObject(object))
+        #expect(objectSet.onlyObject(object))
 
         let valueSet = NSSet(array: [2])
-        XCTAssertTrue(valueSet.onlyObject(2))
+        #expect(valueSet.onlyObject(2))
     }
 
-    func test_notOnly() {
+    @Test func notOnly() {
         let object = NSString(string: "something")
         let objectSet = NSSet(array: [object, NSString(string: "something else")])
-        XCTAssertFalse(objectSet.onlyObject(object))
+        #expect(!objectSet.onlyObject(object))
 
         let valueSet = NSSet(array: [1, 2])
-        XCTAssertFalse(valueSet.onlyObject(2))
+        #expect(!valueSet.onlyObject(2))
     }
-
 }
 
-class NSOrderedSetOnlyTestCase: XCTestCase {
+struct NSOrderedSetOnlyTests {
 
-    func test_only() {
+    @Test func only() {
         let object = NSString(string: "something")
         let objectSet = NSOrderedSet(array: [object])
-        XCTAssertTrue(objectSet.onlyObject(object))
+        #expect(objectSet.onlyObject(object))
 
         let valueSet = NSOrderedSet(array: [2])
-        XCTAssertTrue(valueSet.onlyObject(2))
+        #expect(valueSet.onlyObject(2))
     }
 
-    func test_notOnly() {
+    @Test func notOnly() {
         let object = NSString(string: "something")
         let objectSet = NSOrderedSet(array: [object, NSString(string: "something else")])
-        XCTAssertFalse(objectSet.onlyObject(object))
+        #expect(!objectSet.onlyObject(object))
 
         let valueSet = NSOrderedSet(array: [1, 2])
-        XCTAssertFalse(valueSet.onlyObject(2))
+        #expect(!valueSet.onlyObject(2))
     }
-
 }

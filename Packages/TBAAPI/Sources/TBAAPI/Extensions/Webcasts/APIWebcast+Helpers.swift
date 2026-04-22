@@ -1,11 +1,10 @@
 import Foundation
-import TBAAPI
 
 extension Webcast {
 
-    var typeString: String { _type.rawValue }
+    public var typeString: String { _type.rawValue }
 
-    var displayName: String {
+    public var displayName: String {
         switch _type {
         case .youtube:
             return "YouTube"
@@ -23,7 +22,7 @@ extension Webcast {
         }
     }
 
-    var urlString: String? {
+    public var urlString: String? {
         switch _type {
         case .twitch:
             return "https://twitch.tv/\(channel)"
@@ -36,7 +35,7 @@ extension Webcast {
         }
     }
 
-    var dateParsed: Date? {
+    public var dateParsed: Date? {
         guard let date else { return nil }
         return TBAAPI.dateFormatter.date(from: date)
     }

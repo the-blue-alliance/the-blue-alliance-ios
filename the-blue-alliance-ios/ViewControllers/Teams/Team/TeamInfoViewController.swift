@@ -19,9 +19,7 @@ private enum TeamInfoItem {
 
 class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let teamKey: String
-
-    private var team: Team?
+    private var state: TeamState
 
     private var dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
 
@@ -30,16 +28,15 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - Init
 
     convenience init(teamKey: String, dependencies: Dependencies) {
-        self.init(teamKey: teamKey, team: nil, dependencies: dependencies)
+        self.init(state: .key(teamKey), dependencies: dependencies)
     }
 
     convenience init(team: Team, dependencies: Dependencies) {
-        self.init(teamKey: team.key, team: team, dependencies: dependencies)
+        self.init(state: .team(team), dependencies: dependencies)
     }
 
-    private init(teamKey: String, team: Team?, dependencies: Dependencies) {
-        self.teamKey = teamKey
-        self.team = team
+    private init(state: TeamState, dependencies: Dependencies) {
+        self.state = state
 
         super.init(style: .grouped, dependencies: dependencies)
     }
@@ -82,11 +79,11 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
                     return cell
                 case .twitter:
                     let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                    cell.textLabel?.text = "View \(self.teamKey) on Twitter"
+                    cell.textLabel?.text = "View \(self.state.key) on Twitter"
                     return cell
                 case .youtube:
                     let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                    cell.textLabel?.text = "View \(self.teamKey) on YouTube"
+                    cell.textLabel?.text = "View \(self.state.key) on YouTube"
                     return cell
                 case .chiefDelphi:
                     let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
@@ -101,7 +98,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
 
-        guard let team else {
+        guard let team = state.team else {
             dataSource.applySnapshotUsingReloadData(snapshot)
             return
         }
@@ -145,7 +142,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         let cell =
             tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel?.text = "Location"
-        cell.subtitleLabel?.text = team?.locationString
+        cell.subtitleLabel?.text = state.team?.locationString
         cell.accessoryType = .none
         cell.selectionStyle = .none
         return cell
@@ -157,7 +154,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         let cell =
             tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel?.text = "Rookie Year"
-        cell.subtitleLabel?.text = team?.rookieYear.map(String.init) ?? ""
+        cell.subtitleLabel?.text = state.team?.rookieYear.map(String.init) ?? ""
         cell.accessoryType = .none
         cell.selectionStyle = .none
         return cell
@@ -168,7 +165,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
     {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
-        cell.textLabel?.text = team?.name
+        cell.textLabel?.text = state.team?.name
         cell.textLabel?.textColor = UIColor.secondaryLabel
 
         if sponsorsExpanded {
@@ -205,13 +202,13 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
             sponsorsExpanded = true
             reloadSponsors()
         case .website:
-            urlString = team?.website
+            urlString = state.team?.website
         case .twitter:
-            urlString = "https://twitter.com/search?q=%23\(teamKey)"
+            urlString = "https://twitter.com/search?q=%23\(state.key)"
         case .youtube:
-            urlString = "https://www.youtube.com/results?search_query=\(teamKey)"
+            urlString = "https://www.youtube.com/results?search_query=\(state.key)"
         case .chiefDelphi:
-            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(teamKey)"
+            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(state.key)"
         default:
             break
         }
@@ -223,13 +220,12 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Refreshable
 
-    var isDataSourceEmpty: Bool { team == nil }
+    var isDataSourceEmpty: Bool { state.team == nil }
 
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.api.team(key: self.teamKey)
-            self.team = fetched
+            self.state = .team(try await self.api.team(key: self.state.key))
             self.updateTeamInfo()
         }
     }

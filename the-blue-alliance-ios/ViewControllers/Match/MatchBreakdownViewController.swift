@@ -27,18 +27,25 @@ struct BreakdownRow: Hashable {
 
 class MatchBreakdownViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let matchKey: String
+    private var state: MatchState
     private let year: Int
     private let breakdownConfigurator: MatchBreakdownConfigurator.Type?
-
-    private var match: Match?
 
     private var dataSource: TableViewDataSource<String?, BreakdownRow>!
 
     // MARK: - Init
 
-    init(matchKey: String, year: Int, dependencies: Dependencies) {
-        self.matchKey = matchKey
+    convenience init(matchKey: String, year: Int, dependencies: Dependencies) {
+        self.init(state: .key(matchKey), year: year, dependencies: dependencies)
+    }
+
+    convenience init(match: Match, dependencies: Dependencies) {
+        let year = match.year ?? MatchKey.year(from: match.key) ?? 0
+        self.init(state: .match(match), year: year, dependencies: dependencies)
+    }
+
+    private init(state: MatchState, year: Int, dependencies: Dependencies) {
+        self.state = state
         self.year = year
 
         switch year {
@@ -77,6 +84,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
                 self.disableRefreshing()
             }
         }
+
+        configureDataSource(state.match?.breakdownDict)
     }
 
     // MARK: - Methods
@@ -94,11 +103,6 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         }
         dataSource.delegate = self
         dataSource.statefulDelegate = self
-    }
-
-    func apply(match: Match) {
-        self.match = match
-        configureDataSource(match.breakdownDict)
     }
 
     func configureDataSource(_ breakdown: [String: Any]?) {
@@ -123,8 +127,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         guard breakdownConfigurator != nil else { return }
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.match(key: self.matchKey)
-            self.apply(match: fetched)
+            self.state = .match(try await self.dependencies.api.match(key: self.state.key))
+            self.configureDataSource(self.state.match?.breakdownDict)
         }
     }
 

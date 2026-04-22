@@ -120,8 +120,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.loadTeams()
-            self.applyTeams(fetched)
+            self.applyTeams(try await self.loadTeams())
         }
     }
 
