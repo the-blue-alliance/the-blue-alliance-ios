@@ -32,7 +32,7 @@ extension Event {
 
     var friendlyNameWithYear: String {
         var parts = [String(year)]
-        if let shortName {
+        if let shortName, !shortName.isEmpty {
             parts.append(shortName)
             parts.append(eventTypeString.isEmpty ? "Event" : eventTypeString)
         } else {
