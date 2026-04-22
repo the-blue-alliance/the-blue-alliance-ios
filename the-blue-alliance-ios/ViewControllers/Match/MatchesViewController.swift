@@ -5,7 +5,7 @@ import UIKit
 
 protocol MatchesViewControllerDelegate: AnyObject {
     func showFilter()
-    func matchSelected(matchKey: String)
+    func matchSelected(_ match: Match)
 }
 
 class MatchesViewController: TBATableViewController, Refreshable, Stateful {
@@ -132,7 +132,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let match = dataSource.itemIdentifier(for: indexPath) else { return }
-        delegate?.matchSelected(matchKey: match.key)
+        delegate?.matchSelected(match)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int)

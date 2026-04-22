@@ -4,7 +4,7 @@ import UIKit
 
 protocol TeamSummaryViewControllerDelegate: AnyObject {
     func teamInfoSelected(teamKey: String)
-    func matchSelected(matchKey: String)
+    func matchSelected(_ match: Match)
 }
 
 private enum TeamSummarySection: Int {
@@ -370,7 +370,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         case .teamInfo:
             delegate?.teamInfoSelected(teamKey: teamKey)
         case .match(let match, _):
-            delegate?.matchSelected(matchKey: match.key)
+            delegate?.matchSelected(match)
         case .pitLocation:
             guard let event,
                 let teamNumber = team?.teamNumber,
