@@ -31,6 +31,30 @@ Install project dependencies
 
 Run MyTBAKit unit tests
 
+### ios test_tbautils
+
+```sh
+[bundle exec] fastlane ios test_tbautils
+```
+
+Run TBAUtils unit tests
+
+### ios test_tbaapi
+
+```sh
+[bundle exec] fastlane ios test_tbaapi
+```
+
+Run TBAAPI unit tests
+
+### ios build_debug
+
+```sh
+[bundle exec] fastlane ios build_debug
+```
+
+Build the iOS app (Debug) — a compile-only check for the main app target
+
 ### ios test
 
 ```sh
