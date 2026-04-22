@@ -16,7 +16,7 @@ jobs:
         with:
           xcode-version-file: .xcode-version
       - name: Lint
-        run: ./scripts/swift-format-lint.sh --strict
+        run: ./scripts/swift-format.sh --strict
 
   test-publish:
     name: Test + Publish

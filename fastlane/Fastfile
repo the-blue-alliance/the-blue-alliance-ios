@@ -40,12 +40,12 @@ platform :ios do
 
   desc "Format all Swift files with swift-format"
   lane :format do
-    sh("../scripts/swift-format-fix.sh")
+    sh("../scripts/swift-format.sh --fix")
   end
 
   desc "Lint Swift formatting (strict, used by CI)"
   lane :lint do
-    sh("../scripts/swift-format-lint.sh --strict")
+    sh("../scripts/swift-format.sh --strict")
   end
 
   ## CI Lanes ##
@@ -105,10 +105,11 @@ platform :ios do
     preship
     build
 
-    ship_github(is_prerelease: false) # Create GitHub release
+    release_body = generated_release_notes
+    ship_github(is_prerelease: false, description: release_body)
     slack(
       channel: "#app-releases",
-      message: "Shipping iOS #{current_version} to the App Store 🎉\n```\n#{commit_changelog}\n```\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}",
+      message: "Shipping iOS #{current_version} to the App Store 🎉\n```\n#{release_body}\n```\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}",
       default_payloads: [],
       username: "release-bot",
       icon_url: "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png",
@@ -128,7 +129,7 @@ platform :ios do
      api_token: ENV["GH_TOKEN"],
      name: current_version,
      tag_name: current_version,
-     description: commit_changelog,
+     description: options[:description],
      is_prerelease: options[:is_prerelease] ? true : false,
      upload_assets: ["The Blue Alliance.ipa"]
    )
@@ -200,6 +201,19 @@ platform :ios do
 
   private_lane :commit_changelog do
     File.read("release_notes/beta.md").strip
+  end
+
+  private_lane :generated_release_notes do
+    notes = github_api(
+      api_token: ENV["GH_TOKEN"],
+      http_method: "POST",
+      path: "/repos/the-blue-alliance/the-blue-alliance-ios/releases/generate-notes",
+      body: {
+        tag_name: current_version,
+        target_commitish: "main"
+      }
+    )
+    notes[:json]["body"]
   end
 
   ## End Internal Lanes for Shipping Lanes ##
