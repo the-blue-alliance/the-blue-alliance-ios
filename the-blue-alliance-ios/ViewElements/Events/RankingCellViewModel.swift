@@ -35,10 +35,14 @@ struct RankingCellViewModel {
         self.wltText = nil
     }
 
-    init(apiRanking ranking: EventRanking.RankingsPayloadPayload, detailText: String?) {
+    init(
+        apiRanking ranking: EventRanking.RankingsPayloadPayload,
+        detailText: String?,
+        team: TeamSimple? = nil
+    ) {
         self.rankText = "Rank \(ranking.rank)"
         self.teamNumber = Self.teamNumber(from: ranking.teamKey)
-        self.teamName = "Team \(self.teamNumber ?? ranking.teamKey)"
+        self.teamName = team?.displayNickname ?? "Team \(self.teamNumber ?? ranking.teamKey)"
         self.detailText = detailText
         self.wltText = {
             if let qualAverage = ranking.qualAverage {
