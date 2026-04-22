@@ -46,6 +46,14 @@ class MatchViewController: MyTBAContainerViewController {
         infoViewController.matchSummaryDelegate = self
     }
 
+    convenience init(match: Match, teamKey: String? = nil, dependencies: Dependencies) {
+        self.init(matchKey: match.key, teamKey: teamKey, dependencies: dependencies)
+        self.match = match
+        self.navigationTitle = match.friendlyName
+        self.infoViewController.apply(match: match)
+        self.breakdownViewController.apply(match: match)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

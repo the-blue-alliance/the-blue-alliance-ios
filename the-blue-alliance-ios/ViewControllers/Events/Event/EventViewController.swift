@@ -191,9 +191,9 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 
 extension EventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable {
 
-    func matchSelected(matchKey: String) {
+    func matchSelected(_ match: Match) {
         let matchViewController = MatchViewController(
-            matchKey: matchKey,
+            match: match,
             dependencies: dependencies
         )
         self.navigationController?.pushViewController(matchViewController, animated: true)
