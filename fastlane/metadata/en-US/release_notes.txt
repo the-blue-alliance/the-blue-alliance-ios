@@ -1,3 +1,1 @@
-Hey y'all - this update brings a refreshed Liquid Glass app icon for iOS 26, 2026 Event Insights + Match Breakdowns, pit locations on Team@Event and Event Team views, and new Settings toggles for cache policy and Firebase analytics. The app should be more stable due to a large architectural change - but there may be bugs! Search has also been updated to work differently and should be more usable.
-
-The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update fixes a regression with match breakdowns not rendering properly. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
