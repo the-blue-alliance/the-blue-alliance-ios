@@ -46,10 +46,6 @@ class MatchViewController: MyTBAContainerViewController {
         infoViewController.matchSummaryDelegate = self
     }
 
-    // Preferred path when the caller already has a fully-fetched Match (e.g.
-    // from a matches list). Seeds the title + child VCs synchronously so scores
-    // render immediately on push; the background refresh in viewDidLoad still
-    // runs to pick up fresh data.
     convenience init(match: Match, teamKey: String? = nil, dependencies: Dependencies) {
         self.init(matchKey: match.key, teamKey: teamKey, dependencies: dependencies)
         self.match = match
