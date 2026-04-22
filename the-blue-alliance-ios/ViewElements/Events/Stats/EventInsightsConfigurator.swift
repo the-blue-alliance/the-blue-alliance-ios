@@ -82,6 +82,20 @@ extension EventInsightsConfigurator {
             )
         )
     }
+    static func fourColumnRow(
+        title: String,
+        key: [String],
+        qual: [String: Any]?,
+        playoff: [String: Any]?
+    ) -> InsightRow {
+        return InsightRow(
+            title: title,
+            value: .columns(
+                qual: insightStat(qual, key) ?? [],
+                playoff: insightStat(playoff, key) ?? []
+            )
+        )
+    }
     private static func bonusStat(_ dict: [String: Any]?, _ key: String) -> [String]? {
         guard let dict = dict else {
             return nil
@@ -127,6 +141,52 @@ extension EventInsightsConfigurator {
             (totalsData.safeItem(at: 0) as? Int).map(String.init) ?? "--", allianceAvg,
             teamAvg,
         ]
+    }
+    private static func insightStat(_ dict: [String: Any]?, _ key: [String]) -> [String]? {
+        guard let dict = dict else {
+            return nil
+        }
+        // Helper to fetch a value for a key at a given index safely
+        func value(for index: Int) -> Any? {
+            guard let k = key.safeItem(at: index) else { return nil }
+            return dict[k]
+        }
+
+        // Column 1: expect a Double and format to two decimals if present
+        let columnOne: String = {
+            if let number = value(for: 0) as? Double {
+                return String(format: "%.2f", number)
+            }
+            if let number = value(for: 0) as? NSNumber {
+                return String(format: "%.2f", number.doubleValue)
+            }
+            guard let v = value(for: 0) else { return "--" }
+            return String(describing: v)
+        }()
+
+        let columnTwo: String = {
+            if let number = value(for: 1) as? Double {
+                return String(format: "%.2f", number)
+            }
+            if let number = value(for: 1) as? NSNumber {
+                return String(format: "%.2f", number.doubleValue)
+            }
+            guard let v = value(for: 1) else { return "--" }
+            return String(describing: v)
+        }()
+
+        let columnThree: String = {
+            if let number = value(for: 2) as? Double {
+                return String(format: "%.2f", number)
+            }
+            if let number = value(for: 2) as? NSNumber {
+                return String(format: "%.2f", number.doubleValue)
+            }
+            guard let v = value(for: 2) else { return "--" }
+            return String(describing: v)
+        }()
+
+        return [columnOne, columnTwo, columnThree]
     }
 
     static func filterEmptyInsights(_ rows: [InsightRow]) -> [InsightRow] {
