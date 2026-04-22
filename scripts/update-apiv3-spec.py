@@ -117,6 +117,30 @@ def _drop_nullified_required(
     return removed
 
 
+def _flatten_score_breakdown_oneof(spec: dict) -> bool:
+    """Replace Match.score_breakdown's `oneOf` with a free-form nullable object.
+
+    The upstream oneOf lists eleven per-year schemas with no discriminator, so
+    swift-openapi-generator emits a try-each decoder that mis-routes every
+    non-2015 match through the 2016 branch, dropping all year-specific fields
+    (issues #1023 / #1052). The app already consumes the breakdown as raw
+    `[String: Any]`, so we degrade the schema to a free-form object and let
+    `OpenAPIObjectContainer` preserve the payload verbatim.
+    """
+    try:
+        sb = spec["components"]["schemas"]["Match"]["properties"]["score_breakdown"]
+    except (KeyError, TypeError):
+        return False
+    if not isinstance(sb, dict) or "oneOf" not in sb:
+        return False
+    description = sb.get("description")
+    replacement: dict = {"type": ["object", "null"]}
+    if description:
+        replacement = {"description": description, **replacement}
+    spec["components"]["schemas"]["Match"]["properties"]["score_breakdown"] = replacement
+    return True
+
+
 def _find_residual_null_compositions(node: object, path: list[str]) -> list[str]:
     """Return paths where a `oneOf`/`anyOf` still contains a null branch."""
     hits: list[str] = []
@@ -158,6 +182,9 @@ def main() -> int:
         print(f"Dropped {len(required_removals)} now-nullable field(s) from `required`:")
         for r in required_removals:
             print(f"  - {r}")
+
+    if _flatten_score_breakdown_oneof(patched):
+        print("Flattened Match.score_breakdown oneOf to free-form nullable object.")
 
     OUT_PATH.write_text(json.dumps(patched, indent=2) + "\n")
     print(f"Wrote {OUT_PATH}")
