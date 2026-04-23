@@ -7,7 +7,8 @@ struct MatchBreakdownConfigurator2015: MatchBreakdownConfigurator {
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
-        _ blue: [String: Any]?
+        _ blue: [String: Any]?,
+        _ compLevel: String?
     ) {
         var rows: [BreakdownRow?] = []
 

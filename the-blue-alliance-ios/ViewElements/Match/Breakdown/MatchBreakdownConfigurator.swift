@@ -6,7 +6,8 @@ protocol MatchBreakdownConfigurator {
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
-        _ blue: [String: Any]?
+        _ blue: [String: Any]?,
+        _ compLevel: String?
     )
 }
 
@@ -45,7 +46,7 @@ extension MatchBreakdownConfigurator {
         red: [String: Any]?,
         blue: [String: Any]?,
         type: BreakdownRow.BreakdownRowType = .normal,
-        offset: Int = 0
+        offset: Int = 0,
     ) -> BreakdownRow? {
         return row(
             title: title,
@@ -65,7 +66,7 @@ extension MatchBreakdownConfigurator {
         red: [String: Any]?,
         blue: [String: Any]?,
         type: BreakdownRow.BreakdownRowType = .normal,
-        offset: Int = 0
+        offset: Int = 0,
     ) -> BreakdownRow? {
         guard let red = red, let blue = blue else {
             return nil
@@ -94,14 +95,13 @@ extension MatchBreakdownConfigurator {
             }
             return String(describing: v)
         }
-
-        return BreakdownRow(
-            title: title,
-            red: [String(format: formatString, arguments: redValues)],
-            blue: [String(format: formatString, arguments: blueValues)],
-            type: type,
-            offset: offset
-        )
+            return BreakdownRow(
+                title: title,
+                red: [String(format: formatString, arguments: redValues)],
+                blue: [String(format: formatString, arguments: blueValues)],
+                type: type,
+                offset: offset
+            )
     }
     static func nestedValue(keys: [String], in dictionary: [String: Any]?) -> Any? {
         guard let dict = dictionary else {
