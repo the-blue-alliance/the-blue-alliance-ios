@@ -46,67 +46,92 @@ class EventInsightsConfigurator2017: EventInsightsConfigurator {
                 playoff: playoff
             )
         )
-        matchStats.append(
-            scoreRow(
-                title: "Average Mobility Points",
-                key: "average_mobility_points_auto",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Rotor Points",
-                key: "average_rotor_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Fuel Points",
-                key: "average_fuel_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average High Goal",
-                key: "average_high_goals",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Low Goal",
-                key: "average_low_goals",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Takeoff (Climb) Points",
-                key: "average_takeoff_points_teleop",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Foul Score",
-                key: "average_foul_score",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {
             snapshot.appendSections(["Match Stats"])
             snapshot.appendItems(matchStats, toSection: "Match Stats")
+        }
+
+        var fourColumnMatchStats: [InsightRow] = []
+
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Mobility Points",
+                key: ["average_mobility_points_auto", "", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Rotor Points",
+                key: [
+                    "average_rotor_points_auto", "average_rotor_points_teleop",
+                    "average_rotor_points",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Fuel Points",
+                key: [
+                    "average_fuel_points_auto", "average_fuel_points_teleop", "average_fuel_points",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average High Goal",
+                key: [
+                    "average_high_goals_auto", "average_high_goals_teleop", "average_high_goals",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Low Goal",
+                key: ["average_low_goals_auto", "average_low_goals_teleop", "average_low_goals"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Takeoff (Climb) Points",
+                key: ["", "average_takeoff_points_teleop", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Foul Score",
+                key: ["", "", "average_foul_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Score",
+                key: ["average_points_auto", "average_points_teleop", "average_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats = filterEmptyInsights(fourColumnMatchStats)
+        if !fourColumnMatchStats.isEmpty {
+            snapshot.appendSections(["Match Stats (Auto / Teleop / Overall)"])
+            snapshot.appendItems(
+                fourColumnMatchStats,
+                toSection: "Match Stats (Auto / Teleop / Overall)"
+            )
         }
 
         // Bonus Stats

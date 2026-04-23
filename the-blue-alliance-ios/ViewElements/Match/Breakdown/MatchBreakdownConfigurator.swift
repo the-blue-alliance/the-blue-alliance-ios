@@ -95,13 +95,13 @@ extension MatchBreakdownConfigurator {
             }
             return String(describing: v)
         }
-            return BreakdownRow(
-                title: title,
-                red: [String(format: formatString, arguments: redValues)],
-                blue: [String(format: formatString, arguments: blueValues)],
-                type: type,
-                offset: offset
-            )
+        return BreakdownRow(
+            title: title,
+            red: [String(format: formatString, arguments: redValues)],
+            blue: [String(format: formatString, arguments: blueValues)],
+            type: type,
+            offset: offset
+        )
     }
     static func nestedValue(keys: [String], in dictionary: [String: Any]?) -> Any? {
         guard let dict = dictionary else {

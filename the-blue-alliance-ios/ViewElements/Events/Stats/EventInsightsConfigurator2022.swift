@@ -38,71 +38,97 @@ class EventInsightsConfigurator2022: EventInsightsConfigurator {
                 playoff: playoff
             )
         )
-        matchStats.append(
-            scoreRow(
-                title: "Average Taxi Points",
-                key: "average_taxi_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cargo Count (Lower)",
-                key: "average_lower_cargo_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cargo Count (Upper)",
-                key: "average_upper_cargo_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cargo Count",
-                key: "average_cargo_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cargo Points",
-                key: "average_cargo_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Hangar Points",
-                key: "average_endgame_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Foul Points",
-                key: "average_foul_score",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        // Note - this is not helpful, since we already show "Average Match Score"
-        // If we can show breakdowns by Auto/Teleop/Overall like on web, we can add this back
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/744
-        // matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
 
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {
             snapshot.appendSections(["Match Stats"])
             snapshot.appendItems(matchStats, toSection: "Match Stats")
+        }
+
+        var fourColumnMatchStats: [InsightRow] = []
+
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Taxi Points",
+                key: ["average_taxi_points", "", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cargo Count (Lower)",
+                key: [
+                    "average_lower_cargo_count_auto", "average_lower_cargo_count_teleop",
+                    "average_lower_cargo_count",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cargo Count (Upper)",
+                key: [
+                    "average_upper_cargo_count_auto", "average_upper_cargo_count_teleop",
+                    "average_upper_cargo_count",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cargo Count",
+                key: [
+                    "average_cargo_count_auto", "average_cargo_count_teleop", "average_cargo_count",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cargo Points",
+                key: [
+                    "average_cargo_points_auto", "average_cargo_points_teleop",
+                    "average_cargo_points",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Hangar Points",
+                key: ["", "average_endgame_points", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Foul Points",
+                key: ["", "", "average_foul_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Score",
+                key: ["average_points_auto", "average_points_teleop", "average_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats = filterEmptyInsights(fourColumnMatchStats)
+        if !fourColumnMatchStats.isEmpty {
+            snapshot.appendSections(["Match Stats (Auto / Teleop / Overall)"])
+            snapshot.appendItems(
+                fourColumnMatchStats,
+                toSection: "Match Stats (Auto / Teleop / Overall)"
+            )
         }
 
         // Bonus Stats

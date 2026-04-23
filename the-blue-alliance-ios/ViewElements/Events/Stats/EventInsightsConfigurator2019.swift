@@ -38,55 +38,70 @@ class EventInsightsConfigurator2019: EventInsightsConfigurator {
                 playoff: playoff
             )
         )
-        matchStats.append(
-            scoreRow(
-                title: "Average Sandstorm Bonus Points",
-                key: "average_sandstorm_bonus_auto",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Hatch Panel Points",
-                key: "average_hatch_panel_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cargo Points",
-                key: "average_cargo_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average HAB Climb Points",
-                key: "average_hab_climb_teleop",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Foul Points",
-                key: "average_foul_score",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        // Note - this is not helpful, since we already show "Average Match Score"
-        // If we can show breakdowns by Auto/Teleop/Overall like on web, we can add this back
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/744
-        // matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
 
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {
             snapshot.appendSections(["Match Stats"])
             snapshot.appendItems(matchStats, toSection: "Match Stats")
+        }
+
+        var fourColumnMatchStats: [InsightRow] = []
+
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Sandstorm Bonus Points",
+                key: ["average_sandstorm_bonus_auto", "", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Hatch Panel Points",
+                key: ["", "", "average_hatch_panel_points"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cargo Points",
+                key: ["", "", "average_cargo_points"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average HAB Climb Points",
+                key: ["", "average_hab_climb_teleop", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Foul Points",
+                key: ["", "", "average_foul_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Score",
+                key: ["average_points_auto", "average_points_teleop", "average_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats = filterEmptyInsights(fourColumnMatchStats)
+        if !fourColumnMatchStats.isEmpty {
+            snapshot.appendSections(["Match Stats (Sandstorm / Teleop / Overall)"])
+            snapshot.appendItems(
+                fourColumnMatchStats,
+                toSection: "Match Stats (Sandstorm / Teleop / Overall)"
+            )
         }
 
         // Bonus Stats

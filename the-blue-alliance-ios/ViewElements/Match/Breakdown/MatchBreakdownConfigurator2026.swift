@@ -154,7 +154,13 @@ struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
         )
         if compLevel == Optional("qm") {
             rows.append(
-                row(title: "Ranking Points", key: "rp", formatString: "+%@ RP", red: red, blue: blue)
+                row(
+                    title: "Ranking Points",
+                    key: "rp",
+                    formatString: "+%@ RP",
+                    red: red,
+                    blue: blue
+                )
             )
         }
 

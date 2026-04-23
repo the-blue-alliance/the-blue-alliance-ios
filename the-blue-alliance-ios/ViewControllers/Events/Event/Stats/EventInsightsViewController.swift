@@ -141,7 +141,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                     cell.qualValues = []
                     cell.playoffValues = []
                 }
-
+                cell.selectionStyle = .none
                 return cell
             }
         }

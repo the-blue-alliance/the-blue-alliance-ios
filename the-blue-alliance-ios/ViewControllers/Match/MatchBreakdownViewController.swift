@@ -129,7 +129,10 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         runRefresh { [weak self] in
             guard let self else { return }
             self.state = .match(try await self.dependencies.api.match(key: self.state.key))
-            self.configureDataSource(self.state.match?.breakdownDict, self.state.match?.compLevel.rawValue)
+            self.configureDataSource(
+                self.state.match?.breakdownDict,
+                self.state.match?.compLevel.rawValue
+            )
         }
     }
 
