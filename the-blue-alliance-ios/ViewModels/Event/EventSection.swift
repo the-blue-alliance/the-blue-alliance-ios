@@ -101,7 +101,7 @@ extension Event {
     // year first and fall back to this.
     public static func sectionAscending(_ a: Event, _ b: Event) -> Bool {
         if a.section != b.section { return a.section < b.section }
-        if a.eventType != b.eventType { return a.eventType < b.eventType }
+        if a.eventType != b.eventType { return a.eventType.rawValue < b.eventType.rawValue }
         let ad = a.startDateParsed ?? .distantFuture
         let bd = b.startDateParsed ?? .distantFuture
         if ad != bd { return ad < bd }
