@@ -11,26 +11,32 @@ struct RankingCellViewModel {
     let detailText: String?
     let wltText: String?
 
-    init(apiDistrictRanking ranking: DistrictRanking) {
+    init(ranking: DistrictRanking, team: TeamSimple? = nil) {
         self.rankText = "Rank \(ranking.rank)"
         self.teamNumber = Self.teamNumber(from: ranking.teamKey)
-        self.teamName = "Team \(self.teamNumber ?? ranking.teamKey)"
+        self.teamName = team?.displayNickname ?? "Team \(self.teamNumber ?? ranking.teamKey)"
         self.detailText = "\(ranking.pointTotal) Points"
         self.wltText = nil
     }
 
-    init(rank: String, apiTeamKey teamKey: String, points: Int) {
+    init(rank: String, apiTeamKey teamKey: String, points: Int, team: TeamSimple? = nil) {
         self.rankText = rank
         self.teamNumber = Self.teamNumber(from: teamKey)
-        self.teamName = "Team \(self.teamNumber ?? teamKey)"
+        self.teamName = team?.displayNickname ?? "Team \(self.teamNumber ?? teamKey)"
         self.detailText = "\(points) Points"
         self.wltText = nil
     }
 
-    init(apiTeamKey teamKey: String, opr: Float, dpr: Float, ccwm: Float) {
+    init(
+        apiTeamKey teamKey: String,
+        opr: Float,
+        dpr: Float,
+        ccwm: Float,
+        team: TeamSimple? = nil
+    ) {
         self.rankText = nil
         self.teamNumber = Self.teamNumber(from: teamKey)
-        self.teamName = "Team \(self.teamNumber ?? teamKey)"
+        self.teamName = team?.displayNickname ?? "Team \(self.teamNumber ?? teamKey)"
         self.detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", opr, dpr, ccwm)
         self.wltText = nil
     }

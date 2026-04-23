@@ -11,15 +11,15 @@ struct AwardCellViewModel {
     let awardName: String?
     let recipients: [Recipient]
 
-    init(award: Award) {
+    init(award: Award, teamsByKey: [String: TeamSimple] = [:]) {
         awardName = award.name
         recipients = award.recipientList.map { apiRecipient in
             var awardText: [String] = []
             if let teamKey = apiRecipient.teamKey, let awardee = apiRecipient.awardee {
                 awardText.append(awardee)
-                awardText.append(Self.teamDisplay(key: teamKey))
+                awardText.append(Self.teamDisplay(key: teamKey, teamsByKey: teamsByKey))
             } else if let teamKey = apiRecipient.teamKey {
-                awardText.append(Self.teamDisplay(key: teamKey))
+                awardText.append(Self.teamDisplay(key: teamKey, teamsByKey: teamsByKey))
             } else if let awardee = apiRecipient.awardee {
                 awardText.append(awardee)
             } else {
@@ -29,7 +29,10 @@ struct AwardCellViewModel {
         }
     }
 
-    private static func teamDisplay(key: String) -> String {
+    private static func teamDisplay(key: String, teamsByKey: [String: TeamSimple]) -> String {
+        if let team = teamsByKey[key] {
+            return team.displayNickname
+        }
         if key.hasPrefix("frc") {
             return "Team \(key.dropFirst(3))"
         }
