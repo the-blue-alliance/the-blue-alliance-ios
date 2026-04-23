@@ -100,7 +100,10 @@ struct APIEventHelpersTests {
     // MARK: - weekString
 
     @Test func weekString_unknownEventType() {
-        let event = makeEvent(key: "x", year: 2020, eventType: -99)
+        // The OpenAPI EventType enum covers every documented value (-1, 0..7,
+        // 99, 100), but `APIEventType` (our hand-rolled mapping) hasn't shipped
+        // a case for the spec's REMOTE (7) yet. That's our "unknown" path.
+        let event = makeEvent(key: "x", year: 2020, eventType: 7)
         #expect(event.weekString == "Unknown")
     }
 
@@ -388,7 +391,8 @@ struct APIEventHelpersTests {
             key: key,
             name: name,
             eventCode: key.replacingOccurrences(of: "\(year)", with: ""),
-            eventType: eventType,
+            // Spec bump made `eventType` a typed enum; tests still pass raw ints.
+            eventType: Components.Schemas.EventType(rawValue: eventType) ?? ._0,
             city: city,
             stateProv: stateProv,
             country: country,
