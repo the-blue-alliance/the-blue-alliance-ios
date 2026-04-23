@@ -45,8 +45,7 @@ class WeekEventsViewController: EventsListViewController {
         let sameYear = events.filter { $0.year == weekEvent.year }
         guard let weekEventType = weekEvent.eventTypeEnum else {
             // Selected week has an unknown event type — group all unknown-type events together.
-            let valid = Set(APIEventType.allCases.map { $0.rawValue })
-            return sameYear.filter { !valid.contains($0.eventType) }
+            return sameYear.filter { $0.eventTypeEnum == nil }
         }
 
         if let week = weekEvent.week {

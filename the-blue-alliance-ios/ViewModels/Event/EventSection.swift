@@ -38,7 +38,7 @@ extension Event {
             // raw integer so it slots between known types, and use the
             // API-provided string as the title so it's at least self-describing.
             let label = eventTypeString.isEmpty ? "Unknown Events" : "\(eventTypeString) Events"
-            return .init(sortOrder: eventType, subOrder: 0, title: label)
+            return .init(sortOrder: eventType.rawValue, subOrder: 0, title: label)
         }
 
         switch type {
