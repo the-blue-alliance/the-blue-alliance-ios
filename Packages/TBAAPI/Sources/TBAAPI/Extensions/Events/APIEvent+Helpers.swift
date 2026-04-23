@@ -18,7 +18,10 @@ public enum APIEventType: Int, CaseIterable, Sendable {
 extension Event {
 
     public var eventTypeEnum: APIEventType? {
-        APIEventType(rawValue: eventType)
+        // The OpenAPI spec types `eventType` as the generated EventType enum
+        // (we bumped to a spec that adds named integer enums), so we read the
+        // underlying integer via `.rawValue` to feed our hand-rolled APIEventType.
+        APIEventType(rawValue: eventType.rawValue)
     }
 
     public var safeShortName: String {
