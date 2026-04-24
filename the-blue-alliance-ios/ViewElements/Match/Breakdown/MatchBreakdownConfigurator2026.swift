@@ -1,14 +1,6 @@
 import Foundation
 import UIKit
 
-private class BreakdownStyle2026 {
-    public static let bottomImage = UIImage(systemName: "rectangle")
-    public static let outerImage = UIImage(systemName: "hexagon")
-    public static let innerImage = UIImage(systemName: "circle")
-    public static let trueImage = UIImage(systemName: "checkmark")
-    public static let falseImage = UIImage(systemName: "xmark")
-}
-
 struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
 
     static func configureDataSource(

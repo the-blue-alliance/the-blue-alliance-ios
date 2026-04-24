@@ -74,7 +74,14 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total)
         )
 
-        rows.append(stageActivationRow(title: "Stage Activations", red: red, blue: blue))
+        rows.append(
+            stageActivationRow(
+                title: "Stage Activations",
+                red: red,
+                blue: blue,
+                compLevel: compLevel
+            )
+        )
         rows.append(
             shieldOperationalRow(title: "Shield Generator Operational", red: red, blue: blue)
         )
@@ -341,7 +348,12 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
 
-    private static func stageActivationRow(title: String, red: [String: Any]?, blue: [String: Any]?)
+    private static func stageActivationRow(
+        title: String,
+        red: [String: Any]?,
+        blue: [String: Any]?,
+        compLevel: String?
+    )
         -> BreakdownRow?
     {
         var redActivation: [Int] = [];
@@ -362,7 +374,10 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         let elements = [redActivation, blueActivation].map { (stage) -> String in
             if stage[0] == 1 {
-                return "3 (+1 RP)"
+                if compLevel == Optional("qm") {
+                    return "3 (+1 RP)"
+                }
+                return "3"
             } else if stage[1] == 1 {
                 return "2"
             } else if stage[2] == 1 {
