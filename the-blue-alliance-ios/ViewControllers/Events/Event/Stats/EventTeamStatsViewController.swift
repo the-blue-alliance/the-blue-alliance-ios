@@ -16,6 +16,7 @@ enum EventTeamStatFilter: String, Comparable, CaseIterable {
     case opr = "OPR"
     case dpr = "DPR"
     case ccwm = "CCWM"
+    case teamNumber = "Team #"
 }
 
 struct TeamStatRow: Hashable {
@@ -127,6 +128,13 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
         case .opr: sorted = unsorted.sorted { $0.opr > $1.opr }
         case .dpr: sorted = unsorted.sorted { $0.dpr > $1.dpr }
         case .ccwm: sorted = unsorted.sorted { $0.ccwm > $1.ccwm }
+        case .teamNumber:
+            sorted = unsorted.sorted { lhs, rhs in
+                let lNum = lhs.teamKey.parentKey.teamNumber ?? 0
+                let rNum = rhs.teamKey.parentKey.teamNumber ?? 0
+                if lNum != rNum { return lNum < rNum }
+                return lhs.teamKey < rhs.teamKey
+            }
         }
         self.rows = sorted
 
