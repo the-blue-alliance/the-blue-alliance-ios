@@ -136,14 +136,11 @@ private struct MatchSubscribable: MyTBASubscribable {
 
 extension MatchViewController: MatchSummaryViewDelegate {
 
-    func teamPressed(teamKey: String) {
+    func teamPressed(teamKey: TeamKey) {
         guard let match = state.match, match.allTeamKeys.contains(teamKey) else { return }
-        // B teams (e.g. "frc5940B") alias the parent team — route to the
-        // canonical team@event so the API lookups don't 404.
-        let canonicalKey = teamKey.parentKey
         let year = match.year ?? 0
         let teamAtEventVC = TeamAtEventViewController(
-            teamKey: canonicalKey,
+            teamKey: teamKey,
             eventKey: match.eventKey,
             year: year,
             dependencies: dependencies
