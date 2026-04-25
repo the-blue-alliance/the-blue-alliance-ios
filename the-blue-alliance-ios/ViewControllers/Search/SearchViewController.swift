@@ -85,10 +85,8 @@ class SearchViewController: TBATableViewController {
             switch item {
             case .event(let key, let name):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-                let year = String(key.prefix(4))
-                let displayName = name.isEmpty ? key : "\(year) \(name)"
                 cell.viewModel = EventCellViewModel(
-                    name: displayName,
+                    name: SearchViewController.eventDisplayName(key: key, name: name),
                     location: nil,
                     dateString: nil
                 )
@@ -168,7 +166,15 @@ class SearchViewController: TBATableViewController {
     }
 
     private func matches(event: SearchIndex.EventsPayloadPayload, query: String) -> Bool {
-        event.name.lowercased().contains(query) || event.key.lowercased().contains(query)
+        let display = SearchViewController.eventDisplayName(key: event.key, name: event.name)
+        return display.lowercased().contains(query) || event.key.lowercased().contains(query)
+    }
+
+    // Single source of truth for event row text so the search matcher operates on what the user sees —
+    // event names from the API don't include the year, so without this typing "2026 michigan" wouldn't hit.
+    private static func eventDisplayName(key: String, name: String) -> String {
+        guard !name.isEmpty else { return key }
+        return "\(key.prefix(4)) \(name)"
     }
 
     // MARK: - Table View Delegate
