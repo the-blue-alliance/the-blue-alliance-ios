@@ -1,5 +1,5 @@
 ## Create New Version
-Version numbers in App Store Connect must be unique. CI will [create a new patch version](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/fastlane/Fastfile) after shipping a build to the App Store. However, this step may have timed out on CI and the version number was not updated properly, or you may want to use a different version number for new builds. If either of these is the case, make sure to bump version number manually before shipping a new release.
+Version numbers in App Store Connect must be unique, so each new App Store release needs a fresh version number. CI bumps the **build number** automatically (see below), but the **version number** is bumped manually whenever you want to cut a new release.
 
 First, decide what type of version the new version should be
 
@@ -101,8 +101,6 @@ $ bundle exec fastlane match
 1. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
 2. Click `the-blue-alliance-ios` project in the project navigator
 3. On the left sidebar, under `Targets` click `The Blue Alliance`
-3. Click the `General` tab along the top bar
-4. Under the `Signing (Release)` section, select the provision profile downloaded by `match` (`match AppStore com.the-blue-alliance.tba`)
-5. The `Team` and `Signing Certificate` should update according to the selected provisioning profile.
-
-![](https://i.imgur.com/8JAcykh.png)
+4. Click the `General` tab along the top bar
+5. Under the `Signing (Release)` section, select the provision profile downloaded by `match` (`match AppStore com.the-blue-alliance.tba`)
+6. The `Team` and `Signing Certificate` should update according to the selected provisioning profile.

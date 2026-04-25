@@ -1,34 +1,23 @@
-Welcome to The Blue Alliance for iOS Wiki! Here are some helpful pages -
+Welcome to The Blue Alliance for iOS Wiki! Here are some helpful pages —
 
 # Setup
 ## [Setup Guide](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Setup)
 A step-by-step guide to build and run The Blue Alliance for iOS on your own machine. For new contributors, this should be your first stop.
 
-# Developing
-
 # Release Ops
 ## [Build and Release](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Build-and-Release)
-Documentation for how to create a new version of The Blue Alliance for iOS and ship it to TestFlight or the App Store. This includes information for updating App Store metadata and screenshots.
+How to ship a TestFlight or App Store build via the **Actions → Release → Run workflow** flow, including how to write TestFlight (`beta.md`) and App Store release notes and how to update App Store metadata and screenshots.
 
 ## [Runbook](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Runbook)
-Common tasks for managing The Blue Alliance for iOS. This is mostly documentation for admins.
+Common maintainer tasks: bumping dependencies, regenerating distribution certificates, configuring APNs, and symbolicating crash logs.
 
-# Prep for New Season
-What to expect when you're expecting a new season.
-
-## [Updating Status Defaults](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Updating-Status-Defaults)
-A guide on how to update the locally-shipped `Status` defaults.
-
+# Per-Year Work
 ## [Event Insights](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Event-Insights)
-A guide on how to support Event Insights (`/event/{event_key}/insights`) for a new year.
+How `EventInsightsViewController` and the per-year `EventInsightsConfigurator` classes work, and how to add support for a new FRC season.
 
-# Recovery/Reproduction
+# Recovery / Reproduction
 
-Notes on reproducing the setup for this repo. Mostly for maintainers if something were to break and something needs to be re-setup. Shouldn't be necessary for most contributors.
+Notes on reproducing the setup for this repo. Mostly for maintainers if something needs to be re-set-up. Shouldn't be necessary for most contributors.
 
 ## [CI Setup](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/CI-Setup)
-
-Instructions for how to replicate the GitHub Actions setup.
-
-# App Architecture
-(coming soon)
+The secrets and configuration required to replicate the GitHub Actions setup.

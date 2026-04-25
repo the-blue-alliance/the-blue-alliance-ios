@@ -16,8 +16,6 @@ This step assumes you've completed all of the steps from the [Setup guide](https
 1. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
 2. Click `the-blue-alliance-ios` project in the project navigator
 3. On the left sidebar, under `Targets` click `The Blue Alliance`
-3. Click the `General` tab along the top bar
-4. Change `Bundle Identifier` to the bundle identifier you set during the [Setup Firebase](#setup-firebase) step
-5. Overwrite the existing `GoogleService-Info.plist` is in the `the-blue-alliance-ios/the-blue-alliance-ios` folder with your newly downloaded `GoogleService-Info.plist`
-
-![](https://i.imgur.com/FGi5jNA.png)
+4. Click the `General` tab along the top bar
+5. Change `Bundle Identifier` to the bundle identifier you set during the [Setup Firebase](#setup-firebase) step
+6. Overwrite the existing `GoogleService-Info.plist` in the `the-blue-alliance-ios/` folder with your newly downloaded `GoogleService-Info.plist`
