@@ -129,6 +129,7 @@
 		92C079C723F99CA400AE2AFA /* EventInsightsConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C079C623F99CA400AE2AFA /* EventInsightsConfigurator2020.swift */; };
 		92C5FBDC2B0037E10006AE48 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */; };
 		92C5FBDF2B0038250006AE48 /* Agrume in Frameworks */ = {isa = PBXBuildFile; productRef = 92C5FBDE2B0038250006AE48 /* Agrume */; };
+		92F63EAA2BA91B500025CC03 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EAB2BA91B500025CC03 /* SkeletonView */; };
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
 		92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */; };
@@ -376,6 +377,7 @@
 				92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */,
 				92C5FBDF2B0038250006AE48 /* Agrume in Frameworks */,
 				924BDD9526D2B391008BE7D2 /* GoogleSignIn in Frameworks */,
+				92F63EAA2BA91B500025CC03 /* SkeletonView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,6 +967,7 @@
 				92F63E9A2BA91B4F0025CC03 /* MyTBAKit */,
 				921843022DB42424003B4F9E /* TBAAPI */,
 				921843062DB42424003B4F9E /* TBAUtils */,
+				92F63EAB2BA91B500025CC03 /* SkeletonView */,
 			);
 			productName = "the-blue-alliance";
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
@@ -1010,6 +1013,7 @@
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
+				92F63EAC2BA91B500025CC03 /* XCRemoteSwiftPackageReference "SkeletonView" */,
 				92F63E992BA91B4F0025CC03 /* XCLocalSwiftPackageReference "Packages/MyTBAKit" */,
 				921843012DB42424003B4F9E /* XCLocalSwiftPackageReference "Packages/TBAAPI" */,
 			);
@@ -1504,6 +1508,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		92F63EAC2BA91B500025CC03 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Juanpe/SkeletonView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.31.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1558,6 +1570,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */;
 			productName = Agrume;
+		};
+		92F63EAB2BA91B500025CC03 /* SkeletonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92F63EAC2BA91B500025CC03 /* XCRemoteSwiftPackageReference "SkeletonView" */;
+			productName = SkeletonView;
 		};
 		92F63E9A2BA91B4F0025CC03 /* MyTBAKit */ = {
 			isa = XCSwiftPackageProductDependency;
