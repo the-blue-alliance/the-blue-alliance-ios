@@ -4,18 +4,38 @@ import Testing
 
 struct APITeamHelpersTests {
 
-    // MARK: - TeamKey.trimFRCPrefix
+    // MARK: - TeamKey.trimPrefix
 
-    @Test func trimFRCPrefix_strip() {
-        #expect(TeamKey.trimFRCPrefix("frc2337") == "2337")
+    @Test func trimPrefix_strip() {
+        #expect(("frc2337" as TeamKey).trimPrefix == "2337")
     }
 
-    @Test func trimFRCPrefix_stripKeepsSuffix() {
-        #expect(TeamKey.trimFRCPrefix("frc2337b") == "2337b")
+    @Test func trimPrefix_stripKeepsSuffix() {
+        #expect(("frc2337b" as TeamKey).trimPrefix == "2337b")
     }
 
-    @Test func trimFRCPrefix_noPrefixLeavesAlone() {
-        #expect(TeamKey.trimFRCPrefix("2337") == "2337")
+    // MARK: - TeamKey.teamNumber
+
+    @Test func teamNumber_parsesDigits() {
+        #expect(("frc254" as TeamKey).teamNumber == 254)
+    }
+
+    @Test func teamNumber_nilForBTeamSuffix() {
+        #expect(("frc5940B" as TeamKey).teamNumber == nil)
+    }
+
+    // MARK: - TeamKey.parentKey
+
+    @Test func parentKey_canonicalKeyUnchanged() {
+        #expect(("frc254" as TeamKey).parentKey == "frc254")
+    }
+
+    @Test func parentKey_dropsBSuffix() {
+        #expect(("frc5940B" as TeamKey).parentKey == "frc5940")
+    }
+
+    @Test func parentKey_dropsLowercaseSuffix() {
+        #expect(("frc5940b" as TeamKey).parentKey == "frc5940")
     }
 
     // MARK: - TeamDisplayable (Team)

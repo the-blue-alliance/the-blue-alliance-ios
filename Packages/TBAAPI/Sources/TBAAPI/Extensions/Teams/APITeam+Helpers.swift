@@ -42,9 +42,19 @@ extension Team: TeamDisplayable {
     }
 }
 
-// Strips the `frc` prefix from a team key — "frc254" → "254".
-public enum TeamKey {
-    public static func trimFRCPrefix(_ key: String) -> String {
-        key.hasPrefix("frc") ? String(key.dropFirst(3)) : key
+extension TeamKey {
+    public var trimPrefix: String {
+        String(dropFirst(3))
+    }
+
+    public var teamNumber: Int? {
+        Int(trimPrefix)
+    }
+
+    // B teams (e.g. "frc5940B") aren't independent entities in TBA — they
+    // alias the parent team. Walk from the end and drop non-digits to
+    // recover the canonical key.
+    public var parentKey: TeamKey {
+        TeamKey(reversed().drop(while: { !$0.isNumber }).reversed())
     }
 }

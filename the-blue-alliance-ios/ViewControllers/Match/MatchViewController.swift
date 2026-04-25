@@ -136,12 +136,11 @@ private struct MatchSubscribable: MyTBASubscribable {
 
 extension MatchViewController: MatchSummaryViewDelegate {
 
-    func teamPressed(teamNumber: Int) {
-        let targetKey = "frc\(teamNumber)"
-        guard let match = state.match, match.allTeamKeys.contains(targetKey) else { return }
+    func teamPressed(teamKey: TeamKey) {
+        guard let match = state.match, match.allTeamKeys.contains(teamKey) else { return }
         let year = match.year ?? 0
         let teamAtEventVC = TeamAtEventViewController(
-            teamKey: targetKey,
+            teamKey: teamKey,
             eventKey: match.eventKey,
             year: year,
             dependencies: dependencies

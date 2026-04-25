@@ -18,7 +18,10 @@ class TeamAtEventViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(teamKey: String, eventKey: String, year: Int, dependencies: Dependencies) {
+    init(teamKey: TeamKey, eventKey: String, year: Int, dependencies: Dependencies) {
+        // B teams (e.g. "frc5940B") alias their parent team — there's no
+        // /team/<N>B page, so route every caller to the canonical key.
+        let teamKey = teamKey.parentKey
         self.teamKey = teamKey
         self.eventKey = eventKey
 
@@ -54,7 +57,7 @@ class TeamAtEventViewController: ContainerViewController {
                 statsViewController,
                 awardsViewController,
             ],
-            navigationTitle: "Team \(TeamKey.trimFRCPrefix(teamKey))",
+            navigationTitle: "Team \(teamKey.trimPrefix)",
             navigationSubtitle: nil,
             segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
             dependencies: dependencies

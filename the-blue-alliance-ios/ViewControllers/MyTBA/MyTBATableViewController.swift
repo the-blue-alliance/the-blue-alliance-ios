@@ -136,8 +136,8 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
                         )
                     } else {
                         cell.viewModel = TeamCellViewModel(
-                            teamNumber: TeamKey.trimFRCPrefix(key),
-                            nickname: "Team \(TeamKey.trimFRCPrefix(key))",
+                            teamNumber: key.trimPrefix,
+                            nickname: "Team \(key.trimPrefix)",
                             location: nil
                         )
                     }
@@ -182,14 +182,8 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
             }
         case .team:
             return items.sorted { lhs, rhs in
-                let l =
-                    teamsCache[lhs.modelKey].map { $0.teamNumber } ?? Int(
-                        TeamKey.trimFRCPrefix(lhs.modelKey)
-                    ) ?? 0
-                let r =
-                    teamsCache[rhs.modelKey].map { $0.teamNumber } ?? Int(
-                        TeamKey.trimFRCPrefix(rhs.modelKey)
-                    ) ?? 0
+                let l = teamsCache[lhs.modelKey]?.teamNumber ?? lhs.modelKey.teamNumber ?? 0
+                let r = teamsCache[rhs.modelKey]?.teamNumber ?? rhs.modelKey.teamNumber ?? 0
                 return l < r
             }
         case .match:

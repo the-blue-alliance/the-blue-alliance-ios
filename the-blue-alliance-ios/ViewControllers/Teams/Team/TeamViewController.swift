@@ -56,8 +56,14 @@ class TeamViewController: HeaderContainerViewController {
 
     // MARK: Init
 
-    convenience init(teamKey: String, nickname: String? = nil, dependencies: Dependencies) {
-        self.init(state: .key(teamKey), partialNickname: nickname, dependencies: dependencies)
+    convenience init(teamKey: TeamKey, nickname: String? = nil, dependencies: Dependencies) {
+        // B teams (e.g. "frc5940B") alias their parent team — there's no
+        // /team/<N>B page, so route every caller to the canonical key.
+        self.init(
+            state: .key(teamKey.parentKey),
+            partialNickname: nickname,
+            dependencies: dependencies
+        )
     }
 
     convenience init(team: Team, dependencies: Dependencies) {
@@ -67,7 +73,7 @@ class TeamViewController: HeaderContainerViewController {
     private init(state: TeamState, partialNickname: String?, dependencies: Dependencies) {
         self.state = state
 
-        let teamNumber = state.team?.teamNumber ?? Int(TeamKey.trimFRCPrefix(state.key)) ?? 0
+        let teamNumber = state.team?.teamNumber ?? state.key.teamNumber ?? 0
         let nickname: String? = {
             if let team = state.team, !team.nickname.isEmpty { return team.nickname }
             return partialNickname

@@ -93,7 +93,7 @@ class SearchViewController: TBATableViewController {
                 return cell
             case .team(let key, let nickname):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
-                let teamNumber = TeamKey.trimFRCPrefix(key)
+                let teamNumber = key.trimPrefix
                 cell.viewModel = TeamCellViewModel(
                     teamNumber: teamNumber,
                     nickname: nickname.isEmpty ? "Team \(teamNumber)" : nickname,
@@ -129,8 +129,8 @@ class SearchViewController: TBATableViewController {
             let teams = index.teams
                 .filter { matches(team: $0, query: query) }
                 .sorted { lhs, rhs in
-                    let l = Int(TeamKey.trimFRCPrefix(lhs.key)) ?? .max
-                    let r = Int(TeamKey.trimFRCPrefix(rhs.key)) ?? .max
+                    let l = lhs.key.teamNumber ?? .max
+                    let r = rhs.key.teamNumber ?? .max
                     return l < r
                 }
                 .map { SearchItem.team(key: $0.key, nickname: $0.nickname) }
@@ -160,7 +160,7 @@ class SearchViewController: TBATableViewController {
     }
 
     private func matches(team: SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
-        let number = TeamKey.trimFRCPrefix(team.key)
+        let number = team.key.trimPrefix
         return number.hasPrefix(query) || team.nickname.lowercased().contains(query)
             || team.key.lowercased().contains(query)
     }
