@@ -7,6 +7,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
     private let teamKey: String
     private let districtKey: String
     private var ranking: DistrictRanking
+    private var eventsByKey: [String: Event] = [:]
 
     // MARK: - Init
 
@@ -80,7 +81,8 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
         -> String?
     {
-        eventPoints[section].eventKey
+        let eventKey = eventPoints[section].eventKey
+        return eventsByKey[eventKey]?.safeShortName ?? eventKey
     }
 
     // MARK: - Refreshable
@@ -90,11 +92,26 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let fetched = try await self.dependencies.api.districtRankings(key: self.districtKey)
+            // Unstructured Task handles instead of `async let`: Swift 6.1's
+            // async-let stack allocator trips swift_task_dealloc's LIFO check
+            // here even with reverse-order awaits (#995 didn't fully fix it).
+            // Task handles heap-allocate and sidestep the allocator entirely.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let rankingsHandle = Task {
+                try await self.dependencies.api.districtRankings(key: self.districtKey)
+            }
+            let eventsHandle = Task {
+                try? await self.dependencies.api.districtEvents(key: self.districtKey)
+            }
+
+            let events = await eventsHandle.value ?? []
+            self.eventsByKey = Dictionary(uniqueKeysWithValues: events.map { ($0.key, $0) })
+
+            let fetched = try await rankingsHandle.value
             if let updated = fetched?.first(where: { $0.teamKey == self.teamKey }) {
                 self.ranking = updated
-                self.tableView.reloadData()
             }
+            self.tableView.reloadData()
         }
     }
 
