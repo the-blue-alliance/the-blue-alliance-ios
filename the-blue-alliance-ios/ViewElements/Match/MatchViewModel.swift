@@ -33,14 +33,31 @@ struct MatchViewModel {
         return blueScore != nil && redScore != nil
     }
 
-    // 2018+ alliance breakdowns expose `rp` directly; 2016 and 2017 expose
-    // `tba_rpEarned` (TBA-computed from per-bonus booleans). Earlier years
-    // had no RP concept, and any future year is expected to keep `rp`.
-    static func rpCount(breakdown: [String: Any]?) -> Int {
+    // Counts bonus-objective RPs for `year` by checking the per-game booleans
+    // in `breakdown`. Mirrors the web frontend's `match_table_cell_macros.html`
+    // so unmapped seasons fail closed (0 dots) instead of risking a wrong
+    // count when the season's win RP changes (e.g. 2 → 3 in 2025).
+    static func rpCount(breakdown: [String: Any]?, year: Int) -> Int {
         guard let breakdown else { return 0 }
-        if let rp = breakdown["rp"] as? Int { return rp }
-        if let rp = breakdown["tba_rpEarned"] as? Int { return rp }
-        return 0
+        return bonusKeys(year: year).reduce(0) { count, key in
+            count + ((breakdown[key] as? Bool) == true ? 1 : 0)
+        }
+    }
+
+    private static func bonusKeys(year: Int) -> [String] {
+        switch year {
+        case 2016: return ["teleopDefensesBreached", "teleopTowerCaptured"]
+        case 2017: return ["kPaRankingPointAchieved", "rotorRankingPointAchieved"]
+        case 2018: return ["autoQuestRankingPoint", "faceTheBossRankingPoint"]
+        case 2019: return ["completeRocketRankingPoint", "habDockingRankingPoint"]
+        case 2020: return ["shieldEnergizedRankingPoint", "shieldOperationalRankingPoint"]
+        case 2022: return ["cargoBonusRankingPoint", "hangarBonusRankingPoint"]
+        case 2023: return ["sustainabilityBonusAchieved", "activationBonusAchieved"]
+        case 2024: return ["melodyBonusAchieved", "ensembleBonusAchieved"]
+        case 2025: return ["autoBonusAchieved", "coralBonusAchieved", "bargeBonusAchieved"]
+        case 2026: return ["energizedAchieved", "superchargedAchieved", "traversalAchieved"]
+        default: return []
+        }
     }
 
     init(
@@ -108,7 +125,7 @@ struct MatchViewModel {
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]
 
-        redRPCount = MatchViewModel.rpCount(breakdown: redBreakdown)
-        blueRPCount = MatchViewModel.rpCount(breakdown: blueBreakdown)
+        redRPCount = MatchViewModel.rpCount(breakdown: redBreakdown, year: matchYear)
+        blueRPCount = MatchViewModel.rpCount(breakdown: blueBreakdown, year: matchYear)
     }
 }
