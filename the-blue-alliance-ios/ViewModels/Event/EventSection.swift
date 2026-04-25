@@ -1,10 +1,6 @@
 import Foundation
 import TBAAPI
 
-// Grouping + ordering model for the Week Events screen. sortOrder is
-// derived from the TBA `event_type` integer so we don't carry arbitrary
-// bucket offsets, and unknown event types fall through gracefully to
-// their raw integer position with whatever label the API sent.
 public struct EventSection: Hashable, Comparable {
     public let sortOrder: Int
     public let subOrder: Int
@@ -18,10 +14,8 @@ public struct EventSection: Hashable, Comparable {
 }
 
 extension APIEventType {
-    // Section ordering in the Week view. Mostly the TBA rawValue, with two
-    // sentinels whose rawValue doesn't match display intent:
-    //   • preseason (100) renders first
-    //   • unlabeled (-1) renders last
+    // Mostly the TBA rawValue; preseason (100) and unlabeled (-1) are pushed
+    // to the ends so they don't render in the middle of the chronological flow.
     var displayOrder: Int {
         switch self {
         case .preseason: return -1
@@ -34,9 +28,7 @@ extension APIEventType {
 extension Event {
     var section: EventSection {
         guard let type = eventTypeEnum else {
-            // New TBA event_type we haven't shipped a case for. Sort by the
-            // raw integer so it slots between known types, and use the
-            // API-provided string as the title so it's at least self-describing.
+            // Forward-compat for new TBA event_types we haven't shipped a case for.
             let label = eventTypeString.isEmpty ? "Unknown Events" : "\(eventTypeString) Events"
             return .init(sortOrder: eventType.rawValue, subOrder: 0, title: label)
         }
@@ -53,8 +45,7 @@ extension Event {
                 title: "\(districtSectionName) District Events"
             )
         case .districtChampionship, .districtChampionshipDivision:
-            // Parent + divisions share one section per district, keyed off the
-            // parent's displayOrder so both types land on the same sortOrder.
+            // DCMP parent + its divisions share one section per district.
             return .init(
                 sortOrder: APIEventType.districtChampionship.displayOrder,
                 subOrder: 0,
@@ -82,8 +73,6 @@ extension Event {
         }
     }
 
-    // Display name for a district-scoped section; falls back to the uppercased
-    // abbreviation (e.g. FIM) if the API didn't send a populated displayName.
     private var districtSectionName: String {
         guard let district else { return "District" }
         return district.displayName.isEmpty
@@ -95,10 +84,7 @@ extension Event {
         return "Championship"
     }
 
-    // Default ordering for event lists within a single year: by section,
-    // then by event_type (so DCMP parent 2 sorts before division 5), then
-    // by start date, then by key. Callers that mix years should compare
-    // year first and fall back to this.
+    // Within-year ordering. Callers that mix years should compare year first.
     public static func sectionAscending(_ a: Event, _ b: Event) -> Bool {
         if a.section != b.section { return a.section < b.section }
         if a.eventType != b.eventType { return a.eventType.rawValue < b.eventType.rawValue }

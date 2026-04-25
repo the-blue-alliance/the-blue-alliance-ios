@@ -25,6 +25,10 @@ struct MatchViewModel {
 
     let baseTeamKeys: [String]
 
+    // Non-nil for playoff rows when the event has alliances available.
+    let redAllianceBadge: AllianceLookup.Entry?
+    let blueAllianceBadge: AllianceLookup.Entry?
+
     var hasScores: Bool {
         return blueScore != nil && redScore != nil
     }
@@ -40,9 +44,41 @@ struct MatchViewModel {
         return rpCount
     }
 
-    init(match: Match, baseTeamKeys: [String] = []) {
-        matchName = match.friendlyName
-        hasVideos = match.videos.isEmpty
+    init(
+        match: Match,
+        event: Event,
+        allianceLookup: AllianceLookup? = nil,
+        baseTeamKeys: [String] = []
+    ) {
+        self.init(
+            match: match,
+            playoffType: event.playoffTypeEnum,
+            allianceLookup: allianceLookup,
+            baseTeamKeys: baseTeamKeys
+        )
+    }
+
+    // Named so it can't be reached for by accident — primary init is preferred.
+    init(
+        withoutEventContextFor match: Match,
+        baseTeamKeys: [String] = []
+    ) {
+        self.init(
+            match: match,
+            playoffType: nil,
+            allianceLookup: nil,
+            baseTeamKeys: baseTeamKeys
+        )
+    }
+
+    private init(
+        match: Match,
+        playoffType: PlayoffType?,
+        allianceLookup: AllianceLookup?,
+        baseTeamKeys: [String]
+    ) {
+        matchName = match.friendlyName(playoffType: playoffType)
+        hasVideos = !match.videos.isEmpty
 
         redAlliance = match.redAllianceTeamKeys
         redScore = match.alliances.red.score < 0 ? nil : match.alliances.red.score
@@ -60,6 +96,15 @@ struct MatchViewModel {
         blueAllianceWon = hasWinnersAndLosers && match.winningAllianceString == "blue"
 
         self.baseTeamKeys = baseTeamKeys
+
+        // Only playoff rows have alliance membership to render.
+        if match.compLevel != .qm, let lookup = allianceLookup, !lookup.isEmpty {
+            self.redAllianceBadge = lookup.entry(forTeamKeys: match.redAllianceTeamKeys)
+            self.blueAllianceBadge = lookup.entry(forTeamKeys: match.blueAllianceTeamKeys)
+        } else {
+            self.redAllianceBadge = nil
+            self.blueAllianceBadge = nil
+        }
 
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]

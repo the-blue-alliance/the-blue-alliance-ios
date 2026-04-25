@@ -56,6 +56,13 @@ class MatchSummaryView: UIView {
 
     @IBOutlet weak var timeLabel: UILabel!
 
+    private var redAllianceLabel: UILabel!
+    private var blueAllianceLabel: UILabel!
+    private var redLeftVStack: UIStackView!
+    private var blueLeftVStack: UIStackView!
+    private var redScoreWidth: NSLayoutConstraint?
+    private var blueScoreWidth: NSLayoutConstraint?
+
     // MARK: - Init
 
     init(teamsTappable: Bool = false) {
@@ -81,7 +88,87 @@ class MatchSummaryView: UIView {
         summaryView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.addSubview(summaryView)
 
+        installAllianceLabels()
         styleInterface()
+    }
+
+    // Restructures each colored container into HStack[ VStack[ allianceLabel,
+    // teamHStack ], scoreView ] — replacing the xib's flat layout so the score
+    // can span the full container height while the alliance label sits over
+    // the team row.
+    private func installAllianceLabels() {
+        for (container, teamHStack, scoreView, isRed) in [
+            (redContainerView!, redStackView!, redScoreView!, true),
+            (blueContainerView!, blueStackView!, blueScoreView!, false),
+        ] {
+            container.constraints
+                .filter { $0.firstItem === teamHStack || $0.secondItem === teamHStack }
+                .forEach { $0.isActive = false }
+            teamHStack.removeFromSuperview()
+            scoreView.removeFromSuperview()
+
+            let allianceLabel = UILabel()
+            allianceLabel.font = .boldSystemFont(ofSize: 11)
+            allianceLabel.textColor = .label
+            allianceLabel.numberOfLines = 1
+            allianceLabel.lineBreakMode = .byTruncatingTail
+            allianceLabel.adjustsFontForContentSizeCategory = true
+            allianceLabel.isHidden = true
+
+            let leftVStack = UIStackView(arrangedSubviews: [allianceLabel, teamHStack])
+            leftVStack.axis = .vertical
+            leftVStack.alignment = .fill
+            leftVStack.distribution = .fill
+            leftVStack.spacing = 2
+            leftVStack.isLayoutMarginsRelativeArrangement = true
+            leftVStack.directionalLayoutMargins = .init(
+                top: 0,
+                leading: 8,
+                bottom: 0,
+                trailing: 0
+            )
+
+            let rootHStack = UIStackView(arrangedSubviews: [leftVStack, scoreView])
+            rootHStack.axis = .horizontal
+            rootHStack.alignment = .fill
+            rootHStack.distribution = .fill
+            rootHStack.translatesAutoresizingMaskIntoConstraints = false
+
+            container.addSubview(rootHStack)
+            NSLayoutConstraint.activate([
+                rootHStack.topAnchor.constraint(equalTo: container.topAnchor),
+                rootHStack.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+                rootHStack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+                rootHStack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            ])
+
+            if isRed {
+                redAllianceLabel = allianceLabel
+                redLeftVStack = leftVStack
+            } else {
+                blueAllianceLabel = allianceLabel
+                blueLeftVStack = leftVStack
+            }
+        }
+    }
+
+    // Anchors the score view's width to the first team column so columns stay
+    // equal regardless of whether the inline pill bumps the team stack from 3
+    // to 4 entries. Re-installed after every configureView since the
+    // arrangedSubviews array is rebuilt.
+    private func updateScoreColumnWidth(
+        scoreView: UIView,
+        teamStack: UIStackView,
+        existing: inout NSLayoutConstraint?
+    ) {
+        existing?.isActive = false
+        guard let firstColumn = teamStack.arrangedSubviews.first else {
+            existing = nil
+            return
+        }
+        let constraint = scoreView.widthAnchor.constraint(equalTo: firstColumn.widthAnchor)
+        constraint.isActive = true
+        existing = constraint
     }
 
     private func styleInterface() {
@@ -109,9 +196,6 @@ class MatchSummaryView: UIView {
     private func removeTeams() {
         for stackView in [redStackView, blueStackView] as [UIStackView] {
             for view in stackView.arrangedSubviews {
-                if [redScoreView, blueScoreView].contains(view) {
-                    continue
-                }
                 stackView.removeArrangedSubview(view)
                 view.removeFromSuperview()
             }
@@ -132,27 +216,55 @@ class MatchSummaryView: UIView {
             return
         }
 
-        matchNumberLabel.text = viewModel.matchName
-        playIconImageView.isHidden = viewModel.hasVideos
+        matchNumberLabel.text = stackedMatchName(viewModel.matchName)
+        playIconImageView.isHidden = !viewModel.hasVideos
 
         removeTeams()
         removeRPs()
 
         let baseTeamKeys = viewModel.baseTeamKeys
-        for (alliance, stackView) in [
-            (viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!),
-        ] {
+        let alliancePairs:
+            [(
+                alliance: [String], stackView: UIStackView, badge: AllianceLookup.Entry?,
+                topLabel: UILabel, leftVStack: UIStackView, side: AllianceBadgeView.Side
+            )] = [
+                (
+                    viewModel.redAlliance, redStackView!, viewModel.redAllianceBadge,
+                    redAllianceLabel, redLeftVStack, .red
+                ),
+                (
+                    viewModel.blueAlliance, blueStackView!, viewModel.blueAllianceBadge,
+                    blueAllianceLabel, blueLeftVStack, .blue
+                ),
+            ]
+        for (alliance, stackView, badge, topLabel, leftVStack, side) in alliancePairs {
+            applyAllianceIdentifier(
+                badge,
+                to: topLabel,
+                leftVStack: leftVStack,
+                stackView: stackView,
+                side: side
+            )
             for teamKey in alliance {
                 let dq = viewModel.dqs.contains(teamKey)
-                // if teams are tappable, load the team #s as buttons to link to the team page
                 let label =
                     teamsTappable
                     ? teamButton(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
                     : teamLabel(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
-                // Insert each new stack view at the index just before the score view
-                stackView.insertArrangedSubview(label, at: stackView.arrangedSubviews.count - 1)
+                stackView.addArrangedSubview(label)
             }
         }
+
+        updateScoreColumnWidth(
+            scoreView: redScoreView,
+            teamStack: redStackView,
+            existing: &redScoreWidth
+        )
+        updateScoreColumnWidth(
+            scoreView: blueScoreView,
+            teamStack: blueStackView,
+            existing: &blueScoreWidth
+        )
 
         // Add red RP to view
         addRPToView(stackView: redRPStackView, rpCount: viewModel.redRPCount)
@@ -183,6 +295,48 @@ class MatchSummaryView: UIView {
             blueContainerView.layer.borderWidth = 2.0
             blueScoreLabel.font = winnerFont
         }
+    }
+
+    // Wraps "Semis 1-1" → "Semis\n1-1" so wider playoff numbers don't shrink to
+    // fit. Single-digit numbers stay inline; they fit comfortably as one line.
+    private func stackedMatchName(_ name: String) -> String {
+        guard let spaceIndex = name.lastIndex(of: " ") else { return name }
+        let trailing = name[name.index(after: spaceIndex)...]
+        guard trailing.count >= 2 else { return name }
+        return name.replacingCharacters(in: spaceIndex...spaceIndex, with: "\n")
+    }
+
+    private func applyAllianceIdentifier(
+        _ entry: AllianceLookup.Entry?,
+        to label: UILabel,
+        leftVStack: UIStackView,
+        stackView: UIStackView,
+        side: AllianceBadgeView.Side
+    ) {
+        guard let entry else {
+            label.text = nil
+            label.isHidden = true
+            setAllianceLabelMargins(showing: false, on: leftVStack)
+            return
+        }
+
+        // EITHER the top-row label OR the inline pill carries the identity, never both.
+        if let name = entry.customName {
+            label.text = name.uppercased()
+            label.isHidden = false
+            setAllianceLabelMargins(showing: true, on: leftVStack)
+        } else {
+            label.text = nil
+            label.isHidden = true
+            setAllianceLabelMargins(showing: false, on: leftVStack)
+            let badge = AllianceBadgeView(number: entry.number, name: entry.name, side: side)
+            stackView.insertArrangedSubview(badge, at: 0)
+        }
+    }
+
+    private func setAllianceLabelMargins(showing: Bool, on stack: UIStackView) {
+        let v: CGFloat = showing ? 4 : 0
+        stack.directionalLayoutMargins = .init(top: v, leading: 8, bottom: v, trailing: 0)
     }
 
     private func addRPToView(stackView: UIStackView, rpCount: Int) {

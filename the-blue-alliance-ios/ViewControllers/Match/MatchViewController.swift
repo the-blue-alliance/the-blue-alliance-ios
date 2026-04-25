@@ -72,7 +72,7 @@ class MatchViewController: MyTBAContainerViewController {
             )
         }
 
-        let navTitle = state.match?.friendlyName ?? state.key
+        let navTitle = state.match?.friendlyName(playoffType: nil) ?? state.key
         super.init(
             viewControllers: [infoViewController, breakdownViewController],
             navigationTitle: navTitle,
@@ -114,11 +114,14 @@ class MatchViewController: MyTBAContainerViewController {
                 try? await self.dependencies.api.event(key: MatchKey.eventKey(from: self.state.key))
             }
 
-            if let match = await matchHandle.value {
+            let match = await matchHandle.value
+            let event = await eventHandle.value
+
+            if let match {
                 self.state = .match(match)
-                self.navigationTitle = match.friendlyName
+                self.navigationTitle = match.friendlyName(playoffType: event?.playoffTypeEnum)
             }
-            if let event = await eventHandle.value {
+            if let event {
                 self.navigationSubtitle = "@ \(event.friendlyNameWithYear)"
             }
         }

@@ -136,7 +136,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                         at: indexPath
                     )
                 case .match(let match, let baseTeamKey):
-                    return Self.cellForMatch(
+                    return self.cellForMatch(
                         match,
                         baseTeamKey: baseTeamKey,
                         in: tableView,
@@ -331,17 +331,26 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         return cell
     }
 
-    private static func cellForMatch(
+    private func cellForMatch(
         _ match: Match,
         baseTeamKey: String?,
         in tableView: UITableView,
         at indexPath: IndexPath
     ) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-        cell.viewModel = MatchViewModel(
-            match: match,
-            baseTeamKeys: baseTeamKey.map { [$0] } ?? []
-        )
+        let baseTeamKeys = baseTeamKey.map { [$0] } ?? []
+        if let event {
+            cell.viewModel = MatchViewModel(
+                match: match,
+                event: event,
+                baseTeamKeys: baseTeamKeys
+            )
+        } else {
+            cell.viewModel = MatchViewModel(
+                withoutEventContextFor: match,
+                baseTeamKeys: baseTeamKeys
+            )
+        }
         return cell
     }
 
@@ -404,9 +413,9 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                 )
             }
 
-            self.team = await teamHandle.value
-            self.event = await eventHandle.value
-            self.eventStatus = await statusHandle.value
+            if let team = await teamHandle.value { self.team = team }
+            if let event = await eventHandle.value { self.event = event }
+            if let status = await statusHandle.value { self.eventStatus = status }
 
             let nextHandle = Task { () -> Match? in
                 guard let key = self.eventStatus?.nextMatchKey else { return nil }
@@ -416,8 +425,17 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                 guard let key = self.eventStatus?.lastMatchKey else { return nil }
                 return try? await self.dependencies.api.match(key: key)
             }
-            self.nextMatch = await nextHandle.value
-            self.lastMatch = await lastHandle.value
+            // Split "status says no key" (clear) from "fetch errored" (preserve).
+            if self.eventStatus?.nextMatchKey == nil {
+                self.nextMatch = nil
+            } else if let match = await nextHandle.value {
+                self.nextMatch = match
+            }
+            if self.eventStatus?.lastMatchKey == nil {
+                self.lastMatch = nil
+            } else if let match = await lastHandle.value {
+                self.lastMatch = match
+            }
 
             self.rebuildSnapshot()
         }
