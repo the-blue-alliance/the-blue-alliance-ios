@@ -1,4 +1,5 @@
 import Foundation
+import TBAAPI
 import UIKit
 
 struct MatchBreakdownConfigurator2018: MatchBreakdownConfigurator {
@@ -8,7 +9,7 @@ struct MatchBreakdownConfigurator2018: MatchBreakdownConfigurator {
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
         _ blue: [String: Any]?,
-        _ compLevel: String?
+        _ compLevel: Components.Schemas.CompLevel?
     ) {
         var rows: [BreakdownRow?] = []
 
@@ -183,9 +184,7 @@ struct MatchBreakdownConfigurator2018: MatchBreakdownConfigurator {
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
         )
         // RP
-        if let compLevel, compLevel == "qm" {
-            rows.append(row(title: "Ranking Points", key: "rp", red: red, blue: blue))
-        }
+        rows.append(rankingPointsRow(key: "rp", compLevel: compLevel, red: red, blue: blue))
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })

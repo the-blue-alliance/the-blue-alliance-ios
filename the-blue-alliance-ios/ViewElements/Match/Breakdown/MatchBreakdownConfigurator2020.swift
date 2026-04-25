@@ -1,4 +1,5 @@
 import Foundation
+import TBAAPI
 import UIKit
 
 private class BreakdownStyle2020 {
@@ -14,7 +15,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
         _ blue: [String: Any]?,
-        _ compLevel: String?
+        _ compLevel: Components.Schemas.CompLevel?
     ) {
 
         var rows: [BreakdownRow?] = []
@@ -94,17 +95,15 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         )
 
         // RP
-        if let compLevel, compLevel == "qm" {
-            rows.append(
-                row(
-                    title: "Ranking Points",
-                    key: "rp",
-                    formatString: "+%@ RP",
-                    red: red,
-                    blue: blue
-                )
+        rows.append(
+            rankingPointsRow(
+                key: "rp",
+                formatString: "+%@ RP",
+                compLevel: compLevel,
+                red: red,
+                blue: blue
             )
-        }
+        )
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
@@ -352,7 +351,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         title: String,
         red: [String: Any]?,
         blue: [String: Any]?,
-        compLevel: String?
+        compLevel: Components.Schemas.CompLevel?
     )
         -> BreakdownRow?
     {
@@ -374,7 +373,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         let elements = [redActivation, blueActivation].map { (stage) -> String in
             if stage[0] == 1 {
-                if let compLevel, compLevel == "qm" {
+                if compLevel == .qm {
                     return "3 (+1 RP)"
                 }
                 return "3"
