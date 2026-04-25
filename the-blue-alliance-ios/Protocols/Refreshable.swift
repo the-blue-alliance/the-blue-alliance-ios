@@ -53,7 +53,7 @@ extension Refreshable {
     }
 
     func updateRefresh() {
-        OperationQueue.main.addOperation {
+        DispatchQueue.main.async {
             if self.isRefreshing {
                 self.hideNoData()
 

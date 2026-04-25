@@ -173,11 +173,6 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func matchSelected(matchKey: String) {
-        let viewController = MatchViewController(matchKey: matchKey, dependencies: dependencies)
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-
 }
 
 extension MyTBAViewController: MyTBAAuthenticationObservable {
