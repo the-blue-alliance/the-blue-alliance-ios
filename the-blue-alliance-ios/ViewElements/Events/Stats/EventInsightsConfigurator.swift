@@ -144,13 +144,6 @@ extension EventInsightsConfigurator {
     }
     private static func insightStat(_ dict: [String: Any]?, _ key: [String]) -> [String]? {
         guard let dict = dict else { return nil }
-        // Helper to fetch a value for a key at a given index safely
-        func value(for index: Int) -> Any? {
-            guard let k = key.safeItem(at: index) else { return nil }
-            guard !k.isEmpty else { return nil }
-            return dict[k]
-        }
-
         func format(_ index: Int) -> String {
             guard let k = key.safeItem(at: index), !k.isEmpty,
                 let raw = dict[k]
