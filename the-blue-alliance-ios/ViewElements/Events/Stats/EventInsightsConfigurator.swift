@@ -65,8 +65,8 @@ extension EventInsightsConfigurator {
         return InsightRow(
             title: title,
             value: .columns(
-                qual: bonusStat(qual, key) ?? [],
-                playoff: bonusStat(playoff, key) ?? []
+                qual: bonusStat(qual, key) ?? ["", "", ""],
+                playoff: bonusStat(playoff, key) ?? ["", "", ""]
             )
         )
     }
@@ -77,8 +77,22 @@ extension EventInsightsConfigurator {
         return InsightRow(
             title: title,
             value: .columns(
-                qual: (totalsStat(qual, key) ?? []).map { String(describing: $0) },
-                playoff: (totalsStat(playoff, key) ?? []).map { String(describing: $0) }
+                qual: (totalsStat(qual, key) ?? ["", "", ""]).map { String(describing: $0) },
+                playoff: (totalsStat(playoff, key) ?? ["", "", ""]).map { String(describing: $0) }
+            )
+        )
+    }
+    static func fourColumnRow(
+        title: String,
+        key: [String],
+        qual: [String: Any]?,
+        playoff: [String: Any]?
+    ) -> InsightRow {
+        return InsightRow(
+            title: title,
+            value: .columns(
+                qual: insightStat(qual, key) ?? ["", "", ""],
+                playoff: insightStat(playoff, key) ?? ["", "", ""]
             )
         )
     }
@@ -96,11 +110,11 @@ extension EventInsightsConfigurator {
             if bonusData.safeItem(at: 0) as? Int == 0 && bonusData.safeItem(at: 1) as? Int != nil {
                 return "0.00%"
             }
-            return "--"
+            return ""
         }()
         return [
-            ((bonusData.safeItem(at: 0) as? Int).map(String.init) ?? "--"),
-            ((bonusData.safeItem(at: 1) as? Int).map(String.init) ?? "--"), (quotient),
+            ((bonusData.safeItem(at: 0) as? Int).map(String.init) ?? ""),
+            ((bonusData.safeItem(at: 1) as? Int).map(String.init) ?? ""), (quotient),
         ]
     }
 
@@ -115,21 +129,43 @@ extension EventInsightsConfigurator {
             if let val = totalsData.safeItem(at: 1) as? Double {
                 return "\(String(format: "%.2f", val))"
             }
-            return "--"
+            return ""
         }()
         let teamAvg: String = {
             if let val = totalsData.safeItem(at: 2) as? Double {
                 return "\(String(format: "%.2f", val))"
             }
-            return "--"
+            return ""
         }()
         return [
-            (totalsData.safeItem(at: 0) as? Int).map(String.init) ?? "--", allianceAvg,
+            (totalsData.safeItem(at: 0) as? Int).map(String.init) ?? "", allianceAvg,
             teamAvg,
         ]
     }
+    private static func insightStat(_ dict: [String: Any]?, _ key: [String]) -> [String]? {
+        guard let dict = dict else { return nil }
+        func format(_ index: Int) -> String {
+            guard let k = key.safeItem(at: index), !k.isEmpty,
+                let raw = dict[k]
+            else { return "" }
+            if let number = raw as? Double {
+                return String(format: "%.2f", number)
+            }
+            if let number = raw as? NSNumber {
+                return String(format: "%.2f", number.doubleValue)
+            }
+            return String(describing: raw)
+        }
+
+        return (0..<3).map(format)
+    }
 
     static func filterEmptyInsights(_ rows: [InsightRow]) -> [InsightRow] {
+        func hasNonEmpty(_ arr: [String]) -> Bool {
+            return arr.contains {
+                !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            }
+        }
         return rows.filter {
             // Check title is not empty (ignoring leading/trailing whitespace)
             guard !$0.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
@@ -139,7 +175,7 @@ extension EventInsightsConfigurator {
             case .paired(let qual, let playoff):
                 return (qual?.isEmpty == false) || (playoff?.isEmpty == false)
             case .columns(let qual, let playoff):
-                return !qual.isEmpty || !playoff.isEmpty
+                return hasNonEmpty(qual) || hasNonEmpty(playoff)
             }
         }
     }

@@ -6,7 +6,8 @@ protocol MatchBreakdownConfigurator {
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
-        _ blue: [String: Any]?
+        _ blue: [String: Any]?,
+        _ compLevel: String?
     )
 }
 
@@ -94,7 +95,6 @@ extension MatchBreakdownConfigurator {
             }
             return String(describing: v)
         }
-
         return BreakdownRow(
             title: title,
             red: [String(format: formatString, arguments: redValues)],

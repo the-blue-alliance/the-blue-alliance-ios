@@ -1,21 +1,14 @@
 import Foundation
 import UIKit
 
-private class BreakdownStyle2026 {
-    public static let bottomImage = UIImage(systemName: "rectangle")
-    public static let outerImage = UIImage(systemName: "hexagon")
-    public static let innerImage = UIImage(systemName: "circle")
-    public static let trueImage = UIImage(systemName: "checkmark")
-    public static let falseImage = UIImage(systemName: "xmark")
-}
-
 struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
 
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
-        _ blue: [String: Any]?
+        _ blue: [String: Any]?,
+        _ compLevel: String?
     ) {
 
         var rows: [BreakdownRow?] = []
@@ -151,9 +144,17 @@ struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
         rows.append(
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
         )
-        rows.append(
-            row(title: "Ranking Points", key: "rp", formatString: "+%@ RP", red: red, blue: blue)
-        )
+        if let compLevel, compLevel == "qm" {
+            rows.append(
+                row(
+                    title: "Ranking Points",
+                    key: "rp",
+                    formatString: "+%@ RP",
+                    red: red,
+                    blue: blue
+                )
+            )
+        }
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })

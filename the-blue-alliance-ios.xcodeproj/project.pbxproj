@@ -22,6 +22,10 @@
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
+		5105636C2F97286300D7FB5D /* EventInsightsConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636B2F97286300D7FB5D /* EventInsightsConfigurator2025.swift */; };
+		5105636E2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636D2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift */; };
+		510563702F972D8100D7FB5D /* EventInsightsConfigurator2023.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636F2F972D8100D7FB5D /* EventInsightsConfigurator2023.swift */; };
+		44B383F030BB1DEDDAE2CAD3 /* Array+Only.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15203580D7DE0CA6C768C4E /* Array+Only.swift */; };
 		514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */; };
 		51718D8D2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
@@ -207,6 +211,9 @@
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
+		5105636B2F97286300D7FB5D /* EventInsightsConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2025.swift; sourceTree = "<group>"; };
+		5105636D2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2024.swift; sourceTree = "<group>"; };
+		5105636F2F972D8100D7FB5D /* EventInsightsConfigurator2023.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2023.swift; sourceTree = "<group>"; };
 		514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2026.swift; sourceTree = "<group>"; };
 		51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2026.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
@@ -463,6 +470,9 @@
 				9279737E23CFF3B100FF9B86 /* EventInsightsConfigurator2019.swift */,
 				92C079C623F99CA400AE2AFA /* EventInsightsConfigurator2020.swift */,
 				9263922927F10A53003C302A /* EventInsightsConfigurator2022.swift */,
+				5105636F2F972D8100D7FB5D /* EventInsightsConfigurator2023.swift */,
+				5105636D2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift */,
+				5105636B2F97286300D7FB5D /* EventInsightsConfigurator2025.swift */,
 				51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */,
 			);
 			path = Stats;
@@ -1242,6 +1252,7 @@
 				92FF10F821A61AC2003BC5C4 /* MatchesViewController.swift in Sources */,
 				92943B08222E1DF700EA35B2 /* SwitchTableViewCell.swift in Sources */,
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
+				5105636C2F97286300D7FB5D /* EventInsightsConfigurator2025.swift in Sources */,
 				92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */,
 				92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */,
 				D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */,
@@ -1281,9 +1292,11 @@
 				92FF111721A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift in Sources */,
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				9263922827F0FD71003C302A /* MatchBreakdownConfigurator2022.swift in Sources */,
+				510563702F972D8100D7FB5D /* EventInsightsConfigurator2023.swift in Sources */,
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
 				371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */,
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
+				5105636E2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift in Sources */,
 				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,

@@ -25,7 +25,7 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
         matchStats.append(
             scoreRow(
                 title: "Average Winning Score",
-                key: "average_win_score",
+                key: "average_winning_score",
                 qual: qual,
                 playoff: playoff
             )
@@ -38,10 +38,6 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
                 playoff: playoff
             )
         )
-        // Note - this is not helpful, since we already show "Average Match Score"
-        // If we can show breakdowns by Auto/Teleop/Overall like on web, we can add this back
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/744
-        // matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
 
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {
@@ -53,21 +49,25 @@ class EventInsightsConfigurator2026: EventInsightsConfigurator {
         var bonusStats: [InsightRow] = []
 
         bonusStats.append(
-            bonusRow(title: "Energized RP", key: "energized_rp_count", qual: qual, playoff: nil)
+            bonusRow(title: "Energized RP", key: "energized_rp_count", qual: qual, playoff: playoff)
         )
         bonusStats.append(
             bonusRow(
                 title: "Supercharged RP",
                 key: "supercharged_rp_count",
                 qual: qual,
-                playoff: nil
+                playoff: playoff
             )
         )
         bonusStats.append(
-            bonusRow(title: "Traversal RP", key: "traversal_rp_count", qual: qual, playoff: nil)
+            bonusRow(title: "Traversal RP", key: "traversal_rp_count", qual: qual, playoff: playoff)
         )
-        bonusStats.append(bonusRow(title: "6 RP", key: "six_rp_count", qual: qual, playoff: nil))
-        bonusStats.append(bonusRow(title: "9 RP", key: "nine_rp_count", qual: qual, playoff: nil))
+        bonusStats.append(
+            bonusRow(title: "6 RP", key: "six_rp_count", qual: qual, playoff: playoff)
+        )
+        bonusStats.append(
+            bonusRow(title: "9 RP", key: "nine_rp_count", qual: qual, playoff: playoff)
+        )
         bonusStats.append(
             bonusRow(
                 title: "Auto Win Conversion",

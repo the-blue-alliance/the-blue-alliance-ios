@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class EventInsightsConfigurator2019: EventInsightsConfigurator {
+class EventInsightsConfigurator2023: EventInsightsConfigurator {
 
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String, InsightRow>,
@@ -44,37 +44,47 @@ class EventInsightsConfigurator2019: EventInsightsConfigurator {
             snapshot.appendSections(["Match Stats"])
             snapshot.appendItems(matchStats, toSection: "Match Stats")
         }
-
         var fourColumnMatchStats: [InsightRow] = []
 
         fourColumnMatchStats.append(
             fourColumnRow(
-                title: "Average Sandstorm Bonus Points",
-                key: ["average_sandstorm_bonus_auto", "", ""],
+                title: "Average Mobility Points",
+                key: ["average_mobility_points", "", ""],
                 qual: qual,
                 playoff: playoff
             )
         )
         fourColumnMatchStats.append(
             fourColumnRow(
-                title: "Average Hatch Panel Points",
-                key: ["", "", "average_hatch_panel_points"],
+                title: "Average Game Piece Points",
+                key: ["average_piece_points_auto", "average_piece_points_teleop", ""],
                 qual: qual,
                 playoff: playoff
             )
         )
         fourColumnMatchStats.append(
             fourColumnRow(
-                title: "Average Cargo Points",
-                key: ["", "", "average_cargo_points"],
+                title: "Average Park Points",
+                key: ["", "average_park_points", ""],
                 qual: qual,
                 playoff: playoff
             )
         )
         fourColumnMatchStats.append(
             fourColumnRow(
-                title: "Average HAB Climb Points",
-                key: ["", "average_hab_climb_teleop", ""],
+                title: "Average Charge Station Points",
+                key: [
+                    "average_charge_station_points_auto", "average_charge_station_points_teleop",
+                    "",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Link Points",
+                key: ["", "", "average_link_points"],
                 qual: qual,
                 playoff: playoff
             )
@@ -97,10 +107,10 @@ class EventInsightsConfigurator2019: EventInsightsConfigurator {
         )
         fourColumnMatchStats = filterEmptyInsights(fourColumnMatchStats)
         if !fourColumnMatchStats.isEmpty {
-            snapshot.appendSections(["Match Stats (Sandstorm / Teleop / Overall)"])
+            snapshot.appendSections(["Match Stats (Auto / Teleop / Overall)"])
             snapshot.appendItems(
                 fourColumnMatchStats,
-                toSection: "Match Stats (Sandstorm / Teleop / Overall)"
+                toSection: "Match Stats (Auto / Teleop / Overall)"
             )
         }
 
@@ -108,80 +118,41 @@ class EventInsightsConfigurator2019: EventInsightsConfigurator {
         var bonusStats: [InsightRow] = []
 
         bonusStats.append(
+            bonusRow(title: "Mobility", key: "mobility_count", qual: qual, playoff: playoff)
+        )
+        bonusStats.append(
+            bonusRow(title: "Auto Docked", key: "auto_docked_count", qual: qual, playoff: playoff)
+        )
+        bonusStats.append(
+            bonusRow(title: "Auto Engaged", key: "auto_engaged_count", qual: qual, playoff: playoff)
+        )
+        bonusStats.append(
             bonusRow(
-                title: "Cross HAB Line",
-                key: "cross_hab_line_count",
+                title: "Coopertition Criteria Met",
+                key: "coopertition",
                 qual: qual,
                 playoff: playoff
             )
         )
         bonusStats.append(
             bonusRow(
-                title: "Cross HAB Line in Sandstorm",
-                key: "cross_hab_line_sandstorm_count",
+                title: "Sustainability Bonus RP",
+                key: "sustainability_bonus_rp",
                 qual: qual,
                 playoff: playoff
             )
         )
         bonusStats.append(
             bonusRow(
-                title: "Complete 1 Rocket",
-                key: "complete_1_rocket_count",
+                title: "Activation Bonus RP",
+                key: "activation_bonus_rp",
                 qual: qual,
                 playoff: playoff
             )
         )
         bonusStats.append(
             bonusRow(
-                title: "Complete 2 Rockets",
-                key: "complete_2_rockets_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        bonusStats.append(
-            bonusRow(
-                title: "Complete Rocket RP",
-                key: "rocket_rp_achieved",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        bonusStats.append(
-            bonusRow(
-                title: "Level 1 HAB Climb",
-                key: "level1_climb_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        bonusStats.append(
-            bonusRow(
-                title: "Level 2 HAB Climb",
-                key: "level2_climb_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        bonusStats.append(
-            bonusRow(
-                title: "Level 3 HAB Climb",
-                key: "level3_climb_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        bonusStats.append(
-            bonusRow(
-                title: "HAB Docking RP",
-                key: "climb_rp_achieved",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        bonusStats.append(
-            bonusRow(
-                title: "\"Unicorn Matches\" (Win + Complete Rocket + HAB Docking)",
+                title: "\"Unicorn Matches\" (Win + Sustainability + Activation)",
                 key: "unicorn_matches",
                 qual: qual,
                 playoff: playoff
@@ -190,12 +161,11 @@ class EventInsightsConfigurator2019: EventInsightsConfigurator {
 
         bonusStats = filterEmptyInsights(bonusStats)
         if !bonusStats.isEmpty {
-            snapshot.appendSections(["Bonus Stats (# successful / # opportunities)"])
+            snapshot.appendSections(["Bonus Stats (Count / Opportunities / Success)"])
             snapshot.appendItems(
                 bonusStats,
-                toSection: "Bonus Stats (# successful / # opportunities)"
+                toSection: "Bonus Stats (Count / Opportunities / Success)"
             )
         }
     }
-
 }

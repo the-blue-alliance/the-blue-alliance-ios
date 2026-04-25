@@ -85,7 +85,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
             }
         }
 
-        configureDataSource(state.match?.breakdownDict)
+        configureDataSource(state.match?.breakdownDict, state.match?.compLevel.rawValue)
     }
 
     // MARK: - Methods
@@ -105,15 +105,16 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         dataSource.statefulDelegate = self
     }
 
-    func configureDataSource(_ breakdown: [String: Any]?) {
+    func configureDataSource(_ breakdown: [String: Any]?, _ compLevel: String?) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
 
         let red = breakdown?["red"] as? [String: Any]
         let blue = breakdown?["blue"] as? [String: Any]
+        let compLevel = compLevel
 
         if let breakdownConfigurator = breakdownConfigurator {
-            breakdownConfigurator.configureDataSource(&snapshot, breakdown, red, blue)
+            breakdownConfigurator.configureDataSource(&snapshot, breakdown, red, blue, compLevel)
         }
 
         dataSource.applySnapshotUsingReloadData(snapshot)
@@ -128,7 +129,10 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         runRefresh { [weak self] in
             guard let self else { return }
             self.state = .match(try await self.dependencies.api.match(key: self.state.key))
-            self.configureDataSource(self.state.match?.breakdownDict)
+            self.configureDataSource(
+                self.state.match?.breakdownDict,
+                self.state.match?.compLevel.rawValue
+            )
         }
     }
 

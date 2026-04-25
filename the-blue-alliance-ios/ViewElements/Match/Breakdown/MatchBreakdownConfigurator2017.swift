@@ -7,7 +7,8 @@ struct MatchBreakdownConfigurator2017: MatchBreakdownConfigurator {
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
-        _ blue: [String: Any]?
+        _ blue: [String: Any]?,
+        _ compLevel: String?
     ) {
         var rows: [BreakdownRow?] = []
 
@@ -158,7 +159,9 @@ struct MatchBreakdownConfigurator2017: MatchBreakdownConfigurator {
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
         )
         // RP
-        rows.append(row(title: "Ranking Points", key: "tba_rpEarned", red: red, blue: blue))
+        if let compLevel, compLevel == "qm" {
+            rows.append(row(title: "Ranking Points", key: "tba_rpEarned", red: red, blue: blue))
+        }
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })

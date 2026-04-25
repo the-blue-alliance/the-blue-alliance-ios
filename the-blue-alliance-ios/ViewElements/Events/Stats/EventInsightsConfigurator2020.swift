@@ -38,79 +38,107 @@ class EventInsightsConfigurator2020: EventInsightsConfigurator {
                 playoff: playoff
             )
         )
-        matchStats.append(
-            scoreRow(
-                title: "Average Initiation Line Points",
-                key: "average_init_line_points_auto",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cell Count (Bottom)",
-                key: "average_cell_count_bottom",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cell Count (Outer)",
-                key: "average_cell_count_outer",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cell Count (Inner)",
-                key: "average_cell_count_inner",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cell Count",
-                key: "average_cell_count",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Cell Points",
-                key: "average_cell_score",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Control Panel Points",
-                key: "average_control_panel_points",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        matchStats.append(
-            scoreRow(
-                title: "Average Foul Points",
-                key: "average_foul_score",
-                qual: qual,
-                playoff: playoff
-            )
-        )
-        // Note - this is not helpful, since we already show "Average Match Score"
-        // If we can show breakdowns by Auto/Teleop/Overall like on web, we can add this back
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/744
-        // matchStats.append(scoreRow(title: "Average Score", key: "average_score", qual: qual, playoff: playoff))
-
         matchStats = filterEmptyInsights(matchStats)
         if !matchStats.isEmpty {
             snapshot.appendSections(["Match Stats"])
             snapshot.appendItems(matchStats, toSection: "Match Stats")
+        }
+
+        var fourColumnMatchStats: [InsightRow] = []
+
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Initiation Line Points",
+                key: ["average_init_line_points_auto", "", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cell Count (Bottom)",
+                key: [
+                    "average_cell_count_bottom_auto", "average_cell_count_bottom_teleop",
+                    "average_cell_count_bottom",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cell Count (Outer)",
+                key: [
+                    "average_cell_count_outer_auto", "average_cell_count_outer_teleop",
+                    "average_cell_count_outer",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cell Count (Inner)",
+                key: [
+                    "average_cell_count_inner_auto", "average_cell_count_inner_teleop",
+                    "average_cell_count_inner",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cell Count",
+                key: [
+                    "average_cell_count_auto", "average_cell_count_teleop", "average_cell_count",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Cell Points",
+                key: [
+                    "average_cell_points_auto", "average_cell_points_teleop", "average_cell_score",
+                ],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Control Panel Points",
+                key: ["", "average_control_panel_points", ""],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Foul Points",
+                key: ["", "", "average_foul_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+        fourColumnMatchStats.append(
+            fourColumnRow(
+                title: "Average Score",
+                key: ["average_points_auto", "average_points_teleop", "average_score"],
+                qual: qual,
+                playoff: playoff
+            )
+        )
+
+        fourColumnMatchStats = filterEmptyInsights(fourColumnMatchStats)
+        if !fourColumnMatchStats.isEmpty {
+            snapshot.appendSections(["Match Stats (Auto / Teleop / Overall)"])
+            snapshot.appendItems(
+                fourColumnMatchStats,
+                toSection: "Match Stats (Auto / Teleop / Overall)"
+            )
         }
 
         // Bonus Stats

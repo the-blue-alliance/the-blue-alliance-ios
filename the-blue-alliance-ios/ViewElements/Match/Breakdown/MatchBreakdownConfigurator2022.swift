@@ -18,7 +18,8 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
-        _ blue: [String: Any]?
+        _ blue: [String: Any]?,
+        _ compLevel: String?
     ) {
 
         var rows: [BreakdownRow?] = []
@@ -80,9 +81,17 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
         )
 
         // RP
-        rows.append(
-            row(title: "Ranking Points", key: "rp", formatString: "+%@ RP", red: red, blue: blue)
-        )
+        if let compLevel, compLevel == "qm" {
+            rows.append(
+                row(
+                    title: "Ranking Points",
+                    key: "rp",
+                    formatString: "+%@ RP",
+                    red: red,
+                    blue: blue
+                )
+            )
+        }
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
