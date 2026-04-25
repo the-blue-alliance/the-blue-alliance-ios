@@ -15,29 +15,29 @@ public protocol TBAAPIProtocol {
     // Teams
     func allTeams() async throws -> [Team]
     func allTeamsSimple() async throws -> [TeamSimple]
-    func team(key teamKey: String) async throws -> Team
-    func teamYearsParticipated(key teamKey: String) async throws -> [Int]
-    func teamEventsByYear(key teamKey: String, year: Int) async throws -> [Event]
-    func teamEventMatches(teamKey: String, eventKey: String) async throws -> [Match]
-    func teamEventAwards(teamKey: String, eventKey: String) async throws -> [Award]
-    func teamEventStatus(teamKey: String, eventKey: String) async throws -> TeamEventStatus
-    func teamMediaByYear(teamKey: String, year: Int) async throws -> [Media]
+    func team(key teamKey: TeamKey) async throws -> Team
+    func teamYearsParticipated(key teamKey: TeamKey) async throws -> [Int]
+    func teamEventsByYear(key teamKey: TeamKey, year: Int) async throws -> [Event]
+    func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match]
+    func teamEventAwards(teamKey: TeamKey, eventKey: EventKey) async throws -> [Award]
+    func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus
+    func teamMediaByYear(teamKey: TeamKey, year: Int) async throws -> [Media]
 
-    func eventTeamsStatuses(key eventKey: String) async throws -> [String: TeamEventStatus]
+    func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus]
 
     // Events
     func eventsByYear(_ year: Int) async throws -> [Event]
-    func event(key eventKey: String) async throws -> Event
-    func eventTeams(key eventKey: String) async throws -> [Team]
-    func eventTeamsSimple(key eventKey: String) async throws -> [TeamSimple]
-    func eventRankings(key eventKey: String) async throws -> EventRanking
-    func eventAlliances(key eventKey: String) async throws -> [EliminationAlliance]?
-    func eventAwards(key eventKey: String) async throws -> [Award]
-    func eventDistrictPoints(key eventKey: String) async throws -> EventDistrictPoints
-    func eventInsights(key eventKey: String) async throws -> EventInsights
-    func eventMatches(key eventKey: String) async throws -> [Match]
+    func event(key eventKey: EventKey) async throws -> Event
+    func eventTeams(key eventKey: EventKey) async throws -> [Team]
+    func eventTeamsSimple(key eventKey: EventKey) async throws -> [TeamSimple]
+    func eventRankings(key eventKey: EventKey) async throws -> EventRanking
+    func eventAlliances(key eventKey: EventKey) async throws -> [EliminationAlliance]?
+    func eventAwards(key eventKey: EventKey) async throws -> [Award]
+    func eventDistrictPoints(key eventKey: EventKey) async throws -> EventDistrictPoints
+    func eventInsights(key eventKey: EventKey) async throws -> EventInsights
+    func eventMatches(key eventKey: EventKey) async throws -> [Match]
     func match(key matchKey: String) async throws -> Match
-    func eventOPRs(key eventKey: String) async throws -> EventOPRs
+    func eventOPRs(key eventKey: EventKey) async throws -> EventOPRs
 
     // Districts
     func districtsByYear(_ year: Int) async throws -> [District]

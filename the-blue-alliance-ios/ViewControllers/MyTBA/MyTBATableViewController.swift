@@ -17,8 +17,11 @@ public enum MyTBASection: Int {
 }
 
 protocol MyTBATableViewControllerDelegate: AnyObject {
-    func eventSelected(eventKey: String)
-    func teamSelected(teamKey: String)
+    func eventSelected(_ event: Event)
+    func teamSelected(_ team: Team)
+    // Fallbacks for the placeholder/failure path where we only have a key.
+    func eventSelected(eventKey: EventKey)
+    func teamSelected(teamKey: TeamKey)
 }
 
 enum MyTBAItem: Hashable {
@@ -158,10 +161,8 @@ class MyTBATableViewController: UIViewController, NotificationObservable,
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-            tableView.contentInsetAdjustmentBehavior = .never
-        }
+        tableView.sectionHeaderTopPadding = 0
+        tableView.contentInsetAdjustmentBehavior = .never
 
         let stack = UIStackView(arrangedSubviews: [failureBannerContainer, tableView])
         stack.axis = .vertical
@@ -304,8 +305,8 @@ class MyTBATableViewController: UIViewController, NotificationObservable,
                 else {
                     return lhs.modelKey < rhs.modelKey
                 }
-                let lYear = Int(l.key.prefix(4)) ?? 0
-                let rYear = Int(r.key.prefix(4)) ?? 0
+                let lYear = l.key.year ?? 0
+                let rYear = r.key.year ?? 0
                 if lYear != rYear { return lYear > rYear }
                 return Event.sectionAscending(l, r)
             }
@@ -455,9 +456,15 @@ extension MyTBATableViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-        switch item {
-        case .event(let key): delegate?.eventSelected(eventKey: key)
-        case .team(let key): delegate?.teamSelected(teamKey: key)
+        switch (item, loadedModels[item]) {
+        case (.event, .event(let event)):
+            delegate?.eventSelected(event)
+        case (.team, .team(let team)):
+            delegate?.teamSelected(team)
+        case (.event(let key), _):
+            delegate?.eventSelected(eventKey: key)
+        case (.team(let key), _):
+            delegate?.teamSelected(teamKey: key)
         }
     }
 

@@ -40,7 +40,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
+    convenience init(eventKey: EventKey, name: String? = nil, dependencies: Dependencies) {
         self.init(state: .key(eventKey), eventName: name, dependencies: dependencies)
     }
 
@@ -170,8 +170,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         if let event = state.event {
             cell.viewModel = InfoCellViewModel(event: event)
         } else if let eventName, !eventName.isEmpty {
-            let year = String(state.key.prefix(4))
-            let name = year.allSatisfy(\.isNumber) ? "\(year) \(eventName)" : eventName
+            let name = state.key.year.map { "\($0) \(eventName)" } ?? eventName
             cell.viewModel = InfoCellViewModel(nameString: name, subtitleStrings: [])
         } else {
             cell.viewModel = InfoCellViewModel(nameString: state.key, subtitleStrings: [])

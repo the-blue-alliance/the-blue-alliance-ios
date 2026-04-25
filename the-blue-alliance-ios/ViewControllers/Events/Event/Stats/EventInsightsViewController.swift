@@ -15,13 +15,13 @@ struct InsightRow: Hashable {
 
 class EventInsightsViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let eventKey: String
+    private let eventKey: EventKey
     private let year: Int
     private let eventStatsConfigurator: EventInsightsConfigurator.Type?
 
     private var dataSource: TableViewDataSource<String, InsightRow>!
 
-    init(eventKey: String, year: Int, dependencies: Dependencies) {
+    init(eventKey: EventKey, year: Int, dependencies: Dependencies) {
         self.eventKey = eventKey
         self.year = year
 

@@ -34,7 +34,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
     weak var delegate: TeamSummaryViewControllerDelegate?
 
     private let teamKey: String
-    private let eventKey: String
+    private let eventKey: EventKey
 
     private var team: Team?
     private var event: Event?
@@ -44,7 +44,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     private var dataSource: TableViewDataSource<TeamSummarySection, TeamSummaryItem>!
 
-    init(teamKey: String, eventKey: String, dependencies: Dependencies) {
+    init(teamKey: String, eventKey: EventKey, dependencies: Dependencies) {
         self.teamKey = teamKey
         self.eventKey = eventKey
 

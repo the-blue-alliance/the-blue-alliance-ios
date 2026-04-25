@@ -30,7 +30,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
 
     weak var delegate: EventTeamStatsSelectionDelegate?
 
-    private let eventKey: String
+    private let eventKey: EventKey
 
     private var dataSource: TableViewDataSource<String, TeamStatRow>!
     private var rows: [TeamStatRow] = []
@@ -57,7 +57,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
 
     // MARK: - Init
 
-    init(eventKey: String, dependencies: Dependencies) {
+    init(eventKey: EventKey, dependencies: Dependencies) {
         self.eventKey = eventKey
 
         super.init(dependencies: dependencies)

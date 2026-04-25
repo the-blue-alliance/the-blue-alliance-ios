@@ -3,13 +3,13 @@ import TBAAPI
 
 class EventTeamsViewController: TeamsListViewController<Team> {
 
-    let eventKey: String
+    let eventKey: EventKey
 
     private var pitLocations: [String: String] = [:]
 
     // MARK: Init
 
-    init(eventKey: String, dependencies: Dependencies) {
+    init(eventKey: EventKey, dependencies: Dependencies) {
         self.eventKey = eventKey
 
         super.init(showSearch: false, dependencies: dependencies)

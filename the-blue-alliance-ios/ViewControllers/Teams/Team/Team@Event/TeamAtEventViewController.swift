@@ -7,7 +7,7 @@ import UIKit
 class TeamAtEventViewController: ContainerViewController {
 
     let teamKey: String
-    let eventKey: String
+    let eventKey: EventKey
 
     var matchesViewController: MatchesViewController
 
@@ -18,7 +18,7 @@ class TeamAtEventViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(teamKey: TeamKey, eventKey: String, year: Int, dependencies: Dependencies) {
+    init(teamKey: TeamKey, eventKey: EventKey, year: Int, dependencies: Dependencies) {
         // B teams (e.g. "frc5940B") alias their parent team — there's no
         // /team/<N>B page, so route every caller to the canonical key.
         let teamKey = teamKey.parentKey
@@ -124,7 +124,7 @@ class TeamAtEventViewController: ContainerViewController {
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
-    private func pushTeamAtEvent(teamKey: String, eventKey: String, year: Int) {
+    private func pushTeamAtEvent(teamKey: String, eventKey: EventKey, year: Int) {
         let vc = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: eventKey,
@@ -179,7 +179,7 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
         if self.teamKey == teamKey {
             return
         }
-        guard let year = Int(eventKey.prefix(4)) else { return }
+        guard let year = eventKey.year else { return }
         pushTeamAtEvent(teamKey: teamKey, eventKey: eventKey, year: year)
     }
 

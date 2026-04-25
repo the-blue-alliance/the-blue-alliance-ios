@@ -25,7 +25,7 @@ enum SearchSection: String {
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
-    func eventSelected(eventKey: String, name: String?)
+    func eventSelected(eventKey: EventKey, name: String?)
     func teamSelected(teamKey: String, nickname: String?)
 }
 
@@ -144,8 +144,8 @@ class SearchViewController: TBATableViewController {
             let events = index.events
                 .filter { matches(event: $0, query: query) }
                 .sorted { lhs, rhs in
-                    let lYear = Int(lhs.key.prefix(4)) ?? 0
-                    let rYear = Int(rhs.key.prefix(4)) ?? 0
+                    let lYear = lhs.key.year ?? 0
+                    let rYear = rhs.key.year ?? 0
                     if lYear != rYear { return lYear > rYear }
                     return lhs.name < rhs.name
                 }
@@ -172,9 +172,10 @@ class SearchViewController: TBATableViewController {
 
     // Single source of truth for event row text so the search matcher operates on what the user sees —
     // event names from the API don't include the year, so without this typing "2026 michigan" wouldn't hit.
-    private static func eventDisplayName(key: String, name: String) -> String {
+    private static func eventDisplayName(key: EventKey, name: String) -> String {
         guard !name.isEmpty else { return key }
-        return "\(key.prefix(4)) \(name)"
+        guard let year = key.year else { return name }
+        return "\(year) \(name)"
     }
 
     // MARK: - Table View Delegate
