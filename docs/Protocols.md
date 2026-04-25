@@ -1,2 +1,0 @@
-# Protocols
-When possible, objects are made up of composable functionality via [protocols](https://docs.swift.org/swift-book/LanguageGuide/Protocols.html). In The Blue Alliance, there are a handful of protocols used by data models and view controllers to to create extendable base classes, or easily adoptable functionality between objects/views.

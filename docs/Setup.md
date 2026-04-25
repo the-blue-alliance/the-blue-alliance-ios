@@ -3,17 +3,30 @@ To develop for The Blue Alliance for iOS, you will need a machine running macOS.
 ## Install Build Tool Dependencies
 The commands below suggest [Homebrew](https://brew.sh/) to install the dependencies.
 
-1. Install [Xcode](https://developer.apple.com/xcode/)
-	* The Blue Alliance for iOS is written in Swift 5.5/Xcode 13.2.1
-2. Install the Xcode command line tools
-	* `xcode-select --install`
-	* Or, open Xcode, go to Preferences -> Locations -> Command Line Tools, and select your version of Xcode
-3. Install [Ruby 2.7.3](https://www.ruby-lang.org/en/downloads/) (if it's not already installed on your system) and [Bundler](https://bundler.io/)
-	* `brew install ruby@2.7`
-	* `gem install bundler`
+1. Install [Xcode](https://developer.apple.com/xcode/) from the Mac App Store.
+   - The version pinned in CI is in [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) (currently **26.3**). Anything `>=` that should build cleanly.
+2. Install the Xcode command line tools.
+   - `xcode-select --install`
+   - Or, open Xcode → Settings → Locations → Command Line Tools and select your version of Xcode.
+3. Install Ruby. The version pinned for the project is in [`.ruby-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.ruby-version) (currently **3.2.2**). Pick whichever option fits your setup:
+   - **rvm (recommended for project work)** — installs the exact pinned version automatically when you `cd` into the repo:
+     ```
+     \curl -sSL https://get.rvm.io | bash -s stable
+     source ~/.rvm/scripts/rvm
+     # from inside the repo:
+     rvm install "$(cat .ruby-version)"
+     rvm use "$(cat .ruby-version)"
+     ```
+   - **Homebrew (simpler, but installs system-wide)**:
+     ```
+     brew install ruby@3.2
+     ```
+     Make sure `ruby --version` reports `3.2.x` after this — you may need to add the Homebrew Ruby to your `PATH` (`brew info ruby@3.2` prints the snippet).
+4. Install [Bundler](https://bundler.io/):
+   - `gem install bundler`
 
 ## Install Project Dependencies
-These should be done after you've cloned the project and navigated to the project directory
+These should be done after you've cloned the project and navigated to the project directory.
 
 ```
 $ bundle install
@@ -42,15 +55,17 @@ If linked properly, the `Secrets.plist` file in the Xcode project navigation sho
 
 Building in Xcode
 ---
-1. Be sure you have all required build tools, as described in the [Install Build Tool Dependencies](#install-build-tool-dependencies) section
-2. Install project dependencies, as described in the [Install Project Dependencies](#install-project-dependencies) section
-3. Setup your `Secrets.plist` file, as described in the [Setup Secrets](#setup-secrets) section
-4. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
-5. Build and run The Blue Alliance for iOS!
+1. Be sure you have all required build tools, as described in the [Install Build Tool Dependencies](#install-build-tool-dependencies) section.
+2. Install project dependencies, as described in the [Install Project Dependencies](#install-project-dependencies) section.
+3. Setup your `Secrets.plist` file, as described in the [Setup Secrets](#setup-secrets) section.
+4. Open the workspace file (`the-blue-alliance-ios.xcworkspace`).
+5. Build and run The Blue Alliance for iOS.
+
+> **Pick a Simulator as the run destination.** In the Xcode toolbar, set the destination to one of the iOS Simulators (e.g. _iPhone 16 Pro_). Building against an attached physical device requires provisioning, a paid Apple Developer account, and a unique bundle identifier — none of which are necessary for day-to-day development. If you _do_ know what you're doing and want to run on hardware, change the bundle identifier to something namespaced to you (e.g. `com.the-blue-alliance.tba.<your-name>`) so it doesn't collide with the production build, and use your own signing team.
 
 Updating Your Environment
 ---
-If you have a local copy of the repo but haven't work on it in a while, updating to the latest codebase is fairly straightforward
+If you have a local copy of the repo but haven't worked on it in a while, updating to the latest codebase is fairly straightforward
 
 ```
 $ git pull

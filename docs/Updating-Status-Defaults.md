@@ -1,5 +1,0 @@
-The Blue Alliance API offers a [`/status`](https://www.thebluealliance.com/apidocs/v3#operations-TBA-getStatus) endpoint, which returns a [`Status`](https://www.thebluealliance.com/apidocs/v3#model-API_Status) object with various bits of data we use for configuration inside of the app, such as `max_season` and `current_season`. Internally, this is represented as a [`Status`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/ios13/Frameworks/TBAData/Sources/Status/Status.swift) object, which is updated on app-launch, and periodically afterwards.
-
-Upon initial launch of the app, the `Status` object is loaded from locally-shipped [`StatusDefaults.plist`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/ios13/the-blue-alliance-ios/StatusDefaults.plist) file to allow users who do a first launch of the app offline to use the application. This plist should be updated every year with new values to reflect the year changing. To modify this file, open the `StatusDefaults.plist` in Xcode and modify the `max_season` and `current_season` values to reflect the new year.
-
-![](https://zachorr.com/tba/status-defaults-plist.png)
