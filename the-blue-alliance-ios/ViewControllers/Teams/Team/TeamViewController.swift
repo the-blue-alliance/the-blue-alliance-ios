@@ -67,7 +67,7 @@ class TeamViewController: HeaderContainerViewController {
     private init(state: TeamState, partialNickname: String?, dependencies: Dependencies) {
         self.state = state
 
-        let teamNumber = state.team?.teamNumber ?? Int(state.key.trimFRCPrefix) ?? 0
+        let teamNumber = state.team?.teamNumber ?? state.key.teamNumber ?? 0
         let nickname: String? = {
             if let team = state.team, !team.nickname.isEmpty { return team.nickname }
             return partialNickname

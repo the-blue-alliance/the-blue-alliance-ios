@@ -14,6 +14,16 @@ struct APITeamHelpersTests {
         #expect(("frc2337b" as TeamKey).trimFRCPrefix == "2337b")
     }
 
+    // MARK: - TeamKey.teamNumber
+
+    @Test func teamNumber_parsesDigits() {
+        #expect(("frc254" as TeamKey).teamNumber == 254)
+    }
+
+    @Test func teamNumber_nilForBTeamSuffix() {
+        #expect(("frc5940B" as TeamKey).teamNumber == nil)
+    }
+
     // MARK: - TeamKey.parentKey
 
     @Test func parentKey_canonicalKeyUnchanged() {

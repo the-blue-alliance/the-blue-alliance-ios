@@ -129,8 +129,8 @@ class SearchViewController: TBATableViewController {
             let teams = index.teams
                 .filter { matches(team: $0, query: query) }
                 .sorted { lhs, rhs in
-                    let l = Int(lhs.key.trimFRCPrefix) ?? .max
-                    let r = Int(rhs.key.trimFRCPrefix) ?? .max
+                    let l = lhs.key.teamNumber ?? .max
+                    let r = rhs.key.teamNumber ?? .max
                     return l < r
                 }
                 .map { SearchItem.team(key: $0.key, nickname: $0.nickname) }

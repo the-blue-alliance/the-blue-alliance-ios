@@ -182,14 +182,8 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
             }
         case .team:
             return items.sorted { lhs, rhs in
-                let l =
-                    teamsCache[lhs.modelKey].map { $0.teamNumber } ?? Int(
-                        lhs.modelKey.trimFRCPrefix
-                    ) ?? 0
-                let r =
-                    teamsCache[rhs.modelKey].map { $0.teamNumber } ?? Int(
-                        rhs.modelKey.trimFRCPrefix
-                    ) ?? 0
+                let l = teamsCache[lhs.modelKey]?.teamNumber ?? lhs.modelKey.teamNumber ?? 0
+                let r = teamsCache[rhs.modelKey]?.teamNumber ?? rhs.modelKey.teamNumber ?? 0
                 return l < r
             }
         case .match:

@@ -47,6 +47,10 @@ extension TeamKey {
         String(dropFirst(3))
     }
 
+    public var teamNumber: Int? {
+        Int(trimFRCPrefix)
+    }
+
     // B teams (e.g. "frc5940B") aren't independent entities in TBA — they
     // alias the parent team. Walk from the end and drop non-digits to
     // recover the canonical key.
