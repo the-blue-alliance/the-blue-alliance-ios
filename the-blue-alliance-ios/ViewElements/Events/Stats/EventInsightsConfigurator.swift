@@ -152,7 +152,7 @@ extension EventInsightsConfigurator {
         }
 
         func format(_ index: Int) -> String {
-            guard let k = key.safeItem(at: index), k.isEmpty,
+            guard let k = key.safeItem(at: index), !k.isEmpty,
                 let raw = dict[k]
             else { return "" }
             if let number = raw as? Double {
