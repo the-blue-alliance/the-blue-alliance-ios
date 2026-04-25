@@ -42,20 +42,15 @@ extension Team: TeamDisplayable {
     }
 }
 
-// A TBA team key — always of the form "frc<number>" or "frc<number><suffix>"
-// (e.g. "frc254", "frc5940B"). Plain `String` for now; the typealias documents
-// intent and lets the helpers below read as operations over team keys.
-public typealias TeamKey = String
-
-public enum TeamKeys {
-    // Strips the `frc` prefix from a team key — "frc254" → "254".
-    public static func trimFRCPrefix(_ key: TeamKey) -> String {
-        String(key.dropFirst(3))
+extension TeamKey {
+    public var trimFRCPrefix: String {
+        String(dropFirst(3))
     }
 
-    // Drops a B-team suffix to get the canonical team key — "frc5940B" → "frc5940".
-    // B teams aren't independent entities in TBA; they alias the parent team.
-    public static func parentKey(_ key: TeamKey) -> TeamKey {
-        TeamKey(key.reversed().drop(while: { !$0.isNumber }).reversed())
+    // B teams (e.g. "frc5940B") aren't independent entities in TBA — they
+    // alias the parent team. Walk from the end and drop non-digits to
+    // recover the canonical key.
+    public var parentKey: TeamKey {
+        TeamKey(reversed().drop(while: { !$0.isNumber }).reversed())
     }
 }

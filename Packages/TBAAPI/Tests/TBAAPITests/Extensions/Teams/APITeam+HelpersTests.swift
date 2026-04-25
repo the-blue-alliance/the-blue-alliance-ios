@@ -4,28 +4,28 @@ import Testing
 
 struct APITeamHelpersTests {
 
-    // MARK: - TeamKeys.trimFRCPrefix
+    // MARK: - TeamKey.trimFRCPrefix
 
     @Test func trimFRCPrefix_strip() {
-        #expect(TeamKeys.trimFRCPrefix("frc2337") == "2337")
+        #expect(("frc2337" as TeamKey).trimFRCPrefix == "2337")
     }
 
     @Test func trimFRCPrefix_stripKeepsSuffix() {
-        #expect(TeamKeys.trimFRCPrefix("frc2337b") == "2337b")
+        #expect(("frc2337b" as TeamKey).trimFRCPrefix == "2337b")
     }
 
-    // MARK: - TeamKeys.parentKey
+    // MARK: - TeamKey.parentKey
 
     @Test func parentKey_canonicalKeyUnchanged() {
-        #expect(TeamKeys.parentKey("frc254") == "frc254")
+        #expect(("frc254" as TeamKey).parentKey == "frc254")
     }
 
     @Test func parentKey_dropsBSuffix() {
-        #expect(TeamKeys.parentKey("frc5940B") == "frc5940")
+        #expect(("frc5940B" as TeamKey).parentKey == "frc5940")
     }
 
     @Test func parentKey_dropsLowercaseSuffix() {
-        #expect(TeamKeys.parentKey("frc5940b") == "frc5940")
+        #expect(("frc5940b" as TeamKey).parentKey == "frc5940")
     }
 
     // MARK: - TeamDisplayable (Team)

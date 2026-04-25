@@ -73,7 +73,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
             filtered = rankings
         } else {
             filtered = rankings.filter { ranking in
-                let number = TeamKeys.trimFRCPrefix(ranking.teamKey).lowercased()
+                let number = ranking.teamKey.trimFRCPrefix.lowercased()
                 return number.contains(query) || ranking.teamKey.lowercased().contains(query)
             }
         }
