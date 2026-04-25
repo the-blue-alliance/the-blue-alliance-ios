@@ -27,4 +27,5 @@ public typealias TeamEventStatus = Components.Schemas.TeamEventStatus
 public typealias TeamSimple = Components.Schemas.TeamSimple
 public typealias Webcast = Components.Schemas.Webcast
 
+public typealias EventKey = String
 public typealias TeamKey = String

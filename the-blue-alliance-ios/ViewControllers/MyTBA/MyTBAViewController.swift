@@ -3,6 +3,7 @@ import GoogleSignIn
 import MyTBAKit
 import Photos
 import PureLayout
+import TBAAPI
 import UIKit
 import UserNotifications
 
@@ -163,18 +164,23 @@ class MyTBAViewController: ContainerViewController {
 
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
-    func eventSelected(eventKey: String) {
+    func eventSelected(_ event: Event) {
+        let viewController = EventViewController(event: event, dependencies: dependencies)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func teamSelected(_ team: Team) {
+        let viewController = TeamViewController(team: team, dependencies: dependencies)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func eventSelected(eventKey: EventKey) {
         let viewController = EventViewController(eventKey: eventKey, dependencies: dependencies)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func teamSelected(teamKey: String) {
+    func teamSelected(teamKey: TeamKey) {
         let viewController = TeamViewController(teamKey: teamKey, dependencies: dependencies)
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-
-    func matchSelected(matchKey: String) {
-        let viewController = MatchViewController(matchKey: matchKey, dependencies: dependencies)
         navigationController?.pushViewController(viewController, animated: true)
     }
 

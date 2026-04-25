@@ -37,7 +37,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
     // MARK: - Init
 
-    convenience init(eventKey: String, name: String? = nil, dependencies: Dependencies) {
+    convenience init(eventKey: EventKey, name: String? = nil, dependencies: Dependencies) {
         self.init(state: .key(eventKey), eventName: name, dependencies: dependencies)
     }
 
@@ -208,7 +208,7 @@ extension EventViewController: EventRankingsViewControllerDelegate {
     }
 
     private func pushTeamAtEvent(teamKey: String) {
-        let year = state.event?.year ?? Int(state.key.prefix(4)) ?? 0
+        let year = state.event?.year ?? state.key.year ?? 0
         let teamAtEventViewController = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: state.key,

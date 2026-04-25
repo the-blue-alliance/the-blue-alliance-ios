@@ -42,7 +42,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     // For callers that only have the event key (e.g. TeamAtEventViewController).
     // refresh() upgrades state to `.event` so playoff-aware sectioning kicks in.
-    convenience init(eventKey: String, teamKey: String? = nil, dependencies: Dependencies) {
+    convenience init(eventKey: EventKey, teamKey: String? = nil, dependencies: Dependencies) {
         self.init(state: .key(eventKey), teamKey: teamKey, dependencies: dependencies)
     }
 

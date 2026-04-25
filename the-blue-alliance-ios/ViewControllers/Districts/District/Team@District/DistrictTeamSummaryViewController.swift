@@ -3,7 +3,7 @@ import TBAAPI
 import UIKit
 
 protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
-    func eventPointsSelected(eventKey: String)
+    func eventPointsSelected(eventKey: EventKey)
 }
 
 class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, Stateful {

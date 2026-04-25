@@ -55,7 +55,7 @@ protocol StatusServiceProtocol: AnyObject {
 
     func registerForStatusChanges(_ subscriber: StatusSubscribable)
     func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable)
-    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String)
+    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: EventKey)
 
     func registerRetryable(initiallyRetry: Bool)
     func unregisterRetryable()
@@ -145,7 +145,7 @@ public class StatusService: NSObject, StatusServiceProtocol {
         fmsStatusSubscribers.add(subscriber as AnyObject)
     }
 
-    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String) {
+    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: EventKey) {
         let subscribers =
             eventStatusSubscribers.object(forKey: eventKey as NSString)
             ?? NSHashTable<AnyObject>.weakObjects()
@@ -153,7 +153,7 @@ public class StatusService: NSObject, StatusServiceProtocol {
         eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
     }
 
-    private func updateEventSubscribers(eventKey: String, isEventOffline: Bool) {
+    private func updateEventSubscribers(eventKey: EventKey, isEventOffline: Bool) {
         guard let subscribersTable = eventStatusSubscribers.object(forKey: eventKey as NSString)
         else {
             return
@@ -214,11 +214,11 @@ protocol EventStatusSubscribable: AnyObject {
 
 extension EventStatusSubscribable {
 
-    func registerForEventStatusChanges(eventKey: String) {
+    func registerForEventStatusChanges(eventKey: EventKey) {
         statusService.registerForEventStatusChanges(self, eventKey: eventKey)
     }
 
-    func isEventDown(eventKey: String) -> Bool {
+    func isEventDown(eventKey: EventKey) -> Bool {
         return statusService.status.downEventKeys.contains(eventKey)
     }
 

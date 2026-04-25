@@ -69,7 +69,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     weak var delegate: EventDistrictPointsViewControllerDelegate?
 
-    private let eventKey: String
+    private let eventKey: EventKey
 
     private var dataSource: TableViewDataSource<String, TeamDistrictPointsRow>!
     private var rows: [TeamDistrictPointsRow] = []
@@ -77,7 +77,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     // MARK: - Init
 
-    init(eventKey: String, dependencies: Dependencies) {
+    init(eventKey: EventKey, dependencies: Dependencies) {
         self.eventKey = eventKey
         super.init(dependencies: dependencies)
     }

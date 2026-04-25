@@ -76,8 +76,8 @@ class TeamAtDistrictViewController: ContainerViewController {
 
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
-    func eventPointsSelected(eventKey: String) {
-        let year = Int(eventKey.prefix(4)) ?? self.year
+    func eventPointsSelected(eventKey: EventKey) {
+        let year = eventKey.year ?? self.year
         let teamAtEventViewController = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: eventKey,

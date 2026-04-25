@@ -5,13 +5,13 @@ import UIKit
 class TeamStatsViewController: TBATableViewController, Refreshable, Stateful {
 
     private let teamKey: String
-    private let eventKey: String
+    private let eventKey: EventKey
 
     private var stats: TeamStats?
 
     // MARK: - Init
 
-    init(teamKey: String, eventKey: String, dependencies: Dependencies) {
+    init(teamKey: String, eventKey: EventKey, dependencies: Dependencies) {
         self.teamKey = teamKey
         self.eventKey = eventKey
 

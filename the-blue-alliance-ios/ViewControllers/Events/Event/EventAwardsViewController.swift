@@ -65,7 +65,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
 
     weak var delegate: EventAwardsViewControllerDelegate?
 
-    private let eventKey: String
+    private let eventKey: EventKey
     private let teamKey: String?
 
     private var dataSource: TableViewDataSource<String, Award>!
@@ -74,7 +74,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, teamKey: String? = nil, dependencies: Dependencies) {
+    init(eventKey: EventKey, teamKey: String? = nil, dependencies: Dependencies) {
         self.eventKey = eventKey
         self.teamKey = teamKey
 

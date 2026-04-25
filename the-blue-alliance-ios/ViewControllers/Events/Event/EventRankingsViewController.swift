@@ -10,7 +10,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     weak var delegate: EventRankingsViewControllerDelegate?
 
-    private let eventKey: String
+    private let eventKey: EventKey
 
     private var dataSource: TableViewDataSource<String, EventRanking.RankingsPayloadPayload>!
     private var rankings: [EventRanking.RankingsPayloadPayload] = []
@@ -20,7 +20,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     // MARK: - Init
 
-    init(eventKey: String, dependencies: Dependencies) {
+    init(eventKey: EventKey, dependencies: Dependencies) {
         self.eventKey = eventKey
         super.init(dependencies: dependencies)
     }

@@ -54,7 +54,7 @@ protocol SearchContainerDelegate {
 
 extension SearchContainerDelegate where Self: ContainerViewController {
 
-    func eventSelected(eventKey: String, name: String?) {
+    func eventSelected(eventKey: EventKey, name: String?) {
         let eventViewController = EventViewController(
             eventKey: eventKey,
             name: name,

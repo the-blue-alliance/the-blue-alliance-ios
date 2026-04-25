@@ -64,14 +64,14 @@ protocol EventAlliancesViewControllerDelegate: AnyObject {
 
 private class EventAlliancesViewController: TBATableViewController, Refreshable, Stateful {
 
-    private let eventKey: String
+    private let eventKey: EventKey
     private var alliances: [EliminationAlliance] = []
 
     weak var delegate: EventAlliancesViewControllerDelegate?
 
     // MARK: - Init
 
-    init(eventKey: String, dependencies: Dependencies) {
+    init(eventKey: EventKey, dependencies: Dependencies) {
         self.eventKey = eventKey
         super.init(dependencies: dependencies)
     }
