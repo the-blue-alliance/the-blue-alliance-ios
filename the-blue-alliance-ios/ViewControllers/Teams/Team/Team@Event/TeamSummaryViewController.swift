@@ -339,7 +339,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
     ) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
         cell.viewModel = MatchViewModel(
-            apiMatch: match,
+            match: match,
             baseTeamKeys: baseTeamKey.map { [$0] } ?? []
         )
         return cell

@@ -57,7 +57,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
             let detail = self?.rankingInfoString(for: ranking)
             let team = self?.teamsByKey[ranking.teamKey]
             cell.viewModel = RankingCellViewModel(
-                apiRanking: ranking,
+                ranking: ranking,
                 detailText: detail,
                 team: team
             )

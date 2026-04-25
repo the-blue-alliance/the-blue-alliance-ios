@@ -19,7 +19,7 @@ struct RankingCellViewModel {
         self.wltText = nil
     }
 
-    init(rank: String, apiTeamKey teamKey: String, points: Int, team: TeamSimple? = nil) {
+    init(rank: String, teamKey: String, points: Int, team: TeamSimple? = nil) {
         self.rankText = rank
         self.teamNumber = Self.teamNumber(from: teamKey)
         self.teamName = team?.displayNickname ?? "Team \(self.teamNumber ?? teamKey)"
@@ -28,7 +28,7 @@ struct RankingCellViewModel {
     }
 
     init(
-        apiTeamKey teamKey: String,
+        teamKey: String,
         opr: Float,
         dpr: Float,
         ccwm: Float,
@@ -42,7 +42,7 @@ struct RankingCellViewModel {
     }
 
     init(
-        apiRanking ranking: EventRanking.RankingsPayloadPayload,
+        ranking: EventRanking.RankingsPayloadPayload,
         detailText: String?,
         team: TeamSimple? = nil
     ) {

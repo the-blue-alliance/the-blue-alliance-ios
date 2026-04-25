@@ -92,7 +92,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             let team = self?.teamsByKey[row.teamKey]
             cell.viewModel = RankingCellViewModel(
-                apiTeamKey: row.teamKey,
+                teamKey: row.teamKey,
                 opr: row.opr,
                 dpr: row.dpr,
                 ccwm: row.ccwm,

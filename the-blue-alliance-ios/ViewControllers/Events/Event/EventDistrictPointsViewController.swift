@@ -112,7 +112,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
             let team = self?.teamsByKey[row.teamKey]
             cell.viewModel = RankingCellViewModel(
                 rank: "Rank \(indexPath.row + 1)",
-                apiTeamKey: row.teamKey,
+                teamKey: row.teamKey,
                 points: row.total,
                 team: team
             )
