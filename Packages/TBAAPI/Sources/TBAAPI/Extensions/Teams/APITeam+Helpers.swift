@@ -43,12 +43,12 @@ extension Team: TeamDisplayable {
 }
 
 extension TeamKey {
-    public var trimFRCPrefix: String {
+    public var trimPrefix: String {
         String(dropFirst(3))
     }
 
     public var teamNumber: Int? {
-        Int(trimFRCPrefix)
+        Int(trimPrefix)
     }
 
     // B teams (e.g. "frc5940B") aren't independent entities in TBA — they

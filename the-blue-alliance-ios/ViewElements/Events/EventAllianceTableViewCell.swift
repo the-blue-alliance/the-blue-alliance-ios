@@ -78,7 +78,7 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
         // OH PICK BOY http://photos.prnewswire.com/prnvar/20140130/NY56077
         for (index, teamKey) in viewModel.picks.enumerated() {
-            let teamNumber = teamKey.trimFRCPrefix
+            let teamNumber = teamKey.trimPrefix
 
             var label: UILabel
             if index == 0 {

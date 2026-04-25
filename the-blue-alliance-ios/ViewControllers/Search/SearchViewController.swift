@@ -93,7 +93,7 @@ class SearchViewController: TBATableViewController {
                 return cell
             case .team(let key, let nickname):
                 let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
-                let teamNumber = key.trimFRCPrefix
+                let teamNumber = key.trimPrefix
                 cell.viewModel = TeamCellViewModel(
                     teamNumber: teamNumber,
                     nickname: nickname.isEmpty ? "Team \(teamNumber)" : nickname,
@@ -160,7 +160,7 @@ class SearchViewController: TBATableViewController {
     }
 
     private func matches(team: SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
-        let number = team.key.trimFRCPrefix
+        let number = team.key.trimPrefix
         return number.hasPrefix(query) || team.nickname.lowercased().contains(query)
             || team.key.lowercased().contains(query)
     }

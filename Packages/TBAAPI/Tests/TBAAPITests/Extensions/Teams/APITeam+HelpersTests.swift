@@ -4,14 +4,14 @@ import Testing
 
 struct APITeamHelpersTests {
 
-    // MARK: - TeamKey.trimFRCPrefix
+    // MARK: - TeamKey.trimPrefix
 
-    @Test func trimFRCPrefix_strip() {
-        #expect(("frc2337" as TeamKey).trimFRCPrefix == "2337")
+    @Test func trimPrefix_strip() {
+        #expect(("frc2337" as TeamKey).trimPrefix == "2337")
     }
 
-    @Test func trimFRCPrefix_stripKeepsSuffix() {
-        #expect(("frc2337b" as TeamKey).trimFRCPrefix == "2337b")
+    @Test func trimPrefix_stripKeepsSuffix() {
+        #expect(("frc2337b" as TeamKey).trimPrefix == "2337b")
     }
 
     // MARK: - TeamKey.teamNumber

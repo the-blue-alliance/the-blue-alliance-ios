@@ -54,7 +54,7 @@ class TeamAtEventViewController: ContainerViewController {
                 statsViewController,
                 awardsViewController,
             ],
-            navigationTitle: "Team \(teamKey.trimFRCPrefix)",
+            navigationTitle: "Team \(teamKey.trimPrefix)",
             navigationSubtitle: nil,
             segmentedControlTitles: ["Summary", "Matches", "Media", "Stats", "Awards"],
             dependencies: dependencies

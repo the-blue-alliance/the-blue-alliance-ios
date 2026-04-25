@@ -136,8 +136,8 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
                         )
                     } else {
                         cell.viewModel = TeamCellViewModel(
-                            teamNumber: key.trimFRCPrefix,
-                            nickname: "Team \(key.trimFRCPrefix)",
+                            teamNumber: key.trimPrefix,
+                            nickname: "Team \(key.trimPrefix)",
                             location: nil
                         )
                     }
