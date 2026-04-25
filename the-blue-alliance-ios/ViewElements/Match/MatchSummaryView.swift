@@ -3,7 +3,7 @@ import TBAAPI
 import UIKit
 
 protocol MatchSummaryViewDelegate: AnyObject {
-    func teamPressed(teamNumber: Int)
+    func teamPressed(teamKey: String)
 }
 
 class MatchSummaryView: UIView {
@@ -203,17 +203,15 @@ class MatchSummaryView: UIView {
         let text: String = "\(TeamKey.trimFRCPrefix(teamKey))"
         let isBold: Bool = baseTeamKeys.contains(teamKey)
 
-        return button(text: text, isBold: isBold, isStrikethrough: dq)
+        return button(text: text, teamKey: teamKey, isBold: isBold, isStrikethrough: dq)
     }
 
-    private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
+    private func button(text: String, teamKey: String, isBold: Bool, isStrikethrough: Bool = false)
+        -> UIButton
+    {
         let button = UIButton(type: .system)
         button.setTitle(text, for: [])
         button.setTitleColor(UIColor.highlightColor, for: .normal)
-
-        if let teamNumber = Int(text) {
-            button.tag = teamNumber
-        }
 
         button.titleLabel?.attributedText = customAttributedString(
             text: text,
@@ -222,9 +220,8 @@ class MatchSummaryView: UIView {
         )
 
         button.addAction(
-            UIAction { [weak self, weak button] _ in
-                guard let button, button.tag != 0 else { return }
-                self?.delegate?.teamPressed(teamNumber: button.tag)
+            UIAction { [weak self] _ in
+                self?.delegate?.teamPressed(teamKey: teamKey)
             },
             for: .touchUpInside
         )

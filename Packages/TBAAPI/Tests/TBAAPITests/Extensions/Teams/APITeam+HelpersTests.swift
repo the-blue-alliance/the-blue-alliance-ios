@@ -18,6 +18,28 @@ struct APITeamHelpersTests {
         #expect(TeamKey.trimFRCPrefix("2337") == "2337")
     }
 
+    // MARK: - TeamKey.parentKey
+
+    @Test func parentKey_canonicalKeyUnchanged() {
+        #expect(TeamKey.parentKey("frc254") == "frc254")
+    }
+
+    @Test func parentKey_dropsBSuffix() {
+        #expect(TeamKey.parentKey("frc5940B") == "frc5940")
+    }
+
+    @Test func parentKey_dropsLowercaseSuffix() {
+        #expect(TeamKey.parentKey("frc5940b") == "frc5940")
+    }
+
+    @Test func parentKey_handlesUnprefixedKey() {
+        #expect(TeamKey.parentKey("5940B") == "5940")
+    }
+
+    @Test func parentKey_returnsOriginalForNonNumeric() {
+        #expect(TeamKey.parentKey("frc") == "frc")
+    }
+
     // MARK: - TeamDisplayable (Team)
 
     @Test func teamNumberNickname_prependsTeam() {

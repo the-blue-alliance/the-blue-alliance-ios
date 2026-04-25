@@ -47,4 +47,13 @@ public enum TeamKey {
     public static func trimFRCPrefix(_ key: String) -> String {
         key.hasPrefix("frc") ? String(key.dropFirst(3)) : key
     }
+
+    // Drops a B-team suffix to get the canonical team key — "frc5940B" → "frc5940".
+    // B teams aren't independent entities in TBA; they alias the parent team.
+    public static func parentKey(_ key: String) -> String {
+        let prefix = key.hasPrefix("frc") ? "frc" : ""
+        let rest = key.dropFirst(prefix.count)
+        let digits = rest.prefix(while: { $0.isNumber })
+        return digits.isEmpty ? key : prefix + digits
+    }
 }
