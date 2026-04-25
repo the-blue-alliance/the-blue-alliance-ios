@@ -73,6 +73,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     private var dataSource: TableViewDataSource<String, TeamDistrictPointsRow>!
     private var rows: [TeamDistrictPointsRow] = []
+    private var teamsByKey: [String: TeamSimple] = [:]
 
     // MARK: - Init
 
@@ -106,14 +107,14 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     private func setupDataSource() {
         dataSource = TableViewDataSource<String, TeamDistrictPointsRow>(tableView: tableView) {
-            tableView,
-            indexPath,
-            row in
+            [weak self] tableView, indexPath, row in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
+            let team = self?.teamsByKey[row.teamKey]
             cell.viewModel = RankingCellViewModel(
                 rank: "Rank \(indexPath.row + 1)",
-                apiTeamKey: row.teamKey,
-                points: row.total
+                teamKey: row.teamKey,
+                points: row.total,
+                team: team
             )
             return cell
         }
@@ -146,7 +147,22 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let response = try await self.dependencies.api.eventDistrictPoints(key: self.eventKey)
+            // Unstructured Task handles instead of `async let`: Swift 6.1's
+            // async-let stack allocator trips swift_task_dealloc's LIFO check
+            // here even with reverse-order awaits (#995 didn't fully fix it).
+            // Task handles heap-allocate and sidestep the allocator entirely.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let pointsHandle = Task {
+                try await self.dependencies.api.eventDistrictPoints(key: self.eventKey)
+            }
+            let teamsHandle = Task {
+                try? await self.dependencies.api.eventTeamsSimple(key: self.eventKey)
+            }
+
+            let teams = await teamsHandle.value ?? []
+            self.teamsByKey = Dictionary(uniqueKeysWithValues: teams.map { ($0.key, $0) })
+
+            let response = try await pointsHandle.value
             self.apply(points: response)
         }
     }

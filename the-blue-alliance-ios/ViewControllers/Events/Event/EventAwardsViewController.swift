@@ -70,6 +70,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
 
     private var dataSource: TableViewDataSource<String, Award>!
     private var awards: [Award] = []
+    private var teamsByKey: [String: TeamSimple] = [:]
 
     // MARK: - Init
 
@@ -101,11 +102,10 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
             [weak self] tableView, indexPath, award in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as AwardTableViewCell
             cell.selectionStyle = .none
-            cell.viewModel = AwardCellViewModel(award: award)
+            cell.viewModel = AwardCellViewModel(award: award, teamsByKey: self?.teamsByKey ?? [:])
             cell.teamKeySelected = { [weak self] (teamKey) in
                 self?.delegate?.teamSelected(teamKey: teamKey)
             }
-            _ = self
             return cell
         }
         dataSource.statefulDelegate = self
@@ -135,7 +135,22 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            self.applyAwards(try await self.dependencies.api.eventAwards(key: self.eventKey))
+            // Unstructured Task handles instead of `async let`: Swift 6.1's
+            // async-let stack allocator trips swift_task_dealloc's LIFO check
+            // here even with reverse-order awaits (#995 didn't fully fix it).
+            // Task handles heap-allocate and sidestep the allocator entirely.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let awardsHandle = Task {
+                try await self.dependencies.api.eventAwards(key: self.eventKey)
+            }
+            let teamsHandle = Task {
+                try? await self.dependencies.api.eventTeamsSimple(key: self.eventKey)
+            }
+
+            let teams = await teamsHandle.value ?? []
+            self.teamsByKey = Dictionary(uniqueKeysWithValues: teams.map { ($0.key, $0) })
+
+            self.applyAwards(try await awardsHandle.value)
         }
     }
 

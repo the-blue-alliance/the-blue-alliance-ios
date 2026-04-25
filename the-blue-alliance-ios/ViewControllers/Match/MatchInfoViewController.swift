@@ -140,7 +140,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
 
         var baseTeamKeys: [String] = []
         if let teamKey { baseTeamKeys.append(teamKey) }
-        let viewModel = MatchViewModel(apiMatch: match, baseTeamKeys: baseTeamKeys)
+        let viewModel = MatchViewModel(match: match, baseTeamKeys: baseTeamKeys)
         matchSummaryView.viewModel = viewModel
 
         scoreTitleLabel.text = viewModel.hasScores ? "Score" : "Time"
