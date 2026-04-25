@@ -1,0 +1,29 @@
+name: Update wiki
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+
+jobs:
+  update-wiki:
+    name: "Update wiki"
+    runs-on: ubuntu-latest
+    env:
+      wiki-dir: docs
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update wiki repo
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git clone "https://$GITHUB_ACTOR:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.wiki.git"
+          cd ${GITHUB_REPOSITORY##*/}.wiki
+          rm -rf *
+          cp -r ../${{env.wiki-dir}}/. .
+          git add .
+          git commit --allow-empty -m "Update wiki from main ($GITHUB_SHA)"
+          git push "https://$GITHUB_ACTOR:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.wiki.git"
