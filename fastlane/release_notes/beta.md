@@ -1,14 +1,20 @@
-The Blue Alliance v3.3.2
+The Blue Alliance v3.4.0
+
+What's new:
+- Event Insights now populate for 2023, 2024, and 2025 events (previously blank)
+- Match Breakdowns for 2017–2025 now split auto / teleop / overall instead of just showing the overall total
+- RP rows in Match Breakdown are hidden on matches where they don't apply (e.g. playoffs)
 
 Bug fixes:
-- Fixed a crash when opening a match from a match list
-- Fixed offseason event titles rendering as "20XX  Offseason" with the event name missing (e.g. 2024mmr)
-- Restored team nicknames on the Event Rankings screen
-- Opening a match from a list now seeds the detail view from the already-fetched match, so the title and score no longer flash blank before the background refresh lands
+- 4-column insights cells no longer appear tappable
+- `filterEmptyInsights` now handles row-grouped insights correctly
+- Fixed 2026 insights rendering when average win score is missing
+
+Please poke at:
+- Event → Insights on 2023 / 2024 / 2025 events — every row should populate; check 4-column layout
+- Match Breakdown on 2017–2025 matches — auto / teleop / overall columns all filled in
+- Match Breakdown on quals vs. playoffs — RP rows only on quals
+- 2026 events with no reported avg win score — should render cleanly
 
 Under the hood:
-- Restored Crashlytics breadcrumbs so post-crash logs again show which screen the user was on
-- Removed the legacy Settings bundle (all toggles live in the in-app Settings tab)
-- Refactored Event/Team/Match detail view controllers to a single State enum so the key and the model can't drift
-- Split the TBAAPI display helpers back into their own package with ~90 unit tests restored
-- Switched GitHub release bodies to GitHub's auto-generated changelog so they no longer lag behind the TestFlight notes
+- Match Breakdown configurators now use typed CompLevel enums and share the RP-gating logic in the base configurator
