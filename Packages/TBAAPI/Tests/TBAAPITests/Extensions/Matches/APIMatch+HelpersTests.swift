@@ -16,7 +16,7 @@ struct APIMatchHelpersTests {
 
     @Test func compLevel_level() {
         #expect(CompLevel.qm.level == "Qualification")
-        #expect(CompLevel.ef.level == "Octofinals")
+        #expect(CompLevel.ef.level == "Eighth-Finals")
         #expect(CompLevel.qf.level == "Quarterfinals")
         #expect(CompLevel.sf.level == "Semifinals")
         #expect(CompLevel.f.level == "Finals")
@@ -46,12 +46,59 @@ struct APIMatchHelpersTests {
 
     @Test func friendlyName_qualification() {
         let match = makeMatch(compLevel: .qm, setNumber: 1, matchNumber: 73)
-        #expect(match.friendlyName == "Quals 73")
+        #expect(match.friendlyName(playoffType: nil) == "Quals 73")
     }
 
     @Test func friendlyName_elimination() {
         let match = makeMatch(compLevel: .ef, setNumber: 2, matchNumber: 73)
-        #expect(match.friendlyName == "Eighths 2-73")
+        #expect(match.friendlyName(playoffType: nil) == "Eighths 2-73")
+    }
+
+    @Test func friendlyName_roundRobinSemifinals() {
+        // RR prelims are stored as `sf` with set 1, match 1..15.
+        let match = makeMatch(compLevel: .sf, setNumber: 1, matchNumber: 9)
+        #expect(match.friendlyName(playoffType: .roundRobin6Team) == "Match 9")
+    }
+
+    @Test func friendlyName_roundRobinFinals() {
+        // RR finals are stored as `f` with set 1, match 1..3 — match number
+        // overlaps with prelim range, so distinguishing on comp_level matters.
+        let match = makeMatch(compLevel: .f, setNumber: 1, matchNumber: 2)
+        #expect(match.friendlyName(playoffType: .roundRobin6Team) == "Finals 2")
+    }
+
+    @Test func friendlyName_doubleElimMatch() {
+        // Modern DE stores each pre-finals match as its own `sf` set with
+        // match_number 1, so the label uses set_number.
+        let match = makeMatch(compLevel: .sf, setNumber: 11, matchNumber: 1)
+        #expect(match.friendlyName(playoffType: .doubleElim8Team) == "Match 11")
+    }
+
+    @Test func friendlyName_doubleElimFinals() {
+        let match = makeMatch(compLevel: .f, setNumber: 1, matchNumber: 2)
+        #expect(match.friendlyName(playoffType: .doubleElim8Team) == "Finals 2")
+    }
+
+    @Test func friendlyName_bo3Finals() {
+        let match = makeMatch(compLevel: .f, setNumber: 1, matchNumber: 2)
+        #expect(match.friendlyName(playoffType: .bo3Finals) == "Finals 2")
+    }
+
+    @Test func friendlyName_bo5Finals() {
+        let match = makeMatch(compLevel: .f, setNumber: 1, matchNumber: 4)
+        #expect(match.friendlyName(playoffType: .bo5Finals) == "Finals 4")
+    }
+
+    @Test func friendlyName_averageScore8Quarters() {
+        // 2015's avg-score format keeps set=1 and runs match_number across
+        // the whole comp_level (e.g. qf1m1..qf1m8).
+        let match = makeMatch(compLevel: .qf, setNumber: 1, matchNumber: 7)
+        #expect(match.friendlyName(playoffType: .averageScore8Team) == "Quarters 7")
+    }
+
+    @Test func friendlyName_averageScore8Finals() {
+        let match = makeMatch(compLevel: .f, setNumber: 1, matchNumber: 2)
+        #expect(match.friendlyName(playoffType: .averageScore8Team) == "Finals 2")
     }
 
     // MARK: - startTime priority (actual > predicted > scheduled)

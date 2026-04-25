@@ -165,3 +165,7 @@ extension Event {
         return "\(shortFormatter.string(from: start)) to \(longFormatter.string(from: end))"
     }
 }
+
+extension Event {
+    public var playoffTypeEnum: PlayoffType? { playoffType }
+}

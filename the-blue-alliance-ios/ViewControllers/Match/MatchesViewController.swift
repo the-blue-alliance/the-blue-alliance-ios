@@ -13,13 +13,14 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     weak var delegate: MatchesViewControllerDelegate?
     var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
 
-    private let eventKey: String
+    private var state: EventState
     private let teamKey: String?
 
-    private var dataSource: TableViewDataSource<String, Match>!
+    private var dataSource: TableViewDataSource<MatchSection, Match>!
 
     private var allMatches: [Match] = []
     private var favoriteTeamKeys: [String] = []
+    private var allianceLookup: AllianceLookup?
 
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(
@@ -35,8 +36,18 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Init
 
-    init(eventKey: String, teamKey: String? = nil, dependencies: Dependencies) {
-        self.eventKey = eventKey
+    convenience init(event: Event, teamKey: String? = nil, dependencies: Dependencies) {
+        self.init(state: .event(event), teamKey: teamKey, dependencies: dependencies)
+    }
+
+    // For callers that only have the event key (e.g. TeamAtEventViewController).
+    // refresh() upgrades state to `.event` so playoff-aware sectioning kicks in.
+    convenience init(eventKey: String, teamKey: String? = nil, dependencies: Dependencies) {
+        self.init(state: .key(eventKey), teamKey: teamKey, dependencies: dependencies)
+    }
+
+    private init(state: EventState, teamKey: String?, dependencies: Dependencies) {
+        self.state = state
         self.teamKey = teamKey
 
         super.init(dependencies: dependencies)
@@ -71,7 +82,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Match>(tableView: tableView) {
+        dataSource = TableViewDataSource<MatchSection, Match>(tableView: tableView) {
             [weak self] tableView, indexPath, match in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
@@ -84,7 +95,19 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             {
                 baseTeamKeys.formUnion(favoriteTeamKeys)
             }
-            cell.viewModel = MatchViewModel(match: match, baseTeamKeys: Array(baseTeamKeys))
+            if let event = self?.state.event {
+                cell.viewModel = MatchViewModel(
+                    match: match,
+                    event: event,
+                    allianceLookup: self?.allianceLookup,
+                    baseTeamKeys: Array(baseTeamKeys)
+                )
+            } else {
+                cell.viewModel = MatchViewModel(
+                    withoutEventContextFor: match,
+                    baseTeamKeys: Array(baseTeamKeys)
+                )
+            }
             cell.accessibilityIdentifier = "match.\(match.key)"
             return cell
         }
@@ -99,19 +122,15 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         )
         let sorted = filtered.sorted(ascending: !query.sort.reverse)
 
-        var snapshot = NSDiffableDataSourceSnapshot<String, Match>()
-        // Group by comp-level string so sections mirror the old FRC behavior.
-        var sectionOrder: [String] = []
-        var grouped: [String: [Match]] = [:]
+        var snapshot = NSDiffableDataSourceSnapshot<MatchSection, Match>()
+        var grouped: [MatchSection: [Match]] = [:]
+        let playoffType = state.event?.playoffTypeEnum
         for match in sorted {
-            let key = match.compLevelString
-            if grouped[key] == nil {
-                sectionOrder.append(key)
-                grouped[key] = []
-            }
-            grouped[key]?.append(match)
+            let section = MatchSection.section(for: match, playoffType: playoffType)
+            grouped[section, default: []].append(match)
         }
-        for section in sectionOrder {
+        let sortedSections = grouped.keys.sorted(by: query.sort.reverse ? (>) : (<))
+        for section in sortedSections {
             snapshot.appendSections([section])
             snapshot.appendItems(grouped[section] ?? [], toSection: section)
         }
@@ -121,11 +140,9 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: TableViewDataSourceDelegate
 
     override func title(forSection section: Int) -> String? {
-        guard let firstMatch = dataSource.itemIdentifier(for: IndexPath(row: 0, section: section))
-        else {
-            return "Matches"
-        }
-        return "\(firstMatch.compLevel.level) Matches"
+        let sectionIDs = dataSource.snapshot().sectionIdentifiers
+        guard section >= 0, section < sectionIDs.count else { return nil }
+        return sectionIDs[section].title
     }
 
     // MARK: UITableView Delegate
@@ -167,7 +184,21 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            self.allMatches = try await self.dependencies.api.eventMatches(key: self.eventKey)
+            let key = self.state.key
+            async let matchesTask = self.dependencies.api.eventMatches(key: key)
+            async let alliancesTask: [EliminationAlliance]?? = {
+                try? await self.dependencies.api.eventAlliances(key: key)
+            }()
+            async let eventTask: Event? = {
+                try? await self.dependencies.api.event(key: key)
+            }()
+            self.allMatches = try await matchesTask
+            if let alliancesResult = await alliancesTask {
+                self.allianceLookup = alliancesResult.map(AllianceLookup.init)
+            }
+            if let event = await eventTask {
+                self.state = .event(event)
+            }
             self.applyMatches(self.allMatches)
         }
     }

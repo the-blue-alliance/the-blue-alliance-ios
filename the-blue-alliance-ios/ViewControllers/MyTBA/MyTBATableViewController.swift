@@ -146,7 +146,11 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
                     let cell =
                         tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
                     if let match = self.matchesCache[key] {
-                        cell.viewModel = MatchViewModel(match: match)
+                        if let event = self.eventsCache[MatchKey.eventKey(from: key)] {
+                            cell.viewModel = MatchViewModel(match: match, event: event)
+                        } else {
+                            cell.viewModel = MatchViewModel(withoutEventContextFor: match)
+                        }
                     }
                     return cell
                 }
@@ -245,6 +249,15 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
 
     private func fetchMissingItems() async {
         let items = currentItems
+        // Match rows render playoff-aware labels from their owning Event, so
+        // each .match item implies an event fetch too.
+        let matchImpliedEventKeys = Set(
+            items.compactMap { item -> String? in
+                guard case .match(let key) = item else { return nil }
+                let eventKey = MatchKey.eventKey(from: key)
+                return eventsCache[eventKey] == nil ? eventKey : nil
+            }
+        )
         await withTaskGroup(of: Void.self) { group in
             for item in items {
                 switch item {
@@ -270,6 +283,14 @@ class MyTBATableViewController: TBATableViewController, NotificationObservable {
                         }
                     }
                 default: break
+                }
+            }
+            for eventKey in matchImpliedEventKeys {
+                group.addTask { [weak self] in
+                    guard let self = self else { return }
+                    if let event = try? await self.dependencies.api.event(key: eventKey) {
+                        await MainActor.run { self.eventsCache[eventKey] = event }
+                    }
                 }
             }
         }

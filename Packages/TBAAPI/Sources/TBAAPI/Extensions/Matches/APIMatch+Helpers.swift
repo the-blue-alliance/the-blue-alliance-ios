@@ -15,7 +15,7 @@ extension CompLevel {
     public var level: String {
         switch self {
         case .qm: return "Qualification"
-        case .ef: return "Octofinals"
+        case .ef: return "Eighth-Finals"
         case .qf: return "Quarterfinals"
         case .sf: return "Semifinals"
         case .f: return "Finals"
@@ -39,11 +39,28 @@ extension Match {
 
     public var compLevelSortOrder: Int { compLevel.sortOrder }
 
-    public var friendlyName: String {
+    // Round robin prelims and 2023+ double elim pre-finals are both stored
+    // as `sf` (round robin sets match_number 1..15; double elim sets
+    // set_number 1..13 with match_number 1) — so "Semis N-M" is misleading
+    // for those formats. Finals are `f` for both.
+    public func friendlyName(playoffType: PlayoffType?) -> String {
         if compLevel == .qm {
             return "\(compLevel.levelShort) \(matchNumber)"
         }
-        return "\(compLevel.levelShort) \(setNumber)-\(matchNumber)"
+        switch playoffType?.kind {
+        case .roundRobin6Team:
+            if compLevel == .f { return "Finals \(matchNumber)" }
+            return "Match \(matchNumber)"
+        case .doubleElim8Team, .doubleElim4Team:
+            if compLevel == .f { return "Finals \(matchNumber)" }
+            return "Match \(setNumber)"
+        case .averageScore8Team:
+            return "\(compLevel.levelShort) \(matchNumber)"
+        case .bo3Finals, .bo5Finals:
+            return "Finals \(matchNumber)"
+        default:
+            return "\(compLevel.levelShort) \(setNumber)-\(matchNumber)"
+        }
     }
 
     public var redAllianceTeamKeys: [String] { alliances.red.teamKeys }

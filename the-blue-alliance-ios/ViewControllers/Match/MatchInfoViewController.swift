@@ -8,6 +8,8 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     private var state: MatchState
     private let teamKey: String?
 
+    private var event: Event?
+
     // MARK: - UI
 
     private let teamsLabel: UILabel = {
@@ -140,7 +142,12 @@ class MatchInfoViewController: TBAViewController, Refreshable {
 
         var baseTeamKeys: [String] = []
         if let teamKey { baseTeamKeys.append(teamKey) }
-        let viewModel = MatchViewModel(match: match, baseTeamKeys: baseTeamKeys)
+        let viewModel: MatchViewModel =
+            if let event {
+                MatchViewModel(match: match, event: event, baseTeamKeys: baseTeamKeys)
+            } else {
+                MatchViewModel(withoutEventContextFor: match, baseTeamKeys: baseTeamKeys)
+            }
         matchSummaryView.viewModel = viewModel
 
         scoreTitleLabel.text = viewModel.hasScores ? "Score" : "Time"
@@ -184,7 +191,18 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            self.state = .match(try await self.api.match(key: self.state.key))
+            // Task handles instead of `async let` — see MatchViewController
+            // for the Swift 6.1 allocator bug this sidesteps.
+            let matchHandle = Task { try? await self.api.match(key: self.state.key) }
+            let eventHandle = Task {
+                try? await self.api.event(key: MatchKey.eventKey(from: self.state.key))
+            }
+            if let match = await matchHandle.value {
+                self.state = .match(match)
+            }
+            if let event = await eventHandle.value {
+                self.event = event
+            }
             self.updateInterface()
         }
     }

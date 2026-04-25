@@ -180,6 +180,9 @@
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		A11CF00E00000000000000BB /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A11CF00E00000000000000FF /* AppIcon.icon */; };
 		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
+		AA00000000000000000AA003 /* MatchSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA004 /* MatchSection.swift */; };
+		AA00000000000000000AA007 /* AllianceLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA008 /* AllianceLookup.swift */; };
+		AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA00A /* AllianceBadgeView.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
 /* End PBXBuildFile section */
 
@@ -350,6 +353,9 @@
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
+		AA00000000000000000AA004 /* MatchSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSection.swift; sourceTree = "<group>"; };
+		AA00000000000000000AA008 /* AllianceLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceLookup.swift; sourceTree = "<group>"; };
+		AA00000000000000000AA00A /* AllianceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceBadgeView.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -384,6 +390,7 @@
 				145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */,
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
 				1479693F215E9A580075AF4E /* MatchViewModel.swift */,
+				AA00000000000000000AA00A /* AllianceBadgeView.swift */,
 				921F609723CD4DE000FE633B /* Breakdown */,
 			);
 			path = Match;
@@ -822,6 +829,7 @@
 				92FF10F521A61AC2003BC5C4 /* MatchViewController.swift */,
 				92FF10F321A61AC2003BC5C4 /* MatchInfoViewController.swift */,
 				92FF10F621A61AC2003BC5C4 /* MatchBreakdownViewController.swift */,
+				AA00000000000000000AA004 /* MatchSection.swift */,
 			);
 			path = Match;
 			sourceTree = "<group>";
@@ -913,8 +921,17 @@
 			isa = PBXGroup;
 			children = (
 				929AACF32F95A8EA00587DEA /* Event */,
+				AA00000000000000000AA00B /* Match */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AA00000000000000000AA00B /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000000000000000AA008 /* AllianceLookup.swift */,
+			);
+			path = Match;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1086,6 +1103,9 @@
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
 				5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */,
 				BA0000000000000000000002 /* EventSection.swift in Sources */,
+				AA00000000000000000AA003 /* MatchSection.swift in Sources */,
+				AA00000000000000000AA007 /* AllianceLookup.swift in Sources */,
+				AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */,
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
 				514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */,
 				92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */,

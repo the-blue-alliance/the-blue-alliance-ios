@@ -66,10 +66,17 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
             eventKey: state.key,
             dependencies: dependencies
         )
-        matchesViewController = MatchesViewController(
-            eventKey: state.key,
-            dependencies: dependencies
-        )
+        if let event = state.event {
+            matchesViewController = MatchesViewController(
+                event: event,
+                dependencies: dependencies
+            )
+        } else {
+            matchesViewController = MatchesViewController(
+                eventKey: state.key,
+                dependencies: dependencies
+            )
+        }
 
         let navTitle = state.event?.friendlyNameWithYear ?? state.key
         super.init(
