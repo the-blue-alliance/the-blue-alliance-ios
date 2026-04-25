@@ -183,7 +183,7 @@ struct MatchBreakdownConfigurator2018: MatchBreakdownConfigurator {
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
         )
         // RP
-        if compLevel == Optional("qm") {
+        if let compLevel, compLevel == "qm" {
             rows.append(row(title: "Ranking Points", key: "rp", red: red, blue: blue))
         }
 

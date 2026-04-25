@@ -115,7 +115,7 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         )
 
         // RP
-        if compLevel == Optional("qm") {
+        if let compLevel, compLevel == "qm" {
             rows.append(
                 row(
                     title: "Ranking Points",

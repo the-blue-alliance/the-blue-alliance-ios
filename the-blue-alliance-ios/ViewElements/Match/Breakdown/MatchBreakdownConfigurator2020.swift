@@ -94,7 +94,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         )
 
         // RP
-        if compLevel == Optional("qm") {
+        if let compLevel, compLevel == "qm" {
             rows.append(
                 row(
                     title: "Ranking Points",
@@ -374,7 +374,7 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
 
         let elements = [redActivation, blueActivation].map { (stage) -> String in
             if stage[0] == 1 {
-                if compLevel == Optional("qm") {
+                if let compLevel, compLevel == "qm" {
                     return "3 (+1 RP)"
                 }
                 return "3"

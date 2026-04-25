@@ -144,7 +144,7 @@ struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
         rows.append(
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
         )
-        if compLevel == Optional("qm") {
+        if let compLevel, compLevel == "qm" {
             rows.append(
                 row(
                     title: "Ranking Points",

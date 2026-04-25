@@ -121,12 +121,6 @@ class EventInsightsConfigurator2023: EventInsightsConfigurator {
             bonusRow(title: "Mobility", key: "mobility_count", qual: qual, playoff: playoff)
         )
         bonusStats.append(
-            bonusRow(title: "Auto Docked", key: "mobility_count", qual: qual, playoff: playoff)
-        )
-        bonusStats.append(
-            bonusRow(title: "Auto Engaged", key: "mobility_count", qual: qual, playoff: playoff)
-        )
-        bonusStats.append(
             bonusRow(title: "Auto Docked", key: "auto_docked_count", qual: qual, playoff: playoff)
         )
         bonusStats.append(

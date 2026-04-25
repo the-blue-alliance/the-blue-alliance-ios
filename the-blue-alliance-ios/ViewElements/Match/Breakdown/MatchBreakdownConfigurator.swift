@@ -46,7 +46,7 @@ extension MatchBreakdownConfigurator {
         red: [String: Any]?,
         blue: [String: Any]?,
         type: BreakdownRow.BreakdownRowType = .normal,
-        offset: Int = 0,
+        offset: Int = 0
     ) -> BreakdownRow? {
         return row(
             title: title,
@@ -66,7 +66,7 @@ extension MatchBreakdownConfigurator {
         red: [String: Any]?,
         blue: [String: Any]?,
         type: BreakdownRow.BreakdownRowType = .normal,
-        offset: Int = 0,
+        offset: Int = 0
     ) -> BreakdownRow? {
         guard let red = red, let blue = blue else {
             return nil

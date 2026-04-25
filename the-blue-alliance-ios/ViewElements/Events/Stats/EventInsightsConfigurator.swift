@@ -143,50 +143,28 @@ extension EventInsightsConfigurator {
         ]
     }
     private static func insightStat(_ dict: [String: Any]?, _ key: [String]) -> [String]? {
-        guard let dict = dict else {
-            return nil
-        }
+        guard let dict = dict else { return nil }
         // Helper to fetch a value for a key at a given index safely
         func value(for index: Int) -> Any? {
             guard let k = key.safeItem(at: index) else { return nil }
+            guard !k.isEmpty else { return nil }
             return dict[k]
         }
 
-        // Column 1: expect a Double and format to two decimals if present
-        let columnOne: String = {
-            if let number = value(for: 0) as? Double {
+        func format(_ index: Int) -> String {
+            guard let k = key.safeItem(at: index), k.isEmpty,
+                let raw = dict[k]
+            else { return "" }
+            if let number = raw as? Double {
                 return String(format: "%.2f", number)
             }
-            if let number = value(for: 0) as? NSNumber {
+            if let number = raw as? NSNumber {
                 return String(format: "%.2f", number.doubleValue)
             }
-            guard let v = value(for: 0) else { return "" }
-            return String(describing: v)
-        }()
+            return String(describing: raw)
+        }
 
-        let columnTwo: String = {
-            if let number = value(for: 1) as? Double {
-                return String(format: "%.2f", number)
-            }
-            if let number = value(for: 1) as? NSNumber {
-                return String(format: "%.2f", number.doubleValue)
-            }
-            guard let v = value(for: 1) else { return "" }
-            return String(describing: v)
-        }()
-
-        let columnThree: String = {
-            if let number = value(for: 2) as? Double {
-                return String(format: "%.2f", number)
-            }
-            if let number = value(for: 2) as? NSNumber {
-                return String(format: "%.2f", number.doubleValue)
-            }
-            guard let v = value(for: 2) else { return "" }
-            return String(describing: v)
-        }()
-
-        return [columnOne, columnTwo, columnThree]
+        return (0..<3).map(format)
     }
 
     static func filterEmptyInsights(_ rows: [InsightRow]) -> [InsightRow] {
