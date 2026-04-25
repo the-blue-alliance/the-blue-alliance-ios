@@ -193,14 +193,14 @@ class MatchSummaryView: UIView {
     }
 
     private func teamLabel(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UILabel {
-        let text: String = "\(TeamKey.trimFRCPrefix(teamKey))"
+        let text: String = "\(TeamKeys.trimFRCPrefix(teamKey))"
         let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return label(text: text, isBold: isBold, isStrikethrough: dq)
     }
 
     private func teamButton(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UIButton {
-        let text: String = "\(TeamKey.trimFRCPrefix(teamKey))"
+        let text: String = "\(TeamKeys.trimFRCPrefix(teamKey))"
         let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return button(text: text, teamKey: teamKey, isBold: isBold, isStrikethrough: dq)

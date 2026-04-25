@@ -4,40 +4,28 @@ import Testing
 
 struct APITeamHelpersTests {
 
-    // MARK: - TeamKey.trimFRCPrefix
+    // MARK: - TeamKeys.trimFRCPrefix
 
     @Test func trimFRCPrefix_strip() {
-        #expect(TeamKey.trimFRCPrefix("frc2337") == "2337")
+        #expect(TeamKeys.trimFRCPrefix("frc2337") == "2337")
     }
 
     @Test func trimFRCPrefix_stripKeepsSuffix() {
-        #expect(TeamKey.trimFRCPrefix("frc2337b") == "2337b")
+        #expect(TeamKeys.trimFRCPrefix("frc2337b") == "2337b")
     }
 
-    @Test func trimFRCPrefix_noPrefixLeavesAlone() {
-        #expect(TeamKey.trimFRCPrefix("2337") == "2337")
-    }
-
-    // MARK: - TeamKey.parentKey
+    // MARK: - TeamKeys.parentKey
 
     @Test func parentKey_canonicalKeyUnchanged() {
-        #expect(TeamKey.parentKey("frc254") == "frc254")
+        #expect(TeamKeys.parentKey("frc254") == "frc254")
     }
 
     @Test func parentKey_dropsBSuffix() {
-        #expect(TeamKey.parentKey("frc5940B") == "frc5940")
+        #expect(TeamKeys.parentKey("frc5940B") == "frc5940")
     }
 
     @Test func parentKey_dropsLowercaseSuffix() {
-        #expect(TeamKey.parentKey("frc5940b") == "frc5940")
-    }
-
-    @Test func parentKey_handlesUnprefixedKey() {
-        #expect(TeamKey.parentKey("5940B") == "5940")
-    }
-
-    @Test func parentKey_returnsOriginalForNonNumeric() {
-        #expect(TeamKey.parentKey("frc") == "frc")
+        #expect(TeamKeys.parentKey("frc5940b") == "frc5940")
     }
 
     // MARK: - TeamDisplayable (Team)

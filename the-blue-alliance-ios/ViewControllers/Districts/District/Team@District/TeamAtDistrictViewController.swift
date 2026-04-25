@@ -32,7 +32,7 @@ class TeamAtDistrictViewController: ContainerViewController {
             dependencies: dependencies
         )
 
-        let teamNumber = TeamKey.trimFRCPrefix(ranking.teamKey)
+        let teamNumber = TeamKeys.trimFRCPrefix(ranking.teamKey)
         super.init(
             viewControllers: [summaryViewController, breakdownViewController],
             navigationTitle: "Team \(teamNumber)",

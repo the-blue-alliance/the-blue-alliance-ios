@@ -140,7 +140,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         guard let match = state.match, match.allTeamKeys.contains(teamKey) else { return }
         // B teams (e.g. "frc5940B") alias the parent team — route to the
         // canonical team@event so the API lookups don't 404.
-        let canonicalKey = TeamKey.parentKey(teamKey)
+        let canonicalKey = TeamKeys.parentKey(teamKey)
         let year = match.year ?? 0
         let teamAtEventVC = TeamAtEventViewController(
             teamKey: canonicalKey,
