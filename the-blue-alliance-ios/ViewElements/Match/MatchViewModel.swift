@@ -29,15 +29,14 @@ struct MatchViewModel {
         return blueScore != nil && redScore != nil
     }
 
-    static func calculateRP(breakdown: [String: Any]?, breakdownKeys: [String]) -> Int {
-        var rpCount: Int = 0
-
-        for key in breakdownKeys {
-            if let breakdown = breakdown?[key] as? Bool {
-                rpCount += breakdown ? 1 : 0
-            }
-        }
-        return rpCount
+    // 2018+ alliance breakdowns expose `rp` directly; 2016 and 2017 expose
+    // `tba_rpEarned` (TBA-computed from per-bonus booleans). Earlier years
+    // had no RP concept, and any future year is expected to keep `rp`.
+    static func rpCount(breakdown: [String: Any]?) -> Int {
+        guard let breakdown else { return 0 }
+        if let rp = breakdown["rp"] as? Int { return rp }
+        if let rp = breakdown["tba_rpEarned"] as? Int { return rp }
+        return 0
     }
 
     init(match: Match, baseTeamKeys: [String] = []) {
@@ -64,39 +63,7 @@ struct MatchViewModel {
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]
 
-        var rpName1: String?
-        var rpName2: String?
-        switch matchYear {
-        case 2016:
-            rpName1 = "teleopDefensesBreached"
-            rpName2 = "teleopTowerCaptured"
-        case 2017:
-            rpName1 = "kPaRankingPointAchieved"
-            rpName2 = "rotorRankingPointAchieved"
-        case 2018:
-            rpName1 = "autoQuestRankingPoint"
-            rpName2 = "faceTheBossRankingPoint"
-        case 2019:
-            rpName1 = "completeRocketRankingPoint"
-            rpName2 = "habDockingRankingPoint"
-        case 2020, 2021:
-            rpName1 = "shieldEnergizedRankingPoint"
-            rpName2 = "shieldOperationalRankingPoint"
-        case 2022:
-            rpName1 = "cargoBonusRankingPoint"
-            rpName2 = "hangarBonusRankingPoint"
-        default:
-            break
-        }
-
-        let breakdownKeys: [String] = [rpName1, rpName2].compactMap { $0 }
-        redRPCount = MatchViewModel.calculateRP(
-            breakdown: redBreakdown,
-            breakdownKeys: breakdownKeys
-        )
-        blueRPCount = MatchViewModel.calculateRP(
-            breakdown: blueBreakdown,
-            breakdownKeys: breakdownKeys
-        )
+        redRPCount = MatchViewModel.rpCount(breakdown: redBreakdown)
+        blueRPCount = MatchViewModel.rpCount(breakdown: blueBreakdown)
     }
 }
