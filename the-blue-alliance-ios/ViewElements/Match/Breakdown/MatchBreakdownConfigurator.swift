@@ -1,4 +1,5 @@
 import Foundation
+import TBAAPI
 import UIKit
 
 protocol MatchBreakdownConfigurator {
@@ -7,7 +8,7 @@ protocol MatchBreakdownConfigurator {
         _ breakdown: [String: Any]?,
         _ red: [String: Any]?,
         _ blue: [String: Any]?,
-        _ compLevel: String?
+        _ compLevel: Components.Schemas.CompLevel?
     )
 }
 
@@ -172,6 +173,25 @@ extension MatchBreakdownConfigurator {
             blue: [String(format: formatString, blueString)],
             type: type,
             offset: offset
+        )
+    }
+
+    // Ranking Points are awarded only in qualification matches; this helper
+    // returns nil for any other comp level so the row is dropped by `compactMap`.
+    static func rankingPointsRow(
+        key: String,
+        formatString: String = "%@",
+        compLevel: Components.Schemas.CompLevel?,
+        red: [String: Any]?,
+        blue: [String: Any]?
+    ) -> BreakdownRow? {
+        guard compLevel == .qm else { return nil }
+        return row(
+            title: "Ranking Points",
+            key: key,
+            formatString: formatString,
+            red: red,
+            blue: blue
         )
     }
 
