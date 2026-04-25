@@ -89,6 +89,18 @@ struct APIMatchHelpersTests {
         #expect(match.friendlyName(playoffType: .bo5Finals) == "Finals 4")
     }
 
+    @Test func friendlyName_averageScore8Quarters() {
+        // 2015's avg-score format keeps set=1 and runs match_number across
+        // the whole comp_level (e.g. qf1m1..qf1m8).
+        let match = makeMatch(compLevel: .qf, setNumber: 1, matchNumber: 7)
+        #expect(match.friendlyName(playoffType: .averageScore8Team) == "Quarters 7")
+    }
+
+    @Test func friendlyName_averageScore8Finals() {
+        let match = makeMatch(compLevel: .f, setNumber: 1, matchNumber: 2)
+        #expect(match.friendlyName(playoffType: .averageScore8Team) == "Finals 2")
+    }
+
     // MARK: - startTime priority (actual > predicted > scheduled)
 
     @Test func startTime_prefersActual() {

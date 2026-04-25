@@ -54,6 +54,8 @@ extension Match {
         case .doubleElim8Team, .doubleElim4Team:
             if compLevel == .f { return "Finals \(matchNumber)" }
             return "Match \(setNumber)"
+        case .averageScore8Team:
+            return "\(compLevel.levelShort) \(matchNumber)"
         case .bo3Finals, .bo5Finals:
             return "Finals \(matchNumber)"
         default:
