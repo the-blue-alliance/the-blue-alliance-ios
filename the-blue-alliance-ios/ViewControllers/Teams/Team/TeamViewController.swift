@@ -43,14 +43,56 @@ class TeamViewController: HeaderContainerViewController {
         TeamSubscribable(modelKey: state.key)
     }
 
+    // Avatars were introduced into FRC in 2018. Pre-2018 years never have
+    // avatar media, so we skip the API roundtrip + skeleton entirely and
+    // just collapse the avatar slot.
+    private static let firstAvatarYear = 2018
+
+    // Backing storage for `year`. `loadTeamData` writes this directly to
+    // bypass the user-driven side effects (avatar refetch, child propagation)
+    // during initial load — those are handled inline alongside the team fetch.
+    private var _year: Int?
     private var year: Int? {
-        didSet {
-            if oldValue == year { return }
-            eventsViewController.year = year
-            mediaViewController.year = year ?? Calendar.current.component(.year, from: Date())
-            avatarImage = nil
+        get { _year }
+        set {
+            guard _year != newValue else { return }
+            _year = newValue
+            eventsViewController.year = newValue
+            mediaViewController.year =
+                newValue ?? Calendar.current.component(.year, from: Date())
             updateInterface()
-            if let year { loadAvatar(year: year) }
+
+            guard let newValue else { return }
+
+            if newValue < Self.firstAvatarYear {
+                // Pre-avatar era: no fetch, no skeleton, no animation. Just
+                // nil out + hard-hide the slot.
+                avatarImage = nil
+                teamHeaderView.setAvatar(nil)
+                return
+            }
+
+            if avatarImage != nil {
+                // Had an avatar — show skeleton, fetch, reveal result. The
+                // skeleton hide animates collapse-and-fade if the new year
+                // turns out to have no avatar, in sync with the skeleton out.
+                teamHeaderView.showAvatarSkeleton()
+                Task { @MainActor in
+                    await loadAvatar(year: newValue)
+                    guard self.year == newValue else { return }
+                    teamHeaderView.hideAvatarSkeleton(revealing: avatarImage)
+                }
+            } else {
+                // No prior avatar — silent off-screen fetch, no skeleton.
+                // Only animate the avatar in if we actually got one.
+                Task { @MainActor in
+                    await loadAvatar(year: newValue)
+                    guard self.year == newValue else { return }
+                    if avatarImage != nil {
+                        teamHeaderView.transitionAvatar(to: avatarImage)
+                    }
+                }
+            }
         }
     }
 
@@ -70,13 +112,31 @@ class TeamViewController: HeaderContainerViewController {
         self.init(state: .team(team), partialNickname: nil, dependencies: dependencies)
     }
 
+    // TBA returns the literal "Team <N>" as a fallback nickname for teams
+    // without a real one (e.g. team 18). The header view already shows the
+    // team number on its own line, so echoing "Team N" as the subtitle
+    // duplicates it. Treat the fallback as no nickname here — list-style
+    // cells (TeamCell etc.) keep using the raw value, this only affects the
+    // header subtitle.
+    private static func displayNickname(
+        _ raw: String?,
+        teamNumber: Int
+    ) -> String? {
+        guard let raw, !raw.isEmpty else { return nil }
+        if raw == "Team \(teamNumber)" { return nil }
+        return raw
+    }
+
     private init(state: TeamState, partialNickname: String?, dependencies: Dependencies) {
         self.state = state
 
         let teamNumber = state.team?.teamNumber ?? state.key.teamNumber ?? 0
         let nickname: String? = {
-            if let team = state.team, !team.nickname.isEmpty { return team.nickname }
-            return partialNickname
+            let raw: String? = {
+                if let team = state.team, !team.nickname.isEmpty { return team.nickname }
+                return partialNickname
+            }()
+            return Self.displayNickname(raw, teamNumber: teamNumber)
         }()
         let teamNumberNickname = state.team?.teamNumberNickname ?? "Team \(teamNumber)"
 
@@ -138,6 +198,7 @@ class TeamViewController: HeaderContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        teamHeaderView.showLoadingSkeleton()
         loadTeamData()
     }
 
@@ -164,17 +225,34 @@ class TeamViewController: HeaderContainerViewController {
             if let team = await teamHandle.value {
                 self.state = .team(team)
                 self.navigationTitle = team.teamNumberNickname
-                updateInterface()
             }
             if let years = await yearsHandle.value {
                 self.yearsParticipated = years.sorted().reversed()
-                if year == nil {
-                    year = Self.latestYear(
-                        currentSeason: statusService.currentSeason,
-                        years: yearsParticipated
-                    )
-                }
             }
+
+            // Set the initial year directly to bypass `year.didSet` — we kick
+            // off the avatar fetch inline below so the header reveals once
+            // with team + avatar in place rather than skeleton → avatar pop.
+            let initialYear = Self.latestYear(
+                currentSeason: statusService.currentSeason,
+                years: yearsParticipated
+            )
+            _year = initialYear
+            eventsViewController.year = initialYear
+            mediaViewController.year =
+                initialYear ?? Calendar.current.component(.year, from: Date())
+
+            if let initialYear, initialYear >= Self.firstAvatarYear {
+                await loadAvatar(year: initialYear)
+            }
+
+            // Update text-based subviews FIRST so they're sized at their final
+            // layout under the still-visible skeleton. The avatar is set by
+            // hideLoadingSkeleton itself so its slot collapse/expand animates
+            // in sync with the skeleton fade-out.
+            updateInterface()
+            teamHeaderView.layoutIfNeeded()
+            teamHeaderView.hideLoadingSkeleton(revealing: avatarImage)
         }
     }
 
@@ -193,7 +271,7 @@ class TeamViewController: HeaderContainerViewController {
             teamHeaderView.viewModel = TeamHeaderViewModel(
                 teamNumber: team.teamNumber,
                 avatar: avatarImage,
-                nickname: team.nickname.isEmpty ? nil : team.nickname,
+                nickname: Self.displayNickname(team.nickname, teamNumber: team.teamNumber),
                 teamNumberNickname: team.teamNumberNickname,
                 year: year
             )
@@ -201,19 +279,20 @@ class TeamViewController: HeaderContainerViewController {
         navigationSubtitle = year?.description ?? "----"
     }
 
-    private func loadAvatar(year: Int) {
-        Task { @MainActor in
-            guard
-                let media = try? await dependencies.api.teamMediaByYear(
-                    teamKey: state.key,
-                    year: year
-                )
-            else { return }
-            guard self.year == year else { return }
-            let avatar = media.first(where: { $0._type == .avatar })
-            avatarImage = Self.decodeAvatar(from: avatar)
-            updateInterface()
+    private func loadAvatar(year: Int) async {
+        let media: [Media]
+        do {
+            media = try await dependencies.api.teamMediaByYear(
+                teamKey: state.key,
+                year: year
+            )
+        } catch {
+            // Network/decoding failure: leave any existing avatar in place.
+            return
         }
+        guard self.year == year else { return }
+        let avatar = media.first(where: { $0._type == .avatar })
+        avatarImage = Self.decodeAvatar(from: avatar)
     }
 
     private static func decodeAvatar(from media: Media?) -> UIImage? {
