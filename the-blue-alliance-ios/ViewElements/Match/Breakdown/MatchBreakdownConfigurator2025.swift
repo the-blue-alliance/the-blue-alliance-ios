@@ -15,6 +15,10 @@ private class BreakdownStyle2025 {
     public static let amplifiedSpeaker = UIImage(systemName: "speaker.wave.3.fill")
 
 }
+private enum matchStages {
+    case auto
+    case teleop
+}
 
 struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
 
@@ -69,7 +73,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 )
             )
         }
-        
+
         rows.append(
             row(
                 title: "Teleop Coral Points",
@@ -79,21 +83,52 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 type: .subtotal
             )
         )
-        rows.append(row(title: "Processor Algae Count", key: "wallAlgaeCount", red: red, blue: blue))
+        rows.append(
+            row(title: "Processor Algae Count", key: "wallAlgaeCount", red: red, blue: blue)
+        )
         rows.append(row(title: "Net Algae Count", key: "netAlgaeCount", red: red, blue: blue))
-        rows.append(row(title: "Algae Points", key: "algaePoints", red: red, blue: blue, type: .subtotal))
-        
+        rows.append(
+            row(title: "Algae Points", key: "algaePoints", red: red, blue: blue, type: .subtotal)
+        )
+
         for i in [1, 2, 3] {
             rows.append(endgameRow(i: i, red: red, blue: blue))
         }
-        
-        rows.append(row(title: "Barge Points", key: "endGameBargePoints", red: red, blue: blue, type: .subtotal))
-        rows.append(row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total))
-        rows.append(boolImageRow(title: "Coopertition Criteria Met", key: "coopertitionCriteriaMet", red: red, blue: blue))
-        
+
+        rows.append(
+            row(
+                title: "Barge Points",
+                key: "endGameBargePoints",
+                red: red,
+                blue: blue,
+                type: .subtotal
+            )
+        )
+        rows.append(
+            row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total)
+        )
+        rows.append(
+            boolImageRow(
+                title: "Coopertition Criteria Met",
+                key: "coopertitionCriteriaMet",
+                red: red,
+                blue: blue
+            )
+        )
+
         for i in ["auto", "coral", "barge"] {
-            rows.append(bonusRankingPointRow(title: i, key: i, red: red, blue: blue))
+            rows.append(
+                bonusRankingPointRow(title: i.capitalized + " Bonus", key: i, red: red, blue: blue)
+            )
         }
+        rows.append(foulRow(title: "Fouls / Major Fouls", red: red, blue: blue))
+        rows.append(
+            row(title: "Foul Points", key: "foulPoints", red: red, blue: blue, type: .subtotal)
+        )
+        rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
+        rows.append(
+            row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
+        )
         // RP
         rows.append(
             rankingPointsRow(
@@ -104,7 +139,9 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 blue: blue
             )
         )
-
+        rows.append(coralMapRow(title: "L4 Scoring Location", red: red, blue: blue, level: 4))
+        rows.append(coralMapRow(title: "L3 Scoring Location", red: red, blue: blue, level: 3))
+        rows.append(coralMapRow(title: "L2 Scoring Location", red: red, blue: blue, level: 2))
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
         if !validRows.isEmpty {
@@ -180,60 +217,6 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         )
     }
 
-    private static func notesRow(
-        title: String,
-        period: String,
-        red: [String: Any]?,
-        blue: [String: Any]?
-    )
-        -> BreakdownRow?
-    {
-        let heightKeys = ["Amp", "Speaker"]
-
-        let images = [BreakdownStyle2025.lowerImage, BreakdownStyle2025.upperImage]
-
-        var redCells: [Int] = []
-        var blueCells: [Int] = []
-
-        for heightKey in heightKeys {
-            var redHeightValues: [Int] = []
-            var blueHeightValues: [Int] = []
-
-            let key = "\(period)\(heightKey)NoteCount"
-            guard let cellValues = values(key: key, red: red, blue: blue) else {
-                return nil
-            }
-
-            let (rv, bv) = cellValues
-
-            guard let redCellValue = rv as? Int, let blueCellValue = bv as? Int else {
-                return nil
-            }
-            redHeightValues.append(redCellValue)
-            blueHeightValues.append(blueCellValue)
-
-            redCells.append(redHeightValues.reduce(0, +))
-            blueCells.append(blueHeightValues.reduce(0, +))
-        }
-
-        let mode = UIView.ContentMode.scaleAspectFit
-        let redValues = zip(
-            (images).map {
-                return BreakdownStyle.imageView(image: $0, contentMode: mode)
-            },
-            redCells
-        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
-
-        let blueValues = zip(
-            (images).map {
-                return BreakdownStyle.imageView(image: $0, contentMode: mode)
-            },
-            blueCells
-        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
-
-        return BreakdownRow(title: title, red: redValues, blue: blueValues)
-    }
-
     private static func endgameRow(i: Int, red: [String: Any]?, blue: [String: Any]?)
         -> BreakdownRow?
     {
@@ -241,7 +224,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             return nil
         }
         let (rw, bw) = endgameValues
-        guard var redEndgame = rw as? String, var blueEndgame = bw as? String else {
+        guard let redEndgame = rw as? String, let blueEndgame = bw as? String else {
             return nil
         }
 
@@ -283,11 +266,9 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             return nil
         }
 
-        // NOTE: red and blue are passed in backwards here intentionally, because
-        // the fouls returned are what the opposite alliance received
-        let elements = [(blueFouls, blueTechFouls), (redFouls, redTechFouls)].map {
+        let elements = [(redFouls, redTechFouls), (blueFouls, blueTechFouls)].map {
             (fouls, techFouls) -> AnyHashable in
-            return "+\(fouls * 2) / +\(techFouls * 5)"
+            return "\(fouls) / \(techFouls)"
         }
         return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
@@ -322,108 +303,248 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
-
-    private static func totalNotesScoredRow(
+    private static func coralMapRow(
         title: String,
         red: [String: Any]?,
-        blue: [String: Any]?
+        blue: [String: Any]?,
+        level: Int
     ) -> BreakdownRow? {
+        let width: CGFloat = 640
+        let height: CGFloat = 640
 
-        let scoringElementKeys = ["Amp", "Speaker"]
-        let periodKeys = ["auto", "teleop"]
-        guard
-            let melodyBonusThresholdValues = values(
-                key: "melodyBonusThreshold",
-                red: red,
-                blue: blue
-            )
-        else {
-            return nil
+        let redShapeLayer = CAShapeLayer()
+        let blueShapeLayer = CAShapeLayer()
+        for shapeLayer in [redShapeLayer, blueShapeLayer] {
+            shapeLayer.frame = CGRect(x: 0, y: 0, width: width, height: height)
+            shapeLayer.fillColor = UIColor.clear.cgColor
+            shapeLayer.strokeColor = UIColor.black.cgColor
+            shapeLayer.lineWidth = 10
+            shapeLayer.path = drawHexagon(width: width, height: height).cgPath
         }
 
-        let (threshold, _) = melodyBonusThresholdValues
-        guard let melodyBonusThreshold = threshold as? Int else {
-            return nil
+        let redContainerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        let blueContainerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        for i in 0..<2 {
+            let containerView = i == 0 ? redContainerView : blueContainerView
+            let shapeLayer = i == 0 ? redShapeLayer : blueShapeLayer
+            let dict = i == 0 ? red : blue
+            containerView.backgroundColor = .clear
+            containerView.layer.addSublayer(shapeLayer)
+            
+            drawSegments(level: level, dict: dict, view: containerView, stage: .auto)
+            drawSegments(level: level, dict: dict, view: containerView, stage: .teleop)
         }
-
-        var redNotes: [Int] = []
-        var blueNotes: [Int] = []
-
-        for scoringElementKey in scoringElementKeys {
-            var redScoringElementValues: [Int] = []
-            var blueScoringElementValues: [Int] = []
-            for periodKey in periodKeys {
-                let key = "\(periodKey)\(scoringElementKey)NoteCount"
-                guard let noteValues = values(key: key, red: red, blue: blue) else {
-                    return nil
-                }
-
-                let (rv, bv) = noteValues
-                guard let redCellValue = rv as? Int, let blueCellValue = bv as? Int else {
-                    return nil
-                }
-                redScoringElementValues.append(redCellValue)
-                blueScoringElementValues.append(blueCellValue)
-            }
-            redNotes.append(redScoringElementValues.reduce(0, +))
-            blueNotes.append(blueScoringElementValues.reduce(0, +))
-        }
-
         return BreakdownRow(
             title: title,
-            red: ["\(redNotes.reduce(0, +)) / \(melodyBonusThreshold)"],
-            blue: ["\(blueNotes.reduce(0, +)) / \(melodyBonusThreshold)"]
+            red: renderImage(width: width, height: height, view: redContainerView),
+            blue: renderImage(width: width, height: height, view: blueContainerView)
         )
     }
-
-    private static func speakerRow(title: String, red: [String: Any]?, blue: [String: Any]?)
-        -> BreakdownRow?
-    {
-        let amplificationKeys = ["Count", "AmplifiedCount"]
-
-        let images = [BreakdownStyle2025.standardSpeaker, BreakdownStyle2025.amplifiedSpeaker]
-
-        var redNotes: [Int] = []
-        var blueNotes: [Int] = []
-
-        for amplificationKey in amplificationKeys {
-            var redHeightValues: [Int] = []
-            var blueHeightValues: [Int] = []
-
-            let key = "teleopSpeakerNote\(amplificationKey)"
-            guard let cellValues = values(key: key, red: red, blue: blue) else {
-                return nil
-            }
-
-            let (rv, bv) = cellValues
-
-            guard let redCellValue = rv as? Int, let blueCellValue = bv as? Int else {
-                return nil
-            }
-
-            redHeightValues.append(redCellValue)
-            blueHeightValues.append(blueCellValue)
-
-            redNotes.append(redHeightValues.reduce(0, +))
-            blueNotes.append(blueHeightValues.reduce(0, +))
+    private static func drawSegments(
+        level: Int,
+        dict: [String: Any]?,
+        view: UIView,
+        stage: matchStages
+    ) {
+        var key = ""
+        switch stage {
+        case .auto:
+            key = "autoReef"
+        case .teleop:
+            key = "teleopReef"
         }
-
-        let mode = UIView.ContentMode.scaleAspectFit
-        let redValues = zip(
-            (images).map {
-                return BreakdownStyle.imageView(image: $0, contentMode: mode)
-            },
-            redNotes
-        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
-
-        let blueValues = zip(
-            (images).map {
-                return BreakdownStyle.imageView(image: $0, contentMode: mode)
-            },
-            blueNotes
-        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
-
-        return BreakdownRow(title: title, red: redValues, blue: blueValues)
+        let levels = ["botRow", "midRow", "topRow"]
+        if let reef = dict?[key] as? [String: Any],
+            let values = reef[levels[level - 2]] as? [String: Bool]
+        {
+            let corals = getCoralinLevel(reef: values)
+            for coral in corals {
+                if let id = coral.last {
+                    switch stage {
+                    case .auto:
+                        setSegmentColor(id, to: .green, in: view)
+                    case .teleop:
+                        setSegmentCoral(id, to: .white, in: view)
+                    }
+                }
+            }
+        }
+        func getCoralinLevel(reef: [String: Bool]?) -> [String] {
+            var coral = [String]()
+            for (key, value) in reef ?? [:] {
+                if value == true {
+                    coral.append(key)
+                }
+            }
+            return coral
+        }
+    }
+    private static func drawHexagon(width: CGFloat, height: CGFloat) -> UIBezierPath {
+        let path = UIBezierPath()
+        let center = CGPoint(x: width / 2.0, y: height / 2.0)
+        let sideLength = width / 2.1
+        var vertices: [CGPoint] = []
+        for i in 0..<6 {
+            let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + 0.523599
+            let x = center.x + sideLength * cos(angle)
+            let y = center.y + sideLength * sin(angle)
+            let point = CGPoint(x: x, y: y)
+            vertices.append(point)
+            if i == 0 {
+                path.move(to: point)
+            } else {
+                path.addLine(to: point)
+            }
+        }
+        path.close()
+        for vertex in vertices {
+            path.move(to: center)
+            path.addLine(to: vertex)
+        }
+        path.close()
+        for i in 0..<vertices.count {
+            let currentVertex = vertices[i]
+            let nextVertex = vertices[(i + 1) % vertices.count]
+            let midpoint = CGPoint(
+                x: (currentVertex.x + nextVertex.x) / 2.0,
+                y: (currentVertex.y + nextVertex.y) / 2.0
+            )
+            path.move(to: center)
+            path.addLine(to: midpoint)
+        }
+        return path
     }
 
+    private static func renderImage(width: CGFloat, height: CGFloat, view: UIView)
+        -> [UIImageView]
+    {
+
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
+        let image = renderer.image { ctx in
+            view.layer.render(in: ctx.cgContext)
+        }
+
+        // Use BreakdownStyle's imageView helper so it conforms to BreakdownElement
+        let imageView = BreakdownStyle.imageView(image: image, contentMode: .scaleAspectFit)
+
+        return [imageView]
+    }
+
+    static func setSegmentColor(_ segmentLetter: Character, to color: UIColor, in view: UIView) {
+        let width: CGFloat = 640
+        let height: CGFloat = 640
+        let center = CGPoint(x: width / 2.0, y: height / 2.0)
+        let sideLength = width / 2.1
+
+        var vertices: [CGPoint] = []
+        for i in 0..<6 {
+            let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + 0.523599
+            let x = center.x + sideLength * cos(angle)
+            let y = center.y + sideLength * sin(angle)
+            let point = CGPoint(x: x, y: y)
+            vertices.append(point)
+        }
+
+        // Convert letter to index (A-L)
+        let letterToIndex: [Character: Int] = [
+            "A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5,
+            "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11,
+        ]
+
+        guard let segmentIndex = letterToIndex[segmentLetter] else {
+            print("Invalid segment letter. Use A through L.")
+            return
+        }
+
+        // Create sublayer for this segment
+        let segment = CAShapeLayer()
+        segment.fillColor = color.cgColor
+        segment.strokeColor = UIColor.clear.cgColor
+
+        let segmentPath = UIBezierPath()
+
+        // Each pair of segments shares two vertices, starting from left and going counterclockwise
+        let vertexIndex = (15 - segmentIndex / 2) % 6
+        let currentVertex = vertices[vertexIndex]
+        let nextVertex = vertices[(vertexIndex - 1 + 6) % 6]
+        let midpoint = CGPoint(
+            x: (currentVertex.x + nextVertex.x) / 2.0,
+            y: (currentVertex.y + nextVertex.y) / 2.0
+        )
+
+        if segmentIndex % 2 == 0 {
+            // Even indices (A, C, E, G, I, K) - triangle from center to first vertex to midpoint
+            segmentPath.move(to: center)
+            segmentPath.addLine(to: currentVertex)
+            segmentPath.addLine(to: midpoint)
+            segmentPath.close()
+        } else {
+            // Odd indices (B, D, F, H, J, L) - triangle from center to midpoint to next vertex
+            segmentPath.move(to: center)
+            segmentPath.addLine(to: midpoint)
+            segmentPath.addLine(to: nextVertex)
+            segmentPath.close()
+        }
+
+        segment.path = segmentPath.cgPath
+        view.layer.insertSublayer(segment, at: 0)
+    }
+    static func setSegmentCoral(_ segmentLetter: Character, to color: UIColor, in view: UIView) {
+        let width: CGFloat = 640
+        let height: CGFloat = 640
+        let center = CGPoint(x: width / 2.0, y: height / 2.0)
+        let sideLength = width / 2.1
+
+        var vertices: [CGPoint] = []
+        for i in 0..<6 {
+            let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + 0.523599
+            let x = center.x + sideLength * cos(angle)
+            let y = center.y + sideLength * sin(angle)
+            vertices.append(CGPoint(x: x, y: y))
+        }
+
+        let letterToIndex: [Character: Int] = [
+            "A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5,
+            "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11,
+        ]
+
+        guard let segmentIndex = letterToIndex[segmentLetter] else { return }
+
+        let vertexIndex = (15 - segmentIndex / 2) % 6
+        let v1 = vertices[vertexIndex]
+        let v2 = vertices[(vertexIndex - 1 + 6) % 6]
+        let mid = CGPoint(x: (v1.x + v2.x) / 2, y: (v1.y + v2.y) / 2)
+
+        let triangleCenter = CGPoint(
+            x: segmentIndex % 2 == 0
+                ? (center.x + v1.x + mid.x) / 3 : (center.x + mid.x + v2.x) / 3,
+            y: segmentIndex % 2 == 0 ? (center.y + v1.y + mid.y) / 3 : (center.y + mid.y + v2.y) / 3
+        )
+
+        var angle = atan2(triangleCenter.y - center.y, triangleCenter.x - center.x) + (1.5708 *  2)
+        
+        let legAngle = angle + (segmentIndex % 2 == 0 ? CGFloat.pi / 2 : -CGFloat.pi / 2)
+        let offset: CGFloat = 15
+
+        let offsetX = triangleCenter.x + offset * cos(legAngle)
+        let offsetY = triangleCenter.y + offset * sin(legAngle)
+        let offsetCenter = CGPoint(x: offsetX, y: offsetY)
+
+        if segmentIndex % 2 == 0 {
+            angle = angle - 0.261799
+        } else {
+            angle = angle + 0.261799
+        }
+        var image = UIImage(named: "coral_image")
+        image = image?.withRenderingMode(.alwaysOriginal)
+
+        let imageView = UIImageView(image: image)
+        imageView.frame = CGRect(x: 0, y: 0, width: 125, height: 125)
+        imageView.center = offsetCenter
+
+        let layer = imageView.layer
+        layer.transform = CATransform3DRotate(CATransform3DIdentity, angle, 0, 0, 1)
+
+        view.addSubview(imageView)
+    }
 }
