@@ -13,15 +13,21 @@ private class BreakdownStyle2025 {
     )
     public static let standardSpeaker = UIImage(systemName: "speaker.wave.1.fill")
     public static let amplifiedSpeaker = UIImage(systemName: "speaker.wave.3.fill")
-
 }
-private enum matchStages {
+private enum MatchStages {
     case auto
     case teleop
 }
+private enum Alliance {
+    case red
+    case blue
+}
 
 struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
-
+    private static let letterToIndex: [Character: Int] = [
+        "A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5,
+        "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11,
+    ]
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
@@ -139,17 +145,41 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 blue: blue
             )
         )
-        rows.append(coralMapRow(title: "L4 Scoring Location", red: red, blue: blue, level: 4))
-        rows.append(coralMapRow(title: "L3 Scoring Location", red: red, blue: blue, level: 3))
-        rows.append(coralMapRow(title: "L2 Scoring Location", red: red, blue: blue, level: 2))
+
+        rows.append(
+            coralMapRow(title: "High (L4) Scoring Location", red: red, blue: blue, level: 4)
+        )
+        rows.append(coralMapRow(title: "Mid (L3) Scoring Location", red: red, blue: blue, level: 3))
+        rows.append(coralMapRow(title: "Low (L2) Scoring Location", red: red, blue: blue, level: 2))
+
+        // No direct API for trough overall, so we have to add the auto and teleop values
+        let redL1 = [
+            "value": (nestedValue(keys: ["autoReef", "trough"], in: red) as? Int ?? 0)
+                + (nestedValue(keys: ["teleopReef", "trough"], in: red) as? Int ?? 0)
+        ]
+        let blueL1 = [
+            "value": (nestedValue(keys: ["autoReef", "trough"], in: blue) as? Int ?? 0)
+                + (nestedValue(keys: ["teleopReef", "trough"], in: blue) as? Int ?? 0)
+        ]
+        rows.append(
+            row(
+                title: "Trough (L1) Scoring Location",
+                key: "value",
+                red: redL1,
+                blue: blueL1
+            )
+        )
+
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
         if !validRows.isEmpty {
             snapshot.appendSections([nil])
             snapshot.appendItems(validRows)
         }
+
     }
 
+    // Row build helpers
     private static func leave(red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
         var redLeaveStrings: [String] = []
         var blueLeaveStrings: [String] = []
@@ -303,6 +333,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
+    
+    // Coral Map Rendering
     private static func coralMapRow(
         title: String,
         red: [String: Any]?,
@@ -328,11 +360,24 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             let containerView = i == 0 ? redContainerView : blueContainerView
             let shapeLayer = i == 0 ? redShapeLayer : blueShapeLayer
             let dict = i == 0 ? red : blue
+            let alliance = i == 0 ? Alliance.red : Alliance.blue
             containerView.backgroundColor = .clear
             containerView.layer.addSublayer(shapeLayer)
-            
-            drawSegments(level: level, dict: dict, view: containerView, stage: .auto)
-            drawSegments(level: level, dict: dict, view: containerView, stage: .teleop)
+
+            drawSegments(
+                level: level,
+                dict: dict,
+                view: containerView,
+                stage: .auto,
+                alliance: alliance
+            )
+            drawSegments(
+                level: level,
+                dict: dict,
+                view: containerView,
+                stage: .teleop,
+                alliance: alliance
+            )
         }
         return BreakdownRow(
             title: title,
@@ -344,7 +389,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         level: Int,
         dict: [String: Any]?,
         view: UIView,
-        stage: matchStages
+        stage: MatchStages,
+        alliance: Alliance
     ) {
         var key = ""
         switch stage {
@@ -362,9 +408,9 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 if let id = coral.last {
                     switch stage {
                     case .auto:
-                        setSegmentColor(id, to: .green, in: view)
+                        setSegment(id, to: .green, in: view, alliance: alliance, stage: .auto)
                     case .teleop:
-                        setSegmentCoral(id, to: .white, in: view)
+                        setSegment(id, to: .white, in: view, alliance: alliance, stage: .teleop)
                     }
                 }
             }
@@ -379,21 +425,125 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             return coral
         }
     }
+    private static func setSegment(
+        _ segmentLetter: Character,
+        to color: UIColor,
+        in view: UIView,
+        alliance: Alliance,
+        stage: MatchStages
+    ) {
+        let width: CGFloat = 640
+        let height: CGFloat = 640
+        let center = CGPoint(x: width / 2.0, y: height / 2.0)
+        let sideLength = width / 2.1
+
+        let vertices: [CGPoint] = generateHexVertices(
+            centerX: center.x,
+            centerY: center.y,
+            sideLength: sideLength
+        )
+        guard let segmentIndex = letterToIndex[segmentLetter] else {
+            print("Invalid segment letter. Use A through L.")
+            return
+        }
+
+        // Find the current and next vertex
+        // Blue alliance flips the reef, so we adjust the vertex lookup accordingly
+        let vertexIndex = ((alliance == .red ? 9 : 6) - segmentIndex / 2) % 6
+        let v1 = vertices[vertexIndex]
+        let v2 = vertices[(vertexIndex - 1 + 6) % 6]
+        let mid = CGPoint(
+            x: (v1.x + v2.x) / 2.0,
+            y: (v1.y + v2.y) / 2.0
+        )
+        switch stage {
+        case .auto:
+            let segment = CAShapeLayer()
+            segment.fillColor = color.cgColor
+            segment.strokeColor = UIColor.clear.cgColor
+            let segmentPath = UIBezierPath()
+
+            if segmentIndex % 2 == 0 {
+                // Even indices (A, C, E, G, I, K) - triangle from center to first vertex to midpoint
+                segmentPath.move(to: center)
+                segmentPath.addLine(to: v1)
+                segmentPath.addLine(to: mid)
+                segmentPath.close()
+            } else {
+                // Odd indices (B, D, F, H, J, L) - triangle from center to midpoint to next vertex
+                segmentPath.move(to: center)
+                segmentPath.addLine(to: mid)
+                segmentPath.addLine(to: v2)
+                segmentPath.close()
+            }
+
+            segment.path = segmentPath.cgPath
+            view.layer.insertSublayer(segment, at: 0)
+        case .teleop:
+            let triangleCenter = CGPoint(
+                x: segmentIndex % 2 == 0
+                    ? (center.x + v1.x + mid.x) / 3 : (center.x + mid.x + v2.x) / 3,
+                y: segmentIndex % 2 == 0
+                    ? (center.y + v1.y + mid.y) / 3 : (center.y + mid.y + v2.y) / 3
+            )
+
+            var angle =
+                atan2(triangleCenter.y - center.y, triangleCenter.x - center.x) + CGFloat.pi
+
+            let legAngle = angle + (segmentIndex % 2 == 0 ? CGFloat.pi / 2 : -CGFloat.pi / 2)
+            let offset: CGFloat = 15
+
+            let offsetX = triangleCenter.x + offset * cos(legAngle)
+            let offsetY = triangleCenter.y + offset * sin(legAngle)
+            let offsetCenter = CGPoint(x: offsetX, y: offsetY)
+
+            // Rotate the coral by +15/-15 degrees based on segment index
+            if segmentIndex % 2 == 0 {
+                angle = angle - 0.261799  // Rotate even segments by -15°
+            } else {
+                angle = angle + 0.261799  // Rotate odd segments by +15°
+            }
+            let image = UIImage(named: "coral_image") ?? UIImage(systemName: "circle.fill")
+
+            let imageView = UIImageView(image: image?.withRenderingMode(.alwaysOriginal))
+            imageView.frame = CGRect(x: 0, y: 0, width: 125, height: 125)
+            imageView.center = offsetCenter
+
+            let layer = imageView.layer
+            layer.transform = CATransform3DRotate(CATransform3DIdentity, angle, 0, 0, 1)
+            view.addSubview(imageView)
+
+        }
+    }
+    private static func renderImage(width: CGFloat, height: CGFloat, view: UIView)
+        -> [UIImageView]
+    {
+
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
+        let image = renderer.image { ctx in
+            view.layer.render(in: ctx.cgContext)
+        }
+
+        let imageView = BreakdownStyle.imageView(image: image, contentMode: .scaleAspectFit)
+        return [imageView]
+    }
+    
+    // Geometry Helper Methods
     private static func drawHexagon(width: CGFloat, height: CGFloat) -> UIBezierPath {
         let path = UIBezierPath()
         let center = CGPoint(x: width / 2.0, y: height / 2.0)
         let sideLength = width / 2.1
-        var vertices: [CGPoint] = []
-        for i in 0..<6 {
-            let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + 0.523599
-            let x = center.x + sideLength * cos(angle)
-            let y = center.y + sideLength * sin(angle)
-            let point = CGPoint(x: x, y: y)
-            vertices.append(point)
-            if i == 0 {
-                path.move(to: point)
+        let vertices: [CGPoint] = generateHexVertices(
+            centerX: center.x,
+            centerY: center.y,
+            sideLength: sideLength
+        )
+
+        for (offset, vertex) in vertices.enumerated() {
+            if offset == 0 {
+                path.move(to: vertex)
             } else {
-                path.addLine(to: point)
+                path.addLine(to: vertex)
             }
         }
         path.close()
@@ -414,137 +564,19 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         }
         return path
     }
-
-    private static func renderImage(width: CGFloat, height: CGFloat, view: UIView)
-        -> [UIImageView]
-    {
-
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
-        let image = renderer.image { ctx in
-            view.layer.render(in: ctx.cgContext)
-        }
-
-        // Use BreakdownStyle's imageView helper so it conforms to BreakdownElement
-        let imageView = BreakdownStyle.imageView(image: image, contentMode: .scaleAspectFit)
-
-        return [imageView]
-    }
-
-    static func setSegmentColor(_ segmentLetter: Character, to color: UIColor, in view: UIView) {
-        let width: CGFloat = 640
-        let height: CGFloat = 640
-        let center = CGPoint(x: width / 2.0, y: height / 2.0)
-        let sideLength = width / 2.1
-
+    private static func generateHexVertices(
+        centerX: CGFloat,
+        centerY: CGFloat,
+        sideLength: CGFloat,
+    ) -> [CGPoint] {
         var vertices: [CGPoint] = []
         for i in 0..<6 {
             let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + 0.523599
-            let x = center.x + sideLength * cos(angle)
-            let y = center.y + sideLength * sin(angle)
+            let x = centerX + sideLength * cos(angle)
+            let y = centerY + sideLength * sin(angle)
             let point = CGPoint(x: x, y: y)
             vertices.append(point)
         }
-
-        // Convert letter to index (A-L)
-        let letterToIndex: [Character: Int] = [
-            "A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5,
-            "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11,
-        ]
-
-        guard let segmentIndex = letterToIndex[segmentLetter] else {
-            print("Invalid segment letter. Use A through L.")
-            return
-        }
-
-        // Create sublayer for this segment
-        let segment = CAShapeLayer()
-        segment.fillColor = color.cgColor
-        segment.strokeColor = UIColor.clear.cgColor
-
-        let segmentPath = UIBezierPath()
-
-        // Each pair of segments shares two vertices, starting from left and going counterclockwise
-        let vertexIndex = (15 - segmentIndex / 2) % 6
-        let currentVertex = vertices[vertexIndex]
-        let nextVertex = vertices[(vertexIndex - 1 + 6) % 6]
-        let midpoint = CGPoint(
-            x: (currentVertex.x + nextVertex.x) / 2.0,
-            y: (currentVertex.y + nextVertex.y) / 2.0
-        )
-
-        if segmentIndex % 2 == 0 {
-            // Even indices (A, C, E, G, I, K) - triangle from center to first vertex to midpoint
-            segmentPath.move(to: center)
-            segmentPath.addLine(to: currentVertex)
-            segmentPath.addLine(to: midpoint)
-            segmentPath.close()
-        } else {
-            // Odd indices (B, D, F, H, J, L) - triangle from center to midpoint to next vertex
-            segmentPath.move(to: center)
-            segmentPath.addLine(to: midpoint)
-            segmentPath.addLine(to: nextVertex)
-            segmentPath.close()
-        }
-
-        segment.path = segmentPath.cgPath
-        view.layer.insertSublayer(segment, at: 0)
-    }
-    static func setSegmentCoral(_ segmentLetter: Character, to color: UIColor, in view: UIView) {
-        let width: CGFloat = 640
-        let height: CGFloat = 640
-        let center = CGPoint(x: width / 2.0, y: height / 2.0)
-        let sideLength = width / 2.1
-
-        var vertices: [CGPoint] = []
-        for i in 0..<6 {
-            let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + 0.523599
-            let x = center.x + sideLength * cos(angle)
-            let y = center.y + sideLength * sin(angle)
-            vertices.append(CGPoint(x: x, y: y))
-        }
-
-        let letterToIndex: [Character: Int] = [
-            "A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5,
-            "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11,
-        ]
-
-        guard let segmentIndex = letterToIndex[segmentLetter] else { return }
-
-        let vertexIndex = (15 - segmentIndex / 2) % 6
-        let v1 = vertices[vertexIndex]
-        let v2 = vertices[(vertexIndex - 1 + 6) % 6]
-        let mid = CGPoint(x: (v1.x + v2.x) / 2, y: (v1.y + v2.y) / 2)
-
-        let triangleCenter = CGPoint(
-            x: segmentIndex % 2 == 0
-                ? (center.x + v1.x + mid.x) / 3 : (center.x + mid.x + v2.x) / 3,
-            y: segmentIndex % 2 == 0 ? (center.y + v1.y + mid.y) / 3 : (center.y + mid.y + v2.y) / 3
-        )
-
-        var angle = atan2(triangleCenter.y - center.y, triangleCenter.x - center.x) + (1.5708 *  2)
-        
-        let legAngle = angle + (segmentIndex % 2 == 0 ? CGFloat.pi / 2 : -CGFloat.pi / 2)
-        let offset: CGFloat = 15
-
-        let offsetX = triangleCenter.x + offset * cos(legAngle)
-        let offsetY = triangleCenter.y + offset * sin(legAngle)
-        let offsetCenter = CGPoint(x: offsetX, y: offsetY)
-
-        if segmentIndex % 2 == 0 {
-            angle = angle - 0.261799
-        } else {
-            angle = angle + 0.261799
-        }
-        var image = UIImage(named: "coral_image")
-        image = image?.withRenderingMode(.alwaysOriginal)
-
-        let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 0, y: 0, width: 125, height: 125)
-        imageView.center = offsetCenter
-
-        let layer = imageView.layer
-        layer.transform = CATransform3DRotate(CATransform3DIdentity, angle, 0, 0, 1)
-
-        view.addSubview(imageView)
+        return vertices
     }
 }
