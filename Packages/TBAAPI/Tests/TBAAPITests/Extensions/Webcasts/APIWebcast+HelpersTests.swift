@@ -75,13 +75,88 @@ struct APIWebcastHelpersTests {
         #expect(webcast.dateParsed == nil)
     }
 
+    // MARK: - dateString
+
+    @Test func dateString_nilWhenNoDate() {
+        let webcast = makeWebcast(type: .youtube, channel: "x", date: nil)
+        #expect(webcast.dateString == nil)
+    }
+
+    @Test func dateString_formatsAsMonthDay() {
+        let webcast = makeWebcast(type: .youtube, channel: "x", date: "2024-03-05")
+        #expect(webcast.dateString == "Mar 5")
+    }
+
+    // MARK: - subtitleString
+
+    @Test func subtitleString_nilWhenNoDateAndOffline() {
+        let webcast = makeWebcast(type: .youtube, channel: "x")
+        #expect(webcast.subtitleString == nil)
+    }
+
+    @Test func subtitleString_dateOnly() {
+        let webcast = makeWebcast(type: .youtube, channel: "x", date: "2024-03-05")
+        #expect(webcast.subtitleString == "Mar 5")
+    }
+
+    @Test func subtitleString_dateAndViewerCountWhenOnline() {
+        let webcast = makeWebcast(
+            type: .youtube,
+            channel: "x",
+            date: "2024-03-05",
+            status: .online,
+            viewerCount: 1234
+        )
+        #expect(webcast.subtitleString == "Mar 5 · 1,234 watching")
+    }
+
+    @Test func subtitleString_skipsViewerCountWhenOffline() {
+        let webcast = makeWebcast(
+            type: .youtube,
+            channel: "x",
+            date: "2024-03-05",
+            status: .offline,
+            viewerCount: 1234
+        )
+        #expect(webcast.subtitleString == "Mar 5")
+    }
+
+    @Test func subtitleString_skipsZeroViewers() {
+        let webcast = makeWebcast(
+            type: .youtube,
+            channel: "x",
+            date: "2024-03-05",
+            status: .online,
+            viewerCount: 0
+        )
+        #expect(webcast.subtitleString == "Mar 5")
+    }
+
+    @Test func subtitleString_viewerCountOnlyWhenNoDate() {
+        let webcast = makeWebcast(
+            type: .youtube,
+            channel: "x",
+            status: .online,
+            viewerCount: 42
+        )
+        #expect(webcast.subtitleString == "42 watching")
+    }
+
     // MARK: - Test helpers
 
     private func makeWebcast(
         type: Webcast._TypePayload,
         channel: String,
-        date: String? = nil
+        date: String? = nil,
+        status: Webcast.StatusPayload? = nil,
+        viewerCount: Int? = nil
     ) -> Webcast {
-        Webcast(_type: type, channel: channel, date: date)
+        Webcast(
+            _type: type,
+            channel: channel,
+            date: date,
+            status: status,
+            viewerCount: viewerCount
+        )
     }
 }

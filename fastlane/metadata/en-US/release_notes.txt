@@ -1,4 +1,4 @@
-Hey y'all - welcome to v3.4.0 (shoutout to my GRR friends + M&J). This update contains a lot of missing parity features. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - welcome to v3.4.1 (shoutout to my Miss Daisy friends + KB). This update contains a lot of missing parity features. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
 
 Features:
 * Added support for ALL playoff types in the Event Matches list - including double elimination brackets
@@ -13,6 +13,7 @@ Features:
 * Long event names now wrap to multiple lines in Search, MyTBA, and event lists instead of being truncated
 * New loading view for the Team header view - should be less jumpy and more pretty
 * B teams are now properly supported for offseason events, will link to their parent team on tap
+* Surfaces webcast dates as well as viewer counts + online status event webcasts
 
 Bug fixes:
 * Restored team nicknames on District Rankings, Awards, District Points, and Team@Event Stats (were falling back to "Team N")
@@ -21,3 +22,4 @@ Bug fixes:
 * Fixed 2026 insights rendering when average win score is missing
 * Search now allows for using the year in the search string
 * Team page no longer shows a doubled "Team N / Team N" header when a team has no nickname
+* Fixes Nexus links not directing to CMP division pit maps
