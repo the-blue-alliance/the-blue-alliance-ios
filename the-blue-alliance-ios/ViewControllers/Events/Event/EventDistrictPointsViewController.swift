@@ -119,7 +119,6 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     private func apply(points: EventDistrictPoints?) {

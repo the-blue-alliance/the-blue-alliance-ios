@@ -112,7 +112,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     private func applyMatches(_ matches: [Match]) {
@@ -135,14 +134,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             snapshot.appendItems(grouped[section] ?? [], toSection: section)
         }
         dataSource.applySnapshotUsingReloadData(snapshot)
-    }
-
-    // MARK: TableViewDataSourceDelegate
-
-    override func title(forSection section: Int) -> String? {
-        let sectionIDs = dataSource.snapshot().sectionIdentifiers
-        guard section >= 0, section < sectionIDs.count else { return nil }
-        return sectionIDs[section].title
     }
 
     // MARK: UITableView Delegate

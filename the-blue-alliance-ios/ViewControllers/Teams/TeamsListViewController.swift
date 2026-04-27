@@ -69,7 +69,6 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     private func applyTeams(_ teams: [APITeam]) {

@@ -13,13 +13,25 @@ struct InsightRow: Hashable {
     }
 }
 
+// Section 0 renders a custom EventInsightsHeaderView; suppress its default title.
+private final class EventInsightsDataSource: TableViewDataSource<String, InsightRow> {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
+        -> String?
+    {
+        guard section > 0 else { return nil }
+        let identifiers = snapshot().sectionIdentifiers
+        guard section < identifiers.count else { return nil }
+        return identifiers[section]
+    }
+}
+
 class EventInsightsViewController: TBATableViewController, Refreshable, Stateful {
 
     private let eventKey: EventKey
     private let year: Int
     private let eventStatsConfigurator: EventInsightsConfigurator.Type?
 
-    private var dataSource: TableViewDataSource<String, InsightRow>!
+    private var dataSource: EventInsightsDataSource!
 
     init(eventKey: EventKey, year: Int, dependencies: Dependencies) {
         self.eventKey = eventKey
@@ -93,21 +105,10 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         return headerView
     }
 
-    // MARK: - TableViewDataSourceDelegate
-
-    override func title(forSection section: Int) -> String? {
-        if section == 0 {
-            return nil
-        }
-        let snapshot = dataSource.snapshot()
-        let title = snapshot.sectionIdentifiers[section]
-        return title
-    }
-
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, InsightRow>(tableView: tableView) {
+        dataSource = EventInsightsDataSource(tableView: tableView) {
             (tableView, indexPath, row) -> UITableViewCell? in
             if indexPath.section == 0 {
                 let cell =
@@ -145,7 +146,6 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                 return cell
             }
         }
-        dataSource.delegate = self
         dataSource.statefulDelegate = self
     }
 

@@ -1,18 +1,15 @@
 import Foundation
 import UIKit
 
-protocol TableViewDataSourceDelegate: AnyObject {
-    func title(forSection section: Int) -> String?
+protocol TableSectionTitleProviding {
+    var headerTitle: String? { get }
 }
 
-/// TableViewDataSource is a wrapper around a UITableViewDiffableDataSource that implements
-/// UITableViewDataSource for TBA where we manage no data states and whatnot for table views
 class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<
     Section, Item
 >
 {
 
-    weak var delegate: TableViewDataSourceDelegate?
     weak var statefulDelegate: (Stateful & Refreshable)?
 
     // MARK: - Public Methods
@@ -58,7 +55,9 @@ class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffabl
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
         -> String?
     {
-        return delegate?.title(forSection: section)
+        let identifiers = snapshot().sectionIdentifiers
+        guard section >= 0, section < identifiers.count else { return nil }
+        return (identifiers[section] as? TableSectionTitleProviding)?.headerTitle
     }
 
 }

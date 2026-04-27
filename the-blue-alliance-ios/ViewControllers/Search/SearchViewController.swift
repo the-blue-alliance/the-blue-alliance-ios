@@ -24,6 +24,10 @@ enum SearchSection: String {
     case events = "Events"
 }
 
+extension SearchSection: TableSectionTitleProviding {
+    var headerTitle: String? { rawValue }
+}
+
 protocol SearchViewControllerDelegate: AnyObject {
     func eventSelected(eventKey: EventKey, name: String?)
     func teamSelected(teamKey: String, nickname: String?)
@@ -102,7 +106,6 @@ class SearchViewController: TBATableViewController {
                 return cell
             }
         }
-        dataSource.delegate = self
         dataSource.statefulDelegate = self
     }
 
@@ -187,10 +190,6 @@ class SearchViewController: TBATableViewController {
         case .event(let key, let name): delegate?.eventSelected(eventKey: key, name: name)
         case .team(let key, let nickname): delegate?.teamSelected(teamKey: key, nickname: nickname)
         }
-    }
-
-    override func title(forSection section: Int) -> String? {
-        dataSource.snapshot().sectionIdentifiers[section].rawValue
     }
 
 }

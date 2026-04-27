@@ -109,7 +109,6 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     private func applyAwards(_ awards: [Award]) {

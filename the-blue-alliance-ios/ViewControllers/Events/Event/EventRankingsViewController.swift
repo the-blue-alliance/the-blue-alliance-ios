@@ -64,7 +64,6 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     private func applyRanking(_ response: EventRanking?) {
