@@ -112,7 +112,12 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
 
         for key in ["auto", "coral", "barge"] {
             rows.append(
-                bonusRankingPointRow(title: key.capitalized + " Bonus", key: key, red: red, blue: blue)
+                bonusRankingPointRow(
+                    title: key.capitalized + " Bonus",
+                    key: key,
+                    red: red,
+                    blue: blue
+                )
             )
         }
         rows.append(foulRow(title: "Fouls / Major Fouls", red: red, blue: blue))
@@ -141,22 +146,29 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         rows.append(coralMapRow(title: "Low (L2) Scoring Location", red: red, blue: blue, level: 2))
 
         // No direct API for trough overall, so we have to add the auto and teleop values
-        let redL1 = [
-            "value": (nestedValue(keys: ["autoReef", "trough"], in: red) as? Int ?? 0)
-                + (nestedValue(keys: ["teleopReef", "trough"], in: red) as? Int ?? 0)
-        ]
-        let blueL1 = [
-            "value": (nestedValue(keys: ["autoReef", "trough"], in: blue) as? Int ?? 0)
-                + (nestedValue(keys: ["teleopReef", "trough"], in: blue) as? Int ?? 0)
-        ]
-        rows.append(
-            row(
-                title: "Trough (L1) Scoring Location",
-                key: "value",
-                red: redL1,
-                blue: blueL1
+
+        if nestedValue(keys: ["autoReef", "trough"], in: red) != nil
+            || nestedValue(keys: ["teleopReef", "trough"], in: red) != nil
+            || nestedValue(keys: ["autoReef", "trough"], in: blue) != nil
+            || nestedValue(keys: ["teleopReef", "trough"], in: blue) != nil
+        {
+            let redL1 = [
+                "value": (nestedValue(keys: ["autoReef", "trough"], in: red) as? Int ?? 0)
+                    + (nestedValue(keys: ["teleopReef", "trough"], in: red) as? Int ?? 0)
+            ]
+            let blueL1 = [
+                "value": (nestedValue(keys: ["autoReef", "trough"], in: blue) as? Int ?? 0)
+                    + (nestedValue(keys: ["teleopReef", "trough"], in: blue) as? Int ?? 0)
+            ]
+            rows.append(
+                row(
+                    title: "Trough (L1) Scoring Location",
+                    key: "value",
+                    red: redL1,
+                    blue: blueL1
+                )
             )
-        )
+        }
 
         // Clean up any empty rows
         let validRows = rows.compactMap({ $0 })
@@ -341,14 +353,17 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             shapeLayer.lineWidth = 10
             shapeLayer.path = drawHexagon(width: width, height: height).cgPath
         }
-
+        if red?["autoReef"] == nil || red?["teleopReef"] == nil || blue?["autoReef"] == nil
+            || blue?["teleopReef"] == nil
+        {
+            return nil
+        }
         let redContainerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         let blueContainerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
-        for i in 0..<2 {
-            let containerView = i == 0 ? redContainerView : blueContainerView
-            let shapeLayer = i == 0 ? redShapeLayer : blueShapeLayer
-            let dict = i == 0 ? red : blue
-            let alliance = i == 0 ? Alliance.red : Alliance.blue
+        for (containerView, shapeLayer, dict, alliance) in [
+            (redContainerView, redShapeLayer, red, Alliance.red),
+            (blueContainerView, blueShapeLayer, blue, Alliance.blue),
+        ] {
             containerView.backgroundColor = .clear
             containerView.layer.addSublayer(shapeLayer)
 
@@ -402,7 +417,6 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 }
             }
         }
-    }
     }
     private static func setSegment(
         _ segmentLetter: Character,
