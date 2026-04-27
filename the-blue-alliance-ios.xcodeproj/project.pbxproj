@@ -41,6 +41,7 @@
 		921F609923CD4DFD00FE633B /* MatchBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921F609823CD4DFD00FE633B /* MatchBreakdownView.swift */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
 		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
+		9236EE002F9F0289001546F8 /* UIDevice+TBADisplayName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9236EDFF2F9F0289001546F8 /* UIDevice+TBADisplayName.swift */; };
 		92435E2E23CBC2ED00CDD2D4 /* EventInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */; };
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
 		924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */; };
@@ -129,7 +130,6 @@
 		92C079C723F99CA400AE2AFA /* EventInsightsConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C079C623F99CA400AE2AFA /* EventInsightsConfigurator2020.swift */; };
 		92C5FBDC2B0037E10006AE48 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */; };
 		92C5FBDF2B0038250006AE48 /* Agrume in Frameworks */ = {isa = PBXBuildFile; productRef = 92C5FBDE2B0038250006AE48 /* Agrume */; };
-		92F63EAA2BA91B500025CC03 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EAB2BA91B500025CC03 /* SkeletonView */; };
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
 		92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */; };
@@ -146,6 +146,7 @@
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63E9A2BA91B4F0025CC03 /* MyTBAKit */; };
+		92F63EAA2BA91B500025CC03 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63EAB2BA91B500025CC03 /* SkeletonView */; };
 		92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F79A7523D6536A0026E9E8 /* SearchContainer.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
@@ -180,10 +181,10 @@
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		A11CF00E00000000000000BB /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A11CF00E00000000000000FF /* AppIcon.icon */; };
-		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
 		AA00000000000000000AA003 /* MatchSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA004 /* MatchSection.swift */; };
 		AA00000000000000000AA007 /* AllianceLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA008 /* AllianceLookup.swift */; };
 		AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA00A /* AllianceBadgeView.swift */; };
+		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
 /* End PBXBuildFile section */
 
@@ -219,6 +220,7 @@
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
 		9236EDF52F9C6287001546F8 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
+		9236EDFF2F9F0289001546F8 /* UIDevice+TBADisplayName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+TBADisplayName.swift"; sourceTree = "<group>"; };
 		92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsView.swift; sourceTree = "<group>"; };
 		924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwardTableViewCell.swift; sourceTree = "<group>"; };
 		924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AwardTableViewCell.xib; sourceTree = "<group>"; };
@@ -353,10 +355,10 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
-		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA004 /* MatchSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSection.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA008 /* AllianceLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceLookup.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA00A /* AllianceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceBadgeView.swift; sourceTree = "<group>"; };
+		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -686,6 +688,7 @@
 		92A5E5C721A22D550025CC85 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9236EDFF2F9F0289001546F8 /* UIDevice+TBADisplayName.swift */,
 				92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */,
 				92A5E5C921A22D550025CC85 /* Bundle+Version.swift */,
 				92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */,
@@ -919,6 +922,14 @@
 			path = Events;
 			sourceTree = "<group>";
 		};
+		AA00000000000000000AA00B /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000000000000000AA008 /* AllianceLookup.swift */,
+			);
+			path = Match;
+			sourceTree = "<group>";
+		};
 		BA0000000000000000000010 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -926,14 +937,6 @@
 				AA00000000000000000AA00B /* Match */,
 			);
 			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		AA00000000000000000AA00B /* Match */ = {
-			isa = PBXGroup;
-			children = (
-				AA00000000000000000AA008 /* AllianceLookup.swift */,
-			);
-			path = Match;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1103,6 +1106,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */,
+				9236EE002F9F0289001546F8 /* UIDevice+TBADisplayName.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
 				5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */,
@@ -1571,14 +1575,14 @@
 			package = 92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */;
 			productName = Agrume;
 		};
+		92F63E9A2BA91B4F0025CC03 /* MyTBAKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MyTBAKit;
+		};
 		92F63EAB2BA91B500025CC03 /* SkeletonView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 92F63EAC2BA91B500025CC03 /* XCRemoteSwiftPackageReference "SkeletonView" */;
 			productName = SkeletonView;
-		};
-		92F63E9A2BA91B4F0025CC03 /* MyTBAKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MyTBAKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
