@@ -2,18 +2,6 @@ import Foundation
 import TBAAPI
 import UIKit
 
-private class BreakdownStyle2025 {
-    public static let upperImage = UIImage(
-        systemName: "chevron.up",
-        withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
-    )
-    public static let lowerImage = UIImage(
-        systemName: "chevron.down",
-        withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
-    )
-    public static let standardSpeaker = UIImage(systemName: "speaker.wave.1.fill")
-    public static let amplifiedSpeaker = UIImage(systemName: "speaker.wave.3.fill")
-}
 private enum MatchStages {
     case auto
     case teleop
