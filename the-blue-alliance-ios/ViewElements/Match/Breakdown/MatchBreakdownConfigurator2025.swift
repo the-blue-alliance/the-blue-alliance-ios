@@ -110,9 +110,9 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             )
         )
 
-        for i in ["auto", "coral", "barge"] {
+        for key in ["auto", "coral", "barge"] {
             rows.append(
-                bonusRankingPointRow(title: i.capitalized + " Bonus", key: i, red: red, blue: blue)
+                bonusRankingPointRow(title: key.capitalized + " Bonus", key: key, red: red, blue: blue)
             )
         }
         rows.append(foulRow(title: "Fouls / Major Fouls", red: red, blue: blue))
@@ -329,8 +329,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         blue: [String: Any]?,
         level: Int
     ) -> BreakdownRow? {
-        let width: CGFloat = 640
-        let height: CGFloat = 640
+        let width: CGFloat = 400
+        let height: CGFloat = 400
 
         let redShapeLayer = CAShapeLayer()
         let blueShapeLayer = CAShapeLayer()
@@ -391,9 +391,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         if let reef = dict?[key] as? [String: Any],
             let values = reef[levels[level - 2]] as? [String: Bool]
         {
-            let corals = getCoralinLevel(reef: values)
-            for coral in corals {
-                if let id = coral.last {
+            for (nodeKey, scored) in values where scored {
+                if let id = nodeKey.last {
                     switch stage {
                     case .auto:
                         setSegment(id, to: .green, in: view, alliance: alliance, stage: .auto)
@@ -403,15 +402,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 }
             }
         }
-        func getCoralinLevel(reef: [String: Bool]?) -> [String] {
-            var coral = [String]()
-            for (key, value) in reef ?? [:] {
-                if value == true {
-                    coral.append(key)
-                }
-            }
-            return coral
-        }
+    }
     }
     private static func setSegment(
         _ segmentLetter: Character,
@@ -420,8 +411,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         alliance: Alliance,
         stage: MatchStages
     ) {
-        let width: CGFloat = 640
-        let height: CGFloat = 640
+        let width: CGFloat = 400
+        let height: CGFloat = 400
         let center = CGPoint(x: width / 2.0, y: height / 2.0)
         let sideLength = width / 2.1
 
@@ -430,8 +421,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             centerY: center.y,
             sideLength: sideLength
         )
+        // Only segment letters A through L are supported
         guard let segmentIndex = letterToIndex[segmentLetter] else {
-            print("Invalid segment letter. Use A through L.")
             return
         }
 
@@ -479,7 +470,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 atan2(triangleCenter.y - center.y, triangleCenter.x - center.x) + CGFloat.pi
 
             let legAngle = angle + (segmentIndex % 2 == 0 ? CGFloat.pi / 2 : -CGFloat.pi / 2)
-            let offset: CGFloat = 15
+            let offset: CGFloat = 10
 
             let offsetX = triangleCenter.x + offset * cos(legAngle)
             let offsetY = triangleCenter.y + offset * sin(legAngle)
@@ -487,14 +478,14 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
 
             // Rotate the coral by +15/-15 degrees based on segment index
             if segmentIndex % 2 == 0 {
-                angle = angle - 0.261799  // Rotate even segments by -15°
+                angle = angle - .pi / 12  // Rotate even segments by -15°
             } else {
-                angle = angle + 0.261799  // Rotate odd segments by +15°
+                angle = angle + .pi / 12  // Rotate odd segments by +15°
             }
             let image = UIImage(named: "coral_image") ?? UIImage(systemName: "circle.fill")
 
             let imageView = UIImageView(image: image?.withRenderingMode(.alwaysOriginal))
-            imageView.frame = CGRect(x: 0, y: 0, width: 125, height: 125)
+            imageView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
             imageView.center = offsetCenter
 
             let layer = imageView.layer
@@ -559,7 +550,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
     ) -> [CGPoint] {
         var vertices: [CGPoint] = []
         for i in 0..<6 {
-            let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + 0.523599
+            let angle = (CGFloat.pi / 3.0 * CGFloat(i)) + .pi / 6  // Rotate by 30°
             let x = centerX + sideLength * cos(angle)
             let y = centerY + sideLength * sin(angle)
             let point = CGPoint(x: x, y: y)
