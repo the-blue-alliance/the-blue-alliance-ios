@@ -3,9 +3,7 @@ import MyTBAKit
 import TBAAPI
 import UIKit
 
-class TBATableViewController: UITableViewController, TableViewDataSourceDelegate, DataController,
-    Navigatable
-{
+class TBATableViewController: UITableViewController, DataController, Navigatable {
 
     let dependencies: Dependencies
 
@@ -78,12 +76,6 @@ class TBATableViewController: UITableViewController, TableViewDataSourceDelegate
             headerView.backgroundColor = UIColor.tableViewHeaderColor
             view.backgroundView = headerView
         }
-    }
-
-    // MARK: - TableViewDataSourceDelegate
-
-    func title(forSection section: Int) -> String? {
-        return nil
     }
 
 }

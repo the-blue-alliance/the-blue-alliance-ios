@@ -59,7 +59,6 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     override func updateDataSource() {

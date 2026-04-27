@@ -13,6 +13,10 @@ public struct EventSection: Hashable, Comparable {
     }
 }
 
+extension EventSection: TableSectionTitleProviding {
+    public var headerTitle: String? { title }
+}
+
 extension APIEventType {
     // Mostly the TBA rawValue; preseason (100) and unlabeled (-1) are pushed
     // to the ends so they don't render in the middle of the chronological flow.

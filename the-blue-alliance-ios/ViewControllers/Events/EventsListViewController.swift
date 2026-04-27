@@ -10,6 +10,20 @@ extension EventsListViewControllerDelegate {
     func title(for event: Event) -> String? { nil }
 }
 
+// Lets the host VC overlay a per-event header title on top of the section's natural title.
+private final class EventsListDataSource: TableViewDataSource<EventSection, Event> {
+    var titleOverride: ((Event) -> String?)?
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
+        -> String?
+    {
+        let firstItem = itemIdentifier(for: IndexPath(item: 0, section: section))
+        guard let event = firstItem else { return "Events" }
+        if let custom = titleOverride?(event) { return custom }
+        return super.tableView(tableView, titleForHeaderInSection: section)
+    }
+}
+
 class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     typealias APIEvent = Event
@@ -17,7 +31,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     weak var delegate: EventsListViewControllerDelegate?
 
     private(set) var events: [APIEvent] = []
-    private var dataSource: TableViewDataSource<EventSection, APIEvent>!
+    private var dataSource: EventsListDataSource!
 
     // MARK: - View Lifecycle
 
@@ -39,7 +53,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     // MARK: - Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<EventSection, APIEvent>(tableView: tableView) {
+        dataSource = EventsListDataSource(tableView: tableView) {
             [weak self] tableView, indexPath, event in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
             cell.viewModel = EventCellViewModel(
@@ -52,7 +66,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
+        dataSource.titleOverride = { [weak self] event in self?.delegate?.title(for: event) }
         tableView.dataSource = dataSource
     }
 
@@ -76,17 +90,6 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let event = dataSource.itemIdentifier(for: indexPath) else { return }
         delegate?.eventSelected(event)
-    }
-
-    // MARK: - TableViewDataSourceDelegate
-
-    override func title(forSection section: Int) -> String? {
-        guard let event = dataSource.itemIdentifier(for: IndexPath(item: 0, section: section))
-        else {
-            return "Events"
-        }
-        if let customTitle = delegate?.title(for: event) { return customTitle }
-        return event.section.title
     }
 
     // MARK: - Refreshable
