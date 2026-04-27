@@ -9,14 +9,19 @@ What's new:
 - Match lists now group double-elim playoffs by round and collapse round-robin semis, matching the website
 - Alliance identifiers (sponsor name, or A1–A8 pill) now appear above each colored alliance row in match summaries
 - Long event names now wrap to multiple lines in Search, MyTBA, and event lists instead of being truncated
+- New shimmering skeleton loading views on the Team page — avatar, nickname, and year pill animate as placeholders while team / years / avatar fetch, then cross-fade into the real header all at once. Year switches use the same system for the avatar swap
+- myTBA list rebuilt: events and teams render only once they're fully loaded, so you no longer see a flash of "Event 2026miket" placeholders. Anything that fails to load is surfaced via a tappable banner that expands the failures inline as key-only rows
 
 Bug fixes:
 - Restored team nicknames on District Rankings, Awards, District Points, and Team@Event Stats (were falling back to "Team N")
+- Restored event names on Team@District → Summary and Breakdown (rows / section headers were showing raw keys like "2026mibat")
 - 4-column insights cells no longer appear tappable
 - `filterEmptyInsights` now handles row-grouped insights correctly
 - Fixed 2026 insights rendering when average win score is missing
 - Tapping a B-team (e.g. 5940B) in a Match summary now opens the parent team page instead of doing nothing
 - Search now matches the year shown in event results — typing "2026 michigan" returns hits
+- Team page no longer shows a doubled "Team 18 / Team 18" header when a team has no nickname
+- Match cell RP dots regression from the previous beta is fixed (and 2026 dots are back)
 
 Please poke at:
 - Event → Insights on 2023 / 2024 / 2025 events — every row should populate; check 4-column layout
@@ -32,6 +37,11 @@ Please poke at:
 - Event → Matches on a round-robin event (e.g. Einstein) — semis should collapse into a single section
 - Match summaries — sponsor name (or A1–A8 pill) should sit above each alliance's red/blue row
 - Search / MyTBA / event lists with long event names — full name should wrap, not get truncated
+- Open a Team page cold — skeleton header should animate, then cross-fade to the real avatar / number / nickname / year all at once
+- Switch years on a team that has avatars some years and not others — avatar should animate in / out cleanly without flashing
+- Open a pre-2018 team year — avatar slot should just stay hidden, no skeleton flash
+- myTBA → Events / Teams — only fully loaded items should render. Force a failure (airplane mode mid-refresh) and confirm the banner appears; tap it to expand failed items inline as key-only rows
+- Team @ District (tap a team from a District page) → Summary and Breakdown — event names should render in rows / section headers, not "2026mibat"
 
 Under the hood:
 - Match Breakdown configurators now use typed CompLevel enums and share the RP-gating logic in the base configurator
