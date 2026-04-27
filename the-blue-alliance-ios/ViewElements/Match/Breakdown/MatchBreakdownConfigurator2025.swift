@@ -16,6 +16,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         "A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5,
         "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11,
     ]
+    private static let renderCache = NSCache<NSString, UIImage>()
+    private static let hexVerticesCache = NSCache<NSString, NSArray>()
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
@@ -343,16 +345,9 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
     ) -> BreakdownRow? {
         let width: CGFloat = 400
         let height: CGFloat = 400
+        let redShapeLayer = getCachedHexagon(width: width, height: height)
+        let blueShapeLayer = getCachedHexagon(width: width, height: height)
 
-        let redShapeLayer = CAShapeLayer()
-        let blueShapeLayer = CAShapeLayer()
-        for shapeLayer in [redShapeLayer, blueShapeLayer] {
-            shapeLayer.frame = CGRect(x: 0, y: 0, width: width, height: height)
-            shapeLayer.fillColor = UIColor.clear.cgColor
-            shapeLayer.strokeColor = UIColor.black.cgColor
-            shapeLayer.lineWidth = 10
-            shapeLayer.path = drawHexagon(width: width, height: height).cgPath
-        }
         if red?["autoReef"] == nil || red?["teleopReef"] == nil || blue?["autoReef"] == nil
             || blue?["teleopReef"] == nil
         {
@@ -364,8 +359,9 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             (redContainerView, redShapeLayer, red, Alliance.red),
             (blueContainerView, blueShapeLayer, blue, Alliance.blue),
         ] {
+            let hexView = UIImageView(image: shapeLayer)
             containerView.backgroundColor = .clear
-            containerView.layer.addSublayer(shapeLayer)
+            containerView.addSubview(hexView)
 
             drawSegments(
                 level: level,
@@ -430,7 +426,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         let center = CGPoint(x: width / 2.0, y: height / 2.0)
         let sideLength = width / 2.1
 
-        let vertices: [CGPoint] = generateHexVertices(
+        let vertices: [CGPoint] = getCachedHexVertices(
             centerX: center.x,
             centerY: center.y,
             sideLength: sideLength
@@ -571,5 +567,62 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             vertices.append(point)
         }
         return vertices
+    }
+    private static func getCachedHexagon(width: CGFloat, height: CGFloat) -> UIImage {
+        let cacheKey = NSString(string: "hexagon_\(width)_\(height)")
+
+        if let cached = renderCache.object(forKey: cacheKey) {
+            return cached
+        }
+
+        let hexagonView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.frame = hexagonView.bounds
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeColor = UIColor.black.cgColor
+        shapeLayer.lineWidth = 5
+        shapeLayer.path = drawHexagon(width: width, height: height).cgPath
+        hexagonView.layer.addSublayer(shapeLayer)
+
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
+        let image = renderer.image { ctx in
+            hexagonView.layer.render(in: ctx.cgContext)
+        }
+
+        renderCache.setObject(image, forKey: cacheKey)
+        return image
+    }
+    private static func getCachedHexVertices(
+        centerX: CGFloat,
+        centerY: CGFloat,
+        sideLength: CGFloat
+    ) -> [CGPoint] {
+        let cacheKey = NSString(string: "vertices_\(centerX)_\(centerY)_\(sideLength)")
+
+        if let cached = hexVerticesCache.object(forKey: cacheKey) as? [CGPoint] {
+            return cached
+        }
+
+        let vertices = generateHexVertices(
+            centerX: centerX,
+            centerY: centerY,
+            sideLength: sideLength
+        )
+        hexVerticesCache.setObject(vertices as NSArray, forKey: cacheKey)
+        return vertices
+    }
+
+    private static func redDataHash(_ dict: [String: Any]?) -> String {
+        guard let dict else { return "nil" }
+        if let jsonData = try? JSONSerialization.data(withJSONObject: dict),
+            let jsonString = String(data: jsonData, encoding: .utf8)
+        {
+            return String(jsonString.hashValue)
+        }
+        return UUID().uuidString
+    }
+
+    private static func blueDataHash(_ dict: [String: Any]?) -> String {
+        return redDataHash(dict)
     }
 }
