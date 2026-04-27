@@ -103,7 +103,6 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
             cell.type = row.type
             return cell
         }
-        dataSource.delegate = self
         dataSource.statefulDelegate = self
     }
 

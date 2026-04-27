@@ -7,8 +7,10 @@ import UIKit
 public enum MyTBASection: Int {
     case event
     case team
+}
 
-    var headerTitle: String {
+extension MyTBASection: TableSectionTitleProviding {
+    var headerTitle: String? {
         switch self {
         case .event: return "Events"
         case .team: return "Teams"
@@ -55,8 +57,8 @@ enum MyTBAItem: Hashable {
 // SubscriptionsStore, then pass their entries through the common rendering
 // pipeline. Owns the loaded-model cache, failure tracking, and the pinned
 // failure banner that sits above the table.
-class MyTBATableViewController: UIViewController, NotificationObservable,
-    TableViewDataSourceDelegate, DataController, Navigatable
+class MyTBATableViewController: UIViewController, NotificationObservable, DataController,
+    Navigatable
 {
 
     let dependencies: Dependencies
@@ -224,7 +226,6 @@ class MyTBATableViewController: UIViewController, NotificationObservable,
                 return UITableViewCell()
             }
         )
-        dataSource.delegate = self
     }
 
     private func makeCell(
@@ -320,14 +321,6 @@ class MyTBATableViewController: UIViewController, NotificationObservable,
                 return l.teamNumber < r.teamNumber
             }
         }
-    }
-
-    // MARK: - TableViewDataSourceDelegate
-
-    func title(forSection sectionIndex: Int) -> String? {
-        let sections = dataSource.snapshot().sectionIdentifiers
-        guard sectionIndex < sections.count else { return nil }
-        return sections[sectionIndex].headerTitle
     }
 
     // MARK: - Stateful wiring

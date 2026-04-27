@@ -52,6 +52,10 @@ extension MatchSection: Comparable {
     }
 }
 
+extension MatchSection: TableSectionTitleProviding {
+    var headerTitle: String? { title }
+}
+
 extension MatchSection {
 
     static func section(for match: Match, playoffType: PlayoffType?) -> MatchSection {

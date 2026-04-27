@@ -102,7 +102,6 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     private func apply(oprs response: EventOPRs?) {

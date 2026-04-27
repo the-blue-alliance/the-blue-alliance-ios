@@ -17,6 +17,19 @@ private enum TeamSummarySection: Int {
     case qualInfo
 }
 
+extension TeamSummarySection: TableSectionTitleProviding {
+    var headerTitle: String? {
+        switch self {
+        case .eventInfo: return "Summary"
+        case .nextMatch: return "Next Match"
+        case .playoffInfo: return "Playoffs"
+        case .qualInfo: return "Qualifications"
+        case .lastMatch: return "Most Recent Match"
+        case .teamInfo, .pitLocation: return nil
+        }
+    }
+}
+
 private enum TeamSummaryItem: Hashable {
     case teamInfo(team: Team)
     case pitLocation(location: String)
@@ -145,7 +158,6 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                 }
             }
         )
-        dataSource.delegate = self
         dataSource.statefulDelegate = self
     }
 
@@ -352,21 +364,6 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             )
         }
         return cell
-    }
-
-    // MARK: TableViewDataSourceDelegate
-
-    override func title(forSection section: Int) -> String? {
-        let snapshot = dataSource.snapshot()
-        let section = snapshot.sectionIdentifiers[section]
-        switch section {
-        case .eventInfo: return "Summary"
-        case .nextMatch: return "Next Match"
-        case .playoffInfo: return "Playoffs"
-        case .qualInfo: return "Qualifications"
-        case .lastMatch: return "Most Recent Match"
-        default: return nil
-        }
     }
 
     // MARK: - Table View Delegate

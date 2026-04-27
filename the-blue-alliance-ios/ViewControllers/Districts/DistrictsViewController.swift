@@ -60,7 +60,6 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
             return cell
         }
         dataSource.statefulDelegate = self
-        dataSource.delegate = self
     }
 
     private func apply(_ districts: [District]) {
