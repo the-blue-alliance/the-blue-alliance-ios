@@ -333,7 +333,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
-    
+
     // Coral Map Rendering
     private static func coralMapRow(
         title: String,
@@ -527,7 +527,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         let imageView = BreakdownStyle.imageView(image: image, contentMode: .scaleAspectFit)
         return [imageView]
     }
-    
+
     // Geometry Helper Methods
     private static func drawHexagon(width: CGFloat, height: CGFloat) -> UIBezierPath {
         let path = UIBezierPath()

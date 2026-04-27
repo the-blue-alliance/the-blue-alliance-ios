@@ -95,7 +95,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         dataSource = TableViewDataSource<String?, BreakdownRow>(tableView: tableView) {
             (tableView, indexPath, row) -> UITableViewCell? in
             let cell =
-                tableView.dequeueReusableCell(indexPath: indexPath) as MatchBreakdownTableViewCell
+                tableView.dequeueReusableCell(indexPath: indexPath)
+                as MatchBreakdownTableViewCell
             cell.titleText = row.title
             cell.redElements = row.redElements
             cell.blueElements = row.blueElements
