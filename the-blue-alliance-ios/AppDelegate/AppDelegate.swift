@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     lazy var myTBA: any MyTBAProtocol = MyTBA(
         uuid: UIDevice.current.identifierForVendor!.uuidString,
-        deviceName: UIDevice.current.name,
+        deviceName: UIDevice.current.tbaDisplayName,
         fcmTokenProvider: messaging,
         idTokenProvider: idTokenProvider
     )
