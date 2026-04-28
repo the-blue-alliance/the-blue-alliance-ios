@@ -39,4 +39,23 @@ extension Webcast {
         guard let date else { return nil }
         return TBAAPI.dateFormatter.date(from: date)
     }
+
+    public var dateString: String? {
+        guard let dateParsed else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        return formatter.string(from: dateParsed)
+    }
+
+    public var subtitleString: String? {
+        var parts: [String] = []
+        if let dateString {
+            parts.append(dateString)
+        }
+        if status == .online, let viewerCount, viewerCount > 0 {
+            parts.append("\(viewerCount.formatted()) watching")
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " · ")
+    }
 }

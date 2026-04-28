@@ -82,8 +82,13 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
                     return self.tableView(tableView, titleCellForRowAt: indexPath)
                 case .webcast(let webcast):
                     let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-                    cell.textLabel?.text = "Watch on \(webcast.displayName)"
-                    cell.detailTextLabel?.text = webcast.channel
+                    let trimmedTitle = webcast.streamTitle?.trimmingCharacters(
+                        in: .whitespacesAndNewlines
+                    )
+                    cell.textLabel?.text =
+                        (trimmedTitle?.isEmpty == false ? trimmedTitle : nil)
+                        ?? "Watch on \(webcast.displayName)"
+                    cell.detailTextLabel?.text = webcast.subtitleString
                     cell.accessoryType = .disclosureIndicator
                     return cell
                 case .alliances:
@@ -132,8 +137,15 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
         if let event = state.event {
             let webcasts = event.webcasts
-                .sorted { $0.channel > $1.channel }
                 .filter { $0.urlString != nil }
+                .sorted { lhs, rhs in
+                    switch (lhs.dateParsed, rhs.dateParsed) {
+                    case let (l?, r?): return l < r
+                    case (_?, nil): return true
+                    case (nil, _?): return false
+                    case (nil, nil): return lhs.channel < rhs.channel
+                    }
+                }
                 .map { EventInfoItem.webcast($0) }
             if !webcasts.isEmpty, event.isHappeningThisWeek {
                 snapshot.appendSections([.webcast])
