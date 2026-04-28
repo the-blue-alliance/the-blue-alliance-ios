@@ -405,8 +405,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                             to: .green,
                             in: view,
                             alliance: alliance,
-                            stage: .auto,
-                            coral: coral
+                            stage: .auto
                         )
                     case .teleop:
                         setSegment(
@@ -414,8 +413,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                             to: .white,
                             in: view,
                             alliance: alliance,
-                            stage: .teleop,
-                            coral: coral
+                            stage: .teleop
                         )
                     }
                 }
@@ -427,8 +425,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         to color: UIColor,
         in view: UIView,
         alliance: Alliance,
-        stage: MatchStages,
-        coral: UIImage
+        stage: MatchStages
     ) {
         let width: CGFloat = 400
         let height: CGFloat = 400

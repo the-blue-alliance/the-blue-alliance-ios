@@ -275,11 +275,9 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Icons Methods
 
-    /**
-     Check if the current app icon is the same as the passed app icon name.
-
-     Used to show which app icon we currently have set.
-    */
+    /// Check if the current app icon is the same as the passed app icon name.
+    ///
+    /// Used to show which app icon we currently have set.
     private func isCurrentAppIcon(_ icon: String?) -> Bool {
         return icon == UIApplication.shared.alternateIconName
     }
