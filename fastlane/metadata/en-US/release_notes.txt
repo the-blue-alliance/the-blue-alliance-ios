@@ -1,4 +1,4 @@
-Hey y'all - welcome to v3.4.1 (shoutout to my Miss Daisy friends + KB). This update contains a lot of missing parity features. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
+Hey y'all - this update contains a lot of missing parity features. The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
 
 Features:
 * Added support for ALL playoff types in the Event Matches list - including double elimination brackets
@@ -6,7 +6,8 @@ Features:
 * Subdivision names now show in the match cells for matches on finals fields (ex: Einstein)
 * Match cells now show RP dots for 2023, 2024, 2025, and 2026 season matches.
 * Event Insights for 2023, 2024, and 2025 are now supported in the app.
-* Match Breakdowns for 2017–2025 now split auto / teleop / overall instead of just showing the overall total.
+* 2025 Match Breakdowns are now fully implemented — auto / teleop coral split by level (L1–L4), processor / net algae counts, per-robot barge endgame, and a coral scoring map.
+* Match Breakdowns for 2020–2022 and 2025 now split auto / teleop / overall instead of just showing the overall total.
 * Ranking Point rows in breakdowns will now only show for quals matches where they apply.
 * myTBA now only shows fully loaded cells - no more placeholder cells. Matches will no longer show in myTBA views.
 * Event Stats (OPR, DPR, CCWM) now has a Team # sort option
@@ -14,6 +15,7 @@ Features:
 * New loading view for the Team header view - should be less jumpy and more pretty
 * B teams are now properly supported for offseason events, will link to their parent team on tap
 * Surfaces webcast dates as well as viewer counts + online status event webcasts
+* Pit Map: Event → Info now has a "Pit Map" row when TBA has a pitmap published, with your favorited teams automatically highlighted. Tapping a team's Pit Location on Team @ Event Summary opens the same pitmap with that team highlighted.
 
 Bug fixes:
 * Restored team nicknames on District Rankings, Awards, District Points, and Team@Event Stats (were falling back to "Team N")
@@ -23,3 +25,4 @@ Bug fixes:
 * Search now allows for using the year in the search string
 * Team page no longer shows a doubled "Team N / Team N" header when a team has no nickname
 * Fixes Nexus links not directing to CMP division pit maps
+* Pushing from an event-scoped page (rankings, alliances, awards, matches) into a team now opens the team on the event's year — e.g. tapping a team from a 2024 event lands on the team's 2024 page instead of defaulting to the current year

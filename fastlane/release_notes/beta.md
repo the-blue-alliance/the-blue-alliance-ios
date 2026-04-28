@@ -1,47 +1,18 @@
-The Blue Alliance v3.4.0
+The Blue Alliance v3.4.2
 
 What's new:
-- Event Insights now populate for 2023, 2024, and 2025 events (previously blank)
-- Match Breakdowns for 2017–2025 now split auto / teleop / overall instead of just showing the overall total
-- RP rows in Match Breakdown are hidden on matches where they don't apply (e.g. playoffs)
-- Match cells now show RP dots for 2026 matches (and light up automatically for future seasons)
-- Event → Teams → Stats has a Team # sort option again — B-teams group with their parent (e.g. 5940 then 5940B)
-- Match lists now group double-elim playoffs by round and collapse round-robin semis, matching the website
-- Alliance identifiers (sponsor name, or A1–A8 pill) now appear above each colored alliance row in match summaries
-- Long event names now wrap to multiple lines in Search, MyTBA, and event lists instead of being truncated
-- New shimmering skeleton loading views on the Team page — avatar, nickname, and year pill animate as placeholders while team / years / avatar fetch, then cross-fade into the real header all at once. Year switches use the same system for the avatar swap
-- myTBA list rebuilt: events and teams render only once they're fully loaded, so you no longer see a flash of "Event 2026miket" placeholders. Anything that fails to load is surfaced via a tappable banner that expands the failures inline as key-only rows
-
-Bug fixes:
-- Restored team nicknames on District Rankings, Awards, District Points, and Team@Event Stats (were falling back to "Team N")
-- Restored event names on Team@District → Summary and Breakdown (rows / section headers were showing raw keys like "2026mibat")
-- 4-column insights cells no longer appear tappable
-- `filterEmptyInsights` now handles row-grouped insights correctly
-- Fixed 2026 insights rendering when average win score is missing
-- Tapping a B-team (e.g. 5940B) in a Match summary now opens the parent team page instead of doing nothing
-- Search now matches the year shown in event results — typing "2026 michigan" returns hits
-- Team page no longer shows a doubled "Team 18 / Team 18" header when a team has no nickname
-- Match cell RP dots regression from the previous beta is fixed (and 2026 dots are back)
+- 2025 Match Breakdown is now its own real configurator — auto and teleop coral broken out by level (L1–L4), processor / net algae counts, and per-robot barge endgame, with a coral scoring map drawn from the breakdown data
+- Pit Map: new "Pit Map" row under Event → Info that opens TBA's pitmap (when one is published for the event). Your favorited teams are automatically highlighted on the event-level map
+- Tapping a team's Pit Location on a Team @ Event Summary now opens TBA's pitmap with that team highlighted (replaces the old FRC Nexus deep link)
+- Pushing from an event-scoped page into a team now opens the team on the event's year — e.g. tapping a team from a 2024 event lands on the team's 2024 page instead of defaulting to the current year. EventKey.year is the source of truth
+- Reworked year button on the Team page: shows a skeleton pill while the year list is loading, and a spinner inline while a new year's data is being fetched
 
 Please poke at:
-- Event → Insights on 2023 / 2024 / 2025 events — every row should populate; check 4-column layout
-- Match Breakdown on 2017–2025 matches — auto / teleop / overall columns all filled in
-- Match Breakdown on quals vs. playoffs — RP rows only on quals
-- 2026 events with no reported avg win score — should render cleanly
-- District page → Rankings / Awards / Points, and Event → Teams → Stats — team names should render, not "Team N"
-- Event → Teams → Stats — toggle the new Team # sort; B-teams should sit next to their parent
-- 2026 match cells — RP dots should appear for alliances that earned them
-- Tap a B-team anywhere it shows up (match summary, alliances, rankings) — should land on the parent team's page
-- Search — try queries that include the event year (e.g. "2026 michigan", "2025 worlds")
-- Event → Matches on a double-elim event — playoff matches should be grouped by round (Round 1, Round 2, …)
-- Event → Matches on a round-robin event (e.g. Einstein) — semis should collapse into a single section
-- Match summaries — sponsor name (or A1–A8 pill) should sit above each alliance's red/blue row
-- Search / MyTBA / event lists with long event names — full name should wrap, not get truncated
-- Open a Team page cold — skeleton header should animate, then cross-fade to the real avatar / number / nickname / year all at once
-- Switch years on a team that has avatars some years and not others — avatar should animate in / out cleanly without flashing
-- Open a pre-2018 team year — avatar slot should just stay hidden, no skeleton flash
-- myTBA → Events / Teams — only fully loaded items should render. Force a failure (airplane mode mid-refresh) and confirm the banner appears; tap it to expand failed items inline as key-only rows
-- Team @ District (tap a team from a District page) → Summary and Breakdown — event names should render in rows / section headers, not "2026mibat"
-
-Under the hood:
-- Match Breakdown configurators now use typed CompLevel enums and share the RP-gating logic in the base configurator
+- Open a 2025 match breakdown — auto / teleop coral rows (L1–L4), algae counts, barge endgame rows, and the coral scoring map should all populate; coral map should hide cleanly on matches with no scoring data
+- Event → Info on an event with a published TBA pitmap — "Pit Map" row should appear under the title; tap it and confirm your favorite teams are highlighted on the map
+- Event → Info on an event with no pitmap — the row should not appear at all
+- Team @ Event Summary → tap Pit Location — should push TBA's pitmap with that team highlighted (no more "via FRC Nexus" subtitle, no Safari hop)
+- From a 2024 event, drill into a team (rankings, alliances, awards, matches) — the team page should open at 2024, not 2026
+- Same for older years (2019, 2022, etc.) — the year picker on the team page should reflect the event's year
+- Open a team page cold — year pill should show a skeleton while years load, then settle on the right year
+- Switch years on the team page — chevron should swap to a spinner while the new year's data fetches, then back to the chevron when done
