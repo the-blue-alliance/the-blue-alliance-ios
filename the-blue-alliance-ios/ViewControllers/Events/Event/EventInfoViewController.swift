@@ -7,6 +7,7 @@ protocol EventInfoViewControllerDelegate: AnyObject {
     func showAwards()
     func showDistrictPoints()
     func showInsights()
+    func showPitMap()
 }
 
 private enum EventInfoSection: Int {
@@ -19,6 +20,7 @@ private enum EventInfoSection: Int {
 private enum EventInfoItem: Hashable {
     case title
     case webcast(Webcast)
+    case pitMap
     case alliances
     case districtPoints
     case insights
@@ -37,6 +39,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
     weak var delegate: EventInfoViewControllerDelegate?
+
+    private var hasPitMap = false
 
     // MARK: - Init
 
@@ -73,6 +77,19 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         updateEventInfo()
     }
 
+    private func probePitMapIfNeeded() async {
+        guard !hasPitMap else { return }
+        guard let url = EventPitMapURL.url(eventKey: state.key) else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "HEAD"
+        guard
+            let (_, response) = try? await URLSession.shared.data(for: request),
+            let http = response as? HTTPURLResponse,
+            http.statusCode == 200
+        else { return }
+        hasPitMap = true
+    }
+
     private func setupDataSource() {
         dataSource = TableViewDataSource<EventInfoSection, EventInfoItem>(
             tableView: tableView,
@@ -90,6 +107,10 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
                         ?? "Watch on \(webcast.displayName)"
                     cell.detailTextLabel?.text = webcast.subtitleString
                     cell.accessoryType = .disclosureIndicator
+                    return cell
+                case .pitMap:
+                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
+                    cell.textLabel?.text = "Pit Map"
                     return cell
                 case .alliances:
                     let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
@@ -133,7 +154,11 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         snapshot.deleteAllItems()
 
         snapshot.appendSections([.title])
-        snapshot.appendItems([.title], toSection: .title)
+        var titleItems: [EventInfoItem] = [.title]
+        if hasPitMap {
+            titleItems.append(.pitMap)
+        }
+        snapshot.appendItems(titleItems, toSection: .title)
 
         if let event = state.event {
             let webcasts = event.webcasts
@@ -221,6 +246,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
             delegate?.showInsights()
         case .awards:
             delegate?.showAwards()
+        case .pitMap:
+            delegate?.showPitMap()
         case .webcast(let webcast):
             urlString = webcast.urlString
         case .website:
@@ -247,7 +274,12 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            self.state = .event(try await self.api.event(key: self.state.key))
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let eventHandle = Task { try await self.api.event(key: self.state.key) }
+            let probeHandle = Task { await self.probePitMapIfNeeded() }
+            let event = try await eventHandle.value
+            await probeHandle.value
+            self.state = .event(event)
             self.updateEventInfo()
         }
     }

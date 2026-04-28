@@ -168,6 +168,7 @@
 		92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10FE21A61AF6003BC5C4 /* EventDistrictPointsViewController.swift */; };
 		92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */; };
 		92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */; };
+		F1A2B3C4D5E6F7081A2B3C4D /* EventPitMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7081A2B3C4E /* EventPitMapViewController.swift */; };
 		92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110121A61AF6003BC5C4 /* EventAwardsViewController.swift */; };
 		92FF110C21A61AF6003BC5C4 /* EventInsightsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110321A61AF6003BC5C4 /* EventInsightsContainerViewController.swift */; };
 		92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */; };
@@ -342,6 +343,7 @@
 		92FF10FE21A61AF6003BC5C4 /* EventDistrictPointsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDistrictPointsViewController.swift; sourceTree = "<group>"; };
 		92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAlliancesViewController.swift; sourceTree = "<group>"; };
 		92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoViewController.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E6F7081A2B3C4E /* EventPitMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPitMapViewController.swift; sourceTree = "<group>"; };
 		92FF110121A61AF6003BC5C4 /* EventAwardsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAwardsViewController.swift; sourceTree = "<group>"; };
 		92FF110321A61AF6003BC5C4 /* EventInsightsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInsightsContainerViewController.swift; sourceTree = "<group>"; };
 		92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStatsViewController.swift; sourceTree = "<group>"; };
@@ -844,6 +846,7 @@
 			children = (
 				92FF10FC21A61AF6003BC5C4 /* EventViewController.swift */,
 				92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */,
+				F1A2B3C4D5E6F7081A2B3C4E /* EventPitMapViewController.swift */,
 				9275957421B7519C00560D81 /* EventTeamsViewController.swift */,
 				92FF10FD21A61AF6003BC5C4 /* EventRankingsViewController.swift */,
 				92FF10FE21A61AF6003BC5C4 /* EventDistrictPointsViewController.swift */,
@@ -1232,6 +1235,7 @@
 				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
+				F1A2B3C4D5E6F7081A2B3C4D /* EventPitMapViewController.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventInsightsContainerViewController.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
