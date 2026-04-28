@@ -48,49 +48,52 @@ class TeamViewController: HeaderContainerViewController {
     // just collapse the avatar slot.
     private static let firstAvatarYear = 2018
 
-    // Backing storage for `year`. `loadTeamData` writes this directly to
-    // bypass the user-driven side effects (avatar refetch, child propagation)
-    // during initial load — those are handled inline alongside the team fetch.
     private var _year: Int?
     private var year: Int? {
         get { _year }
         set {
             guard _year != newValue else { return }
             _year = newValue
-            eventsViewController.year = newValue
-            mediaViewController.year =
-                newValue ?? Calendar.current.component(.year, from: Date())
-            updateInterface()
+            propagateYear()
+            animateAvatarForYearChange()
+        }
+    }
 
-            guard let newValue else { return }
+    private func propagateYear() {
+        eventsViewController.year = year
+        mediaViewController.year = year
+        updateInterface()
+    }
 
-            if newValue < Self.firstAvatarYear {
-                // Pre-avatar era: no fetch, no skeleton, no animation. Just
-                // nil out + hard-hide the slot.
-                avatarImage = nil
-                teamHeaderView.setAvatar(nil)
-                return
+    private func animateAvatarForYearChange() {
+        guard let year else { return }
+
+        if year < Self.firstAvatarYear {
+            // Pre-avatar era: no fetch, no skeleton, no animation. Just
+            // nil out + hard-hide the slot.
+            avatarImage = nil
+            teamHeaderView.setAvatar(nil)
+            return
+        }
+
+        if avatarImage != nil {
+            // Had an avatar — show skeleton, fetch, reveal result. The
+            // skeleton hide animates collapse-and-fade if the new year
+            // turns out to have no avatar, in sync with the skeleton out.
+            teamHeaderView.showAvatarSkeleton()
+            Task { @MainActor in
+                await loadAvatar(year: year)
+                guard self.year == year else { return }
+                teamHeaderView.hideAvatarSkeleton(revealing: avatarImage)
             }
-
-            if avatarImage != nil {
-                // Had an avatar — show skeleton, fetch, reveal result. The
-                // skeleton hide animates collapse-and-fade if the new year
-                // turns out to have no avatar, in sync with the skeleton out.
-                teamHeaderView.showAvatarSkeleton()
-                Task { @MainActor in
-                    await loadAvatar(year: newValue)
-                    guard self.year == newValue else { return }
-                    teamHeaderView.hideAvatarSkeleton(revealing: avatarImage)
-                }
-            } else {
-                // No prior avatar — silent off-screen fetch, no skeleton.
-                // Only animate the avatar in if we actually got one.
-                Task { @MainActor in
-                    await loadAvatar(year: newValue)
-                    guard self.year == newValue else { return }
-                    if avatarImage != nil {
-                        teamHeaderView.transitionAvatar(to: avatarImage)
-                    }
+        } else {
+            // No prior avatar — silent off-screen fetch, no skeleton.
+            // Only animate the avatar in if we actually got one.
+            Task { @MainActor in
+                await loadAvatar(year: year)
+                guard self.year == year else { return }
+                if avatarImage != nil {
+                    teamHeaderView.transitionAvatar(to: avatarImage)
                 }
             }
         }
@@ -98,18 +101,29 @@ class TeamViewController: HeaderContainerViewController {
 
     // MARK: Init
 
-    convenience init(teamKey: TeamKey, nickname: String? = nil, dependencies: Dependencies) {
+    convenience init(
+        teamKey: TeamKey,
+        nickname: String? = nil,
+        year: Int? = nil,
+        dependencies: Dependencies
+    ) {
         // B teams (e.g. "frc5940B") alias their parent team — there's no
         // /team/<N>B page, so route every caller to the canonical key.
         self.init(
             state: .key(teamKey.parentKey),
             partialNickname: nickname,
+            year: year,
             dependencies: dependencies
         )
     }
 
-    convenience init(team: Team, dependencies: Dependencies) {
-        self.init(state: .team(team), partialNickname: nil, dependencies: dependencies)
+    convenience init(team: Team, year: Int? = nil, dependencies: Dependencies) {
+        self.init(
+            state: .team(team),
+            partialNickname: nil,
+            year: year,
+            dependencies: dependencies
+        )
     }
 
     // TBA returns the literal "Team <N>" as a fallback nickname for teams
@@ -127,8 +141,14 @@ class TeamViewController: HeaderContainerViewController {
         return raw
     }
 
-    private init(state: TeamState, partialNickname: String?, dependencies: Dependencies) {
+    private init(
+        state: TeamState,
+        partialNickname: String?,
+        year: Int?,
+        dependencies: Dependencies
+    ) {
         self.state = state
+        self._year = year
 
         let teamNumber = state.team?.teamNumber ?? state.key.teamNumber ?? 0
         let nickname: String? = {
@@ -146,7 +166,7 @@ class TeamViewController: HeaderContainerViewController {
                 avatar: nil,
                 nickname: nickname,
                 teamNumberNickname: teamNumberNickname,
-                year: nil
+                year: year
             )
         )
 
@@ -161,19 +181,19 @@ class TeamViewController: HeaderContainerViewController {
         }
         eventsViewController = TeamEventsViewController(
             teamKey: state.key,
-            year: nil,
+            year: year,
             dependencies: dependencies
         )
         mediaViewController = TeamMediaCollectionViewController(
             teamKey: state.key,
-            year: Calendar.current.component(.year, from: Date()),
+            year: year,
             dependencies: dependencies
         )
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
             navigationTitle: teamNumberNickname,
-            navigationSubtitle: "----",
+            navigationSubtitle: nil,
             segmentedControlTitles: ["Info", "Events", "Media"],
             dependencies: dependencies
         )
@@ -199,13 +219,20 @@ class TeamViewController: HeaderContainerViewController {
         super.viewDidLoad()
 
         teamHeaderView.showLoadingSkeleton()
+        if year != nil {
+            teamHeaderView.yearButton.isLoading = true
+        }
         loadTeamData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        dependencies.reporter.log("Team: \(state.key)")
+        if let year {
+            dependencies.reporter.log("Team: \(state.key) | Year \(year)")
+        } else {
+            dependencies.reporter.log("Team: \(state.key)")
+        }
     }
 
     // MARK: - Private
@@ -222,25 +249,28 @@ class TeamViewController: HeaderContainerViewController {
                 try? await self.dependencies.api.teamYearsParticipated(key: self.state.key)
             }
 
+            if let years = await yearsHandle.value {
+                self.yearsParticipated = years.sorted().reversed()
+            }
+            teamHeaderView.yearButton.isLoading = false
+
             if let team = await teamHandle.value {
                 self.state = .team(team)
                 self.navigationTitle = team.teamNumberNickname
             }
-            if let years = await yearsHandle.value {
-                self.yearsParticipated = years.sorted().reversed()
-            }
 
-            // Set the initial year directly to bypass `year.didSet` — we kick
-            // off the avatar fetch inline below so the header reveals once
-            // with team + avatar in place rather than skeleton → avatar pop.
-            let initialYear = Self.latestYear(
-                currentSeason: statusService.currentSeason,
-                years: yearsParticipated
-            )
+            // Avatar fetch is awaited inline below so the header reveals
+            // once with team + avatar in place. Skip the public setter (which
+            // kicks off avatar work as a fire-and-forget Task) and drive the
+            // shared propagation directly.
+            let initialYear =
+                year
+                ?? Self.latestYear(
+                    currentSeason: statusService.currentSeason,
+                    years: yearsParticipated
+                )
             _year = initialYear
-            eventsViewController.year = initialYear
-            mediaViewController.year =
-                initialYear ?? Calendar.current.component(.year, from: Date())
+            propagateYear()
 
             if let initialYear, initialYear >= Self.firstAvatarYear {
                 await loadAvatar(year: initialYear)
@@ -276,7 +306,6 @@ class TeamViewController: HeaderContainerViewController {
                 year: year
             )
         }
-        navigationSubtitle = year?.description ?? "----"
     }
 
     private func loadAvatar(year: Int) async {
@@ -355,7 +384,6 @@ extension TeamViewController: EventsListViewControllerDelegate {
         let teamAtEventViewController = TeamAtEventViewController(
             teamKey: state.key,
             eventKey: event.key,
-            year: event.year,
             dependencies: dependencies
         )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)

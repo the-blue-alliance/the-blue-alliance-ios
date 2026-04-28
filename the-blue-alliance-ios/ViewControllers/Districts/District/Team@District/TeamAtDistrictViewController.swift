@@ -68,7 +68,7 @@ class TeamAtDistrictViewController: ContainerViewController {
     // MARK: - Private Methods
 
     @objc private func pushTeam() {
-        let vc = TeamViewController(teamKey: teamKey, dependencies: dependencies)
+        let vc = TeamViewController(teamKey: teamKey, year: year, dependencies: dependencies)
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -81,7 +81,6 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
         let teamAtEventViewController = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: eventKey,
-            year: year,
             dependencies: dependencies
         )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)

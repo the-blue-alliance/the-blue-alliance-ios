@@ -48,7 +48,6 @@ extension EventDistrictPointsContainerViewController: EventDistrictPointsViewCon
         let teamAtEventViewController = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: event.key,
-            year: event.year,
             dependencies: dependencies
         )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)

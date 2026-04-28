@@ -141,11 +141,9 @@ extension MatchViewController: MatchSummaryViewDelegate {
 
     func teamPressed(teamKey: TeamKey) {
         guard let match = state.match, match.allTeamKeys.contains(teamKey) else { return }
-        let year = match.year ?? 0
         let teamAtEventVC = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: match.eventKey,
-            year: year,
             dependencies: dependencies
         )
         navigationController?.pushViewController(teamAtEventVC, animated: true)
