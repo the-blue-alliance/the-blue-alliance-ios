@@ -40,7 +40,7 @@ extension Date {
 
     /**
      Find the next weekday after the current date.
-    
+
      This method is not inclusive of the reciever. Ex: If reciever is a Monday, and we're looking for the next Monday, it will return reciever + 7, not reciever
      */
     public func next(_ weekday: Weekday, calendar: Calendar = Calendar.current) -> Date {

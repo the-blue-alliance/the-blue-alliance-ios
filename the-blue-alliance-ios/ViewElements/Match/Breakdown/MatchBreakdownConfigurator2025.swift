@@ -18,6 +18,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
     ]
     private static let hexCache = NSCache<NSString, UIImage>()
     private static let hexVerticesCache = NSCache<NSString, NSArray>()
+    private static let coral = UIImage(named: "coral_image") ?? UIImage(systemName: "circle.fill")!
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
         _ breakdown: [String: Any]?,
@@ -149,25 +150,17 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
 
         // No direct API for trough overall, so we have to add the auto and teleop values
 
-        if nestedValue(keys: ["autoReef", "trough"], in: red) != nil
-            || nestedValue(keys: ["teleopReef", "trough"], in: red) != nil
-            || nestedValue(keys: ["autoReef", "trough"], in: blue) != nil
-            || nestedValue(keys: ["teleopReef", "trough"], in: blue) != nil
-        {
-            let redL1 = [
-                "value": (nestedValue(keys: ["autoReef", "trough"], in: red) as? Int ?? 0)
-                    + (nestedValue(keys: ["teleopReef", "trough"], in: red) as? Int ?? 0)
-            ]
-            let blueL1 = [
-                "value": (nestedValue(keys: ["autoReef", "trough"], in: blue) as? Int ?? 0)
-                    + (nestedValue(keys: ["teleopReef", "trough"], in: blue) as? Int ?? 0)
-            ]
+        let redAuto = nestedValue(keys: ["autoReef", "trough"], in: red) as? Int
+        let redTele = nestedValue(keys: ["teleopReef", "trough"], in: red) as? Int
+        let blueAuto = nestedValue(keys: ["autoReef", "trough"], in: blue) as? Int
+        let blueTele = nestedValue(keys: ["teleopReef", "trough"], in: blue) as? Int
+        if (redAuto ?? redTele) != nil, (blueAuto ?? blueTele) != nil {
             rows.append(
                 row(
                     title: "Trough (L1) Scoring Location",
                     key: "value",
-                    red: redL1,
-                    blue: blueL1
+                    red: ["value": (redAuto ?? 0) + (redTele ?? 0)],
+                    blue: ["value": (blueAuto ?? 0) + (blueTele ?? 0)]
                 )
             )
         }
@@ -343,21 +336,22 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         blue: [String: Any]?,
         level: Int
     ) -> BreakdownRow? {
-        let width: CGFloat = 400
-        let height: CGFloat = 400
-        let redShapeLayer = getCachedHexagon(width: width, height: height)
-        let blueShapeLayer = getCachedHexagon(width: width, height: height)
-
         if red?["autoReef"] == nil || red?["teleopReef"] == nil || blue?["autoReef"] == nil
             || blue?["teleopReef"] == nil
         {
             return nil
         }
+
+        let width: CGFloat = 400
+        let height: CGFloat = 400
+        let redImageLayer = getCachedHexagon(width: width, height: height)
+        let blueImageLayer = getCachedHexagon(width: width, height: height)
+
         let redContainerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         let blueContainerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         for (containerView, shapeLayer, dict, alliance) in [
-            (redContainerView, redShapeLayer, red, Alliance.red),
-            (blueContainerView, blueShapeLayer, blue, Alliance.blue),
+            (redContainerView, redImageLayer, red, Alliance.red),
+            (blueContainerView, blueImageLayer, blue, Alliance.blue),
         ] {
             let hexView = UIImageView(image: shapeLayer)
             containerView.backgroundColor = .clear
@@ -399,7 +393,6 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             key = "teleopReef"
         }
         let levels = ["botRow", "midRow", "topRow"]
-        let coral = UIImage(named: "coral_image") ?? UIImage(systemName: "circle.fill")!
         if let reef = dict?[key] as? [String: Any],
             let values = reef[levels[level - 2]] as? [String: Bool]
         {
@@ -509,7 +502,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 angle = angle + .pi / 12  // Rotate odd segments by +15°
             }
 
-            let imageView = UIImageView(image: coral.withRenderingMode(.alwaysOriginal))
+            let imageView = UIImageView(image: coral)
             imageView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
             imageView.center = offsetCenter
             let layer = imageView.layer
