@@ -95,7 +95,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                     let cell = Self.reverseSubtitleCell(
                         in: tableView,
                         title: "Pit Location",
-                        subtitle: "\(location) · via FRC Nexus",
+                        subtitle: location,
                         at: indexPath
                     )
                     cell.accessoryType = .disclosureIndicator
@@ -378,12 +378,18 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         case .match(let match, _):
             delegate?.matchSelected(match)
         case .pitLocation:
-            guard let event,
-                let teamNumber = team?.teamNumber,
-                let url = event.nexusTeamPitMapURL(teamNumber: teamNumber),
-                urlOpener.canOpenURL(url)
+            guard let teamNumber = team?.teamNumber,
+                let url = EventPitMapURL.url(
+                    eventKey: eventKey,
+                    highlightTeamKeys: ["frc\(teamNumber)"]
+                )
             else { return }
-            urlOpener.open(url, options: [:], completionHandler: nil)
+            let pitMap = EventPitMapViewController(
+                url: url,
+                title: "Pit Map",
+                dependencies: dependencies
+            )
+            navigationController?.pushViewController(pitMap, animated: true)
         default:
             break
         }

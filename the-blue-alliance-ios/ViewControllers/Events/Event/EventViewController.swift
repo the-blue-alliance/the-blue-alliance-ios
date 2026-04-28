@@ -191,6 +191,22 @@ extension EventViewController: EventInfoViewControllerDelegate {
         )
     }
 
+    func showPitMap() {
+        let highlightTeamKeys = dependencies.myTBAStores.favorites.favoriteTeamKeys()
+        guard
+            let url = EventPitMapURL.url(
+                eventKey: state.key,
+                highlightTeamKeys: highlightTeamKeys
+            )
+        else { return }
+        let pitMap = EventPitMapViewController(
+            url: url,
+            title: "Pit Map",
+            dependencies: dependencies
+        )
+        navigationController?.pushViewController(pitMap, animated: true)
+    }
+
 }
 
 extension EventViewController: TeamsListViewControllerDelegate {
