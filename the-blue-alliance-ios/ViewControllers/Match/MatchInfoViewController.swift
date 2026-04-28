@@ -121,6 +121,16 @@ class MatchInfoViewController: TBAViewController, Refreshable {
             withMultiplier: (1.0 / 3.0)
         )
 
+        // Match the data row's column proportions: 3 team columns + 1 score
+        // column, all equal width. So the "Score" header gets 1/4 of the row
+        // and "Teams" fills the remaining 3/4 — both center-aligned.
+        scoreTitleLabel.autoMatch(
+            .width,
+            to: .width,
+            of: infoStackView,
+            withMultiplier: 0.25
+        )
+
         scrollView.addSubview(videoStackView)
         videoStackView.autoPinEdge(.top, to: .bottom, of: matchStackView, withOffset: 8)
         videoStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
