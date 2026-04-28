@@ -10,6 +10,7 @@ enum PendingAlert {
 protocol AppServicesProviding: AnyObject {
     var dependencies: Dependencies { get }
     var pushService: PushService { get }
+    var pushNotificationRouter: PushNotificationRouter { get }
     var fcmTokenProvider: any FCMTokenProvider { get }
     var pendingAlerts: [PendingAlert] { get set }
 }

@@ -29,6 +29,8 @@
 		51BECA942F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
+		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
+		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
 		5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000005 /* EventsListViewController.swift */; };
 		5EC0D41A2C26041A00000006 /* TeamsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000005 /* TeamsListViewController.swift */; };
@@ -212,6 +214,8 @@
 		51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2025.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationRouter.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsGrouping.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000005 /* EventsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListViewController.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041A00000005 /* TeamsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsListViewController.swift; sourceTree = "<group>"; };
@@ -800,6 +804,8 @@
 				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
 				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
+				5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */,
+				5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
 				92564C6A21644AA30047917F /* Secrets.swift */,
 			);
@@ -1110,6 +1116,8 @@
 			files = (
 				5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
+				5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */,
+				5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
 				5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */,
 				BA0000000000000000000002 /* EventSection.swift in Sources */,

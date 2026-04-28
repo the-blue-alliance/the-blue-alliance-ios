@@ -21,6 +21,7 @@ class PushService: NSObject, PushServiceProtocol {
     private var myTBA: any MyTBAProtocol
     internal var retryService: RetryService
     private let registrar: any RemoteNotificationRegistering
+    weak var router: (any PushNotificationRouting)?
 
     private var registerTask: Task<Void, Never>?
 
@@ -109,8 +110,28 @@ extension PushService: UNUserNotificationCenterDelegate {
         withCompletionHandler completionHandler:
             @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        // Show all notifications in the foreground.
+        let payload = PushNotificationPayload.parse(notification.request.content.userInfo)
+        if case .silentRefresh = payload {
+            completionHandler([])
+            return
+        }
         completionHandler([.banner, .list, .badge, .sound])
+    }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let userInfo = response.notification.request.content.userInfo
+        guard let payload = PushNotificationPayload.parse(userInfo) else {
+            completionHandler()
+            return
+        }
+        Task { @MainActor [weak self] in
+            self?.router?.handleTap(payload)
+            completionHandler()
+        }
     }
 
 }

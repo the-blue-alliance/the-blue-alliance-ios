@@ -1,0 +1,14 @@
+{
+  "Simulator Target Bundle": "com.the-blue-alliance.tba",
+  "aps": {
+    "alert": {
+      "title": "Upcoming Match",
+      "body": "2025 FIM State Championship - Aptiv Division F1-1 is starting soon. frc2337 is on the Red alliance."
+    },
+    "sound": "default"
+  },
+  "notification_type": "upcoming_match",
+  "match_key": "2025micmp4_f1m1",
+  "event_key": "2025micmp4",
+  "team_key": "frc2337"
+}

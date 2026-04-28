@@ -15,13 +15,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
 
         let services = UIApplication.shared.appServices
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = PhoneRootViewController(
+        let root = PhoneRootViewController(
             fcmTokenProvider: services.fcmTokenProvider,
             pushService: services.pushService,
             dependencies: services.dependencies
         )
+        window.rootViewController = root
         window.makeKeyAndVisible()
         self.window = window
+        services.pushNotificationRouter.rootViewController = root
 
         if !AppDelegate.isAppVersionSupported(
             minimumAppVersion: services.dependencies.statusService.status.minAppVersion
