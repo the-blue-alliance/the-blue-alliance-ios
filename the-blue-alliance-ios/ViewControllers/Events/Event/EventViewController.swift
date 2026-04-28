@@ -202,6 +202,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
         let pitMap = EventPitMapViewController(
             url: url,
             title: "Pit Map",
+            focusLabelKey: state.key,
             dependencies: dependencies
         )
         navigationController?.pushViewController(pitMap, animated: true)
