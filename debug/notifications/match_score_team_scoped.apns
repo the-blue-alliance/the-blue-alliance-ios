@@ -1,0 +1,14 @@
+{
+  "Simulator Target Bundle": "com.the-blue-alliance.tba",
+  "aps": {
+    "alert": {
+      "title": "Match Score",
+      "body": "2025 FIM State Championship - Aptiv Division F1-2 score posted: Red 191, Blue 186."
+    },
+    "sound": "default"
+  },
+  "notification_type": "match_score",
+  "match_key": "2025micmp4_f1m2",
+  "event_key": "2025micmp4",
+  "team_key": "frc2337"
+}

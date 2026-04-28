@@ -1,0 +1,14 @@
+{
+  "Simulator Target Bundle": "com.the-blue-alliance.tba",
+  "aps": {
+    "alert": {
+      "title": "Match Video Added",
+      "body": "A video has been posted for 2025 FIM State Championship - Aptiv Division F1-2 (frc2337)."
+    },
+    "sound": "default"
+  },
+  "notification_type": "match_video",
+  "match_key": "2025micmp4_f1m2",
+  "event_key": "2025micmp4",
+  "team_key": "frc2337"
+}

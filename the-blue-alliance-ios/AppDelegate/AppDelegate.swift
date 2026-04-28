@@ -43,6 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         retryService: RetryService(),
         registrar: self
     )
+    @MainActor
+    lazy var pushNotificationRouter: PushNotificationRouter = PushNotificationRouter(
+        dependencies: dependencies
+    )
     lazy var statusService: any StatusServiceProtocol = StatusService(
         reporter: reporter,
         api: api,
@@ -106,8 +110,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didReceiveRemoteNotification userInfo: [AnyHashable: Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        print("Remote notification: \(userInfo)")
-        completionHandler(.noData)
+        guard
+            let payload = PushNotificationPayload.parse(userInfo),
+            case .silentRefresh(let kind) = payload
+        else {
+            completionHandler(.noData)
+            return
+        }
+        Task { @MainActor in
+            await pushNotificationRouter.performSilentRefresh(kind)
+            completionHandler(.newData)
+        }
     }
 
 }
@@ -144,6 +157,7 @@ private extension AppDelegate {
         messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
+        pushService.router = pushNotificationRouter
         // Best-effort registration; failures will surface later.
         pushService.registerForRemoteNotifications(nil)
     }

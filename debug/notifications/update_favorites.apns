@@ -1,0 +1,7 @@
+{
+  "Simulator Target Bundle": "com.the-blue-alliance.tba",
+  "aps": {
+    "content-available": 1
+  },
+  "notification_type": "update_favorites"
+}
