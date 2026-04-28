@@ -355,7 +355,6 @@ class TeamHeaderView: UIView {
         avatarImageView.isHidden = false
         avatarImageView.alpha = 0
         teamNameLabel.isHidden = false
-        yearButton.alpha = 0
 
         // If we were pushed with a full Team (nickname known at init), skip
         // the subtitle skeleton and keep the real label visible — there's
@@ -364,6 +363,10 @@ class TeamHeaderView: UIView {
         let hasNickname = viewModel.nickname != nil
         skeletonSubtitleBar.isHidden = hasNickname
         teamNameLabel.alpha = hasNickname ? 1 : 0
+
+        let hasYear = viewModel.year != nil
+        skeletonYearPill.isHidden = hasYear
+        yearButton.alpha = hasYear ? 1 : 0
 
         // When the nickname is unknown, give teamNameLabel a single-space
         // placeholder so it claims its title3 intrinsic height. Without this
@@ -516,47 +519,96 @@ private class AvatarImageView: UIView {
 
 }
 
-class YearButton: UIButton {
+class YearButton: UIControl {
 
-    // HIG minimum touch target (44pt) — expanded via hitTest so the visible
-    // button stays compact without making the tappable area too small.
     private static let minimumTouchTarget: CGFloat = 44
 
+    private let label: UILabel = {
+        let label = UILabel()
+        let base = UIFont.preferredFont(forTextStyle: .callout).pointSize
+        label.font = UIFont.monospacedDigitSystemFont(ofSize: base, weight: .bold)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = UIColor.navigationBarTintColor
+        label.text = "----"
+        return label
+    }()
+
+    private let chevronView: UIImageView = {
+        let imageView = UIImageView(
+            image: UIImage(
+                systemName: "chevron.down",
+                withConfiguration: UIImage.SymbolConfiguration(
+                    textStyle: .callout,
+                    scale: .small
+                )
+            )
+        )
+        imageView.tintColor = UIColor.navigationBarTintColor
+        imageView.contentMode = .center
+        return imageView
+    }()
+
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.color = UIColor.navigationBarTintColor
+        spinner.hidesWhenStopped = false
+        spinner.isHidden = true
+        return spinner
+    }()
+
+    private let trailingContainer = TrailingContainerView()
+
     var year: Int? {
+        didSet { label.text = year.map(String.init) ?? "----" }
+    }
+
+    var isLoading: Bool = false {
         didSet {
-            var updated = configuration
-            updated?.title = year.map(String.init) ?? "----"
-            configuration = updated
+            guard isLoading != oldValue else { return }
+            chevronView.isHidden = isLoading
+            spinner.isHidden = !isLoading
+            if isLoading {
+                spinner.startAnimating()
+            } else {
+                spinner.stopAnimating()
+            }
+        }
+    }
+
+    override var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted ? UIColor.lightGray : UIColor.white
         }
     }
 
     init() {
         super.init(frame: .zero)
 
-        var config = UIButton.Configuration.plain()
-        config.baseForegroundColor = UIColor.navigationBarTintColor
-        config.background.backgroundColor = UIColor.white
-        config.cornerStyle = .capsule
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 8)
-        config.image = UIImage(systemName: "chevron.down")
-        config.imagePlacement = .trailing
-        config.imagePadding = 2
-        config.title = "----"
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
-            incoming in
-            var outgoing = incoming
-            let base = UIFont.preferredFont(forTextStyle: .callout).pointSize
-            outgoing.font = UIFont.monospacedDigitSystemFont(ofSize: base, weight: .bold)
-            return outgoing
-        }
-        configuration = config
+        backgroundColor = UIColor.white
+        layer.masksToBounds = true
 
-        configurationUpdateHandler = { button in
-            var updated = button.configuration
-            updated?.background.backgroundColor =
-                button.isHighlighted ? UIColor.lightGray : UIColor.white
-            button.configuration = updated
+        for child in [chevronView, spinner] as [UIView] {
+            child.translatesAutoresizingMaskIntoConstraints = false
+            trailingContainer.addSubview(child)
+            NSLayoutConstraint.activate([
+                child.centerXAnchor.constraint(equalTo: trailingContainer.centerXAnchor),
+                child.centerYAnchor.constraint(equalTo: trailingContainer.centerYAnchor),
+            ])
         }
+
+        let stack = UIStackView(arrangedSubviews: [label, trailingContainer])
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = 2
+        stack.isUserInteractionEnabled = false
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+        ])
 
         setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
@@ -565,10 +617,27 @@ class YearButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = bounds.height / 2
+    }
+
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let dx = max(0, (Self.minimumTouchTarget - bounds.width) / 2)
         let dy = max(0, (Self.minimumTouchTarget - bounds.height) / 2)
         return bounds.insetBy(dx: -dx, dy: -dy).contains(point)
     }
 
+}
+
+private final class TrailingContainerView: UIView {
+    override var intrinsicContentSize: CGSize {
+        var size = CGSize.zero
+        for sub in subviews {
+            let s = sub.intrinsicContentSize
+            size.width = max(size.width, s.width)
+            size.height = max(size.height, s.height)
+        }
+        return size
+    }
 }

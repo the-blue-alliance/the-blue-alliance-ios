@@ -18,12 +18,14 @@ class TeamAtEventViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(teamKey: TeamKey, eventKey: EventKey, year: Int, dependencies: Dependencies) {
+    init(teamKey: TeamKey, eventKey: EventKey, dependencies: Dependencies) {
         // B teams (e.g. "frc5940B") alias their parent team — there's no
         // /team/<N>B page, so route every caller to the canonical key.
         let teamKey = teamKey.parentKey
         self.teamKey = teamKey
         self.eventKey = eventKey
+
+        let year = eventKey.year!
 
         summaryViewController = TeamSummaryViewController(
             teamKey: teamKey,
@@ -124,18 +126,21 @@ class TeamAtEventViewController: ContainerViewController {
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
-    private func pushTeamAtEvent(teamKey: String, eventKey: EventKey, year: Int) {
+    private func pushTeamAtEvent(teamKey: String, eventKey: EventKey) {
         let vc = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: eventKey,
-            year: year,
             dependencies: dependencies
         )
         navigationController?.pushViewController(vc, animated: true)
     }
 
     private func pushTeam(teamKey: String) {
-        let vc = TeamViewController(teamKey: teamKey, dependencies: dependencies)
+        let vc = TeamViewController(
+            teamKey: teamKey,
+            year: eventKey.year,
+            dependencies: dependencies
+        )
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -179,8 +184,7 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
         if self.teamKey == teamKey {
             return
         }
-        guard let year = eventKey.year else { return }
-        pushTeamAtEvent(teamKey: teamKey, eventKey: eventKey, year: year)
+        pushTeamAtEvent(teamKey: teamKey, eventKey: eventKey)
     }
 
 }

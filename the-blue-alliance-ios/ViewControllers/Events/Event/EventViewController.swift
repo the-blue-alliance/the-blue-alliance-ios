@@ -208,11 +208,9 @@ extension EventViewController: EventRankingsViewControllerDelegate {
     }
 
     private func pushTeamAtEvent(teamKey: String) {
-        let year = state.event?.year ?? state.key.year ?? 0
         let teamAtEventViewController = TeamAtEventViewController(
             teamKey: teamKey,
             eventKey: state.key,
-            year: year,
             dependencies: dependencies
         )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)

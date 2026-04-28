@@ -86,6 +86,7 @@ extension DistrictViewController: TeamsListViewControllerDelegate {
         let teamViewController = TeamViewController(
             teamKey: team.key,
             nickname: team.nickname,
+            year: year,
             dependencies: dependencies
         )
         self.navigationController?.pushViewController(teamViewController, animated: true)
