@@ -16,7 +16,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         "A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5,
         "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11,
     ]
-    private static let renderCache = NSCache<NSString, UIImage>()
+    private static let hexCache = NSCache<NSString, UIImage>()
     private static let hexVerticesCache = NSCache<NSString, NSArray>()
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
@@ -399,6 +399,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             key = "teleopReef"
         }
         let levels = ["botRow", "midRow", "topRow"]
+        let coral = UIImage(named: "coral_image") ?? UIImage(systemName: "circle.fill")!
         if let reef = dict?[key] as? [String: Any],
             let values = reef[levels[level - 2]] as? [String: Bool]
         {
@@ -406,9 +407,9 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 if let id = nodeKey.last {
                     switch stage {
                     case .auto:
-                        setSegment(id, to: .green, in: view, alliance: alliance, stage: .auto)
+                        setSegment(id, to: .green, in: view, alliance: alliance, stage: .auto, coral: coral)
                     case .teleop:
-                        setSegment(id, to: .white, in: view, alliance: alliance, stage: .teleop)
+                        setSegment(id, to: .white, in: view, alliance: alliance, stage: .teleop, coral: coral)
                     }
                 }
             }
@@ -419,7 +420,8 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         to color: UIColor,
         in view: UIView,
         alliance: Alliance,
-        stage: MatchStages
+        stage: MatchStages,
+        coral: UIImage
     ) {
         let width: CGFloat = 400
         let height: CGFloat = 400
@@ -492,12 +494,10 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             } else {
                 angle = angle + .pi / 12  // Rotate odd segments by +15°
             }
-            let image = UIImage(named: "coral_image") ?? UIImage(systemName: "circle.fill")
 
-            let imageView = UIImageView(image: image?.withRenderingMode(.alwaysOriginal))
+            let imageView = UIImageView(image: coral.withRenderingMode(.alwaysOriginal))
             imageView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
             imageView.center = offsetCenter
-
             let layer = imageView.layer
             layer.transform = CATransform3DRotate(CATransform3DIdentity, angle, 0, 0, 1)
             view.addSubview(imageView)
@@ -571,7 +571,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
     private static func getCachedHexagon(width: CGFloat, height: CGFloat) -> UIImage {
         let cacheKey = NSString(string: "hexagon_\(width)_\(height)")
 
-        if let cached = renderCache.object(forKey: cacheKey) {
+        if let cached = hexCache.object(forKey: cacheKey) {
             return cached
         }
 
@@ -589,7 +589,7 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             hexagonView.layer.render(in: ctx.cgContext)
         }
 
-        renderCache.setObject(image, forKey: cacheKey)
+        hexCache.setObject(image, forKey: cacheKey)
         return image
     }
     private static func getCachedHexVertices(
@@ -611,18 +611,5 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         hexVerticesCache.setObject(vertices as NSArray, forKey: cacheKey)
         return vertices
     }
-
-    private static func redDataHash(_ dict: [String: Any]?) -> String {
-        guard let dict else { return "nil" }
-        if let jsonData = try? JSONSerialization.data(withJSONObject: dict),
-            let jsonString = String(data: jsonData, encoding: .utf8)
-        {
-            return String(jsonString.hashValue)
-        }
-        return UUID().uuidString
-    }
-
-    private static func blueDataHash(_ dict: [String: Any]?) -> String {
-        return redDataHash(dict)
-    }
 }
+
