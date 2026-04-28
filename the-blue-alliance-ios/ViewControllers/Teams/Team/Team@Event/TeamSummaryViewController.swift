@@ -378,15 +378,16 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         case .match(let match, _):
             delegate?.matchSelected(match)
         case .pitLocation:
-            guard let teamNumber = team?.teamNumber,
+            guard
                 let url = EventPitMapURL.url(
                     eventKey: eventKey,
-                    highlightTeamKeys: ["frc\(teamNumber)"]
+                    highlightTeamKeys: [teamKey]
                 )
             else { return }
             let pitMap = EventPitMapViewController(
                 url: url,
                 title: "Pit Map",
+                focusTeamKey: teamKey,
                 dependencies: dependencies
             )
             navigationController?.pushViewController(pitMap, animated: true)
