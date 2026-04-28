@@ -38,11 +38,9 @@ extension Date {
         return calendar.date(bySettingHour: 23, minute: 59, second: 59, of: self)!
     }
 
-    /**
-     Find the next weekday after the current date.
-    
-     This method is not inclusive of the reciever. Ex: If reciever is a Monday, and we're looking for the next Monday, it will return reciever + 7, not reciever
-     */
+    /// Find the next weekday after the current date.
+    ///
+    /// This method is not inclusive of the reciever. Ex: If reciever is a Monday, and we're looking for the next Monday, it will return reciever + 7, not reciever
     public func next(_ weekday: Weekday, calendar: Calendar = Calendar.current) -> Date {
         return calendar.nextDate(
             after: self,

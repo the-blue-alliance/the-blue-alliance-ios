@@ -55,18 +55,16 @@ extension UICollectionView {
             as! T
     }
 
-    /*
-    func registerReusableSupplementaryView<T: Reusable>(elementKind: String, _: T.Type) {
-        if let nib = T.nib {
-            self.register(nib, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: T.reuseIdentifier)
-        } else {
-            self.register(T.self, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: T.reuseIdentifier)
-        }
-    }
-    
-    func dequeueReusableSupplementaryView<T: UICollectionViewCell>(elementKind: String, indexPath: IndexPath) -> T where T: Reusable {
-        return self.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
-    }
-    */
+    //    func registerReusableSupplementaryView<T: Reusable>(elementKind: String, _: T.Type) {
+    //        if let nib = T.nib {
+    //            self.register(nib, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: T.reuseIdentifier)
+    //        } else {
+    //            self.register(T.self, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: T.reuseIdentifier)
+    //        }
+    //    }
+    //
+    //    func dequeueReusableSupplementaryView<T: UICollectionViewCell>(elementKind: String, indexPath: IndexPath) -> T where T: Reusable {
+    //        return self.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
+    //    }
 
 }

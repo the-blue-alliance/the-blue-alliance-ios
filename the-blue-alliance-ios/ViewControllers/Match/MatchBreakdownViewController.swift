@@ -57,6 +57,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         case 2020, 2021: breakdownConfigurator = MatchBreakdownConfigurator2020.self
         case 2022: breakdownConfigurator = MatchBreakdownConfigurator2022.self
         case 2024: breakdownConfigurator = MatchBreakdownConfigurator2024.self
+        case 2025: breakdownConfigurator = MatchBreakdownConfigurator2025.self
         case 2026: breakdownConfigurator = MatchBreakdownConfigurator2026.self
         default: breakdownConfigurator = nil
         }
@@ -94,7 +95,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         dataSource = TableViewDataSource<String?, BreakdownRow>(tableView: tableView) {
             (tableView, indexPath, row) -> UITableViewCell? in
             let cell =
-                tableView.dequeueReusableCell(indexPath: indexPath) as MatchBreakdownTableViewCell
+                tableView.dequeueReusableCell(indexPath: indexPath)
+                as MatchBreakdownTableViewCell
             cell.titleText = row.title
             cell.redElements = row.redElements
             cell.blueElements = row.blueElements

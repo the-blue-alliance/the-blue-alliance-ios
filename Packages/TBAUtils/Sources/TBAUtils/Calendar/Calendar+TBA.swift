@@ -36,13 +36,11 @@ extension Calendar {
         }
     }
 
-    /*
-     Computes the date of Kickoff for a given year. Kickoff is always the first Saturday in January after Jan 2nd.
-    
-     - Parameter year: The year to find the kickoff date for - defaults to current year if nil.
-    
-     - Returns: The date of Kickoff for the given year.
-     */
+    /// Computes the date of Kickoff for a given year. Kickoff is always the first Saturday in January after Jan 2nd.
+    ///
+    /// - Parameter year: The year to find the kickoff date for - defaults to current year if nil.
+    ///
+    /// - Returns: The date of Kickoff for the given year.
     public func kickoff(_ year: Int? = nil) -> Date {
         let firstOfTheYearComponents = DateComponents(
             year: year ?? self.year,
@@ -52,13 +50,11 @@ extension Calendar {
         return date(from: firstOfTheYearComponents)!.next(.Saturday)
     }
 
-    /**
-     Computes day teams are done working on robots. The stop build day is kickoff + 6 weeks + 3 days.
-    
-     - Parameter year: The year to find the stop build date for - defaults to current year if nil.
-    
-     - Returns: The stop build date for the given year.
-     */
+    /// Computes day teams are done working on robots. The stop build day is kickoff + 6 weeks + 3 days.
+    ///
+    /// - Parameter year: The year to find the stop build date for - defaults to current year if nil.
+    ///
+    /// - Returns: The stop build date for the given year.
     public func stopBuildDay(_ year: Int? = nil) -> Date {
         let numberOfDaysInWeek = weekdaySymbols.count
         if numberOfDaysInWeek == 0 {
