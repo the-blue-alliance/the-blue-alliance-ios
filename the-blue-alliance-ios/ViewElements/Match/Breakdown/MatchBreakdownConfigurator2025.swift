@@ -407,9 +407,23 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 if let id = nodeKey.last {
                     switch stage {
                     case .auto:
-                        setSegment(id, to: .green, in: view, alliance: alliance, stage: .auto, coral: coral)
+                        setSegment(
+                            id,
+                            to: .green,
+                            in: view,
+                            alliance: alliance,
+                            stage: .auto,
+                            coral: coral
+                        )
                     case .teleop:
-                        setSegment(id, to: .white, in: view, alliance: alliance, stage: .teleop, coral: coral)
+                        setSegment(
+                            id,
+                            to: .white,
+                            in: view,
+                            alliance: alliance,
+                            stage: .teleop,
+                            coral: coral
+                        )
                     }
                 }
             }
@@ -612,4 +626,3 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         return vertices
     }
 }
-
