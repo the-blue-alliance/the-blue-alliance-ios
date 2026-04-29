@@ -194,4 +194,17 @@ struct MatchBreakdownConfigurator2018: MatchBreakdownConfigurator {
         }
     }
 
+    static func footerText(
+        _ breakdown: [String: Any]?,
+        _ red: [String: Any]?,
+        _ blue: [String: Any]?
+    ) -> String? {
+        guard let plates = (red?["tba_gameData"] ?? blue?["tba_gameData"]) as? String,
+            !plates.isEmpty
+        else {
+            return nil
+        }
+        return "Scoring Plate Assignments: \(plates)"
+    }
+
 }

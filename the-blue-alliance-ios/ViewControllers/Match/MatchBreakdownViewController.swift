@@ -121,6 +121,39 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         }
 
         dataSource.applySnapshotUsingReloadData(snapshot)
+        updateTableFooter(breakdown: breakdown, red: red, blue: blue)
+    }
+
+    private func updateTableFooter(
+        breakdown: [String: Any]?,
+        red: [String: Any]?,
+        blue: [String: Any]?
+    ) {
+        guard let breakdownConfigurator,
+            let text = breakdownConfigurator.footerText(breakdown, red, blue)
+        else {
+            tableView.tableFooterView = UIView(frame: .zero)
+            return
+        }
+
+        let label = UILabel()
+        label.text = text
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        label.frame = CGRect(x: 16, y: 12, width: tableView.bounds.width - 32, height: 0)
+        label.sizeToFit()
+
+        let footer = UIView(
+            frame: CGRect(
+                x: 0,
+                y: 0,
+                width: tableView.bounds.width,
+                height: label.frame.height + 24
+            )
+        )
+        footer.addSubview(label)
+        tableView.tableFooterView = footer
     }
 
     // MARK: - Refreshable
