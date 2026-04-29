@@ -371,20 +371,20 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             blueActivation.append(blueStage);
         }
 
-        let elements = [redActivation, blueActivation].map { (stage) -> String in
+        let elements = [redActivation, blueActivation].map { (stage) -> [AnyHashable] in
             if stage[0] == 1 {
                 if compLevel == .qm {
-                    return "3 (+1 RP)"
+                    return ["3 (+1 RP)"]
                 }
-                return "3"
+                return ["3"]
             } else if stage[1] == 1 {
-                return "2"
+                return ["2"]
             } else if stage[2] == 1 {
-                return "1"
+                return ["1"]
             }
-            return ""
+            return [BreakdownStyle.imageView(image: BreakdownStyle.xImage)]
         }
-        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
+        return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
 
 }
