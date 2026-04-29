@@ -10,9 +10,22 @@ protocol MatchBreakdownConfigurator {
         _ blue: [String: Any]?,
         _ compLevel: Components.Schemas.CompLevel?
     )
+    static func footerText(
+        _ breakdown: [String: Any]?,
+        _ red: [String: Any]?,
+        _ blue: [String: Any]?
+    ) -> String?
 }
 
 extension MatchBreakdownConfigurator {
+
+    static func footerText(
+        _ breakdown: [String: Any]?,
+        _ red: [String: Any]?,
+        _ blue: [String: Any]?
+    ) -> String? {
+        return nil
+    }
 
     // MARK: - Helper Methods
 
