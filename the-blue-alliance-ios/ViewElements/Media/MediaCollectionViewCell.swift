@@ -46,15 +46,29 @@ class MediaCollectionViewCell: UICollectionViewCell, Reusable {
     }()
     private lazy var noDataView: UIView = {
         let noDataView = UIView(forAutoLayout: ())
-        noDataView.addSubview(noDataLabel)
-        noDataLabel.autoPinEdgesToSuperviewEdges(
-            with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        )
+        let stack = UIStackView(arrangedSubviews: [noDataIconView, noDataLabel])
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.spacing = 6
+        stack.configureForAutoLayout()
+        noDataView.addSubview(stack)
+        stack.autoCenterInSuperview()
+        stack.autoPinEdge(toSuperviewEdge: .leading, withInset: 8, relation: .greaterThanOrEqual)
+        stack.autoPinEdge(toSuperviewEdge: .trailing, withInset: 8, relation: .greaterThanOrEqual)
         return noDataView
+    }()
+    private let noDataIconView: UIImageView = {
+        let icon = UIImageView(
+            image: UIImage(systemName: "photo")?
+                .withConfiguration(UIImage.SymbolConfiguration(pointSize: 28, weight: .regular))
+        )
+        icon.tintColor = UIColor.label.withAlphaComponent(0.4)
+        icon.contentMode = .scaleAspectFit
+        return icon
     }()
     private let noDataLabel: UILabel = {
         let noDataLabel = UILabel(forAutoLayout: ())
-        noDataLabel.font = UIFont.systemFont(ofSize: 14)
+        noDataLabel.font = UIFont.systemFont(ofSize: 13)
         noDataLabel.numberOfLines = 0
         noDataLabel.textColor = UIColor.label
         noDataLabel.alpha = 0.5
