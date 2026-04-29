@@ -225,48 +225,39 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
     }
 
-    private func imageContextMenu(for photo: TeamMediaItem.Photo) -> UIContextMenuConfiguration {
+    private func imageContextMenu(for photo: TeamMediaItem.Photo) -> UIContextMenuConfiguration? {
         let cachedImage = imageCache[photo.foreignKey]
-        return UIContextMenuConfiguration(
-            identifier: photo.foreignKey as NSString,
-            previewProvider: nil
-        ) { _ in
-            var actions: [UIMenuElement] = []
-            if !photo.isInstagram {
-                actions.append(
-                    UIAction(title: "View", image: UIImage(systemName: "eye.fill")) { _ in
-                        self.delegate?.mediaSelected(
-                            image: cachedImage,
-                            directURL: photo.directURL,
-                            viewURL: photo.viewURL
-                        )
-                    }
-                )
-            }
+        var actions: [UIMenuElement] = []
 
-            if let viewURL = photo.viewURL, self.urlOpener.canOpenURL(viewURL) {
-                let viewOnlineAction = UIAction(
-                    title: "View Online",
-                    image: UIImage(systemName: "safari.fill")
-                ) { _ in
+        if !photo.isInstagram {
+            actions.append(
+                UIAction(title: "View", image: UIImage(systemName: "eye.fill")) { _ in
+                    self.delegate?.mediaSelected(
+                        image: cachedImage,
+                        directURL: photo.directURL,
+                        viewURL: photo.viewURL
+                    )
+                }
+            )
+        }
+
+        if let viewURL = photo.viewURL, urlOpener.canOpenURL(viewURL) {
+            actions.append(
+                UIAction(title: "View Online", image: UIImage(systemName: "safari.fill")) { _ in
                     self.urlOpener.open(viewURL, options: [:], completionHandler: nil)
                 }
-                actions.append(viewOnlineAction)
-            }
+            )
+        }
 
-            if let image = cachedImage {
-                let copyAction = UIAction(
-                    title: "Copy",
-                    image: UIImage(systemName: "doc.on.doc.fill")
-                ) { _ in
+        if let image = cachedImage {
+            actions.append(
+                UIAction(title: "Copy", image: UIImage(systemName: "doc.on.doc.fill")) { _ in
                     self.pasteboard.image = image
                 }
-                actions.append(copyAction)
-
-                let saveAction = UIAction(
-                    title: "Save",
-                    image: UIImage(systemName: "square.and.arrow.down.fill")
-                ) { _ in
+            )
+            actions.append(
+                UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down.fill")) {
+                    _ in
                     self.photoLibrary.performChanges(
                         {
                             PHAssetChangeRequest.creationRequestForAsset(from: image)
@@ -274,9 +265,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                         completionHandler: nil
                     )
                 }
-                actions.append(saveAction)
-            }
-            return UIMenu(title: "", children: actions)
+            )
+        }
+
+        guard !actions.isEmpty else { return nil }
+        return UIContextMenuConfiguration(
+            identifier: photo.foreignKey as NSString,
+            previewProvider: nil
+        ) { _ in
+            UIMenu(title: "", children: actions)
         }
     }
 
