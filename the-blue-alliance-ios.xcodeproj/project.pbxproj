@@ -29,12 +29,9 @@
 		51BECA942F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
-		5EC0D41A2C26041C00000004 /* LocalBuffersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */; };
-		5EC0D41A2C26041C00000006 /* BoundedHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */; };
-		5EC0D41A2C26041D00000002 /* BoundedHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041D00000001 /* BoundedHistory.swift */; };
+		5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042100000001 /* NotificationStore.swift */; };
 		5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041F00000001 /* AppGroup.swift */; };
-		5EC0D41A2C260420BB000002 /* BoundedHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C260420BB000001 /* BoundedHistoryTests.swift */; };
-		5EC0D41A2C260420BB000004 /* FileBoundedHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C260420BB000003 /* FileBoundedHistoryStoreTests.swift */; };
+		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
 		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
 		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
@@ -220,12 +217,9 @@
 		51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2025.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
-		5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalBuffersStore.swift; sourceTree = "<group>"; };
-		5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistoryStore.swift; sourceTree = "<group>"; };
-		5EC0D41A2C26041D00000001 /* BoundedHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistory.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26042100000001 /* NotificationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
-		5EC0D41A2C260420BB000001 /* BoundedHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistoryTests.swift; sourceTree = "<group>"; };
-		5EC0D41A2C260420BB000003 /* FileBoundedHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBoundedHistoryStoreTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
 		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationRouter.swift; sourceTree = "<group>"; };
@@ -564,8 +558,7 @@
 		CE8E6930F354EB795163DD95 /* TBAUnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				5EC0D41A2C260420BB000001 /* BoundedHistoryTests.swift */,
-				5EC0D41A2C260420BB000003 /* FileBoundedHistoryStoreTests.swift */,
+				5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */,
 			);
 			name = TBAUnitTests;
 			path = TBAUnitTests;
@@ -770,8 +763,7 @@
 				92AABBCC000000000000DD02 /* CachePolicyStore.swift */,
 				92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */,
 				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
-				5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */,
-				5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */,
+				5EC0D41A2C26042100000001 /* NotificationStore.swift */,
 			);
 			path = LocalStore;
 			sourceTree = "<group>";
@@ -779,7 +771,6 @@
 		5EC0D41A2C26041D00000010 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5EC0D41A2C26041D00000001 /* BoundedHistory.swift */,
 				5EC0D41A2C26041E00000010 /* Push */,
 			);
 			path = Models;
@@ -1206,8 +1197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5EC0D41A2C260420BB000002 /* BoundedHistoryTests.swift in Sources */,
-				5EC0D41A2C260420BB000004 /* FileBoundedHistoryStoreTests.swift in Sources */,
+				5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1217,9 +1207,7 @@
 			files = (
 				5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
-				5EC0D41A2C26041C00000004 /* LocalBuffersStore.swift in Sources */,
-				5EC0D41A2C26041C00000006 /* BoundedHistoryStore.swift in Sources */,
-				5EC0D41A2C26041D00000002 /* BoundedHistory.swift in Sources */,
+				5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */,
 				5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */,
 				5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */,
 				5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */,

@@ -7,18 +7,18 @@ import Foundation
 // Reference (server-side): the-blue-alliance/the-blue-alliance
 //   src/backend/common/consts/notification_type.py
 //   src/backend/common/models/notifications/
-enum PushNotificationPayload: Equatable {
+enum PushNotificationPayload: Codable, Equatable {
     case match(kind: MatchKind, matchKey: String, eventKey: String, teamKey: String?)
     case silentRefresh(SilentKind)
     case unhandled(typeKey: String)
 
-    enum MatchKind: String {
+    enum MatchKind: String, Codable {
         case upcoming = "upcoming_match"
         case score = "match_score"
         case video = "match_video"
     }
 
-    enum SilentKind: String {
+    enum SilentKind: String, Codable {
         case favorites = "update_favorites"
         case subscriptions = "update_subscriptions"
     }
