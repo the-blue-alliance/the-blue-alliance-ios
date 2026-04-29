@@ -52,7 +52,9 @@ class PlayerView: UIView {
     }
 
     func load(youtubeKey: String?) {
-        if youtubeKey == loadedKey {
+        // Only short-circuit when we already loaded the same non-nil key, so a
+        // fresh view (loadedKey == nil) loaded with nil still surfaces the error.
+        if let youtubeKey, youtubeKey == loadedKey {
             return
         }
         playerView.stopVideo()
@@ -92,6 +94,11 @@ class PlayerView: UIView {
 extension PlayerView: YTPlayerViewDelegate {
     func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
         loadingIndicator.stopAnimating()
+    }
+
+    func playerView(_ playerView: YTPlayerView, receivedError error: YTPlayerError) {
+        loadingIndicator.stopAnimating()
+        showErrorView(error: "Unable to load video.")
     }
 }
 
