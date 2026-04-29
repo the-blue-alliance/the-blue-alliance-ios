@@ -62,8 +62,6 @@ enum LocalBuffersStore {
             configuration: configuration,
             didMutate: { store.save($0) }
         )
-        // Reapply prune in case the config tightened between builds.
-        history.prune()
         registry[filename] = WeakBuffer(value: history)
         return history
     }

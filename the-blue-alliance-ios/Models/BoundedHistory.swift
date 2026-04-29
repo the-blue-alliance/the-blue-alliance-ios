@@ -39,6 +39,7 @@ final class BoundedHistory<Entry: Identifiable> {
         self.entries = initial
         self.configuration = configuration
         self.didMutate = didMutate
+        prune()
     }
 
     func append(_ entry: Entry) {

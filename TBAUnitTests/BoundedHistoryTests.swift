@@ -117,19 +117,23 @@ struct BoundedHistoryTests {
     }
 
     @Test func pruneReturnsTrueWhenChangedAndFires() {
+        var stale = false
         var fired = 0
-        let stale = Stub(at: Date().addingTimeInterval(-3600))
-        let fresh = Stub()
         let buffer = BoundedHistory<Stub>(
-            initial: [fresh, stale],
-            configuration: Self.ageConfig(maxAge: 60),
+            initial: [Stub(), Stub()],
+            configuration: BoundedHistory<Stub>.Configuration(
+                maxCount: 10,
+                maxAge: 60,
+                ageProvider: { _ in stale ? Date.distantPast : Date() }
+            ),
             didMutate: { _ in fired += 1 }
         )
 
+        stale = true
         let changed = buffer.prune()
 
         #expect(changed)
-        #expect(buffer.entries.map(\.id) == [fresh.id])
+        #expect(buffer.entries.isEmpty)
         #expect(fired == 1)
     }
 
@@ -143,6 +147,18 @@ struct BoundedHistoryTests {
         let changed = buffer.prune()
         #expect(!changed)
         #expect(fired == 0)
+    }
+
+    @Test func initNormalizesOverCapacityInitial() {
+        let entries = (0..<10).map { _ in Stub() }
+        var fired: [Int] = []
+        let buffer = BoundedHistory<Stub>(
+            initial: entries,
+            configuration: Self.config(maxCount: 3),
+            didMutate: { fired.append($0.count) }
+        )
+        #expect(buffer.entries.count == 3)
+        #expect(fired == [3])
     }
 
     @Test func clearInMemoryDoesNotFireMutate() {

@@ -91,8 +91,10 @@ struct FileBoundedHistoryStoreTests {
     }
 
     @Test func saveCreatesParentDirectoryOnDemand() {
-        let url = Self.tempURL(filename: "nested/deeply/buffer.plist")
-        defer { try? FileManager.default.removeItem(at: url.deletingLastPathComponent()) }
+        let base = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: base) }
+        let url = base.appendingPathComponent("nested/deeply/buffer.plist")
 
         let store = FileBoundedHistoryStore<Stub>(url: url)
         store.save([Stub(id: UUID(), value: "x")])
