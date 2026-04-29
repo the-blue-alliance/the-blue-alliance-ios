@@ -18,9 +18,10 @@ final class NotificationStore {
 
     init(directory: URL = NotificationStore.defaultDirectory) {
         self.url = directory.appendingPathComponent("notifications.json")
-        self.entries =
+        let loaded =
             (try? Data(contentsOf: url))
             .flatMap { try? JSONDecoder().decode([Entry].self, from: $0) } ?? []
+        self.entries = Array(loaded.prefix(Self.maxCount))
     }
 
     func append(_ entry: Entry) {

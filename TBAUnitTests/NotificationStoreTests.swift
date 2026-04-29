@@ -95,6 +95,21 @@ struct NotificationStoreTests {
         #expect(store.entries.isEmpty)
     }
 
+    @Test func initTrimsOverCapacityFile() throws {
+        let dir = Self.tempDirectory()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+
+        let entries = (0..<(NotificationStore.maxCount + 5)).map { _ in Self.entry() }
+        let data = try JSONEncoder().encode(entries)
+        try data.write(to: dir.appendingPathComponent("notifications.json"))
+
+        let store = NotificationStore(directory: dir)
+
+        #expect(store.entries.count == NotificationStore.maxCount)
+        #expect(store.entries.first?.id == entries.first?.id)
+    }
+
     @Test func loadFromCorruptFileReturnsEmpty() throws {
         let dir = Self.tempDirectory()
         defer { try? FileManager.default.removeItem(at: dir) }
