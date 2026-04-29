@@ -39,7 +39,6 @@ final class NotificationStore {
     }
 
     func clear() {
-        guard !entries.isEmpty else { return }
         entries.removeAll()
         try? FileManager.default.removeItem(at: url)
         notifyChange()
