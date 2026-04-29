@@ -22,6 +22,9 @@ final class NotificationStore {
             (try? Data(contentsOf: url))
             .flatMap { try? JSONDecoder().decode([Entry].self, from: $0) } ?? []
         self.entries = Array(loaded.prefix(Self.maxCount))
+        if loaded.count > Self.maxCount {
+            persist()
+        }
     }
 
     func append(_ entry: Entry) {
@@ -42,7 +45,6 @@ final class NotificationStore {
     func clear() {
         entries.removeAll()
         try? FileManager.default.removeItem(at: url)
-        notifyChange()
     }
 
     private func persist() {
@@ -53,11 +55,6 @@ final class NotificationStore {
         if let data = try? JSONEncoder().encode(entries) {
             try? data.write(to: url, options: .atomic)
         }
-        notifyChange()
-    }
-
-    private func notifyChange() {
-        NotificationCenter.default.post(name: .notificationStoreDidChange, object: self)
     }
 
     nonisolated private static var defaultDirectory: URL {
@@ -72,8 +69,4 @@ final class NotificationStore {
         }
         return base
     }
-}
-
-extension Notification.Name {
-    static let notificationStoreDidChange = Notification.Name("notificationStoreDidChange")
 }

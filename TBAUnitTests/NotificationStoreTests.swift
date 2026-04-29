@@ -135,27 +135,4 @@ struct NotificationStoreTests {
         #expect(reader.entries == [entry])
     }
 
-    @Test func mutationsPostNotificationCenterChange() async {
-        let dir = Self.tempDirectory()
-        defer { try? FileManager.default.removeItem(at: dir) }
-        let store = NotificationStore(directory: dir)
-
-        var observed = 0
-        let token = NotificationCenter.default.addObserver(
-            forName: .notificationStoreDidChange,
-            object: store,
-            queue: .main
-        ) { _ in observed += 1 }
-        defer { NotificationCenter.default.removeObserver(token) }
-
-        store.append(Self.entry())
-        store.remove(id: store.entries[0].id)
-        store.append(Self.entry())
-        store.clear()
-
-        // The observer block runs on the main queue; yield once so it drains.
-        await Task.yield()
-
-        #expect(observed == 4)
-    }
 }
