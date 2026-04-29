@@ -3,22 +3,40 @@ import TBAAPI
 import UIKit
 
 protocol TeamMediaCollectionViewControllerDelegate: AnyObject {
-    func mediaSelected(image: UIImage?, directURL: URL?)
+    func mediaSelected(image: UIImage?, directURL: URL?, viewURL: URL?)
 }
 
-struct TeamMediaItem: Hashable {
-    let foreignKey: String
-    let type: String
-    let directURL: URL?
-    let viewURL: URL?
+enum MediaSection: Hashable {
+    case videos
+    case images
+}
+
+enum TeamMediaItem: Hashable {
+    case image(Photo)
+    case video(Video)
+
+    struct Photo: Hashable {
+        let foreignKey: String
+        let type: String
+        let directURL: URL?
+        let viewURL: URL?
+
+        var isInstagram: Bool { type == "instagram-image" }
+    }
+
+    struct Video: Hashable {
+        let youtubeKey: String
+        let viewURL: URL?
+    }
 }
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private static let spacerSize: CGFloat = 3.0
     private static let imageTypes: Set<String> = [
-        "imgur", "cdphotothread", "avatar", "instagram-image",
+        "imgur", "instagram-image",
     ]
+    private static let videoTypes: Set<String> = ["youtube"]
 
     private let teamKey: String
     private let pasteboard: UIPasteboard
@@ -35,7 +53,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     weak var delegate: TeamMediaCollectionViewControllerDelegate?
 
-    private var dataSource: CollectionViewDataSource<String, TeamMediaItem>!
+    private var dataSource: CollectionViewDataSource<MediaSection, TeamMediaItem>!
     private var media: [TeamMediaItem] = []
     private var imageCache: [String: UIImage] = [:]
     private var imageErrors: [String: Error] = [:]
@@ -55,7 +73,10 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
 
-        super.init(collectionViewLayout: Self.makeLayout(), dependencies: dependencies)
+        super.init(
+            collectionViewLayout: UICollectionViewCompositionalLayout { _, _ in nil },
+            dependencies: dependencies
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,41 +85,85 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: - Layout
 
-    private static func makeLayout() -> UICollectionViewLayout {
-        UICollectionViewCompositionalLayout { _, env in
-            let columns = env.traitCollection.horizontalSizeClass == .regular ? 3 : 2
-            let spacer = TeamMediaCollectionViewController.spacerSize
-            let containerWidth = env.container.effectiveContentSize.width
-            let itemWidth =
-                (containerWidth - spacer * CGFloat(columns - 1) - 2 * spacer) / CGFloat(columns)
-
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(itemWidth),
-                heightDimension: .absolute(itemWidth)
-            )
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(itemWidth)
-            )
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: groupSize,
-                repeatingSubitem: item,
-                count: columns
-            )
-            group.interItemSpacing = .fixed(spacer)
-
-            let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = spacer
-            section.contentInsets = NSDirectionalEdgeInsets(
-                top: spacer,
-                leading: spacer,
-                bottom: spacer,
-                trailing: spacer
-            )
-            return section
+    private func makeLayout() -> UICollectionViewLayout {
+        UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
+            guard let self else { return nil }
+            let section = self.dataSource?.sectionIdentifier(for: sectionIndex) ?? .images
+            switch section {
+            case .videos:
+                return Self.makeVideoSection(env: env)
+            case .images:
+                return Self.makeImageSection(env: env)
+            }
         }
+    }
+
+    private static func makeImageSection(env: NSCollectionLayoutEnvironment)
+        -> NSCollectionLayoutSection
+    {
+        let columns = env.traitCollection.horizontalSizeClass == .regular ? 3 : 2
+        let spacer = TeamMediaCollectionViewController.spacerSize
+        let containerWidth = env.container.effectiveContentSize.width
+        let itemWidth =
+            (containerWidth - spacer * CGFloat(columns - 1) - 2 * spacer) / CGFloat(columns)
+
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(itemWidth),
+            heightDimension: .absolute(itemWidth)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(itemWidth)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            repeatingSubitem: item,
+            count: columns
+        )
+        group.interItemSpacing = .fixed(spacer)
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = spacer
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: spacer,
+            leading: spacer,
+            bottom: spacer,
+            trailing: spacer
+        )
+        return section
+    }
+
+    private static func makeVideoSection(env: NSCollectionLayoutEnvironment)
+        -> NSCollectionLayoutSection
+    {
+        let spacer = TeamMediaCollectionViewController.spacerSize
+        let containerWidth = env.container.effectiveContentSize.width
+        let itemWidth = containerWidth - 2 * spacer
+        let itemHeight = itemWidth * (9.0 / 16.0)
+
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(itemHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(itemHeight)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = spacer
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: spacer,
+            leading: spacer,
+            bottom: spacer,
+            trailing: spacer
+        )
+        return section
     }
 
     // MARK: - View Lifecycle
@@ -106,8 +171,12 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.registerReusableCell(MediaCollectionViewCell.self)
+        collectionView.registerReusableCell(PlayerCollectionViewCell.self)
+
         setupDataSource()
         collectionView.dataSource = dataSource
+        collectionView.setCollectionViewLayout(makeLayout(), animated: false)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -123,7 +192,23 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         didSelectItemAt indexPath: IndexPath
     ) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-        delegate?.mediaSelected(image: imageCache[item.foreignKey], directURL: item.directURL)
+        switch item {
+        case .image(let photo):
+            if photo.isInstagram {
+                if let viewURL = photo.viewURL, urlOpener.canOpenURL(viewURL) {
+                    urlOpener.open(viewURL, options: [:], completionHandler: nil)
+                }
+            } else {
+                delegate?.mediaSelected(
+                    image: imageCache[photo.foreignKey],
+                    directURL: photo.directURL,
+                    viewURL: photo.viewURL
+                )
+            }
+        case .video:
+            // The embedded YouTube player handles its own play/pause taps.
+            break
+        }
     }
 
     override func collectionView(
@@ -132,18 +217,34 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         point: CGPoint
     ) -> UIContextMenuConfiguration? {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
-        let cachedImage = imageCache[item.foreignKey]
-        let configuration = UIContextMenuConfiguration(
-            identifier: item.foreignKey as NSString,
-            previewProvider: nil
-        ) {
-            _ in
-            let viewAction = UIAction(title: "View", image: UIImage(systemName: "eye.fill")) { _ in
-                self.delegate?.mediaSelected(image: cachedImage, directURL: item.directURL)
-            }
-            var actions: [UIMenuElement] = [viewAction]
+        switch item {
+        case .image(let photo):
+            return imageContextMenu(for: photo)
+        case .video(let video):
+            return videoContextMenu(for: video)
+        }
+    }
 
-            if let viewURL = item.viewURL, self.urlOpener.canOpenURL(viewURL) {
+    private func imageContextMenu(for photo: TeamMediaItem.Photo) -> UIContextMenuConfiguration {
+        let cachedImage = imageCache[photo.foreignKey]
+        return UIContextMenuConfiguration(
+            identifier: photo.foreignKey as NSString,
+            previewProvider: nil
+        ) { _ in
+            var actions: [UIMenuElement] = []
+            if !photo.isInstagram {
+                actions.append(
+                    UIAction(title: "View", image: UIImage(systemName: "eye.fill")) { _ in
+                        self.delegate?.mediaSelected(
+                            image: cachedImage,
+                            directURL: photo.directURL,
+                            viewURL: photo.viewURL
+                        )
+                    }
+                )
+            }
+
+            if let viewURL = photo.viewURL, self.urlOpener.canOpenURL(viewURL) {
                 let viewOnlineAction = UIAction(
                     title: "View Online",
                     image: UIImage(systemName: "safari.fill")
@@ -165,8 +266,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 let saveAction = UIAction(
                     title: "Save",
                     image: UIImage(systemName: "square.and.arrow.down.fill")
-                ) {
-                    _ in
+                ) { _ in
                     self.photoLibrary.performChanges(
                         {
                             PHAssetChangeRequest.creationRequestForAsset(from: image)
@@ -178,7 +278,22 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             }
             return UIMenu(title: "", children: actions)
         }
-        return configuration
+    }
+
+    private func videoContextMenu(for video: TeamMediaItem.Video) -> UIContextMenuConfiguration? {
+        guard let viewURL = video.viewURL, urlOpener.canOpenURL(viewURL) else { return nil }
+        return UIContextMenuConfiguration(
+            identifier: video.youtubeKey as NSString,
+            previewProvider: nil
+        ) { _ in
+            let viewOnYouTubeAction = UIAction(
+                title: "View on YouTube",
+                image: UIImage(systemName: "safari.fill")
+            ) { _ in
+                self.urlOpener.open(viewURL, options: [:], completionHandler: nil)
+            }
+            return UIMenu(title: "", children: [viewOnYouTubeAction])
+        }
     }
 
     override func collectionView(
@@ -187,48 +302,73 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         animator: UIContextMenuInteractionCommitAnimating
     ) {
         guard let foreignKey = configuration.identifier as? String,
-            let item = media.first(where: { $0.foreignKey == foreignKey })
+            let item = media.first(where: { $0.contextMenuIdentifier == foreignKey })
         else { return }
-        delegate?.mediaSelected(image: imageCache[foreignKey], directURL: item.directURL)
+        switch item {
+        case .image(let photo):
+            delegate?.mediaSelected(
+                image: imageCache[photo.foreignKey],
+                directURL: photo.directURL,
+                viewURL: photo.viewURL
+            )
+        case .video(let video):
+            if let viewURL = video.viewURL, urlOpener.canOpenURL(viewURL) {
+                urlOpener.open(viewURL, options: [:], completionHandler: nil)
+            }
+        }
     }
 
     // MARK: Data Source
 
     private func setupDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<
-            MediaCollectionViewCell, TeamMediaItem
-        > {
-            [weak self] cell, _, item in
-            guard let self else { return }
-            if let image = self.imageCache[item.foreignKey] {
-                cell.state = .loaded(image)
-            } else if let error = self.imageErrors[item.foreignKey] {
-                cell.state = .error("Error loading media - \(error.localizedDescription)")
-            } else {
-                cell.state = .loading
+        dataSource = CollectionViewDataSource<MediaSection, TeamMediaItem>(
+            collectionView: collectionView
+        ) { [weak self] collectionView, indexPath, item in
+            guard let self else { return UICollectionViewCell() }
+            switch item {
+            case .image(let photo):
+                let cell: MediaCollectionViewCell = collectionView.dequeueReusableCell(
+                    indexPath: indexPath
+                )
+                if photo.isInstagram {
+                    cell.state = .error("Instagram image")
+                } else if let image = self.imageCache[photo.foreignKey] {
+                    cell.state = .loaded(image)
+                } else if self.imageErrors[photo.foreignKey] != nil {
+                    cell.state = .error("Image unavailable")
+                } else {
+                    cell.state = .loading
+                }
+                return cell
+            case .video(let video):
+                let cell: PlayerCollectionViewCell = collectionView.dequeueReusableCell(
+                    indexPath: indexPath
+                )
+                cell.configure(youtubeKey: video.youtubeKey)
+                return cell
             }
-            cell.accessibilityIdentifier = "media.\(item.foreignKey)"
-        }
-        dataSource = CollectionViewDataSource<String, TeamMediaItem>(collectionView: collectionView)
-        {
-            collectionView,
-            indexPath,
-            item in
-            return collectionView.dequeueConfiguredReusableCell(
-                using: cellRegistration,
-                for: indexPath,
-                item: item
-            )
         }
         dataSource.delegate = self
     }
 
     private func applyMedia(_ items: [TeamMediaItem]) {
         self.media = items
-        var snapshot = NSDiffableDataSourceSnapshot<String, TeamMediaItem>()
-        if !items.isEmpty {
-            snapshot.appendSections([""])
-            snapshot.appendItems(items, toSection: "")
+        var snapshot = NSDiffableDataSourceSnapshot<MediaSection, TeamMediaItem>()
+
+        let videos = items.compactMap { item -> TeamMediaItem? in
+            if case .video = item { return item } else { return nil }
+        }
+        let images = items.compactMap { item -> TeamMediaItem? in
+            if case .image = item { return item } else { return nil }
+        }
+
+        if !images.isEmpty {
+            snapshot.appendSections([.images])
+            snapshot.appendItems(images, toSection: .images)
+        }
+        if !videos.isEmpty {
+            snapshot.appendSections([.videos])
+            snapshot.appendItems(videos, toSection: .videos)
         }
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
@@ -249,46 +389,64 @@ extension TeamMediaCollectionViewController: Refreshable {
                 teamKey: self.teamKey,
                 year: year
             )
-            let items: [TeamMediaItem] =
-                apiMedia
-                .filter { Self.imageTypes.contains($0._type.rawValue) }
-                .map { m in
-                    TeamMediaItem(
-                        foreignKey: m.foreignKey,
-                        type: m._type.rawValue,
-                        directURL: m.directUrl.flatMap { URL(string: $0) },
-                        viewURL: m.viewUrl.flatMap { URL(string: $0) }
-                    )
-                }
+            let items: [TeamMediaItem] = apiMedia.compactMap { Self.makeItem(from: $0) }
             self.imageErrors.removeAll()
             self.applyMedia(items)
-            for item in items { self.downloadImage(for: item) }
-        }
-    }
-
-    private func downloadImage(for item: TeamMediaItem) {
-        guard imageCache[item.foreignKey] == nil else { return }
-        guard let url = item.directURL else { return }
-        downloadTasks[item.foreignKey]?.cancel()
-        downloadTasks[item.foreignKey] = Task { @MainActor [weak self] in
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                if let image = UIImage(data: data) {
-                    self?.imageCache[item.foreignKey] = image
-                } else {
-                    self?.imageErrors[item.foreignKey] = URLError(.cannotDecodeContentData)
-                }
-                self?.reconfigure(item: item)
-            } catch {
-                if !Task.isCancelled {
-                    self?.imageErrors[item.foreignKey] = error
-                    self?.reconfigure(item: item)
+            for item in items {
+                if case .image(let photo) = item, !photo.isInstagram {
+                    self.downloadImage(for: photo)
                 }
             }
         }
     }
 
-    private func reconfigure(item: TeamMediaItem) {
+    private static func makeItem(from media: Media) -> TeamMediaItem? {
+        let type = media._type.rawValue
+        if Self.imageTypes.contains(type) {
+            return .image(
+                .init(
+                    foreignKey: media.foreignKey,
+                    type: type,
+                    directURL: media.directUrl.flatMap { URL(string: $0) },
+                    viewURL: media.viewUrl.flatMap { URL(string: $0) }
+                )
+            )
+        }
+        if Self.videoTypes.contains(type), !media.foreignKey.isEmpty {
+            return .video(
+                .init(
+                    youtubeKey: media.foreignKey,
+                    viewURL: media.viewUrl.flatMap { URL(string: $0) }
+                )
+            )
+        }
+        return nil
+    }
+
+    private func downloadImage(for photo: TeamMediaItem.Photo) {
+        guard imageCache[photo.foreignKey] == nil else { return }
+        guard let url = photo.directURL else { return }
+        downloadTasks[photo.foreignKey]?.cancel()
+        downloadTasks[photo.foreignKey] = Task { @MainActor [weak self] in
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                if let image = UIImage(data: data) {
+                    self?.imageCache[photo.foreignKey] = image
+                } else {
+                    self?.imageErrors[photo.foreignKey] = URLError(.cannotDecodeContentData)
+                }
+                self?.reconfigure(photo: photo)
+            } catch {
+                if !Task.isCancelled {
+                    self?.imageErrors[photo.foreignKey] = error
+                    self?.reconfigure(photo: photo)
+                }
+            }
+        }
+    }
+
+    private func reconfigure(photo: TeamMediaItem.Photo) {
+        let item = TeamMediaItem.image(photo)
         var snapshot = dataSource.snapshot()
         if snapshot.itemIdentifiers.contains(item) {
             snapshot.reconfigureItems([item])
@@ -304,4 +462,13 @@ extension TeamMediaCollectionViewController: Stateful {
         return "No media for team"
     }
 
+}
+
+private extension TeamMediaItem {
+    var contextMenuIdentifier: String {
+        switch self {
+        case .image(let photo): return photo.foreignKey
+        case .video(let video): return video.youtubeKey
+        }
+    }
 }

@@ -171,8 +171,8 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
 
 extension TeamAtEventViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {
 
-    func mediaSelected(image: UIImage?, directURL: URL?) {
-        show(image: image, directURL: directURL)
+    func mediaSelected(image: UIImage?, directURL: URL?, viewURL: URL?) {
+        show(image: image, directURL: directURL, viewURL: viewURL)
     }
 
 }

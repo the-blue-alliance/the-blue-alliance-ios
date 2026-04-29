@@ -10,8 +10,13 @@ protocol Playable {
 
 class PlayerView: UIView {
 
-    private let playable: Playable
     private let playerView: YTPlayerView = YTPlayerView(frame: .zero)
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    private(set) var loadedKey: String?
 
     lazy var noDataViewController: NoDataViewController = {
         let noDataViewController = NoDataViewController()
@@ -19,22 +24,23 @@ class PlayerView: UIView {
         return noDataViewController
     }()
 
-    init(playable: Playable) {
-        self.playable = playable
-
+    init() {
         super.init(frame: .zero)
         backgroundColor = UIColor.systemGray6
 
         playerView.configureForAutoLayout()
+        playerView.delegate = self
         addSubview(playerView)
         playerView.autoPinEdgesToSuperviewEdges()
 
-        if let youtubeKey = playable.youtubeKey {
-            let parsed = YouTubeForeignKey(youtubeKey)
-            playerView.load(withVideoId: parsed.videoId, playerVars: parsed.playerVars)
-        } else {
-            showErrorView(error: "No YouTube key for video.")
-        }
+        loadingIndicator.configureForAutoLayout()
+        addSubview(loadingIndicator)
+        loadingIndicator.autoCenterInSuperview()
+    }
+
+    convenience init(playable: Playable) {
+        self.init()
+        load(youtubeKey: playable.youtubeKey)
     }
 
     deinit {
@@ -45,6 +51,28 @@ class PlayerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func load(youtubeKey: String?) {
+        if youtubeKey == loadedKey {
+            return
+        }
+        playerView.stopVideo()
+        loadedKey = youtubeKey
+        if let youtubeKey {
+            removeErrorView()
+            loadingIndicator.startAnimating()
+            let parsed = YouTubeForeignKey(youtubeKey)
+            playerView.load(withVideoId: parsed.videoId, playerVars: parsed.playerVars)
+        } else {
+            loadingIndicator.stopAnimating()
+            showErrorView(error: "No YouTube key for video.")
+        }
+    }
+
+    func stopVideo() {
+        playerView.stopVideo()
+        loadingIndicator.stopAnimating()
+    }
+
     private func showErrorView(error: String) {
         noDataViewController.textLabel.text = error
         if noDataViewController.view.superview == nil {
@@ -53,6 +81,18 @@ class PlayerView: UIView {
         }
     }
 
+    private func removeErrorView() {
+        if noDataViewController.view.superview != nil {
+            noDataViewController.view.removeFromSuperview()
+        }
+    }
+
+}
+
+extension PlayerView: YTPlayerViewDelegate {
+    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
+        loadingIndicator.stopAnimating()
+    }
 }
 
 struct YouTubeForeignKey {

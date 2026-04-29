@@ -392,8 +392,8 @@ extension TeamViewController: EventsListViewControllerDelegate {
 
 extension TeamViewController: MediaViewer, TeamMediaCollectionViewControllerDelegate {
 
-    func mediaSelected(image: UIImage?, directURL: URL?) {
-        show(image: image, directURL: directURL)
+    func mediaSelected(image: UIImage?, directURL: URL?, viewURL: URL?) {
+        show(image: image, directURL: directURL, viewURL: viewURL)
     }
 
 }
@@ -401,14 +401,50 @@ extension TeamViewController: MediaViewer, TeamMediaCollectionViewControllerDele
 protocol MediaViewer: UIViewController {}
 extension MediaViewer {
 
-    func show(image: UIImage?, directURL: URL?) {
+    func show(image: UIImage?, directURL: URL?, viewURL: URL?) {
+        let agrume: Agrume
         if let image {
-            let agrume = Agrume(image: image)
-            agrume.show(from: self)
+            agrume = Agrume(image: image)
         } else if let directURL {
-            let agrume = Agrume(url: directURL)
-            agrume.show(from: self)
+            agrume = Agrume(url: directURL)
+        } else {
+            return
         }
+        agrume.onLongPress = { [weak self] image, agrumeVC in
+            self?.presentMediaActions(image: image, viewURL: viewURL, from: agrumeVC)
+        }
+        agrume.show(from: self)
+    }
+
+    fileprivate func presentMediaActions(
+        image: UIImage?,
+        viewURL: URL?,
+        from presenter: UIViewController
+    ) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if let viewURL, UIApplication.shared.canOpenURL(viewURL) {
+            alert.addAction(
+                UIAlertAction(title: "View Online", style: .default) { _ in
+                    UIApplication.shared.open(viewURL)
+                }
+            )
+        }
+        if let image {
+            alert.addAction(
+                UIAlertAction(title: "Copy", style: .default) { _ in
+                    UIPasteboard.general.image = image
+                }
+            )
+            alert.addAction(
+                UIAlertAction(title: "Save Photo", style: .default) { _ in
+                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                }
+            )
+        }
+        guard !alert.actions.isEmpty else { return }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.popoverPresentationController?.sourceView = presenter.view
+        presenter.present(alert, animated: true)
     }
 
 }
