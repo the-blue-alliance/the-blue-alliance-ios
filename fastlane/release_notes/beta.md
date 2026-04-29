@@ -1,6 +1,10 @@
 The Blue Alliance v3.4.2
 
 What's new:
+- Team Media now shows YouTube videos alongside photos — photos render in their own section on top, videos in a section below with an inline YouTube player and a loading spinner until the iframe is ready
+  - Photo tiles that can't load now show a friendlier placeholder (SF symbol + short caption like "Image unavailable") instead of a blank cell
+  - Instagram media tiles now show an "Instagram image" placeholder, tap opens Instagram directly (no broken thumbnail fetch), and the context menu drops the "View" action
+  - Long-pressing a photo in the full-screen viewer now offers the same actions as the cell context menu (View Online / Copy / Save) instead of just Save
 - Push notifications are now wired up end-to-end:
   - Tapping an "upcoming match" / "match score" / "match video" push opens that match directly (works on top of whatever you had open)
   - "Favorites updated" / "Subscriptions updated" pushes from another device now silently refresh myTBA in the background — no banner, just fresh data
@@ -16,6 +20,9 @@ What's new:
 - 2020 Match Breakdown: stage rows with no activations now render an X icon instead of a blank cell, matching the shield-operational row right above
 
 Please poke at:
+- Team → Media on a team with YouTube videos for the season — photos should appear up top, videos below in their own section, each video should show a spinner until the player loads and then play in-cell
+- Team → Media tiles that can't load an image (or Instagram items) — should show an SF symbol + caption instead of a blank box; tapping an Instagram tile should open Instagram, and its context menu should not include "View"
+- Long-press a photo from the full-screen viewer — the menu should offer View Online / Copy / Save (matching the cell's context menu)
 - Push notifications:
   - With the app backgrounded, tap an "upcoming match", "match score", or "match video" push from a team you've subscribed to — the app should open straight to that match
   - Favorite or subscribe to something on another device (or tba.com) — the in-app myTBA list should update on its own without you opening the myTBA tab
