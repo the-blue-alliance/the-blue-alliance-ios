@@ -22,17 +22,15 @@ platform :ios do
     spm(command: "test", package_path: "Packages/TBAAPI")
   end
 
-  desc "Build the iOS app (Debug) — a compile-only check for the main app target"
-  lane :build_debug do
-    xcodebuild(
+  desc "Run TBAUnitTests (the main app's Xcode unit-test target)"
+  lane :test_app do
+    run_tests(
       project: "the-blue-alliance-ios.xcodeproj",
       scheme: "The Blue Alliance",
       configuration: "Debug",
-      destination: "generic/platform=iOS Simulator",
-      build: true,
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation " \
-              "SWIFT_COMPILATION_MODE=wholemodule " \
-              "COMPILER_INDEX_STORE_ENABLE=NO"
+      devices: [],
+      skip_package_dependencies_resolution: true,
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
     )
   end
 
@@ -41,7 +39,7 @@ platform :ios do
     test_mytbakit
     test_tbautils
     test_tbaapi
-    build_debug
+    test_app
   end
 
   desc "Format all Swift files with swift-format"

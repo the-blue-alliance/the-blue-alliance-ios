@@ -47,13 +47,13 @@ Run TBAUtils unit tests
 
 Run TBAAPI unit tests
 
-### ios build_debug
+### ios test_app
 
 ```sh
-[bundle exec] fastlane ios build_debug
+[bundle exec] fastlane ios test_app
 ```
 
-Build the iOS app (Debug) — a compile-only check for the main app target
+Run TBAUnitTests (the main app's Xcode unit-test target)
 
 ### ios test
 

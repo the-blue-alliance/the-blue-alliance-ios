@@ -32,6 +32,9 @@
 		5EC0D41A2C26041C00000004 /* LocalBuffersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */; };
 		5EC0D41A2C26041C00000006 /* BoundedHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */; };
 		5EC0D41A2C26041D00000002 /* BoundedHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041D00000001 /* BoundedHistory.swift */; };
+		5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041F00000001 /* AppGroup.swift */; };
+		5EC0D41A2C260420BB000002 /* BoundedHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C260420BB000001 /* BoundedHistoryTests.swift */; };
+		5EC0D41A2C260420BB000004 /* FileBoundedHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C260420BB000003 /* FileBoundedHistoryStoreTests.swift */; };
 		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
 		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
@@ -220,6 +223,10 @@
 		5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalBuffersStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistoryStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041D00000001 /* BoundedHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistory.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
+		5EC0D41A2C260420BB000001 /* BoundedHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistoryTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C260420BB000003 /* FileBoundedHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBoundedHistoryStoreTests.swift; sourceTree = "<group>"; };
+		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationRouter.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsGrouping.swift; sourceTree = "<group>"; };
@@ -374,7 +381,24 @@
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXContainerItemProxy section */
+		2F0C89F9ACB8C058CF077586 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92942D911E2154DA008E79CA;
+			remoteInfo = "The Blue Alliance";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		83CE06C95649B81A0355276A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D8F1E2154DA008E79CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -450,6 +474,7 @@
 				92598CCA24A92B00007E08CB /* AppServicesProviding.swift */,
 				5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */,
 				92564C6A21644AA30047917F /* Secrets.swift */,
+				5EC0D41A2C26041F00000001 /* AppGroup.swift */,
 			);
 			path = AppDelegate;
 			sourceTree = "<group>";
@@ -522,6 +547,7 @@
 			children = (
 				92A7B62E26D01B9E00EECCC9 /* Packages */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
+				CE8E6930F354EB795163DD95 /* TBAUnitTests */,
 				92942D931E2154DA008E79CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -530,8 +556,19 @@
 			isa = PBXGroup;
 			children = (
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
+				0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CE8E6930F354EB795163DD95 /* TBAUnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C260420BB000001 /* BoundedHistoryTests.swift */,
+				5EC0D41A2C260420BB000003 /* FileBoundedHistoryStoreTests.swift */,
+			);
+			name = TBAUnitTests;
+			path = TBAUnitTests;
 			sourceTree = "<group>";
 		};
 		92942D941E2154DA008E79CA /* the-blue-alliance-ios */ = {
@@ -976,6 +1013,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6859D167B239EF78DC94AEB7 /* TBAUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53B8734CCD7D40A1D459286D /* Build configuration list for PBXNativeTarget "TBAUnitTests" */;
+			buildPhases = (
+				3295B785F5B079BED4ADD156 /* Sources */,
+				83CE06C95649B81A0355276A /* Frameworks */,
+				DE4A3E94AF8E3DD69FD832AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8424467F3C09288A1FC78F76 /* PBXTargetDependency */,
+			);
+			name = TBAUnitTests;
+			productName = TBAUnitTests;
+			productReference = 0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		92942D911E2154DA008E79CA /* The Blue Alliance */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
@@ -1020,6 +1075,10 @@
 				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
+					6859D167B239EF78DC94AEB7 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 92942D911E2154DA008E79CA;
+					};
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
 						LastSwiftMigration = 1020;
@@ -1059,11 +1118,19 @@
 			projectRoot = "";
 			targets = (
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
+				6859D167B239EF78DC94AEB7 /* TBAUnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DE4A3E94AF8E3DD69FD832AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D901E2154DA008E79CA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1135,6 +1202,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3295B785F5B079BED4ADD156 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EC0D41A2C260420BB000002 /* BoundedHistoryTests.swift in Sources */,
+				5EC0D41A2C260420BB000004 /* FileBoundedHistoryStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92942D8E1E2154DA008E79CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1144,6 +1220,7 @@
 				5EC0D41A2C26041C00000004 /* LocalBuffersStore.swift in Sources */,
 				5EC0D41A2C26041C00000006 /* BoundedHistoryStore.swift in Sources */,
 				5EC0D41A2C26041D00000002 /* BoundedHistory.swift in Sources */,
+				5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */,
 				5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */,
 				5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
@@ -1296,6 +1373,15 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8424467F3C09288A1FC78F76 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "The Blue Alliance";
+			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
+			targetProxy = 2F0C89F9ACB8C058CF077586 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -1309,6 +1395,43 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1712CE89ADC35B42F3049586 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E663DCDD3562FF42B45BF4D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+			};
+			name = Debug;
+		};
 		92942DA41E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1480,6 +1603,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		53B8734CCD7D40A1D459286D /* Build configuration list for PBXNativeTarget "TBAUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1712CE89ADC35B42F3049586 /* Release */,
+				E663DCDD3562FF42B45BF4D2 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

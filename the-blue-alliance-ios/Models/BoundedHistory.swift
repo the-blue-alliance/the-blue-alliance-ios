@@ -6,19 +6,23 @@ import Observation
 @Observable @MainActor
 final class BoundedHistory<Entry: Identifiable> {
 
+    struct AgeLimit {
+        var maxAge: TimeInterval
+        var ageProvider: (Entry) -> Date
+    }
+
     struct Configuration {
         var maxCount: Int
-        var maxAge: TimeInterval?
-        var ageProvider: (Entry) -> Date
+        var ageLimit: AgeLimit?
 
-        init(
-            maxCount: Int,
-            maxAge: TimeInterval? = nil,
-            ageProvider: @escaping (Entry) -> Date
-        ) {
+        init(maxCount: Int) {
             self.maxCount = maxCount
-            self.maxAge = maxAge
-            self.ageProvider = ageProvider
+            self.ageLimit = nil
+        }
+
+        init(maxCount: Int, maxAge: TimeInterval, ageProvider: @escaping (Entry) -> Date) {
+            self.maxCount = maxCount
+            self.ageLimit = AgeLimit(maxAge: maxAge, ageProvider: ageProvider)
         }
     }
 
@@ -39,7 +43,7 @@ final class BoundedHistory<Entry: Identifiable> {
 
     func append(_ entry: Entry) {
         entries.insert(entry, at: 0)
-        _ = pruneInPlace()
+        pruneInPlace()
         didMutate(entries)
     }
 
@@ -51,10 +55,7 @@ final class BoundedHistory<Entry: Identifiable> {
     }
 
     func clear() {
-        guard !entries.isEmpty else {
-            didMutate([])
-            return
-        }
+        guard !entries.isEmpty else { return }
         entries.removeAll()
         didMutate(entries)
     }
@@ -69,13 +70,26 @@ final class BoundedHistory<Entry: Identifiable> {
     @discardableResult
     private func pruneInPlace() -> Bool {
         let beforeCount = entries.count
-        if let maxAge = configuration.maxAge {
-            let cutoff = Date().addingTimeInterval(-maxAge)
-            entries.removeAll { configuration.ageProvider($0) < cutoff }
+        if let ageLimit = configuration.ageLimit {
+            let cutoff = Date().addingTimeInterval(-ageLimit.maxAge)
+            entries.removeAll { ageLimit.ageProvider($0) < cutoff }
         }
         if entries.count > configuration.maxCount {
             entries = Array(entries.prefix(configuration.maxCount))
         }
         return entries.count != beforeCount
+    }
+}
+
+// Internal hook for `LocalBuffersStore.wipeAll()`: clears memory without
+// invoking the persistence callback.
+@MainActor
+protocol BoundedHistoryWipeable: AnyObject {
+    func clearInMemory()
+}
+
+extension BoundedHistory: BoundedHistoryWipeable {
+    func clearInMemory() {
+        entries.removeAll()
     }
 }

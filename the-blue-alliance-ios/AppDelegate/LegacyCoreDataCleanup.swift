@@ -9,7 +9,6 @@ import Foundation
 // clear both.
 enum LegacyCoreDataCleanup {
 
-    private static let appGroupIdentifier = "group.com.the-blue-alliance.tba.tbadata"
     private static let storeFilename = "TBA.sqlite"
     private static let completedFlagKey = "has_removed_legacy_core_data_store_v1"
 
@@ -29,7 +28,7 @@ enum LegacyCoreDataCleanup {
     private static func legacyStoreBaseURLs(fileManager: FileManager) -> [URL] {
         var urls: [URL] = []
         if let groupURL = fileManager.containerURL(
-            forSecurityApplicationGroupIdentifier: appGroupIdentifier
+            forSecurityApplicationGroupIdentifier: AppGroup.identifier
         ) {
             urls.append(groupURL)
         }
