@@ -4,26 +4,37 @@ import TBAUtils
 enum LocalBuffersStore {
 
     // Stored in the App Group container so a future Notification Service
-    // Extension can write to the same files as the main app.
+    // Extension can write to the same files as the main app. A nil
+    // container indicates a misconfigured entitlement — fail loudly
+    // rather than silently fall back somewhere the extension can't see.
     static let directory: URL = {
-        let base =
-            FileManager.default.containerURL(
+        guard
+            let base = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppGroup.identifier
             )
-            ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-            .first
-            ?? FileManager.default.temporaryDirectory
+        else {
+            fatalError(
+                "App group container \(AppGroup.identifier) is unavailable; check the entitlements file."
+            )
+        }
         return base.appendingPathComponent("tba-buffers", isDirectory: true)
     }()
 
-    @MainActor private static var registry: [String: BoundedHistoryWipeable] = [:]
+    // Weak refs so callers control buffer lifetime; the registry exists
+    // for dedup + wipeAll, not as a retainer.
+    private struct WeakBuffer {
+        weak var value: AnyObject?
+    }
+
+    @MainActor private static var registry: [String: WeakBuffer] = [:]
 
     @MainActor
     static func wipeAll() {
-        for buffer in registry.values {
-            buffer.clearInMemory()
-        }
         try? FileManager.default.removeItem(at: directory)
+        for entry in registry.values {
+            (entry.value as? BoundedHistoryWipeable)?.clearInMemory()
+        }
+        registry.removeAll()
     }
 
     @MainActor
@@ -33,7 +44,7 @@ enum LocalBuffersStore {
         compress: Bool = false,
         reporter: (any Reporter)? = nil
     ) -> BoundedHistory<Entry> {
-        if let existing = registry[filename] {
+        if let existing = registry[filename]?.value {
             guard let cached = existing as? BoundedHistory<Entry> else {
                 preconditionFailure(
                     "BoundedHistory at \(filename) was already created with a different Entry type"
@@ -44,7 +55,7 @@ enum LocalBuffersStore {
         let store = FileBoundedHistoryStore<Entry>(
             url: directory.appendingPathComponent(filename),
             compress: compress,
-            onSchemaError: reporter.map { r in { r.record($0) } }
+            onSchemaError: reporter.map { reporter in { reporter.record($0) } }
         )
         let history = BoundedHistory(
             initial: store.load(),
@@ -53,7 +64,7 @@ enum LocalBuffersStore {
         )
         // Reapply prune in case the config tightened between builds.
         history.prune()
-        registry[filename] = history
+        registry[filename] = WeakBuffer(value: history)
         return history
     }
 }

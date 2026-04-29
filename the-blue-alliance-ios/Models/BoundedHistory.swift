@@ -42,8 +42,14 @@ final class BoundedHistory<Entry: Identifiable> {
     }
 
     func append(_ entry: Entry) {
+        let beforeCount = entries.count
         entries.insert(entry, at: 0)
         pruneInPlace()
+        // Skip didMutate when the insert was immediately pruned out and
+        // nothing else changed (e.g. a stale entry past `maxAge`, or an
+        // append into a `maxCount: 0` buffer).
+        let keptInsert = entries.first?.id == entry.id
+        guard keptInsert || entries.count < beforeCount else { return }
         didMutate(entries)
     }
 
