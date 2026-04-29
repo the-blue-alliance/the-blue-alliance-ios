@@ -29,6 +29,9 @@
 		51BECA942F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
+		5EC0D41A2C26041C00000004 /* LocalBuffersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */; };
+		5EC0D41A2C26041C00000006 /* BoundedHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */; };
+		5EC0D41A2C26041D00000002 /* BoundedHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041D00000001 /* BoundedHistory.swift */; };
 		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
 		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
@@ -214,6 +217,9 @@
 		51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2025.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalBuffersStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistoryStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041D00000001 /* BoundedHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundedHistory.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationRouter.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsGrouping.swift; sourceTree = "<group>"; };
@@ -442,6 +448,8 @@
 				92598CC624A92AFE007E08CB /* Dependencies.swift */,
 				92598CC824A92B00007E08CB /* SceneDelegate.swift */,
 				92598CCA24A92B00007E08CB /* AppServicesProviding.swift */,
+				5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */,
+				92564C6A21644AA30047917F /* Secrets.swift */,
 			);
 			path = AppDelegate;
 			sourceTree = "<group>";
@@ -532,6 +540,7 @@
 				927246C12AFFFC8900EF7796 /* Auth */,
 				923AEE8F2165966C00EF50C8 /* AppDelegate */,
 				92AABBCC000000000000DD10 /* LocalStore */,
+				5EC0D41A2C26041D00000010 /* Models */,
 				BA0000000000000000000010 /* ViewModels */,
 				923A0D7620D21D3800BF5E31 /* LaunchViews */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
@@ -723,8 +732,28 @@
 				92AABBCC000000000000DD12 /* AppSettings.swift */,
 				92AABBCC000000000000DD02 /* CachePolicyStore.swift */,
 				92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */,
+				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
+				5EC0D41A2C26041C00000003 /* LocalBuffersStore.swift */,
+				5EC0D41A2C26041C00000005 /* BoundedHistoryStore.swift */,
 			);
 			path = LocalStore;
+			sourceTree = "<group>";
+		};
+		5EC0D41A2C26041D00000010 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C26041D00000001 /* BoundedHistory.swift */,
+				5EC0D41A2C26041E00000010 /* Push */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5EC0D41A2C26041E00000010 /* Push */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */,
+			);
+			path = Push;
 			sourceTree = "<group>";
 		};
 		92AF73D621EB9E10006A338D /* Search */ = {
@@ -800,14 +829,10 @@
 		92F8E354209AAE400094213F /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */,
-				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
 				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
-				5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */,
 				5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
-				92564C6A21644AA30047917F /* Secrets.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1116,6 +1141,9 @@
 			files = (
 				5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
+				5EC0D41A2C26041C00000004 /* LocalBuffersStore.swift in Sources */,
+				5EC0D41A2C26041C00000006 /* BoundedHistoryStore.swift in Sources */,
+				5EC0D41A2C26041D00000002 /* BoundedHistory.swift in Sources */,
 				5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */,
 				5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */,
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
