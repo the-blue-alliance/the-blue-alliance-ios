@@ -1,15 +1,8 @@
 import Foundation
 import Observation
 
-// Bounded, observable, newest-first history of entries. Pure data model —
-// knows nothing about how (or whether) entries get persisted. After every
-// mutation it calls `didMutate(entries)` so a storage layer can take over.
-//
-// Ring-buffer-like in that there's a hard `maxCount` cap and the oldest
-// entries are evicted on overflow, but it isn't a textbook ring buffer:
-// it adds a `maxAge` TTL, supports random-access removal by `Entry.ID`,
-// and is newest-first rather than FIFO. "Bounded history" is the more
-// honest framing for a UI-facing inbox / activity log.
+// Ring-buffer-like, but with a `maxAge` TTL and random-access removal
+// by `Entry.ID` — not a textbook FIFO ring buffer.
 @Observable @MainActor
 final class BoundedHistory<Entry: Identifiable> {
 

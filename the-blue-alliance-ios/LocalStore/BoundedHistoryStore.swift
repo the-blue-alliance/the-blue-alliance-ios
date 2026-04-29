@@ -1,8 +1,5 @@
 import Foundation
 
-// Persistence backend for a `BoundedHistory`. Knows nothing about
-// eviction semantics — it just loads, saves, and clears a `[Entry]` for
-// a single storage location.
 protocol BoundedHistoryStore<Entry> {
     associatedtype Entry: Codable
     func load() -> [Entry]
@@ -10,14 +7,9 @@ protocol BoundedHistoryStore<Entry> {
     func clear()
 }
 
-// Binary-plist file with optional LZFSE compression.
-//
-// `load()` is resilient: any failure (missing file, corrupt data,
-// decompress/decode failure, schema mismatch from an older build) wipes
-// the file and returns `[]` rather than throwing.
-//
-// `save(_:)` creates the parent directory on demand, so the first write
-// after a fresh install or a `clear()` just works.
+// `load()` swallows any error (missing file, corrupt data, schema
+// mismatch from an older build) and returns `[]` so a stale file can't
+// crash launch.
 struct FileBoundedHistoryStore<Entry: Codable>: BoundedHistoryStore {
 
     let url: URL
@@ -57,7 +49,7 @@ struct FileBoundedHistoryStore<Entry: Codable>: BoundedHistoryStore {
                 : plist
             try payload.write(to: url, options: .atomic)
         } catch {
-            // Best-effort: keep in-memory state, retry on next mutation.
+            // In-memory state is correct; retry on next mutation.
         }
     }
 

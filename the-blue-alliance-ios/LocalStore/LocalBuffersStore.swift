@@ -1,12 +1,5 @@
 import Foundation
 
-// Single namespace for all on-device bounded histories (notification
-// inbox, activity log, future additions). Owns the directory the
-// histories live in plus a factory that wires a `BoundedHistory` to a
-// `FileBoundedHistoryStore`.
-//
-// Mirrors `MyTBALocalStore` so a future "clear all my data" flow can call
-// both `MyTBALocalStore.wipeAll()` and `LocalBuffersStore.wipeAll()`.
 enum LocalBuffersStore {
     static let directory: URL = {
         let base =
@@ -34,8 +27,7 @@ enum LocalBuffersStore {
             configuration: configuration,
             didMutate: { store.save($0) }
         )
-        // Apply current pruning policy on load (e.g. after a config change
-        // tightens maxCount or maxAge between builds).
+        // Reapply prune in case the config tightened between builds.
         history.prune()
         return history
     }
