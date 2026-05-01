@@ -52,8 +52,8 @@ class TeamHeaderView: UIView {
     }
     private var baseAvatarColor: UIColor {
         // Some teams look better in Red, some teams look better in Blue.
-        // One team looks better in Black.
-        if viewModel.teamNumber == 148 {
+        let blackTeams = [148, 1684]
+        if blackTeams.contains(viewModel.teamNumber) {
             return UIColor.black
         }
         let redTeams = [1114, 2337]
