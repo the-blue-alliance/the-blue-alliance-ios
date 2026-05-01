@@ -345,7 +345,7 @@ class MatchSummaryView: UIView {
             stackView.addArrangedSubview(rpLabel)
         }
         for _ in 0..<(max(rpCount[1] - rpCount[0], 0)) {
-            let rpLabel = label(text: "◦", isBold: false, color: .secondaryLabel)
+            let rpLabel = label(text: "◦", isBold: true, color: .secondaryLabel)
             stackView.addArrangedSubview(rpLabel)
         }
     }
