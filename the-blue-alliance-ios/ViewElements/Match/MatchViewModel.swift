@@ -20,8 +20,8 @@ struct MatchViewModel {
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
 
-    var redRPCount: Int = 0
-    var blueRPCount: Int = 0
+    var redRPCount: [Int] = [0, 0]
+    var blueRPCount: [Int] = [0, 0]
 
     let baseTeamKeys: [String]
 
@@ -125,7 +125,7 @@ struct MatchViewModel {
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]
 
-        redRPCount = MatchViewModel.rpCount(breakdown: redBreakdown, year: matchYear)
-        blueRPCount = MatchViewModel.rpCount(breakdown: blueBreakdown, year: matchYear)
+        redRPCount = [MatchViewModel.rpCount(breakdown: redBreakdown, year: matchYear), MatchViewModel.bonusKeys(year: matchYear).count]
+        blueRPCount = [MatchViewModel.rpCount(breakdown: blueBreakdown, year: matchYear), MatchViewModel.bonusKeys(year: matchYear).count]
     }
 }
