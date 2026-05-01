@@ -387,7 +387,12 @@ class MatchSummaryView: UIView {
         return button
     }
 
-    private func label(text: String, isBold: Bool, isStrikethrough: Bool = false, color: UIColor = .label) -> UILabel {
+    private func label(
+        text: String,
+        isBold: Bool,
+        isStrikethrough: Bool = false,
+        color: UIColor = .label
+    ) -> UILabel {
         let label = UILabel()
         label.textAlignment = .center
         label.attributedText = customAttributedString(

@@ -125,7 +125,13 @@ struct MatchViewModel {
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]
 
-        redRPCount = [MatchViewModel.rpCount(breakdown: redBreakdown, year: matchYear), MatchViewModel.bonusKeys(year: matchYear).count]
-        blueRPCount = [MatchViewModel.rpCount(breakdown: blueBreakdown, year: matchYear), MatchViewModel.bonusKeys(year: matchYear).count]
+        redRPCount = [
+            MatchViewModel.rpCount(breakdown: redBreakdown, year: matchYear),
+            MatchViewModel.bonusKeys(year: matchYear).count,
+        ]
+        blueRPCount = [
+            MatchViewModel.rpCount(breakdown: blueBreakdown, year: matchYear),
+            MatchViewModel.bonusKeys(year: matchYear).count,
+        ]
     }
 }
