@@ -339,13 +339,14 @@ class MatchSummaryView: UIView {
         stack.directionalLayoutMargins = .init(top: v, leading: 8, bottom: v, trailing: 0)
     }
 
-    private func addRPToView(stackView: UIStackView, rpCount: [Int]) {
-        for _ in 0..<rpCount[0] {
-            let rpLabel = label(text: "•", isBold: true)
-            stackView.addArrangedSubview(rpLabel)
-        }
-        for _ in 0..<(max(rpCount[1] - rpCount[0], 0)) {
-            let rpLabel = label(text: "◦", isBold: true, color: .secondaryLabel)
+    private func addRPToView(stackView: UIStackView, rpCount: [Bool]?) {
+        guard let rpList = rpCount else { return }
+        for rpValue in rpList {
+            let rpLabel = label(
+                text: rpValue ? "•" : "◦",
+                isBold: true,
+                color: rpValue ? .label : .secondaryLabel
+            )
             stackView.addArrangedSubview(rpLabel)
         }
     }
