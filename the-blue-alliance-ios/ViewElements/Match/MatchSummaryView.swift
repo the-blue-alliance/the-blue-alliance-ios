@@ -339,9 +339,14 @@ class MatchSummaryView: UIView {
         stack.directionalLayoutMargins = .init(top: v, leading: 8, bottom: v, trailing: 0)
     }
 
-    private func addRPToView(stackView: UIStackView, rpCount: Int) {
-        for _ in 0..<rpCount {
-            let rpLabel = label(text: "•", isBold: true)
+    private func addRPToView(stackView: UIStackView, rpCount: [Bool]?) {
+        guard let rpList = rpCount else { return }
+        for rpValue in rpList {
+            let rpLabel = label(
+                text: rpValue ? "•" : "◦",
+                isBold: true,
+                color: rpValue ? .label : .secondaryLabel
+            )
             stackView.addArrangedSubview(rpLabel)
         }
     }
@@ -383,7 +388,12 @@ class MatchSummaryView: UIView {
         return button
     }
 
-    private func label(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UILabel {
+    private func label(
+        text: String,
+        isBold: Bool,
+        isStrikethrough: Bool = false,
+        color: UIColor = .label
+    ) -> UILabel {
         let label = UILabel()
         label.textAlignment = .center
         label.attributedText = customAttributedString(
@@ -392,7 +402,7 @@ class MatchSummaryView: UIView {
             isStrikethrough: isStrikethrough
         )
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.label
+        label.textColor = color
         return label
     }
 

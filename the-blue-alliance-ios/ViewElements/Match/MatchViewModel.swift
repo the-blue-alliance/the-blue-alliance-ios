@@ -20,8 +20,8 @@ struct MatchViewModel {
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
 
-    var redRPCount: Int = 0
-    var blueRPCount: Int = 0
+    var redRPCount: [Bool]?
+    var blueRPCount: [Bool]?
 
     let baseTeamKeys: [String]
 
@@ -33,14 +33,22 @@ struct MatchViewModel {
         return blueScore != nil && redScore != nil
     }
 
-    // Counts bonus-objective RPs for `year` by checking the per-game booleans
+    // Returns a [Bool]? of bonus-objective RPs for `year` by checking the per-game booleans
     // in `breakdown`. Mirrors the web frontend's `match_table_cell_macros.html`
     // so unmapped seasons fail closed (0 dots) instead of risking a wrong
     // count when the season's win RP changes (e.g. 2 → 3 in 2025).
-    static func rpCount(breakdown: [String: Any]?, year: Int) -> Int {
-        guard let breakdown else { return 0 }
-        return bonusKeys(year: year).reduce(0) { count, key in
-            count + ((breakdown[key] as? Bool) == true ? 1 : 0)
+    static func rpCount(
+        breakdown: [String: Any]?,
+        year: Int,
+        compLevel: Components.Schemas.CompLevel
+    ) -> [Bool]? {
+        guard let breakdown else { return nil }
+        guard compLevel == .qm else { return nil }
+        let values = bonusKeys(year: year).compactMap { breakdown[$0] as? Bool }
+        if values.count == bonusKeys(year: year).count {
+            return values
+        } else {
+            return nil
         }
     }
 
@@ -125,7 +133,15 @@ struct MatchViewModel {
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]
 
-        redRPCount = MatchViewModel.rpCount(breakdown: redBreakdown, year: matchYear)
-        blueRPCount = MatchViewModel.rpCount(breakdown: blueBreakdown, year: matchYear)
+        redRPCount = MatchViewModel.rpCount(
+            breakdown: redBreakdown,
+            year: matchYear,
+            compLevel: match.compLevel
+        )
+        blueRPCount = MatchViewModel.rpCount(
+            breakdown: blueBreakdown,
+            year: matchYear,
+            compLevel: match.compLevel
+        )
     }
 }
