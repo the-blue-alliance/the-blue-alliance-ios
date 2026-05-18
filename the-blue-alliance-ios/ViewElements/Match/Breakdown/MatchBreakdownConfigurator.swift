@@ -29,23 +29,13 @@ extension MatchBreakdownConfigurator {
 
     // MARK: - Helper Methods
 
-    static func breakdownValueSupported(key: String, red: [String: Any], blue: [String: Any])
-        -> Bool
-    {
-        guard let redValue = red[key], let blueValue = blue[key] else { return false }
-        // TBA encodes "this stat doesn't apply to this match" as JSON null, which
-        // `JSONSerialization` surfaces as `NSNull`. Treat those like missing keys
-        // so rows are skipped instead of rendering `<null>`.
-        return !(redValue is NSNull) && !(blueValue is NSNull)
-    }
-
     // Values
 
     static func values(key: String, red: [String: Any]?, blue: [String: Any]?) -> (Any?, Any?)? {
         guard let red = red, let blue = blue else {
             return nil
         }
-        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
+        guard breakdownValueSupported(keyPath: [key], red: red, blue: blue) else {
             return nil
         }
         return (red[key], blue[key])
@@ -86,7 +76,7 @@ extension MatchBreakdownConfigurator {
             return nil
         }
         let supportedKeys = keys.map { k -> String? in
-            guard breakdownValueSupported(key: k, red: red, blue: blue) else {
+            guard breakdownValueSupported(keyPath: [k], red: red, blue: blue) else {
                 return nil
             }
             return k
@@ -135,18 +125,7 @@ extension MatchBreakdownConfigurator {
         return current
     }
 
-    static func nestedValues(keyPath: [String], red: [String: Any]?, blue: [String: Any]?) -> (
-        Any?, Any?
-    )? {
-        guard let redValue = nestedValue(keys: keyPath, in: red),
-            let blueValue = nestedValue(keys: keyPath, in: blue)
-        else {
-            return nil
-        }
-        return (redValue, blueValue)
-    }
-
-    static func nestedBreakdownValueSupported(
+    static func breakdownValueSupported(
         keyPath: [String],
         red: [String: Any],
         blue: [String: Any]
@@ -167,7 +146,7 @@ extension MatchBreakdownConfigurator {
         guard let red = red, let blue = blue else {
             return nil
         }
-        guard nestedBreakdownValueSupported(keyPath: keyPath, red: red, blue: blue) else {
+        guard breakdownValueSupported(keyPath: keyPath, red: red, blue: blue) else {
             return nil
         }
 
