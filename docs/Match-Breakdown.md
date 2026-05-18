@@ -3,9 +3,9 @@ The Blue Alliance for iOS shows a detailed breakdown of each match under **Match
 
 ## Code Location
 
-- View controller: [`MatchBreakdownViewController`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/the-blue-alliance-ios/ViewControllers/Match/MatchBreakdownViewController.swift) - fetches the breakdown payload and routes it to the right configurator based on `year`.
+- View controller: [`MatchBreakdownViewController.swift`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/the-blue-alliance-ios/ViewControllers/Match/MatchBreakdownViewController.swift) - fetches the breakdown payload and routes it to the right configurator based on `year`.
 - Configurator protocol + shared helpers: [`MatchBreakdownConfigurator.swift`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/the-blue-alliance-ios/ViewElements/Match/Breakdown/MatchBreakdownConfigurator.swift).
-- Per-year configurators: [`MatchBreakdownConfigurator{year}.swift`] - one file per supported year, 2021 falls back to 2020.
+- Per-year configurators: `MatchBreakdownConfigurator{year}.swift` - one file per supported year, 2021 falls back to 2020.
 
 ## How Years are Rendered
 
