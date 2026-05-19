@@ -88,7 +88,17 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
         )
 
         // Match totals
-        rows.append(foulRow(title: "Fouls / Tech Fouls", red: red, blue: blue))
+        rows.append(
+            foulRow(
+                title: "Fouls / Tech Fouls",
+                keys: ["foulCount", "techFoulCount"],
+                pointValues: [3, 15],
+                red: red,
+                blue: blue,
+                reversed: true,
+                type: .points
+            )
+        )
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
         rows.append(
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
@@ -253,34 +263,6 @@ struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {
             red: [elements.first],
             blue: [elements.last]
         )
-    }
-
-    private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?)
-        -> BreakdownRow?
-    {
-        guard let foulValues = values(key: "foulCount", red: red, blue: blue) else {
-            return nil
-        }
-        let (rf, bf) = foulValues
-        guard let redFouls = rf as? Int, let blueFouls = bf as? Int else {
-            return nil
-        }
-
-        guard let techFoulValues = values(key: "techFoulCount", red: red, blue: blue) else {
-            return nil
-        }
-        let (rtf, btf) = techFoulValues
-        guard let redTechFouls = rtf as? Int, let blueTechFouls = btf as? Int else {
-            return nil
-        }
-
-        // NOTE: red and blue are passed in backwards here intentionally, because
-        // the fouls returned are what the opposite alliance received
-        let elements = [(blueFouls, blueTechFouls), (redFouls, redTechFouls)].map {
-            (fouls, techFouls) -> AnyHashable in
-            return "+\(fouls * 3) / +\(techFouls * 15)"
-        }
-        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
 
     private static func shieldSwitchLevelRow(

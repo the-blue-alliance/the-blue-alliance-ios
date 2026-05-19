@@ -123,7 +123,17 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
                 )
             )
         }
-        rows.append(foulRow(title: "Fouls / Major Fouls", red: red, blue: blue))
+        rows.append(
+            foulRow(
+                title: "Fouls / Major Fouls",
+                keys: ["foulCount", "techFoulCount"],
+                pointValues: [2, 6],
+                red: red,
+                blue: blue,
+                reversed: false,
+                type: .count
+            )
+        )
         rows.append(
             row(title: "Foul Points", key: "foulPoints", red: red, blue: blue, type: .subtotal)
         )
@@ -270,32 +280,6 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
             red: [elements.first],
             blue: [elements.last]
         )
-    }
-
-    private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?)
-        -> BreakdownRow?
-    {
-        guard let foulValues = values(key: "foulCount", red: red, blue: blue) else {
-            return nil
-        }
-        let (rf, bf) = foulValues
-        guard let redFouls = rf as? Int, let blueFouls = bf as? Int else {
-            return nil
-        }
-
-        guard let techFoulValues = values(key: "techFoulCount", red: red, blue: blue) else {
-            return nil
-        }
-        let (rtf, btf) = techFoulValues
-        guard let redTechFouls = rtf as? Int, let blueTechFouls = btf as? Int else {
-            return nil
-        }
-
-        let elements = [(redFouls, redTechFouls), (blueFouls, blueTechFouls)].map {
-            (fouls, techFouls) -> AnyHashable in
-            return "\(fouls) / \(techFouls)"
-        }
-        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
 
     private static func bonusRankingPointRow(

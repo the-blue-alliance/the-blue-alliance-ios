@@ -189,7 +189,7 @@ struct MatchBreakdownConfigurator2017: MatchBreakdownConfigurator {
         let (rRotor, bRotor) = (rotorImage(enabledInAuton: r), rotorImage(enabledInAuton: b))
 
         // Value
-        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
+        guard breakdownValueSupported(keyPath: [key], red: red, blue: blue) else {
             return nil
         }
         guard let redBool = red[key] as? Bool, let blueBool = blue[key] as? Bool else {
@@ -207,7 +207,7 @@ struct MatchBreakdownConfigurator2017: MatchBreakdownConfigurator {
     private static func rotorEnabledInAuton(key: String, red: [String: Any], blue: [String: Any])
         -> (Bool, Bool)
     {
-        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
+        guard breakdownValueSupported(keyPath: [key], red: red, blue: blue) else {
             return (false, false)
         }
         guard let redBool = red[key] as? Bool, let blueBool = blue[key] as? Bool else {

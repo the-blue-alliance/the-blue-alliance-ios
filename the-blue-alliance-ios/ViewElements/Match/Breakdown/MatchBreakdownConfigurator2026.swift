@@ -137,7 +137,17 @@ struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
             boolImageRow(title: "Traversal Bonus", key: "traversalAchieved", red: red, blue: blue)
         )
         // Fouls/Total
-        rows.append(foulRow(title: "Fouls / Major Fouls", red: red, blue: blue))
+        rows.append(
+            foulRow(
+                title: "Fouls / Major Fouls",
+                keys: ["minorFoulCount", "majorFoulCount"],
+                pointValues: [5, 15],
+                red: red,
+                blue: blue,
+                reversed: false,
+                type: foulRowType.count
+            )
+        )
         rows.append(
             row(title: "Foul Points", key: "foulPoints", red: red, blue: blue, type: .subtotal)
         )
@@ -161,31 +171,6 @@ struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
             snapshot.appendSections([nil])
             snapshot.appendItems(validRows)
         }
-    }
-    private static func foulRow(title: String, red: [String: Any]?, blue: [String: Any]?)
-        -> BreakdownRow?
-    {
-        guard let foulValues = values(key: "minorFoulCount", red: red, blue: blue) else {
-            return nil
-        }
-        let (rf, bf) = foulValues
-        guard let redFouls = rf as? Int, let blueFouls = bf as? Int else {
-            return nil
-        }
-
-        guard let minorFoulValues = values(key: "majorFoulCount", red: red, blue: blue) else {
-            return nil
-        }
-        let (rmf, bmf) = minorFoulValues
-        guard let redMajorFouls = rmf as? Int, let blueMajorFouls = bmf as? Int else {
-            return nil
-        }
-
-        let elements = [(redFouls, redMajorFouls), (blueFouls, blueMajorFouls)].map {
-            (fouls, majorFouls) -> AnyHashable in
-            return "\(fouls) / \(majorFouls)"
-        }
-        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
     }
 
     private static func autoClimb(red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {

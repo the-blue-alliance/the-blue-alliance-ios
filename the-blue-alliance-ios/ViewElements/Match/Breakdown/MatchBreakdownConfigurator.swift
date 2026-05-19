@@ -2,6 +2,12 @@ import Foundation
 import TBAAPI
 import UIKit
 
+public enum foulRowType {
+    case count
+    case points
+    case both
+}
+
 protocol MatchBreakdownConfigurator {
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
@@ -273,5 +279,53 @@ extension MatchBreakdownConfigurator {
             offset: offset
         )
     }
+    static func foulRow(
+        title: String,
+        keys: [String],
+        pointValues: [Int],
+        red: [String: Any]?,
+        blue: [String: Any]?,
+        reversed: Bool,
+        type: foulRowType
+    )
+        -> BreakdownRow?
+    {
+        guard let foulValues = values(key: keys[0], red: red, blue: blue) else {
+            return nil
+        }
+        let (rf, bf) = foulValues
+        guard let redFouls = rf as? Int, let blueFouls = bf as? Int else {
+            return nil
+        }
 
+        guard let techFoulValues = values(key: keys[1], red: red, blue: blue) else {
+            return nil
+        }
+        let (rtf, btf) = techFoulValues
+        guard let redTechFouls = rtf as? Int, let blueTechFouls = btf as? Int else {
+            return nil
+        }
+
+        let foulTechTuples =
+            reversed
+            ? [(blueFouls, blueTechFouls), (redFouls, redTechFouls)]
+            : [(redFouls, redTechFouls), (blueFouls, blueTechFouls)]
+        let elements: [String]
+        switch (type) {
+        case .count:
+            elements = foulTechTuples.map { (fouls, techFouls) in
+                "\(fouls) / \(techFouls)"
+            }
+        case .points:
+            elements = foulTechTuples.map { (fouls, techFouls) in
+                "+\(fouls * pointValues[0]) / +\(techFouls * pointValues[1])"
+            }
+        case .both:
+            let points = foulTechTuples.map { $0 * pointValues[0] + $1 * pointValues[1] }.reduce(0, +)
+            elements = foulTechTuples.map { (fouls, techFouls) in
+                "\(fouls) / \(techFouls)\(points > 0 ? " (+\(points))" : "")"
+            }
+        }
+        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
+    }
 }
