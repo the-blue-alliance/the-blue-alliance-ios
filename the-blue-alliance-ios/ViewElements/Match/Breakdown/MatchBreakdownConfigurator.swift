@@ -321,7 +321,10 @@ extension MatchBreakdownConfigurator {
                 "+\(fouls * pointValues[0]) / +\(techFouls * pointValues[1])"
             }
         case .both:
-            let points = foulTechTuples.map { $0 * pointValues[0] + $1 * pointValues[1] }.reduce(0, +)
+            let points = foulTechTuples.map { $0 * pointValues[0] + $1 * pointValues[1] }.reduce(
+                0,
+                +
+            )
             elements = foulTechTuples.map { (fouls, techFouls) in
                 "\(fouls) / \(techFouls)\(points > 0 ? " (+\(points))" : "")"
             }
