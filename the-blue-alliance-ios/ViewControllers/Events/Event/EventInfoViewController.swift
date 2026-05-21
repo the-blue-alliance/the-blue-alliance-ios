@@ -26,9 +26,6 @@ private enum EventInfoItem: Hashable {
     case insights
     case awards
     case website
-    case twitter
-    case youtube
-    case chiefDelphi
 }
 
 class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
@@ -132,18 +129,6 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
                     let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                     cell.textLabel?.text = "View event's website"
                     return cell
-                case .twitter:
-                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                    cell.textLabel?.text = "View \(self.state.key) on Twitter"
-                    return cell
-                case .youtube:
-                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                    cell.textLabel?.text = "View \(self.state.key) on YouTube"
-                    return cell
-                case .chiefDelphi:
-                    let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
-                    cell.textLabel?.text = "View photos on Chief Delphi"
-                    return cell
                 }
             }
         )
@@ -188,12 +173,10 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         snapshot.appendSections([.detail])
         snapshot.appendItems(detailItems, toSection: .detail)
 
-        var linkItems: [EventInfoItem] = [.twitter, .youtube, .chiefDelphi]
         if state.event?.hasWebsite == true {
-            linkItems.insert(.website, at: 0)
+            snapshot.appendSections([.link])
+            snapshot.appendItems([.website], toSection: .link)
         }
-        snapshot.appendSections([.link])
-        snapshot.appendItems(linkItems, toSection: .link)
 
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
@@ -252,12 +235,6 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
             urlString = webcast.urlString
         case .website:
             urlString = state.event?.website
-        case .twitter:
-            urlString = "https://twitter.com/search?q=%23\(state.key)"
-        case .youtube:
-            urlString = "https://www.youtube.com/results?search_query=\(state.key)"
-        case .chiefDelphi:
-            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(state.key)"
         default:
             break
         }
