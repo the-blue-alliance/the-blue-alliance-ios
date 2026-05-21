@@ -30,7 +30,8 @@ extension TeamDisplayable {
     // context (e.g. partial nicknames passed in before a full team is loaded).
     public static func nonFallback(_ nickname: String?, forTeamNumber teamNumber: Int) -> String? {
         guard let nickname, !nickname.isEmpty,
-              nickname != "Team \(teamNumber)" else { return nil }
+            nickname != "Team \(teamNumber)"
+        else { return nil }
         return nickname
     }
 

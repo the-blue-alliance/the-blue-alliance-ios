@@ -85,19 +85,19 @@ struct APITeamHelpersTests {
     // MARK: - TeamDisplayable.nonFallback(_:forTeamNumber:)
 
     @Test func nonFallbackStatic_nilForNil() {
-        #expect(TeamDisplayable.nonFallback(nil, forTeamNumber: 18) == nil)
+        #expect(Team.nonFallback(nil, forTeamNumber: 18) == nil)
     }
 
     @Test func nonFallbackStatic_nilForEmpty() {
-        #expect(TeamDisplayable.nonFallback("", forTeamNumber: 18) == nil)
+        #expect(Team.nonFallback("", forTeamNumber: 18) == nil)
     }
 
     @Test func nonFallbackStatic_nilForFallback() {
-        #expect(TeamDisplayable.nonFallback("Team 18", forTeamNumber: 18) == nil)
+        #expect(Team.nonFallback("Team 18", forTeamNumber: 18) == nil)
     }
 
     @Test func nonFallbackStatic_returnsRealNickname() {
-        #expect(TeamDisplayable.nonFallback("The Cheesy Poofs", forTeamNumber: 254) == "The Cheesy Poofs")
+        #expect(Team.nonFallback("The Cheesy Poofs", forTeamNumber: 254) == "The Cheesy Poofs")
     }
 
     // MARK: - Team.locationString

@@ -138,7 +138,7 @@ class TeamViewController: HeaderContainerViewController {
         let teamNumber = state.team?.teamNumber ?? state.key.teamNumber ?? 0
         let nickname: String? = {
             if let team = state.team { return team.nonFallbackNickname }
-            return TeamDisplayable.nonFallback(partialNickname, forTeamNumber: teamNumber)
+            return Team.nonFallback(partialNickname, forTeamNumber: teamNumber)
         }()
         let teamNumberNickname = state.team?.teamNumberNickname ?? "Team \(teamNumber)"
 
