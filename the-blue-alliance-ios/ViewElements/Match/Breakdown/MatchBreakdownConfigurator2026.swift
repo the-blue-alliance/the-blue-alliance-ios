@@ -145,7 +145,7 @@ struct MatchBreakdownConfigurator2026: MatchBreakdownConfigurator {
                 red: red,
                 blue: blue,
                 reversed: false,
-                type: foulRowType.count
+                type: FoulRowType.count
             )
         )
         rows.append(

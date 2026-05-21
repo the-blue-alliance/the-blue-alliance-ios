@@ -2,7 +2,7 @@ import Foundation
 import TBAAPI
 import UIKit
 
-public enum foulRowType {
+internal enum FoulRowType {
     case count
     case points
     case both
@@ -136,8 +136,9 @@ extension MatchBreakdownConfigurator {
         red: [String: Any],
         blue: [String: Any]
     ) -> Bool {
-        return nestedValue(keys: keyPath, in: red) != nil
-            && nestedValue(keys: keyPath, in: blue) != nil
+        let redValue = nestedValue(keys: keyPath, in: red)
+        let blueValue = nestedValue(keys: keyPath, in: blue)
+        return !(redValue == nil || redValue is NSNull || blueValue == nil || blueValue is NSNull)
     }
 
     static func nestedRow(
@@ -286,10 +287,14 @@ extension MatchBreakdownConfigurator {
         red: [String: Any]?,
         blue: [String: Any]?,
         reversed: Bool,
-        type: foulRowType
+        type: FoulRowType
     )
         -> BreakdownRow?
     {
+
+        guard keys.count == 2, pointValues.count == 2 else {
+            return nil
+        }
         guard let foulValues = values(key: keys[0], red: red, blue: blue) else {
             return nil
         }
@@ -321,12 +326,9 @@ extension MatchBreakdownConfigurator {
                 "+\(fouls * pointValues[0]) / +\(techFouls * pointValues[1])"
             }
         case .both:
-            let points = foulTechTuples.map { $0 * pointValues[0] + $1 * pointValues[1] }.reduce(
-                0,
-                +
-            )
             elements = foulTechTuples.map { (fouls, techFouls) in
-                "\(fouls) / \(techFouls)\(points > 0 ? " (+\(points))" : "")"
+                let points = fouls * pointValues[0] + techFouls * pointValues[1]
+                return "\(fouls) / \(techFouls)\(points > 0 ? " (+\(points))" : "")"
             }
         }
         return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
