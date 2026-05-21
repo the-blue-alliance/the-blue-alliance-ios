@@ -12,8 +12,13 @@ How to ship a TestFlight or App Store build via the **Actions → Release → Ru
 Common maintainer tasks: bumping dependencies, regenerating distribution certificates, configuring APNs, and symbolicating crash logs.
 
 # Per-Year Work
+Work that needs to be done manually to add feature support every season.
+
 ## [Event Insights](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Event-Insights)
 How `EventInsightsViewController` and the per-year `EventInsightsConfigurator` classes work, and how to add support for a new FRC season.
+
+## [Match Breakdown](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Match-Breakdown)
+How `MatchBreakdownViewController` and the per-year `MatchBreakdownConfigurator` classes work, and how to add support for a new FRC season.
 
 # Recovery / Reproduction
 
