@@ -19,6 +19,21 @@ extension TeamDisplayable {
         nickname.isEmpty ? teamNumberNickname : nickname
     }
 
+    // Returns nil when nickname is empty or equals FIRST's "Team N" fallback
+    // placeholder. Use this wherever showing the fallback would duplicate the
+    // team-number line that is already displayed separately.
+    public var nonFallbackNickname: String? {
+        Self.nonFallback(nickname, forTeamNumber: teamNumber)
+    }
+
+    // Static variant for raw strings that don't already have a TeamDisplayable
+    // context (e.g. partial nicknames passed in before a full team is loaded).
+    public static func nonFallback(_ nickname: String?, forTeamNumber teamNumber: Int) -> String? {
+        guard let nickname, !nickname.isEmpty,
+              nickname != "Team \(teamNumber)" else { return nil }
+        return nickname
+    }
+
     public var locationString: String? {
         let parts = [city, stateProv, country].compactMap { $0 }.filter { !$0.isEmpty }
         return parts.isEmpty ? nil : parts.joined(separator: ", ")
