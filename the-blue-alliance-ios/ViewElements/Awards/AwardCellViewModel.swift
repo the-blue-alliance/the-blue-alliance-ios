@@ -20,10 +20,8 @@ struct AwardCellViewModel {
                 awardText.append(Self.teamNumber(key: teamKey, teamsByKey: teamsByKey))
             } else if let teamKey = apiRecipient.teamKey {
                 awardText.append(Self.teamNumber(key: teamKey, teamsByKey: teamsByKey))
-                if let team = teamsByKey[teamKey],
-                   !team.nickname.isEmpty,
-                   team.nickname != team.teamNumberNickname {
-                    awardText.append(team.nickname)
+                if let nickname = teamsByKey[teamKey]?.meaningfulNickname {
+                    awardText.append(nickname)
                 }
             } else if let awardee = apiRecipient.awardee {
                 awardText.append(awardee)

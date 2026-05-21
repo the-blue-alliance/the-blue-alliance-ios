@@ -55,6 +55,51 @@ struct APITeamHelpersTests {
         #expect(team.displayNickname == "Team 254")
     }
 
+    // MARK: - TeamDisplayable.meaningfulNickname
+
+    @Test func meaningfulNickname_nilWhenEmpty() {
+        let team = makeTeam(teamNumber: 18, nickname: "")
+        #expect(team.meaningfulNickname == nil)
+    }
+
+    @Test func meaningfulNickname_nilForFallback() {
+        let team = makeTeam(teamNumber: 18, nickname: "Team 18")
+        #expect(team.meaningfulNickname == nil)
+    }
+
+    @Test func meaningfulNickname_returnsRealNickname() {
+        let team = makeTeam(teamNumber: 254, nickname: "The Cheesy Poofs")
+        #expect(team.meaningfulNickname == "The Cheesy Poofs")
+    }
+
+    @Test func teamSimple_meaningfulNickname_nilForFallback() {
+        let simple = makeTeamSimple(teamNumber: 18, nickname: "Team 18")
+        #expect(simple.meaningfulNickname == nil)
+    }
+
+    @Test func teamSimple_meaningfulNickname_returnsRealNickname() {
+        let simple = makeTeamSimple(teamNumber: 254, nickname: "The Cheesy Poofs")
+        #expect(simple.meaningfulNickname == "The Cheesy Poofs")
+    }
+
+    // MARK: - TeamDisplayable.meaningful(_:forTeamNumber:)
+
+    @Test func meaningfulStatic_nilForNil() {
+        #expect(TeamDisplayable.meaningful(nil, forTeamNumber: 18) == nil)
+    }
+
+    @Test func meaningfulStatic_nilForEmpty() {
+        #expect(TeamDisplayable.meaningful("", forTeamNumber: 18) == nil)
+    }
+
+    @Test func meaningfulStatic_nilForFallback() {
+        #expect(TeamDisplayable.meaningful("Team 18", forTeamNumber: 18) == nil)
+    }
+
+    @Test func meaningfulStatic_returnsRealNickname() {
+        #expect(TeamDisplayable.meaningful("The Cheesy Poofs", forTeamNumber: 254) == "The Cheesy Poofs")
+    }
+
     // MARK: - Team.locationString
 
     @Test func team_locationString_nilWhenAllEmpty() {

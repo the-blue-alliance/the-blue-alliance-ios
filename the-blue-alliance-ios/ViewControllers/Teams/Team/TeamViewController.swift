@@ -126,21 +126,6 @@ class TeamViewController: HeaderContainerViewController {
         )
     }
 
-    // TBA returns the literal "Team <N>" as a fallback nickname for teams
-    // without a real one (e.g. team 18). The header view already shows the
-    // team number on its own line, so echoing "Team N" as the subtitle
-    // duplicates it. Treat the fallback as no nickname here — list-style
-    // cells (TeamCell etc.) keep using the raw value, this only affects the
-    // header subtitle.
-    private static func displayNickname(
-        _ raw: String?,
-        teamNumber: Int
-    ) -> String? {
-        guard let raw, !raw.isEmpty else { return nil }
-        if raw == "Team \(teamNumber)" { return nil }
-        return raw
-    }
-
     private init(
         state: TeamState,
         partialNickname: String?,
@@ -152,11 +137,8 @@ class TeamViewController: HeaderContainerViewController {
 
         let teamNumber = state.team?.teamNumber ?? state.key.teamNumber ?? 0
         let nickname: String? = {
-            let raw: String? = {
-                if let team = state.team, !team.nickname.isEmpty { return team.nickname }
-                return partialNickname
-            }()
-            return Self.displayNickname(raw, teamNumber: teamNumber)
+            if let team = state.team { return team.meaningfulNickname }
+            return TeamDisplayable.meaningful(partialNickname, forTeamNumber: teamNumber)
         }()
         let teamNumberNickname = state.team?.teamNumberNickname ?? "Team \(teamNumber)"
 
@@ -301,7 +283,7 @@ class TeamViewController: HeaderContainerViewController {
             teamHeaderView.viewModel = TeamHeaderViewModel(
                 teamNumber: team.teamNumber,
                 avatar: avatarImage,
-                nickname: Self.displayNickname(team.nickname, teamNumber: team.teamNumber),
+                nickname: team.meaningfulNickname,
                 teamNumberNickname: team.teamNumberNickname,
                 year: year
             )
