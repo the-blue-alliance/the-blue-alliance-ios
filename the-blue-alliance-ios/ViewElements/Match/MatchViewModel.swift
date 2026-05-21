@@ -37,19 +37,17 @@ struct MatchViewModel {
     // in `breakdown`. Mirrors the web frontend's `match_table_cell_macros.html`
     // so unmapped seasons fail closed (0 dots) instead of risking a wrong
     // count when the season's win RP changes (e.g. 2 → 3 in 2025).
+    // For each known RP, the function returns an item in the Boolean array with true for a filled dot and false for an empty dot.
     static func rpCount(
         breakdown: [String: Any]?,
         year: Int,
-        compLevel: Components.Schemas.CompLevel
+        compLevel: CompLevel
     ) -> [Bool]? {
         guard let breakdown else { return nil }
         guard compLevel == .qm else { return nil }
-        let values = bonusKeys(year: year).compactMap { breakdown[$0] as? Bool }
-        if values.count == bonusKeys(year: year).count {
-            return values
-        } else {
-            return nil
-        }
+        let keys = bonusKeys(year: year)
+        let values = keys.compactMap { breakdown[$0] as? Bool }
+        return values.count == keys.count ? values : nil
     }
 
     private static func bonusKeys(year: Int) -> [String] {
