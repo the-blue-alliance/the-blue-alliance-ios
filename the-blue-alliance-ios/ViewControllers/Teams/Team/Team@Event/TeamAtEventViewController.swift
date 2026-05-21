@@ -65,15 +65,6 @@ class TeamAtEventViewController: ContainerViewController {
             dependencies: dependencies
         )
 
-        rightBarButtonItems = [
-            UIBarButtonItem(
-                image: UIImage.eventIcon,
-                style: .plain,
-                target: self,
-                action: #selector(pushEvent)
-            )
-        ]
-
         summaryViewController.delegate = self
         matchesViewController.delegate = self
         mediaViewController.delegate = self
@@ -118,7 +109,7 @@ class TeamAtEventViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
-    @objc private func pushEvent() {
+    private func pushEvent() {
         let eventViewController = EventViewController(
             eventKey: eventKey,
             dependencies: dependencies
@@ -161,6 +152,10 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
 
     func teamInfoSelected(teamKey: String) {
         pushTeam(teamKey: teamKey)
+    }
+
+    func eventInfoSelected() {
+        pushEvent()
     }
 
     func matchSelected(_ match: Match) {
