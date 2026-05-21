@@ -4,10 +4,12 @@ import UIKit
 
 protocol TeamSummaryViewControllerDelegate: AnyObject {
     func teamInfoSelected(teamKey: String)
+    func eventSelected()
     func matchSelected(_ match: Match)
 }
 
 private enum TeamSummarySection: Int {
+    case event
     case teamInfo
     case pitLocation
     case eventInfo
@@ -25,12 +27,13 @@ extension TeamSummarySection: TableSectionTitleProviding {
         case .playoffInfo: return "Playoffs"
         case .qualInfo: return "Qualifications"
         case .lastMatch: return "Most Recent Match"
-        case .teamInfo, .pitLocation: return nil
+        case .event, .teamInfo, .pitLocation: return nil
         }
     }
 }
 
 private enum TeamSummaryItem: Hashable {
+    case event(event: Event)
     case teamInfo(team: Team)
     case pitLocation(location: String)
     case status(status: String)
@@ -75,6 +78,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
         tableView.registerReusableCell(InfoTableViewCell.self)
+        tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
         tableView.dataSource = dataSource
@@ -89,6 +93,8 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
                 guard let self else { return nil }
                 switch item {
+                case .event(let event):
+                    return self.cellForEvent(event, in: tableView, at: indexPath)
                 case .teamInfo(let team):
                     return self.cellForTeam(team, in: tableView, at: indexPath)
                 case .pitLocation(let location):
@@ -164,7 +170,11 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
     private func rebuildSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<TeamSummarySection, TeamSummaryItem>()
 
-        // Team info
+        if let event {
+            snapshot.appendSections([.event])
+            snapshot.appendItems([.event(event: event)], toSection: .event)
+        }
+
         if let team {
             snapshot.appendSections([.teamInfo])
             snapshot.appendItems([.teamInfo(team: team)], toSection: .teamInfo)
@@ -310,6 +320,19 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Cells
 
+    private func cellForEvent(_ event: Event, in tableView: UITableView, at indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
+        cell.viewModel = EventCellViewModel(
+            name: event.safeShortName,
+            location: event.locationString,
+            dateString: event.dateString
+        )
+        cell.accessoryType = .disclosureIndicator
+        return cell
+    }
+
     private func cellForTeam(_ team: Team, in tableView: UITableView, at indexPath: IndexPath)
         -> UITableViewCell
     {
@@ -319,7 +342,6 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             subtitleStrings: [team.locationString].compactMap { $0 }
         )
         cell.accessoryType = .disclosureIndicator
-        cell.selectionStyle = .none
         return cell
     }
 
@@ -373,6 +395,8 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
+        case .event:
+            delegate?.eventSelected()
         case .teamInfo:
             delegate?.teamInfoSelected(teamKey: teamKey)
         case .match(let match, _):

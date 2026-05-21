@@ -16,6 +16,7 @@ Features:
 * B teams are now properly supported for offseason events, will link to their parent team on tap
 * Surfaces webcast dates as well as viewer counts + online status event webcasts
 * Pit Map: Event → Info now has a "Pit Map" row when TBA has a pitmap published, with your favorited teams automatically highlighted. Tapping a team's Pit Location on Team @ Event Summary opens the same pitmap with that team highlighted.
+* Tapping a match push notification (upcoming match, match score, match video) now opens that match directly.
 
 Bug fixes:
 * Restored team nicknames on District Rankings, Awards, District Points, and Team@Event Stats (were falling back to "Team N")

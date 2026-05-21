@@ -12,9 +12,6 @@ private enum TeamInfoItem {
     case rookieYear
     case sponsors
     case website
-    case twitter
-    case youtube
-    case chiefDelphi
 }
 
 class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
@@ -77,18 +74,6 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
                     let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
                     cell.textLabel?.text = "View team's website"
                     return cell
-                case .twitter:
-                    let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                    cell.textLabel?.text = "View \(self.state.key) on Twitter"
-                    return cell
-                case .youtube:
-                    let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                    cell.textLabel?.text = "View \(self.state.key) on YouTube"
-                    return cell
-                case .chiefDelphi:
-                    let cell = self.tableView(tableView, linkCellForRowAt: indexPath)
-                    cell.textLabel?.text = "View photos on Chief Delphi"
-                    return cell
                 }
             }
         )
@@ -118,12 +103,10 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         }
 
         // Links
-        var linkItems: [TeamInfoItem] = [.twitter, .youtube, .chiefDelphi]
         if team.hasWebsite {
-            linkItems.insert(.website, at: 0)
+            snapshot.appendSections([.link])
+            snapshot.appendItems([.website], toSection: .link)
         }
-        snapshot.appendSections([.link])
-        snapshot.appendItems(linkItems, toSection: .link)
 
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
@@ -203,12 +186,6 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
             reloadSponsors()
         case .website:
             urlString = state.team?.website
-        case .twitter:
-            urlString = "https://twitter.com/search?q=%23\(state.key)"
-        case .youtube:
-            urlString = "https://www.youtube.com/results?search_query=\(state.key)"
-        case .chiefDelphi:
-            urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(state.key)"
         default:
             break
         }

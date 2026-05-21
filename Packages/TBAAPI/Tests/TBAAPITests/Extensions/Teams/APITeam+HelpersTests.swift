@@ -55,6 +55,51 @@ struct APITeamHelpersTests {
         #expect(team.displayNickname == "Team 254")
     }
 
+    // MARK: - TeamDisplayable.nonFallbackNickname
+
+    @Test func nonFallbackNickname_nilWhenEmpty() {
+        let team = makeTeam(teamNumber: 18, nickname: "")
+        #expect(team.nonFallbackNickname == nil)
+    }
+
+    @Test func nonFallbackNickname_nilForFallback() {
+        let team = makeTeam(teamNumber: 18, nickname: "Team 18")
+        #expect(team.nonFallbackNickname == nil)
+    }
+
+    @Test func nonFallbackNickname_returnsRealNickname() {
+        let team = makeTeam(teamNumber: 254, nickname: "The Cheesy Poofs")
+        #expect(team.nonFallbackNickname == "The Cheesy Poofs")
+    }
+
+    @Test func teamSimple_nonFallbackNickname_nilForFallback() {
+        let simple = makeTeamSimple(teamNumber: 18, nickname: "Team 18")
+        #expect(simple.nonFallbackNickname == nil)
+    }
+
+    @Test func teamSimple_nonFallbackNickname_returnsRealNickname() {
+        let simple = makeTeamSimple(teamNumber: 254, nickname: "The Cheesy Poofs")
+        #expect(simple.nonFallbackNickname == "The Cheesy Poofs")
+    }
+
+    // MARK: - TeamDisplayable.nonFallback(_:forTeamNumber:)
+
+    @Test func nonFallbackStatic_nilForNil() {
+        #expect(Team.nonFallback(nil, forTeamNumber: 18) == nil)
+    }
+
+    @Test func nonFallbackStatic_nilForEmpty() {
+        #expect(Team.nonFallback("", forTeamNumber: 18) == nil)
+    }
+
+    @Test func nonFallbackStatic_nilForFallback() {
+        #expect(Team.nonFallback("Team 18", forTeamNumber: 18) == nil)
+    }
+
+    @Test func nonFallbackStatic_returnsRealNickname() {
+        #expect(Team.nonFallback("The Cheesy Poofs", forTeamNumber: 254) == "The Cheesy Poofs")
+    }
+
     // MARK: - Team.locationString
 
     @Test func team_locationString_nilWhenAllEmpty() {
