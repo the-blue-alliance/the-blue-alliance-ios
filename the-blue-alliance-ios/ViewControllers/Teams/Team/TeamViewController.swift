@@ -137,8 +137,8 @@ class TeamViewController: HeaderContainerViewController {
 
         let teamNumber = state.team?.teamNumber ?? state.key.teamNumber ?? 0
         let nickname: String? = {
-            if let team = state.team { return team.meaningfulNickname }
-            return TeamDisplayable.meaningful(partialNickname, forTeamNumber: teamNumber)
+            if let team = state.team { return team.nonFallbackNickname }
+            return TeamDisplayable.nonFallback(partialNickname, forTeamNumber: teamNumber)
         }()
         let teamNumberNickname = state.team?.teamNumberNickname ?? "Team \(teamNumber)"
 
@@ -283,7 +283,7 @@ class TeamViewController: HeaderContainerViewController {
             teamHeaderView.viewModel = TeamHeaderViewModel(
                 teamNumber: team.teamNumber,
                 avatar: avatarImage,
-                nickname: team.meaningfulNickname,
+                nickname: team.nonFallbackNickname,
                 teamNumberNickname: team.teamNumberNickname,
                 year: year
             )

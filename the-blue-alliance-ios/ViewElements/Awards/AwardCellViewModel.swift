@@ -20,7 +20,7 @@ struct AwardCellViewModel {
                 awardText.append(Self.teamNumber(key: teamKey, teamsByKey: teamsByKey))
             } else if let teamKey = apiRecipient.teamKey {
                 awardText.append(Self.teamNumber(key: teamKey, teamsByKey: teamsByKey))
-                if let nickname = teamsByKey[teamKey]?.meaningfulNickname {
+                if let nickname = teamsByKey[teamKey]?.nonFallbackNickname {
                     awardText.append(nickname)
                 }
             } else if let awardee = apiRecipient.awardee {
