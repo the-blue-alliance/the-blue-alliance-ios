@@ -154,7 +154,7 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
         pushTeam(teamKey: teamKey)
     }
 
-    func eventInfoSelected() {
+    func eventSelected() {
         pushEvent()
     }
 

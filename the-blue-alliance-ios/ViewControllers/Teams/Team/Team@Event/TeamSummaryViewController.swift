@@ -4,7 +4,7 @@ import UIKit
 
 protocol TeamSummaryViewControllerDelegate: AnyObject {
     func teamInfoSelected(teamKey: String)
-    func eventInfoSelected()
+    func eventSelected()
     func matchSelected(_ match: Match)
 }
 
@@ -330,7 +330,6 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             dateString: event.dateString
         )
         cell.accessoryType = .disclosureIndicator
-        cell.selectionStyle = .none
         return cell
     }
 
@@ -343,7 +342,6 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             subtitleStrings: [team.locationString].compactMap { $0 }
         )
         cell.accessoryType = .disclosureIndicator
-        cell.selectionStyle = .none
         return cell
     }
 
@@ -398,7 +396,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
         case .event:
-            delegate?.eventInfoSelected()
+            delegate?.eventSelected()
         case .teamInfo:
             delegate?.teamInfoSelected(teamKey: teamKey)
         case .match(let match, _):
