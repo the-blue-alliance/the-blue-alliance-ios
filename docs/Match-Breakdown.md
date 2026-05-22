@@ -29,6 +29,13 @@ These live in `MatchBreakdownConfigurator.swift`.
 - `nestedRow`: Same as `row`, but to be used when the value is not at the top level in the API.
 - `rankingPointsRow`: Used for RP values in the breakdown.
 - `boolImageRow`: Used to show a ✓/✗ in the given row based on a boolean value.
+- `foulRow`: Used to show fouls/secondary fouls for the given match. There are a couple options for using this:
+  - **pointValues**: an array used to configure how many points to show in foul rows. Must be an `[Int, Int]` configuring fouls and secondary fouls, respectively.
+  - **`reversed`**: if `true`, the method routes any fouls to show on the *other* alliance (used to show point awarded values, since points for fouls go to the opposite alliance).
+  - **Type**:
+    - `count` is used to show the exact number of fouls (ex. [2026](https://www.thebluealliance.com/match/2026cancmp_qm2))
+    - `points` is used to show the number of points awarded by fouls (ex. [2022](https://www.thebluealliance.com/match/2022caav_qm2))
+    - `both` is used to show the count of fouls *and* the points awarded by fouls (ex. [2024](https://www.thebluealliance.com/match/2024azgl_qm2))
 
 ## Adding a New Year
 1. **Find the API shape**: hit `/match/{match_key}` for an event in the new year, one that is real and finished.
