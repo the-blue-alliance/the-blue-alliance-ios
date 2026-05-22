@@ -33,11 +33,14 @@ struct MatchViewModel {
         return blueScore != nil && redScore != nil
     }
 
-    // Returns a [Bool]? of bonus-objective RPs for `year` by checking the per-game booleans
-    // in `breakdown`. Mirrors the web frontend's `match_table_cell_macros.html`
-    // so unmapped seasons fail closed (0 dots) instead of risking a wrong
-    // count when the season's win RP changes (e.g. 2 → 3 in 2025).
-    // For each known RP, the function returns an item in the Boolean array with true for a filled dot and false for an empty dot.
+    // Returns a per-RP `[Bool]` for `year` by checking the bonus-objective booleans
+    // in `breakdown` — `true` renders as a filled dot, `false` as a hollow one.
+    // Mirrors the web frontend's `match_table_cell_macros.html`.
+    //
+    // Returns `nil` (renders no dots) when the match is not a qualification,
+    // `breakdown` is missing, or any expected bonus key is absent — so an
+    // unmapped or shifted season fails closed instead of risking a wrong count
+    // when the season's win RP changes (e.g. 2 → 3 in 2025).
     static func rpCount(
         breakdown: [String: Any]?,
         year: Int,
