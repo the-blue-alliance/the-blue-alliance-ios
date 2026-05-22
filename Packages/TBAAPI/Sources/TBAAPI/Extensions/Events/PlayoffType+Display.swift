@@ -50,7 +50,6 @@ extension DoubleElimRound {
     // The raw string already reads "Round 1", "Finals", etc.
     public var title: String { rawValue }
 
-    // Compact label for tight UI (e.g. alliance level chips).
     public var shortTitle: String {
         switch self {
         case .round1: return "R1"
