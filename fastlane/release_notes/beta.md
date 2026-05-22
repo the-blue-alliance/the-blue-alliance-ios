@@ -1,41 +1,16 @@
-The Blue Alliance v3.4.2
+The Blue Alliance v3.5.0
 
 What's new:
-- Team Media now shows YouTube videos alongside photos — photos render in their own section on top, videos in a section below with an inline YouTube player and a loading spinner until the iframe is ready
-  - Photo tiles that can't load now show a friendlier placeholder (SF symbol + short caption like "Image unavailable") instead of a blank cell
-  - Instagram media tiles now show an "Instagram image" placeholder, tap opens Instagram directly (no broken thumbnail fetch), and the context menu drops the "View" action
-  - Long-pressing a photo in the full-screen viewer now offers the same actions as the cell context menu (View Online / Copy / Save) instead of just Save
-- Push notifications are now wired up end-to-end:
-  - Tapping an "upcoming match" / "match score" / "match video" push opens that match directly (works on top of whatever you had open)
-  - "Favorites updated" / "Subscriptions updated" pushes from another device now silently refresh myTBA in the background — no banner, just fresh data
-- Pit Map: new "Pit Map" row under Event → Info that opens TBA's pitmap (when one is published for the event). Your favorited teams are automatically highlighted on the event-level map, and the map now opens centered on the event marker
-  - Tapping a team's Pit Location on a Team @ Event Summary now opens TBA's pitmap centered on that team's pit (replaces the old FRC Nexus deep link)
-  - Pit Map now shows a loading spinner while TBA's page renders, instead of flashing a blank web view
-- 2025 Match Breakdown is now its own real configurator — auto and teleop coral broken out by level (L1–L4), processor / net algae counts, and per-robot barge endgame, with a coral scoring map drawn from the breakdown data
-- Pushing from an event-scoped page into a team now opens the team on the event's year — e.g. tapping a team from a 2024 event lands on the team's 2024 page instead of defaulting to the current year. EventKey.year is the source of truth
-- Reworked year button on the Team page: shows a skeleton pill while the year list is loading, and a spinner inline while a new year's data is being fetched
-- Match Info: the "Score" column header now actually lines up with the score column instead of floating over the team columns
-- Match videos that ship with a YouTube `?t=<seconds>` start-time parameter (e.g. a foreign_key like `efN3u9H2qRY?t=56`) now jump to that timestamp instead of YouTube treating the whole foreign_key as the video ID
-- 2018 Match Breakdown: the scoring plate assignment (`tba_gameData`, e.g. `LLR` / `RRL`) now shows as a footer at the bottom of the breakdown, matching the web app
-- 2020 Match Breakdown: stage rows with no activations now render an X icon instead of a blank cell, matching the shield-operational row right above
+- Match Summary rows now show one dot per possible bonus RP for the season — filled when earned, hollow when missed (e.g. 2025 always shows three dots for auto/coral/barge). Previously only the filled dots were rendered, so you could see how many RPs an alliance earned but not which
+- Event → Alliances now shows which round of a double-elim playoff an alliance was eliminated in — the level column reads `R1`–`R5` (or `F` for finals) for double-elim events, instead of always showing the single-elim labels. The alliance-name column was widened slightly so the new labels fit
+- Team @ Event Summary now has a tappable event row at the top of the Summary tab (mirroring the team row right below it), replacing the small event icon that used to live in the top-right of the navigation bar. Tapping it jumps back to the parent event
+- Event Awards list now shows the team number as the primary line again with the nickname underneath — team numbers had silently disappeared from this list after the Core Data removal. Generic FIRST fallback nicknames (e.g. "Team 9999") are filtered out so the second line is blank instead of redundant
+- Event Info and Team Info no longer show the Twitter, YouTube, and Chief Delphi search rows — Twitter's hashtag URL is broken since X removed support, and the YouTube/CD rows almost never produced relevant results. The Links section now only appears when a real website URL is published for the event/team
 
 Please poke at:
-- Team → Media on a team with YouTube videos for the season — photos should appear up top, videos below in their own section, each video should show a spinner until the player loads and then play in-cell
-- Team → Media tiles that can't load an image (or Instagram items) — should show an SF symbol + caption instead of a blank box; tapping an Instagram tile should open Instagram, and its context menu should not include "View"
-- Long-press a photo from the full-screen viewer — the menu should offer View Online / Copy / Save (matching the cell's context menu)
-- Push notifications:
-  - With the app backgrounded, tap an "upcoming match", "match score", or "match video" push from a team you've subscribed to — the app should open straight to that match
-  - Favorite or subscribe to something on another device (or tba.com) — the in-app myTBA list should update on its own without you opening the myTBA tab
-  - Foreground pushes for these events shouldn't show a banner (they're handled silently)
-- Event → Info on an event with a published TBA pitmap — "Pit Map" row should appear under the title; spinner should show briefly, then your favorite teams should be highlighted with the map centered on the event marker
-- Event → Info on an event with no pitmap — the row should not appear at all
-- Team @ Event Summary → tap Pit Location — should push TBA's pitmap with that team highlighted *and the view scrolled/centered on that team's pit* (no more "via FRC Nexus" subtitle, no Safari hop)
-- Open a 2025 match breakdown — auto / teleop coral rows (L1–L4), algae counts, barge endgame rows, and the coral scoring map should all populate; coral map should hide cleanly on matches with no scoring data
-- From a 2024 event, drill into a team (rankings, alliances, awards, matches) — the team page should open at 2024, not 2026
-- Same for older years (2019, 2022, etc.) — the year picker on the team page should reflect the event's year
-- Open a team page cold — year pill should show a skeleton while years load, then settle on the right year
-- Switch years on the team page — chevron should swap to a spinner while the new year's data fetches, then back to the chevron when done
-- Open a Match Info screen — "Score" header should sit directly above the score column, not drift over the team columns
-- Open a match with a YouTube clip that has a start timestamp baked into the foreign_key (e.g. `efN3u9H2qRY?t=56`) — the player should jump to that point instead of starting at 0
-- Open a 2018 match breakdown — the bottom of the table should show the scoring plate assignment for that match
-- Open a 2020 match breakdown for a match where no stages were activated — the stage activations row should show an X instead of being blank
+- Open a Match Info screen for a qual match where an alliance earned only some of the season's bonus RPs — every possible bonus RP should appear as a dot in the RP row, filled for earned and hollow for missed (so 2025 always shows three dots, 2024 always shows two, etc.). On matches with no breakdown, no dots should appear at all
+- Open Event → Alliances for a double-elimination event with eliminations under way — the level column on eliminated alliances should read `R1` / `R2` / ... / `R5` (and `F` for finals) instead of single-elim labels. Confirm the alliance-name column has room for these without truncating
+- Open a Team @ Event page (from an event's Teams tab, or by tapping a team in a match) — the Summary tab should show an event row at the top, a team row beneath it, and tapping the event row should push back into that event. Confirm the old top-right event icon is gone from the nav bar
+- Open Event → Awards for an event with team-recipient awards — each award row should show the team number on the first line and the nickname (when one is set) on the second line. For teams using a generic FIRST fallback nickname like "Team 1234", the second line should be blank rather than duplicating the number
+- Open Event → Info and Team → Info for an event/team that *does* have a website set — the Links section should appear and contain only the website row (no Twitter/YouTube/Chief Delphi rows)
+- Open Event → Info and Team → Info for an event/team that does *not* have a website set — the Links section should not appear at all
