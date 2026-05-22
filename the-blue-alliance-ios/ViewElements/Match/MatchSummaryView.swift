@@ -341,13 +341,16 @@ class MatchSummaryView: UIView {
 
     private func addRPToView(stackView: UIStackView, rps: [Bool]?) {
         guard let rps else { return }
+        let config = UIImage.SymbolConfiguration(pointSize: 5, weight: .bold)
         for earned in rps {
-            let rpLabel = label(
-                text: earned ? "•" : "◦",
-                isBold: true,
-                color: earned ? .label : .secondaryLabel
+            let image = UIImage(
+                systemName: earned ? "circle.fill" : "circle",
+                withConfiguration: config
             )
-            stackView.addArrangedSubview(rpLabel)
+            let imageView = UIImageView(image: image)
+            imageView.tintColor = earned ? .label : .secondaryLabel
+            imageView.contentMode = .center
+            stackView.addArrangedSubview(imageView)
         }
     }
 

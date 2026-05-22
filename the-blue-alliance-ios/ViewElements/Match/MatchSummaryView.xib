@@ -93,7 +93,7 @@
                                                                         </mask>
                                                                     </variation>
                                                                 </label>
-                                                                <stackView verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D8q-gZ-JhX" userLabel="Red RP View">
+                                                                <stackView verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="D8q-gZ-JhX" userLabel="Red RP View">
                                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="20"/>
                                                                     <viewLayoutGuide key="safeArea" id="aOv-nb-YVi"/>
                                                                 </stackView>
@@ -105,7 +105,7 @@
                                                                 <constraint firstAttribute="trailing" secondItem="r4c-pQ-IQY" secondAttribute="trailing" id="6Xq-u0-Gjt"/>
                                                                 <constraint firstItem="r4c-pQ-IQY" firstAttribute="top" secondItem="DTT-M1-On3" secondAttribute="top" id="Mnu-5U-8Ef"/>
                                                                 <constraint firstAttribute="bottom" secondItem="r4c-pQ-IQY" secondAttribute="bottom" id="NzZ-z6-bIC"/>
-                                                                <constraint firstItem="D8q-gZ-JhX" firstAttribute="top" secondItem="r4c-pQ-IQY" secondAttribute="top" constant="-3" id="gz4-ih-exJ"/>
+                                                                <constraint firstItem="D8q-gZ-JhX" firstAttribute="top" secondItem="r4c-pQ-IQY" secondAttribute="top" constant="3" id="gz4-ih-exJ"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
@@ -155,7 +155,7 @@
                                                                         </mask>
                                                                     </variation>
                                                                 </label>
-                                                                <stackView verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" ambiguous="YES" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="lwC-KQ-hCX" userLabel="Blue RP View">
+                                                                <stackView verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" ambiguous="YES" alignment="top" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="lwC-KQ-hCX" userLabel="Blue RP View">
                                                                     <rect key="frame" x="1" y="-3" width="102" height="26"/>
                                                                     <viewLayoutGuide key="safeArea" id="MDd-GC-vmQ"/>
                                                                 </stackView>
@@ -166,7 +166,7 @@
                                                                 <constraint firstAttribute="bottom" secondItem="BIa-h9-yIu" secondAttribute="bottom" id="e1B-fZ-gSo"/>
                                                                 <constraint firstAttribute="trailing" secondItem="BIa-h9-yIu" secondAttribute="trailing" id="gXr-9W-vUG"/>
                                                                 <constraint firstItem="lwC-KQ-hCX" firstAttribute="leading" secondItem="BIa-h9-yIu" secondAttribute="leading" constant="1" id="pg4-kh-HHg"/>
-                                                                <constraint firstItem="lwC-KQ-hCX" firstAttribute="top" secondItem="BIa-h9-yIu" secondAttribute="top" constant="-3" id="uCh-9W-zSl"/>
+                                                                <constraint firstItem="lwC-KQ-hCX" firstAttribute="top" secondItem="BIa-h9-yIu" secondAttribute="top" constant="3" id="uCh-9W-zSl"/>
                                                                 <constraint firstItem="BIa-h9-yIu" firstAttribute="top" secondItem="HMh-7L-pf5" secondAttribute="top" id="vkn-QY-6SX"/>
                                                             </constraints>
                                                         </view>
