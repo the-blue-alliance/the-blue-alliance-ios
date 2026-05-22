@@ -280,6 +280,9 @@ extension MatchBreakdownConfigurator {
             offset: offset
         )
     }
+
+    // Function for generating a row showing fouls / secondary fouls for each alliance. Type can be points, count, or both to allow for flexibility between years. The `reversed` Boolean is for whether to show fouls on the alliance that made the offense (typically for the `points` type) or the alliance that recieved the points (typically for the `count` type.
+
     static func foulRow(
         title: String,
         keys: [String],
@@ -303,32 +306,33 @@ extension MatchBreakdownConfigurator {
             return nil
         }
 
-        guard let techFoulValues = values(key: keys[1], red: red, blue: blue) else {
+        guard let secondaryFoulValues = values(key: keys[1], red: red, blue: blue) else {
             return nil
         }
-        let (rtf, btf) = techFoulValues
-        guard let redTechFouls = rtf as? Int, let blueTechFouls = btf as? Int else {
+        let (rsf, bsf) = secondaryFoulValues
+        guard let redSecondaryFouls = rsf as? Int, let blueSecondaryFouls = bsf as? Int else {
             return nil
         }
 
-        let foulTechTuples =
+        let secondaryFoulTuples =
             reversed
-            ? [(blueFouls, blueTechFouls), (redFouls, redTechFouls)]
-            : [(redFouls, redTechFouls), (blueFouls, blueTechFouls)]
+            ? [(blueFouls, blueSecondaryFouls), (redFouls, redSecondaryFouls)]
+            : [(redFouls, redSecondaryFouls), (blueFouls, blueSecondaryFouls)]
         let elements: [String]
         switch (type) {
         case .count:
-            elements = foulTechTuples.map { (fouls, techFouls) in
-                "\(fouls) / \(techFouls)"
+            elements = secondaryFoulTuples.map { (fouls, secondaryFouls) in
+                "\(fouls) / \(secondaryFouls)"
             }
         case .points:
-            elements = foulTechTuples.map { (fouls, techFouls) in
-                "+\(fouls * pointValues[0]) / +\(techFouls * pointValues[1])"
+            elements = secondaryFoulTuples.map { (fouls, secondaryFouls) in
+                "+\(fouls * pointValues[0]) / +\(secondaryFouls * pointValues[1])"
             }
         case .both:
-            elements = foulTechTuples.map { (fouls, techFouls) in
-                let points = fouls * pointValues[0] + techFouls * pointValues[1]
-                return "\(fouls) / \(techFouls)\(points > 0 ? " (+\(points))" : "")"
+            elements = secondaryFoulTuples.map { (fouls, secondaryFouls) in
+                let points = fouls * pointValues[0]
+                let secondaryPoints =  secondaryFouls * pointValues[1]
+                return "\(fouls)\(points > 0 ? " (+\(points))" : "") / \(secondaryFouls)\(secondaryPoints > 0 ? " (+\(secondaryPoints))" : "")"
             }
         }
         return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])

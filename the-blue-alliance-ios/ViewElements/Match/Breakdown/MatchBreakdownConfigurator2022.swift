@@ -83,7 +83,7 @@ struct MatchBreakdownConfigurator2022: MatchBreakdownConfigurator {
                 red: red,
                 blue: blue,
                 reversed: true,
-                type: FoulRowType.points
+                type: .points
             )
         )
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
