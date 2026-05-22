@@ -22,6 +22,9 @@ struct EventAllianceCellViewModel {
         if level == .f, let s = status?.status {
             return s == .won ? "W" : "F"
         }
+        if let round = status?.doubleElimRound {
+            return round.shortTitle
+        }
         return level.rawValue.uppercased()
     }
 

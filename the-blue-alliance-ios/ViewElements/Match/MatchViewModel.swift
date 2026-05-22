@@ -20,8 +20,8 @@ struct MatchViewModel {
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
 
-    var redRPCount: Int = 0
-    var blueRPCount: Int = 0
+    var redRPs: [Bool]?
+    var blueRPs: [Bool]?
 
     let baseTeamKeys: [String]
 
@@ -33,15 +33,24 @@ struct MatchViewModel {
         return blueScore != nil && redScore != nil
     }
 
-    // Counts bonus-objective RPs for `year` by checking the per-game booleans
-    // in `breakdown`. Mirrors the web frontend's `match_table_cell_macros.html`
-    // so unmapped seasons fail closed (0 dots) instead of risking a wrong
-    // count when the season's win RP changes (e.g. 2 → 3 in 2025).
-    static func rpCount(breakdown: [String: Any]?, year: Int) -> Int {
-        guard let breakdown else { return 0 }
-        return bonusKeys(year: year).reduce(0) { count, key in
-            count + ((breakdown[key] as? Bool) == true ? 1 : 0)
-        }
+    // Returns a per-RP `[Bool]` for `year` by checking the bonus-objective booleans
+    // in `breakdown` — `true` renders as a filled dot, `false` as a hollow one.
+    // Mirrors the web frontend's `match_table_cell_macros.html`.
+    //
+    // Returns `nil` (renders no dots) when the match is not a qualification,
+    // `breakdown` is missing, or any expected bonus key is absent — so an
+    // unmapped or shifted season fails closed instead of risking a wrong count
+    // when the season's win RP changes (e.g. 2 → 3 in 2025).
+    static func rps(
+        breakdown: [String: Any]?,
+        year: Int,
+        compLevel: CompLevel
+    ) -> [Bool]? {
+        guard let breakdown else { return nil }
+        guard compLevel == .qm else { return nil }
+        let keys = bonusKeys(year: year)
+        let values = keys.compactMap { breakdown[$0] as? Bool }
+        return values.count == keys.count ? values : nil
     }
 
     private static func bonusKeys(year: Int) -> [String] {
@@ -125,7 +134,15 @@ struct MatchViewModel {
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]
 
-        redRPCount = MatchViewModel.rpCount(breakdown: redBreakdown, year: matchYear)
-        blueRPCount = MatchViewModel.rpCount(breakdown: blueBreakdown, year: matchYear)
+        redRPs = MatchViewModel.rps(
+            breakdown: redBreakdown,
+            year: matchYear,
+            compLevel: match.compLevel
+        )
+        blueRPs = MatchViewModel.rps(
+            breakdown: blueBreakdown,
+            year: matchYear,
+            compLevel: match.compLevel
+        )
     }
 }

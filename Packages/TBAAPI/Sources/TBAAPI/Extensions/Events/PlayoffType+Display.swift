@@ -50,6 +50,17 @@ extension DoubleElimRound {
     // The raw string already reads "Round 1", "Finals", etc.
     public var title: String { rawValue }
 
+    public var shortTitle: String {
+        switch self {
+        case .round1: return "R1"
+        case .round2: return "R2"
+        case .round3: return "R3"
+        case .round4: return "R4"
+        case .round5: return "R5"
+        case .finals: return "F"
+        }
+    }
+
     public var sortOrder: Int {
         switch self {
         case .round1: return 0
