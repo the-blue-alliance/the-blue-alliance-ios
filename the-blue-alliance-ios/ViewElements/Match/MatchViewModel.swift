@@ -20,8 +20,8 @@ struct MatchViewModel {
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
 
-    var redRPCount: [Bool]?
-    var blueRPCount: [Bool]?
+    var redRPs: [Bool]?
+    var blueRPs: [Bool]?
 
     let baseTeamKeys: [String]
 
@@ -41,7 +41,7 @@ struct MatchViewModel {
     // `breakdown` is missing, or any expected bonus key is absent — so an
     // unmapped or shifted season fails closed instead of risking a wrong count
     // when the season's win RP changes (e.g. 2 → 3 in 2025).
-    static func rpCount(
+    static func rps(
         breakdown: [String: Any]?,
         year: Int,
         compLevel: CompLevel
@@ -134,12 +134,12 @@ struct MatchViewModel {
         let redBreakdown = match.breakdownDict?["red"] as? [String: Any]
         let blueBreakdown = match.breakdownDict?["blue"] as? [String: Any]
 
-        redRPCount = MatchViewModel.rpCount(
+        redRPs = MatchViewModel.rps(
             breakdown: redBreakdown,
             year: matchYear,
             compLevel: match.compLevel
         )
-        blueRPCount = MatchViewModel.rpCount(
+        blueRPs = MatchViewModel.rps(
             breakdown: blueBreakdown,
             year: matchYear,
             compLevel: match.compLevel
