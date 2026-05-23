@@ -2,6 +2,12 @@ import Foundation
 import TBAAPI
 import UIKit
 
+internal enum FoulRowType {
+    case count
+    case points
+    case both
+}
+
 protocol MatchBreakdownConfigurator {
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
@@ -29,23 +35,13 @@ extension MatchBreakdownConfigurator {
 
     // MARK: - Helper Methods
 
-    static func breakdownValueSupported(key: String, red: [String: Any], blue: [String: Any])
-        -> Bool
-    {
-        guard let redValue = red[key], let blueValue = blue[key] else { return false }
-        // TBA encodes "this stat doesn't apply to this match" as JSON null, which
-        // `JSONSerialization` surfaces as `NSNull`. Treat those like missing keys
-        // so rows are skipped instead of rendering `<null>`.
-        return !(redValue is NSNull) && !(blueValue is NSNull)
-    }
-
     // Values
 
     static func values(key: String, red: [String: Any]?, blue: [String: Any]?) -> (Any?, Any?)? {
         guard let red = red, let blue = blue else {
             return nil
         }
-        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
+        guard breakdownValueSupported(keyPath: [key], red: red, blue: blue) else {
             return nil
         }
         return (red[key], blue[key])
@@ -86,7 +82,7 @@ extension MatchBreakdownConfigurator {
             return nil
         }
         let supportedKeys = keys.map { k -> String? in
-            guard breakdownValueSupported(key: k, red: red, blue: blue) else {
+            guard breakdownValueSupported(keyPath: [k], red: red, blue: blue) else {
                 return nil
             }
             return k
@@ -135,24 +131,14 @@ extension MatchBreakdownConfigurator {
         return current
     }
 
-    static func nestedValues(keyPath: [String], red: [String: Any]?, blue: [String: Any]?) -> (
-        Any?, Any?
-    )? {
-        guard let redValue = nestedValue(keys: keyPath, in: red),
-            let blueValue = nestedValue(keys: keyPath, in: blue)
-        else {
-            return nil
-        }
-        return (redValue, blueValue)
-    }
-
-    static func nestedBreakdownValueSupported(
+    static func breakdownValueSupported(
         keyPath: [String],
         red: [String: Any],
         blue: [String: Any]
     ) -> Bool {
-        return nestedValue(keys: keyPath, in: red) != nil
-            && nestedValue(keys: keyPath, in: blue) != nil
+        let redValue = nestedValue(keys: keyPath, in: red)
+        let blueValue = nestedValue(keys: keyPath, in: blue)
+        return !(redValue == nil || redValue is NSNull || blueValue == nil || blueValue is NSNull)
     }
 
     static func nestedRow(
@@ -167,7 +153,7 @@ extension MatchBreakdownConfigurator {
         guard let red = red, let blue = blue else {
             return nil
         }
-        guard nestedBreakdownValueSupported(keyPath: keyPath, red: red, blue: blue) else {
+        guard breakdownValueSupported(keyPath: keyPath, red: red, blue: blue) else {
             return nil
         }
 
@@ -295,4 +281,60 @@ extension MatchBreakdownConfigurator {
         )
     }
 
+    // Function for generating a row showing fouls / secondary fouls for each alliance. Type can be points, count, or both to allow for flexibility between years. The `reversed` Boolean is for whether to show fouls on the alliance that made the offense (typically for the `points` type) or the alliance that received the points (typically for the `count` type).
+
+    static func foulRow(
+        title: String,
+        keys: [String],
+        pointValues: [Int],
+        red: [String: Any]?,
+        blue: [String: Any]?,
+        reversed: Bool,
+        type: FoulRowType
+    )
+        -> BreakdownRow?
+    {
+        guard keys.count == 2, pointValues.count == 2 else {
+            return nil
+        }
+        guard let foulValues = values(key: keys[0], red: red, blue: blue) else {
+            return nil
+        }
+        let (rf, bf) = foulValues
+        guard let redFouls = rf as? Int, let blueFouls = bf as? Int else {
+            return nil
+        }
+
+        guard let secondaryFoulValues = values(key: keys[1], red: red, blue: blue) else {
+            return nil
+        }
+        let (rsf, bsf) = secondaryFoulValues
+        guard let redSecondaryFouls = rsf as? Int, let blueSecondaryFouls = bsf as? Int else {
+            return nil
+        }
+
+        let foulTuples =
+            reversed
+            ? [(blueFouls, blueSecondaryFouls), (redFouls, redSecondaryFouls)]
+            : [(redFouls, redSecondaryFouls), (blueFouls, blueSecondaryFouls)]
+        let elements: [String]
+        switch type {
+        case .count:
+            elements = foulTuples.map { (fouls, secondaryFouls) in
+                "\(fouls) / \(secondaryFouls)"
+            }
+        case .points:
+            elements = foulTuples.map { (fouls, secondaryFouls) in
+                "+\(fouls * pointValues[0]) / +\(secondaryFouls * pointValues[1])"
+            }
+        case .both:
+            elements = foulTuples.map { (fouls, secondaryFouls) in
+                let points = fouls * pointValues[0]
+                let secondaryPoints = secondaryFouls * pointValues[1]
+                return
+                    "\(fouls)\(points > 0 ? " (+\(points))" : "") / \(secondaryFouls)\(secondaryPoints > 0 ? " (+\(secondaryPoints))" : "")"
+            }
+        }
+        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
+    }
 }

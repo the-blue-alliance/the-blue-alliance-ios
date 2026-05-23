@@ -193,7 +193,7 @@ struct MatchBreakdownConfigurator2016: MatchBreakdownConfigurator {
             return nil
         }
         // # crosses
-        guard breakdownValueSupported(key: key, red: red, blue: blue) else {
+        guard breakdownValueSupported(keyPath: [key], red: red, blue: blue) else {
             return nil
         }
         guard let redCrosses = numberCrosses(key, red), let blueCrosses = numberCrosses(key, blue)
