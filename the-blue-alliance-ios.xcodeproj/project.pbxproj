@@ -235,7 +235,6 @@
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26042100000001 /* NotificationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
-		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
 		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
