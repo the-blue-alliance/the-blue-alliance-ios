@@ -28,7 +28,7 @@ platform :ios do
       project: "the-blue-alliance-ios.xcodeproj",
       scheme: "The Blue Alliance",
       configuration: "Debug",
-      devices: [],
+      devices: ["iPhone 17 Pro"],
       skip_package_dependencies_resolution: true,
       xcargs: "-skipPackagePluginValidation -skipMacroValidation"
     )

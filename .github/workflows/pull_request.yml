@@ -9,15 +9,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Read Xcode version
+        id: xcode
+        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version-file: .xcode-version
+          xcode-version: ${{ steps.xcode.outputs.version }}
       - name: Lint
         run: ./scripts/swift-format.sh --strict
 
   test:
     name: Test
     runs-on: macos-latest
+    timeout-minutes: 30
     env:
       # Fastlane scan/run_tests runs `xcodebuild -showBuildSettings` with a
       # tight timeout (3s → 6s → 12s → 24s, then gives up). On fresh CI
@@ -27,9 +31,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Read Xcode version
+        id: xcode
+        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version-file: .xcode-version
+          xcode-version: ${{ steps.xcode.outputs.version }}
       - uses: actions/cache@v5
         with:
           path: vendor/bundle
