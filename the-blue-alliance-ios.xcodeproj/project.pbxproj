@@ -31,6 +31,13 @@
 		51BECA942F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */; };
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
+		5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042100000001 /* NotificationStore.swift */; };
+		5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041F00000001 /* AppGroup.swift */; };
+		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
+		5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* EventSectionTests.swift */; };
+		5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */; };
+		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
+		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
 		5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000005 /* EventsListViewController.swift */; };
 		5EC0D41A2C26041A00000006 /* TeamsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000005 /* TeamsListViewController.swift */; };
@@ -232,6 +239,14 @@
 		51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2025.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26042100000001 /* NotificationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
+		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationRouter.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsGrouping.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041700000005 /* EventsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListViewController.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041A00000005 /* TeamsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsListViewController.swift; sourceTree = "<group>"; };
@@ -575,6 +590,17 @@
 				0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CE8E6930F354EB795163DD95 /* TBAUnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */,
+				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
+				5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */,
+			);
+			name = TBAUnitTests;
+			path = TBAUnitTests;
 			sourceTree = "<group>";
 		};
 		92942D941E2154DA008E79CA /* the-blue-alliance-ios */ = {
@@ -1203,6 +1229,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */,
+				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
+				5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,5 +20,7 @@ class DistrictEventsViewController: EventsListViewController {
         try await dependencies.api.districtEvents(key: districtKey)
     }
 
+    override var splitsDistrictsByWeek: Bool { true }
+
     override var noDataText: String? { "No events for district" }
 }

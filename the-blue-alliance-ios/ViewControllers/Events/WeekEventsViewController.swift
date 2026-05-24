@@ -40,6 +40,10 @@ class WeekEventsViewController: EventsListViewController {
     // MARK: - EventsListViewController
 
     override func filter(_ events: [APIEvent]) -> [APIEvent] {
+        WeekEventsViewController.filter(events, for: weekEvent)
+    }
+
+    static func filter(_ events: [APIEvent], for weekEvent: APIEvent?) -> [APIEvent] {
         guard let weekEvent else { return [] }
 
         let sameYear = events.filter { $0.year == weekEvent.year }

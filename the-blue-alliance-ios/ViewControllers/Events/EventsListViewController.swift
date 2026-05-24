@@ -50,6 +50,11 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     func filter(_ events: [APIEvent]) -> [APIEvent] { events }
 
+    // Opt-in for the District tab, where one district's events span multiple
+    // weeks and each week should be its own section. Other tabs keep the
+    // default (false) so district events collapse into a single section.
+    var splitsDistrictsByWeek: Bool { false }
+
     // MARK: - Data Source
 
     private func setupDataSource() {
@@ -73,7 +78,8 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     func applyEvents(_ apiEvents: [APIEvent]) {
         events = filter(apiEvents)
 
-        let grouped = Dictionary(grouping: events, by: \.section)
+        let split = splitsDistrictsByWeek
+        let grouped = Dictionary(grouping: events) { $0.section(splitDistrictsByWeek: split) }
         var snapshot = NSDiffableDataSourceSnapshot<EventSection, APIEvent>()
         for section in grouped.keys.sorted() {
             snapshot.appendSections([section])
