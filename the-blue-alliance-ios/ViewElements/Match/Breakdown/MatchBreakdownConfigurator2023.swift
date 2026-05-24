@@ -63,17 +63,17 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
         let redLinkPoints = nestedValue(keys: ["linkPoints"], in: red) as? Int
         let blueLinkPoints = nestedValue(keys: ["linkPoints"], in: blue) as? Int
         if let redLinkCount = redLinks?.count, let blueLinkCount = blueLinks?.count {
+            let redLinkPointsSuffix = (redLinkPoints ?? 0) > 0 ? " (+\(redLinkPoints ?? 0))" : ""
+            let blueLinkPointsSuffix = (blueLinkPoints ?? 0) > 0 ? " (+\(blueLinkPoints ?? 0))" : ""
             rows.append(
                 row(
                     title: "Links",
                     key: "value",
                     red: [
-                        "value":
-                            "\(redLinkCount) \((redLinkPoints ?? 0) > 0 ? "(+\(redLinkPoints, default: ""))" : "")"
+                        "value": "\(redLinkCount)\(redLinkPointsSuffix)"
                     ],
                     blue: [
-                        "value":
-                            "\(blueLinkCount) \((blueLinkPoints ?? 0) > 0 ? "(+\(blueLinkPoints, default: ""))" : "")"
+                        "value": "\(blueLinkCount)\(blueLinkPointsSuffix)"
                     ]
                 )
             )
