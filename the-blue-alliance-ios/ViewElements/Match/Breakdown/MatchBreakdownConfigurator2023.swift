@@ -69,11 +69,11 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
                     key: "value",
                     red: [
                         "value":
-                            "\(redLinkCount) \(redLinkPoints ?? 0 > 0 ? "(+\(redLinkPoints, default: ""))" : "")"
+                            "\(redLinkCount) \((redLinkPoints ?? 0) > 0 ? "(+\(redLinkPoints, default: ""))" : "")"
                     ],
                     blue: [
                         "value":
-                            "\(blueLinkCount) \(blueLinkPoints ?? 0 > 0 ? "(+\(blueLinkPoints, default: ""))" : "")"
+                            "\(blueLinkCount) \((blueLinkPoints ?? 0) > 0 ? "(+\(blueLinkPoints, default: ""))" : "")"
                     ]
                 )
             )
