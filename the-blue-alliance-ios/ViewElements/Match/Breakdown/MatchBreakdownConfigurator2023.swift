@@ -184,7 +184,7 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
         blueStackView.distribution = .fillEqually
 
         // Add the point totals for the taxi
-        guard let leavePoints = values(key: "autoLeavePoints", red: red, blue: blue) else {
+        guard let leavePoints = values(key: "autoMobilityPoints", red: red, blue: blue) else {
             return nil
         }
 
@@ -238,8 +238,8 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
         let elements = [redEndgame, blueEndgame].map { (endgame) -> AnyHashable in
             if endgame[0] == "None" {
                 return BreakdownStyle.xImage
-            } else if endgame[0] == "Park" {
-                return "Park (+\(pointValues.safeItem(at: 0) ?? 0))"
+            } else if endgame[0] == "Park" || endgame[0] == "Parked" {
+                return "Parked (+\(pointValues.safeItem(at: 0) ?? 0))"
             } else if endgame[0] == "Docked" {
                 return endgame[1] == "Level"
                     ? "Engaged (+\(pointValues.safeItem(at: 2) ?? 0))"
