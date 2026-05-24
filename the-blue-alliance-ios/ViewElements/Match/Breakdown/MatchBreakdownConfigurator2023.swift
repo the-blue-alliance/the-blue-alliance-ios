@@ -150,7 +150,8 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
         }
 
         let mode = UIView.ContentMode.scaleAspectFit
-        let elements = [redLeaveStrings, blueLeaveStrings].map { (mobilityStrings) -> [AnyHashable] in
+        let elements = [redLeaveStrings, blueLeaveStrings].map {
+            (mobilityStrings) -> [AnyHashable] in
             return mobilityStrings.map { (mobility) -> AnyHashable in
                 switch mobility {
                 case "No":
