@@ -32,6 +32,8 @@
 		5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042100000001 /* NotificationStore.swift */; };
 		5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041F00000001 /* AppGroup.swift */; };
 		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
+		5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* EventSectionTests.swift */; };
+		5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */; };
 		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
 		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
@@ -221,6 +223,8 @@
 		5EC0D41A2C26042100000001 /* NotificationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
 		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationRouter.swift; sourceTree = "<group>"; };
@@ -562,6 +566,8 @@
 			isa = PBXGroup;
 			children = (
 				5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */,
+				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
+				5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */,
 			);
 			name = TBAUnitTests;
 			path = TBAUnitTests;
@@ -1201,6 +1207,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */,
+				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
+				5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

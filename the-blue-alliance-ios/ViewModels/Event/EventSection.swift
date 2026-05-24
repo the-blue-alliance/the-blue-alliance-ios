@@ -27,10 +27,25 @@ extension APIEventType {
         default: return rawValue
         }
     }
+
+    // The DCMP parent and CMP finals are played after their divisions, so
+    // within a shared section they should sort last.
+    var isChampionshipFinalsParent: Bool {
+        switch self {
+        case .districtChampionship, .championshipFinals: return true
+        default: return false
+        }
+    }
 }
 
 extension Event {
-    var section: EventSection {
+    var section: EventSection { section(splitDistrictsByWeek: false) }
+
+    // `splitDistrictsByWeek` is for the District tab, where a single district's
+    // events span multiple weeks and the view wants one section per week.
+    // Other views (Team tab, Year/Week tab) leave it false so district events
+    // collapse into one section per district.
+    func section(splitDistrictsByWeek: Bool) -> EventSection {
         guard let type = eventTypeEnum else {
             // Forward-compat for new TBA event_types we haven't shipped a case for.
             let label = eventTypeString.isEmpty ? "Unknown Events" : "\(eventTypeString) Events"
@@ -45,7 +60,7 @@ extension Event {
         case .district:
             return .init(
                 sortOrder: type.displayOrder,
-                subOrder: 0,
+                subOrder: splitDistrictsByWeek ? (week ?? Int.max) : 0,
                 title: "\(districtSectionName) District Events"
             )
         case .districtChampionship, .districtChampionshipDivision:
@@ -53,7 +68,7 @@ extension Event {
             return .init(
                 sortOrder: APIEventType.districtChampionship.displayOrder,
                 subOrder: 0,
-                title: districtSectionName
+                title: "\(districtSectionName) District Championship"
             )
         case .championshipDivision:
             return .init(
@@ -91,7 +106,12 @@ extension Event {
     // Within-year ordering. Callers that mix years should compare year first.
     public static func sectionAscending(_ a: Event, _ b: Event) -> Bool {
         if a.section != b.section { return a.section < b.section }
-        if a.eventType != b.eventType { return a.eventType.rawValue < b.eventType.rawValue }
+        if a.eventType != b.eventType {
+            let aParent = a.eventTypeEnum?.isChampionshipFinalsParent ?? false
+            let bParent = b.eventTypeEnum?.isChampionshipFinalsParent ?? false
+            if aParent != bParent { return !aParent }
+            return a.eventType.rawValue < b.eventType.rawValue
+        }
         let ad = a.startDateParsed ?? .distantFuture
         let bd = b.startDateParsed ?? .distantFuture
         if ad != bd { return ad < bd }
