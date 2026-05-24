@@ -17,85 +17,98 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
         // Auto
         rows.append(leave(red: red, blue: blue))
         rows.append(
-            row(title: "Auto Amp Note Count", key: "autoAmpNoteCount", red: red, blue: blue)
+            row(title: "Auto Game Piece Count", key: "autoGamePieceCount", red: red, blue: blue)
         )
-        rows.append(
-            row(title: "Auto Speaker Note Count", key: "autoSpeakerNoteCount", red: red, blue: blue)
-        )
-        //rows.append(notesRow(title: "Auto Note Count", period: "auto", red: red, blue: blue))
         rows.append(
             row(
-                title: "Auto Note Points",
-                key: "autoTotalNotePoints",
-                red: red,
-                blue: blue,
-                type: .subtotal
-            )
-        )
-        rows.append(row(title: "Total Auto", key: "autoPoints", red: red, blue: blue, type: .total))
-
-        // Teleop
-        rows.append(
-            row(title: "Teleop Amp Note Count", key: "teleopAmpNoteCount", red: red, blue: blue)
-        )
-        rows.append(speakerRow(title: "Teleop Speaker Note Count", red: red, blue: blue))
-
-        rows.append(
-            row(
-                title: "Teleop Note Points",
-                key: "teleopTotalNotePoints",
+                title: "Auto Game Piece Points",
+                key: "autoGamePiecePoints",
                 red: red,
                 blue: blue,
                 type: .subtotal
             )
         )
         for i in [1, 2, 3] {
-            rows.append(endgameRow(i: i, red: red, blue: blue))
+            rows.append(
+                endgameRow(i: i, red: red, blue: blue, pointValues: [0, 8, 12], isEndgame: false)
+            )
         }
+        rows.append(row(title: "Total Auto", key: "autoPoints", red: red, blue: blue, type: .total))
 
+        // Game Piece / Endgame
+        rows.append(
+            row(title: "Game Piece Count", key: "teleopGamePieceCount", red: red, blue: blue)
+        )
         rows.append(
             row(
-                title: "Harmony Points",
-                key: "endGameHarmonyPoints",
+                title: "Game Piece Points",
+                key: "teleopGamePiecePoints",
                 red: red,
                 blue: blue,
                 type: .subtotal
             )
         )
-        rows.append(
-            row(
-                title: "Trap Points",
-                key: "endGameNoteInTrapPoints",
-                red: red,
-                blue: blue,
-                type: .subtotal
+        for i in [1, 2, 3] {
+            rows.append(
+                endgameRow(i: i, red: red, blue: blue, pointValues: [2, 6, 10], isEndgame: true)
             )
-        )
+        }
         rows.append(
             row(title: "Total Teleop", key: "teleopPoints", red: red, blue: blue, type: .total)
         )
+
+        // Bonus RPs / Other
+        let redLinks = nestedValue(keys: ["links"], in: red) as? [Any]
+        let blueLinks = nestedValue(keys: ["links"], in: blue) as? [Any]
+        let redLinkPoints = nestedValue(keys: ["linkPoints"], in: red) as? Int
+        let blueLinkPoints = nestedValue(keys: ["linkPoints"], in: blue) as? Int
+        if let redLinkCount = redLinks?.count, let blueLinkCount = blueLinks?.count {
+            rows.append(
+                row(
+                    title: "Links",
+                    key: "value",
+                    red: [
+                        "value":
+                            "\(redLinkCount) \(redLinkPoints ?? 0 > 0 ? "(+\(redLinkPoints, default: ""))" : "")"
+                    ],
+                    blue: [
+                        "value":
+                            "\(blueLinkCount) \(blueLinkPoints ?? 0 > 0 ? "(+\(blueLinkPoints, default: ""))" : "")"
+                    ]
+                )
+            )
+        }
         rows.append(
             boolImageRow(
                 title: "Coopertition Criteria Met",
-                key: "coopertitionBonusAchieved",
+                key: "coopertitionCriteriaMet",
                 red: red,
                 blue: blue
             )
         )
-        rows.append(totalNotesScoredRow(title: "Total Notes Scored", red: red, blue: blue))
-
         rows.append(
-            bonusRankingPointRow(title: "Melody Bonus", key: "melody", red: red, blue: blue)
+            bonusRankingPointRow(
+                title: "Sustainability Bonus",
+                key: "sustainability",
+                red: red,
+                blue: blue
+            )
         )
         rows.append(
-            row(title: "Stage Points", key: "endGameTotalStagePoints", red: red, blue: blue)
+            bonusRankingPointRow(title: "Activation Bonus", key: "activation", red: red, blue: blue)
         )
-        rows.append(
-            bonusRankingPointRow(title: "Ensemble Bonus", key: "ensemble", red: red, blue: blue)
-        )
-
         // Match totals
-        rows.append(foulRow(title: "Fouls / Tech Fouls", red: red, blue: blue))
+        rows.append(
+            foulRow(
+                title: "Fouls / Tech Fouls",
+                keys: ["foulCount", "techFoulCount"],
+                pointValues: [5, 12],
+                red: red,
+                blue: blue,
+                reversed: true,
+                type: .both
+            )
+        )
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
         rows.append(
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)
@@ -187,6 +200,60 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
         )
     }
 
+    private static func endgameRow(
+        i: Int,
+        red: [String: Any]?,
+        blue: [String: Any]?,
+        pointValues: [Int],
+        isEndgame: Bool
+    )
+        -> BreakdownRow?
+    {
+        guard
+            let endgameValues = values(
+                key: isEndgame ? "endGameChargeStationRobot\(i)" : "autoChargeStationRobot\(i)",
+                red: red,
+                blue: blue
+            )
+        else {
+            return nil
+        }
+        guard
+            let bridgeState = values(
+                key: isEndgame ? "endGameBridgeState" : "autoBridgeState",
+                red: red,
+                blue: blue
+            )
+        else {
+            return nil
+        }
+        let (rw, bw) = endgameValues
+        let (rb, bb) = bridgeState
+        guard let redEndgame = [rw, rb] as? [String], let blueEndgame = [bw, bb] as? [String] else {
+            return nil
+        }
+        guard redEndgame.count == 2 && blueEndgame.count == 2 else {
+            return nil
+        }
+        let elements = [redEndgame, blueEndgame].map { (endgame) -> AnyHashable in
+            if endgame[0] == "None" {
+                return BreakdownStyle.xImage
+            } else if endgame[0] == "Park" {
+                return "Park (+\(pointValues.safeItem(at: 0) ?? 0))"
+            } else if endgame[0] == "Docked" {
+                return endgame[1] == "Level"
+                    ? "Engaged (+\(pointValues.safeItem(at: 2) ?? 0))"
+                    : "Docked (+\(pointValues.safeItem(at: 1) ?? 0))"
+            }
+            return BreakdownStyle.xImage
+        }
+        return BreakdownRow(
+            title: "Robot \(i) \(isEndgame ? "Endgame" : "Auto Charge Station")",
+            red: [elements.first],
+            blue: [elements.last]
+        )
+    }
+
     private static func bonusRankingPointRow(
         title: String,
         key: String,
@@ -217,108 +284,4 @@ struct MatchBreakdownConfigurator2023: MatchBreakdownConfigurator {
         }
         return BreakdownRow(title: title, red: elements.first ?? [], blue: elements.last ?? [])
     }
-
-    private static func totalNotesScoredRow(
-        title: String,
-        red: [String: Any]?,
-        blue: [String: Any]?
-    ) -> BreakdownRow? {
-
-        let scoringElementKeys = ["Amp", "Speaker"]
-        let periodKeys = ["auto", "teleop"]
-        guard
-            let melodyBonusThresholdValues = values(
-                key: "melodyBonusThreshold",
-                red: red,
-                blue: blue
-            )
-        else {
-            return nil
-        }
-
-        let (threshold, _) = melodyBonusThresholdValues
-        guard let melodyBonusThreshold = threshold as? Int else {
-            return nil
-        }
-
-        var redNotes: [Int] = []
-        var blueNotes: [Int] = []
-
-        for scoringElementKey in scoringElementKeys {
-            var redScoringElementValues: [Int] = []
-            var blueScoringElementValues: [Int] = []
-            for periodKey in periodKeys {
-                let key = "\(periodKey)\(scoringElementKey)NoteCount"
-                guard let noteValues = values(key: key, red: red, blue: blue) else {
-                    return nil
-                }
-
-                let (rv, bv) = noteValues
-                guard let redCellValue = rv as? Int, let blueCellValue = bv as? Int else {
-                    return nil
-                }
-                redScoringElementValues.append(redCellValue)
-                blueScoringElementValues.append(blueCellValue)
-            }
-            redNotes.append(redScoringElementValues.reduce(0, +))
-            blueNotes.append(blueScoringElementValues.reduce(0, +))
-        }
-
-        return BreakdownRow(
-            title: title,
-            red: ["\(redNotes.reduce(0, +)) / \(melodyBonusThreshold)"],
-            blue: ["\(blueNotes.reduce(0, +)) / \(melodyBonusThreshold)"]
-        )
-    }
-
-    private static func speakerRow(title: String, red: [String: Any]?, blue: [String: Any]?)
-        -> BreakdownRow?
-    {
-        let amplificationKeys = ["Count", "AmplifiedCount"]
-
-        let images = [BreakdownStyle2024.standardSpeaker, BreakdownStyle2024.amplifiedSpeaker]
-
-        var redNotes: [Int] = []
-        var blueNotes: [Int] = []
-
-        for amplificationKey in amplificationKeys {
-            var redHeightValues: [Int] = []
-            var blueHeightValues: [Int] = []
-
-            let key = "teleopSpeakerNote\(amplificationKey)"
-            guard let cellValues = values(key: key, red: red, blue: blue) else {
-                return nil
-            }
-
-            let (rv, bv) = cellValues
-
-            guard let redCellValue = rv as? Int, let blueCellValue = bv as? Int else {
-                return nil
-            }
-
-            redHeightValues.append(redCellValue)
-            blueHeightValues.append(blueCellValue)
-
-            redNotes.append(redHeightValues.reduce(0, +))
-            blueNotes.append(blueHeightValues.reduce(0, +))
-        }
-
-        let mode = UIView.ContentMode.scaleAspectFit
-        let redValues = zip(
-            (images).map {
-                return BreakdownStyle.imageView(image: $0, contentMode: mode)
-            },
-            redNotes
-        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
-
-        let blueValues = zip(
-            (images).map {
-                return BreakdownStyle.imageView(image: $0, contentMode: mode)
-            },
-            blueNotes
-        ).flatMap { (imgV: UIImageView, v: Int) -> [AnyHashable?] in [imgV, String(v)] }
-
-        return BreakdownRow(title: title, red: redValues, blue: blueValues)
-    }
-
 }
