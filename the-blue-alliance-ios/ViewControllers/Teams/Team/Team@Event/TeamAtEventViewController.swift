@@ -109,11 +109,8 @@ class TeamAtEventViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
-    private func pushEvent() {
-        let eventViewController = EventViewController(
-            eventKey: eventKey,
-            dependencies: dependencies
-        )
+    private func pushEvent(_ event: Event) {
+        let eventViewController = EventViewController(event: event, dependencies: dependencies)
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -154,8 +151,8 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewC
         pushTeam(teamKey: teamKey)
     }
 
-    func eventSelected() {
-        pushEvent()
+    func eventSelected(_ event: Event) {
+        pushEvent(event)
     }
 
     func matchSelected(_ match: Match) {

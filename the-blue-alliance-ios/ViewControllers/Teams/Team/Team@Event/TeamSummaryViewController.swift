@@ -4,7 +4,7 @@ import UIKit
 
 protocol TeamSummaryViewControllerDelegate: AnyObject {
     func teamInfoSelected(teamKey: String)
-    func eventSelected()
+    func eventSelected(_ event: Event)
     func matchSelected(_ match: Match)
 }
 
@@ -395,8 +395,8 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
-        case .event:
-            delegate?.eventSelected()
+        case .event(let event):
+            delegate?.eventSelected(event)
         case .teamInfo:
             delegate?.teamInfoSelected(teamKey: teamKey)
         case .match(let match, _):
