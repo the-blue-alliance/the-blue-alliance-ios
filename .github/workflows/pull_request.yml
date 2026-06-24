@@ -8,7 +8,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Read Xcode version
         id: xcode
         run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
@@ -30,7 +30,7 @@ jobs:
       FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "180"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Read Xcode version
         id: xcode
         run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
