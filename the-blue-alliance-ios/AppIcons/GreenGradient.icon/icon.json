@@ -2,7 +2,7 @@
   "fill-specializations" : [
     {
       "value" : {
-        "automatic-gradient" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+        "automatic-gradient" : "display-p3:0.34688,0.96783,0.50110,1.00000"
       }
     },
     {
@@ -30,13 +30,13 @@
       "blur-material" : 0.62,
       "layers" : [
         {
-          "image-name" : "Screenshot 2026-08-26 at 4.41.10 PM - Edited.png",
-          "name" : "Screenshot 2026-08-26 at 4.41.10 PM - Edited",
+          "image-name" : "tba-lamp.svg",
+          "name" : "tba-lamp",
           "position" : {
-            "scale" : 0.93,
+            "scale" : 6.37,
             "translation-in-points" : [
-              -25.25,
-              10.9609375
+              0,
+              19.330937500000005
             ]
           }
         }

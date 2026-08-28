@@ -7,13 +7,13 @@
       "blur-material" : 0.98,
       "layers" : [
         {
-          "image-name" : "Screenshot 2026-08-26 at 4.41.10 PM - Edited.png",
-          "name" : "Screenshot 2026-08-26 at 4.41.10 PM - Edited",
+          "image-name" : "tba-lamp.svg",
+          "name" : "tba-lamp",
           "position" : {
-            "scale" : 0.93,
+            "scale" : 6.37,
             "translation-in-points" : [
-              -25.25,
-              10.9609375
+              0,
+              19.330937500000005
             ]
           }
         }
