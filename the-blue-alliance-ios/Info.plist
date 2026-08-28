@@ -12,25 +12,20 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
-			<key>Forest</key>
-			<dict>
-				<key>CFBundleIconName</key>
-				<string>Forest</string>
-			</dict>
-			<key>Rebuilt</key>
-			<dict>
-				<key>CFBundleIconName</key>
-				<string>Rebuilt</string>
-			</dict>
 			<key>BlueGhost</key>
 			<dict>
 				<key>CFBundleIconName</key>
 				<string>BlueGhost</string>
 			</dict>
-			<key>Sunset</key>
+			<key>DeepSpace</key>
 			<dict>
 				<key>CFBundleIconName</key>
-				<string>Sunset</string>
+				<string>DeepSpace</string>
+			</dict>
+			<key>Forest</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>Forest</string>
 			</dict>
 			<key>GreenGradient</key>
 			<dict>
@@ -42,10 +37,15 @@
 				<key>CFBundleIconName</key>
 				<string>Party</string>
 			</dict>
-			<key>DeepSpace</key>
+			<key>Rebuilt</key>
 			<dict>
 				<key>CFBundleIconName</key>
-				<string>DeepSpace</string>
+				<string>Rebuilt</string>
+			</dict>
+			<key>Sunset</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>Sunset</string>
 			</dict>
 		</dict>
 		<key>CFBundlePrimaryIcon</key>
