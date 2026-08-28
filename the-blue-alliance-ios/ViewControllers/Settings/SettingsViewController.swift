@@ -7,6 +7,7 @@ import UIKit
 private enum SettingsSection: Int, CaseIterable {
     case info
     case networking
+    case icons
     case privacy
     case debug
 }
@@ -21,7 +22,29 @@ private enum NetworkingRow: Int, CaseIterable {
     case cachePolicy
     case deleteNetworkCache
 }
+private enum IconRow: String, CaseIterable {
+    case primary = "Default"
+    case deepSpace = "DeepSpace"
+    case greenGradient = "GreenGradient"
+    case party = "Party"
+    case sunset = "Sunset"
+    case rebuilt = "Rebuilt"
+    case blueGhost = "BlueGhost"
+    case forest = "Forest"
 
+    var displayName: String {
+        switch self {
+        case .primary: return "Default"
+        case .deepSpace: return "Deep Space"
+        case .greenGradient: return "Green Gradient"
+        case .party: return "Party"
+        case .sunset: return "Sunset"
+        case .rebuilt: return "Rebuilt"
+        case .blueGhost: return "Blue Ghost"
+        case .forest: return "Forest"
+        }
+    }
+}
 private enum PrivacyRow: Int, CaseIterable {
     case analytics
     case crashlytics
@@ -97,6 +120,8 @@ class SettingsViewController: TBATableViewController {
             return InfoRow.allCases.count
         case .networking:
             return NetworkingRow.allCases.count
+        case .icons:
+            return IconRow.allCases.count
         case .privacy:
             return PrivacyRow.allCases.count
         case .debug:
@@ -116,6 +141,8 @@ class SettingsViewController: TBATableViewController {
             return "Info"
         case .networking:
             return "Networking"
+        case .icons:
+            return "App Icon"
         case .privacy:
             return "Privacy"
         case .debug:
@@ -179,6 +206,21 @@ class SettingsViewController: TBATableViewController {
                 cell.accessoryType = .disclosureIndicator
                 return cell
             }
+        case .icons:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            let iconRow = IconRow.allCases[indexPath.row]
+            
+            cell.textLabel?.text = iconRow.displayName
+            
+            let currentActiveIcon = UIApplication.shared.alternateIconName
+            
+            if (currentActiveIcon == nil && iconRow == .primary) || (currentActiveIcon == iconRow.rawValue) {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
+            
+            return cell
         case .privacy:
             let privacyRow = PrivacyRow.allCases[indexPath.row]
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -252,6 +294,22 @@ class SettingsViewController: TBATableViewController {
             case .deleteNetworkCache:
                 showDeleteNetworkCache()
             }
+        case .icons:
+            let iconRow = IconRow.allCases[indexPath.row]
+            // Passing nil to setAlternateIconName reverts back to the primary icon
+            let iconNameToSend = (iconRow == .primary) ? nil : iconRow.rawValue
+            guard UIApplication.shared.supportsAlternateIcons else { return }
+            UIApplication.shared.setAlternateIconName(iconNameToSend) { [weak self] error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        print("Error changing icon: \(error.localizedDescription)")
+                    } else {
+                        // Reload section to shift the checkmark visually
+                        self?.tableView.reloadSections(IndexSet(integer: indexPath.section), with: .fade)
+                    }
+                }
+            }
+
         case .privacy:
             break
         case .debug:

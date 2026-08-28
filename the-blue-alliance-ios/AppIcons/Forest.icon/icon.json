@@ -1,0 +1,142 @@
+{
+  "fill" : {
+    "automatic-gradient" : "display-p3:0.33183,0.45590,0.22411,1.00000"
+  },
+  "groups" : [
+    {
+      "blur-material" : 0.04,
+      "layers" : [
+
+      ],
+      "opacity" : 1,
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.74
+      }
+    },
+    {
+      "blur-material" : 0.11,
+      "layers" : [
+        {
+          "image-name" : "Screenshot 2026-08-26 at 4.41.10 PM - Edited.png",
+          "name" : "Screenshot 2026-08-26 at 4.41.10 PM - Edited",
+          "position" : {
+            "scale" : 0.93,
+            "translation-in-points" : [
+              -25.25,
+              10.9609375
+            ]
+          }
+        }
+      ],
+      "name" : "Group",
+      "opacity-specializations" : [
+        {
+          "value" : 0.91
+        },
+        {
+          "appearance" : "dark",
+          "value" : 1
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 1
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.74
+      }
+    },
+    {
+      "blur-material" : 0.04,
+      "layers" : [
+        {
+          "hidden" : false,
+          "image-name" : "leaf.png",
+          "name" : "leaf",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -462.03906250000006,
+              371.51406250000014
+            ]
+          }
+        },
+        {
+          "image-name" : "leaf3 2.png",
+          "name" : "leaf3 2",
+          "position" : {
+            "scale" : 0.77,
+            "translation-in-points" : [
+              -336.0234375,
+              -413.109375
+            ]
+          }
+        },
+        {
+          "image-name" : "leaf4 2.png",
+          "name" : "leaf4 2",
+          "position" : {
+            "scale" : 0.72,
+            "translation-in-points" : [
+              371.40999999999997,
+              -289.5490625
+            ]
+          }
+        }
+      ],
+      "opacity-specializations" : [
+        {
+          "appearance" : "dark",
+          "value" : 0.63
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "blur-material" : null,
+      "layers" : [
+        {
+          "image-name" : "Screenshot 2026-08-27 at 3.34.18 PM.png",
+          "name" : "Screenshot 2026-08-27 at 3.34.18 PM",
+          "opacity" : 0.31,
+          "position" : {
+            "scale" : 2.41,
+            "translation-in-points" : [
+              -2.000000000000057,
+              -15.9921875
+            ]
+          }
+        }
+      ],
+      "name" : "Group",
+      "opacity" : 0.53,
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

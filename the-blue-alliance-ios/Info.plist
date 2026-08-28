@@ -10,6 +10,44 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
 	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Forest</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>Forest</string>
+			</dict>
+			<key>Rebuilt</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>Rebuilt</string>
+			</dict>
+			<key>BlueGhost</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>BlueGhost</string>
+			</dict>
+			<key>Sunset</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>Sunset</string>
+			</dict>
+			<key>GreenGradient</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>GreenGradient</string>
+			</dict>
+			<key>Party</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>Party</string>
+			</dict>
+			<key>DeepSpace</key>
+			<dict>
+				<key>CFBundleIconName</key>
+				<string>DeepSpace</string>
+			</dict>
+		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
 			<key>CFBundleIconName</key>
