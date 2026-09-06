@@ -52,15 +52,15 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/Library/Caches/org.swift.swiftpm
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.swift', '**/*.pbxproj') }}
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}
           restore-keys: ${{ runner.os }}-spm-
       - name: Restore package build products
         uses: actions/cache/restore@v6
         with:
           path: Packages/*/.build
-          key: ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift') }}-${{ github.sha }}
+          key: ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift') }}-
+            ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-
             ${{ runner.os }}-spmbuild-
       # These are offline unit tests, so they need neither Secrets.plist nor a
       # signing keychain.
@@ -75,7 +75,7 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: Packages/*/.build
-          key: ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift') }}-${{ github.sha }}
+          key: ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
 
   test-app:
     name: Test app
@@ -104,15 +104,15 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/Library/Caches/org.swift.swiftpm
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.swift', '**/*.pbxproj') }}
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}
           restore-keys: ${{ runner.os }}-spm-
       - name: Restore DerivedData
         uses: actions/cache/restore@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/*.pbxproj') }}-${{ github.sha }}
+          key: ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/*.pbxproj') }}-
+            ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-
             ${{ runner.os }}-derived-data-
       - name: Install
         run: |
@@ -135,4 +135,4 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/*.pbxproj') }}-${{ github.sha }}
+          key: ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
