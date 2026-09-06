@@ -31,6 +31,17 @@ The username/password style fastlane secrets (`FASTLANE_USERNAME` / `FASTLANE_PA
 
 The macOS image is set per-job via `runs-on:` (currently `macos-latest` on every job).
 
-The Xcode version is loaded from the repo's [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) file by [`maxim-lobanov/setup-xcode`](https://github.com/maxim-lobanov/setup-xcode). To bump CI's Xcode, edit `.xcode-version`. The lint and test workflows pass `xcode-version-file: .xcode-version`; the release workflow currently pins `latest-stable` (worth aligning if you're picky).
+The Xcode version comes from [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version). Every job in `ci.yml` and `release.yml` reads it into a step output for [`maxim-lobanov/setup-xcode`](https://github.com/maxim-lobanov/setup-xcode), so checkout has to run before that step.
 
 The list of macOS images, installed Xcode versions, and other preinstalled software lives in the [actions/runner-images](https://github.com/actions/runner-images/tree/main/images/macos) repo (formerly `actions/virtual-environments`).
+
+### Bumping the Xcode version
+
+1. Check the [runner image readme](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md) lists the Xcode version, and that its simulator runtime includes the `TEST_DEVICES` model from the `Fastfile`. `setup-xcode` can only select an Xcode already on the image.
+2. Edit `.xcode-version` and the version quoted in [`Setup.md`](Setup.md).
+3. Run `bundle exec fastlane test` locally, then a Release build. Only Release runs the SIL optimizer, and a new toolchain can crash on code that Debug compiles fine (see the `Gymfile` workaround):
+   ```sh
+   xcodebuild -scheme "The Blue Alliance" -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
+   ```
+
+A newer Xcode also drops older SDKs, so check `IPHONEOS_DEPLOYMENT_TARGET` and each `Package.swift`'s `platforms:` still resolve to an installed runtime.

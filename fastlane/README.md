@@ -55,6 +55,14 @@ Run TBAAPI unit tests
 
 Run TBAUnitTests (the main app's Xcode unit-test target)
 
+### ios test_packages
+
+```sh
+[bundle exec] fastlane ios test_packages
+```
+
+Run the Swift package unit tests
+
 ### ios test
 
 ```sh

@@ -12,28 +12,33 @@ class EventInsightsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
+    // Children go through locals: reading them off self before super.init
+    // crashes the Swift 6.3.3 optimizer in Release builds.
     init(event: Event, dependencies: Dependencies) {
         self.event = event
 
-        teamStatsViewController = EventTeamStatsTableViewController(
+        let teamStatsViewController = EventTeamStatsTableViewController(
             eventKey: event.key,
             dependencies: dependencies
         )
+        self.teamStatsViewController = teamStatsViewController
 
-        var eventStatsViewController: EventInsightsViewController?
-        // Only show event insights if year is 2016 or onward
+        var viewControllers: [ContainableViewController] = [teamStatsViewController]
         var titles = ["Team Stats"]
+        // Only show event insights if year is 2016 or onward
         if event.year >= 2016 {
-            titles.append("Event Insights")
-            eventStatsViewController = EventInsightsViewController(
-                eventKey: event.key,
-                year: event.year,
-                dependencies: dependencies
+            viewControllers.append(
+                EventInsightsViewController(
+                    eventKey: event.key,
+                    year: event.year,
+                    dependencies: dependencies
+                )
             )
+            titles.append("Event Insights")
         }
 
         super.init(
-            viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
+            viewControllers: viewControllers,
             navigationTitle: "Stats",
             navigationSubtitle: "@ \(event.friendlyNameWithYear)",
             segmentedControlTitles: titles,
