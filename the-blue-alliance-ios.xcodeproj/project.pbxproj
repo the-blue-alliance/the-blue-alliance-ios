@@ -192,6 +192,9 @@
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		A11CF00E00000000000000BB /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A11CF00E00000000000000FF /* AppIcon.icon */; };
+		3604CABD3040CAFF00DC500B /* Canopy.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CABC3040CAFF00DC500B /* Canopy.icon */; };
+		3604CAAA303FEEBD00DC500B /* Champs.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA8303FEEBD00DC500B /* Champs.icon */; };
+		3604CAAD303FEEBD00DC500B /* Offseason.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA9303FEEBD00DC500B /* Offseason.icon */; };
 		AA00000000000000000AA003 /* MatchSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA004 /* MatchSection.swift */; };
 		AA00000000000000000AA007 /* AllianceLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA008 /* AllianceLookup.swift */; };
 		AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA00A /* AllianceBadgeView.swift */; };
@@ -378,6 +381,9 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A11CF00E00000000000000FF /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		3604CABC3040CAFF00DC500B /* Canopy.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Canopy.icon; sourceTree = "<group>"; };
+		3604CAA8303FEEBD00DC500B /* Champs.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Champs.icon; sourceTree = "<group>"; };
+		3604CAA9303FEEBD00DC500B /* Offseason.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Offseason.icon; sourceTree = "<group>"; };
 		AA00000000000000000AA004 /* MatchSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSection.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA008 /* AllianceLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceLookup.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA00A /* AllianceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceBadgeView.swift; sourceTree = "<group>"; };
@@ -426,6 +432,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		36DB3E40303FDB7D00DCEAEC /* AppIcons */ = {
+			isa = PBXGroup;
+			children = (
+				A11CF00E00000000000000FF /* AppIcon.icon */,
+				3604CABC3040CAFF00DC500B /* Canopy.icon */,
+				3604CAA8303FEEBD00DC500B /* Champs.icon */,
+				3604CAA9303FEEBD00DC500B /* Offseason.icon */,
+			);
+			path = AppIcons;
+			sourceTree = "<group>";
+		};
 		145C57B31ED377DE004955B2 /* Match */ = {
 			isa = PBXGroup;
 			children = (
@@ -589,7 +606,7 @@
 				BA0000000000000000000010 /* ViewModels */,
 				923A0D7620D21D3800BF5E31 /* LaunchViews */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
-				A11CF00E00000000000000FF /* AppIcon.icon */,
+				36DB3E40303FDB7D00DCEAEC /* AppIcons */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				9236EDF52F9C6287001546F8 /* the-blue-alliance-ios.entitlements */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
@@ -1041,6 +1058,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
 			buildPhases = (
+				92FC9BA52F95EF7B00771E06 /* Generate App Icon Previews */,
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92FC9BA32F95EF7B00771E04 /* Lint Swift (swift-format) */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
@@ -1151,6 +1169,9 @@
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				A11CF00E00000000000000BB /* AppIcon.icon in Resources */,
+				3604CABD3040CAFF00DC500B /* Canopy.icon in Resources */,
+				3604CAAA303FEEBD00DC500B /* Champs.icon in Resources */,
+				3604CAAD303FEEBD00DC500B /* Offseason.icon in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92B3874221CAF7190041A049 /* IconTableViewCell.xib in Resources */,
@@ -1167,6 +1188,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		92FC9BA52F95EF7B00771E06 /* Generate App Icon Previews */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate App Icon Previews";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/scripts/generate-app-icon-previews.sh\"\n";
+		};
 		924E826C208FE7D20053247C /* Run FirebaseCrashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -1562,7 +1602,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
@@ -1587,7 +1629,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
