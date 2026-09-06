@@ -56,6 +56,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         case 2019: breakdownConfigurator = MatchBreakdownConfigurator2019.self
         case 2020, 2021: breakdownConfigurator = MatchBreakdownConfigurator2020.self
         case 2022: breakdownConfigurator = MatchBreakdownConfigurator2022.self
+        case 2023: breakdownConfigurator = MatchBreakdownConfigurator2023.self
         case 2024: breakdownConfigurator = MatchBreakdownConfigurator2024.self
         case 2025: breakdownConfigurator = MatchBreakdownConfigurator2025.self
         case 2026: breakdownConfigurator = MatchBreakdownConfigurator2026.self

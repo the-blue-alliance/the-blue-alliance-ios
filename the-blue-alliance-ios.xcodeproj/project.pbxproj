@@ -24,6 +24,7 @@
 		5105636C2F97286300D7FB5D /* EventInsightsConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636B2F97286300D7FB5D /* EventInsightsConfigurator2025.swift */; };
 		5105636E2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636D2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift */; };
 		510563702F972D8100D7FB5D /* EventInsightsConfigurator2023.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636F2F972D8100D7FB5D /* EventInsightsConfigurator2023.swift */; };
+		5120A6F42FC2056300324119 /* MatchBreakdownConfigurator2023.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5120A6F32FC2056300324119 /* MatchBreakdownConfigurator2023.swift */; };
 		514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */; };
 		51718D8D2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */; };
 		51BECA942F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */; };
@@ -34,6 +35,7 @@
 		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
 		5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* EventSectionTests.swift */; };
 		5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */; };
+		5EC0D41A2C26060100000006 /* MatchBreakdownConfigurator2023Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */; };
 		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
 		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
 		5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */; };
@@ -215,6 +217,7 @@
 		5105636B2F97286300D7FB5D /* EventInsightsConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2025.swift; sourceTree = "<group>"; };
 		5105636D2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2024.swift; sourceTree = "<group>"; };
 		5105636F2F972D8100D7FB5D /* EventInsightsConfigurator2023.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2023.swift; sourceTree = "<group>"; };
+		5120A6F32FC2056300324119 /* MatchBreakdownConfigurator2023.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2023.swift; sourceTree = "<group>"; };
 		514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2026.swift; sourceTree = "<group>"; };
 		51718D8C2F9442CD00B7BC24 /* EventInsightsConfigurator2026.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2026.swift; sourceTree = "<group>"; };
 		51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2025.swift; sourceTree = "<group>"; };
@@ -225,6 +228,7 @@
 		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift"; sourceTree = "<group>"; };
 		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationRouter.swift; sourceTree = "<group>"; };
@@ -448,6 +452,7 @@
 				9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */,
 				D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */,
 				9263922727F0FD71003C302A /* MatchBreakdownConfigurator2022.swift */,
+				5120A6F32FC2056300324119 /* MatchBreakdownConfigurator2023.swift */,
 				371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */,
 				51BECA932F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift */,
 				514C2EF42F8F0D5E00C674A9 /* MatchBreakdownConfigurator2026.swift */,
@@ -568,6 +573,7 @@
 				5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */,
 				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
 				5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */,
+				5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */,
 			);
 			name = TBAUnitTests;
 			path = TBAUnitTests;
@@ -1209,6 +1215,7 @@
 				5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
 				5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */,
+				5EC0D41A2C26060100000006 /* MatchBreakdownConfigurator2023Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1339,6 +1346,7 @@
 				92FF111721A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift in Sources */,
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				9263922827F0FD71003C302A /* MatchBreakdownConfigurator2022.swift in Sources */,
+				5120A6F42FC2056300324119 /* MatchBreakdownConfigurator2023.swift in Sources */,
 				510563702F972D8100D7FB5D /* EventInsightsConfigurator2023.swift in Sources */,
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
 				371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */,
