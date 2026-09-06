@@ -91,10 +91,6 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: ${{ steps.xcode.outputs.version }}
-      # Boot now so the simulator is warm by the time the build finishes,
-      # instead of paying for it serially once testing starts.
-      - name: Boot simulator
-        run: xcrun simctl boot "iPhone 17 Pro" || true
       - uses: actions/cache@v6
         with:
           path: vendor/bundle
