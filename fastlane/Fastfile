@@ -33,14 +33,18 @@ platform :ios do
       # Passes an explicit -resultBundlePath, so scan doesn't have to locate the
       # .xcresult by diffing derived data.
       result_bundle: true,
-      # Pinned so CI can cache it. Index-while-building is dead weight here and
-      # produces a large Index.noindex we'd otherwise have to cache around.
+      # These three exist to keep scan from shelling out to
+      # `xcodebuild -showBuildSettings`, which costs 100-200s on a cold runner.
+      # Scan reads exactly three things from it, and every one of them is
+      # something we already know:
+      #   derived_data_path         -> where to look for build output
+      #   deployment_target_version -> only filters the simulator list, and we
+      #                                pin `devices` above anyway
+      #   app_name                  -> names the raw build log, because the
+      #                                Scanfile sets buildlog_path
       derived_data_path: "DerivedData",
-      # Only used to filter the simulator list, and we already pin `devices`
-      # above. Setting it keeps scan from shelling out to
-      # `xcodebuild -showBuildSettings` purely to read it back, which costs
-      # ~110s on a cold runner.
       deployment_target_version: "26.0",
+      app_name: "The Blue Alliance",
       xcargs: "-skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO"
     )
   end
