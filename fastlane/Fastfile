@@ -33,15 +33,32 @@ platform :ios do
       # Passes an explicit -resultBundlePath, so scan doesn't have to locate the
       # .xcresult by diffing derived data.
       result_bundle: true,
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+      # These three exist to keep scan from shelling out to
+      # `xcodebuild -showBuildSettings`, which costs 100-200s on a cold runner.
+      # Scan reads exactly three things from it, and every one of them is
+      # something we already know:
+      #   derived_data_path         -> where to look for build output
+      #   deployment_target_version -> only filters the simulator list, and we
+      #                                pin `devices` above anyway
+      #   app_name                  -> names the raw build log, because the
+      #                                Scanfile sets buildlog_path
+      derived_data_path: "DerivedData",
+      deployment_target_version: "26.0",
+      app_name: "The Blue Alliance",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO"
     )
+  end
+
+  desc "Run the Swift package unit tests"
+  lane :test_packages do
+    test_mytbakit
+    test_tbautils
+    test_tbaapi
   end
 
   desc "Run all of our tests"
   lane :test do
-    test_mytbakit
-    test_tbautils
-    test_tbaapi
+    test_packages
     test_app
   end
 

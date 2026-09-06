@@ -1203,7 +1203,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    \"${SRCROOT}/scripts/swift-format.sh\"\nfi\n";
+			shellScript = "# Skipped on CI, where the swift-format job already lints the whole tree.\nif [ \"${CONFIGURATION}\" = \"Debug\" ] && [ -z \"$CI\" ]; then\n    \"${SRCROOT}/scripts/swift-format.sh\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
