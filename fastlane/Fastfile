@@ -1,5 +1,30 @@
 default_platform :ios
 
+# Failure messages worth translating into the actual next step, since fastlane's
+# own output either buries the cause or can't explain it.
+KNOWN_FAILURE_HINTS = [
+  {
+    match: /ProgramLicenseAgreementUpdated|required agreement is missing or has expired/i,
+    hint: "An App Store Connect agreement is unsigned or expired. The Account Holder has to accept it at https://appstoreconnect.apple.com/agreements, then re-run this workflow."
+  },
+  {
+    match: /UnauthorizedAccessError|NoUserCredentialsError|Authentication credentials are missing or invalid/i,
+    hint: "App Store Connect rejected our API key. Check that the APPLE_KEY_ID, APPLE_ISSUER_ID, and APPLE_KEY_CONTENT secrets are current and that the key is still active under Users and Access > Integrations."
+  },
+  {
+    match: /InsufficientPermissions/,
+    hint: "Our App Store Connect API key doesn't have the access this lane needs. It has to be an App Manager (or Admin) key under Users and Access > Integrations."
+  },
+  {
+    match: /Error building the application|Exit status: 65/,
+    hint: "The archive failed to build. xcpretty hides the real compiler error, so download the build-logs artifact from this run for the full xcodebuild log. Release builds with optimizations that CI's Debug test run does not, so this can fail while CI is green."
+  }
+].freeze
+
+RELEASE_LANES = [:beta_ci, :app_store].freeze
+RELEASE_CHANNEL = "#app-releases".freeze
+RELEASE_BOT_ICON_URL = "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png".freeze
+
 platform :ios do
 
   desc "Install project dependencies"
@@ -132,11 +157,11 @@ platform :ios do
     release_body = generated_release_notes
     ship_github(is_prerelease: false, description: release_body)
     slack(
-      channel: "#app-releases",
+      channel: RELEASE_CHANNEL,
       message: "Shipping iOS #{current_version} to the App Store 🎉\n```\n#{release_body}\n```\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}",
       default_payloads: [],
       username: "release-bot",
-      icon_url: "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png",
+      icon_url: RELEASE_BOT_ICON_URL,
       attachment_properties: {}
     )
     deliver(
@@ -253,5 +278,40 @@ platform :ios do
   end
 
   ## End Utility Lanes ##
+
+  ## Error Handling ##
+
+  # Reporting only - fastlane re-raises after this, so it never swallows a failure.
+  error do |lane, exception, options|
+    known_error = KNOWN_FAILURE_HINTS.find do |candidate|
+      "#{exception.class} #{exception.message}" =~ candidate[:match]
+    end
+    hint = known_error && known_error[:hint]
+
+    if hint
+      UI.error("👉 #{hint}")
+      # Beats the default "Process completed with exit code 1" annotation.
+      puts("::error title=fastlane #{lane} needs a human::#{hint}") if ENV["GITHUB_ACTIONS"]
+    end
+
+    next unless RELEASE_LANES.include?(lane)
+    next if ENV["SLACK_URL"].to_s.empty?
+
+    run_url = ENV["GITHUB_RUN_ID"] ? "\n#{ENV["GITHUB_SERVER_URL"]}/#{ENV["GITHUB_REPOSITORY"]}/actions/runs/#{ENV["GITHUB_RUN_ID"]}" : ""
+
+    slack(
+      channel: RELEASE_CHANNEL,
+      # Not echoing exception.message - match/sigh failures can carry repo URLs
+      # and keychain details.
+      message: "iOS release failed 🚨 (`fastlane #{lane}`)\n#{hint || "Check the build log for details."}#{run_url}",
+      success: false,
+      default_payloads: [],
+      username: "release-bot",
+      icon_url: RELEASE_BOT_ICON_URL,
+      fail_on_error: false # a Slack hiccup shouldn't mask the real error
+    )
+  end
+
+  ## End Error Handling ##
 
 end
