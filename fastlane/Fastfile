@@ -36,6 +36,11 @@ platform :ios do
       # Pinned so CI can cache it. Index-while-building is dead weight here and
       # produces a large Index.noindex we'd otherwise have to cache around.
       derived_data_path: "DerivedData",
+      # Only used to filter the simulator list, and we already pin `devices`
+      # above. Setting it keeps scan from shelling out to
+      # `xcodebuild -showBuildSettings` purely to read it back, which costs
+      # ~110s on a cold runner.
+      deployment_target_version: "26.0",
       xcargs: "-skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO"
     )
   end
