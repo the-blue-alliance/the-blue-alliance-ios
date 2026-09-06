@@ -1,0 +1,85 @@
+{
+  "fill-specializations": [
+    {
+      "value": {
+        "automatic-gradient": "display-p3:0.02617,0.52275,0.96783,1.00000"
+      }
+    },
+    {
+      "appearance": "dark",
+      "value": {
+        "automatic-gradient": "display-p3:0.00254,0.05078,0.09402,1.00000"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "layers": [
+        {
+          "image-name": "tba-lamp.svg",
+          "name": "tba-lamp",
+          "position": {
+            "scale": 6.27,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "opacity": 0.9,
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 1
+      }
+    },
+    {
+      "layers": [
+        {
+          "image-name": "offseason-background.png",
+          "name": "offseason-background",
+          "opacity-specializations": [
+            {
+              "value": 1
+            },
+            {
+              "appearance": "dark",
+              "value": 0.5
+            }
+          ],
+          "position": {
+            "scale": 1.28,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "opacity-specializations": [
+        {
+          "appearance": "dark",
+          "value": 1
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.42
+      }
+    }
+  ],
+  "supported-platforms": {
+    "circles": [
+      "watchOS"
+    ],
+    "squares": "shared"
+  }
+}

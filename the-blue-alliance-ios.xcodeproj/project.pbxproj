@@ -21,13 +21,9 @@
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
-		3604CAAA303FEEBD00DC500B /* Party.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA8303FEEBD00DC500B /* Party.icon */; };
-		3604CAAB303FEEBD00DC500B /* DeepSpace.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA6303FEEBD00DC500B /* DeepSpace.icon */; };
-		3604CAAC303FEEBD00DC500B /* GreenGradient.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA7303FEEBD00DC500B /* GreenGradient.icon */; };
-		3604CAAD303FEEBD00DC500B /* Sunset.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA9303FEEBD00DC500B /* Sunset.icon */; };
-		3604CAB93040A06700DC500B /* BlueGhost.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAB83040A06700DC500B /* BlueGhost.icon */; };
-		3604CABB3040A4FC00DC500B /* Rebuilt.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CABA3040A4FC00DC500B /* Rebuilt.icon */; };
-		3604CABD3040CAFF00DC500B /* Forest.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CABC3040CAFF00DC500B /* Forest.icon */; };
+		3604CAAA303FEEBD00DC500B /* Champs.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA8303FEEBD00DC500B /* Champs.icon */; };
+		3604CAAD303FEEBD00DC500B /* Offseason.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA9303FEEBD00DC500B /* Offseason.icon */; };
+		3604CABD3040CAFF00DC500B /* Canopy.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CABC3040CAFF00DC500B /* Canopy.icon */; };
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
 		5105636C2F97286300D7FB5D /* EventInsightsConfigurator2025.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636B2F97286300D7FB5D /* EventInsightsConfigurator2025.swift */; };
 		5105636E2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105636D2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift */; };
@@ -239,13 +235,9 @@
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
-		3604CAA6303FEEBD00DC500B /* DeepSpace.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = DeepSpace.icon; sourceTree = "<group>"; };
-		3604CAA7303FEEBD00DC500B /* GreenGradient.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = GreenGradient.icon; sourceTree = "<group>"; };
-		3604CAA8303FEEBD00DC500B /* Party.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Party.icon; sourceTree = "<group>"; };
-		3604CAA9303FEEBD00DC500B /* Sunset.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Sunset.icon; sourceTree = "<group>"; };
-		3604CAB83040A06700DC500B /* BlueGhost.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = BlueGhost.icon; sourceTree = "<group>"; };
-		3604CABA3040A4FC00DC500B /* Rebuilt.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Rebuilt.icon; sourceTree = "<group>"; };
-		3604CABC3040CAFF00DC500B /* Forest.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Forest.icon; sourceTree = "<group>"; };
+		3604CAA8303FEEBD00DC500B /* Champs.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Champs.icon; sourceTree = "<group>"; };
+		3604CAA9303FEEBD00DC500B /* Offseason.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Offseason.icon; sourceTree = "<group>"; };
+		3604CABC3040CAFF00DC500B /* Canopy.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Canopy.icon; sourceTree = "<group>"; };
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
 		5105636B2F97286300D7FB5D /* EventInsightsConfigurator2025.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2025.swift; sourceTree = "<group>"; };
 		5105636D2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2024.swift; sourceTree = "<group>"; };
@@ -473,13 +465,9 @@
 			isa = PBXGroup;
 			children = (
 				A11CF00E00000000000000FF /* AppIcon.icon */,
-				3604CABA3040A4FC00DC500B /* Rebuilt.icon */,
-				3604CAA6303FEEBD00DC500B /* DeepSpace.icon */,
-				3604CABC3040CAFF00DC500B /* Forest.icon */,
-				3604CAB83040A06700DC500B /* BlueGhost.icon */,
-				3604CAA7303FEEBD00DC500B /* GreenGradient.icon */,
-				3604CAA8303FEEBD00DC500B /* Party.icon */,
-				3604CAA9303FEEBD00DC500B /* Sunset.icon */,
+				3604CABC3040CAFF00DC500B /* Canopy.icon */,
+				3604CAA8303FEEBD00DC500B /* Champs.icon */,
+				3604CAA9303FEEBD00DC500B /* Offseason.icon */,
 			);
 			path = AppIcons;
 			sourceTree = "<group>";
@@ -1095,6 +1083,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
 			buildPhases = (
+				92FC9BA52F95EF7B00771E06 /* Generate App Icon Previews */,
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92FC9BA32F95EF7B00771E04 /* Lint Swift (swift-format) */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
@@ -1142,6 +1131,7 @@
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
 						LastSwiftMigration = 1020;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1187,18 +1177,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3604CABB3040A4FC00DC500B /* Rebuilt.icon in Resources */,
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
 				92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */,
 				9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
-				3604CAAA303FEEBD00DC500B /* Party.icon in Resources */,
-				3604CAAB303FEEBD00DC500B /* DeepSpace.icon in Resources */,
-				3604CAB93040A06700DC500B /* BlueGhost.icon in Resources */,
-				3604CAAC303FEEBD00DC500B /* GreenGradient.icon in Resources */,
-				3604CABD3040CAFF00DC500B /* Forest.icon in Resources */,
-				3604CAAD303FEEBD00DC500B /* Sunset.icon in Resources */,
+				3604CAAA303FEEBD00DC500B /* Champs.icon in Resources */,
+				3604CABD3040CAFF00DC500B /* Canopy.icon in Resources */,
+				3604CAAD303FEEBD00DC500B /* Offseason.icon in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
@@ -1264,6 +1250,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Skipped on CI, where the swift-format job already lints the whole tree.\nif [ \"${CONFIGURATION}\" = \"Debug\" ] && [ -z \"$CI\" ]; then\n    \"${SRCROOT}/scripts/swift-format.sh\"\nfi\n";
+		};
+		92FC9BA52F95EF7B00771E06 /* Generate App Icon Previews */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate App Icon Previews";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/scripts/generate-app-icon-previews.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1486,8 +1491,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "DeepSpace Party Rebuilt Sunset GreenGradient Gar";
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1550,8 +1553,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Party DeepSpace Rebuilt Sunset GreenGradient Gar";
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1608,7 +1609,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "BlueGhost DeepSpace GreenGradient Party Sunset Rebuilt Forest";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
@@ -1635,7 +1636,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "BlueGhost DeepSpace GreenGradient Party Sunset Rebuilt Forest";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";

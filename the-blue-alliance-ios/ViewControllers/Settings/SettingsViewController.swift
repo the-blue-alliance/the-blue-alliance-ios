@@ -22,29 +22,15 @@ private enum NetworkingRow: Int, CaseIterable {
     case cachePolicy
     case deleteNetworkCache
 }
-private enum IconRow: String, CaseIterable {
-    case primary = "Default"
-    case deepSpace = "DeepSpace"
-    case greenGradient = "GreenGradient"
-    case party = "Party"
-    case sunset = "Sunset"
-    case rebuilt = "Rebuilt"
-    case blueGhost = "BlueGhost"
-    case forest = "Forest"
-
-    var displayName: String {
-        switch self {
-        case .primary: return "Default"
-        case .deepSpace: return "Deep Space"
-        case .greenGradient: return "Green Gradient"
-        case .party: return "Party"
-        case .sunset: return "Sunset"
-        case .rebuilt: return "Rebuilt"
-        case .blueGhost: return "Blue Ghost"
-        case .forest: return "Forest"
-        }
-    }
+/// A selectable app icon, backed by the `CFBundleIcons` entries the asset catalog
+/// compiler generates from `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES`.
+private struct AppIconOption {
+    /// The name passed to `setAlternateIconName`. `nil` represents the primary icon.
+    let alternateName: String?
+    let displayName: String
+    let imageName: String
 }
+
 private enum PrivacyRow: Int, CaseIterable {
     case analytics
     case crashlytics
@@ -106,12 +92,27 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Table View Data Source
 
+    /// Sections in display order. The icon picker is dropped when the system can't switch
+    /// icons, or when no alternates ship, so we never render a section that can't do anything.
+    private lazy var visibleSections: [SettingsSection] = {
+        let canSwitchIcons =
+            UIApplication.shared.supportsAlternateIcons && !alternateAppIconNames.isEmpty
+        return SettingsSection.allCases.filter { $0 != .icons || canSwitchIcons }
+    }()
+
+    private func section(at index: Int) -> SettingsSection? {
+        guard visibleSections.indices.contains(index) else {
+            return nil
+        }
+        return visibleSections[index]
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return SettingsSection.allCases.count
+        return visibleSections.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = SettingsSection(rawValue: section) else {
+        guard let section = self.section(at: section) else {
             return 0
         }
 
@@ -121,7 +122,7 @@ class SettingsViewController: TBATableViewController {
         case .networking:
             return NetworkingRow.allCases.count
         case .icons:
-            return IconRow.allCases.count
+            return appIconOptions.count
         case .privacy:
             return PrivacyRow.allCases.count
         case .debug:
@@ -132,7 +133,7 @@ class SettingsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
         -> String?
     {
-        guard let section = SettingsSection(rawValue: section) else {
+        guard let section = self.section(at: section) else {
             return nil
         }
 
@@ -153,7 +154,7 @@ class SettingsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int)
         -> String?
     {
-        switch SettingsSection(rawValue: section) {
+        switch self.section(at: section) {
         case .privacy:
             return
                 "Analytics helps us understand how the app is used. Crash reports help us find and fix bugs. Both are sent to Firebase."
@@ -167,7 +168,7 @@ class SettingsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
         -> UITableViewCell
     {
-        guard let section = SettingsSection(rawValue: indexPath.section) else {
+        guard let section = self.section(at: indexPath.section) else {
             fatalError("This section does not exist")
         }
 
@@ -207,19 +208,15 @@ class SettingsViewController: TBATableViewController {
                 return cell
             }
         case .icons:
-            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            let iconRow = IconRow.allCases[indexPath.row]
-            
-            cell.textLabel?.text = iconRow.displayName
-            
-            let currentActiveIcon = UIApplication.shared.alternateIconName
-            
-            if (currentActiveIcon == nil && iconRow == .primary) || (currentActiveIcon == iconRow.rawValue) {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
-            
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as IconTableViewCell
+            let option = appIconOptions[indexPath.row]
+
+            cell.viewModel = IconCellViewModel(
+                name: option.displayName,
+                imageName: option.imageName
+            )
+            cell.accessoryType = isCurrentAppIcon(option.alternateName) ? .checkmark : .none
+
             return cell
         case .privacy:
             let privacyRow = PrivacyRow.allCases[indexPath.row]
@@ -276,7 +273,7 @@ class SettingsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let section = SettingsSection(rawValue: indexPath.section) else {
+        guard let section = self.section(at: indexPath.section) else {
             fatalError("This section does not exist")
         }
 
@@ -295,21 +292,12 @@ class SettingsViewController: TBATableViewController {
                 showDeleteNetworkCache()
             }
         case .icons:
-            let iconRow = IconRow.allCases[indexPath.row]
-            // Passing nil to setAlternateIconName reverts back to the primary icon
-            let iconNameToSend = (iconRow == .primary) ? nil : iconRow.rawValue
-            guard UIApplication.shared.supportsAlternateIcons else { return }
-            UIApplication.shared.setAlternateIconName(iconNameToSend) { [weak self] error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        print("Error changing icon: \(error.localizedDescription)")
-                    } else {
-                        // Reload section to shift the checkmark visually
-                        self?.tableView.reloadSections(IndexSet(integer: indexPath.section), with: .fade)
-                    }
-                }
+            let option = appIconOptions[indexPath.row]
+            if let alternateName = option.alternateName {
+                setAlternateAppIcon(alternateName)
+            } else {
+                setDefaultAppIcon()
             }
-
         case .privacy:
             break
         case .debug:
@@ -342,32 +330,57 @@ class SettingsViewController: TBATableViewController {
 
     private var primaryAppIconName: String? {
         guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
-            let primaryIconsDictionary = iconsDictionary["CFBundlePrimaryIcon"] as? [String: Any],
-            let iconFiles = primaryIconsDictionary["CFBundleIconFiles"] as? [String],
-            let lastIcon = iconFiles.last
+            let primaryIconsDictionary = iconsDictionary["CFBundlePrimaryIcon"] as? [String: Any]
         else { return nil }
-        return lastIcon
+        return primaryIconsDictionary["CFBundleIconName"] as? String
     }
 
-    /*
-     Key is the name, value is the image name.
-    */
-    private lazy var alternateAppIcons: [String: String] = {
+    /// The names of every alternate icon, as passed to `setAlternateIconName`.
+    private lazy var alternateAppIconNames: [String] = {
         guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
             let alternateIconsDictionary = iconsDictionary["CFBundleAlternateIcons"]
                 as? [String: Any]
-        else { return [:] }
-
-        var alternateAppIcons: [String: String] = [:]
-        alternateIconsDictionary.forEach({ (key, value) in
-            guard let iconDictionary = value as? [String: Any],
-                let iconFiles = iconDictionary["CFBundleIconFiles"] as? [String],
-                let lastIcon = iconFiles.last
-            else { return }
-            alternateAppIcons[key] = lastIcon
-        })
-        return alternateAppIcons
+        else { return [] }
+        return Array(alternateIconsDictionary.keys)
     }()
+
+    /// The primary icon followed by every alternate icon, sorted for a stable order.
+    private lazy var appIconOptions: [AppIconOption] = {
+        let primary = AppIconOption(
+            alternateName: nil,
+            displayName: "The Blue Alliance",
+            imageName: Self.previewImageName(for: primaryAppIconName ?? "AppIcon")
+        )
+        let alternates =
+            alternateAppIconNames
+            .map {
+                AppIconOption(
+                    alternateName: $0,
+                    displayName: Self.displayName(for: $0),
+                    imageName: Self.previewImageName(for: $0)
+                )
+            }
+            .sorted { $0.displayName.localizedStandardCompare($1.displayName) == .orderedAscending }
+        return [primary] + alternates
+    }()
+
+    /// Icon Composer `.icon` files are compiled into a form that `UIImage(named:)` cannot load —
+    /// asking for the icon's own name throws rather than returning `nil`. Each icon therefore
+    /// ships a matching `<name>Preview` image set, rendered from the icon itself, for display here.
+    private static func previewImageName(for iconName: String) -> String {
+        return "\(iconName)Preview"
+    }
+
+    /// Turns an icon key like `ZachOrr` into a readable `Zach Orr`.
+    private static func displayName(for iconName: String) -> String {
+        return
+            iconName
+            .replacingOccurrences(
+                of: "([a-z0-9])([A-Z])",
+                with: "$1 $2",
+                options: .regularExpression
+            )
+    }
 
     private func setDefaultAppIcon() {
         // Only change icons if it's supported by the OS
@@ -382,8 +395,8 @@ class SettingsViewController: TBATableViewController {
 
         UIApplication.shared.setAlternateIconName(
             nil,
-            completionHandler: { _ in
-                self.reloadIconsSection()
+            completionHandler: { [weak self] error in
+                self?.handleIconChangeResult(error)
             }
         )
     }
@@ -401,10 +414,19 @@ class SettingsViewController: TBATableViewController {
 
         UIApplication.shared.setAlternateIconName(
             alternateName,
-            completionHandler: { _ in
-                self.reloadIconsSection()
+            completionHandler: { [weak self] error in
+                self?.handleIconChangeResult(error)
             }
         )
+    }
+
+    /// `setAlternateIconName` can fail without the icon visibly changing, so surface the
+    /// error rather than dropping it, then reload from the icon the system actually has.
+    private func handleIconChangeResult(_ error: (any Error)?) {
+        if let error {
+            dependencies.reporter.record(error)
+        }
+        reloadIconsSection()
     }
 
     private func reloadIconsSection() {

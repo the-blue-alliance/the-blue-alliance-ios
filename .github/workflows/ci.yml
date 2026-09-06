@@ -29,6 +29,36 @@ jobs:
       - name: Lint
         run: ./scripts/swift-format.sh --strict
 
+  app-icon-previews:
+    name: App icon previews
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Read Xcode version
+        id: xcode
+        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ steps.xcode.outputs.version }}
+      # Regenerate rather than using --check: that compares mtimes, and a fresh
+      # checkout gives every file the same timestamp, so it would always pass here.
+      - name: Regenerate previews
+        run: ./scripts/generate-app-icon-previews.sh --force
+      - name: Check previews are up to date
+        run: |
+          if ! git diff --quiet -- the-blue-alliance-ios/Assets.xcassets/AppIconPreviews; then
+            echo "::error::App icon previews are out of date. Run scripts/generate-app-icon-previews.sh and commit the result."
+            git diff --stat -- the-blue-alliance-ios/Assets.xcassets/AppIconPreviews
+            exit 1
+          fi
+          if [ -n "$(git status --porcelain -- the-blue-alliance-ios/Assets.xcassets/AppIconPreviews)" ]; then
+            echo "::error::App icon previews are missing or untracked. Run scripts/generate-app-icon-previews.sh and commit the result."
+            git status --porcelain -- the-blue-alliance-ios/Assets.xcassets/AppIconPreviews
+            exit 1
+          fi
+          echo "App icon previews are up to date."
+
   test-packages:
     name: Test packages
     if: ${{ inputs.run-tests }}

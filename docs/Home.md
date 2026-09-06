@@ -20,6 +20,9 @@ How `EventInsightsViewController` and the per-year `EventInsightsConfigurator` c
 ## [Match Breakdown](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Match-Breakdown)
 How `MatchBreakdownViewController` and the per-year `MatchBreakdownConfigurator` classes work, and how to add support for a new FRC season.
 
+## [App Icons](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/App-Icons)
+How the alternate app icons are wired up and how to add one, why preview images have to be generated from the Icon Composer `.icon` bundles, and the simulator bug that breaks icon switching after the first change.
+
 # Recovery / Reproduction
 
 Notes on reproducing the setup for this repo. Mostly for maintainers if something needs to be re-set-up. Shouldn't be necessary for most contributors.

@@ -1,0 +1,127 @@
+{
+  "fill": {
+    "automatic-gradient": "display-p3:0.33183,0.45590,0.22411,1.00000"
+  },
+  "groups": [
+    {
+      "blur-material": 0.11,
+      "layers": [
+        {
+          "image-name": "tba-lamp.svg",
+          "name": "tba-lamp",
+          "position": {
+            "scale": 6.27,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "name": "Group",
+      "opacity-specializations": [
+        {
+          "value": 0.91
+        },
+        {
+          "appearance": "dark",
+          "value": 1
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 1
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.74
+      }
+    },
+    {
+      "blur-material": 0.04,
+      "layers": [
+        {
+          "hidden": false,
+          "image-name": "canopy-leaf-1.png",
+          "name": "canopy-leaf-1",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              -462.03906250000006,
+              371.51406250000014
+            ]
+          }
+        },
+        {
+          "image-name": "canopy-leaf-2.png",
+          "name": "canopy-leaf-2",
+          "position": {
+            "scale": 0.77,
+            "translation-in-points": [
+              -336.0234375,
+              -413.109375
+            ]
+          }
+        },
+        {
+          "image-name": "canopy-leaf-3.png",
+          "name": "canopy-leaf-3",
+          "position": {
+            "scale": 0.72,
+            "translation-in-points": [
+              371.40999999999997,
+              -289.5490625
+            ]
+          }
+        }
+      ],
+      "opacity-specializations": [
+        {
+          "appearance": "dark",
+          "value": 0.63
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.5
+      }
+    },
+    {
+      "blur-material": null,
+      "layers": [
+        {
+          "image-name": "canopy-background.png",
+          "name": "canopy-background",
+          "opacity": 0.31,
+          "position": {
+            "scale": 2.41,
+            "translation-in-points": [
+              -2.000000000000057,
+              -15.9921875
+            ]
+          }
+        }
+      ],
+      "name": "Group",
+      "opacity": 0.53,
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.5
+      }
+    }
+  ],
+  "supported-platforms": {
+    "circles": [
+      "watchOS"
+    ],
+    "squares": "shared"
+  }
+}
