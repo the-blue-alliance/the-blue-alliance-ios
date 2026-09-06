@@ -31,6 +31,18 @@ The username/password style fastlane secrets (`FASTLANE_USERNAME` / `FASTLANE_PA
 
 The macOS image is set per-job via `runs-on:` (currently `macos-latest` on every job).
 
-The Xcode version is loaded from the repo's [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) file by [`maxim-lobanov/setup-xcode`](https://github.com/maxim-lobanov/setup-xcode). To bump CI's Xcode, edit `.xcode-version`. The lint and test workflows pass `xcode-version-file: .xcode-version`; the release workflow currently pins `latest-stable` (worth aligning if you're picky).
+[`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) is the **single source of truth** for the Xcode version. Every job in `ci.yml` and `release.yml` reads it into a step output and hands it to [`maxim-lobanov/setup-xcode`](https://github.com/maxim-lobanov/setup-xcode); nothing pins a version inline. Note that each of those jobs has to check out the repo *before* the setup-xcode step, since it reads a file from the repo.
 
 The list of macOS images, installed Xcode versions, and other preinstalled software lives in the [actions/runner-images](https://github.com/actions/runner-images/tree/main/images/macos) repo (formerly `actions/virtual-environments`).
+
+### Bumping the Xcode version
+
+1. **Check the target Xcode is on the runner image.** Open the readme for the image `runs-on:` resolves to — `macos-latest` is currently macOS 26, so [`macos-26-arm64-Readme.md`](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md) — and confirm the version is listed. `setup-xcode` can only select an Xcode already installed on the image; it cannot download one.
+2. **Check the simulator runtime you need ships with it.** The readme lists installed simulator runtimes *per Xcode version*, and they differ a lot. Xcode 26.3, for example, ships only iOS 26.2, while 26.5 and 26.6 ship iOS 26.2/26.4/26.5. The test lanes deliberately name a device (`TEST_DEVICES` in the `Fastfile`) without a runtime version so they resolve against whatever the pinned Xcode provides — don't add a runtime version unless you've confirmed it's on the image.
+3. **Confirm the device model exists.** The same readme lists the simulator device types. `TEST_DEVICES` has to name one of them.
+4. **Edit `.xcode-version`** — that one file covers every CI job and the release workflow.
+5. **Update the version quoted in [`Setup.md`](Setup.md)**, which tells contributors the minimum local Xcode.
+6. **Build and test locally on the new version** before merging (`bundle exec fastlane test`). CI and release will now both be on it, so a regression takes out shipping too.
+7. **Also build a Release configuration locally.** CI only compiles Debug, and Release runs the SIL optimizer, which a new Swift toolchain can crash on code that Debug compiles fine (this has happened twice; see the `-sil-disable-pass` workaround in the `Gymfile`). `xcodebuild -scheme "The Blue Alliance" -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build` catches that before the App Store lane does.
+
+Bumping is also the moment to sanity-check `IPHONEOS_DEPLOYMENT_TARGET` and each `Package.swift`'s `platforms:` — a newer Xcode drops older SDKs, and a package whose minimum is above every installed simulator runtime will fail destination resolution with an empty destination list rather than an obvious error.

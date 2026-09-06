@@ -21,6 +21,10 @@ KNOWN_FAILURE_HINTS = [
   }
 ].freeze
 
+# Simulators the test lanes run against. Named without a runtime version so
+# each lane resolves against whatever the pinned Xcode ships.
+TEST_DEVICES = ["iPhone 17 Pro"].freeze
+
 RELEASE_LANES = [:beta_ci, :app_store].freeze
 RELEASE_CHANNEL = "#app-releases".freeze
 RELEASE_BOT_ICON_URL = "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png".freeze
@@ -53,7 +57,7 @@ platform :ios do
       project: "the-blue-alliance-ios.xcodeproj",
       scheme: "The Blue Alliance",
       configuration: "Debug",
-      devices: ["iPhone 17 Pro"],
+      devices: TEST_DEVICES,
       skip_package_dependencies_resolution: true,
       # Passes an explicit -resultBundlePath, so scan doesn't have to locate the
       # .xcresult by diffing derived data.

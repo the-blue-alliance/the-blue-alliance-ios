@@ -4,7 +4,7 @@ To develop for The Blue Alliance for iOS, you will need a machine running macOS.
 The commands below suggest [Homebrew](https://brew.sh/) to install the dependencies.
 
 1. Install [Xcode](https://developer.apple.com/xcode/) from the Mac App Store.
-   - The version pinned in CI is in [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) (currently **26.3**). Anything `>=` that should build cleanly.
+   - The version pinned in CI is in [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) (currently **26.6**). Anything `>=` that should build cleanly.
 2. Install the Xcode command line tools.
    - `xcode-select --install`
    - Or, open Xcode → Settings → Locations → Command Line Tools and select your version of Xcode.
