@@ -30,6 +30,12 @@ platform :ios do
       configuration: "Debug",
       devices: ["iPhone 17 Pro"],
       skip_package_dependencies_resolution: true,
+      # Without this, scan has to guess the .xcresult location by diffing the
+      # derived data directory, which it can only find via
+      # `xcodebuild -showBuildSettings`. When that lookup fails, scan reports a
+      # build failure even though the tests passed. Passing an explicit
+      # -resultBundlePath removes the guesswork.
+      result_bundle: true,
       xcargs: "-skipPackagePluginValidation -skipMacroValidation"
     )
   end
