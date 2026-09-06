@@ -33,15 +33,23 @@ platform :ios do
       # Passes an explicit -resultBundlePath, so scan doesn't have to locate the
       # .xcresult by diffing derived data.
       result_bundle: true,
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+      # Pinned so CI can cache it. Index-while-building is dead weight here and
+      # produces a large Index.noindex we'd otherwise have to cache around.
+      derived_data_path: "DerivedData",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO"
     )
+  end
+
+  desc "Run the Swift package unit tests"
+  lane :test_packages do
+    test_mytbakit
+    test_tbautils
+    test_tbaapi
   end
 
   desc "Run all of our tests"
   lane :test do
-    test_mytbakit
-    test_tbautils
-    test_tbaapi
+    test_packages
     test_app
   end
 
