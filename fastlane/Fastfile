@@ -21,8 +21,7 @@ KNOWN_FAILURE_HINTS = [
   }
 ].freeze
 
-# Simulators the test lanes run against. Named without a runtime version so
-# each lane resolves against whatever the pinned Xcode ships.
+# No runtime version, so these resolve against whatever the pinned Xcode ships.
 TEST_DEVICES = ["iPhone 17 Pro"].freeze
 
 RELEASE_LANES = [:beta_ci, :app_store].freeze

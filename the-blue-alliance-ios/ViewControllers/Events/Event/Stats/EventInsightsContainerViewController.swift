@@ -12,9 +12,8 @@ class EventInsightsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    // Children are built into locals and handed to super.init rather than read
-    // back off self before it: the Swift 6.3.3 (Xcode 26.6) optimizer crashes in
-    // SILCombine on the previous shape of this init in Release builds only.
+    // Children go through locals: reading them off self before super.init
+    // crashes the Swift 6.3.3 optimizer in Release builds.
     init(event: Event, dependencies: Dependencies) {
         self.event = event
 
