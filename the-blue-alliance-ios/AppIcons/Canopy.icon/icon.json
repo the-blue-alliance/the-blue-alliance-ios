@@ -89,33 +89,6 @@
         "enabled": true,
         "value": 0.5
       }
-    },
-    {
-      "blur-material": null,
-      "layers": [
-        {
-          "image-name": "canopy-background.png",
-          "name": "canopy-background",
-          "opacity": 0.31,
-          "position": {
-            "scale": 2.41,
-            "translation-in-points": [
-              -2.000000000000057,
-              -15.9921875
-            ]
-          }
-        }
-      ],
-      "name": "Group",
-      "opacity": 0.53,
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 0.5
-      },
-      "translucency": {
-        "enabled": true,
-        "value": 0.5
-      }
     }
   ],
   "supported-platforms": {
