@@ -98,6 +98,7 @@ platform :ios do
   desc "Lint Swift formatting (strict, used by CI)"
   lane :lint do
     sh("../scripts/swift-format.sh --strict")
+    sh("../scripts/check-dependency-pins.py")
   end
 
   ## CI Lanes ##

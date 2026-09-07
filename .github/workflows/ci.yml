@@ -29,6 +29,15 @@ jobs:
       - name: Lint
         run: ./scripts/swift-format.sh --strict
 
+  dependency-pins:
+    name: Dependency pins
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Check dependency pins
+        run: ./scripts/check-dependency-pins.py
+
   app-icon-previews:
     name: App icon previews
     runs-on: macos-latest

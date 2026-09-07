@@ -109,5 +109,9 @@ fastlane/metadata/review_information
 /vendor/bundle
 /lib/bundler/man/
 
+# Python (scripts/)
+__pycache__/
+*.py[cod]
+
 # Claude Code agent workspaces
 .claude/
