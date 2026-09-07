@@ -187,6 +187,12 @@ class MyTBATableViewController: UIViewController, NotificationObservable, DataCo
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        (self as? any Refreshable)?.updateRefreshOnAppear()
+    }
+
     // MARK: Subclass Hooks
 
     /// The entries to display, grouped by `MyTBASection` order.

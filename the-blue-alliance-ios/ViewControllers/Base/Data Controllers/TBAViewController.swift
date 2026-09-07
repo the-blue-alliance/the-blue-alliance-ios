@@ -58,6 +58,12 @@ class TBAViewController: UIViewController, DataController, Navigatable {
         scrollView.autoPinEdgesToSuperviewEdges()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        (self as? any Refreshable)?.updateRefreshOnAppear()
+    }
+
     // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
     func reloadData() {
         fatalError("Implement this downstream")

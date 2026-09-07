@@ -52,6 +52,12 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
         collectionView.registerReusableCell(BasicCollectionViewCell.self)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        (self as? any Refreshable)?.updateRefreshOnAppear()
+    }
+
 }
 
 extension Refreshable where Self: TBACollectionViewController {
