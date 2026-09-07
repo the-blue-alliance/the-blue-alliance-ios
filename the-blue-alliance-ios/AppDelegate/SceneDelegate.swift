@@ -1,4 +1,5 @@
 import UIKit
+import TBAAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
 

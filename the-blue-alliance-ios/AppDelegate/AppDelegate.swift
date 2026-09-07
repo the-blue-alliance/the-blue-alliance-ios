@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     lazy var pushService: PushService = PushService(
         reporter: reporter,
+        authService: authService,
         myTBA: myTBA,
         retryService: RetryService(),
         registrar: self
@@ -66,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var dependencies = Dependencies(
         api: api,
         appSettings: appSettings,
+        authService: authService,
         myTBA: myTBA,
         myTBAStores: myTBAStores,
         myTBASession: myTBASession,
@@ -167,7 +169,7 @@ private extension AppDelegate {
     func configurePushNotifications() {
         messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
-        myTBA.authenticationProvider.add(observer: pushService)
+        authService.addStateObserver(pushService)
         pushService.router = pushNotificationRouter
         // Best-effort registration; failures will surface later.
         pushService.registerForRemoteNotifications(nil)
@@ -177,7 +179,6 @@ private extension AppDelegate {
         // Coarse-grained auth state — fires on sign-in / sign-out only.
         // The actual ID token is fetched per-request via `FirebaseIDTokenProvider`,
         // so we no longer listen for (or care about) token refreshes here.
-        authService.addStateObserver(self)
         authService.start()
         Task { await myTBASession.restorePreviousSignIn() }
     }
@@ -230,16 +231,6 @@ extension AppDelegate: FMSStatusSubscribable {
 extension AppDelegate: AppServicesProviding {
 
     var fcmTokenProvider: any FCMTokenProvider { messaging }
-
-}
-
-// MARK: - Auth state
-
-extension AppDelegate: AuthStateObserving {
-
-    func authStateChanged(isSignedIn: Bool) {
-        myTBA.notifyAuthStateChanged(isAuthenticated: isSignedIn)
-    }
 
 }
 

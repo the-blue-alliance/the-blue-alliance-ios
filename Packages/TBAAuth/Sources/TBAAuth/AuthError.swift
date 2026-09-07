@@ -2,7 +2,6 @@ import Foundation
 
 public enum AuthError: LocalizedError, Equatable, Sendable {
     case canceled
-    case notSignedIn
     case unsupportedProvider(AuthProviderKind)
     case missingIDToken(AuthProviderKind)
     case unexpectedCredentialType
@@ -13,8 +12,6 @@ public enum AuthError: LocalizedError, Equatable, Sendable {
         switch self {
         case .canceled:
             return "Sign in was canceled."
-        case .notSignedIn:
-            return "Not signed in."
         case .unsupportedProvider(let kind):
             return "Signing in with \(kind.rawValue) isn't supported."
         case .missingIDToken(let kind):

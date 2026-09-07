@@ -3,6 +3,7 @@ import MyTBAKit
 import PureLayout
 import TBAAPI
 import UIKit
+import TBAAuth
 
 public enum MyTBASection: Int {
     case event
@@ -206,7 +207,7 @@ class MyTBATableViewController: UIViewController, NotificationObservable, DataCo
     // MARK: - Refreshable default
 
     func refresh() {
-        guard myTBA.isAuthenticated else { return }
+        guard dependencies.authService.isSignedIn else { return }
         refreshFromRemote()
     }
 
@@ -559,7 +560,9 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
 
     // MARK: - Refreshable
 
-    var isDataSourceEmpty: Bool { myTBA.isAuthenticated && favoritesStore.favorites.isEmpty }
+    var isDataSourceEmpty: Bool {
+        dependencies.authService.isSignedIn && favoritesStore.favorites.isEmpty
+    }
 
     // MARK: - Stateful
 
@@ -597,7 +600,7 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
     // MARK: - Refreshable
 
     var isDataSourceEmpty: Bool {
-        myTBA.isAuthenticated && subscriptionsStore.subscriptions.isEmpty
+        dependencies.authService.isSignedIn && subscriptionsStore.subscriptions.isEmpty
     }
 
     // MARK: - Stateful

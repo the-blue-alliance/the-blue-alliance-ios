@@ -8,11 +8,15 @@ private struct Constants {
 
 public enum MyTBAError: Error {
     case error(Int?, String)
+    /// No FCM token, so this device was never registered and can't be.
+    case missingFCMToken
 
     public var code: Int? {
         switch self {
         case .error(let code, _):
             return code
+        case .missingFCMToken:
+            return nil
         }
     }
 }
@@ -23,6 +27,8 @@ extension MyTBAError: LocalizedError {
         case .error(_, let message):
             // TODO: This, unlike the name says, isn't localized
             return message
+        case .missingFCMToken:
+            return "Missing FCM token"
         }
     }
 }
@@ -34,27 +40,6 @@ public protocol MyTBAURLSession {
 extension URLSession: MyTBAURLSession {}
 
 open class MyTBA {
-
-    public var isAuthenticated: Bool {
-        return idTokenProvider.isSignedIn
-    }
-
-    // Called by the host app when the underlying auth identity changes
-    // (sign-in / sign-out). Token refreshes in between do not flow through
-    // here — they're picked up per-request via `idTokenProvider.idToken()`.
-    public func notifyAuthStateChanged(isAuthenticated: Bool) {
-        if lastPostedAuthState == isAuthenticated {
-            return
-        }
-        lastPostedAuthState = isAuthenticated
-        authenticationProvider.post { observer in
-            if isAuthenticated {
-                observer.authenticated()
-            } else {
-                observer.unauthenticated()
-            }
-        }
-    }
 
     public init(
         uuid: String,
@@ -70,8 +55,6 @@ open class MyTBA {
         self.urlSession = urlSession ?? URLSession(configuration: .default)
     }
 
-    public var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
-
     internal var fcmToken: String? {
         return fcmTokenProvider.fcmToken
     }
@@ -81,7 +64,6 @@ open class MyTBA {
     internal var deviceName: String
     private var fcmTokenProvider: FCMTokenProvider
     private var idTokenProvider: IDTokenProvider
-    private var lastPostedAuthState: Bool?
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()
@@ -100,8 +82,9 @@ open class MyTBA {
         var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
 
-        if idTokenProvider.isSignedIn {
-            let token = try await idTokenProvider.idToken()
+        // No token means unauthenticated; the server decides whether that's
+        // acceptable for the endpoint.
+        if let token = try await idTokenProvider.idToken() {
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
 
@@ -132,18 +115,14 @@ open class MyTBA {
             }
         #endif
 
-        let decoded = try MyTBA.jsonDecoder.decode(T.self, from: data)
-
-        if let base = decoded as? MyTBABaseResponse, let error = base.error {
+        // Errors come back as HTTP 200 with the code in the body (it's a port of
+        // the old Cloud Endpoints API), and every response carries the envelope -
+        // so check it first, before the payload type gets a say.
+        let envelope = try MyTBA.jsonDecoder.decode(MyTBABaseResponse.self, from: data)
+        if let error = envelope.error {
             throw error
         }
-
-        return decoded
+        return try MyTBA.jsonDecoder.decode(T.self, from: data)
     }
 
-}
-
-public protocol MyTBAAuthenticationObservable {
-    func authenticated()
-    func unauthenticated()
 }

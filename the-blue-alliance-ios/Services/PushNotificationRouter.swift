@@ -1,6 +1,7 @@
 import Foundation
 import MyTBAKit
 import UIKit
+import TBAAuth
 
 @MainActor
 protocol PushNotificationRouting: AnyObject {
@@ -66,7 +67,7 @@ final class PushNotificationRouter: PushNotificationRouting {
     // MARK: - Silent refresh
 
     func performSilentRefresh(_ kind: PushNotificationPayload.SilentKind) async {
-        guard dependencies.myTBA.isAuthenticated else { return }
+        guard dependencies.authService.isSignedIn else { return }
         do {
             switch kind {
             case .favorites:

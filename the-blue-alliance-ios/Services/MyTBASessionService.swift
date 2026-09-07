@@ -89,6 +89,9 @@ final class MyTBASessionService {
         } catch let error as MyTBAError where error.code == 404 {
             // Already unregistered server-side.
             stoppedPushes = true
+        } catch MyTBAError.missingFCMToken {
+            // Never registered, so there's nothing to stop.
+            stoppedPushes = true
         } catch {
             reporter.record(error)
         }

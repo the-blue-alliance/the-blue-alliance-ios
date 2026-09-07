@@ -2,6 +2,7 @@ import Foundation
 import MyTBAKit
 import UIKit
 import UserNotifications
+import TBAAuth
 
 private enum NotificationRow: Int, CaseIterable {
     case registration
@@ -340,7 +341,7 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        guard myTBA.isAuthenticated else {
+        guard dependencies.authService.isSignedIn else {
             return
         }
 
@@ -363,7 +364,7 @@ class NotificationsViewController: TBATableViewController {
     }
 
     private func myTBARegistrationNotificationStatus() -> NotificationStatus {
-        if !myTBA.isAuthenticated {
+        if !dependencies.authService.isSignedIn {
             return .invalid("Not signed in to myTBA. Sign in under the myTBA tab.")
         } else if fcmTokenProvider.fcmToken == nil {
             return .invalid("No FCM token from Firebase.")
@@ -394,7 +395,7 @@ class NotificationsViewController: TBATableViewController {
         }
 
         // Not auth'd to myTBA - request would fail
-        guard myTBA.isAuthenticated else {
+        guard dependencies.authService.isSignedIn else {
             return
         }
 
@@ -426,7 +427,7 @@ class NotificationsViewController: TBATableViewController {
     }
 
     private func myTBAPingNotificationStatus() -> NotificationStatus {
-        if !myTBA.isAuthenticated {
+        if !dependencies.authService.isSignedIn {
             return .unknown
         } else if fcmTokenProvider.fcmToken == nil {
             return .unknown

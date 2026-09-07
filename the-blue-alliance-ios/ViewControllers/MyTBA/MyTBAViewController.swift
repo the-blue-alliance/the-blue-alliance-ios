@@ -4,6 +4,7 @@ import PureLayout
 import TBAAPI
 import UIKit
 import UserNotifications
+import TBAAuth
 
 class MyTBAViewController: ContainerViewController {
 
@@ -31,7 +32,7 @@ class MyTBAViewController: ContainerViewController {
         }
     }
     private var isLoggedIn: Bool {
-        return myTBA.isAuthenticated
+        return dependencies.authService.isSignedIn
     }
 
     init(dependencies: Dependencies) {
@@ -66,7 +67,7 @@ class MyTBAViewController: ContainerViewController {
 
         styleInterface()
 
-        myTBA.authenticationProvider.add(observer: self)
+        dependencies.authService.addStateObserver(self)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -170,16 +171,12 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
 }
 
-extension MyTBAViewController: MyTBAAuthenticationObservable {
+extension MyTBAViewController: AuthStateObserving {
 
-    @objc func authenticated() {
-        if let viewController = currentViewController() {
+    func authStateChanged(isSignedIn: Bool) {
+        if isSignedIn, let viewController = currentViewController() {
             viewController.refresh()
         }
-        updateInterfaceMain()
-    }
-
-    @objc func unauthenticated() {
         updateInterfaceMain()
     }
 

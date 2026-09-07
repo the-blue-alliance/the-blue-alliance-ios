@@ -166,6 +166,20 @@ struct MyTBASessionServiceTests {
         #expect(harness.reporter.errors.count == 1)
     }
 
+    @Test func signOutTreatsNoFCMTokenAsNothingToStop() async throws {
+        let harness = Self.makeHarness()
+        defer { try? FileManager.default.removeItem(at: harness.directory) }
+        Self.seedStores(harness)
+        harness.myTBA.unregisterError = MyTBAError.missingFCMToken
+        harness.pushService.deleteTokenError = MockError.boom
+
+        try await harness.service.signOut()
+
+        #expect(harness.authService.signOutCallCount == 1)
+        #expect(harness.stores.favorites.favorites.isEmpty)
+        #expect(harness.reporter.errors.count == 1)
+    }
+
     // Unregister needs the TBA API and can't be retried after Firebase sign-out,
     // so it's best-effort; deleting the FCM token is what stops pushes anyway.
     @Test func signOutContinuesWhenUnregisterFails() async throws {

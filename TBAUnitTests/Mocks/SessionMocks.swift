@@ -110,15 +110,8 @@ final class MockSessionMyTBA: MyTBAProtocol {
     var unregisterError: Error?
     private(set) var unregisterCallCount = 0
 
-    var isAuthenticated: Bool = false
-    var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
-
     init(callLog: CallLog = CallLog()) {
         self.callLog = callLog
-    }
-
-    func notifyAuthStateChanged(isAuthenticated: Bool) {
-        self.isAuthenticated = isAuthenticated
     }
 
     /// `MyTBABaseResponse`'s memberwise init is internal to MyTBAKit, so build

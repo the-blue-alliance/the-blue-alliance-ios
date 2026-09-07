@@ -1,6 +1,7 @@
 import Foundation
 import MyTBAKit
 import UIKit
+import TBAAuth
 
 protocol MatchQueryOptionsDelegate: AnyObject {
     func updateQuery(query: MatchQueryOptions)
@@ -98,7 +99,7 @@ class MatchQueryOptionsViewController: TBATableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         // If myTBA isn't enabled, disable filtering for myTBA Favorites
         var sections = QuerySections.allCases.count
-        if !myTBA.isAuthenticated {
+        if !dependencies.authService.isSignedIn {
             sections = sections - 1
         }
         return sections

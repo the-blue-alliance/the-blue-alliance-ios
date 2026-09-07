@@ -21,11 +21,11 @@ public class MockIDTokenProvider: IDTokenProvider {
         self.stubbedToken = stubbedToken
     }
 
-    public func idToken() async throws -> String {
+    public func idToken() async throws -> String? {
         if let stubbedError {
             throw stubbedError
         }
-        return stubbedToken
+        return isSignedIn ? stubbedToken : nil
     }
 }
 

@@ -1,5 +1,6 @@
 import MyTBAKit
 import UIKit
+import TBAAuth
 
 class MyTBAPreferenceViewController: TBATableViewController,
     UIAdaptivePresentationControllerDelegate
@@ -140,7 +141,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
     // before letting the user edit — otherwise empty toggles could overwrite
     // real subscriptions on Save.
     private func refresh() {
-        guard myTBA.isAuthenticated else { return }
+        guard dependencies.authService.isSignedIn else { return }
 
         isLoading = true
         loadFailed = false

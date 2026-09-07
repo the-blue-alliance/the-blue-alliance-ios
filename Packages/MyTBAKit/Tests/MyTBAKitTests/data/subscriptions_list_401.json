@@ -1,0 +1,5 @@
+{
+ "code": 401,
+ "message": "Unauthorized to list subscriptions",
+ "subscriptions": []
+}

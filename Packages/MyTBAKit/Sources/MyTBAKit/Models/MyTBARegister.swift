@@ -19,7 +19,7 @@ extension MyTBA {
 
     private func registerUnregister(_ method: String) async throws -> MyTBABaseResponse {
         guard let token = fcmToken else {
-            throw MyTBAError.error(nil, "Missing FCM token")
+            throw MyTBAError.missingFCMToken
         }
         let registration = MyTBARegisterRequest(deviceUuid: uuid, mobileId: token, name: deviceName)
         let encoded = try MyTBA.jsonEncoder.encode(registration)

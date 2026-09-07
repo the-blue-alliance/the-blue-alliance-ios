@@ -1,6 +1,7 @@
 import FirebaseMessaging
 import Foundation
 import MyTBAKit
+import TBAAuth
 import TBAUtils
 import UserNotifications
 import UIKit
@@ -22,7 +23,8 @@ protocol PushServiceProtocol: AnyObject {
 class PushService: NSObject, PushServiceProtocol {
 
     private let reporter: any Reporter
-    private var myTBA: any MyTBAProtocol
+    private let authService: any AuthServiceProtocol
+    private let myTBA: any MyTBAProtocol
     internal var retryService: RetryService
     private let registrar: any RemoteNotificationRegistering
     weak var router: (any PushNotificationRouting)?
@@ -31,11 +33,13 @@ class PushService: NSObject, PushServiceProtocol {
 
     init(
         reporter: any Reporter,
+        authService: any AuthServiceProtocol,
         myTBA: any MyTBAProtocol,
         retryService: RetryService,
         registrar: any RemoteNotificationRegistering
     ) {
         self.reporter = reporter
+        self.authService = authService
         self.myTBA = myTBA
         self.retryService = retryService
         self.registrar = registrar
@@ -43,14 +47,17 @@ class PushService: NSObject, PushServiceProtocol {
         super.init()
     }
 
+    // Reads auth state, which lives on the main actor. The two callers that
+    // arrive off it (Firebase's delegate queue, the retry timer) hop first.
+    @MainActor
     fileprivate func registerPushToken() {
-        if !myTBA.isAuthenticated {
+        if !authService.isSignedIn {
             // Not authenticated to myTBA - we'll try again when we're auth'd
             return
         }
         guard registerTask == nil else {
             // Hack-y fix for register being called twice during app startup -
-            // Once from MyTBAAuthenticationObservable.authenticated and once from
+            // Once from AuthStateObserving.authStateChanged and once from
             // MessagingDelegate.didReceiveRegistrationToken
             // We should look to fix this properly some other time
             return
@@ -96,15 +103,13 @@ extension PushService {
 
 }
 
-extension PushService: MyTBAAuthenticationObservable {
+extension PushService: AuthStateObserving {
 
-    func authenticated() {
-        registerPushToken()
-    }
-
-    func unauthenticated() {
-        if self.retryService.isRetryRegistered {
-            self.unregisterRetryable()
+    func authStateChanged(isSignedIn: Bool) {
+        if isSignedIn {
+            registerPushToken()
+        } else if retryService.isRetryRegistered {
+            unregisterRetryable()
         }
     }
 }
@@ -113,7 +118,7 @@ extension PushService: MessagingDelegate {
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Firebase registration token: \(fcmToken ?? "N/A")")
-        registerPushToken()
+        Task { @MainActor in registerPushToken() }
     }
 
 }
@@ -160,7 +165,7 @@ extension PushService: Retryable {
     }
 
     func retry() {
-        registerPushToken()
+        Task { @MainActor in registerPushToken() }
     }
 
 }

@@ -1,6 +1,7 @@
 import Foundation
 import MyTBAKit
 import UIKit
+import TBAAuth
 
 class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
@@ -37,7 +38,7 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
         updateFavoriteButton()
 
-        myTBA.authenticationProvider.add(observer: self)
+        dependencies.authService.addStateObserver(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -47,7 +48,7 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
     // MARK: - Interface Methods
 
     func updateFavoriteButton() {
-        if myTBA.isAuthenticated {
+        if dependencies.authService.isSignedIn {
             rightBarButtonItems = [favoriteBarButtonItem]
         } else {
             rightBarButtonItems = []
@@ -60,13 +61,9 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
 }
 
-extension MyTBAContainerViewController: MyTBAAuthenticationObservable {
+extension MyTBAContainerViewController: AuthStateObserving {
 
-    func authenticated() {
-        updateFavoriteButton()
-    }
-
-    func unauthenticated() {
+    func authStateChanged(isSignedIn: Bool) {
         updateFavoriteButton()
     }
 

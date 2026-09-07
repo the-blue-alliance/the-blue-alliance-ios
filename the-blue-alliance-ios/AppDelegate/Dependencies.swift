@@ -1,5 +1,6 @@
 import Foundation
 import MyTBAKit
+import TBAAuth
 import TBAAPI
 import TBAUtils
 import UIKit
@@ -7,6 +8,7 @@ import UIKit
 class Dependencies {
     let api: any TBAAPIProtocol
     let appSettings: AppSettings
+    let authService: any AuthServiceProtocol
     let myTBA: any MyTBAProtocol
     let myTBAStores: MyTBAStores
     let myTBASession: MyTBASessionService
@@ -17,6 +19,7 @@ class Dependencies {
     init(
         api: any TBAAPIProtocol,
         appSettings: AppSettings,
+        authService: any AuthServiceProtocol,
         myTBA: any MyTBAProtocol,
         myTBAStores: MyTBAStores,
         myTBASession: MyTBASessionService,
@@ -26,6 +29,7 @@ class Dependencies {
     ) {
         self.api = api
         self.appSettings = appSettings
+        self.authService = authService
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores
         self.myTBASession = myTBASession

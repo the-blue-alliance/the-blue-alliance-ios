@@ -39,57 +39,6 @@ class MyTBATests: MyTBATestCase {
         XCTAssertEqual(zz.fcmToken, fcmToken)
     }
 
-    func test_authenticationProvider_authenticated() {
-        let authObserver = MockAuthObserver()
-        myTBA.authenticationProvider.add(observer: authObserver)
-
-        XCTAssertFalse(myTBA.isAuthenticated)
-
-        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
-        authObserver.authenticatedExpectation = authenticatedExpectation
-        myTBA.idTokenProvider.isSignedIn = true
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
-        wait(for: [authenticatedExpectation], timeout: 1.0)
-    }
-
-    func test_authenticationProvider_noChange() {
-        let authObserver = MockAuthObserver()
-        myTBA.authenticationProvider.add(observer: authObserver)
-
-        myTBA.idTokenProvider.isSignedIn = true
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
-
-        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
-        authenticatedExpectation.isInverted = true
-        authObserver.authenticatedExpectation = authenticatedExpectation
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
-
-        wait(for: [authenticatedExpectation], timeout: 1.0)
-    }
-
-    func test_authenticationProvider_unauthenticated() {
-        let authObserver = MockAuthObserver()
-        myTBA.authenticationProvider.add(observer: authObserver)
-
-        myTBA.idTokenProvider.isSignedIn = true
-        myTBA.notifyAuthStateChanged(isAuthenticated: true)
-
-        let unauthenticatedExpectation = expectation(description: "myTBA Unauthenticated")
-        authObserver.unauthenticatedExpectation = unauthenticatedExpectation
-        myTBA.idTokenProvider.isSignedIn = false
-        myTBA.notifyAuthStateChanged(isAuthenticated: false)
-
-        wait(for: [unauthenticatedExpectation], timeout: 1.0)
-    }
-
-    func test_isAuthenticated() {
-        XCTAssertFalse(myTBA.isAuthenticated)
-        myTBA.idTokenProvider.isSignedIn = true
-        XCTAssert(myTBA.isAuthenticated)
-        myTBA.idTokenProvider.isSignedIn = false
-        XCTAssertFalse(myTBA.isAuthenticated)
-    }
-
     func test_jsonEncoder() {
         let jsonEncoder = MyTBA.jsonEncoder
         XCTAssertNotNil(jsonEncoder)
@@ -98,6 +47,15 @@ class MyTBATests: MyTBATestCase {
     func test_jsonDecoder() {
         let jsonDecoder = MyTBA.jsonDecoder
         XCTAssertNotNil(jsonDecoder)
+    }
+
+    func test_callApi_noBearerWhenSignedOut() async throws {
+        myTBA.idTokenProvider.isSignedIn = false
+        myTBA.stub(for: "favorites/list")
+        _ = try await myTBA.fetchFavorites()
+
+        let request = try XCTUnwrap(myTBA.session.lastRequest)
+        XCTAssertNil(request.allHTTPHeaderFields?["Authorization"])
     }
 
     func test_callApi_hasBearer() async throws {
@@ -121,18 +79,4 @@ class MyTBATests: MyTBATestCase {
         XCTAssertEqual(authorizationHeader, "Bearer abcd123")
     }
 
-}
-
-private class MockAuthObserver: MyTBAAuthenticationObservable {
-
-    var authenticatedExpectation: XCTestExpectation?
-    var unauthenticatedExpectation: XCTestExpectation?
-
-    func authenticated() {
-        authenticatedExpectation?.fulfill()
-    }
-
-    func unauthenticated() {
-        unauthenticatedExpectation?.fulfill()
-    }
 }
