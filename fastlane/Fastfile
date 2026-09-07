@@ -24,6 +24,11 @@ KNOWN_FAILURE_HINTS = [
 # No runtime version, so these resolve against whatever the pinned Xcode ships.
 TEST_DEVICES = ["iPhone 17 Pro"].freeze
 
+# scan chdirs into `package_path`, so package lanes have to name this
+# explicitly or their result bundles land inside the package, where the
+# root .gitignore doesn't reach them.
+TEST_OUTPUT_DIR = File.expand_path("test_output", __dir__).freeze
+
 RELEASE_LANES = [:beta_ci, :app_store].freeze
 RELEASE_CHANNEL = "#app-releases".freeze
 RELEASE_BOT_ICON_URL = "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png".freeze
@@ -48,6 +53,25 @@ platform :ios do
   desc "Run TBAAPI unit tests"
   lane :test_tbaapi do
     spm(command: "test", package_path: "Packages/TBAAPI")
+  end
+
+  desc "Run TBAAuth unit tests"
+  lane :test_tbaauth do
+    # Not `spm` like the other package lanes - TBAAuth is iOS-only, so
+    # `swift test` on macOS can't build it. That means scan, which needs
+    # `result_bundle` to find results at all when given a `package_path`, and
+    # its own output dir, since xcodebuild refuses to overwrite an existing
+    # result bundle and scan doesn't clear one.
+    output_directory = File.join(TEST_OUTPUT_DIR, "TBAAuth")
+    FileUtils.rm_rf(output_directory)
+
+    run_tests(
+      package_path: "Packages/TBAAuth",
+      scheme: "TBAAuth",
+      devices: TEST_DEVICES,
+      result_bundle: true,
+      output_directory: output_directory
+    )
   end
 
   desc "Run TBAUnitTests (the main app's Xcode unit-test target)"
@@ -82,6 +106,7 @@ platform :ios do
     test_mytbakit
     test_tbautils
     test_tbaapi
+    test_tbaauth
   end
 
   desc "Run all of our tests"

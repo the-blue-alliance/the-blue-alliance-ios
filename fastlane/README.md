@@ -47,6 +47,14 @@ Run TBAUtils unit tests
 
 Run TBAAPI unit tests
 
+### ios test_tbaauth
+
+```sh
+[bundle exec] fastlane ios test_tbaauth
+```
+
+Run TBAAuth unit tests
+
 ### ios test_app
 
 ```sh

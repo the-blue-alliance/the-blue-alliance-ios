@@ -1,4 +1,5 @@
 {
+  "originHash" : "279e268c2f46054225f87be4d84a09305044220c624771d5c809ee524803058c",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -7,15 +8,6 @@
       "state" : {
         "revision" : "bbe8b69694d7873315fd3a4ad41efe043e1c07c5",
         "version" : "1.2024072200.0"
-      }
-    },
-    {
-      "identity" : "agrume",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JanGorman/Agrume.git",
-      "state" : {
-        "revision" : "8e9f9735b67a714b67752b3ff0e5d5a97c29394a",
-        "version" : "5.8.10"
       }
     },
     {
@@ -145,15 +137,6 @@
       }
     },
     {
-      "identity" : "openapikit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mattpolzin/OpenAPIKit",
-      "state" : {
-        "revision" : "57b6318128e3f901c93f4fbf98d1c1464ec168d3",
-        "version" : "6.2.0"
-      }
-    },
-    {
       "identity" : "promises",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
@@ -161,124 +144,7 @@
         "revision" : "f4a19a3c313dc2616c70bb49d29a799fb16be837",
         "version" : "2.4.1"
       }
-    },
-    {
-      "identity" : "purelayout",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/PureLayout/PureLayout",
-      "state" : {
-        "revision" : "5561683c96dc49b023c1299bfe4f6fbeed5f8199",
-        "version" : "3.1.9"
-      }
-    },
-    {
-      "identity" : "skeletonview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Juanpe/SkeletonView.git",
-      "state" : {
-        "revision" : "2f5274827d310e32c09325dd3e0007120940988e",
-        "version" : "1.31.0"
-      }
-    },
-    {
-      "identity" : "swift-algorithms",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-algorithms",
-      "state" : {
-        "revision" : "87e50f483c54e6efd60e885f7f5aa946cee68023",
-        "version" : "1.2.1"
-      }
-    },
-    {
-      "identity" : "swift-argument-parser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-argument-parser",
-      "state" : {
-        "revision" : "6a52f3251125d74daf04fcbd5e6f08a75d074382",
-        "version" : "1.8.2"
-      }
-    },
-    {
-      "identity" : "swift-collections",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-collections",
-      "state" : {
-        "revision" : "a0cb0954ecb21e4e31b0070e6ed5674e8556685a",
-        "version" : "1.6.0"
-      }
-    },
-    {
-      "identity" : "swift-http-types",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-http-types",
-      "state" : {
-        "revision" : "6c8ca8297332ea2780c45e1bce9d7fd2a8b51e1d",
-        "version" : "1.7.0"
-      }
-    },
-    {
-      "identity" : "swift-numerics",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-numerics.git",
-      "state" : {
-        "revision" : "0c0290ff6b24942dadb83a929ffaaa1481df04a2",
-        "version" : "1.1.1"
-      }
-    },
-    {
-      "identity" : "swift-openapi-generator",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-openapi-generator",
-      "state" : {
-        "revision" : "39d49cf22abab58a07f02bb76808b5d2839b294a",
-        "version" : "1.13.1"
-      }
-    },
-    {
-      "identity" : "swift-openapi-runtime",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-openapi-runtime",
-      "state" : {
-        "revision" : "9e53df53e043b53046a371b31aaf0a1e26eef946",
-        "version" : "1.12.1"
-      }
-    },
-    {
-      "identity" : "swift-openapi-urlsession",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-openapi-urlsession",
-      "state" : {
-        "revision" : "08796d36c99ad2318929bfa1d1e40f82194b65cc",
-        "version" : "1.3.1"
-      }
-    },
-    {
-      "identity" : "swiftygif",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kirualex/SwiftyGif",
-      "state" : {
-        "revision" : "4430cbc148baa3907651d40562d96325426f409a",
-        "version" : "5.4.5"
-      }
-    },
-    {
-      "identity" : "yams",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/Yams",
-      "state" : {
-        "revision" : "a27b21e0c81c5bf42049b897a62aaf387e80f279",
-        "version" : "6.2.2"
-      }
-    },
-    {
-      "identity" : "youtube-ios-player-helper",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/youtube/youtube-ios-player-helper.git",
-      "state" : {
-        "revision" : "f57129cd4380ec0a74dd3a59da3270a1d653d59b",
-        "version" : "1.0.4"
-      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
