@@ -263,7 +263,10 @@ class TeamViewController: HeaderContainerViewController {
             // hideLoadingSkeleton itself so its slot collapse/expand animates
             // in sync with the skeleton fade-out.
             updateInterface()
-            teamHeaderView.layoutIfNeeded()
+            // Only worth settling the layout if there's an animation to run against it.
+            if teamHeaderView.window != nil {
+                teamHeaderView.layoutIfNeeded()
+            }
             teamHeaderView.hideLoadingSkeleton(revealing: avatarImage)
         }
     }
