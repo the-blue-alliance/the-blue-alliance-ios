@@ -30,6 +30,10 @@ TEST_DEVICES = ["iPhone 17 Pro"].freeze
 TEST_OUTPUT_DIR = File.expand_path("test_output", __dir__).freeze
 DERIVED_DATA_DIR = File.expand_path("../DerivedData", __dir__).freeze
 
+# Build tool plugins (TBAAPI's OpenAPIGenerator) and macros are only trusted
+# through Xcode's UI, so xcodebuild won't run them on CI without these.
+TEST_XCARGS = "-skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO".freeze
+
 RELEASE_LANES = [:beta_ci, :app_store].freeze
 RELEASE_CHANNEL = "#app-releases".freeze
 RELEASE_BOT_ICON_URL = "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png".freeze
@@ -84,7 +88,7 @@ platform :ios do
       derived_data_path: "DerivedData",
       deployment_target_version: "26.0",
       app_name: "The Blue Alliance",
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO"
+      xcargs: TEST_XCARGS
     )
   end
 
@@ -312,7 +316,8 @@ platform :ios do
       devices: TEST_DEVICES,
       derived_data_path: DERIVED_DATA_DIR,
       result_bundle: true,
-      output_directory: output_directory
+      output_directory: output_directory,
+      xcargs: TEST_XCARGS
     )
   end
 
