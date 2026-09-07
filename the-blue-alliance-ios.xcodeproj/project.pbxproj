@@ -33,6 +33,8 @@
 		5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042100000001 /* NotificationStore.swift */; };
 		5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041F00000001 /* AppGroup.swift */; };
 		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
+		92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* SessionMocks.swift */; };
+		92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */; };
 		5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* EventSectionTests.swift */; };
 		5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */; };
 		5EC0D41A2C26060100000006 /* MatchBreakdownConfigurator2023Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */; };
@@ -46,6 +48,7 @@
 		9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400C2AEB6ADC0003D118 /* MyTBAKit */; };
 		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
 		921843072DB42424003B4F9E /* TBAUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 921843062DB42424003B4F9E /* TBAUtils */; };
+		92AA7A032F0100000003AAAA /* TBAAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 92AA7A022F0100000002AAAA /* TBAAuth */; };
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921DD67D241D3D6C00403192 /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921DD67C241D3D6C00403192 /* RootController.swift */; };
 		921F609923CD4DFD00FE633B /* MatchBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921F609823CD4DFD00FE633B /* MatchBreakdownView.swift */; };
@@ -57,11 +60,8 @@
 		924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */; };
 		924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924AFD782171AB1A00D7BE7E /* NoDataView.xib */; };
 		924BDD8A26D2B366008BE7D2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */; };
-		924BDD8C26D2B366008BE7D2 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8B26D2B366008BE7D2 /* FirebaseAuth */; };
-		92AA7A032F0100000003AAAA /* TBAAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 92AA7A022F0100000002AAAA /* TBAAuth */; };
 		924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */; };
 		924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */; };
-		924BDD9526D2B391008BE7D2 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD9426D2B391008BE7D2 /* GoogleSignIn */; };
 		925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */; };
 		925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */; };
 		9255EB6D209AC9760006A745 /* RetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9255EB6C209AC9760006A745 /* RetryService.swift */; };
@@ -74,7 +74,6 @@
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		9263922827F0FD71003C302A /* MatchBreakdownConfigurator2022.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263922727F0FD71003C302A /* MatchBreakdownConfigurator2022.swift */; };
 		9263922A27F10A53003C302A /* EventInsightsConfigurator2022.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9263922927F10A53003C302A /* EventInsightsConfigurator2022.swift */; };
-		927246C32AFFFC9300EF7796 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927246C22AFFFC9300EF7796 /* AuthHelper.swift */; };
 		9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */; };
 		9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */; };
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
@@ -145,7 +144,6 @@
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
 		92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */; };
-		92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */; };
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAF54F240775180078CA0A /* PhoneRootViewController.swift */; };
@@ -160,6 +158,7 @@
 		92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63E9A2BA91B4F0025CC03 /* MyTBAKit */; };
 		92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F79A7523D6536A0026E9E8 /* SearchContainer.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
+		92AA7A052F0100000005AAAA /* MyTBASessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A042F0100000004AAAA /* MyTBASessionService.swift */; };
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
 		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
 		92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */; };
@@ -230,6 +229,8 @@
 		5EC0D41A2C26042100000001 /* NotificationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
+		92AA7A062F0100000006AAAA /* SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/SessionMocks.swift"; sourceTree = "<group>"; };
+		92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/MyTBASessionServiceTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift"; sourceTree = "<group>"; };
@@ -264,7 +265,6 @@
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
 		9263922727F0FD71003C302A /* MatchBreakdownConfigurator2022.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2022.swift; sourceTree = "<group>"; };
 		9263922927F10A53003C302A /* EventInsightsConfigurator2022.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2022.swift; sourceTree = "<group>"; };
-		927246C22AFFFC9300EF7796 /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
@@ -335,7 +335,6 @@
 		92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
 		92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAContainerViewController.swift; sourceTree = "<group>"; };
-		92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyTBASignInViewController.xib; sourceTree = "<group>"; };
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CAF54F240775180078CA0A /* PhoneRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRootViewController.swift; sourceTree = "<group>"; };
@@ -349,6 +348,7 @@
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F79A7523D6536A0026E9E8 /* SearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContainer.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
+		92AA7A042F0100000004AAAA /* MyTBASessionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASessionService.swift; sourceTree = "<group>"; };
 		92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderView.swift; sourceTree = "<group>"; };
 		92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
 		92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewModel.swift; sourceTree = "<group>"; };
@@ -415,18 +415,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				92C5FBDC2B0037E10006AE48 /* YouTubeiOSPlayerHelper in Frameworks */,
-				924BDD8C26D2B366008BE7D2 /* FirebaseAuth in Frameworks */,
-				92AA7A032F0100000003AAAA /* TBAAuth in Frameworks */,
 				924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */,
 				9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */,
 				924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */,
 				921843032DB42424003B4F9E /* TBAAPI in Frameworks */,
 				921843072DB42424003B4F9E /* TBAUtils in Frameworks */,
+				92AA7A032F0100000003AAAA /* TBAAuth in Frameworks */,
 				920240072AEB6AAD0003D118 /* PureLayout in Frameworks */,
 				924BDD8A26D2B366008BE7D2 /* FirebaseAnalytics in Frameworks */,
 				92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */,
 				92C5FBDF2B0038250006AE48 /* Agrume in Frameworks */,
-				924BDD9526D2B391008BE7D2 /* GoogleSignIn in Frameworks */,
 				92F63EAA2BA91B500025CC03 /* SkeletonView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -542,14 +540,6 @@
 			path = Media;
 			sourceTree = "<group>";
 		};
-		927246C12AFFFC8900EF7796 /* Auth */ = {
-			isa = PBXGroup;
-			children = (
-				927246C22AFFFC9300EF7796 /* AuthHelper.swift */,
-			);
-			path = Auth;
-			sourceTree = "<group>";
-		};
 		9274E14221B1027100F5D5D0 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -590,6 +580,8 @@
 			isa = PBXGroup;
 			children = (
 				5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */,
+				92AA7A062F0100000006AAAA /* SessionMocks.swift */,
+				92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
 				5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */,
 				5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */,
@@ -601,7 +593,6 @@
 		92942D941E2154DA008E79CA /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
-				927246C12AFFFC8900EF7796 /* Auth */,
 				923AEE8F2165966C00EF50C8 /* AppDelegate */,
 				92AABBCC000000000000DD10 /* LocalStore */,
 				5EC0D41A2C26041D00000010 /* Models */,
@@ -677,7 +668,6 @@
 				92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */,
 				92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */,
 				928018F32096431200693447 /* MyTBASignInViewController.swift */,
-				92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */,
 				92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */,
 			);
 			path = MyTBA;
@@ -893,6 +883,7 @@
 			children = (
 				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
+				92AA7A042F0100000004AAAA /* MyTBASessionService.swift */,
 				5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
 			);
@@ -1074,11 +1065,8 @@
 			name = "The Blue Alliance";
 			packageProductDependencies = (
 				924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */,
-				924BDD8B26D2B366008BE7D2 /* FirebaseAuth */,
-				92AA7A022F0100000002AAAA /* TBAAuth */,
 				924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */,
 				924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */,
-				924BDD9426D2B391008BE7D2 /* GoogleSignIn */,
 				920240062AEB6AAD0003D118 /* PureLayout */,
 				9202400C2AEB6ADC0003D118 /* MyTBAKit */,
 				92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */,
@@ -1086,6 +1074,7 @@
 				92F63E9A2BA91B4F0025CC03 /* MyTBAKit */,
 				921843022DB42424003B4F9E /* TBAAPI */,
 				921843062DB42424003B4F9E /* TBAUtils */,
+				92AA7A022F0100000002AAAA /* TBAAuth */,
 				92F63EAB2BA91B500025CC03 /* SkeletonView */,
 			);
 			productName = "the-blue-alliance";
@@ -1132,7 +1121,6 @@
 			mainGroup = 92942D891E2154DA008E79CA;
 			packageReferences = (
 				924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				924BDD9326D2B391008BE7D2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */,
 				92C5FBDA2B0037E10006AE48 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 				92C5FBDD2B0038250006AE48 /* XCRemoteSwiftPackageReference "Agrume" */,
@@ -1165,7 +1153,6 @@
 			files = (
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
-				92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */,
 				9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
@@ -1257,6 +1244,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */,
+				92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */,
+				92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
 				5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */,
 				5EC0D41A2C26060100000006 /* MatchBreakdownConfigurator2023Tests.swift in Sources */,
@@ -1299,6 +1288,7 @@
 				9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */,
 				921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */,
 				92F8E356209AAE890094213F /* PushService.swift in Sources */,
+				92AA7A052F0100000005AAAA /* MyTBASessionService.swift in Sources */,
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
 				928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */,
 				92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */,
@@ -1314,7 +1304,6 @@
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
 				921F609923CD4DFD00FE633B /* MatchBreakdownView.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
-				927246C32AFFFC9300EF7796 /* AuthHelper.swift in Sources */,
 				92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */,
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
 				92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */,
@@ -1712,14 +1701,6 @@
 				minimumVersion = 12.12.1;
 			};
 		};
-		924BDD9326D2B391008BE7D2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
-			};
-		};
 		92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PureLayout/PureLayout";
@@ -1781,11 +1762,6 @@
 			package = 924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
 		};
-		924BDD8B26D2B366008BE7D2 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
 		924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -1795,11 +1771,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
-		};
-		924BDD9426D2B391008BE7D2 /* GoogleSignIn */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 924BDD9326D2B391008BE7D2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignIn;
 		};
 		92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */ = {
 			isa = XCSwiftPackageProductDependency;

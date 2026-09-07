@@ -1,11 +1,10 @@
 import FirebaseAnalytics
-import FirebaseAuth
 import FirebaseCore
 import FirebaseCrashlytics
 import FirebaseMessaging
-import GoogleSignIn
 import MyTBAKit
 import TBAAPI
+import TBAAuth
 import TBAUtils
 import UIKit
 import UserNotifications
@@ -52,12 +51,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         api: api,
         retryService: RetryService()
     )
+    @MainActor
+    lazy var authService: any AuthServiceProtocol = AuthService(reporter: reporter)
+    @MainActor
+    lazy var myTBASession = MyTBASessionService(
+        authService: authService,
+        myTBA: myTBA,
+        myTBAStores: myTBAStores,
+        pushService: pushService,
+        reporter: reporter
+    )
 
+    @MainActor
     lazy var dependencies = Dependencies(
         api: api,
         appSettings: appSettings,
         myTBA: myTBA,
         myTBAStores: myTBAStores,
+        myTBASession: myTBASession,
         reporter: reporter,
         statusService: statusService,
         urlOpener: urlOpener
@@ -166,40 +177,15 @@ private extension AppDelegate {
         // Coarse-grained auth state — fires on sign-in / sign-out only.
         // The actual ID token is fetched per-request via `FirebaseIDTokenProvider`,
         // so we no longer listen for (or care about) token refreshes here.
-        _ = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            self?.myTBA.notifyAuthStateChanged(isAuthenticated: user != nil)
-        }
-        restorePreviousSignIn()
+        authService.addStateObserver(self)
+        authService.start()
+        Task { await myTBASession.restorePreviousSignIn() }
     }
 
     func configureStatusService() {
         registerForFMSStatusChanges()
         registerForStatusChanges()
         statusService.registerRetryable(initiallyRetry: true)
-    }
-
-    func restorePreviousSignIn() {
-        guard Auth.auth().currentUser == nil, GIDSignIn.sharedInstance.hasPreviousSignIn() else {
-            return
-        }
-        GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
-            if let error = error {
-                reporter.record(error)
-                return
-            }
-
-            AuthHelper.signInToGoogle(user: user) { [unowned self] success, error in
-                if let error = error {
-                    reporter.record(error)
-                }
-                guard success else { return }
-                PushService.requestAuthorizationForNotifications { [unowned self] _, error in
-                    if let error = error {
-                        reporter.record(error)
-                    }
-                }
-            }
-        }
     }
 
 }
@@ -247,6 +233,16 @@ extension AppDelegate: AppServicesProviding {
 
 }
 
+// MARK: - Auth state
+
+extension AppDelegate: AuthStateObserving {
+
+    func authStateChanged(isSignedIn: Bool) {
+        myTBA.notifyAuthStateChanged(isAuthenticated: isSignedIn)
+    }
+
+}
+
 private extension AppDelegate {
 
     func showAlert(_ alert: PendingAlert) {
@@ -279,34 +275,9 @@ extension Messaging: @retroactive FCMTokenProvider {}
 
 // MARK: - IDTokenProvider
 
-// Wraps Firebase Auth's `currentUser.getIDToken(completion:)`, which returns
-// a cached token if it's still fresh and silently refreshes if it's expired.
-// Called on every myTBA request, so stale tokens never pile up.
-final class FirebaseIDTokenProvider: IDTokenProvider {
-
-    var isSignedIn: Bool {
-        Auth.auth().currentUser != nil
-    }
-
-    func idToken() async throws -> String {
-        guard let user = Auth.auth().currentUser else {
-            throw MyTBAError.error(401, "Not signed in")
-        }
-        return try await withCheckedThrowingContinuation { continuation in
-            user.getIDToken { token, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else if let token {
-                    continuation.resume(returning: token)
-                } else {
-                    continuation.resume(
-                        throwing: MyTBAError.error(401, "Firebase returned no ID token")
-                    )
-                }
-            }
-        }
-    }
-}
+// TBAAuth vends the token; MyTBAKit declares the protocol. Neither should know
+// about the other, so the app is where they meet.
+extension FirebaseIDTokenProvider: @retroactive IDTokenProvider {}
 
 // MARK: - Appearance
 

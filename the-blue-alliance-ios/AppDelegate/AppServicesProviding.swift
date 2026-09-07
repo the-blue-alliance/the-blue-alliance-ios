@@ -1,5 +1,6 @@
 import FirebaseMessaging
 import MyTBAKit
+import TBAAuth
 import UIKit
 
 enum PendingAlert {
@@ -9,6 +10,7 @@ enum PendingAlert {
 
 protocol AppServicesProviding: AnyObject {
     var dependencies: Dependencies { get }
+    var authService: any AuthServiceProtocol { get }
     var pushService: PushService { get }
     var pushNotificationRouter: PushNotificationRouter { get }
     var fcmTokenProvider: any FCMTokenProvider { get }

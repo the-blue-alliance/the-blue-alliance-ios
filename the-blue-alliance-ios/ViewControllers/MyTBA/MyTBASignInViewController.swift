@@ -1,39 +1,101 @@
-import AuthenticationServices
-import CryptoKit
-import GoogleSignIn
-import FirebaseAuth
-import Foundation
+import PureLayout
+import TBAAuth
 import UIKit
 
 protocol SignInViewControllerDelegate: AnyObject {
-    func signInError(error: Error)
-    func pushRegistrationError(error: Error)
+    func signInViewController(_ controller: MyTBASignInViewController, didFailWith error: Error)
 }
 
-class MyTBASignInViewController: UIViewController,
-    ASAuthorizationControllerPresentationContextProviding
-{
-
-    @IBOutlet var starImageView: UIImageView! {
-        didSet {
-            starImageView.tintColor = UIColor.myTBAStarColor
-        }
-    }
-    @IBOutlet var favoriteImageView: UIImageView!
-    @IBOutlet var subscriptionImageView: UIImageView!
-    @IBOutlet var signInButton: UIButton!
+class MyTBASignInViewController: UIViewController {
 
     weak var delegate: SignInViewControllerDelegate?
 
-    // Unhashed nonce.
-    fileprivate var currentNonce: String?
+    private let dependencies: Dependencies
 
-    init() {
-        super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
+    private var isSigningIn: Bool = false {
+        didSet {
+            googleSignInButton.isEnabled = !isSigningIn
+            appleSignInButton.isEnabled = !isSigningIn
+        }
+    }
+
+    // MARK: - View Elements
+
+    private lazy var starImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "star.fill"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor.myTBAStarColor
+        imageView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        return imageView
+    }()
+
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Welcome to myTBA"
+        label.font = UIFont.preferredFont(forTextStyle: .title1)
+        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+
+    private lazy var favoriteImageView = Self.featureImageView(systemName: "heart")
+    private lazy var subscriptionImageView = Self.featureImageView(systemName: "bell")
+
+    private lazy var googleSignInButton: UIControl = {
+        let button = SignInButton.google()
+        button.addAction(
+            UIAction { [weak self] _ in self?.beginSignIn(with: .google) },
+            for: .touchUpInside
+        )
+        return button
+    }()
+
+    // Style is baked in at init, so a light/dark change means a new button.
+    private lazy var appleSignInButton: UIControl = makeAppleSignInButton()
+
+    private lazy var buttonsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [googleSignInButton, appleSignInButton])
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        return stackView
+    }()
+
+    private lazy var contentStackView: UIStackView = {
+        let headerStackView = UIStackView(arrangedSubviews: [starImageView, titleLabel])
+        headerStackView.axis = .vertical
+        headerStackView.alignment = .center
+        headerStackView.spacing = 8
+
+        let stackView = UIStackView(arrangedSubviews: [
+            headerStackView,
+            Self.featureRow(
+                imageView: favoriteImageView,
+                text: "Mark teams, events, and matches as favorites for fast access"
+            ),
+            Self.featureRow(
+                imageView: subscriptionImageView,
+                text: "Subscribe to teams, events, and matches to get realtime updates"
+            ),
+            buttonsStackView,
+        ])
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 20
+        return stackView
+    }()
+
+    // MARK: - Init
+
+    init(dependencies: Dependencies) {
+        self.dependencies = dependencies
+
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - View Lifecycle
@@ -42,6 +104,19 @@ class MyTBASignInViewController: UIViewController,
         super.viewDidLoad()
 
         styleInterface()
+
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) {
+            (self: Self, _: UITraitCollection) in
+            self.replaceAppleSignInButton()
+        }
+    }
+
+    // A tab bar controller only forwards transitions to its selected child, so
+    // a tab that rotated while off screen never got willTransition. Re-apply on
+    // the way back; when nothing changed this is a no-op.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyImageVisibility(for: traitCollection)
     }
 
     override func willTransition(
@@ -49,19 +124,9 @@ class MyTBASignInViewController: UIViewController,
         with coordinator: UIViewControllerTransitionCoordinator
     ) {
         super.willTransition(to: newCollection, with: coordinator)
-
-        // Show/hide our images for compact size classes
-        let shouldHideImages = newCollection.verticalSizeClass == .compact
-        let newImageAlpha: CGFloat = shouldHideImages ? 0.0 : 1.0
-        let images = [starImageView, favoriteImageView, subscriptionImageView].filter({
-            $0.isHidden != shouldHideImages
-        })
-        coordinator.animate(alongsideTransition: { (_) in
-            images.forEach {
-                $0.alpha = newImageAlpha
-                $0.isHidden = shouldHideImages
-            }
-        })
+        coordinator.animate { [weak self] _ in
+            self?.applyImageVisibility(for: newCollection)
+        }
     }
 
     // MARK: - Interface Methods
@@ -69,158 +134,108 @@ class MyTBASignInViewController: UIViewController,
     private func styleInterface() {
         view.backgroundColor = UIColor.systemGroupedBackground
 
-        var config = UIButton.Configuration.plain()
-        config.baseForegroundColor = UIColor.googleSignInTextColor
-        signInButton.configuration = config
+        view.addSubview(contentStackView)
+        for edge in [ALEdge.leading, ALEdge.trailing] {
+            contentStackView.autoPinEdge(toSuperviewSafeArea: edge, withInset: 20)
+        }
+        contentStackView.autoAlignAxis(toSuperviewAxis: .horizontal)
+        contentStackView.autoPinEdge(
+            toSuperviewSafeArea: .top,
+            withInset: 0,
+            relation: .greaterThanOrEqual
+        )
+        contentStackView.autoPinEdge(
+            toSuperviewSafeArea: .bottom,
+            withInset: 0,
+            relation: .greaterThanOrEqual
+        )
 
-        signInButton.configurationUpdateHandler = { button in
-            guard var config = button.configuration else { return }
-            let imageName: String
-            if button.state.contains(.disabled) {
-                imageName = "btn_google_signin_disabled"
-            } else if button.state.contains(.focused) {
-                imageName = "btn_google_signin_focus"
-            } else if button.state.contains(.highlighted) {
-                imageName = "btn_google_signin_pressed"
-            } else {
-                imageName = "btn_google_signin_normal"
-            }
-            config.background.image = UIImage(named: imageName)
-            button.configuration = config
+        // ASAuthorizationAppleIDButton caps itself at 375pt, so the pair fills
+        // the width in portrait and sits centered at 375 in landscape.
+        buttonsStackView.autoSetDimension(.width, toSize: 375, relation: .lessThanOrEqual)
+        let fill = buttonsStackView.autoMatch(.width, to: .width, of: contentStackView)
+        fill.priority = .defaultHigh
+        starImageView.autoSetDimension(.height, toSize: 60)
+        starImageView.autoMatch(
+            .width,
+            to: .height,
+            of: starImageView,
+            withMultiplier: 102.0 / 97.0
+        )
+        googleSignInButton.autoSetDimension(.height, toSize: 48)
+        appleSignInButton.autoSetDimension(.height, toSize: 48)
+    }
+
+    private func applyImageVisibility(for traitCollection: UITraitCollection) {
+        let shouldHideImages = traitCollection.verticalSizeClass == .compact
+        for imageView in [starImageView, favoriteImageView, subscriptionImageView]
+        where imageView.isHidden != shouldHideImages {
+            imageView.alpha = shouldHideImages ? 0 : 1
+            imageView.isHidden = shouldHideImages
         }
     }
 
-    // MARK: - IBActions
+    private func makeAppleSignInButton() -> UIControl {
+        let button = SignInButton.apple(for: traitCollection.userInterfaceStyle)
+        button.isEnabled = !isSigningIn
+        button.addAction(
+            UIAction { [weak self] _ in self?.beginSignIn(with: .apple) },
+            for: .touchUpInside
+        )
+        return button
+    }
 
-    @IBAction private func signIn() {
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
-            // Don't respond to errors from signInSilently or a user cancelling a sign in
-            if let error = error as NSError?, error.code == GIDSignInError.canceled.rawValue {
-                return
-            } else if let error = error {
-                self.delegate?.signInError(error: error)
-                return
-            }
+    private func replaceAppleSignInButton() {
+        let previous = appleSignInButton
+        let index = buttonsStackView.arrangedSubviews.firstIndex(of: previous) ?? 0
+        buttonsStackView.removeArrangedSubview(previous)
+        previous.removeFromSuperview()
 
-            AuthHelper.signInToGoogle(user: result?.user) { [unowned self] success, error in
-                if let error = error {
-                    delegate?.signInError(error: error)
-                }
-                guard success else {
-                    return
-                }
-                PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
-                    guard let error = error else {
-                        return
-                    }
-                    delegate?.pushRegistrationError(error: error)
-                }
-            }
+        appleSignInButton = makeAppleSignInButton()
+        buttonsStackView.insertArrangedSubview(appleSignInButton, at: index)
+        appleSignInButton.autoSetDimension(.height, toSize: 48)
+    }
+
+    // MARK: - Sign In
+
+    private func beginSignIn(with kind: AuthProviderKind) {
+        guard !isSigningIn else {
+            return
         }
-    }
+        isSigningIn = true
 
-    // https://firebase.google.com/docs/auth/ios/apple
-
-    private func sha256(_ input: String) -> String {
-        let inputData = Data(input.utf8)
-        let hashedData = SHA256.hash(data: inputData)
-        let hashString = hashedData.compactMap {
-            String(format: "%02x", $0)
-        }.joined()
-
-        return hashString
-    }
-
-    @IBAction private func signInWithApple() {
-        let nonce = randomNonceString()
-        currentNonce = nonce
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-        request.nonce = sha256(nonce)
-
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        authorizationController.delegate = self
-        authorizationController.presentationContextProvider = self
-        authorizationController.performRequests()
-    }
-
-    private func randomNonceString(length: Int = 32) -> String {
-        precondition(length > 0)
-        var randomBytes = [UInt8](repeating: 0, count: length)
-        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-        if errorCode != errSecSuccess {
-            fatalError(
-                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-            )
-        }
-
-        let charset: [Character] =
-            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-
-        let nonce = randomBytes.map { byte in
-            // Pick a random character from the set, wrapping around if needed.
-            charset[Int(byte) % charset.count]
-        }
-
-        return String(nonce)
-    }
-
-}
-
-extension MyTBASignInViewController: ASAuthorizationControllerDelegate {
-
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return view.window!
-    }
-
-    func authorizationController(
-        controller: ASAuthorizationController,
-        didCompleteWithAuthorization authorization: ASAuthorization
-    ) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            guard let nonce = currentNonce else {
-                fatalError(
-                    "Invalid state: A login callback was received, but no login request was sent."
-                )
-            }
-            guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Unable to fetch identity token")
-                return
-            }
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print(
-                    "Unable to serialize token string from data: \(appleIDToken.debugDescription)"
-                )
-                return
-            }
-            // Initialize a Firebase credential, including the user's full name.
-            let credential = OAuthProvider.appleCredential(
-                withIDToken: idTokenString,
-                rawNonce: nonce,
-                fullName: appleIDCredential.fullName
-            )
-            // Sign in with Firebase.
-            Auth.auth().signIn(with: credential) { (authResult, error) in
-                if let error {
-                    // Error. If error.code == .MissingOrInvalidNonce, make sure
-                    // you're sending the SHA256-hashed nonce as a hex string with
-                    // your request to Apple.
-                    print(error.localizedDescription)
-                    return
-                }
-
-                // TODO: Need to do something here......
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            defer { self.isSigningIn = false }
+            do {
+                try await self.dependencies.myTBASession.signIn(with: kind, presenting: self)
+            } catch {
+                self.delegate?.signInViewController(self, didFailWith: error)
             }
         }
     }
 
-    func authorizationController(
-        controller: ASAuthorizationController,
-        didCompleteWithError error: Error
-    ) {
-        // Handle error.
-        print("Sign in with Apple errored: \(error)")
+    // MARK: - View Factories
+
+    private static func featureImageView(systemName: String) -> UIImageView {
+        let imageView = UIImageView(image: UIImage(systemName: systemName))
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor.label
+        imageView.autoSetDimensions(to: CGSize(width: 28, height: 28))
+        return imageView
+    }
+
+    private static func featureRow(imageView: UIImageView, text: String) -> UIStackView {
+        let label = UILabel()
+        label.text = text
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+
+        let stackView = UIStackView(arrangedSubviews: [imageView, label])
+        stackView.alignment = .center
+        stackView.spacing = 8
+        return stackView
     }
 
 }

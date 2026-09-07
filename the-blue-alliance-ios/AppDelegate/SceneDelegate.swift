@@ -1,4 +1,3 @@
-import GoogleSignIn
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
@@ -41,8 +40,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
     }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        let authService = UIApplication.shared.appServices.authService
         for ctx in URLContexts {
-            _ = GIDSignIn.sharedInstance.handle(ctx.url)
+            _ = authService.handle(ctx.url)
         }
     }
 

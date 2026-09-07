@@ -25,6 +25,9 @@ let package = Package(
                 "TBAUtils",
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .testTarget(

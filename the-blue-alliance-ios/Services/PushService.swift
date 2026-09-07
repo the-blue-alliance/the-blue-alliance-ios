@@ -11,6 +11,10 @@ protocol RemoteNotificationRegistering: AnyObject {
 
 protocol PushServiceProtocol: AnyObject {
     func registerForRemoteNotifications(_ completion: ((Error?) -> Void)?)
+    @discardableResult func requestAuthorizationForNotifications() async throws -> Bool
+    /// Invalidates this device's FCM token so pushes to it fail at Firebase.
+    /// Needs no TBA auth, which is what makes sign-out safe to finish offline.
+    func deletePushToken() async throws
 }
 
 // PushService handles registering push notification tokens with TBA and handling APNS messages
@@ -66,16 +70,28 @@ class PushService: NSObject, PushServiceProtocol {
         }
     }
 
-    static func requestAuthorizationForNotifications(_ completion: ((Bool, Error?) -> Void)?) {
-        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) {
-            (granted, error) in
-            completion?(granted, error)
-        }
-    }
-
     func registerForRemoteNotifications(_ completion: ((Error?) -> Void)?) {
         registrar.registerForRemoteNotifications(completion: completion)
+    }
+
+}
+
+extension PushService {
+
+    @discardableResult
+    func requestAuthorizationForNotifications() async throws -> Bool {
+        return try await UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert, .badge, .sound]
+        )
+    }
+
+    func deletePushToken() async throws {
+        // No token means this device was never registered, so there's nothing
+        // to stop - and nothing for Firebase to delete.
+        guard Messaging.messaging().fcmToken != nil else {
+            return
+        }
+        try await Messaging.messaging().deleteToken()
     }
 
 }

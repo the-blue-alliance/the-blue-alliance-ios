@@ -68,7 +68,7 @@ class NotificationsViewController: TBATableViewController {
 
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(checkDeviceAuthorization),
+            selector: #selector(applicationWillEnterForeground),
             name: UIApplication.willEnterForegroundNotification,
             object: nil
         )
@@ -83,7 +83,7 @@ class NotificationsViewController: TBATableViewController {
 
         // Kick-off the stages in our checks
         checkRemoteNotificationRegistration()
-        checkDeviceAuthorization()
+        Task { await checkDeviceAuthorization() }
         checkMyTBARegistration()
     }
 
@@ -237,9 +237,11 @@ class NotificationsViewController: TBATableViewController {
             if deviceAuthorizationStatus == .denied {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             } else if deviceAuthorizationStatus == .notDetermined {
-                PushService.requestAuthorizationForNotifications({ [weak self] (_, _) in
-                    self?.checkDeviceAuthorization()
-                })
+                Task {
+                    // Granted, denied, or errored - the row re-reads the real status.
+                    _ = try? await pushService.requestAuthorizationForNotifications()
+                    await checkDeviceAuthorization()
+                }
             } else {
                 showError(
                     "Unable to resolve device settings - check push notification settings in Settings.app"
@@ -289,20 +291,21 @@ class NotificationsViewController: TBATableViewController {
 
     // MARK: - Device Settings
 
-    @objc private func checkDeviceAuthorization() {
-        // Already fetching authorzation
-        guard fetchingDeviceAuthorizationStatus == false else {
+    @objc private func applicationWillEnterForeground() {
+        Task { await checkDeviceAuthorization() }
+    }
+
+    private func checkDeviceAuthorization() async {
+        guard !fetchingDeviceAuthorizationStatus else {
             return
         }
-
         fetchingDeviceAuthorizationStatus = true
-        UNUserNotificationCenter.current().getNotificationSettings { [weak self] (settings) in
-            self?.fetchingDeviceAuthorizationStatus = false
-            self?.deviceAuthorizationStatus = settings.authorizationStatus
+        reloadMain()
 
-            self?.sendPing()
-            self?.reloadMain()
-        }
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        fetchingDeviceAuthorizationStatus = false
+        deviceAuthorizationStatus = settings.authorizationStatus
+        sendPing()
         reloadMain()
     }
 

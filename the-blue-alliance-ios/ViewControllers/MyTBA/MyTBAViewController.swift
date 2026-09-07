@@ -1,5 +1,3 @@
-import FirebaseAuth
-import GoogleSignIn
 import MyTBAKit
 import Photos
 import PureLayout
@@ -9,7 +7,7 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
-    private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
+    private(set) var signInViewController: MyTBASignInViewController
     private(set) var favoritesViewController: MyTBAFavoritesViewController
     private(set) var subscriptionsViewController: MyTBASubscriptionsViewController
 
@@ -38,6 +36,7 @@ class MyTBAViewController: ContainerViewController {
 
     init(dependencies: Dependencies) {
 
+        signInViewController = MyTBASignInViewController(dependencies: dependencies)
         favoritesViewController = MyTBAFavoritesViewController(dependencies: dependencies)
         subscriptionsViewController = MyTBASubscriptionsViewController(dependencies: dependencies)
 
@@ -88,6 +87,7 @@ class MyTBAViewController: ContainerViewController {
         for edge in [ALEdge.leading, ALEdge.trailing] {
             signInView.autoPinEdge(toSuperviewEdge: edge)
         }
+        signInViewController.didMove(toParent: self)
 
         updateInterface()
     }
@@ -110,33 +110,17 @@ class MyTBAViewController: ContainerViewController {
         Task { @MainActor [weak self] in
             guard let self else { return }
             defer { self.isLoggingOut = false }
+            for vc in [favoritesViewController, subscriptionsViewController] as [Refreshable] {
+                vc.cancelRefresh()
+            }
             do {
-                _ = try await self.myTBA.unregister()
-                self.logoutSuccessful()
-            } catch let error as MyTBAError where error.code == 404 {
-                self.logoutSuccessful()
+                try await self.dependencies.myTBASession.signOut()
             } catch {
                 self.showErrorAlert(
                     with: "Unable to sign out of myTBA - \(error.localizedDescription)"
                 )
             }
         }
-    }
-
-    private func logoutSuccessful() {
-        GIDSignIn.sharedInstance.signOut()
-        try! Auth.auth().signOut()
-
-        for vc in [favoritesViewController, subscriptionsViewController] as [Refreshable] {
-            vc.cancelRefresh()
-        }
-
-        removeMyTBAData()
-    }
-
-    func removeMyTBAData() {
-        myTBAStores.favorites.clear()
-        myTBAStores.subscriptions.clear()
     }
 
     // MARK: - Interface Methods
@@ -209,14 +193,17 @@ extension MyTBAViewController: MyTBAAuthenticationObservable {
 
 extension MyTBAViewController: SignInViewControllerDelegate {
 
-    func signInError(error: Error) {
-        showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
-    }
-
-    func pushRegistrationError(error: Error) {
-        showErrorAlert(
-            with: "Error registering for push notifications - \(error.localizedDescription)"
-        )
+    func signInViewController(
+        _ controller: MyTBASignInViewController,
+        didFailWith error: Error
+    ) {
+        if case MyTBASessionError.pushAuthorization = error {
+            showErrorAlert(
+                with: "Error registering for push notifications - \(error.localizedDescription)"
+            )
+        } else {
+            showErrorAlert(with: "Error signing in to myTBA - \(error.localizedDescription)")
+        }
     }
 
 }

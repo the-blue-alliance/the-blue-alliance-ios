@@ -9,6 +9,7 @@ class Dependencies {
     let appSettings: AppSettings
     let myTBA: any MyTBAProtocol
     let myTBAStores: MyTBAStores
+    let myTBASession: MyTBASessionService
     let reporter: any Reporter
     let statusService: any StatusServiceProtocol
     let urlOpener: any URLOpener
@@ -18,6 +19,7 @@ class Dependencies {
         appSettings: AppSettings,
         myTBA: any MyTBAProtocol,
         myTBAStores: MyTBAStores,
+        myTBASession: MyTBASessionService,
         reporter: any Reporter,
         statusService: any StatusServiceProtocol,
         urlOpener: any URLOpener = UIApplication.shared
@@ -26,6 +28,7 @@ class Dependencies {
         self.appSettings = appSettings
         self.myTBA = myTBA
         self.myTBAStores = myTBAStores
+        self.myTBASession = myTBASession
         self.reporter = reporter
         self.statusService = statusService
         self.urlOpener = urlOpener
