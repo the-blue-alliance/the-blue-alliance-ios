@@ -27,7 +27,7 @@ class SwitchTableViewCell: UITableViewCell {
 
     // MARK: - Interface Builder
 
-    public lazy var switchView: UISwitch! = {
+    lazy var switchView: UISwitch! = {
         let switchView = UISwitch(frame: .zero)
         switchView.addAction(
             UIAction { [weak self] action in

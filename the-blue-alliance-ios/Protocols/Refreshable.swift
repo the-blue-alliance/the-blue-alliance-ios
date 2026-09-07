@@ -1,10 +1,6 @@
 import Foundation
 import UIKit
 
-protocol RefreshView {
-    func setContentOffset(_ contentOffset: CGPoint, animated: Bool)
-}
-
 // Refreshable describes a class that has some data that can be refreshed from the server.
 protocol Refreshable: AnyObject {
     var currentRefreshTask: Task<Void, Never>? { get set }

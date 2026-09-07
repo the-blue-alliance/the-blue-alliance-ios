@@ -8,7 +8,7 @@ protocol MatchSummaryViewDelegate: AnyObject {
 
 class MatchSummaryView: UIView {
 
-    public weak var delegate: MatchSummaryViewDelegate?
+    weak var delegate: MatchSummaryViewDelegate?
 
     var viewModel: MatchViewModel? {
         didSet {

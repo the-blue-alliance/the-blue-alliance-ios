@@ -19,7 +19,7 @@ enum EventTeamStatFilter: String, Comparable, CaseIterable {
     case teamNumber = "Team #"
 }
 
-struct TeamStatRow: Hashable {
+nonisolated struct TeamStatRow: Hashable {
     let teamKey: String
     let opr: Float
     let dpr: Float

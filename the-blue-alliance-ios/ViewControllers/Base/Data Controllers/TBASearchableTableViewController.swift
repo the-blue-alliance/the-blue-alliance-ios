@@ -18,7 +18,7 @@ class TBASearchableTableViewController: TBATableViewController, SearchableContro
 
     // MARK: - Public Methods
 
-    public func setupSearch() {
+    func setupSearch() {
         tableView.tableHeaderView = searchController.searchBar
         // Hack to fix white background when refreshing in dark mode
         tableView.backgroundView = UIView()
@@ -45,7 +45,7 @@ class TBASearchableTableViewController: TBATableViewController, SearchableContro
 
 extension TBASearchableTableViewController: UISearchResultsUpdating {
 
-    public func updateSearchResults(for searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         OperationQueue.main.addOperation {
             self.updateDataSource()
         }

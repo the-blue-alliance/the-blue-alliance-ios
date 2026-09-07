@@ -28,7 +28,7 @@ extension UIColor {
 
     // MARK: Safe Colors - support light/dark mode, high contrast
 
-    public class var primaryBlue: UIColor {
+    class var primaryBlue: UIColor {
         let lightModePrimaryBlue = UIColor.colorWithRGB(rgbValue: 0x3F51B5)
         let lightModePrimaryBlueHighContrast = UIColor.colorWithRGB(rgbValue: 0x3949AB)
         let darkModePrimaryBlue = UIColor.colorWithRGB(rgbValue: 0x5C6BC0)
@@ -41,7 +41,7 @@ extension UIColor {
         )
     }
 
-    public class var highlightColor: UIColor {
+    class var highlightColor: UIColor {
         return dynamicColor(
             UIColor.primaryBlue,
             UIColor.primaryBlue,
@@ -50,7 +50,7 @@ extension UIColor {
         )
     }
 
-    public class var navigationBarTintColor: UIColor {
+    class var navigationBarTintColor: UIColor {
         return dynamicColor(
             UIColor.primaryBlue,
             UIColor.primaryBlue,
@@ -59,7 +59,7 @@ extension UIColor {
         )
     }
 
-    public class var tabBarTintColor: UIColor {
+    class var tabBarTintColor: UIColor {
         return dynamicColor(
             UIColor.systemBlue,
             UIColor.systemBlue,
@@ -68,7 +68,7 @@ extension UIColor {
         )
     }
 
-    public class var tableViewHeaderColor: UIColor {
+    class var tableViewHeaderColor: UIColor {
         return dynamicColor(
             UIColor.darkModePrimaryBlue,
             UIColor.darkModePrimaryBlue,
@@ -77,7 +77,7 @@ extension UIColor {
         )
     }
 
-    public class var searchFieldBackgroundColor: UIColor {
+    class var searchFieldBackgroundColor: UIColor {
         return UIColor { traits in
             traits.userInterfaceStyle == .dark
                 ? UIColor.systemGray5
@@ -85,11 +85,11 @@ extension UIColor {
         }
     }
 
-    public class var segmentedControlSelectedColor: UIColor {
+    class var segmentedControlSelectedColor: UIColor {
         return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.white, UIColor.white)
     }
 
-    public class var yearSelectColor: UIColor {
+    class var yearSelectColor: UIColor {
         return dynamicColor(UIColor.white, UIColor.white, UIColor.systemGray5, UIColor.systemGray5)
     }
 
@@ -97,7 +97,7 @@ extension UIColor {
     // so instead of creating a higher contrast with the text they're used with, they're higher value colors to create a better contrast
     // between each otehr.
 
-    public class var redAllianceBackgroundColor: UIColor {
+    class var redAllianceBackgroundColor: UIColor {
         let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xFFEEEE)
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xFFDDDD)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x660000)
@@ -110,7 +110,7 @@ extension UIColor {
         )
     }
 
-    public class var redAllianceScoreBackgroundColor: UIColor {
+    class var redAllianceScoreBackgroundColor: UIColor {
         let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xFFDDDD)
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xFFCCCC)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x770000)
@@ -123,7 +123,7 @@ extension UIColor {
         )
     }
 
-    public class var blueAllianceBackgroundColor: UIColor {
+    class var blueAllianceBackgroundColor: UIColor {
         let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xEEEEFF)
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xDDDDFF)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000066)
@@ -136,7 +136,7 @@ extension UIColor {
         )
     }
 
-    public class var blueAllianceScoreBackgroundColor: UIColor {
+    class var blueAllianceScoreBackgroundColor: UIColor {
         let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xDDDDFF)
         let lightModeHighContrastColor = UIColor.colorWithRGB(rgbValue: 0xCCCCFF)
         let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000088)
@@ -149,39 +149,39 @@ extension UIColor {
         )
     }
 
-    public class var avatarRed: UIColor {
+    class var avatarRed: UIColor {
         return .colorWithRGB(rgbValue: 0xda3434)
     }
 
-    public class var avatarBlue: UIColor {
+    class var avatarBlue: UIColor {
         return .colorWithRGB(rgbValue: 0x487fcc)
     }
 
-    public class var dangerRed: UIColor {
+    class var dangerRed: UIColor {
         let dangerRed = UIColor.colorWithRGB(rgbValue: 0xf2dede)
         return dynamicColor(dangerRed, dangerRed, dangerRed, dangerRed)
     }
 
-    public class var dangerDarkRed: UIColor {
+    class var dangerDarkRed: UIColor {
         let dangerDarkRed = UIColor.colorWithRGB(rgbValue: 0xa94442)
         return dynamicColor(dangerDarkRed, dangerDarkRed, dangerDarkRed, dangerDarkRed)
     }
 
-    public class var myTBAStarColor: UIColor {
+    class var myTBAStarColor: UIColor {
         return UIColor.colorWithRGB(rgbValue: 0xFFC108)
     }
 
     // MARK: - Match Breakdown Colors
 
-    public class var nullHatchPanelColor: UIColor {
+    class var nullHatchPanelColor: UIColor {
         return .colorWithRGB(rgbValue: 0x555555)
     }
 
-    public class var hatchPanelColor: UIColor {
+    class var hatchPanelColor: UIColor {
         return .colorWithRGB(rgbValue: 0xf4d941)
     }
 
-    public class var cargoColor: UIColor {
+    class var cargoColor: UIColor {
         return .colorWithRGB(rgbValue: 0xffa500)
     }
 

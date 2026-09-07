@@ -19,7 +19,7 @@ enum SearchScope: CaseIterable {
     var shouldShowEvents: Bool { self == .all || self == .events }
 }
 
-enum SearchSection: String {
+nonisolated enum SearchSection: String {
     case teams = "Teams"
     case events = "Events"
 }
@@ -33,7 +33,7 @@ protocol SearchViewControllerDelegate: AnyObject {
     func teamSelected(teamKey: String, nickname: String?)
 }
 
-enum SearchItem: Hashable {
+nonisolated enum SearchItem: Hashable {
     case event(key: String, name: String)
     case team(key: String, nickname: String)
 }
@@ -201,7 +201,7 @@ extension SearchViewController: UISearchControllerDelegate {
 }
 
 extension SearchViewController: UISearchResultsUpdating {
-    public func updateSearchResults(for searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         searchText = searchController.searchBar.text
     }
 }

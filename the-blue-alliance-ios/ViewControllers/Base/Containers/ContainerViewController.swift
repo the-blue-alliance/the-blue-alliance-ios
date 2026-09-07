@@ -200,9 +200,9 @@ class ContainerViewController: UIViewController, Alertable {
 
     // MARK: - Public Methods
 
-    public func switchedToIndex(_ index: Int) {}
+    func switchedToIndex(_ index: Int) {}
 
-    public func currentViewController() -> ContainableViewController? {
+    func currentViewController() -> ContainableViewController? {
         if viewControllers.count == 1, let viewController = viewControllers.first {
             return viewController
         } else if viewControllers.count > 0,
@@ -213,7 +213,7 @@ class ContainerViewController: UIViewController, Alertable {
         return nil
     }
 
-    public static func yearSubtitle(_ year: Int?) -> String {
+    static func yearSubtitle(_ year: Int?) -> String {
         if let year = year {
             return "▾ \(year)"
         } else {
@@ -221,7 +221,7 @@ class ContainerViewController: UIViewController, Alertable {
         }
     }
 
-    public func showOfflineEventMessage(shouldShow: Bool, animated: Bool = true) {
+    func showOfflineEventMessage(shouldShow: Bool, animated: Bool = true) {
         if shouldShow {
             if !rootStackView.arrangedSubviews.contains(offlineEventView) {
                 // Animate our down events view in

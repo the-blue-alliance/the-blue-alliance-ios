@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-public protocol URLOpener {
+protocol URLOpener {
     func canOpenURL(_ url: URL) -> Bool
     func open(
         _ url: URL,

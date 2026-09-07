@@ -59,7 +59,7 @@ protocol EventDistrictPointsViewControllerDelegate: AnyObject {
     func teamSelected(teamKey: String)
 }
 
-private struct TeamDistrictPointsRow: Hashable {
+nonisolated private struct TeamDistrictPointsRow: Hashable {
     let teamKey: String
     let total: Int
 }

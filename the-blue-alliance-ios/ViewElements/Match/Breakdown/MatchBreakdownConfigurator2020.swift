@@ -3,9 +3,9 @@ import TBAAPI
 import UIKit
 
 private class BreakdownStyle2020 {
-    public static let bottomImage = UIImage(systemName: "rectangle")
-    public static let outerImage = UIImage(systemName: "hexagon")
-    public static let innerImage = UIImage(systemName: "circle")
+    static let bottomImage = UIImage(systemName: "rectangle")
+    static let outerImage = UIImage(systemName: "hexagon")
+    static let innerImage = UIImage(systemName: "circle")
 }
 
 struct MatchBreakdownConfigurator2020: MatchBreakdownConfigurator {

@@ -5,7 +5,7 @@ import TBAAPI
 import UIKit
 import TBAAuth
 
-public enum MyTBASection: Int {
+nonisolated enum MyTBASection: Int {
     case event
     case team
 }
@@ -27,7 +27,7 @@ protocol MyTBATableViewControllerDelegate: AnyObject {
     func teamSelected(teamKey: TeamKey)
 }
 
-enum MyTBAItem: Hashable {
+nonisolated enum MyTBAItem: Hashable {
     case event(key: String)
     case team(key: String)
 

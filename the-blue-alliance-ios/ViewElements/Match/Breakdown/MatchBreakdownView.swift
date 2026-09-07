@@ -3,9 +3,9 @@ import UIKit
 
 class BreakdownStyle {
 
-    public static let filledCheckImage = UIImage(systemName: "checkmark.circle.fill")
-    public static let checkImage = UIImage(systemName: "checkmark")
-    public static let xImage = UIImage(systemName: "xmark")
+    static let filledCheckImage = UIImage(systemName: "checkmark.circle.fill")
+    static let checkImage = UIImage(systemName: "checkmark")
+    static let xImage = UIImage(systemName: "xmark")
 
     static public func breakdownLabel() -> UILabel {
         let label = UILabel()

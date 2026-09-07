@@ -8,7 +8,7 @@ protocol TeamSummaryViewControllerDelegate: AnyObject {
     func matchSelected(_ match: Match)
 }
 
-private enum TeamSummarySection: Int {
+nonisolated private enum TeamSummarySection: Int {
     case event
     case teamInfo
     case pitLocation
@@ -32,7 +32,7 @@ extension TeamSummarySection: TableSectionTitleProviding {
     }
 }
 
-private enum TeamSummaryItem: Hashable {
+nonisolated private enum TeamSummaryItem: Hashable {
     case event(event: Event)
     case teamInfo(team: Team)
     case pitLocation(location: String)

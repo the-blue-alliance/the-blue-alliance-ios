@@ -3,7 +3,7 @@ import OpenAPIRuntime
 import TBAAPI
 import UIKit
 
-struct InsightRow: Hashable {
+nonisolated struct InsightRow: Hashable {
     var title: String
     var value: InsightValue
 

@@ -2,12 +2,12 @@ import Foundation
 import TBAAPI
 import UIKit
 
-private enum TeamInfoSection: Int {
+nonisolated private enum TeamInfoSection: Int {
     case info
     case link
 }
 
-private enum TeamInfoItem {
+nonisolated private enum TeamInfoItem {
     case location
     case rookieYear
     case sponsors

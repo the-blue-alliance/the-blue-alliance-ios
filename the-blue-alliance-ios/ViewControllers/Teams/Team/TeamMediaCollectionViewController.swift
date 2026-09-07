@@ -6,12 +6,12 @@ protocol TeamMediaCollectionViewControllerDelegate: AnyObject {
     func mediaSelected(image: UIImage?, directURL: URL?, viewURL: URL?)
 }
 
-enum MediaSection: Hashable {
+nonisolated enum MediaSection: Hashable {
     case videos
     case images
 }
 
-enum TeamMediaItem: Hashable {
+nonisolated enum TeamMediaItem: Hashable {
     case image(Photo)
     case video(Video)
 

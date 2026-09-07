@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-enum MatchSection: Hashable {
+nonisolated enum MatchSection: Hashable {
     case qualification
     case compLevel(CompLevel)
     case doubleElimRound(DoubleElimRound)

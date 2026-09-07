@@ -5,9 +5,10 @@ protocol TableSectionTitleProviding {
     var headerTitle: String? { get }
 }
 
-class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<
-    Section, Item
->
+class TableViewDataSource<Section: Hashable & Sendable, Item: Hashable & Sendable>:
+    UITableViewDiffableDataSource<
+        Section, Item
+    >
 {
 
     weak var statefulDelegate: (Stateful & Refreshable)?

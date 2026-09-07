@@ -1,12 +1,12 @@
 import Foundation
 import TBAAPI
 
-public struct EventSection: Hashable, Comparable {
-    public let sortOrder: Int
-    public let subOrder: Int
-    public let title: String
+nonisolated struct EventSection: Hashable, Comparable {
+    let sortOrder: Int
+    let subOrder: Int
+    let title: String
 
-    public static func < (lhs: Self, rhs: Self) -> Bool {
+    static func < (lhs: Self, rhs: Self) -> Bool {
         if lhs.sortOrder != rhs.sortOrder { return lhs.sortOrder < rhs.sortOrder }
         if lhs.subOrder != rhs.subOrder { return lhs.subOrder < rhs.subOrder }
         return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
@@ -14,7 +14,7 @@ public struct EventSection: Hashable, Comparable {
 }
 
 extension EventSection: TableSectionTitleProviding {
-    public var headerTitle: String? { title }
+    var headerTitle: String? { title }
 }
 
 extension APIEventType {
@@ -104,7 +104,7 @@ extension Event {
     }
 
     // Within-year ordering. Callers that mix years should compare year first.
-    public static func sectionAscending(_ a: Event, _ b: Event) -> Bool {
+    static func sectionAscending(_ a: Event, _ b: Event) -> Bool {
         if a.section != b.section { return a.section < b.section }
         if a.eventType != b.eventType {
             let aParent = a.eventTypeEnum?.isChampionshipFinalsParent ?? false

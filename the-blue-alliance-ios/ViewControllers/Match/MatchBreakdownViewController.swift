@@ -2,7 +2,10 @@ import Foundation
 import TBAAPI
 import UIKit
 
-struct BreakdownRow: Hashable {
+// Holds live UIViews in `red`/`blue`, so it can't be structurally Sendable. Safe
+// in practice: AnyHashable-of-UIView hashes by identity, and the snapshot is only
+// built and applied on the main actor. The real fix is #1143.
+nonisolated struct BreakdownRow: Hashable, @unchecked Sendable {
 
     enum BreakdownRowType {
         case normal

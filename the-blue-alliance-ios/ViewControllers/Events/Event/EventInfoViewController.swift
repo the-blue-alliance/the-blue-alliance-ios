@@ -10,14 +10,14 @@ protocol EventInfoViewControllerDelegate: AnyObject {
     func showPitMap()
 }
 
-private enum EventInfoSection: Int {
+nonisolated private enum EventInfoSection: Int {
     case title
     case detail
     case webcast
     case link
 }
 
-private enum EventInfoItem: Hashable {
+nonisolated private enum EventInfoItem: Hashable {
     case title
     case webcast(Webcast)
     case pitMap

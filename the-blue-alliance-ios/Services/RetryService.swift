@@ -5,7 +5,7 @@ class RetryService {
     private var retryTimer: Timer?
     private weak var retryRunLoop: RunLoop?
 
-    public var isRetryRegistered: Bool {
+    var isRetryRegistered: Bool {
         return retryTimer != nil
     }
 

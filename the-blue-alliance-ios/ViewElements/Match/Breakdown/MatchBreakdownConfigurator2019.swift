@@ -3,9 +3,9 @@ import TBAAPI
 import UIKit
 
 private class BreakdownStyle2019 {
-    public static let nullHatchPanelImage = UIImage(systemName: "circle")
-    public static let hatchPanelImage = UIImage(systemName: "circle")
-    public static let cargoImage = UIImage(systemName: "circle.fill")
+    static let nullHatchPanelImage = UIImage(systemName: "circle")
+    static let hatchPanelImage = UIImage(systemName: "circle")
+    static let cargoImage = UIImage(systemName: "circle.fill")
 }
 
 struct MatchBreakdownConfigurator2019: MatchBreakdownConfigurator {

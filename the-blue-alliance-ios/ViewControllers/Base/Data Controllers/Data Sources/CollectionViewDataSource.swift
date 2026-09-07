@@ -3,7 +3,7 @@ import UIKit
 
 /// CollectionViewDataSource is a wrapper around a UICollectionViewDiffableDataSource that implements
 /// UICollectionViewDataSource for TBA where we manage no data states and whatnot for table views
-class CollectionViewDataSource<Section: Hashable, Item: Hashable>:
+class CollectionViewDataSource<Section: Hashable & Sendable, Item: Hashable & Sendable>:
     UICollectionViewDiffableDataSource<Section, Item>
 {
 

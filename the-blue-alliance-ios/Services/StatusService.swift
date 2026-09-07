@@ -61,7 +61,7 @@ protocol StatusServiceProtocol: AnyObject {
     func unregisterRetryable()
 }
 
-public class StatusService: NSObject, StatusServiceProtocol {
+class StatusService: NSObject, StatusServiceProtocol {
 
     var retryService: RetryService
 
