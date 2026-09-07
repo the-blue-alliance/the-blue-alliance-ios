@@ -1,33 +1,32 @@
-import MyTBAKit
-import XCTest
+import Testing
 
-class MyTBAFavoriteTests: MyTBATestCase {
+@testable import MyTBAKit
 
-    func test_favorites() async throws {
-        myTBA.stub(for: "favorites/list")
+struct MyTBAFavoriteTests {
+
+    let myTBA = MockMyTBA()
+
+    @Test func favorites() async throws {
+        try myTBA.stub(for: "favorites/list")
         let favorites = try await myTBA.fetchFavorites()
-        XCTAssertEqual(favorites.count, 3)
+        #expect(favorites.count == 3)
     }
 
-    func test_favorites_empty() async throws {
-        myTBA.stub(for: "favorites/list", code: 201)
+    @Test func favoritesEmpty() async throws {
+        try myTBA.stub(for: "favorites/list", code: 201)
         let favorites = try await myTBA.fetchFavorites()
-        XCTAssertTrue(favorites.isEmpty)
+        #expect(favorites.isEmpty)
     }
 
     // The server signals auth failure inside a 200 body. Before the envelope
     // check this decoded as an empty list, and the app would then wipe the
     // user's cached favorites with it.
-    func test_favorites_unauthorized() async {
-        myTBA.stub(for: "favorites/list", code: 401)
-        do {
-            _ = try await myTBA.fetchFavorites()
-            XCTFail("Expected a 401 to throw")
-        } catch let error as MyTBAError {
-            XCTAssertEqual(error.code, 401)
-        } catch {
-            XCTFail("Unexpected error: \(error)")
+    @Test func favoritesUnauthorized() async throws {
+        try myTBA.stub(for: "favorites/list", code: 401)
+        let error = await #expect(throws: MyTBAError.self) {
+            try await myTBA.fetchFavorites()
         }
+        #expect(error?.code == 401)
     }
 
 }

@@ -1,33 +1,34 @@
-import MyTBAKit
-import XCTest
+import Testing
 
-class MyTBAPreferencesTests: MyTBATestCase {
+@testable import MyTBAKit
 
-    func test_preferences() async throws {
-        myTBA.stub(for: "model/setPreferences")
+struct MyTBAPreferencesTests {
+
+    let myTBA = MockMyTBA()
+
+    @Test func preferences() async throws {
+        try myTBA.stub(for: "model/setPreferences")
         let response = try await myTBA.updatePreferences(
             modelKey: "2018ckw0",
             modelType: .event,
             favorite: true,
             notifications: []
         )
-        XCTAssertNotNil(response.favorite)
-        XCTAssertNotNil(response.subscription)
+        #expect(response.favorite.code == 200)
+        #expect(response.subscription.code == 200)
     }
 
-    func test_preferences_error() async {
-        myTBA.stub(for: "model/setPreferences", code: 401)
-        do {
-            _ = try await myTBA.updatePreferences(
+    @Test func preferencesUnauthorized() async throws {
+        try myTBA.stub(for: "model/setPreferences", code: 401)
+        let error = await #expect(throws: MyTBAError.self) {
+            try await myTBA.updatePreferences(
                 modelKey: "2018ckw0",
                 modelType: .event,
                 favorite: true,
                 notifications: []
             )
-            XCTFail("Expected updatePreferences to throw on 401")
-        } catch {
-            // expected
         }
+        #expect(error?.code == 401)
     }
 
 }

@@ -1,82 +1,59 @@
-import XCTest
+import Foundation
+import Testing
+
 @testable import MyTBAKit
 
-class MyTBAErrorTests: XCTestCase {
+struct MyTBAErrorTests {
 
-    func test_code() {
-        let errorNoCode = MyTBAError.error(nil, "")
-        XCTAssertNil(errorNoCode.code)
-
-        let error = MyTBAError.error(210, "")
-        XCTAssertEqual(error.code, 210)
+    @Test func code() {
+        #expect(MyTBAError.error(nil, "").code == nil)
+        #expect(MyTBAError.error(210, "").code == 210)
+        #expect(MyTBAError.missingFCMToken.code == nil)
     }
 
-    func test_errorMessage() {
-        let errorMessage = "Testing error message"
-        let error = MyTBAError.error(nil, errorMessage)
-        XCTAssertEqual(error.localizedDescription, errorMessage)
+    @Test func errorMessage() {
+        let message = "Testing error message"
+        #expect(MyTBAError.error(nil, message).localizedDescription == message)
     }
 
 }
 
-class MyTBATests: MyTBATestCase {
+struct MyTBATests {
 
-    func test_init() {
-        let uuid = "abcd123"
-        let deviceName = "My Device"
-        let fcmToken = "abc"
+    let myTBA = MockMyTBA()
 
-        let mfcm = MockFCMTokenProvider(fcmToken: fcmToken)
-        let midTokenProvider = MockIDTokenProvider()
-        let zz = MyTBA(
-            uuid: uuid,
-            deviceName: deviceName,
-            fcmTokenProvider: mfcm,
-            idTokenProvider: midTokenProvider
+    @Test func initStoresIdentity() {
+        let fcmTokenProvider = MockFCMTokenProvider()
+        fcmTokenProvider.fcmToken = "abc"
+        let subject = MyTBA(
+            uuid: "abcd123",
+            deviceName: "My Device",
+            fcmTokenProvider: fcmTokenProvider,
+            idTokenProvider: MockIDTokenProvider()
         )
-        XCTAssertEqual(zz.uuid, uuid)
-        XCTAssertEqual(zz.deviceName, deviceName)
-        XCTAssertEqual(zz.fcmToken, fcmToken)
+        #expect(subject.uuid == "abcd123")
+        #expect(subject.deviceName == "My Device")
+        #expect(subject.fcmToken == "abc")
     }
 
-    func test_jsonEncoder() {
-        let jsonEncoder = MyTBA.jsonEncoder
-        XCTAssertNotNil(jsonEncoder)
-    }
-
-    func test_jsonDecoder() {
-        let jsonDecoder = MyTBA.jsonDecoder
-        XCTAssertNotNil(jsonDecoder)
-    }
-
-    func test_callApi_noBearerWhenSignedOut() async throws {
+    @Test func noBearerWhenSignedOut() async throws {
         myTBA.idTokenProvider.isSignedIn = false
-        myTBA.stub(for: "favorites/list")
+        try myTBA.stub(for: "favorites/list")
         _ = try await myTBA.fetchFavorites()
 
-        let request = try XCTUnwrap(myTBA.session.lastRequest)
-        XCTAssertNil(request.allHTTPHeaderFields?["Authorization"])
+        let request = try #require(myTBA.session.lastRequest)
+        #expect(request.allHTTPHeaderFields?["Authorization"] == nil)
     }
 
-    func test_callApi_hasBearer() async throws {
+    @Test func bearerWhenSignedIn() async throws {
         myTBA.idTokenProvider.isSignedIn = true
         myTBA.idTokenProvider.stubbedToken = "abcd123"
-        myTBA.stub(for: "favorites/list")
+        try myTBA.stub(for: "favorites/list")
         _ = try await myTBA.fetchFavorites()
 
-        guard let request = myTBA.session.lastRequest else {
-            XCTFail()
-            return
-        }
-        XCTAssertEqual(request.httpMethod, "POST")
-
-        guard let headers = request.allHTTPHeaderFields,
-            let authorizationHeader = headers["Authorization"]
-        else {
-            XCTFail()
-            return
-        }
-        XCTAssertEqual(authorizationHeader, "Bearer abcd123")
+        let request = try #require(myTBA.session.lastRequest)
+        #expect(request.httpMethod == "POST")
+        #expect(request.allHTTPHeaderFields?["Authorization"] == "Bearer abcd123")
     }
 
 }

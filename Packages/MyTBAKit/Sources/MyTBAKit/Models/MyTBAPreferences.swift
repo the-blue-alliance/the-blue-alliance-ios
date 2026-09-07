@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MyTBAPreferences: Codable {
+public struct MyTBAPreferences: Codable, Sendable {
     var deviceKey: String?
     var favorite: Bool
     var modelKey: String
@@ -8,7 +8,7 @@ public struct MyTBAPreferences: Codable {
     var notifications: [NotificationType]
 }
 
-public struct MyTBAPreferencesMessageResponse: Codable {
+public struct MyTBAPreferencesMessageResponse: Codable, Sendable {
     public let favorite: MyTBABaseResponse
     public let subscription: MyTBABaseResponse
 }

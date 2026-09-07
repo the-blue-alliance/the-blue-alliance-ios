@@ -93,14 +93,16 @@ jobs:
           path: ~/Library/Caches/org.swift.swiftpm
           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}
           restore-keys: ${{ runner.os }}-spm-
-      - name: Restore package build products
+      # The packages are iOS-only, so their tests build through xcodebuild into
+      # DerivedData rather than `swift test` into Packages/*/.build.
+      - name: Restore package DerivedData
         uses: actions/cache/restore@v6
         with:
-          path: Packages/*/.build
-          key: ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
+          path: DerivedData
+          key: ${{ runner.os }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-
-            ${{ runner.os }}-spmbuild-
+            ${{ runner.os }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-
+            ${{ runner.os }}-packages-derived-data-
       # These are offline unit tests, so they need neither Secrets.plist nor a
       # signing keychain.
       - name: Install
@@ -109,12 +111,17 @@ jobs:
           bundle install
       - name: fastlane test_packages
         run: bundle exec fastlane test_packages
-      - name: Save package build products
+      # Logs holds the .xcresult, which result_bundle already copies into
+      # fastlane/test_output. Neither is worth carrying in the cache.
+      - name: Trim DerivedData
+        if: ${{ always() }}
+        run: rm -rf DerivedData/Logs DerivedData/Index.noindex
+      - name: Save package DerivedData
         if: ${{ always() && inputs.save-caches }}
         uses: actions/cache/save@v6
         with:
-          path: Packages/*/.build
-          key: ${{ runner.os }}-spmbuild-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
+          path: DerivedData
+          key: ${{ runner.os }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
 
   test-app:
     name: Test app

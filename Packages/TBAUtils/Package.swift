@@ -5,8 +5,7 @@ import PackageDescription
 let package = Package(
     name: "TBAUtils",
     platforms: [
-        .iOS(.v15),
-        .macOS(.v12),
+        .iOS(.v26)
     ],
     products: [
         .library(

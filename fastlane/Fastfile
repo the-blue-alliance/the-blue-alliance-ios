@@ -24,10 +24,11 @@ KNOWN_FAILURE_HINTS = [
 # No runtime version, so these resolve against whatever the pinned Xcode ships.
 TEST_DEVICES = ["iPhone 17 Pro"].freeze
 
-# scan chdirs into `package_path`, so package lanes have to name this
-# explicitly or their result bundles land inside the package, where the
-# root .gitignore doesn't reach them.
+# scan chdirs into `package_path`, so package lanes have to name these
+# absolutely or their output lands inside the package directory - where the
+# app build and swift-format would walk into it.
 TEST_OUTPUT_DIR = File.expand_path("test_output", __dir__).freeze
+DERIVED_DATA_DIR = File.expand_path("../DerivedData", __dir__).freeze
 
 RELEASE_LANES = [:beta_ci, :app_store].freeze
 RELEASE_CHANNEL = "#app-releases".freeze
@@ -42,36 +43,22 @@ platform :ios do
 
   desc "Run MyTBAKit unit tests"
   lane :test_mytbakit do
-    spm(command: "test", package_path: "Packages/MyTBAKit")
+    test_package("MyTBAKit")
   end
 
   desc "Run TBAUtils unit tests"
   lane :test_tbautils do
-    spm(command: "test", package_path: "Packages/TBAUtils")
+    test_package("TBAUtils")
   end
 
   desc "Run TBAAPI unit tests"
   lane :test_tbaapi do
-    spm(command: "test", package_path: "Packages/TBAAPI")
+    test_package("TBAAPI")
   end
 
   desc "Run TBAAuth unit tests"
   lane :test_tbaauth do
-    # Not `spm` like the other package lanes - TBAAuth is iOS-only, so
-    # `swift test` on macOS can't build it. That means scan, which needs
-    # `result_bundle` to find results at all when given a `package_path`, and
-    # its own output dir, since xcodebuild refuses to overwrite an existing
-    # result bundle and scan doesn't clear one.
-    output_directory = File.join(TEST_OUTPUT_DIR, "TBAAuth")
-    FileUtils.rm_rf(output_directory)
-
-    run_tests(
-      package_path: "Packages/TBAAuth",
-      scheme: "TBAAuth",
-      devices: TEST_DEVICES,
-      result_bundle: true,
-      output_directory: output_directory
-    )
+    test_package("TBAAuth")
   end
 
   desc "Run TBAUnitTests (the main app's Xcode unit-test target)"
@@ -307,6 +294,27 @@ platform :ios do
   end
 
   ## End Utility Lanes ##
+
+  ## Package Tests ##
+
+  # The packages are iOS-only, so `swift test` (which builds for the host Mac)
+  # can't run them - it has to be scan against a simulator. Scan needs
+  # `result_bundle` to find results at all when given a `package_path`, and
+  # each package needs its own output dir: xcodebuild refuses to overwrite an
+  # existing result bundle and scan doesn't clear one.
+  def test_package(name)
+    output_directory = File.join(TEST_OUTPUT_DIR, name)
+    FileUtils.rm_rf(output_directory)
+
+    run_tests(
+      package_path: "Packages/#{name}",
+      scheme: name,
+      devices: TEST_DEVICES,
+      derived_data_path: DERIVED_DATA_DIR,
+      result_bundle: true,
+      output_directory: output_directory
+    )
+  end
 
   ## Error Handling ##
 

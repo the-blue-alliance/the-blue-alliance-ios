@@ -1,27 +1,19 @@
-import XCTest
+import Foundation
+
 @testable import MyTBAKit
 
 extension MockURLSession: MyTBAURLSession {}
 
-public class MockFCMTokenProvider: FCMTokenProvider {
-    public var fcmToken: String?
-
-    public init(fcmToken: String?) {
-        self.fcmToken = fcmToken
-    }
+final class MockFCMTokenProvider: FCMTokenProvider {
+    var fcmToken: String?
 }
 
-public class MockIDTokenProvider: IDTokenProvider {
-    public var isSignedIn: Bool
-    public var stubbedToken: String
-    public var stubbedError: Error?
+final class MockIDTokenProvider: IDTokenProvider {
+    var isSignedIn = false
+    var stubbedToken = "mock-id-token"
+    var stubbedError: Error?
 
-    public init(isSignedIn: Bool = false, stubbedToken: String = "mock-id-token") {
-        self.isSignedIn = isSignedIn
-        self.stubbedToken = stubbedToken
-    }
-
-    public func idToken() async throws -> String? {
+    func idToken() async throws -> String? {
         if let stubbedError {
             throw stubbedError
         }
@@ -29,18 +21,18 @@ public class MockIDTokenProvider: IDTokenProvider {
     }
 }
 
-public class MockMyTBA: MyTBA {
+struct MissingFixture: Error {
+    let name: String
+}
 
-    public let session: MockURLSession
-    public let idTokenProvider: MockIDTokenProvider
+/// A `MyTBA` whose collaborators are all controllable from a test.
+final class MockMyTBA: MyTBA {
 
-    public init(
-        fcmTokenProvider: FCMTokenProvider,
-        idTokenProvider: MockIDTokenProvider = MockIDTokenProvider()
-    ) {
-        self.session = MockURLSession()
-        self.idTokenProvider = idTokenProvider
+    let session = MockURLSession()
+    let fcmTokenProvider = MockFCMTokenProvider()
+    let idTokenProvider = MockIDTokenProvider()
 
+    init() {
         super.init(
             uuid: "abcd123",
             deviceName: "MyTBATesting",
@@ -50,37 +42,22 @@ public class MockMyTBA: MyTBA {
         )
     }
 
-    public func stub(for method: String, code: Int = 200) {
-        var filepath = method.replacingOccurrences(of: "/", with: "_")
+    /// Serves `data/<method>[_<code>].json` as the next response.
+    func stub(for method: String, code: Int = 200) throws {
+        var name = method.replacingOccurrences(of: "/", with: "_")
         if code != 200 {
-            filepath.append("_\(code)")
+            name.append("_\(code)")
         }
-
-        guard
-            let resourceURL = Bundle.module.url(
-                forResource: "data/\(filepath)",
-                withExtension: "json"
-            )
-        else {
-            XCTFail("Cannot find file \(filepath).json")
-            return
+        guard let url = Bundle.module.url(forResource: "data/\(name)", withExtension: "json") else {
+            throw MissingFixture(name: name)
         }
-
-        do {
-            session.stubbedData = try Data(contentsOf: resourceURL)
-            let url = URL(
-                string: method,
-                relativeTo: URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!
-            )!
-            session.stubbedResponse = HTTPURLResponse(
-                url: url,
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil
-            )
-        } catch {
-            XCTFail("\(error)")
-        }
+        session.stubbedData = try Data(contentsOf: url)
+        session.stubbedResponse = HTTPURLResponse(
+            url: URL(string: method, relativeTo: MyTBA.baseURL)!,
+            statusCode: code,
+            httpVersion: nil,
+            headerFields: nil
+        )
     }
 
 }

@@ -1,22 +1,30 @@
-import MyTBAKit
-import XCTest
+import Testing
 
-class MyTBARegisterTests: MyTBATestCase {
+@testable import MyTBAKit
 
-    func test_register() async throws {
-        fcmTokenProvider.fcmToken = "abc"
-        myTBA.stub(for: "register")
+struct MyTBARegisterTests {
+
+    let myTBA = MockMyTBA()
+
+    @Test func register() async throws {
+        myTBA.fcmTokenProvider.fcmToken = "abc"
+        try myTBA.stub(for: "register")
         _ = try await myTBA.register()
     }
 
-    func test_register_error() async {
-        fcmTokenProvider.fcmToken = "abc"
-        myTBA.stub(for: "register", code: 401)
-        do {
-            _ = try await myTBA.register()
-            XCTFail("Expected register to throw on 401")
-        } catch {
-            // expected
+    @Test func registerUnauthorized() async throws {
+        myTBA.fcmTokenProvider.fcmToken = "abc"
+        try myTBA.stub(for: "register", code: 401)
+        let error = await #expect(throws: MyTBAError.self) {
+            try await myTBA.register()
+        }
+        #expect(error?.code == 401)
+    }
+
+    @Test func registerWithoutTokenThrows() async {
+        myTBA.fcmTokenProvider.fcmToken = nil
+        await #expect(throws: MyTBAError.missingFCMToken) {
+            try await myTBA.register()
         }
     }
 

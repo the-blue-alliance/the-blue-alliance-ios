@@ -6,8 +6,7 @@ import PackageDescription
 let package = Package(
     name: "TBAAPI",
     platforms: [
-        .iOS(.v26),
-        .macOS(.v26),
+        .iOS(.v26)
     ],
     products: [
         .library(
@@ -32,10 +31,6 @@ let package = Package(
             plugins: [
                 .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator")
             ]
-        ),
-        .executableTarget(
-            name: "TBAAPI-main",
-            dependencies: ["TBAAPI"]
         ),
         .testTarget(
             name: "TBAAPITests",

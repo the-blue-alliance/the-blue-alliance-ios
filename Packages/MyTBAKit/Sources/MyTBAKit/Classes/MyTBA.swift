@@ -1,12 +1,6 @@
 import Foundation
 
-private struct Constants {
-    struct APIConstants {
-        static let baseURL = URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!
-    }
-}
-
-public enum MyTBAError: Error {
+public enum MyTBAError: Error, Equatable, Sendable {
     case error(Int?, String)
     /// No FCM token, so this device was never registered and can't be.
     case missingFCMToken
@@ -40,6 +34,8 @@ public protocol MyTBAURLSession {
 extension URLSession: MyTBAURLSession {}
 
 open class MyTBA {
+
+    static let baseURL = URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!
 
     public init(
         uuid: String,
@@ -78,7 +74,7 @@ open class MyTBA {
     }
 
     func createRequest(_ method: String, _ bodyData: Data? = nil) async throws -> URLRequest {
-        let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
+        let apiURL = URL(string: method, relativeTo: Self.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
 

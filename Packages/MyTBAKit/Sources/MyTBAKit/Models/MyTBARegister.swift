@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MyTBARegisterRequest: Codable {
+public struct MyTBARegisterRequest: Codable, Sendable {
     var deviceUuid: String
     var mobileId: String
     var name: String

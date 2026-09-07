@@ -8,7 +8,7 @@ struct MyTBAFavoritesResponse: MyTBAResponse, Codable {
     var favorites: [MyTBAFavorite]?
 }
 
-public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
+public struct MyTBAFavorite: MyTBAModel, Equatable {
 
     public init(modelKey: String, modelType: MyTBAModelType) {
         self.modelKey = modelKey
