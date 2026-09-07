@@ -57,18 +57,39 @@ extension Refreshable {
             if self.isRefreshing {
                 self.hideNoData()
 
-                let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0
-                self.refreshView.setContentOffset(
-                    CGPoint(x: 0, y: -refreshControlHeight),
-                    animated: true
-                )
-                self.refreshControl?.beginRefreshing()
+                self.showRefreshControl()
             } else {
                 self.refreshControl?.endRefreshing()
 
                 self.noDataReload()
             }
         }
+    }
+
+    /// Spins the refresh control and scrolls it into view.
+    ///
+    /// UIKit ignores `beginRefreshing()` while the scroll view is offscreen, and refreshes
+    /// start from `viewWillAppear` - before the view is in a window. `viewDidAppear` calls
+    /// `updateRefresh()` again to pick up anything still in flight.
+    func showRefreshControl() {
+        guard refreshView.window != nil else {
+            return
+        }
+
+        let refreshControlHeight = refreshControl?.frame.size.height ?? 0
+        refreshView.setContentOffset(
+            CGPoint(x: 0, y: -refreshControlHeight),
+            animated: true
+        )
+        refreshControl?.beginRefreshing()
+    }
+
+    /// Shows the indicator for a refresh that started while we were offscreen.
+    func updateRefreshOnAppear() {
+        guard isRefreshing else {
+            return
+        }
+        updateRefresh()
     }
 
     func enableRefreshing() {

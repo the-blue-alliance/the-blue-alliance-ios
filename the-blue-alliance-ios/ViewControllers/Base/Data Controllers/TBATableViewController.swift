@@ -57,6 +57,12 @@ class TBATableViewController: UITableViewController, DataController, Navigatable
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        (self as? any Refreshable)?.updateRefreshOnAppear()
+    }
+
     // MARK: - UITableViewDelegate
 
     override func tableView(
