@@ -43,7 +43,7 @@ class PlayerView: UIView {
         load(youtubeKey: playable.youtubeKey)
     }
 
-    deinit {
+    isolated deinit {
         playerView.stopVideo()
     }
 

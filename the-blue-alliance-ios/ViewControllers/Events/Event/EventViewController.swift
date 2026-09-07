@@ -129,9 +129,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     // MARK: - Interface Methods
 
     func eventStatusChanged(isEventOffline: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            self?.showOfflineEventMessage(shouldShow: isEventOffline)
-        }
+        showOfflineEventMessage(shouldShow: isEventOffline)
     }
 
 }

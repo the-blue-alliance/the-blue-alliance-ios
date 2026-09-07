@@ -15,9 +15,7 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>:
     private(set) var current: Delegate.OptionType?
     var options: [Delegate.OptionType] {
         didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+            tableView.reloadData()
         }
     }
     private let willPush: Bool

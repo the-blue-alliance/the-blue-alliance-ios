@@ -285,9 +285,9 @@ class NotificationsViewController: TBATableViewController {
             self?.hasCheckedRemoteNotificationRegistration = true
             self?.remoteNotificationRegistrationError = error
 
-            self?.reloadMain()
+            self?.tableView.reloadData()
         }
-        reloadMain()
+        tableView.reloadData()
     }
 
     // MARK: - Device Settings
@@ -301,13 +301,13 @@ class NotificationsViewController: TBATableViewController {
             return
         }
         fetchingDeviceAuthorizationStatus = true
-        reloadMain()
+        tableView.reloadData()
 
         let settings = await UNUserNotificationCenter.current().notificationSettings()
         fetchingDeviceAuthorizationStatus = false
         deviceAuthorizationStatus = settings.authorizationStatus
         sendPing()
-        reloadMain()
+        tableView.reloadData()
     }
 
     private func deviceAuthorizationNotificationStatus(
@@ -357,10 +357,10 @@ class NotificationsViewController: TBATableViewController {
             }
             self.myTBARegisterTask = nil
             self.sendPing()
-            self.reloadMain()
+            self.tableView.reloadData()
         }
 
-        reloadMain()
+        tableView.reloadData()
     }
 
     private func myTBARegistrationNotificationStatus() -> NotificationStatus {
@@ -420,10 +420,10 @@ class NotificationsViewController: TBATableViewController {
                 self.myTBAPingError = error
             }
             self.myTBAPingTask = nil
-            self.reloadMain()
+            self.tableView.reloadData()
         }
 
-        reloadMain()
+        tableView.reloadData()
     }
 
     private func myTBAPingNotificationStatus() -> NotificationStatus {
@@ -442,20 +442,12 @@ class NotificationsViewController: TBATableViewController {
 
     // MARK: - UI Methods
 
-    func reloadMain() {
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
-        }
-    }
-
     // TODO: Use Alertable instead...
     private func showError(_ error: String) {
         let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
 
-        DispatchQueue.main.async { [weak self] in
-            self?.present(alert, animated: true, completion: nil)
-        }
+        present(alert, animated: true, completion: nil)
     }
 
     @objc func showCopyFCMToken() {
@@ -474,9 +466,7 @@ class NotificationsViewController: TBATableViewController {
             actionSheet.popoverPresentationController?.sourceView = notificationTokenFooter
         }
 
-        DispatchQueue.main.async { [weak self] in
-            self?.present(actionSheet, animated: true, completion: nil)
-        }
+        present(actionSheet, animated: true, completion: nil)
     }
 
     private func copyFCMTokenToPasteboard(_ fcmToken: String) {

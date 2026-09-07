@@ -64,7 +64,6 @@
 		924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */; };
 		925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */; };
 		925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */; };
-		9255EB6D209AC9760006A745 /* RetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9255EB6C209AC9760006A745 /* RetryService.swift */; };
 		92564C6B21644AA30047917F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6A21644AA30047917F /* Secrets.swift */; };
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
 		92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */; };
@@ -253,7 +252,6 @@
 		924BDD7E26D2A95D008BE7D2 /* MyTBAKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MyTBAKit; sourceTree = "<group>"; };
 		925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCell.swift; sourceTree = "<group>"; };
 		925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventAllianceTableViewCell.xib; sourceTree = "<group>"; };
-		9255EB6C209AC9760006A745 /* RetryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryService.swift; sourceTree = "<group>"; };
 		92564C6A21644AA30047917F /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASearchableTableViewController.swift; sourceTree = "<group>"; };
@@ -875,7 +873,6 @@
 		92F8E354209AAE400094213F /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
 				92AA7A042F0100000004AAAA /* MyTBASessionService.swift */,
 				5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */,
@@ -1400,7 +1397,6 @@
 				9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */,
 				02600260260026002600A002 /* PlayerCollectionViewCell.swift in Sources */,
 				921DD67D241D3D6C00403192 /* RootController.swift in Sources */,
-				9255EB6D209AC9760006A745 /* RetryService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

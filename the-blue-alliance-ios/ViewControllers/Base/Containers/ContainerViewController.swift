@@ -20,17 +20,13 @@ class ContainerViewController: UIViewController, Alertable {
 
     var navigationTitle: String? {
         didSet {
-            DispatchQueue.main.async {
-                self.navigationTitleLabel.text = self.navigationTitle
-            }
+            navigationTitleLabel.text = navigationTitle
         }
     }
 
     var navigationSubtitle: String? {
         didSet {
-            DispatchQueue.main.async {
-                self.navigationSubtitleLabel.text = self.navigationSubtitle
-            }
+            navigationSubtitleLabel.text = navigationSubtitle
         }
     }
 

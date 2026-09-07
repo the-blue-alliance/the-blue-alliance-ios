@@ -25,7 +25,6 @@ class PushService: NSObject, PushServiceProtocol {
     private let reporter: any Reporter
     private let authService: any AuthServiceProtocol
     private let myTBA: any MyTBAProtocol
-    internal var retryService: RetryService
     private let registrar: any RemoteNotificationRegistering
     weak var router: (any PushNotificationRouting)?
 
@@ -35,45 +34,37 @@ class PushService: NSObject, PushServiceProtocol {
         reporter: any Reporter,
         authService: any AuthServiceProtocol,
         myTBA: any MyTBAProtocol,
-        retryService: RetryService,
         registrar: any RemoteNotificationRegistering
     ) {
         self.reporter = reporter
         self.authService = authService
         self.myTBA = myTBA
-        self.retryService = retryService
         self.registrar = registrar
 
         super.init()
     }
 
-    // Reads auth state, which lives on the main actor. The two callers that
-    // arrive off it (Firebase's delegate queue, the retry timer) hop first.
-    @MainActor
+    // Registering needs both a signed-in user and an FCM token, and either can
+    // arrive first, so both events land here. Restarting replaces any attempt
+    // already in flight, which is what a refreshed token needs anyway. Retries
+    // once a minute until the server accepts it.
     fileprivate func registerPushToken() {
-        if !authService.isSignedIn {
-            // Not authenticated to myTBA - we'll try again when we're auth'd
-            return
-        }
-        guard registerTask == nil else {
-            // Hack-y fix for register being called twice during app startup -
-            // Once from AuthStateObserving.authStateChanged and once from
-            // MessagingDelegate.didReceiveRegistrationToken
-            // We should look to fix this properly some other time
+        registerTask?.cancel()
+        guard authService.isSignedIn else {
             return
         }
         registerTask = Task { [weak self] in
-            guard let self else { return }
-            do {
-                _ = try await self.myTBA.register()
-                self.unregisterRetryable()
-            } catch {
-                self.reporter.record(error)
-                if !self.retryService.isRetryRegistered {
-                    await MainActor.run { self.registerRetryable() }
+            while !Task.isCancelled {
+                guard let self else { return }
+                do {
+                    _ = try await myTBA.register()
+                    return
+                } catch {
+                    guard !Task.isCancelled else { return }
+                    reporter.record(error)
                 }
+                try? await Task.sleep(for: .seconds(60))
             }
-            self.registerTask = nil
         }
     }
 
@@ -108,17 +99,19 @@ extension PushService: AuthStateObserving {
     func authStateChanged(isSignedIn: Bool) {
         if isSignedIn {
             registerPushToken()
-        } else if retryService.isRetryRegistered {
-            unregisterRetryable()
+        } else {
+            registerTask?.cancel()
         }
     }
 }
 
 extension PushService: MessagingDelegate {
 
+    // Firebase always delivers this on the main thread (it hops in
+    // -[FIRMessaging notifyDelegateOfFCMTokenAvailability]), which is why a
+    // main-actor method can witness this nonisolated requirement directly.
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("Firebase registration token: \(fcmToken ?? "N/A")")
-        Task { @MainActor in registerPushToken() }
+        registerPushToken()
     }
 
 }
@@ -153,19 +146,6 @@ extension PushService: UNUserNotificationCenterDelegate {
             self?.router?.handleTap(payload)
             completionHandler()
         }
-    }
-
-}
-
-extension PushService: Retryable {
-
-    var retryInterval: TimeInterval {
-        // Retry push notification register once a minute until success
-        return 1 * 60
-    }
-
-    func retry() {
-        Task { @MainActor in registerPushToken() }
     }
 
 }

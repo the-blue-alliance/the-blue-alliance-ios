@@ -40,7 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         reporter: reporter,
         authService: authService,
         myTBA: myTBA,
-        retryService: RetryService(),
         registrar: self
     )
     @MainActor
@@ -49,8 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     lazy var statusService: any StatusServiceProtocol = StatusService(
         reporter: reporter,
-        api: api,
-        retryService: RetryService()
+        api: api
     )
     @MainActor
     lazy var authService: any AuthServiceProtocol = AuthService(reporter: reporter)
@@ -186,7 +184,7 @@ private extension AppDelegate {
     func configureStatusService() {
         registerForFMSStatusChanges()
         registerForStatusChanges()
-        statusService.registerRetryable(initiallyRetry: true)
+        statusService.start()
     }
 
 }

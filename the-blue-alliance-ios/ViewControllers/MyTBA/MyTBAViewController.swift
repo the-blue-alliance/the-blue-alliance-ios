@@ -26,9 +26,7 @@ class MyTBAViewController: ContainerViewController {
 
     var isLoggingOut: Bool = false {
         didSet {
-            DispatchQueue.main.async {
-                self.updateInterface()
-            }
+            updateInterface()
         }
     }
     private var isLoggedIn: Bool {
@@ -177,13 +175,7 @@ extension MyTBAViewController: AuthStateObserving {
         if isSignedIn, let viewController = currentViewController() {
             viewController.refresh()
         }
-        updateInterfaceMain()
-    }
-
-    func updateInterfaceMain() {
-        DispatchQueue.main.async { [weak self] in
-            self?.updateInterface()
-        }
+        updateInterface()
     }
 
 }

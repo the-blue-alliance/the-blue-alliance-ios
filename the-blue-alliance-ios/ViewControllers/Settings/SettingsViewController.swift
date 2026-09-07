@@ -396,7 +396,7 @@ class SettingsViewController: TBATableViewController {
         UIApplication.shared.setAlternateIconName(
             nil,
             completionHandler: { [weak self] error in
-                self?.handleIconChangeResult(error)
+                Task { @MainActor in self?.handleIconChangeResult(error) }
             }
         )
     }
@@ -415,7 +415,7 @@ class SettingsViewController: TBATableViewController {
         UIApplication.shared.setAlternateIconName(
             alternateName,
             completionHandler: { [weak self] error in
-                self?.handleIconChangeResult(error)
+                Task { @MainActor in self?.handleIconChangeResult(error) }
             }
         )
     }
@@ -430,9 +430,7 @@ class SettingsViewController: TBATableViewController {
     }
 
     private func reloadIconsSection() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        tableView.reloadData()
     }
 
     // MARK: - Networking Methods

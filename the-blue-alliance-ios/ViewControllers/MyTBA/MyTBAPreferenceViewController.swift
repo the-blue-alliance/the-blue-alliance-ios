@@ -38,9 +38,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
     // silently wipe the user's real server-side subscriptions.
     private var isLoading: Bool = false {
         didSet {
-            DispatchQueue.main.async {
-                self.updateInterface()
-            }
+            updateInterface()
         }
     }
     private var loadFailed: Bool = false
@@ -51,10 +49,8 @@ class MyTBAPreferenceViewController: TBATableViewController,
 
     private var isSaving: Bool = false {
         didSet {
-            DispatchQueue.main.async {
-                self.updateInterface()
-                self.tableView.reloadData()
-            }
+            updateInterface()
+            tableView.reloadData()
         }
     }
     internal lazy var closeBarButtonItem = UIBarButtonItem(

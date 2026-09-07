@@ -10,6 +10,8 @@ protocol Refreshable: AnyObject {
 
     /// If the data source for the given view controller is empty - used to drive the no-data view.
     var isDataSourceEmpty: Bool { get }
+    /// False when the screen has nothing to fetch, so containers don't attach a refresh control.
+    var supportsRefreshing: Bool { get }
 
     func refresh()
 
@@ -20,6 +22,8 @@ protocol Refreshable: AnyObject {
 }
 
 extension Refreshable {
+
+    var supportsRefreshing: Bool { true }
 
     var isRefreshing: Bool {
         guard let task = currentRefreshTask else { return false }
@@ -49,16 +53,14 @@ extension Refreshable {
     }
 
     func updateRefresh() {
-        DispatchQueue.main.async {
-            if self.isRefreshing {
-                self.hideNoData()
+        if isRefreshing {
+            hideNoData()
 
-                self.showRefreshControl()
-            } else {
-                self.refreshControl?.endRefreshing()
+            showRefreshControl()
+        } else {
+            refreshControl?.endRefreshing()
 
-                self.noDataReload()
-            }
+            noDataReload()
         }
     }
 
@@ -89,6 +91,9 @@ extension Refreshable {
     }
 
     func enableRefreshing() {
+        guard supportsRefreshing else {
+            return
+        }
         let refreshControl = UIRefreshControl()
         refreshControl.addAction(
             UIAction { [weak self] _ in

@@ -46,9 +46,7 @@ class TBASearchableTableViewController: TBATableViewController, SearchableContro
 extension TBASearchableTableViewController: UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
-        OperationQueue.main.addOperation {
-            self.updateDataSource()
-        }
+        updateDataSource()
     }
 
 }

@@ -58,15 +58,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
         guard let root = window?.rootViewController else { return }
         switch alert {
         case .minVersion(let currentAppVersion):
-            DispatchQueue.main.async {
-                let controller = UIAlertController(
-                    title: "Unsupported App Version",
-                    message:
-                        "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
-                    preferredStyle: .alert
-                )
-                root.present(controller, animated: true)
-            }
+            let controller = UIAlertController(
+                title: "Unsupported App Version",
+                message:
+                    "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
+                preferredStyle: .alert
+            )
+            root.present(controller, animated: true)
         case .fmsStatus(let isDatafeedDown):
             if isDatafeedDown {
                 guard fmsDownAlert == nil else { return }

@@ -509,15 +509,11 @@ extension Refreshable where Self: MyTBATableViewController {
 extension Stateful where Self: MyTBATableViewController {
 
     func addNoDataView(_ noDataView: UIView) {
-        DispatchQueue.main.async {
-            self.tableView.backgroundView = noDataView
-        }
+        tableView.backgroundView = noDataView
     }
 
     func removeNoDataView(_ noDataView: UIView) {
-        DispatchQueue.main.async {
-            self.tableView.backgroundView = nil
-        }
+        tableView.backgroundView = nil
     }
 }
 

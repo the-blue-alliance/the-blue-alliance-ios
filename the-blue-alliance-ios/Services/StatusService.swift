@@ -57,13 +57,10 @@ protocol StatusServiceProtocol: AnyObject {
     func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable)
     func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: EventKey)
 
-    func registerRetryable(initiallyRetry: Bool)
-    func unregisterRetryable()
+    func start()
 }
 
-class StatusService: NSObject, StatusServiceProtocol {
-
-    var retryService: RetryService
+final class StatusService: StatusServiceProtocol {
 
     private let reporter: any Reporter
     private let api: any TBAAPIProtocol
@@ -76,34 +73,38 @@ class StatusService: NSObject, StatusServiceProtocol {
 
     private var previousFMSStatus: Bool = false
     private var previouslyDownEventKeys: [String] = []
+    private var pollTask: Task<Void, Never>?
 
     var currentSeason: Int { status.currentSeason }
     var maxSeason: Int { status.maxSeason }
 
-    init(reporter: any Reporter, api: any TBAAPIProtocol, retryService: RetryService) {
+    init(reporter: any Reporter, api: any TBAAPIProtocol) {
         self.reporter = reporter
         self.api = api
-        self.retryService = retryService
-
-        super.init()
     }
 
-    func fetchStatus() async {
-        do {
-            let apiStatus = try await api.getStatus()
-            let newStatus = AppStatus(apiStatus: apiStatus)
-            await MainActor.run { apply(newStatus) }
-        } catch {
-            reporter.record(error)
+    /// Fetches now, then every five minutes for as long as the app runs.
+    func start() {
+        pollTask?.cancel()
+        pollTask = Task { [weak self] in
+            while !Task.isCancelled {
+                guard let self else { return }
+                await fetchStatus()
+                try? await Task.sleep(for: .seconds(5 * 60))
+            }
         }
     }
 
-    @MainActor
-    private func apply(_ newStatus: AppStatus) {
-        status = newStatus
-        dispatchStatusChanged(newStatus)
-        dispatchFMSDown(newStatus.isDatafeedDown)
-        dispatchEvents(downEventKeys: newStatus.downEventKeys)
+    private func fetchStatus() async {
+        do {
+            let newStatus = AppStatus(apiStatus: try await api.getStatus())
+            status = newStatus
+            dispatchStatusChanged(newStatus)
+            dispatchFMSDown(newStatus.isDatafeedDown)
+            dispatchEvents(downEventKeys: newStatus.downEventKeys)
+        } catch {
+            reporter.record(error)
+        }
     }
 
     private func dispatchStatusChanged(_ status: AppStatus) {
@@ -161,19 +162,6 @@ class StatusService: NSObject, StatusServiceProtocol {
         for obj in subscribersTable.allObjects {
             (obj as? EventStatusSubscribable)?.eventStatusChanged(isEventOffline: isEventOffline)
         }
-    }
-
-}
-
-extension StatusService: Retryable {
-
-    var retryInterval: TimeInterval {
-        // Poll every 5 minutes for a new status object.
-        return 5 * 60
-    }
-
-    func retry() {
-        Task { await fetchStatus() }
     }
 
 }

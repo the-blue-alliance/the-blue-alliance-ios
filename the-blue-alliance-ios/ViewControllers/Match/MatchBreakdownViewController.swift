@@ -84,12 +84,6 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         setupDataSource()
         tableView.dataSource = dataSource
 
-        if breakdownConfigurator == nil {
-            DispatchQueue.main.async {
-                self.disableRefreshing()
-            }
-        }
-
         configureDataSource(state.match?.breakdownDict, state.match?.compLevel)
     }
 
@@ -163,6 +157,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
     // MARK: - Refreshable
 
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
+
+    var supportsRefreshing: Bool { breakdownConfigurator != nil }
 
     func refresh() {
         guard breakdownConfigurator != nil else { return }

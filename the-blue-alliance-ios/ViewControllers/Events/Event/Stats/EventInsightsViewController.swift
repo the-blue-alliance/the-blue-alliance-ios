@@ -74,12 +74,6 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
 
         tableView.dataSource = dataSource
         setupDataSource()
-
-        if eventStatsConfigurator == nil {
-            DispatchQueue.main.async {
-                self.disableRefreshing()
-            }
-        }
     }
 
     // MARK: - UITableViewDelegate
@@ -163,6 +157,8 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
     // MARK: - Refreshable
 
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
+
+    var supportsRefreshing: Bool { eventStatsConfigurator != nil }
 
     func refresh() {
         guard eventStatsConfigurator != nil else { return }

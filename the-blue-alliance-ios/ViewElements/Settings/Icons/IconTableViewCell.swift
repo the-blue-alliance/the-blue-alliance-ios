@@ -20,15 +20,6 @@ class IconTableViewCell: UITableViewCell, Reusable {
     @IBOutlet private weak var iconImageView: UIImageView!
     @IBOutlet private weak var iconLabel: UILabel!
 
-    // MARK: - View Lifecycle
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-
-        iconImageView.layer.cornerRadius = 8
-        iconImageView.clipsToBounds = true
-    }
-
     // MARK: - Private Methods
 
     private func configureCell() {
@@ -36,6 +27,8 @@ class IconTableViewCell: UITableViewCell, Reusable {
             return
         }
 
+        iconImageView.layer.cornerRadius = 8
+        iconImageView.clipsToBounds = true
         iconImageView.image = UIImage(named: viewModel.imageName)
         iconLabel.text = viewModel.name
     }

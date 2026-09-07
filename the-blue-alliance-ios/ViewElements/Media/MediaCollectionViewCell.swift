@@ -12,23 +12,17 @@ class MediaCollectionViewCell: UICollectionViewCell, Reusable {
         didSet {
             switch state {
             case .loading:
-                DispatchQueue.main.async { [weak self] in
-                    self?.imageView.image = nil
-                    self?.removeNoDataView()
-                    self?.showLoadingView()
-                }
+                imageView.image = nil
+                removeNoDataView()
+                showLoadingView()
             case .loaded(let image):
-                DispatchQueue.main.async { [weak self] in
-                    self?.removeLoadingView()
-                    self?.removeNoDataView()
-                    self?.imageView.image = image
-                }
+                removeLoadingView()
+                removeNoDataView()
+                imageView.image = image
             case .error(let error):
-                DispatchQueue.main.async { [weak self] in
-                    self?.removeLoadingView()
-                    self?.imageView.image = nil
-                    self?.showNoDataView(text: error)
-                }
+                removeLoadingView()
+                imageView.image = nil
+                showNoDataView(text: error)
             }
         }
     }

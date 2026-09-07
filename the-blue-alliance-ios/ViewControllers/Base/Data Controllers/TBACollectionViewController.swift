@@ -88,15 +88,11 @@ extension Refreshable where Self: TBACollectionViewController {
 extension Stateful where Self: TBACollectionViewController {
 
     func addNoDataView(_ noDataView: UIView) {
-        DispatchQueue.main.async {
-            self.collectionView.backgroundView = noDataView
-        }
+        collectionView.backgroundView = noDataView
     }
 
     func removeNoDataView(_ view: UIView) {
-        DispatchQueue.main.async {
-            self.collectionView.backgroundView = nil
-        }
+        collectionView.backgroundView = nil
     }
 
 }
