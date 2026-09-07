@@ -292,12 +292,7 @@ class SettingsViewController: TBATableViewController {
                 showDeleteNetworkCache()
             }
         case .icons:
-            let option = appIconOptions[indexPath.row]
-            if let alternateName = option.alternateName {
-                setAlternateAppIcon(alternateName)
-            } else {
-                setDefaultAppIcon()
-            }
+            setAppIcon(appIconOptions[indexPath.row].alternateName)
         case .privacy:
             break
         case .debug:
@@ -382,55 +377,22 @@ class SettingsViewController: TBATableViewController {
             )
     }
 
-    private func setDefaultAppIcon() {
-        // Only change icons if it's supported by the OS
-        guard UIApplication.shared.supportsAlternateIcons else {
+    /// `nil` selects the primary icon. `setAlternateIconName` can fail without the icon
+    /// visibly changing, so record the error, then reload from what the system actually has.
+    private func setAppIcon(_ alternateName: String?) {
+        guard UIApplication.shared.supportsAlternateIcons,
+            UIApplication.shared.alternateIconName != alternateName
+        else {
             return
         }
-
-        // Only set the default app icon if we have an alternate icon set
-        guard UIApplication.shared.alternateIconName != nil else {
-            return
-        }
-
-        UIApplication.shared.setAlternateIconName(
-            nil,
-            completionHandler: { [weak self] error in
-                Task { @MainActor in self?.handleIconChangeResult(error) }
+        Task {
+            do {
+                try await UIApplication.shared.setAlternateIconName(alternateName)
+            } catch {
+                dependencies.reporter.record(error)
             }
-        )
-    }
-
-    private func setAlternateAppIcon(_ alternateName: String) {
-        // Only change icons if it's supported by the OS
-        guard UIApplication.shared.supportsAlternateIcons else {
-            return
+            tableView.reloadData()
         }
-
-        // Only set the the alternate icon if it's different from the icon we have currently set
-        guard UIApplication.shared.alternateIconName != alternateName else {
-            return
-        }
-
-        UIApplication.shared.setAlternateIconName(
-            alternateName,
-            completionHandler: { [weak self] error in
-                Task { @MainActor in self?.handleIconChangeResult(error) }
-            }
-        )
-    }
-
-    /// `setAlternateIconName` can fail without the icon visibly changing, so surface the
-    /// error rather than dropping it, then reload from the icon the system actually has.
-    private func handleIconChangeResult(_ error: (any Error)?) {
-        if let error {
-            dependencies.reporter.record(error)
-        }
-        reloadIconsSection()
-    }
-
-    private func reloadIconsSection() {
-        tableView.reloadData()
     }
 
     // MARK: - Networking Methods
