@@ -275,6 +275,31 @@ class TeamHeaderView: UIView {
 
     // MARK: Private Methods
 
+    /// Animates `changes`, or applies them immediately when we're offscreen.
+    ///
+    /// `layoutIfNeeded()` lays out from the topmost dirty ancestor, which drags the
+    /// container's table views along with it - off-window that's an unnecessary layout
+    /// pass UIKit warns about.
+    private func animateLayout(
+        _ changes: @escaping () -> Void,
+        completion: ((Bool) -> Void)? = nil
+    ) {
+        guard window != nil else {
+            changes()
+            completion?(true)
+            return
+        }
+
+        UIView.animate(
+            withDuration: 0.25,
+            animations: {
+                changes()
+                self.layoutIfNeeded()
+            },
+            completion: completion
+        )
+    }
+
     private func configureView() {
         // Avatar is intentionally NOT touched here — it's driven by the
         // explicit avatar API (setAvatar / transitionAvatar / hide…Skeleton)
@@ -318,20 +343,14 @@ class TeamHeaderView: UIView {
             avatarImageView.image = image
             avatarImageView.isHidden = false
             avatarImageView.alpha = 0
-            UIView.animate(
-                withDuration: 0.25,
-                animations: {
-                    self.avatarImageView.alpha = 1
-                    self.layoutIfNeeded()
-                }
-            )
+            animateLayout {
+                self.avatarImageView.alpha = 1
+            }
         case (.some, nil):
-            UIView.animate(
-                withDuration: 0.25,
-                animations: {
+            animateLayout(
+                {
                     self.avatarImageView.alpha = 0
                     self.avatarImageView.isHidden = true
-                    self.layoutIfNeeded()
                 },
                 completion: { _ in
                     self.avatarImageView.image = nil
@@ -393,9 +412,8 @@ class TeamHeaderView: UIView {
         avatarImageView.image = avatar
         let willHaveAvatar = avatar != nil
 
-        UIView.animate(
-            withDuration: 0.25,
-            animations: {
+        animateLayout(
+            {
                 self.skeletonStackView.alpha = 0
                 self.teamNameLabel.alpha = 1
                 self.yearButton.alpha = 1
@@ -406,7 +424,6 @@ class TeamHeaderView: UIView {
                     self.avatarImageView.alpha = 0
                     self.avatarImageView.isHidden = true
                 }
-                self.layoutIfNeeded()
             },
             completion: { _ in
                 self.skeletonStackView.isHidden = true
@@ -431,9 +448,8 @@ class TeamHeaderView: UIView {
         avatarImageView.image = avatar
         let willHaveAvatar = avatar != nil
 
-        UIView.animate(
-            withDuration: 0.25,
-            animations: {
+        animateLayout(
+            {
                 self.avatarSkeletonOverlay.alpha = 0
                 if willHaveAvatar {
                     self.avatarImageView.isHidden = false
@@ -442,7 +458,6 @@ class TeamHeaderView: UIView {
                     self.avatarImageView.alpha = 0
                     self.avatarImageView.isHidden = true
                 }
-                self.layoutIfNeeded()
             },
             completion: { _ in
                 self.avatarSkeletonOverlay.isHidden = true
