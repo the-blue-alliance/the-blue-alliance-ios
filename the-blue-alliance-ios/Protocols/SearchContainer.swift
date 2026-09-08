@@ -5,24 +5,22 @@ import TBAAPI
 import UIKit
 
 protocol SearchContainer: ContainerViewController {
-    var searchController: UISearchController! { get set }
+    var searchController: UISearchController { get }
 }
 
 extension SearchContainer where Self: SearchViewControllerDelegate {
 
-    func setupSearchController() {
+    func makeSearchController() -> UISearchController {
         let searchViewController = SearchViewController(dependencies: dependencies)
         searchViewController.delegate = self
 
-        searchController = UISearchController(searchResultsController: searchViewController)
+        let searchController = UISearchController(searchResultsController: searchViewController)
         searchController.delegate = searchViewController
 
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.showsSearchResultsController = true
         searchController.searchResultsUpdater = searchViewController
         searchController.scopeBarActivation = .onSearchActivation
-
-        navigationItem.searchController = searchController
 
         // Style our search bar
         searchController.searchBar.backgroundColor = UIColor.navigationBarTintColor
@@ -40,9 +38,12 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
             string: "Search teams and events",
             attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
         )
+        return searchController
+    }
 
+    func setupSearchController() {
+        navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-
         definesPresentationContext = true
     }
 
