@@ -427,7 +427,9 @@ extension TeamMediaCollectionViewController: Refreshable {
         downloadTasks[photo.foreignKey] = Task { [weak self] in
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
-                if let image = UIImage(data: data) {
+                // UIImage(data:) defers decoding to first draw, on the main thread.
+                // byPreparingForDisplay() does it here instead, off the main actor.
+                if let image = await UIImage(data: data)?.byPreparingForDisplay() {
                     self?.imageCache[photo.foreignKey] = image
                 } else {
                     self?.imageErrors[photo.foreignKey] = URLError(.cannotDecodeContentData)

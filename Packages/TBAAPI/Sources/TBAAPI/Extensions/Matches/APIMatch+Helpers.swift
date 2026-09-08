@@ -79,9 +79,7 @@ extension Match {
 
     public var startTimeString: String? {
         guard let startTime else { return nil }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE h:mm a"
-        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(startTime)))
+        return Date(timeIntervalSince1970: TimeInterval(startTime)).formatted(APIDate.weekdayTime)
     }
 
     // Year parsed from the match key (first 4 chars of `yyyy[EVENT]_...`).

@@ -13,13 +13,6 @@ public actor TBAAPI {
         case bypass
     }
 
-    public static let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        return dateFormatter
-    }()
-
     private let apiKey: String
     var client: Client
     public private(set) var cachePolicy: CachePolicy
