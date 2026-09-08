@@ -37,15 +37,11 @@ extension Webcast {
 
     public var dateParsed: Date? {
         guard let date else { return nil }
-        return TBAAPI.dateFormatter.date(from: date)
+        return APIDate.parse(date)
     }
 
     public var dateString: String? {
-        guard let dateParsed else { return nil }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
-        return formatter.string(from: dateParsed)
+        dateParsed?.formatted(APIDate.shortDate)
     }
 
     public var subtitleString: String? {

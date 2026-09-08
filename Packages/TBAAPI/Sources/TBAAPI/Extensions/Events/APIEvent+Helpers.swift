@@ -75,11 +75,7 @@ extension Event {
     }
 
     public var month: String? {
-        guard let date = startDateParsed else { return nil }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM"
-        formatter.timeZone = .utc
-        return formatter.string(from: date)
+        startDateParsed?.formatted(APIDate.monthName)
     }
 
     public var isChampionshipDivision: Bool { eventTypeEnum == .championshipDivision }
@@ -132,12 +128,8 @@ extension Event {
 
 extension Event {
 
-    // Parsed Date form of the API's string date fields. The generated struct
-    // stores `startDate` and `endDate` as ISO-ish `yyyy-MM-dd` strings;
-    // `TBAAPI.dateFormatter` parses them in UTC so in-memory Date comparisons
-    // are consistent regardless of the user's locale.
-    public var startDateParsed: Date? { TBAAPI.dateFormatter.date(from: startDate) }
-    public var endDateParsed: Date? { TBAAPI.dateFormatter.date(from: endDate) }
+    public var startDateParsed: Date? { APIDate.parse(startDate) }
+    public var endDateParsed: Date? { APIDate.parse(endDate) }
 
     public var locationString: String? {
         let parts = [city, stateProv, country].compactMap { $0 }.filter { !$0.isEmpty }
@@ -146,23 +138,14 @@ extension Event {
 
     public var dateString: String? {
         guard let start = startDateParsed, let end = endDateParsed else { return nil }
-        // Dates are UTC-midnight; format and compare year components in UTC so
-        // users west of UTC don't see the range shifted back a day.
-        let shortFormatter = DateFormatter()
-        shortFormatter.dateFormat = "MMM dd"
-        shortFormatter.timeZone = .utc
-
-        let longFormatter = DateFormatter()
-        longFormatter.dateFormat = "MMM dd, y"
-        longFormatter.timeZone = .utc
-
         if start == end {
-            return shortFormatter.string(from: end)
+            return end.formatted(APIDate.shortDate)
         }
         if Calendar.utc.component(.year, from: start) == Calendar.utc.component(.year, from: end) {
-            return "\(shortFormatter.string(from: start)) to \(shortFormatter.string(from: end))"
+            return "\(start.formatted(APIDate.shortDate)) to \(end.formatted(APIDate.shortDate))"
         }
-        return "\(shortFormatter.string(from: start)) to \(longFormatter.string(from: end))"
+        return
+            "\(start.formatted(APIDate.shortDate)) to \(end.formatted(APIDate.shortDateWithYear))"
     }
 }
 

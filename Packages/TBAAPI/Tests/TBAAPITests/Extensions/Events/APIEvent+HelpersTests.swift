@@ -333,17 +333,17 @@ struct APIEventHelpersTests {
 
     @Test func dateString_sameDay() {
         let event = makeEvent(key: "x", year: 2018, startDate: "2018-03-05", endDate: "2018-03-05")
-        #expect(event.dateString == "Mar 05")
+        #expect(event.dateString == "Mar 5")
     }
 
     @Test func dateString_sameYear() {
         let event = makeEvent(key: "x", year: 2018, startDate: "2018-03-01", endDate: "2018-03-03")
-        #expect(event.dateString == "Mar 01 to Mar 03")
+        #expect(event.dateString == "Mar 1 to Mar 3")
     }
 
     @Test func dateString_differentYear() {
         let event = makeEvent(key: "x", year: 2018, startDate: "2018-12-31", endDate: "2019-01-01")
-        #expect(event.dateString == "Dec 31 to Jan 01, 2019")
+        #expect(event.dateString == "Dec 31 to Jan 1, 2019")
     }
 
     // MARK: - locationString
