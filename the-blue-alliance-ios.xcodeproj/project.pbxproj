@@ -41,6 +41,7 @@
 		5EC0D41A2C26070100000002 /* DependenciesMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000001 /* DependenciesMocks.swift */; };
 		5EC0D41A2C26070100000004 /* MatchBreakdownViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000003 /* MatchBreakdownViewControllerTests.swift */; };
 		5EC0D41A2C26070100000006 /* TeamsListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000005 /* TeamsListViewControllerTests.swift */; };
+		5EC0D41A2C26070100000008 /* MyTBATableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000007 /* MyTBATableViewControllerTests.swift */; };
 		5EC0D41A2C26060100000006 /* MatchBreakdownConfigurator2023Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */; };
 		5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */; };
 		5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */; };
@@ -238,6 +239,7 @@
 		5EC0D41A2C26070100000001 /* DependenciesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/DependenciesMocks.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000003 /* MatchBreakdownViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Match/MatchBreakdownViewControllerTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000005 /* TeamsListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Teams/TeamsListViewControllerTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26070100000007 /* MyTBATableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/MyTBA/MyTBATableViewControllerTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift"; sourceTree = "<group>"; };
 		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EC0D41A2C26041B00000001 /* PushNotificationPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationPayload.swift; sourceTree = "<group>"; };
@@ -589,6 +591,7 @@
 				5EC0D41A2C26070100000001 /* DependenciesMocks.swift */,
 				5EC0D41A2C26070100000003 /* MatchBreakdownViewControllerTests.swift */,
 				5EC0D41A2C26070100000005 /* TeamsListViewControllerTests.swift */,
+				5EC0D41A2C26070100000007 /* MyTBATableViewControllerTests.swift */,
 				5EC0D41A2C26060100000005 /* MatchBreakdownConfigurator2023Tests.swift */,
 			);
 			name = TBAUnitTests;
@@ -1255,6 +1258,7 @@
 				5EC0D41A2C26070100000002 /* DependenciesMocks.swift in Sources */,
 				5EC0D41A2C26070100000004 /* MatchBreakdownViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000006 /* TeamsListViewControllerTests.swift in Sources */,
+				5EC0D41A2C26070100000008 /* MyTBATableViewControllerTests.swift in Sources */,
 				5EC0D41A2C26060100000006 /* MatchBreakdownConfigurator2023Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

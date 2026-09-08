@@ -20,11 +20,6 @@ enum MyTBALocalStore {
     }
 }
 
-extension Notification.Name {
-    static let favoritesStoreDidChange = Notification.Name("favoritesStoreDidChange")
-    static let subscriptionsStoreDidChange = Notification.Name("subscriptionsStoreDidChange")
-}
-
 // Passed explicitly to the handful of view controllers that care about myTBA
 // state. Kept out of `Dependencies` since only myTBA-adjacent screens use it.
 struct MyTBAStores {
@@ -65,7 +60,6 @@ final class FavoritesStore {
     func clear() {
         favorites = []
         file.delete()
-        NotificationCenter.default.post(name: .favoritesStoreDidChange, object: self)
     }
 
     func favoriteTeamKeys() -> [String] {
@@ -78,7 +72,6 @@ final class FavoritesStore {
 
     private func persist() {
         file.save(favorites)
-        NotificationCenter.default.post(name: .favoritesStoreDidChange, object: self)
     }
 }
 
@@ -117,7 +110,6 @@ final class SubscriptionsStore {
     func clear() {
         subscriptions = []
         file.delete()
-        NotificationCenter.default.post(name: .subscriptionsStoreDidChange, object: self)
     }
 
     func subscription(modelKey: String, modelType: MyTBAModelType) -> MyTBASubscription? {
@@ -130,6 +122,5 @@ final class SubscriptionsStore {
 
     private func persist() {
         file.save(subscriptions)
-        NotificationCenter.default.post(name: .subscriptionsStoreDidChange, object: self)
     }
 }

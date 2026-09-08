@@ -99,6 +99,7 @@ class MyTBATableViewController: UIViewController, DataController,
         case event(Event)
         case team(Team)
     }
+    private var storeObservation: Task<Void, Never>?
     private var loadedModels: [MyTBAItem: LoadedModel] = [:]
     private var failedKeys: Set<MyTBAItem> = []
     /// When true, failed items render inline as key-only placeholder cells and
@@ -176,13 +177,16 @@ class MyTBATableViewController: UIViewController, DataController,
         setupDataSource()
         tableView.dataSource = dataSource
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(storeDidChange),
-            name: storeChangeNotification,
-            object: nil
-        )
+        storeObservation = Task { [weak self] in
+            for await _ in Observations({ [weak self] in self?.currentItems ?? [] }) {
+                self?.storeDidChange()
+            }
+        }
         rebuildSnapshot()
+    }
+
+    isolated deinit {
+        storeObservation?.cancel()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -208,10 +212,6 @@ class MyTBATableViewController: UIViewController, DataController,
     /// Kicks off a remote refresh, writes the result into the backing store.
     func performRemoteRefresh() async throws {
         fatalError("Subclasses must override performRemoteRefresh()")
-    }
-
-    var storeChangeNotification: Notification.Name {
-        fatalError("Subclasses must override storeChangeNotification")
     }
 
     // MARK: - Refreshable default
@@ -345,7 +345,7 @@ class MyTBATableViewController: UIViewController, DataController,
 
     // MARK: - Refresh
 
-    @objc func storeDidChange() {
+    private func storeDidChange() {
         rebuildSnapshot()
         // Locally added favorites/subscriptions need their backing models loaded
         // even when the user hasn't pulled to refresh.
@@ -554,8 +554,6 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
         }
     }
 
-    override var storeChangeNotification: Notification.Name { .favoritesStoreDidChange }
-
     override func performRemoteRefresh() async throws {
         favoritesStore.replaceAll(with: try await myTBA.fetchFavorites())
     }
@@ -587,8 +585,6 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
             MyTBAItem(modelType: $0.modelType, key: $0.modelKey)
         }
     }
-
-    override var storeChangeNotification: Notification.Name { .subscriptionsStoreDidChange }
 
     override func performRemoteRefresh() async throws {
         subscriptionsStore.replaceAll(with: try await myTBA.fetchSubscriptions())
