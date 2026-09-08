@@ -1,3 +1,3 @@
-Hey y'all - you can now change the app icon from Settings → App Icon, with three new icons to pick from. 2023 Match Breakdowns are now fully implemented. Matches will now show empty RP dots (as well as the filled RP dots) to show the possible number of RP in a match. Team @ Event now has a tappable event row on the Summary tab. District Event grouping has been fixed. Event Awards now shows team numbers again.
+Hey y'all - this release is mostly under the hood: the app has been rebuilt for Swift 6. The myTBA sign-in screen got a refresh, and signing out of myTBA now reliably stops push notifications on that device.
 
 The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
