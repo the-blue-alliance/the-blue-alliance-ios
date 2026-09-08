@@ -365,26 +365,28 @@ class MyTBATableViewController: UIViewController, NotificationObservable, DataCo
     }
 
     private func fetchMissingItems() async {
-        let items = currentItems
-        await withTaskGroup(of: Void.self) { group in
-            for item in items where loadedModels[item] == nil {
-                group.addTask { [weak self] in
-                    guard let self = self else { return }
+        await withTaskGroup(of: (MyTBAItem, Result<LoadedModel, any Error>).self) { group in
+            for item in currentItems where loadedModels[item] == nil {
+                group.addTask { [self] in
                     do {
-                        let model = try await self.loadModel(for: item)
-                        await MainActor.run {
-                            self.loadedModels[item] = model
-                            self.failedKeys.remove(item)
-                            self.rebuildSnapshot()
-                        }
-                    } catch is CancellationError {
-                        // Refresh was cancelled; leave state untouched.
+                        return (item, .success(try await loadModel(for: item)))
                     } catch {
-                        await MainActor.run {
-                            self.failedKeys.insert(item)
-                            self.updateFailureBanner()
-                        }
+                        return (item, .failure(error))
                     }
+                }
+            }
+            for await (item, result) in group {
+                switch result {
+                case .success(let model):
+                    loadedModels[item] = model
+                    failedKeys.remove(item)
+                    rebuildSnapshot()
+                case .failure(is CancellationError):
+                    // Refresh was cancelled; leave state untouched.
+                    break
+                case .failure:
+                    failedKeys.insert(item)
+                    updateFailureBanner()
                 }
             }
         }
@@ -556,8 +558,7 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
     }
 
     override func performRemoteRefresh() async throws {
-        let favorites = try await myTBA.fetchFavorites()
-        await MainActor.run { favoritesStore.replaceAll(with: favorites) }
+        favoritesStore.replaceAll(with: try await myTBA.fetchFavorites())
     }
 
     // MARK: - Refreshable
@@ -595,8 +596,7 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
     }
 
     override func performRemoteRefresh() async throws {
-        let subs = try await myTBA.fetchSubscriptions()
-        await MainActor.run { subscriptionsStore.replaceAll(with: subs) }
+        subscriptionsStore.replaceAll(with: try await myTBA.fetchSubscriptions())
     }
 
     // MARK: - Refreshable
@@ -615,7 +615,10 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
 protocol NotificationObservable: AnyObject {}
 
 extension NotificationObservable {
-    func observeNotification(name: Notification.Name, handler: @escaping (Notification) -> Void) {
+    func observeNotification(
+        name: Notification.Name,
+        handler: @escaping @Sendable (Notification) -> Void
+    ) {
         NotificationCenter.default.addObserver(
             forName: name,
             object: nil,
