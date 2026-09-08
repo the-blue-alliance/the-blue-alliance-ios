@@ -3,6 +3,7 @@ import FirebaseCrashlytics
 import MyTBAKit
 import TBAAPI
 import UIKit
+import TBAUtils
 
 private enum SettingsSection: Int, CaseIterable {
     case info

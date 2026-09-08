@@ -3,6 +3,7 @@ import MyTBAKit
 import Photos
 import TBAAPI
 import UIKit
+import TBAUtils
 
 class TeamAtEventViewController: ContainerViewController {
 
