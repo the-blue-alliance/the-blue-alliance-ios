@@ -1,6 +1,7 @@
 import Foundation
 import TBAAPI
 import UIKit
+import TBAUtils
 
 protocol YearSelectViewControllerDelegate: AnyObject {
     func weekEventSelected(_ weekEvent: Event)

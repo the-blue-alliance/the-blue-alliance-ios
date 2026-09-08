@@ -1,5 +1,6 @@
 import Foundation
 import TBAAPI
+import TBAUtils
 
 nonisolated struct EventSection: Hashable, Comparable {
     let sortOrder: Int

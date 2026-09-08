@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import TBAUtils
 
 protocol EventInsightsConfigurator {
     static func configureDataSource(

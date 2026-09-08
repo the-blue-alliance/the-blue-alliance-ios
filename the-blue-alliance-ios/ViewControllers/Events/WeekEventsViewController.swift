@@ -1,5 +1,6 @@
 import Foundation
 import TBAAPI
+import TBAUtils
 
 protocol WeekEventsDelegate: AnyObject {
     func weekEventUpdated()

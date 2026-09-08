@@ -1,6 +1,7 @@
 import Foundation
 import TBAAPI
 import Testing
+import UIKit
 
 @testable import The_Blue_Alliance
 

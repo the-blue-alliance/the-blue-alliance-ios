@@ -5,6 +5,7 @@ import TBAAPI
 import UIKit
 import UserNotifications
 import TBAAuth
+import TBAUtils
 
 class MyTBAViewController: ContainerViewController {
 

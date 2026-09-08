@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import PureLayout
 
 class EventInsightsView: UIView, Reusable {
 
