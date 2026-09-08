@@ -45,9 +45,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
     lazy private var filerBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(
             image: UIImage.sortFilterIcon,
-            style: .plain,
-            target: self,
-            action: #selector(showFilter)
+            primaryAction: UIAction { [weak self] _ in self?.delegate?.filterSelected() }
         )
     }()
 
@@ -144,10 +142,6 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
     }
 
     // MARK: - Interface Actions
-
-    @objc private func showFilter() {
-        delegate?.filterSelected()
-    }
 
     // MARK: - Refreshable
 

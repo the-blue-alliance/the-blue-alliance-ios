@@ -25,9 +25,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(
             image: UIImage.sortFilterIcon,
-            style: .plain,
-            target: self,
-            action: #selector(showFilter)
+            primaryAction: UIAction { [weak self] _ in self?.delegate?.showFilter() }
         )
     }()
     override var additionalRightBarButtonItems: [UIBarButtonItem] {
@@ -160,10 +158,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     }
 
     // MARK: - Interface Methods
-
-    @objc func showFilter(_ sender: UIBarButtonItem) {
-        delegate?.showFilter()
-    }
 
     // MARK: - Refreshable
 

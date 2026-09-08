@@ -8,9 +8,7 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
     lazy var favoriteBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(
             image: UIImage.starIcon,
-            style: .plain,
-            target: self,
-            action: #selector(myTBAPreferencesTapped)
+            primaryAction: UIAction { [weak self] _ in self?.presentMyTBAPreferences() }
         )
     }()
 
@@ -53,10 +51,6 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
         } else {
             rightBarButtonItems = []
         }
-    }
-
-    @objc func myTBAPreferencesTapped() {
-        presentMyTBAPreferences()
     }
 
 }
