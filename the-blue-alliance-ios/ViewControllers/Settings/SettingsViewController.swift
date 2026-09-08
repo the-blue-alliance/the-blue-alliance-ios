@@ -311,7 +311,7 @@ class SettingsViewController: TBATableViewController {
 
     private func openURL(url: URL) {
         if urlOpener.canOpenURL(url) {
-            urlOpener.open(url, options: [:], completionHandler: nil)
+            urlOpener.open(url)
         }
     }
 

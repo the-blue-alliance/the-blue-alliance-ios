@@ -68,9 +68,9 @@ final class EventPitMapViewController: UIViewController, Navigatable, WKNavigati
             return
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self, weak webView] in
-            guard let self, let webView else { return }
-            self.scrollToFocused(webView: webView, selector: selector)
+        Task {
+            try? await Task.sleep(for: .milliseconds(400))
+            scrollToFocused(webView: webView, selector: selector)
         }
     }
 
