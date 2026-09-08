@@ -106,16 +106,15 @@ class MyTBAViewController: ContainerViewController {
 
     private func logout() {
         isLoggingOut = true
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            defer { self.isLoggingOut = false }
+        Task {
+            defer { isLoggingOut = false }
             for vc in [favoritesViewController, subscriptionsViewController] as [Refreshable] {
                 vc.cancelRefresh()
             }
             do {
-                try await self.dependencies.myTBASession.signOut()
+                try await dependencies.myTBASession.signOut()
             } catch {
-                self.showErrorAlert(
+                showErrorAlert(
                     with: "Unable to sign out of myTBA - \(error.localizedDescription)"
                 )
             }

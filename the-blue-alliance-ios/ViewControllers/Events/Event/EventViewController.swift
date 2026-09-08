@@ -111,7 +111,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         }
         registerForEventStatusChanges(eventKey: state.key)
 
-        Task { @MainActor in
+        Task {
             if let fetched = try? await api.event(key: state.key) {
                 state = .event(fetched)
                 title = fetched.friendlyNameWithYear

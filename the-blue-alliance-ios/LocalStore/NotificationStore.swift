@@ -1,6 +1,5 @@
 import Foundation
 
-@MainActor
 final class NotificationStore {
 
     struct Entry: Codable, Identifiable, Equatable {

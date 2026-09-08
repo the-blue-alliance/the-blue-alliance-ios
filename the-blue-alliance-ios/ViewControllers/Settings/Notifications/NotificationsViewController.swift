@@ -345,7 +345,7 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBARegisterTask = Task { @MainActor [weak self] in
+        myTBARegisterTask = Task { [weak self] in
             guard let self else { return }
             do {
                 let response = try await self.myTBA.register()
@@ -409,7 +409,7 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBAPingTask = Task { @MainActor [weak self] in
+        myTBAPingTask = Task { [weak self] in
             guard let self else { return }
             do {
                 let response = try await self.myTBA.ping()
@@ -457,8 +457,8 @@ class NotificationsViewController: TBATableViewController {
 
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         actionSheet.addAction(
-            UIAlertAction(title: "Copy Token", style: .default) { [weak self] _ in
-                self?.copyFCMTokenToPasteboard(fcmToken)
+            UIAlertAction(title: "Copy Token", style: .default) { _ in
+                self.copyFCMTokenToPasteboard(fcmToken)
             }
         )
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

@@ -3,14 +3,12 @@ import MyTBAKit
 import UIKit
 import TBAAuth
 
-@MainActor
 protocol PushNotificationRouting: AnyObject {
     var rootViewController: UIViewController? { get set }
     func handleTap(_ payload: PushNotificationPayload)
     func performSilentRefresh(_ kind: PushNotificationPayload.SilentKind) async
 }
 
-@MainActor
 final class PushNotificationRouter: PushNotificationRouting {
 
     private let dependencies: Dependencies

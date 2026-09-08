@@ -42,7 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         myTBA: myTBA,
         registrar: self
     )
-    @MainActor
     lazy var pushNotificationRouter: PushNotificationRouter = PushNotificationRouter(
         dependencies: dependencies
     )
@@ -50,9 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         reporter: reporter,
         api: api
     )
-    @MainActor
     lazy var authService: any AuthServiceProtocol = AuthService(reporter: reporter)
-    @MainActor
     lazy var myTBASession = MyTBASessionService(
         authService: authService,
         myTBA: myTBA,
@@ -61,7 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         reporter: reporter
     )
 
-    @MainActor
     lazy var dependencies = Dependencies(
         api: api,
         appSettings: appSettings,
@@ -128,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             completionHandler(.noData)
             return
         }
-        Task { @MainActor in
+        Task {
             await pushNotificationRouter.performSilentRefresh(kind)
             completionHandler(.newData)
         }
@@ -273,39 +269,25 @@ extension FirebaseIDTokenProvider: @retroactive IDTokenProvider {}
 extension AppDelegate {
 
     static func setupAppearance() {
-        if #available(iOS 15.0, *) {
-            let navigationBarAppearance = UINavigationBarAppearance()
-            navigationBarAppearance.configureWithOpaqueBackground()
-            navigationBarAppearance.backgroundColor = UIColor.navigationBarTintColor
-            navigationBarAppearance.shadowColor = nil
-            navigationBarAppearance.shadowImage = UIImage()
-            navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-            UINavigationBar.appearance().standardAppearance = navigationBarAppearance
-            UINavigationBar.appearance().compactAppearance = navigationBarAppearance
-            UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
-        }
-
-        let navigationBarAppearance = UINavigationBar.appearance()
-        navigationBarAppearance.barTintColor = UIColor.navigationBarTintColor
-        navigationBarAppearance.tintColor = UIColor.white
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = UIColor.navigationBarTintColor
+        navigationBarAppearance.shadowColor = nil
         navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
-        navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-        if #available(iOS 15.0, *) {
-            let tabBarAppearance = UITabBarAppearance()
-            tabBarAppearance.configureWithOpaqueBackground()
-            tabBarAppearance.selectionIndicatorTintColor = UIColor.tabBarTintColor
+        UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+        UINavigationBar.appearance().tintColor = UIColor.white
 
-            UITabBar.appearance().standardAppearance = tabBarAppearance
-            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        }
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.selectionIndicatorTintColor = UIColor.tabBarTintColor
 
-        let tabBarAppearance = UITabBar.appearance()
-        tabBarAppearance.isTranslucent = false
-        tabBarAppearance.tintColor = UIColor.tabBarTintColor
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        UITabBar.appearance().tintColor = UIColor.tabBarTintColor
 
         let segmentedControlAppearance = UISegmentedControl.appearance()
         segmentedControlAppearance.setTitleTextAttributes(

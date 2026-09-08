@@ -424,7 +424,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         guard imageCache[photo.foreignKey] == nil else { return }
         guard let url = photo.directURL else { return }
         downloadTasks[photo.foreignKey]?.cancel()
-        downloadTasks[photo.foreignKey] = Task { @MainActor [weak self] in
+        downloadTasks[photo.foreignKey] = Task { [weak self] in
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 if let image = UIImage(data: data) {

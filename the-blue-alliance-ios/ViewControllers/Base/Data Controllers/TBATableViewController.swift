@@ -51,10 +51,8 @@ class TBATableViewController: UITableViewController, DataController, Navigatable
         tableView.delegate = self
         tableView.registerReusableCell(BasicTableViewCell.self)
 
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-            tableView.contentInsetAdjustmentBehavior = .never
-        }
+        tableView.sectionHeaderTopPadding = 0
+        tableView.contentInsetAdjustmentBehavior = .never
     }
 
     override func viewDidAppear(_ animated: Bool) {

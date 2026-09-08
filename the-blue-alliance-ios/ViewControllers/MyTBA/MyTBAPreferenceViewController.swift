@@ -141,7 +141,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
 
         isLoading = true
         loadFailed = false
-        loadTask = Task { @MainActor [weak self] in
+        loadTask = Task { [weak self] in
             guard let self else { return }
             do {
                 // Unstructured Task handles instead of `async let`: Swift 6.1's
@@ -201,7 +201,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
 
     func save() {
         isSaving = true
-        preferencesTask = Task { @MainActor [weak self] in
+        preferencesTask = Task { [weak self] in
             guard let self else { return }
             do {
                 let response = try await self.myTBA.updatePreferences(
@@ -265,13 +265,13 @@ class MyTBAPreferenceViewController: TBATableViewController,
             preferredStyle: .actionSheet
         )
         alert.addAction(
-            UIAlertAction(title: "Save", style: .default) { [weak self] _ in
-                self?.save()
+            UIAlertAction(title: "Save", style: .default) { _ in
+                self.save()
             }
         )
         alert.addAction(
-            UIAlertAction(title: "Close", style: .destructive) { [weak self] _ in
-                self?.close()
+            UIAlertAction(title: "Close", style: .destructive) { _ in
+                self.close()
             }
         )
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

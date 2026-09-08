@@ -58,7 +58,7 @@ nonisolated enum MyTBAItem: Hashable {
 // SubscriptionsStore, then pass their entries through the common rendering
 // pipeline. Owns the loaded-model cache, failure tracking, and the pinned
 // failure banner that sits above the table.
-class MyTBATableViewController: UIViewController, NotificationObservable, DataController,
+class MyTBATableViewController: UIViewController, DataController,
     Navigatable
 {
 
@@ -176,7 +176,12 @@ class MyTBATableViewController: UIViewController, NotificationObservable, DataCo
         setupDataSource()
         tableView.dataSource = dataSource
 
-        registerForStoreChanges()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(storeDidChange),
+            name: storeChangeNotification,
+            object: nil
+        )
         rebuildSnapshot()
     }
 
@@ -205,9 +210,9 @@ class MyTBATableViewController: UIViewController, NotificationObservable, DataCo
         fatalError("Subclasses must override performRemoteRefresh()")
     }
 
-    /// Registers for the NotificationCenter name that the backing store posts on change.
-    func registerForStoreChanges() {
-        fatalError("Subclasses must override registerForStoreChanges()")
+    /// The name the backing store posts when it changes.
+    var storeChangeNotification: Notification.Name {
+        fatalError("Subclasses must override storeChangeNotification")
     }
 
     // MARK: - Refreshable default
@@ -341,14 +346,13 @@ class MyTBATableViewController: UIViewController, NotificationObservable, DataCo
 
     // MARK: - Refresh
 
-    func storeDidChange() {
+    @objc func storeDidChange() {
         rebuildSnapshot()
         // Locally added favorites/subscriptions need their backing models loaded
         // even when the user hasn't pulled to refresh.
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            await self.fetchMissingItems()
-            self.rebuildSnapshot()
+        Task {
+            await fetchMissingItems()
+            rebuildSnapshot()
         }
     }
 
@@ -551,11 +555,7 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
         }
     }
 
-    override func registerForStoreChanges() {
-        observeNotification(name: .favoritesStoreDidChange) { [weak self] _ in
-            Task { @MainActor in self?.storeDidChange() }
-        }
-    }
+    override var storeChangeNotification: Notification.Name { .favoritesStoreDidChange }
 
     override func performRemoteRefresh() async throws {
         favoritesStore.replaceAll(with: try await myTBA.fetchFavorites())
@@ -589,11 +589,7 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
         }
     }
 
-    override func registerForStoreChanges() {
-        observeNotification(name: .subscriptionsStoreDidChange) { [weak self] _ in
-            Task { @MainActor in self?.storeDidChange() }
-        }
-    }
+    override var storeChangeNotification: Notification.Name { .subscriptionsStoreDidChange }
 
     override func performRemoteRefresh() async throws {
         subscriptionsStore.replaceAll(with: try await myTBA.fetchSubscriptions())
@@ -608,24 +604,6 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
     // MARK: - Stateful
 
     var noDataText: String? { "No subscriptions" }
-}
-
-// MARK: - NotificationObservable helper
-
-protocol NotificationObservable: AnyObject {}
-
-extension NotificationObservable {
-    func observeNotification(
-        name: Notification.Name,
-        handler: @escaping @Sendable (Notification) -> Void
-    ) {
-        NotificationCenter.default.addObserver(
-            forName: name,
-            object: nil,
-            queue: .main,
-            using: handler
-        )
-    }
 }
 
 // MARK: - Failure Banner View

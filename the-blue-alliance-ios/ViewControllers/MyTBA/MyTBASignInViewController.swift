@@ -204,13 +204,12 @@ class MyTBASignInViewController: UIViewController {
         }
         isSigningIn = true
 
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            defer { self.isSigningIn = false }
+        Task {
+            defer { isSigningIn = false }
             do {
-                try await self.dependencies.myTBASession.signIn(with: kind, presenting: self)
+                try await dependencies.myTBASession.signIn(with: kind, presenting: self)
             } catch {
-                self.delegate?.signInViewController(self, didFailWith: error)
+                delegate?.signInViewController(self, didFailWith: error)
             }
         }
     }

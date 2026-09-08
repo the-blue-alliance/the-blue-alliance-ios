@@ -91,7 +91,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
         )
         parts.append(
             contentsOf: Self.formattedPairs(
-                values: ranking.sortOrders ?? [],
+                values: ranking.sortOrders,
                 info: sortOrderInfo.map { (name: $0.name, precision: $0.precision) }
             )
         )

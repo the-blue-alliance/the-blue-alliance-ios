@@ -81,7 +81,7 @@ class TeamViewController: HeaderContainerViewController {
             // skeleton hide animates collapse-and-fade if the new year
             // turns out to have no avatar, in sync with the skeleton out.
             teamHeaderView.showAvatarSkeleton()
-            Task { @MainActor in
+            Task {
                 await loadAvatar(year: year)
                 guard self.year == year else { return }
                 teamHeaderView.hideAvatarSkeleton(revealing: avatarImage)
@@ -89,7 +89,7 @@ class TeamViewController: HeaderContainerViewController {
         } else {
             // No prior avatar — silent off-screen fetch, no skeleton.
             // Only animate the avatar in if we actually got one.
-            Task { @MainActor in
+            Task {
                 await loadAvatar(year: year)
                 guard self.year == year else { return }
                 if avatarImage != nil {
@@ -220,7 +220,7 @@ class TeamViewController: HeaderContainerViewController {
     // MARK: - Private
 
     private func loadTeamData() {
-        Task { @MainActor in
+        Task {
             // Unstructured Task handles instead of `async let`: Swift 6.1's
             // async-let stack allocator trips swift_task_dealloc's LIFO check
             // here even with reverse-order awaits (#995 didn't fully fix it).

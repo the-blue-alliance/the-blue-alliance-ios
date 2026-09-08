@@ -142,10 +142,8 @@ extension PushService: UNUserNotificationCenterDelegate {
             completionHandler()
             return
         }
-        Task { @MainActor [weak self] in
-            self?.router?.handleTap(payload)
-            completionHandler()
-        }
+        router?.handleTap(payload)
+        completionHandler()
     }
 
 }

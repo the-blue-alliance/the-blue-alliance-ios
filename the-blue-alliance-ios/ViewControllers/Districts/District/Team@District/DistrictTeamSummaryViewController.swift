@@ -40,7 +40,7 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, St
     // MARK: - Table view data source
 
     private var eventPoints: [DistrictRanking.EventPointsPayloadPayload] {
-        ranking.eventPoints ?? []
+        ranking.eventPoints
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

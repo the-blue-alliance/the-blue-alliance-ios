@@ -25,7 +25,6 @@ enum MyTBASessionError: LocalizedError {
 /// device's push registration, notification permission, and cached favorites.
 /// This sequences those around sign-in and sign-out, so Google and Apple share
 /// one flow and `AuthService` never has to know myTBA exists.
-@MainActor
 final class MyTBASessionService {
 
     private let authService: any AuthServiceProtocol

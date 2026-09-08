@@ -34,7 +34,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
     // MARK: Table View Data Source
 
     private var eventPoints: [DistrictRanking.EventPointsPayloadPayload] {
-        ranking.eventPoints ?? []
+        ranking.eventPoints
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {

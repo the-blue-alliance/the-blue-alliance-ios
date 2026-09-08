@@ -80,7 +80,7 @@ class TeamAtEventViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Task { @MainActor in
+        Task {
             // Unstructured Task handles instead of `async let`: Swift 6.1's
             // async-let stack allocator trips swift_task_dealloc's LIFO check
             // here even with reverse-order awaits (#995 didn't fully fix it).

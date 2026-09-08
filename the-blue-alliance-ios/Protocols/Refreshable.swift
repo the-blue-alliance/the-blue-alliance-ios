@@ -41,7 +41,7 @@ extension Refreshable {
     /// silently — transient API failures aren't worth recording.
     func runRefresh(_ body: @escaping @MainActor () async throws -> Void) {
         currentRefreshTask?.cancel()
-        currentRefreshTask = Task { @MainActor [weak self] in
+        currentRefreshTask = Task { [weak self] in
             guard let self else { return }
             self.updateRefresh()
             defer {
