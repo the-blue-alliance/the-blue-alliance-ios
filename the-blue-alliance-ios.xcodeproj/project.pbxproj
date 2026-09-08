@@ -31,6 +31,7 @@
 		5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */; };
 		5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */; };
 		5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042100000001 /* NotificationStore.swift */; };
+		5EC0D41A2C26042100000004 /* JSONFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042100000003 /* JSONFileStore.swift */; };
 		5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041F00000001 /* AppGroup.swift */; };
 		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
 		92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* SessionMocks.swift */; };
@@ -224,6 +225,7 @@
 		5EC0D41A2C26041600000001 /* LegacyCoreDataCleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBALocalStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26042100000001 /* NotificationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26042100000003 /* JSONFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFileStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
 		92AA7A062F0100000006AAAA /* SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/SessionMocks.swift"; sourceTree = "<group>"; };
@@ -780,6 +782,7 @@
 				92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */,
 				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
 				5EC0D41A2C26042100000001 /* NotificationStore.swift */,
+				5EC0D41A2C26042100000003 /* JSONFileStore.swift */,
 			);
 			path = LocalStore;
 			sourceTree = "<group>";
@@ -1251,6 +1254,7 @@
 				5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
 				5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */,
+				5EC0D41A2C26042100000004 /* JSONFileStore.swift in Sources */,
 				5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */,
 				5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */,
 				5EC0D41A2C26041B00000004 /* PushNotificationRouter.swift in Sources */,

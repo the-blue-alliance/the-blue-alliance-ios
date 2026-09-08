@@ -36,14 +36,11 @@ struct MyTBAStores {
 final class FavoritesStore {
 
     private(set) var favorites: [MyTBAFavorite]
-    @ObservationIgnored private let fileURL: URL
+    @ObservationIgnored private let file: JSONFileStore<[MyTBAFavorite]>
 
     init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("favorites.json")) {
-        self.fileURL = fileURL
-        self.favorites =
-            (try? Data(contentsOf: fileURL)).flatMap {
-                try? JSONDecoder().decode([MyTBAFavorite].self, from: $0)
-            } ?? []
+        self.file = JSONFileStore(url: fileURL)
+        self.favorites = file.load() ?? []
     }
 
     func replaceAll(with favorites: [MyTBAFavorite]) {
@@ -67,7 +64,7 @@ final class FavoritesStore {
 
     func clear() {
         favorites = []
-        try? FileManager.default.removeItem(at: fileURL)
+        file.delete()
         NotificationCenter.default.post(name: .favoritesStoreDidChange, object: self)
     }
 
@@ -75,14 +72,13 @@ final class FavoritesStore {
         favorites.filter { $0.modelType == .team }.map { $0.modelKey }
     }
 
+    /// Waits for pending disk writes; for tests that read the file back.
+    func flush() async {
+        await file.flush()
+    }
+
     private func persist() {
-        try? FileManager.default.createDirectory(
-            at: fileURL.deletingLastPathComponent(),
-            withIntermediateDirectories: true
-        )
-        if let data = try? JSONEncoder().encode(favorites) {
-            try? data.write(to: fileURL, options: .atomic)
-        }
+        file.save(favorites)
         NotificationCenter.default.post(name: .favoritesStoreDidChange, object: self)
     }
 }
@@ -91,14 +87,11 @@ final class FavoritesStore {
 final class SubscriptionsStore {
 
     private(set) var subscriptions: [MyTBASubscription]
-    @ObservationIgnored private let fileURL: URL
+    @ObservationIgnored private let file: JSONFileStore<[MyTBASubscription]>
 
     init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("subscriptions.json")) {
-        self.fileURL = fileURL
-        self.subscriptions =
-            (try? Data(contentsOf: fileURL)).flatMap {
-                try? JSONDecoder().decode([MyTBASubscription].self, from: $0)
-            } ?? []
+        self.file = JSONFileStore(url: fileURL)
+        self.subscriptions = file.load() ?? []
     }
 
     func replaceAll(with subscriptions: [MyTBASubscription]) {
@@ -124,7 +117,7 @@ final class SubscriptionsStore {
 
     func clear() {
         subscriptions = []
-        try? FileManager.default.removeItem(at: fileURL)
+        file.delete()
         NotificationCenter.default.post(name: .subscriptionsStoreDidChange, object: self)
     }
 
@@ -132,14 +125,13 @@ final class SubscriptionsStore {
         subscriptions.first { $0.modelKey == modelKey && $0.modelType == modelType }
     }
 
+    /// Waits for pending disk writes; for tests that read the file back.
+    func flush() async {
+        await file.flush()
+    }
+
     private func persist() {
-        try? FileManager.default.createDirectory(
-            at: fileURL.deletingLastPathComponent(),
-            withIntermediateDirectories: true
-        )
-        if let data = try? JSONEncoder().encode(subscriptions) {
-            try? data.write(to: fileURL, options: .atomic)
-        }
+        file.save(subscriptions)
         NotificationCenter.default.post(name: .subscriptionsStoreDidChange, object: self)
     }
 }

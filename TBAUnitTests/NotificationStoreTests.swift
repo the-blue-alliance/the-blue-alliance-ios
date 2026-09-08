@@ -71,16 +71,18 @@ struct NotificationStoreTests {
         #expect(store.entries.map(\.id) == [other.id])
     }
 
-    @Test func clearEmptiesEntriesAndRemovesFile() {
+    @Test func clearEmptiesEntriesAndRemovesFile() async {
         let dir = Self.tempDirectory()
         defer { try? FileManager.default.removeItem(at: dir) }
         let store = NotificationStore(directory: dir)
         store.append(Self.entry())
+        await store.flush()
 
         let url = dir.appendingPathComponent("notifications.json")
         #expect(FileManager.default.fileExists(atPath: url.path))
 
         store.clear()
+        await store.flush()
 
         #expect(store.entries.isEmpty)
         #expect(!FileManager.default.fileExists(atPath: url.path))
@@ -123,16 +125,32 @@ struct NotificationStoreTests {
         #expect(store.entries.isEmpty)
     }
 
-    @Test func persistsAcrossInstances() {
+    @Test func persistsAcrossInstances() async {
         let dir = Self.tempDirectory()
         defer { try? FileManager.default.removeItem(at: dir) }
 
         let writer = NotificationStore(directory: dir)
         let entry = Self.entry(title: "persisted")
         writer.append(entry)
+        await writer.flush()
 
         let reader = NotificationStore(directory: dir)
         #expect(reader.entries == [entry])
+    }
+
+    @Test func writesLandInRequestOrder() async {
+        let dir = Self.tempDirectory()
+        defer { try? FileManager.default.removeItem(at: dir) }
+
+        let store = NotificationStore(directory: dir)
+        let kept = Self.entry(title: "kept")
+        store.append(Self.entry(title: "first"))
+        store.clear()
+        store.append(kept)
+        await store.flush()
+
+        let reader = NotificationStore(directory: dir)
+        #expect(reader.entries == [kept])
     }
 
 }

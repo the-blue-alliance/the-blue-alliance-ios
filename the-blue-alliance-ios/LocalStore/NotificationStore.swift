@@ -13,13 +13,11 @@ final class NotificationStore {
     static let maxCount = 100
 
     private(set) var entries: [Entry]
-    private let url: URL
+    private let file: JSONFileStore<[Entry]>
 
     init(directory: URL = NotificationStore.defaultDirectory) {
-        self.url = directory.appendingPathComponent("notifications.json")
-        let loaded =
-            (try? Data(contentsOf: url))
-            .flatMap { try? JSONDecoder().decode([Entry].self, from: $0) } ?? []
+        self.file = JSONFileStore(url: directory.appendingPathComponent("notifications.json"))
+        let loaded = file.load() ?? []
         self.entries = Array(loaded.prefix(Self.maxCount))
         if loaded.count > Self.maxCount {
             persist()
@@ -43,17 +41,16 @@ final class NotificationStore {
 
     func clear() {
         entries.removeAll()
-        try? FileManager.default.removeItem(at: url)
+        file.delete()
+    }
+
+    /// Waits for pending disk writes; for tests that read the file back.
+    func flush() async {
+        await file.flush()
     }
 
     private func persist() {
-        try? FileManager.default.createDirectory(
-            at: url.deletingLastPathComponent(),
-            withIntermediateDirectories: true
-        )
-        if let data = try? JSONEncoder().encode(entries) {
-            try? data.write(to: url, options: .atomic)
-        }
+        file.save(entries)
     }
 
     nonisolated private static var defaultDirectory: URL {
