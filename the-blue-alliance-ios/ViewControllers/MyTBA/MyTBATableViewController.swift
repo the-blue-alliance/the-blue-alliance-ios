@@ -87,10 +87,48 @@ class MyTBATableViewController: UIViewController, DataController,
 
     // MARK: - Views
 
-    private(set) var tableView: UITableView!
-    private var failureBannerView: FailureBannerView!
-    private var failureBannerContainer: UIView!
-    private var failureBannerHeightConstraint: NSLayoutConstraint!
+    private(set) lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 64.0
+        tableView.backgroundColor = UIColor.systemGroupedBackground
+        tableView.tableFooterView = UIView(frame: .zero)
+        tableView.delegate = self
+        tableView.registerReusableCell(BasicTableViewCell.self)
+        tableView.registerReusableCell(EventTableViewCell.self)
+        tableView.registerReusableCell(TeamTableViewCell.self)
+        tableView.sectionHeaderTopPadding = 0
+        tableView.contentInsetAdjustmentBehavior = .never
+        return tableView
+    }()
+
+    private lazy var failureBannerView: FailureBannerView = {
+        let banner = FailureBannerView()
+        banner.addAction(UIAction { [weak self] _ in self?.bannerTapped() }, for: .touchUpInside)
+        banner.translatesAutoresizingMaskIntoConstraints = false
+        return banner
+    }()
+
+    // Clipping wrapper so the banner can slide up behind the segmented
+    // control instead of being scrunched. Banner is pinned to the wrapper's
+    // bottom; animating the wrapper's height 0 ↔ bannerHeight produces the
+    // slide effect without resizing the banner content itself.
+    private lazy var failureBannerContainer: UIView = {
+        let container = UIView()
+        container.clipsToBounds = true
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(failureBannerView)
+        NSLayoutConstraint.activate([
+            failureBannerView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            failureBannerView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            failureBannerView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+        ])
+        return container
+    }()
+
+    private lazy var failureBannerHeightConstraint = failureBannerContainer.heightAnchor.constraint(
+        equalToConstant: 0
+    )
     private lazy var dataSource: TableViewDataSource<MyTBASection, MyTBAItem> = makeDataSource()
 
     // MARK: - State
@@ -124,49 +162,7 @@ class MyTBATableViewController: UIViewController, DataController,
 
         view.backgroundColor = UIColor.systemGroupedBackground
 
-        failureBannerView = FailureBannerView()
-        failureBannerView.addAction(
-            UIAction { [weak self] _ in self?.bannerTapped() },
-            for: .touchUpInside
-        )
-        failureBannerView.translatesAutoresizingMaskIntoConstraints = false
-
-        // Clipping wrapper so the banner can slide up behind the segmented
-        // control instead of being scrunched. Banner is pinned to the wrapper's
-        // bottom; animating the wrapper's height 0 ↔ bannerHeight produces the
-        // slide effect without resizing the banner content itself.
-        failureBannerContainer = UIView()
-        failureBannerContainer.clipsToBounds = true
-        failureBannerContainer.translatesAutoresizingMaskIntoConstraints = false
-        failureBannerContainer.addSubview(failureBannerView)
-        NSLayoutConstraint.activate([
-            failureBannerView.leadingAnchor.constraint(
-                equalTo: failureBannerContainer.leadingAnchor
-            ),
-            failureBannerView.trailingAnchor.constraint(
-                equalTo: failureBannerContainer.trailingAnchor
-            ),
-            failureBannerView.bottomAnchor.constraint(
-                equalTo: failureBannerContainer.bottomAnchor
-            ),
-        ])
-        failureBannerHeightConstraint = failureBannerContainer.heightAnchor.constraint(
-            equalToConstant: 0
-        )
         failureBannerHeightConstraint.isActive = true
-
-        tableView = UITableView(frame: .zero, style: .plain)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 64.0
-        tableView.backgroundColor = UIColor.systemGroupedBackground
-        tableView.tableFooterView = UIView(frame: .zero)
-        tableView.delegate = self
-        tableView.registerReusableCell(BasicTableViewCell.self)
-        tableView.registerReusableCell(EventTableViewCell.self)
-        tableView.registerReusableCell(TeamTableViewCell.self)
-
-        tableView.sectionHeaderTopPadding = 0
-        tableView.contentInsetAdjustmentBehavior = .never
 
         let stack = UIStackView(arrangedSubviews: [failureBannerContainer, tableView])
         stack.axis = .vertical
