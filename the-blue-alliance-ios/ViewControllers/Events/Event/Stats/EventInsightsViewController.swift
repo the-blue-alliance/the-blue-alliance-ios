@@ -31,7 +31,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
     private let year: Int
     private let eventStatsConfigurator: (any EventInsightsConfigurator.Type)?
 
-    private var dataSource: EventInsightsDataSource!
+    private lazy var dataSource: EventInsightsDataSource = makeDataSource()
 
     init(eventKey: EventKey, year: Int, dependencies: Dependencies) {
         self.eventKey = eventKey
@@ -73,7 +73,6 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         tableView.insetsContentViewsToSafeArea = false
 
         tableView.dataSource = dataSource
-        setupDataSource()
     }
 
     // MARK: - UITableViewDelegate
@@ -101,8 +100,8 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
 
     // MARK: - Private Methods
 
-    private func setupDataSource() {
-        dataSource = EventInsightsDataSource(tableView: tableView) {
+    private func makeDataSource() -> EventInsightsDataSource {
+        let dataSource = EventInsightsDataSource(tableView: tableView) {
             (tableView, indexPath, row) -> UITableViewCell? in
             if indexPath.section == 0 {
                 let cell =
@@ -141,6 +140,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
             }
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func configureDataSource(qual: [String: Any]?, playoff: [String: Any]?) {

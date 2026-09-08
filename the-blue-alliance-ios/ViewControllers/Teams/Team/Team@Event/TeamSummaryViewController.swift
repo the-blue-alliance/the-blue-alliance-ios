@@ -58,7 +58,8 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
     private var nextMatch: Match?
     private var lastMatch: Match?
 
-    private var dataSource: TableViewDataSource<TeamSummarySection, TeamSummaryItem>!
+    private lazy var dataSource: TableViewDataSource<TeamSummarySection, TeamSummaryItem> =
+        makeDataSource()
 
     init(teamKey: String, eventKey: EventKey, dependencies: Dependencies) {
         self.teamKey = teamKey
@@ -82,13 +83,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         tableView.registerReusableCell(MatchTableViewCell.self)
 
         tableView.dataSource = dataSource
-        setupDataSource()
     }
 
     // MARK: - Private Methods
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<TeamSummarySection, TeamSummaryItem>(
+    private func makeDataSource() -> TableViewDataSource<TeamSummarySection, TeamSummaryItem> {
+        let dataSource = TableViewDataSource<TeamSummarySection, TeamSummaryItem>(
             tableView: tableView,
             cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
                 guard let self else { return nil }
@@ -165,6 +165,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             }
         )
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func rebuildSnapshot() {

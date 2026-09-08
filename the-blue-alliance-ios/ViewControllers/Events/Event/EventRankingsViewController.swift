@@ -12,7 +12,8 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     private let eventKey: EventKey
 
-    private var dataSource: TableViewDataSource<String, EventRanking.RankingsPayloadPayload>!
+    private lazy var dataSource: TableViewDataSource<String, EventRanking.RankingsPayloadPayload> =
+        makeDataSource()
     private var rankings: [EventRanking.RankingsPayloadPayload] = []
     private var extraStatsInfo: [EventRanking.ExtraStatsInfoPayloadPayload] = []
     private var sortOrderInfo: [EventRanking.SortOrderInfoPayloadPayload] = []
@@ -35,7 +36,6 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
         super.viewDidLoad()
 
         tableView.registerReusableCell(RankingTableViewCell.self)
-        setupDataSource()
         tableView.dataSource = dataSource
     }
 
@@ -48,8 +48,10 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<String, EventRanking.RankingsPayloadPayload>(
+    private func makeDataSource() -> TableViewDataSource<
+        String, EventRanking.RankingsPayloadPayload
+    > {
+        let dataSource = TableViewDataSource<String, EventRanking.RankingsPayloadPayload>(
             tableView: tableView
         ) {
             [weak self] tableView, indexPath, ranking in
@@ -64,6 +66,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func applyRanking(_ response: EventRanking?) {

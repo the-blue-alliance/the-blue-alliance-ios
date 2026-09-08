@@ -32,7 +32,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
 
     private let eventKey: EventKey
 
-    private var dataSource: TableViewDataSource<String, TeamStatRow>!
+    private lazy var dataSource: TableViewDataSource<String, TeamStatRow> = makeDataSource()
     private var rows: [TeamStatRow] = []
     private var teamsByKey: [String: TeamSimple] = [:]
 
@@ -71,7 +71,6 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
         super.viewDidLoad()
 
         tableView.registerReusableCell(RankingTableViewCell.self)
-        setupDataSource()
         tableView.dataSource = dataSource
     }
 
@@ -85,8 +84,8 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<String, TeamStatRow>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<String, TeamStatRow> {
+        let dataSource = TableViewDataSource<String, TeamStatRow>(tableView: tableView) {
             [weak self] tableView, indexPath, row in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             let team = self?.teamsByKey[row.teamKey]
@@ -100,6 +99,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func apply(oprs response: EventOPRs?) {

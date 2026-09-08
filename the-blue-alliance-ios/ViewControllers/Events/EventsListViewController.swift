@@ -31,7 +31,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     weak var delegate: (any EventsListViewControllerDelegate)?
 
     private(set) var events: [APIEvent] = []
-    private var dataSource: EventsListDataSource!
+    private lazy var dataSource: EventsListDataSource = makeDataSource()
 
     // MARK: - View Lifecycle
 
@@ -39,7 +39,6 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
         super.viewDidLoad()
 
         tableView.registerReusableCell(EventTableViewCell.self)
-        setupDataSource()
     }
 
     // MARK: - Subclass override points
@@ -57,8 +56,8 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: - Data Source
 
-    private func setupDataSource() {
-        dataSource = EventsListDataSource(tableView: tableView) {
+    private func makeDataSource() -> EventsListDataSource {
+        let dataSource = EventsListDataSource(tableView: tableView) {
             [weak self] tableView, indexPath, event in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
             cell.viewModel = EventCellViewModel(
@@ -73,6 +72,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
         dataSource.statefulDelegate = self
         dataSource.titleOverride = { [weak self] event in self?.delegate?.title(for: event) }
         tableView.dataSource = dataSource
+        return dataSource
     }
 
     func applyEvents(_ apiEvents: [APIEvent]) {

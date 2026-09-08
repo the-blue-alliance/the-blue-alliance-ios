@@ -53,7 +53,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     weak var delegate: (any TeamMediaCollectionViewControllerDelegate)?
 
-    private var dataSource: CollectionViewDataSource<MediaSection, TeamMediaItem>!
+    private lazy var dataSource: CollectionViewDataSource<MediaSection, TeamMediaItem> =
+        makeDataSource()
     private var media: [TeamMediaItem] = []
     private var imageCache: [String: UIImage] = [:]
     private var imageErrors: [String: any Error] = [:]
@@ -88,7 +89,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private func makeLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
             guard let self else { return nil }
-            let section = self.dataSource?.sectionIdentifier(for: sectionIndex) ?? .images
+            let section = self.dataSource.sectionIdentifier(for: sectionIndex) ?? .images
             switch section {
             case .videos:
                 return Self.makeVideoSection(env: env)
@@ -174,7 +175,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
         collectionView.registerReusableCell(PlayerCollectionViewCell.self)
 
-        setupDataSource()
         collectionView.dataSource = dataSource
         collectionView.setCollectionViewLayout(makeLayout(), animated: false)
     }
@@ -316,8 +316,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Data Source
 
-    private func setupDataSource() {
-        dataSource = CollectionViewDataSource<MediaSection, TeamMediaItem>(
+    private func makeDataSource() -> CollectionViewDataSource<MediaSection, TeamMediaItem> {
+        let dataSource = CollectionViewDataSource<MediaSection, TeamMediaItem>(
             collectionView: collectionView
         ) { [weak self] collectionView, indexPath, item in
             guard let self else { return UICollectionViewCell() }
@@ -345,6 +345,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             }
         }
         dataSource.delegate = self
+        return dataSource
     }
 
     private func applyMedia(_ items: [TeamMediaItem]) {

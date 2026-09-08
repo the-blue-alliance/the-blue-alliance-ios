@@ -18,7 +18,8 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     private var state: TeamState
 
-    private var dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
+    private lazy var dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem> =
+        makeDataSource()
 
     private var sponsorsExpanded: Bool = false
 
@@ -51,15 +52,14 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
 
         tableView.dataSource = dataSource
-        setupDataSource()
 
         updateTeamInfo()
     }
 
     // MARK: - Private Methods
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<TeamInfoSection, TeamInfoItem>(
+    private func makeDataSource() -> TableViewDataSource<TeamInfoSection, TeamInfoItem> {
+        let dataSource = TableViewDataSource<TeamInfoSection, TeamInfoItem>(
             tableView: tableView,
             cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
                 guard let self = self else { return nil }
@@ -77,6 +77,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
                 }
             }
         )
+        return dataSource
     }
 
     private func updateTeamInfo() {

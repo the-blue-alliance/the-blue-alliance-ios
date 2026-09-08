@@ -16,7 +16,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     private var loadedTeams: [APITeam] = []
     private var filterTask: Task<Void, Never>?
 
-    private var dataSource: TableViewDataSource<String, APITeam>!
+    private lazy var dataSource: TableViewDataSource<String, APITeam> = makeDataSource()
 
     private let showSearch: Bool
 
@@ -39,7 +39,6 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
         }
 
         tableView.registerReusableCell(TeamTableViewCell.self)
-        setupDataSource()
         tableView.dataSource = dataSource
     }
 
@@ -55,8 +54,8 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
 
     // MARK: - Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<String, APITeam>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<String, APITeam> {
+        let dataSource = TableViewDataSource<String, APITeam>(tableView: tableView) {
             tableView,
             indexPath,
             team in
@@ -71,6 +70,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func applyTeams(_ loaded: [APITeam]) {
