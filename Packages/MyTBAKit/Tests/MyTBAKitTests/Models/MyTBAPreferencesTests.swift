@@ -2,6 +2,7 @@ import Testing
 
 @testable import MyTBAKit
 
+@MainActor
 struct MyTBAPreferencesTests {
 
     let myTBA = MockMyTBA()

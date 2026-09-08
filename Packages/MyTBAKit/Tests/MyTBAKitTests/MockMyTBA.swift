@@ -8,6 +8,7 @@ final class MockFCMTokenProvider: FCMTokenProvider {
     var fcmToken: String?
 }
 
+@MainActor
 final class MockIDTokenProvider: IDTokenProvider {
     var isSignedIn = false
     var stubbedToken = "mock-id-token"

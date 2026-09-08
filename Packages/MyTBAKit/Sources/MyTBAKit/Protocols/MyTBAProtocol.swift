@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 public protocol MyTBAProtocol: AnyObject {
     func ping() async throws -> MyTBABaseResponse
     func register() async throws -> MyTBABaseResponse

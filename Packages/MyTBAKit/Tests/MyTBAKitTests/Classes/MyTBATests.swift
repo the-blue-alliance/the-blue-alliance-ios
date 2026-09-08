@@ -3,6 +3,7 @@ import Testing
 
 @testable import MyTBAKit
 
+@MainActor
 struct MyTBAErrorTests {
 
     @Test func code() {
@@ -18,6 +19,7 @@ struct MyTBAErrorTests {
 
 }
 
+@MainActor
 struct MyTBATests {
 
     let myTBA = MockMyTBA()

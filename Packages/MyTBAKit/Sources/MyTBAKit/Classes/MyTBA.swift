@@ -27,12 +27,16 @@ extension MyTBAError: LocalizedError {
     }
 }
 
-public protocol MyTBAURLSession {
+public protocol MyTBAURLSession: Sendable {
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
 extension URLSession: MyTBAURLSession {}
 
+/// Main-actor on purpose. Every caller is a view controller or a main-actor service, the
+/// payloads are small, and it pins the `Messaging.fcmToken` read to the thread Firebase
+/// delivers on - that getter reads an unsynchronized ivar.
+@MainActor
 open class MyTBA {
 
     static let baseURL = URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!
@@ -55,11 +59,11 @@ open class MyTBA {
         return fcmTokenProvider.fcmToken
     }
 
-    internal var urlSession: MyTBAURLSession
-    internal var uuid: String
-    internal var deviceName: String
-    private var fcmTokenProvider: FCMTokenProvider
-    private var idTokenProvider: IDTokenProvider
+    internal let urlSession: MyTBAURLSession
+    internal let uuid: String
+    internal let deviceName: String
+    private let fcmTokenProvider: FCMTokenProvider
+    private let idTokenProvider: IDTokenProvider
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()
