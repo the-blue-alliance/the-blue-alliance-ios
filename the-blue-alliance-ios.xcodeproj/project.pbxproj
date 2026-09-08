@@ -50,7 +50,6 @@
 		5EC0D41A2C26041A00000006 /* TeamsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000005 /* TeamsListViewController.swift */; };
 		5EC0D41A2C26041A00000008 /* TeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000007 /* TeamsViewController.swift */; };
 		920240072AEB6AAD0003D118 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 920240062AEB6AAD0003D118 /* PureLayout */; };
-		9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400C2AEB6ADC0003D118 /* MyTBAKit */; };
 		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
 		921843072DB42424003B4F9E /* TBAUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 921843062DB42424003B4F9E /* TBAUtils */; };
 		92AA7A032F0100000003AAAA /* TBAAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 92AA7A022F0100000002AAAA /* TBAAuth */; };
@@ -422,7 +421,6 @@
 			files = (
 				92C5FBDC2B0037E10006AE48 /* YouTubeiOSPlayerHelper in Frameworks */,
 				924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */,
-				9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */,
 				924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */,
 				921843032DB42424003B4F9E /* TBAAPI in Frameworks */,
 				921843072DB42424003B4F9E /* TBAUtils in Frameworks */,
@@ -1077,7 +1075,6 @@
 				924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */,
 				924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */,
 				920240062AEB6AAD0003D118 /* PureLayout */,
-				9202400C2AEB6ADC0003D118 /* MyTBAKit */,
 				92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */,
 				92C5FBDE2B0038250006AE48 /* Agrume */,
 				92F63E9A2BA91B4F0025CC03 /* MyTBAKit */,
@@ -1757,10 +1754,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 92B3217D26ED1A79003B28DC /* XCRemoteSwiftPackageReference "PureLayout" */;
 			productName = PureLayout;
-		};
-		9202400C2AEB6ADC0003D118 /* MyTBAKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MyTBAKit;
 		};
 		921843022DB42424003B4F9E /* TBAAPI */ = {
 			isa = XCSwiftPackageProductDependency;
