@@ -61,13 +61,8 @@ final class MockStatusService: StatusServiceProtocol {
 final class MockURLOpener: URLOpener {
     private(set) var opened: [URL] = []
     func canOpenURL(_ url: URL) -> Bool { true }
-    func open(
-        _ url: URL,
-        options: [UIApplication.OpenExternalURLOptionsKey: Any],
-        completionHandler completion: (@MainActor @Sendable (Bool) -> Void)?
-    ) {
+    func open(_ url: URL) {
         opened.append(url)
-        completion?(true)
     }
 }
 

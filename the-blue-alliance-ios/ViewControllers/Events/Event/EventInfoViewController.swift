@@ -240,7 +240,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         }
 
         if let urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
-            urlOpener.open(url, options: [:], completionHandler: nil)
+            urlOpener.open(url)
         }
     }
 

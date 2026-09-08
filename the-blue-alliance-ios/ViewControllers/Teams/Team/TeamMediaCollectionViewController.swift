@@ -196,7 +196,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         case .image(let photo):
             if photo.isInstagram {
                 if let viewURL = photo.viewURL, urlOpener.canOpenURL(viewURL) {
-                    urlOpener.open(viewURL, options: [:], completionHandler: nil)
+                    urlOpener.open(viewURL)
                 }
             } else {
                 delegate?.mediaSelected(
@@ -244,7 +244,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         if let viewURL = photo.viewURL, urlOpener.canOpenURL(viewURL) {
             actions.append(
                 UIAction(title: "View Online", image: UIImage(systemName: "safari.fill")) { _ in
-                    self.urlOpener.open(viewURL, options: [:], completionHandler: nil)
+                    self.urlOpener.open(viewURL)
                 }
             )
         }
@@ -258,12 +258,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             actions.append(
                 UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down.fill")) {
                     _ in
-                    self.photoLibrary.performChanges(
-                        {
+                    Task {
+                        try? await self.photoLibrary.performChanges {
                             PHAssetChangeRequest.creationRequestForAsset(from: image)
-                        },
-                        completionHandler: nil
-                    )
+                        }
+                    }
                 }
             )
         }
@@ -287,7 +286,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 title: "View on YouTube",
                 image: UIImage(systemName: "safari.fill")
             ) { _ in
-                self.urlOpener.open(viewURL, options: [:], completionHandler: nil)
+                self.urlOpener.open(viewURL)
             }
             return UIMenu(title: "", children: [viewOnYouTubeAction])
         }
@@ -310,7 +309,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             )
         case .video(let video):
             if let viewURL = video.viewURL, urlOpener.canOpenURL(viewURL) {
-                urlOpener.open(viewURL, options: [:], completionHandler: nil)
+                urlOpener.open(viewURL)
             }
         }
     }
