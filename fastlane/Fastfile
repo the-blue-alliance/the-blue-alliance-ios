@@ -65,7 +65,7 @@ platform :ios do
     test_package("TBAAuth")
   end
 
-  desc "Run TBAUnitTests (the main app's Xcode unit-test target)"
+  desc "Run TBAUnitTests plus the TBAAPI and MyTBAKit package tests, all in the app scheme"
   lane :test_app do
     run_tests(
       project: "the-blue-alliance-ios.xcodeproj",
@@ -92,11 +92,12 @@ platform :ios do
     )
   end
 
-  desc "Run the Swift package unit tests"
+  # TBAAPI and MyTBAKit run inside the app scheme. xcodebuild refuses to host
+  # TBAUtilsTests and TBAAuthTests there ("isn't a member of the specified test
+  # plan or scheme") despite identical wiring, so they still run on their own.
+  desc "Run the Swift package unit tests that the app scheme doesn't already cover"
   lane :test_packages do
-    test_mytbakit
     test_tbautils
-    test_tbaapi
     test_tbaauth
   end
 
