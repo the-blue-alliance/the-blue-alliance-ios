@@ -127,9 +127,8 @@ class ContainerViewController: UIViewController, Alertable {
 
         super.init(nibName: nil, bundle: nil)
 
-        segmentedControl.addTarget(
-            self,
-            action: #selector(segmentedControlValueChanged),
+        segmentedControl.addAction(
+            UIAction { [weak self] _ in self?.updateSegmentedControlViews() },
             for: .valueChanged
         )
 
@@ -261,10 +260,6 @@ class ContainerViewController: UIViewController, Alertable {
     }
 
     // MARK: - Private Methods
-
-    @objc private func segmentedControlValueChanged() {
-        updateSegmentedControlViews()
-    }
 
     private func updateSegmentedControlViews() {
         if let viewController = currentViewController() {

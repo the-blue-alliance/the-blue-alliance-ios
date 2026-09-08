@@ -44,9 +44,7 @@ class TeamAtDistrictViewController: ContainerViewController {
         rightBarButtonItems = [
             UIBarButtonItem(
                 image: UIImage.teamIcon,
-                style: .plain,
-                target: self,
-                action: #selector(pushTeam)
+                primaryAction: UIAction { [weak self] _ in self?.pushTeam() }
             )
         ].compactMap({ $0 })
 
@@ -67,7 +65,7 @@ class TeamAtDistrictViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
-    @objc private func pushTeam() {
+    private func pushTeam() {
         let vc = TeamViewController(teamKey: teamKey, year: year, dependencies: dependencies)
         navigationController?.pushViewController(vc, animated: true)
     }

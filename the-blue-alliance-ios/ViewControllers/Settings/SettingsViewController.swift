@@ -227,17 +227,18 @@ class SettingsViewController: TBATableViewController {
             case .analytics:
                 cell.textLabel?.text = "Share Analytics"
                 toggle.isOn = dependencies.appSettings.firebaseCollection.analyticsEnabled
-                toggle.addTarget(
-                    self,
-                    action: #selector(analyticsToggleChanged(_:)),
+                toggle.addAction(
+                    UIAction { [weak self, unowned toggle] _ in self?.analyticsToggleChanged(toggle)
+                    },
                     for: .valueChanged
                 )
             case .crashlytics:
                 cell.textLabel?.text = "Share Crash Reports"
                 toggle.isOn = dependencies.appSettings.firebaseCollection.crashlyticsEnabled
-                toggle.addTarget(
-                    self,
-                    action: #selector(crashlyticsToggleChanged(_:)),
+                toggle.addAction(
+                    UIAction { [weak self, unowned toggle] _ in
+                        self?.crashlyticsToggleChanged(toggle)
+                    },
                     for: .valueChanged
                 )
             }
@@ -448,12 +449,12 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Privacy Methods
 
-    @objc private func analyticsToggleChanged(_ sender: UISwitch) {
+    private func analyticsToggleChanged(_ sender: UISwitch) {
         dependencies.appSettings.firebaseCollection.analyticsEnabled = sender.isOn
         Analytics.setAnalyticsCollectionEnabled(sender.isOn)
     }
 
-    @objc private func crashlyticsToggleChanged(_ sender: UISwitch) {
+    private func crashlyticsToggleChanged(_ sender: UISwitch) {
         if sender.isOn {
             applyCrashlyticsEnabled(true)
             return
