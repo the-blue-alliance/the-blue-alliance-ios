@@ -35,7 +35,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
     private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
 
-    weak var delegate: EventInfoViewControllerDelegate?
+    weak var delegate: (any EventInfoViewControllerDelegate)?
 
     private var hasPitMap = false
 

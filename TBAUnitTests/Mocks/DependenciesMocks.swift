@@ -56,9 +56,9 @@ final class MockStatusService: StatusServiceProtocol {
     var status: AppStatus = .default
     var currentSeason: Int { status.currentSeason }
     var maxSeason: Int { status.maxSeason }
-    func registerForStatusChanges(_ subscriber: StatusSubscribable) {}
-    func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {}
-    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: EventKey) {}
+    func registerForStatusChanges(_ subscriber: any StatusSubscribable) {}
+    func registerForFMSStatusChanges(_ subscriber: any FMSStatusSubscribable) {}
+    func registerForEventStatusChanges(_ subscriber: any EventStatusSubscribable, eventKey: EventKey) {}
     func start() {}
 }
 

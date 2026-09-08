@@ -51,12 +51,12 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
     }
 
-    weak var delegate: TeamMediaCollectionViewControllerDelegate?
+    weak var delegate: (any TeamMediaCollectionViewControllerDelegate)?
 
     private var dataSource: CollectionViewDataSource<MediaSection, TeamMediaItem>!
     private var media: [TeamMediaItem] = []
     private var imageCache: [String: UIImage] = [:]
-    private var imageErrors: [String: Error] = [:]
+    private var imageErrors: [String: any Error] = [:]
     private var downloadTasks: [String: Task<Void, Never>] = [:]
 
     // MARK: Init
@@ -98,7 +98,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
     }
 
-    private static func makeImageSection(env: NSCollectionLayoutEnvironment)
+    private static func makeImageSection(env: any NSCollectionLayoutEnvironment)
         -> NSCollectionLayoutSection
     {
         let columns = env.traitCollection.horizontalSizeClass == .regular ? 3 : 2
@@ -135,7 +135,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         return section
     }
 
-    private static func makeVideoSection(env: NSCollectionLayoutEnvironment)
+    private static func makeVideoSection(env: any NSCollectionLayoutEnvironment)
         -> NSCollectionLayoutSection
     {
         let spacer = TeamMediaCollectionViewController.spacerSize
@@ -295,7 +295,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func collectionView(
         _ collectionView: UICollectionView,
         willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
-        animator: UIContextMenuInteractionCommitAnimating
+        animator: any UIContextMenuInteractionCommitAnimating
     ) {
         guard let foreignKey = configuration.identifier as? String,
             let item = media.first(where: { $0.contextMenuIdentifier == foreignKey })

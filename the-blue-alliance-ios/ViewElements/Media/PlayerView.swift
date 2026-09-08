@@ -38,7 +38,7 @@ class PlayerView: UIView {
         loadingIndicator.autoCenterInSuperview()
     }
 
-    convenience init(playable: Playable) {
+    convenience init(playable: any Playable) {
         self.init()
         load(youtubeKey: playable.youtubeKey)
     }

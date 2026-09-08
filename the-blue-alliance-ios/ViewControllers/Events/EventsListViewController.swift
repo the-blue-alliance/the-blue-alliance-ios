@@ -28,7 +28,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
 
     typealias APIEvent = Event
 
-    weak var delegate: EventsListViewControllerDelegate?
+    weak var delegate: (any EventsListViewControllerDelegate)?
 
     private(set) var events: [APIEvent] = []
     private var dataSource: EventsListDataSource!

@@ -3,12 +3,12 @@ import TBAAuth
 import UIKit
 
 protocol SignInViewControllerDelegate: AnyObject {
-    func signInViewController(_ controller: MyTBASignInViewController, didFailWith error: Error)
+    func signInViewController(_ controller: MyTBASignInViewController, didFailWith error: any Error)
 }
 
 class MyTBASignInViewController: UIViewController {
 
-    weak var delegate: SignInViewControllerDelegate?
+    weak var delegate: (any SignInViewControllerDelegate)?
 
     private let dependencies: Dependencies
 
@@ -121,7 +121,7 @@ class MyTBASignInViewController: UIViewController {
 
     override func willTransition(
         to newCollection: UITraitCollection,
-        with coordinator: UIViewControllerTransitionCoordinator
+        with coordinator: any UIViewControllerTransitionCoordinator
     ) {
         super.willTransition(to: newCollection, with: coordinator)
         coordinator.animate { [weak self] _ in

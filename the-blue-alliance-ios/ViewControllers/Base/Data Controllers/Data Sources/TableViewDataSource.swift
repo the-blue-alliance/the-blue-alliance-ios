@@ -11,7 +11,7 @@ class TableViewDataSource<Section: Hashable & Sendable, Item: Hashable & Sendabl
     >
 {
 
-    weak var statefulDelegate: (Stateful & Refreshable)?
+    weak var statefulDelegate: (any Stateful & Refreshable)?
 
     // MARK: - Public Methods
 
@@ -58,7 +58,7 @@ class TableViewDataSource<Section: Hashable & Sendable, Item: Hashable & Sendabl
     {
         let identifiers = snapshot().sectionIdentifiers
         guard section >= 0, section < identifiers.count else { return nil }
-        return (identifiers[section] as? TableSectionTitleProviding)?.headerTitle
+        return (identifiers[section] as? any TableSectionTitleProviding)?.headerTitle
     }
 
 }

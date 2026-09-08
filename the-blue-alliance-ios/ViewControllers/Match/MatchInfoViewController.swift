@@ -66,7 +66,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         return videoStackView
     }()
 
-    var matchSummaryDelegate: MatchSummaryViewDelegate? {
+    var matchSummaryDelegate: (any MatchSummaryViewDelegate)? {
         get {
             return matchSummaryView.delegate
         }

@@ -40,7 +40,7 @@ class TeamViewController: HeaderContainerViewController {
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
 
-    override var subscribableModel: MyTBASubscribable {
+    override var subscribableModel: any MyTBASubscribable {
         TeamSubscribable(modelKey: state.key)
     }
 

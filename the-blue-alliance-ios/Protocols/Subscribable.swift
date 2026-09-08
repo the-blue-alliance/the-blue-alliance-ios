@@ -5,7 +5,7 @@ import UIKit
 protocol Subscribable {
     var dependencies: Dependencies { get }
     var favoriteBarButtonItem: UIBarButtonItem { get }
-    var subscribableModel: MyTBASubscribable { get }
+    var subscribableModel: any MyTBASubscribable { get }
 }
 
 extension Subscribable where Self: UIViewController {

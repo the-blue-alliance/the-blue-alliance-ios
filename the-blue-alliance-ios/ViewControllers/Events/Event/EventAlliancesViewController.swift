@@ -67,7 +67,7 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable,
     private let eventKey: EventKey
     private var alliances: [EliminationAlliance] = []
 
-    weak var delegate: EventAlliancesViewControllerDelegate?
+    weak var delegate: (any EventAlliancesViewControllerDelegate)?
 
     // MARK: - Init
 

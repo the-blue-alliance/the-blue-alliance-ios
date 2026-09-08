@@ -19,11 +19,11 @@ nonisolated struct BreakdownRow: Hashable, @unchecked Sendable {
     var type: BreakdownRowType = .normal
     var offset: Int = 0  // Used so we can have rows with duplicate titles
 
-    var redElements: [BreakdownElement] {
-        return red.compactMap({ $0 as? BreakdownElement })
+    var redElements: [any BreakdownElement] {
+        return red.compactMap({ $0 as? any BreakdownElement })
     }
-    var blueElements: [BreakdownElement] {
-        return blue.compactMap({ $0 as? BreakdownElement })
+    var blueElements: [any BreakdownElement] {
+        return blue.compactMap({ $0 as? any BreakdownElement })
     }
 
 }
@@ -32,7 +32,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
 
     private var state: MatchState
     private let year: Int
-    private let breakdownConfigurator: MatchBreakdownConfigurator.Type?
+    private let breakdownConfigurator: (any MatchBreakdownConfigurator.Type)?
 
     private var dataSource: TableViewDataSource<String?, BreakdownRow>!
 

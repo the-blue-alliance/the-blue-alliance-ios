@@ -72,7 +72,7 @@ class ContainerViewController: UIViewController, Alertable {
         )
         return navigationSubtitleLabel
     }()
-    weak var navigationTitleDelegate: NavigationTitleDelegate?
+    weak var navigationTitleDelegate: (any NavigationTitleDelegate)?
 
     private let shouldShowSegmentedControl: Bool = false
     lazy var segmentedControlView: UIView = {
@@ -88,7 +88,7 @@ class ContainerViewController: UIViewController, Alertable {
     private var segmentedControl: UISegmentedControl
 
     private let containerView: UIView = UIView()
-    private let viewControllers: [ContainableViewController]
+    private let viewControllers: [any ContainableViewController]
     var rootStackView: UIStackView!
 
     private lazy var offlineEventView: UIView = {
@@ -110,7 +110,7 @@ class ContainerViewController: UIViewController, Alertable {
     }()
 
     init(
-        viewControllers: [ContainableViewController],
+        viewControllers: [any ContainableViewController],
         navigationTitle: String? = nil,
         navigationSubtitle: String? = nil,
         segmentedControlTitles: [String]? = nil,
@@ -198,7 +198,7 @@ class ContainerViewController: UIViewController, Alertable {
 
     func switchedToIndex(_ index: Int) {}
 
-    func currentViewController() -> ContainableViewController? {
+    func currentViewController() -> (any ContainableViewController)? {
         if viewControllers.count == 1, let viewController = viewControllers.first {
             return viewController
         } else if viewControllers.count > 0,

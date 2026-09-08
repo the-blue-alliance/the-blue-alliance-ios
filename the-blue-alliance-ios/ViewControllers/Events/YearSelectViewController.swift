@@ -15,7 +15,7 @@ class YearSelectViewController: ContainerViewController {
 
     private let selectViewController: SelectTableViewController<YearSelectViewController>
 
-    weak var delegate: YearSelectViewControllerDelegate?
+    weak var delegate: (any YearSelectViewControllerDelegate)?
 
     // MARK: - Init
 
@@ -110,7 +110,7 @@ private class EventWeekSelectViewController: ContainerViewController {
 
     private let selectViewController: WeeksSelectTableViewController
 
-    weak var delegate: YearSelectViewControllerDelegate?
+    weak var delegate: (any YearSelectViewControllerDelegate)?
 
     init(year: Int, week: Event?, dependencies: Dependencies) {
         selectViewController = WeeksSelectTableViewController(

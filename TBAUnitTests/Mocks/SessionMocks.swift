@@ -26,8 +26,8 @@ final class MockAuthService: AuthServiceProtocol {
 
     var isSignedIn: Bool = false
     var currentProviderKind: AuthProviderKind?
-    var signInError: Error?
-    var signOutError: Error?
+    var signInError: (any Error)?
+    var signOutError: (any Error)?
     var restoreResult: Bool = false
 
     private(set) var signInKinds: [AuthProviderKind] = []
@@ -74,8 +74,8 @@ final class MockAuthService: AuthServiceProtocol {
 final class MockPushService: PushServiceProtocol {
 
     let callLog: CallLog
-    var error: Error?
-    var deleteTokenError: Error?
+    var error: (any Error)?
+    var deleteTokenError: (any Error)?
     private(set) var callCount = 0
     private(set) var deleteTokenCallCount = 0
 
@@ -83,7 +83,7 @@ final class MockPushService: PushServiceProtocol {
         self.callLog = callLog
     }
 
-    func registerForRemoteNotifications(_ completion: ((Error?) -> Void)?) {}
+    func registerForRemoteNotifications(_ completion: (((any Error)?) -> Void)?) {}
 
     @discardableResult
     func requestAuthorizationForNotifications() async throws -> Bool {
@@ -107,7 +107,7 @@ final class MockPushService: PushServiceProtocol {
 final class MockSessionMyTBA: MyTBAProtocol {
 
     let callLog: CallLog
-    var unregisterError: Error?
+    var unregisterError: (any Error)?
     private(set) var unregisterCallCount = 0
 
     init(callLog: CallLog = CallLog()) {
@@ -152,10 +152,10 @@ final class MockSessionMyTBA: MyTBAProtocol {
 }
 
 final class MockReporter: Reporter {
-    private(set) var errors: [Error] = []
+    private(set) var errors: [any Error] = []
     private(set) var messages: [String] = []
 
-    func record(_ error: Error) {
+    func record(_ error: any Error) {
         errors.append(error)
     }
 

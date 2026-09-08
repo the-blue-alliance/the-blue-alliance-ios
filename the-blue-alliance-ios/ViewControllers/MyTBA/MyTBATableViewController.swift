@@ -63,7 +63,7 @@ class MyTBATableViewController: UIViewController, DataController,
 {
 
     let dependencies: Dependencies
-    weak var delegate: MyTBATableViewControllerDelegate?
+    weak var delegate: (any MyTBATableViewControllerDelegate)?
 
     var api: any TBAAPIProtocol { dependencies.api }
     var myTBA: any MyTBAProtocol { dependencies.myTBA }
@@ -340,7 +340,7 @@ class MyTBATableViewController: UIViewController, DataController,
     /// hook the no-data view into the data source. Walked via an Obj-C cast so
     /// the base doesn't have to conform.
     func attachStatefulDelegate() {
-        dataSource.statefulDelegate = self as? (Refreshable & Stateful)
+        dataSource.statefulDelegate = self as? (any Refreshable & Stateful)
     }
 
     // MARK: - Refresh
@@ -356,7 +356,7 @@ class MyTBATableViewController: UIViewController, DataController,
     }
 
     func refreshFromRemote() {
-        (self as? Refreshable)?.runRefresh { [weak self] in
+        (self as? any Refreshable)?.runRefresh { [weak self] in
             guard let self else { return }
             self.failedKeys.removeAll()
             self.inlineFailedKeys = false

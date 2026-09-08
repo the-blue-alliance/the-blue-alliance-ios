@@ -40,7 +40,7 @@ nonisolated enum SearchItem: Hashable {
 
 class SearchViewController: TBATableViewController {
 
-    weak var delegate: SearchViewControllerDelegate?
+    weak var delegate: (any SearchViewControllerDelegate)?
 
     var scope = SearchScope.all {
         didSet { updateSnapshot() }

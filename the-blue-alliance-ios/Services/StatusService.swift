@@ -53,9 +53,12 @@ protocol StatusServiceProtocol: AnyObject {
     var currentSeason: Int { get }
     var maxSeason: Int { get }
 
-    func registerForStatusChanges(_ subscriber: StatusSubscribable)
-    func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable)
-    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: EventKey)
+    func registerForStatusChanges(_ subscriber: any StatusSubscribable)
+    func registerForFMSStatusChanges(_ subscriber: any FMSStatusSubscribable)
+    func registerForEventStatusChanges(
+        _ subscriber: any EventStatusSubscribable,
+        eventKey: EventKey
+    )
 
     func start()
 }
@@ -108,14 +111,14 @@ final class StatusService: StatusServiceProtocol {
 
     private func dispatchStatusChanged(_ status: AppStatus) {
         for obj in statusSubscribers.allObjects {
-            (obj as? StatusSubscribable)?.statusChanged(status: status)
+            (obj as? any StatusSubscribable)?.statusChanged(status: status)
         }
     }
 
     private func dispatchFMSDown(_ fmsStatus: Bool) {
         if fmsStatus != previousFMSStatus {
             for obj in fmsStatusSubscribers.allObjects {
-                (obj as? FMSStatusSubscribable)?.fmsStatusChanged(isDatafeedDown: fmsStatus)
+                (obj as? any FMSStatusSubscribable)?.fmsStatusChanged(isDatafeedDown: fmsStatus)
             }
         }
         previousFMSStatus = fmsStatus
@@ -137,15 +140,18 @@ final class StatusService: StatusServiceProtocol {
 
     // MARK: - Subscription Registration
 
-    func registerForStatusChanges(_ subscriber: StatusSubscribable) {
+    func registerForStatusChanges(_ subscriber: any StatusSubscribable) {
         statusSubscribers.add(subscriber as AnyObject)
     }
 
-    func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {
+    func registerForFMSStatusChanges(_ subscriber: any FMSStatusSubscribable) {
         fmsStatusSubscribers.add(subscriber as AnyObject)
     }
 
-    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: EventKey) {
+    func registerForEventStatusChanges(
+        _ subscriber: any EventStatusSubscribable,
+        eventKey: EventKey
+    ) {
         let subscribers =
             eventStatusSubscribers.object(forKey: eventKey as NSString)
             ?? NSHashTable<AnyObject>.weakObjects()
@@ -159,7 +165,9 @@ final class StatusService: StatusServiceProtocol {
             return
         }
         for obj in subscribersTable.allObjects {
-            (obj as? EventStatusSubscribable)?.eventStatusChanged(isEventOffline: isEventOffline)
+            (obj as? any EventStatusSubscribable)?.eventStatusChanged(
+                isEventOffline: isEventOffline
+            )
         }
     }
 

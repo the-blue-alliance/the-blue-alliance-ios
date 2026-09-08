@@ -32,7 +32,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     private(set) var rankingsViewController: EventRankingsViewController
     private(set) var matchesViewController: MatchesViewController
 
-    override var subscribableModel: MyTBASubscribable {
+    override var subscribableModel: any MyTBASubscribable {
         EventSubscribable(modelKey: state.key)
     }
 

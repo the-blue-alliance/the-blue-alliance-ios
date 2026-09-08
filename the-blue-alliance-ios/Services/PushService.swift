@@ -7,11 +7,11 @@ import UserNotifications
 import UIKit
 
 protocol RemoteNotificationRegistering: AnyObject {
-    func registerForRemoteNotifications(completion: ((Error?) -> Void)?)
+    func registerForRemoteNotifications(completion: (((any Error)?) -> Void)?)
 }
 
 protocol PushServiceProtocol: AnyObject {
-    func registerForRemoteNotifications(_ completion: ((Error?) -> Void)?)
+    func registerForRemoteNotifications(_ completion: (((any Error)?) -> Void)?)
     @discardableResult func requestAuthorizationForNotifications() async throws -> Bool
     /// Invalidates this device's FCM token so pushes to it fail at Firebase.
     /// Needs no TBA auth, which is what makes sign-out safe to finish offline.
@@ -66,7 +66,7 @@ class PushService: NSObject, PushServiceProtocol {
         }
     }
 
-    func registerForRemoteNotifications(_ completion: ((Error?) -> Void)?) {
+    func registerForRemoteNotifications(_ completion: (((any Error)?) -> Void)?) {
         registrar.registerForRemoteNotifications(completion: completion)
     }
 

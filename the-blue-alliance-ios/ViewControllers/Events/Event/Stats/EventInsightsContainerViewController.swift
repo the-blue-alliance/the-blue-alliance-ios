@@ -24,7 +24,7 @@ class EventInsightsContainerViewController: ContainerViewController {
         )
         self.teamStatsViewController = teamStatsViewController
 
-        var viewControllers: [ContainableViewController] = [teamStatsViewController]
+        var viewControllers: [any ContainableViewController] = [teamStatsViewController]
         var titles = ["Team Stats"]
         // Only show event insights if year is 2016 or onward
         if event.year >= 2016 {

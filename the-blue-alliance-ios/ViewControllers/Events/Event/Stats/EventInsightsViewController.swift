@@ -29,7 +29,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
 
     private let eventKey: EventKey
     private let year: Int
-    private let eventStatsConfigurator: EventInsightsConfigurator.Type?
+    private let eventStatsConfigurator: (any EventInsightsConfigurator.Type)?
 
     private var dataSource: EventInsightsDataSource!
 

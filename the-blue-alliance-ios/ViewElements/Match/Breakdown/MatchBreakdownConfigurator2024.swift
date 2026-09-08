@@ -183,8 +183,8 @@ struct MatchBreakdownConfigurator2024: MatchBreakdownConfigurator {
         }
 
         let (redElements, blueElements) = (elements[0], elements[1])
-        guard let redBreakdownElements = redElements as? [BreakdownElement],
-            let blueBreakdownElements = blueElements as? [BreakdownElement]
+        guard let redBreakdownElements = redElements as? [any BreakdownElement],
+            let blueBreakdownElements = blueElements as? [any BreakdownElement]
         else {
             return nil
         }

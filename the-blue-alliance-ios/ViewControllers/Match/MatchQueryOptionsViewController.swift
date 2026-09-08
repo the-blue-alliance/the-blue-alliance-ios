@@ -73,7 +73,7 @@ class MatchQueryOptionsViewController: TBATableViewController {
 
     private var query: MatchQueryOptions
 
-    weak var delegate: MatchQueryOptionsDelegate?
+    weak var delegate: (any MatchQueryOptionsDelegate)?
 
     init(query: MatchQueryOptions, dependencies: Dependencies) {
         self.query = query
