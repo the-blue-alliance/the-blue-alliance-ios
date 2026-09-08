@@ -280,6 +280,7 @@ extension AppDelegate {
         UINavigationBar.appearance().compactAppearance = navigationBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().isTranslucent = false
 
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
@@ -288,6 +289,7 @@ extension AppDelegate {
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         UITabBar.appearance().tintColor = UIColor.tabBarTintColor
+        UITabBar.appearance().isTranslucent = false
 
         let segmentedControlAppearance = UISegmentedControl.appearance()
         segmentedControlAppearance.setTitleTextAttributes(
