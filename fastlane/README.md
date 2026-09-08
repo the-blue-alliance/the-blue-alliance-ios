@@ -61,7 +61,7 @@ Run TBAAuth unit tests
 [bundle exec] fastlane ios test_app
 ```
 
-Run TBAUnitTests (the main app's Xcode unit-test target)
+Run TBAUnitTests plus the TBAAPI and MyTBAKit package tests, all in the app scheme
 
 ### ios test_packages
 
@@ -69,7 +69,7 @@ Run TBAUnitTests (the main app's Xcode unit-test target)
 [bundle exec] fastlane ios test_packages
 ```
 
-Run the Swift package unit tests
+Run the Swift package unit tests that the app scheme doesn't already cover
 
 ### ios test
 

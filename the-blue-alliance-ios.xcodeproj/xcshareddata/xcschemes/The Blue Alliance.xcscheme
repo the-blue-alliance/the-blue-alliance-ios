@@ -48,6 +48,26 @@
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "TBAAPITests"
+               BuildableName = "TBAAPITests"
+               BlueprintName = "TBAAPITests"
+               ReferencedContainer = "container:Packages/TBAAPI">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MyTBAKitTests"
+               BuildableName = "MyTBAKitTests"
+               BlueprintName = "MyTBAKitTests"
+               ReferencedContainer = "container:Packages/MyTBAKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
