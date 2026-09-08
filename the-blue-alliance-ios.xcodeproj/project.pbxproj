@@ -120,6 +120,7 @@
 		929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */; };
 		92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C6214EF83800FDADFB /* SettingsViewController.swift */; };
 		92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */; };
+		5EC0D41A2C2607010000000D /* FormatStyle+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C2607010000000C /* FormatStyle+TBA.swift */; };
 		92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5C921A22D550025CC85 /* Bundle+Version.swift */; };
 		92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */; };
 		92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */; };
@@ -315,6 +316,7 @@
 		929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsViewController.swift; sourceTree = "<group>"; };
 		92A321C6214EF83800FDADFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+URLOpener.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C2607010000000C /* FormatStyle+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormatStyle+TBA.swift"; sourceTree = "<group>"; };
 		92A5E5C921A22D550025CC85 /* Bundle+Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
 		92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+TBA.swift"; sourceTree = "<group>"; };
 		92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix.swift"; sourceTree = "<group>"; };
@@ -767,6 +769,7 @@
 			isa = PBXGroup;
 			children = (
 				92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */,
+				5EC0D41A2C2607010000000C /* FormatStyle+TBA.swift */,
 				92A5E5C921A22D550025CC85 /* Bundle+Version.swift */,
 				92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */,
 				92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */,
@@ -1366,6 +1369,7 @@
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
+				5EC0D41A2C2607010000000D /* FormatStyle+TBA.swift in Sources */,
 				9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,

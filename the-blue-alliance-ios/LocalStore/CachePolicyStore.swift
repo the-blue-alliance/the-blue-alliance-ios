@@ -1,9 +1,9 @@
 import Foundation
 import TBAAPI
 
-private let kTBACachePolicy = "kTBACachePolicy"
-
 struct CachePolicyStore {
+
+    private static let key = "kTBACachePolicy"
 
     private let defaults: UserDefaults
 
@@ -13,7 +13,7 @@ struct CachePolicyStore {
 
     var current: TBAAPI.CachePolicy {
         get {
-            guard let raw = defaults.string(forKey: kTBACachePolicy),
+            guard let raw = defaults.string(forKey: Self.key),
                 let policy = TBAAPI.CachePolicy(rawValue: raw)
             else {
                 return .default
@@ -21,7 +21,7 @@ struct CachePolicyStore {
             return policy
         }
         nonmutating set {
-            defaults.set(newValue.rawValue, forKey: kTBACachePolicy)
+            defaults.set(newValue.rawValue, forKey: Self.key)
         }
     }
 }
