@@ -89,7 +89,17 @@ class ContainerViewController: UIViewController, Alertable {
 
     private let containerView: UIView = UIView()
     private let viewControllers: [any ContainableViewController]
-    var rootStackView: UIStackView!
+    lazy var rootStackView: UIStackView = {
+        // Skip the segmented control when there's nothing to switch between
+        var arrangedSubviews = [containerView]
+        if segmentedControl.numberOfSegments > 1 {
+            arrangedSubviews.insert(segmentedControlView, at: 0)
+        }
+        let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        return stackView
+    }()
 
     private lazy var offlineEventView: UIView = {
         let offlineEventLabel = UILabel(forAutoLayout: ())
@@ -151,15 +161,6 @@ class ContainerViewController: UIViewController, Alertable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Remove segmentedControl if we don't need one
-        var arrangedSubviews = [containerView]
-        if segmentedControl.numberOfSegments > 1 {
-            arrangedSubviews.insert(segmentedControlView, at: 0)
-        }
-
-        rootStackView = UIStackView(arrangedSubviews: arrangedSubviews)
-        rootStackView.translatesAutoresizingMaskIntoConstraints = false
-        rootStackView.axis = .vertical
         view.addSubview(rootStackView)
 
         // Add subviews to view hierarchy in reverse order, so first one is showing automatically

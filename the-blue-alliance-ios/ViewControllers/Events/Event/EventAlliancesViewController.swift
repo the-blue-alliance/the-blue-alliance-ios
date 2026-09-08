@@ -9,8 +9,6 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
     private(set) var event: Event
 
-    private var alliancesViewController: EventAlliancesViewController!
-
     // MARK: - Init
 
     init(event: Event, dependencies: Dependencies) {

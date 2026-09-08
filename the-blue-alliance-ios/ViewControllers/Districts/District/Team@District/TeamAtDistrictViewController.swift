@@ -12,8 +12,6 @@ class TeamAtDistrictViewController: ContainerViewController {
     private let year: Int
     private var ranking: DistrictRanking
 
-    private var summaryViewController: DistrictTeamSummaryViewController!
-
     // MARK: Init
 
     init(ranking: DistrictRanking, district: District, year: Int, dependencies: Dependencies) {

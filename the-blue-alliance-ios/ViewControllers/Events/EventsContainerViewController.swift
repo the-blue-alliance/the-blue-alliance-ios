@@ -9,7 +9,7 @@ class EventsContainerViewController: ContainerViewController {
 
     private(set) var eventsViewController: WeekEventsViewController
 
-    var searchController: UISearchController!
+    lazy var searchController: UISearchController = makeSearchController()
 
     // MARK: - Init
 

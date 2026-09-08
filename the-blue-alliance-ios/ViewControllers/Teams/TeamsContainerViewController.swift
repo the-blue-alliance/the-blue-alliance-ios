@@ -5,9 +5,9 @@ import TBAUtils
 
 class TeamsContainerViewController: ContainerViewController {
 
-    var searchController: UISearchController!
+    lazy var searchController: UISearchController = makeSearchController()
 
-    private(set) var teamsViewController: TeamsViewController!
+    let teamsViewController: TeamsViewController
 
     // MARK: - Init
 

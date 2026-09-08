@@ -22,8 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let appSettings = AppSettings()
 
-    // Set in `application(_:didFinishLaunchingWithOptions:)` once `Secrets` are loaded.
-    var api: TBAAPI!
+    lazy var api = TBAAPI(apiKey: Secrets().tbaAPIKey, cachePolicy: appSettings.cachePolicy.current)
 
     lazy var messaging: Messaging = .messaging()
     lazy var myTBAStores: MyTBAStores = MyTBAStores(
@@ -90,7 +89,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Self.setupAppearance()
 
         configureFirebase()
-        configureAPI()
         configurePushNotifications()
         configureAuth()
         configureStatusService()
@@ -153,11 +151,6 @@ private extension AppDelegate {
                 appSettings.firebaseCollection.crashlyticsEnabled
             )
         #endif
-    }
-
-    func configureAPI() {
-        let secrets = Secrets()
-        api = TBAAPI(apiKey: secrets.tbaAPIKey, cachePolicy: appSettings.cachePolicy.current)
     }
 
     func configurePushNotifications() {
