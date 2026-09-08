@@ -13,6 +13,8 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     weak var delegate: TeamsListViewControllerDelegate?
 
     private(set) var teams: [APITeam] = []
+    private var loadedTeams: [APITeam] = []
+    private var filterTask: Task<Void, Never>?
 
     private var dataSource: TableViewDataSource<String, APITeam>!
 
@@ -71,11 +73,13 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
         dataSource.statefulDelegate = self
     }
 
-    private func applyTeams(_ teams: [APITeam]) {
-        let narrowed = filter(teams).filter { match in
-            searchMatch(team: match)
-        }.sorted { $0.teamNumber < $1.teamNumber }
-        self.teams = narrowed
+    private func applyTeams(_ loaded: [APITeam]) {
+        loadedTeams = loaded
+        updateDataSource()
+    }
+
+    private func show(_ narrowed: [APITeam]) {
+        teams = narrowed
 
         var snapshot = NSDiffableDataSourceSnapshot<String, APITeam>()
         snapshot.appendSections([""])
@@ -83,13 +87,16 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
-    private func searchMatch(team: APITeam) -> Bool {
-        guard showSearch,
-            let query = searchController.searchBar.text?.lowercased(),
-            !query.isEmpty
-        else {
-            return true
-        }
+    // `String.contains` over ~10k teams is tens of ms per keystroke; keep it off the main actor.
+    @concurrent
+    private nonisolated static func narrow(_ teams: [APITeam], matching query: String) async
+        -> [APITeam]
+    {
+        let query = query.lowercased()
+        return teams.filter { matches($0, query: query) }.sorted { $0.teamNumber < $1.teamNumber }
+    }
+
+    private nonisolated static func matches(_ team: APITeam, query: String) -> Bool {
         if "\(team.teamNumber)".contains(query) { return true }
         if team.nickname.lowercased().contains(query) { return true }
         if team.name.lowercased().contains(query) { return true }
@@ -109,7 +116,18 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     // MARK: - SearchableController
 
     override func updateDataSource() {
-        applyTeams(teams)
+        filterTask?.cancel()
+        let candidates = filter(loadedTeams)
+        let query = showSearch ? (searchController.searchBar.text ?? "") : ""
+        guard !query.isEmpty else {
+            show(candidates.sorted { $0.teamNumber < $1.teamNumber })
+            return
+        }
+        filterTask = Task {
+            let narrowed = await Self.narrow(candidates, matching: query)
+            guard !Task.isCancelled else { return }
+            show(narrowed)
+        }
     }
 
     // MARK: - Refreshable
