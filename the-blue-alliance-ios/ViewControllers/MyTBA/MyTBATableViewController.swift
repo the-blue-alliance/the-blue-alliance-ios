@@ -210,7 +210,6 @@ class MyTBATableViewController: UIViewController, DataController,
         fatalError("Subclasses must override performRemoteRefresh()")
     }
 
-    /// The name the backing store posts when it changes.
     var storeChangeNotification: Notification.Name {
         fatalError("Subclasses must override storeChangeNotification")
     }

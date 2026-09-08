@@ -228,10 +228,11 @@ class NotificationsViewController: TBATableViewController {
         switch row {
         case .registration:
             if let error = remoteNotificationRegistrationError {
-                showError(error.localizedDescription)
+                showErrorAlert(with: error.localizedDescription)
             } else {
-                showError(
-                    "Unknown error registering for remote notifications - try force quitting and re-launching the app."
+                showErrorAlert(
+                    with:
+                        "Unknown error registering for remote notifications - try force quitting and re-launching the app."
                 )
             }
         case .device:
@@ -244,27 +245,30 @@ class NotificationsViewController: TBATableViewController {
                     await checkDeviceAuthorization()
                 }
             } else {
-                showError(
-                    "Unable to resolve device settings - check push notification settings in Settings.app"
+                showErrorAlert(
+                    with:
+                        "Unable to resolve device settings - check push notification settings in Settings.app"
                 )
             }
         case .firebase:
-            showError("No FCM token from Firebase - try force quitting and re-launching the app.")
+            showErrorAlert(
+                with: "No FCM token from Firebase - try force quitting and re-launching the app."
+            )
         case .myTBA:
             let status = myTBARegistrationNotificationStatus()
             switch status {
             case .invalid(let str):
-                showError("Error registering with myTBA - \(str)")
+                showErrorAlert(with: "Error registering with myTBA - \(str)")
             default:
-                showError("Unknown error registering with myTBA")
+                showErrorAlert(with: "Unknown error registering with myTBA")
             }
         case .ping:
             let status = myTBAPingNotificationStatus()
             switch status {
             case .invalid(let str):
-                showError("Error pinging device - \(str)")
+                showErrorAlert(with: "Error pinging device - \(str)")
             default:
-                showError("Unknown error pinging device")
+                showErrorAlert(with: "Unknown error pinging device")
             }
         }
     }
@@ -441,14 +445,6 @@ class NotificationsViewController: TBATableViewController {
     }
 
     // MARK: - UI Methods
-
-    // TODO: Use Alertable instead...
-    private func showError(_ error: String) {
-        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-
-        present(alert, animated: true, completion: nil)
-    }
 
     @objc func showCopyFCMToken() {
         guard let fcmToken = fcmTokenProvider.fcmToken else {

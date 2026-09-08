@@ -83,7 +83,6 @@ final class StatusService: StatusServiceProtocol {
         self.api = api
     }
 
-    /// Fetches now, then every five minutes for as long as the app runs.
     func start() {
         pollTask?.cancel()
         pollTask = Task { [weak self] in

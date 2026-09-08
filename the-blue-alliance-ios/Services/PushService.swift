@@ -44,10 +44,8 @@ class PushService: NSObject, PushServiceProtocol {
         super.init()
     }
 
-    // Registering needs both a signed-in user and an FCM token, and either can
-    // arrive first, so both events land here. Restarting replaces any attempt
-    // already in flight, which is what a refreshed token needs anyway. Retries
-    // once a minute until the server accepts it.
+    // Both triggers (auth state, FCM token) land here and either can come first.
+    // Restarting an in-flight attempt is deliberate: a refreshed token must win.
     fileprivate func registerPushToken() {
         registerTask?.cancel()
         guard authService.isSignedIn else {
@@ -107,9 +105,7 @@ extension PushService: AuthStateObserving {
 
 extension PushService: MessagingDelegate {
 
-    // Firebase always delivers this on the main thread (it hops in
-    // -[FIRMessaging notifyDelegateOfFCMTokenAvailability]), which is why a
-    // main-actor method can witness this nonisolated requirement directly.
+    // Firebase delivers this on the main thread (-[FIRMessaging notifyDelegateOfFCMTokenAvailability]).
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         registerPushToken()
     }

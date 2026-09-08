@@ -33,9 +33,8 @@ public protocol MyTBAURLSession: Sendable {
 
 extension URLSession: MyTBAURLSession {}
 
-/// Main-actor on purpose. Every caller is a view controller or a main-actor service, the
-/// payloads are small, and it pins the `Messaging.fcmToken` read to the thread Firebase
-/// delivers on - that getter reads an unsynchronized ivar.
+/// Main-actor on purpose: every caller already is, and it keeps the `Messaging.fcmToken`
+/// read on the thread Firebase delivers on - that getter reads an unsynchronized ivar.
 @MainActor
 open class MyTBA {
 
