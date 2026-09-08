@@ -6,7 +6,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
     UIAdaptivePresentationControllerDelegate
 {
 
-    var subscribableModel: MyTBASubscribable
+    var subscribableModel: any MyTBASubscribable
 
     lazy var notificationTypes: [NotificationType] = {
         let subscribableModelClass = type(of: subscribableModel)
@@ -72,7 +72,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
     internal var saveActivityIndicatorBarButtonItem =
         UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(subscribableModel: MyTBASubscribable, dependencies: Dependencies) {
+    init(subscribableModel: any MyTBASubscribable, dependencies: Dependencies) {
         self.subscribableModel = subscribableModel
 
         let existingFavorite = dependencies.myTBAStores.favorites.favorites.first {

@@ -38,18 +38,18 @@ class NotificationsViewController: TBATableViewController {
 
     private var fetchingRemoteNotificationRegistrationStatus = false
     private var hasCheckedRemoteNotificationRegistration = false
-    private var remoteNotificationRegistrationError: Error?
+    private var remoteNotificationRegistrationError: (any Error)?
 
     private var fetchingDeviceAuthorizationStatus = false
     private var deviceAuthorizationStatus: UNAuthorizationStatus?
 
     private var myTBARegisterTask: Task<Void, Never>?
     private var myTBARegisterResponse: MyTBABaseResponse?
-    private var myTBARegisterError: Error?
+    private var myTBARegisterError: (any Error)?
 
     private var myTBAPingTask: Task<Void, Never>?
     private var myTBAPingResponse: MyTBABaseResponse?
-    private var myTBAPingError: Error?
+    private var myTBAPingError: (any Error)?
 
     private let fcmTokenProvider: any FCMTokenProvider
     private let pushService: any PushServiceProtocol

@@ -63,7 +63,7 @@ protocol EventAwardsViewControllerDelegate: AnyObject {
 
 class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
 
-    weak var delegate: EventAwardsViewControllerDelegate?
+    weak var delegate: (any EventAwardsViewControllerDelegate)?
 
     private let eventKey: EventKey
     private let teamKey: String?

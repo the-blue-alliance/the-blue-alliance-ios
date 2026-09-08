@@ -67,7 +67,7 @@ nonisolated private struct TeamDistrictPointsRow: Hashable {
 
 private class EventDistrictPointsViewController: TBATableViewController, Refreshable, Stateful {
 
-    weak var delegate: EventDistrictPointsViewControllerDelegate?
+    weak var delegate: (any EventDistrictPointsViewControllerDelegate)?
 
     private let eventKey: EventKey
 

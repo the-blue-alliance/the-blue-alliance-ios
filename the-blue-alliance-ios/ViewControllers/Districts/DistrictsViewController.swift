@@ -8,7 +8,7 @@ protocol DistrictsViewControllerDelegate: AnyObject {
 
 class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
 
-    weak var delegate: DistrictsViewControllerDelegate?
+    weak var delegate: (any DistrictsViewControllerDelegate)?
     var year: Int {
         didSet {
             refresh()

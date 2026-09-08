@@ -9,7 +9,7 @@ protocol WeekEventsDelegate: AnyObject {
 class WeekEventsViewController: EventsListViewController {
 
     private let year: Int
-    weak var weekEventsDelegate: WeekEventsDelegate?
+    weak var weekEventsDelegate: (any WeekEventsDelegate)?
 
     // Full year load — kept so changing `weekEvent` doesn't require a re-fetch.
     private var allEvents: [APIEvent] = []

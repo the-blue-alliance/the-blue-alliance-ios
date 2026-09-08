@@ -12,14 +12,14 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
         )
     }()
 
-    var subscribableModel: MyTBASubscribable {
+    var subscribableModel: any MyTBASubscribable {
         fatalError("Implement subscribableModel in subclass")
     }
 
     // MARK: - Init
 
     override init(
-        viewControllers: [ContainableViewController],
+        viewControllers: [any ContainableViewController],
         navigationTitle: String? = nil,
         navigationSubtitle: String? = nil,
         segmentedControlTitles: [String]? = nil,

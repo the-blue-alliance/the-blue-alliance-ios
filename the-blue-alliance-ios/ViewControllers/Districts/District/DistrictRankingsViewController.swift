@@ -8,7 +8,7 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
 
 class DistrictRankingsViewController: TBASearchableTableViewController, Refreshable, Stateful {
 
-    weak var delegate: DistrictRankingsViewControllerDelegate?
+    weak var delegate: (any DistrictRankingsViewControllerDelegate)?
 
     private let districtKey: String
 

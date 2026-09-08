@@ -5,8 +5,8 @@ import TBAUtils
 import UIKit
 
 enum MyTBASessionError: LocalizedError {
-    case signIn(Error)
-    case pushAuthorization(Error)
+    case signIn(any Error)
+    case pushAuthorization(any Error)
     case offline
 
     var errorDescription: String? {

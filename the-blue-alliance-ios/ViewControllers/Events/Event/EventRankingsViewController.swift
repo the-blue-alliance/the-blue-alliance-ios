@@ -8,7 +8,7 @@ protocol EventRankingsViewControllerDelegate: AnyObject {
 
 class EventRankingsViewController: TBATableViewController, Refreshable, Stateful {
 
-    weak var delegate: EventRankingsViewControllerDelegate?
+    weak var delegate: (any EventRankingsViewControllerDelegate)?
 
     private let eventKey: EventKey
 

@@ -91,7 +91,7 @@ extension MatchBreakdownConfigurator {
             guard let k = k else {
                 return "--"
             }
-            guard let v = red[k] as? CustomStringConvertible else {
+            guard let v = red[k] as? any CustomStringConvertible else {
                 return "--"
             }
             return String(describing: v)
@@ -100,7 +100,7 @@ extension MatchBreakdownConfigurator {
             guard let k = k else {
                 return "--"
             }
-            guard let v = blue[k] as? CustomStringConvertible else {
+            guard let v = blue[k] as? any CustomStringConvertible else {
                 return "--"
             }
             return String(describing: v)
@@ -157,8 +157,8 @@ extension MatchBreakdownConfigurator {
             return nil
         }
 
-        guard let redValue = nestedValue(keys: keyPath, in: red) as? CustomStringConvertible,
-            let blueValue = nestedValue(keys: keyPath, in: blue) as? CustomStringConvertible
+        guard let redValue = nestedValue(keys: keyPath, in: red) as? any CustomStringConvertible,
+            let blueValue = nestedValue(keys: keyPath, in: blue) as? any CustomStringConvertible
         else {
             return nil
         }

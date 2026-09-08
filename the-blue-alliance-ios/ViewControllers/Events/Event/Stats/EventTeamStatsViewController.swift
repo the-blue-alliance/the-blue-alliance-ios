@@ -28,7 +28,7 @@ nonisolated struct TeamStatRow: Hashable {
 
 class EventTeamStatsTableViewController: TBATableViewController, Refreshable, Stateful {
 
-    weak var delegate: EventTeamStatsSelectionDelegate?
+    weak var delegate: (any EventTeamStatsSelectionDelegate)?
 
     private let eventKey: EventKey
 

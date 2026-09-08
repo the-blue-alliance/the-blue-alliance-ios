@@ -13,7 +13,7 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, St
     private var ranking: DistrictRanking
     private var eventsByKey: [String: Event] = [:]
 
-    weak var delegate: DistrictTeamSummaryViewControllerDelegate?
+    weak var delegate: (any DistrictTeamSummaryViewControllerDelegate)?
 
     // MARK: Init
 

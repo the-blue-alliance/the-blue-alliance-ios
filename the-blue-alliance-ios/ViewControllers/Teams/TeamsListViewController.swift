@@ -10,7 +10,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     Refreshable, Stateful
 {
 
-    weak var delegate: TeamsListViewControllerDelegate?
+    weak var delegate: (any TeamsListViewControllerDelegate)?
 
     private(set) var teams: [APITeam] = []
     private var loadedTeams: [APITeam] = []

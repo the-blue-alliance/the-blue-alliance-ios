@@ -184,7 +184,7 @@ extension MyTBAViewController: SignInViewControllerDelegate {
 
     func signInViewController(
         _ controller: MyTBASignInViewController,
-        didFailWith error: Error
+        didFailWith error: any Error
     ) {
         if case MyTBASessionError.pushAuthorization = error {
             showErrorAlert(

@@ -10,7 +10,7 @@ protocol MatchesViewControllerDelegate: AnyObject {
 
 class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
-    weak var delegate: MatchesViewControllerDelegate?
+    weak var delegate: (any MatchesViewControllerDelegate)?
     var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
 
     private var state: EventState

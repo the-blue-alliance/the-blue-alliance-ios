@@ -47,7 +47,7 @@ nonisolated private enum TeamSummaryItem: Hashable {
 
 class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
 
-    weak var delegate: TeamSummaryViewControllerDelegate?
+    weak var delegate: (any TeamSummaryViewControllerDelegate)?
 
     private let teamKey: String
     private let eventKey: EventKey

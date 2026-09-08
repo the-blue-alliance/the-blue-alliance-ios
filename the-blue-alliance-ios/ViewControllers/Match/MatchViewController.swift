@@ -31,7 +31,7 @@ class MatchViewController: MyTBAContainerViewController {
     private(set) var infoViewController: MatchInfoViewController
     private let breakdownViewController: MatchBreakdownViewController
 
-    override var subscribableModel: MyTBASubscribable {
+    override var subscribableModel: any MyTBASubscribable {
         MatchSubscribable(modelKey: state.key)
     }
 

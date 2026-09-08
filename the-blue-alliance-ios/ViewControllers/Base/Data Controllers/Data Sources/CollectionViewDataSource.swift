@@ -7,7 +7,7 @@ class CollectionViewDataSource<Section: Hashable & Sendable, Item: Hashable & Se
     UICollectionViewDiffableDataSource<Section, Item>
 {
 
-    weak var delegate: (Stateful & Refreshable)?
+    weak var delegate: (any Stateful & Refreshable)?
 
     // MARK: - Public Methods
 

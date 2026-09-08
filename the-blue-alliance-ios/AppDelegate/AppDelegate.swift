@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let reporter = FirebaseReporter()
     let favoritesStore = FavoritesStore()
     let subscriptionsStore = SubscriptionsStore()
-    let urlOpener: URLOpener = UIApplication.shared
+    let urlOpener: any URLOpener = UIApplication.shared
     let idTokenProvider = FirebaseIDTokenProvider()
 
     let appSettings = AppSettings()
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // Holds the completion passed to `registerForRemoteNotifications` until
     // APNS calls back into one of our `application(_:didRegister...)` methods.
-    var registerForRemoteNotificationsCompletion: ((Error?) -> ())?
+    var registerForRemoteNotificationsCompletion: (((any Error)?) -> ())?
 
     // MARK: - UIApplicationDelegate
 
@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(
         _ application: UIApplication,
-        didFailToRegisterForRemoteNotificationsWithError error: Error
+        didFailToRegisterForRemoteNotificationsWithError error: any Error
     ) {
         registerForRemoteNotificationsCompletion?(error)
     }
@@ -232,7 +232,7 @@ private extension AppDelegate {
 
     func showAlert(_ alert: PendingAlert) {
         let presenter = UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.delegate as? SceneAlertPresenting }
+            .compactMap { ($0 as? UIWindowScene)?.delegate as? any SceneAlertPresenting }
             .first
         if let presenter {
             presenter.present(alert)
@@ -247,7 +247,7 @@ private extension AppDelegate {
 
 extension AppDelegate: RemoteNotificationRegistering {
 
-    func registerForRemoteNotifications(completion: ((Error?) -> Void)?) {
+    func registerForRemoteNotifications(completion: (((any Error)?) -> Void)?) {
         registerForRemoteNotificationsCompletion = completion
         UIApplication.shared.registerForRemoteNotifications()
     }
@@ -308,7 +308,7 @@ extension AppDelegate {
 
 private class FirebaseReporter: Reporter {
 
-    func record(_ error: Error) {
+    func record(_ error: any Error) {
         #if DEBUG
             print(error)
         #else

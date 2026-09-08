@@ -83,7 +83,7 @@ class MatchBreakdownTableViewCell: UITableViewCell, Reusable {
             breakdownView.titleLabel.text = titleText
         }
     }
-    var redElements: [BreakdownElement] = [] {
+    var redElements: [any BreakdownElement] = [] {
         didSet {
             breakdownView.redStackView.arrangedSubviews.forEach {
                 breakdownView.redStackView.removeArrangedSubview($0)
@@ -94,7 +94,7 @@ class MatchBreakdownTableViewCell: UITableViewCell, Reusable {
             }
         }
     }
-    var blueElements: [BreakdownElement] = [] {
+    var blueElements: [any BreakdownElement] = [] {
         didSet {
             breakdownView.blueStackView.arrangedSubviews.forEach {
                 breakdownView.redStackView.removeArrangedSubview($0)
