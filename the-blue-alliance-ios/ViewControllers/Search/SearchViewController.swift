@@ -50,6 +50,7 @@ class SearchViewController: TBATableViewController {
     }
 
     private var index: SearchIndex?
+    private var searchTask: Task<Void, Never>?
     private var dataSource: TableViewDataSource<SearchSection, SearchItem>!
 
     init(dependencies: Dependencies) {
@@ -120,16 +121,53 @@ class SearchViewController: TBATableViewController {
     }
 
     private func updateSnapshot() {
+        searchTask?.cancel()
         let query = (searchText ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        var snapshot = NSDiffableDataSourceSnapshot<SearchSection, SearchItem>()
 
         guard !query.isEmpty, let index else {
-            dataSource.applySnapshotUsingReloadData(snapshot)
+            dataSource.applySnapshotUsingReloadData(NSDiffableDataSourceSnapshot())
             return
         }
 
-        if scope.shouldShowTeams {
-            let teams = index.teams
+        let showTeams = scope.shouldShowTeams
+        let showEvents = scope.shouldShowEvents
+        searchTask = Task {
+            let (teams, events) = await Self.results(
+                in: index,
+                query: query,
+                teams: showTeams,
+                events: showEvents
+            )
+            guard !Task.isCancelled else { return }
+            show(teams: teams, events: events)
+        }
+    }
+
+    private func show(teams: [SearchItem], events: [SearchItem]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SearchSection, SearchItem>()
+        if !teams.isEmpty {
+            snapshot.appendSections([.teams])
+            snapshot.appendItems(teams, toSection: .teams)
+        }
+        if !events.isEmpty {
+            snapshot.appendSections([.events])
+            snapshot.appendItems(events, toSection: .events)
+        }
+        dataSource.applySnapshotUsingReloadData(snapshot)
+    }
+
+    // `String.contains` across every team and event ever is tens of ms per keystroke; keep it
+    // off the main actor.
+    @concurrent
+    private nonisolated static func results(
+        in index: SearchIndex,
+        query: String,
+        teams showTeams: Bool,
+        events showEvents: Bool
+    ) async -> (teams: [SearchItem], events: [SearchItem]) {
+        let teams =
+            showTeams
+            ? index.teams
                 .filter { matches(team: $0, query: query) }
                 .sorted { lhs, rhs in
                     let l = lhs.key.teamNumber ?? .max
@@ -137,14 +175,10 @@ class SearchViewController: TBATableViewController {
                     return l < r
                 }
                 .map { SearchItem.team(key: $0.key, nickname: $0.nickname) }
-            if !teams.isEmpty {
-                snapshot.appendSections([.teams])
-                snapshot.appendItems(teams, toSection: .teams)
-            }
-        }
-
-        if scope.shouldShowEvents {
-            let events = index.events
+            : []
+        let events =
+            showEvents
+            ? index.events
                 .filter { matches(event: $0, query: query) }
                 .sorted { lhs, rhs in
                     let lYear = lhs.key.year ?? 0
@@ -153,29 +187,28 @@ class SearchViewController: TBATableViewController {
                     return lhs.name < rhs.name
                 }
                 .map { SearchItem.event(key: $0.key, name: $0.name) }
-            if !events.isEmpty {
-                snapshot.appendSections([.events])
-                snapshot.appendItems(events, toSection: .events)
-            }
-        }
-
-        dataSource.applySnapshotUsingReloadData(snapshot)
+            : []
+        return (teams, events)
     }
 
-    private func matches(team: SearchIndex.TeamsPayloadPayload, query: String) -> Bool {
+    private nonisolated static func matches(team: SearchIndex.TeamsPayloadPayload, query: String)
+        -> Bool
+    {
         let number = team.key.trimPrefix
         return number.hasPrefix(query) || team.nickname.lowercased().contains(query)
             || team.key.lowercased().contains(query)
     }
 
-    private func matches(event: SearchIndex.EventsPayloadPayload, query: String) -> Bool {
-        let display = SearchViewController.eventDisplayName(key: event.key, name: event.name)
+    private nonisolated static func matches(event: SearchIndex.EventsPayloadPayload, query: String)
+        -> Bool
+    {
+        let display = eventDisplayName(key: event.key, name: event.name)
         return display.lowercased().contains(query) || event.key.lowercased().contains(query)
     }
 
     // Single source of truth for event row text so the search matcher operates on what the user sees —
     // event names from the API don't include the year, so without this typing "2026 michigan" wouldn't hit.
-    private static func eventDisplayName(key: EventKey, name: String) -> String {
+    private nonisolated static func eventDisplayName(key: EventKey, name: String) -> String {
         guard !name.isEmpty else { return key }
         guard let year = key.year else { return name }
         return "\(year) \(name)"
