@@ -13,6 +13,7 @@ struct Unstubbed: Error {}
 final class MockTBAAPI: TBAAPIProtocol {
 
     var teams: [TeamSimple] = []
+    var teamsByKey: [TeamKey: Team] = [:]
 
     func setCachePolicy(_ policy: TBAAPI.CachePolicy) async {}
     func clearCache() async {}
@@ -20,7 +21,10 @@ final class MockTBAAPI: TBAAPIProtocol {
     func getSearchIndex() async throws -> SearchIndex { throw Unstubbed() }
     func allTeams() async throws -> [Team] { throw Unstubbed() }
     func allTeamsSimple() async throws -> [TeamSimple] { teams }
-    func team(key teamKey: TeamKey) async throws -> Team { throw Unstubbed() }
+    func team(key teamKey: TeamKey) async throws -> Team {
+        guard let team = teamsByKey[teamKey] else { throw Unstubbed() }
+        return team
+    }
     func teamYearsParticipated(key teamKey: TeamKey) async throws -> [Int] { throw Unstubbed() }
     func teamEventsByYear(key teamKey: TeamKey, year: Int) async throws -> [Event] { throw Unstubbed() }
     func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match] { throw Unstubbed() }
