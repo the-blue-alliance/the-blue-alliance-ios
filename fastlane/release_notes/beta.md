@@ -14,7 +14,7 @@ Please poke at:
 - Tap a push notification and confirm it opens the right screen — this is the one runtime path the Swift 6 move changes
 - myTBA favorites and subscriptions tabs, pull-to-refresh, and star/subscribe from a team or event
 - Settings → App Icon, Settings → Cache Policy, Settings → Delete Network Cache
-- Match Breakdown on a 2020 or 2021 match (no pull-to-refresh expected) and on a 2026 match (pull-to-refresh expected)
+- Match Breakdown on a 2014 match (no pull-to-refresh expected) and on a 2026 match (pull-to-refresh expected)
 
 Under the hood:
 - The app and all four packages now build in Swift 6 language mode with strict concurrency checking and main-actor isolation by default; packages are iOS-only and tested on the simulator

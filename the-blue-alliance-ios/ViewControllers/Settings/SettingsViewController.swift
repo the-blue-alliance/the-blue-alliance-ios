@@ -378,8 +378,8 @@ class SettingsViewController: TBATableViewController {
             )
     }
 
-    /// `nil` selects the primary icon. `setAlternateIconName` can fail without the icon
-    /// visibly changing, so record the error, then reload from what the system actually has.
+    // `nil` is the primary icon. Reload after either outcome: a failed change leaves the
+    // system's icon unchanged and the row has to show that.
     private func setAppIcon(_ alternateName: String?) {
         guard UIApplication.shared.supportsAlternateIcons,
             UIApplication.shared.alternateIconName != alternateName

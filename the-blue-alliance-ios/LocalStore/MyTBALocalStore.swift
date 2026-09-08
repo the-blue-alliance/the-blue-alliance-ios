@@ -72,7 +72,6 @@ final class FavoritesStore {
         favorites.filter { $0.modelType == .team }.map { $0.modelKey }
     }
 
-    /// Waits for pending disk writes; for tests that read the file back.
     func flush() async {
         await file.flush()
     }
@@ -125,7 +124,6 @@ final class SubscriptionsStore {
         subscriptions.first { $0.modelKey == modelKey && $0.modelType == modelType }
     }
 
-    /// Waits for pending disk writes; for tests that read the file back.
     func flush() async {
         await file.flush()
     }

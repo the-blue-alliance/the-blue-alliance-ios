@@ -44,7 +44,6 @@ final class NotificationStore {
         file.delete()
     }
 
-    /// Waits for pending disk writes; for tests that read the file back.
     func flush() async {
         await file.flush()
     }

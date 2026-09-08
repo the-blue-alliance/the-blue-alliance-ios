@@ -1,10 +1,8 @@
 import Foundation
 
-/// One JSON file's disk operations, run off the main actor in the order they were
-/// requested, so a slow write can never land after a later `delete()` and resurrect the
-/// file. Encoding happens on the caller's actor - it's microseconds for these payloads,
-/// and it means the stored types keep their default isolation. Loading stays synchronous:
-/// the stores read once at init and callers read the in-memory value.
+/// Disk operations for one JSON file, run off the main actor in request order so a slow
+/// write can't land after a later `delete()`. Encoding stays on the caller's actor: it's
+/// microseconds, and it keeps the stored types' default isolation.
 final class JSONFileStore<Value: Codable> {
 
     let url: URL
@@ -35,8 +33,7 @@ final class JSONFileStore<Value: Codable> {
         }
     }
 
-    /// Completes once every operation requested so far has finished. Tests call this
-    /// before reading the file back.
+    /// For tests that read the file back.
     func flush() async {
         await lastOperation?.value
     }
