@@ -1,6 +1,6 @@
 import Foundation
 
-extension TBAAPI {
+nonisolated extension TBAAPI {
 
     public func getSearchIndex() async throws -> SearchIndex {
         let response = try await client.getSearchIndex()

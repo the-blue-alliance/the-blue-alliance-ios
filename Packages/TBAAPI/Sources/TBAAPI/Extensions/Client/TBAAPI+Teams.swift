@@ -1,6 +1,6 @@
 import Foundation
 
-extension TBAAPI {
+nonisolated extension TBAAPI {
 
     // TBA's `/teams/{page}` paginates at 500 per page. We keep fetching until
     // a page comes back empty — that's the API's signal that we're past the end.

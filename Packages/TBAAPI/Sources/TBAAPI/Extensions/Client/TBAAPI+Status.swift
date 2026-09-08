@@ -2,7 +2,7 @@ import Foundation
 
 extension TBAAPI: TBAAPIProtocol {}
 
-extension TBAAPI {
+nonisolated extension TBAAPI {
 
     public func getStatus() async throws -> APIStatus {
         let response = try await client.getStatus()

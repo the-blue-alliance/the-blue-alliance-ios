@@ -1,6 +1,6 @@
 import Foundation
 
-extension TBAAPI {
+nonisolated extension TBAAPI {
 
     public func eventsByYear(_ year: Int) async throws -> [Event] {
         let response = try await client.getEventsByYear(path: .init(year: year))

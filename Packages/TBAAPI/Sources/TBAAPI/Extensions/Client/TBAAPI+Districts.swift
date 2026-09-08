@@ -1,6 +1,6 @@
 import Foundation
 
-extension TBAAPI {
+nonisolated extension TBAAPI {
 
     public func districtsByYear(_ year: Int) async throws -> [District] {
         let response = try await client.getDistrictsByYear(path: .init(year: year))

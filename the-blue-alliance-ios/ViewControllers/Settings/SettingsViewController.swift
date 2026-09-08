@@ -198,7 +198,8 @@ class SettingsViewController: TBATableViewController {
             case .cachePolicy:
                 let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
                 cell.textLabel?.text = "Cache Policy"
-                cell.detailTextLabel?.text = api.cachePolicy.displayName
+                cell.detailTextLabel?.text =
+                    dependencies.appSettings.cachePolicy.current.displayName
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .deleteNetworkCache:
@@ -405,14 +406,12 @@ class SettingsViewController: TBATableViewController {
         )
 
         for policy in TBAAPI.CachePolicy.allCases {
-            let action = UIAlertAction(title: policy.displayName, style: .default) {
-                [weak self] _ in
-                guard let self else { return }
+            let action = UIAlertAction(title: policy.displayName, style: .default) { _ in
                 self.dependencies.appSettings.cachePolicy.current = policy
-                self.api.setCachePolicy(policy)
+                Task { await self.api.setCachePolicy(policy) }
                 self.tableView.reloadRows(at: [indexPath], with: .none)
             }
-            if api.cachePolicy == policy {
+            if dependencies.appSettings.cachePolicy.current == policy {
                 action.setValue(true, forKey: "checked")
             }
             alertController.addAction(action)
@@ -436,9 +435,8 @@ class SettingsViewController: TBATableViewController {
             preferredStyle: .alert
         )
 
-        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) {
-            [weak self] _ in
-            self?.api.clearCache()
+        let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            Task { await self.api.clearCache() }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
