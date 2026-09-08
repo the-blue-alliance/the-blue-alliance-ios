@@ -56,7 +56,7 @@ extension EventInsightsConfigurator {
         guard let val = dict[key] as? Double else {
             return nil
         }
-        return String(format: "%.2f", val)
+        return val.formatted(.twoDecimals)
     }
 
     static func bonusRow(title: String, key: String, qual: [String: Any]?, playoff: [String: Any]?)
@@ -105,7 +105,7 @@ extension EventInsightsConfigurator {
         }
         let quotient: String = {
             if let val = bonusData.safeItem(at: 2) as? Double {
-                return "\(String(format: "%.2f", val))%"
+                return "\(val.formatted(.twoDecimals))%"
             }
             if bonusData.safeItem(at: 0) as? Int == 0 && bonusData.safeItem(at: 1) as? Int != nil {
                 return "0.00%"
@@ -127,13 +127,13 @@ extension EventInsightsConfigurator {
         }
         let allianceAvg: String = {
             if let val = totalsData.safeItem(at: 1) as? Double {
-                return "\(String(format: "%.2f", val))"
+                return val.formatted(.twoDecimals)
             }
             return ""
         }()
         let teamAvg: String = {
             if let val = totalsData.safeItem(at: 2) as? Double {
-                return "\(String(format: "%.2f", val))"
+                return val.formatted(.twoDecimals)
             }
             return ""
         }()
@@ -149,10 +149,10 @@ extension EventInsightsConfigurator {
                 let raw = dict[k]
             else { return "" }
             if let number = raw as? Double {
-                return String(format: "%.2f", number)
+                return number.formatted(.twoDecimals)
             }
             if let number = raw as? NSNumber {
-                return String(format: "%.2f", number.doubleValue)
+                return number.doubleValue.formatted(.twoDecimals)
             }
             return String(describing: raw)
         }

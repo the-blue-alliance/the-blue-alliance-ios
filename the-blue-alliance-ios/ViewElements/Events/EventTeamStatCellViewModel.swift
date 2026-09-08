@@ -7,7 +7,7 @@ struct EventTeamStatCellViewModel {
 
     init(statName: String, value: Float?) {
         self.statName = statName.uppercased()
-        self.statValue = value.map { String(format: "%.2f", $0) } ?? "----"
+        self.statValue = value?.formatted(.twoDecimals) ?? "----"
     }
 
 }

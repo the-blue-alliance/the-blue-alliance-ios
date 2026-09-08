@@ -101,13 +101,8 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
     private static func formattedPairs(values: [Double], info: [(name: String, precision: Int)])
         -> [String]
     {
-        zip(info, values).compactMap { info, value in
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            formatter.maximumFractionDigits = info.precision
-            formatter.minimumFractionDigits = info.precision
-            guard let valueString = formatter.string(for: value) else { return nil }
-            return "\(info.name): \(valueString)"
+        zip(info, values).map { info, value in
+            "\(info.name): \(value.formatted(.number.precision(.fractionLength(info.precision))))"
         }
     }
 

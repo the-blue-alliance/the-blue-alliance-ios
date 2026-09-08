@@ -1,9 +1,9 @@
 import Foundation
 
-private let kAnalyticsCollectionEnabled = "kAnalyticsCollectionEnabled"
-private let kCrashlyticsCollectionEnabled = "kCrashlyticsCollectionEnabled"
-
 struct FirebaseCollectionStore {
+
+    private static let analyticsKey = "kAnalyticsCollectionEnabled"
+    private static let crashlyticsKey = "kCrashlyticsCollectionEnabled"
 
     private let defaults: UserDefaults
 
@@ -12,13 +12,13 @@ struct FirebaseCollectionStore {
     }
 
     var analyticsEnabled: Bool {
-        get { enabled(forKey: kAnalyticsCollectionEnabled) }
-        nonmutating set { defaults.set(newValue, forKey: kAnalyticsCollectionEnabled) }
+        get { enabled(forKey: Self.analyticsKey) }
+        nonmutating set { defaults.set(newValue, forKey: Self.analyticsKey) }
     }
 
     var crashlyticsEnabled: Bool {
-        get { enabled(forKey: kCrashlyticsCollectionEnabled) }
-        nonmutating set { defaults.set(newValue, forKey: kCrashlyticsCollectionEnabled) }
+        get { enabled(forKey: Self.crashlyticsKey) }
+        nonmutating set { defaults.set(newValue, forKey: Self.crashlyticsKey) }
     }
 
     private func enabled(forKey key: String) -> Bool {

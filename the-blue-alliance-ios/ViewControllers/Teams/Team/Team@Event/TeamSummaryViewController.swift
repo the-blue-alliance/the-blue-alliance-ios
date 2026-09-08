@@ -308,12 +308,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
         let parts: [String] = zip(info, sortOrders).compactMap { info, value in
             guard let name = info.name else { return nil }
             let precision = info.precision ?? 0
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            formatter.minimumFractionDigits = precision
-            formatter.maximumFractionDigits = precision
-            guard let valueString = formatter.string(for: value) else { return nil }
-            return "\(name): \(valueString)"
+            return "\(name): \(value.formatted(.number.precision(.fractionLength(precision))))"
         }
         return parts.isEmpty ? nil : parts.joined(separator: ", ")
     }

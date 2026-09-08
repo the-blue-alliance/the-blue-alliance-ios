@@ -37,7 +37,8 @@ struct RankingCellViewModel {
         self.rankText = nil
         self.teamNumber = Self.teamNumber(from: teamKey)
         self.teamName = team?.displayNickname ?? "Team \(self.teamNumber ?? teamKey)"
-        self.detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", opr, dpr, ccwm)
+        self.detailText =
+            "OPR: \(opr.formatted(.twoDecimals)), DPR: \(dpr.formatted(.twoDecimals)), CCWM: \(ccwm.formatted(.twoDecimals))"
         self.wltText = nil
     }
 
