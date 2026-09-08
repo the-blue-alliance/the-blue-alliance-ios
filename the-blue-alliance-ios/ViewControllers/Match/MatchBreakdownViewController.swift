@@ -34,7 +34,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
     private let year: Int
     private let breakdownConfigurator: (any MatchBreakdownConfigurator.Type)?
 
-    private var dataSource: TableViewDataSource<String?, BreakdownRow>!
+    private lazy var dataSource: TableViewDataSource<String?, BreakdownRow> = makeDataSource()
 
     // MARK: - Init
 
@@ -81,7 +81,6 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
         tableView.registerReusableCell(MatchBreakdownTableViewCell.self)
         tableView.insetsContentViewsToSafeArea = false
 
-        setupDataSource()
         tableView.dataSource = dataSource
 
         configureDataSource(state.match?.breakdownDict, state.match?.compLevel)
@@ -89,8 +88,8 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
 
     // MARK: - Methods
 
-    func setupDataSource() {
-        dataSource = TableViewDataSource<String?, BreakdownRow>(tableView: tableView) {
+    func makeDataSource() -> TableViewDataSource<String?, BreakdownRow> {
+        let dataSource = TableViewDataSource<String?, BreakdownRow>(tableView: tableView) {
             (tableView, indexPath, row) -> UITableViewCell? in
             let cell =
                 tableView.dequeueReusableCell(indexPath: indexPath)
@@ -102,6 +101,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     func configureDataSource(

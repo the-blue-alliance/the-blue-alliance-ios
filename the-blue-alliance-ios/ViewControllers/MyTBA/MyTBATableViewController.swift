@@ -91,7 +91,7 @@ class MyTBATableViewController: UIViewController, DataController,
     private var failureBannerView: FailureBannerView!
     private var failureBannerContainer: UIView!
     private var failureBannerHeightConstraint: NSLayoutConstraint!
-    private var dataSource: TableViewDataSource<MyTBASection, MyTBAItem>!
+    private lazy var dataSource: TableViewDataSource<MyTBASection, MyTBAItem> = makeDataSource()
 
     // MARK: - State
 
@@ -174,7 +174,6 @@ class MyTBATableViewController: UIViewController, DataController,
         stack.autoPinEdge(toSuperviewSafeArea: .top)
         stack.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
 
-        setupDataSource()
         tableView.dataSource = dataSource
 
         storeObservation = Task { [weak self] in
@@ -223,8 +222,8 @@ class MyTBATableViewController: UIViewController, DataController,
 
     // MARK: - Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<MyTBASection, MyTBAItem>(
+    private func makeDataSource() -> TableViewDataSource<MyTBASection, MyTBAItem> {
+        let dataSource = TableViewDataSource<MyTBASection, MyTBAItem>(
             tableView: tableView,
             cellProvider: { [weak self] tableView, indexPath, item in
                 guard let self = self else { return UITableViewCell() }
@@ -237,6 +236,7 @@ class MyTBATableViewController: UIViewController, DataController,
                 return UITableViewCell()
             }
         )
+        return dataSource
     }
 
     private func makeCell(

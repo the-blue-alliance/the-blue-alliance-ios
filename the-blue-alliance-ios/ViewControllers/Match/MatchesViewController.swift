@@ -16,7 +16,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     private var state: EventState
     private let teamKey: String?
 
-    private var dataSource: TableViewDataSource<MatchSection, Match>!
+    private lazy var dataSource: TableViewDataSource<MatchSection, Match> = makeDataSource()
 
     private var allMatches: [Match] = []
     private var favoriteTeamKeys: [String] = []
@@ -63,7 +63,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         super.viewDidLoad()
 
         tableView.registerReusableCell(MatchTableViewCell.self)
-        setupDataSource()
         tableView.dataSource = dataSource
 
         updateInterface()
@@ -79,8 +78,8 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<MatchSection, Match>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<MatchSection, Match> {
+        let dataSource = TableViewDataSource<MatchSection, Match>(tableView: tableView) {
             [weak self] tableView, indexPath, match in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
@@ -110,6 +109,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func applyMatches(_ matches: [Match]) {

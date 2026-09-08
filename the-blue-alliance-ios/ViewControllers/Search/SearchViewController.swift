@@ -51,7 +51,7 @@ class SearchViewController: TBATableViewController {
 
     private var index: SearchIndex?
     private var searchTask: Task<Void, Never>?
-    private var dataSource: TableViewDataSource<SearchSection, SearchItem>!
+    private lazy var dataSource: TableViewDataSource<SearchSection, SearchItem> = makeDataSource()
 
     init(dependencies: Dependencies) {
         super.init(dependencies: dependencies)
@@ -72,7 +72,6 @@ class SearchViewController: TBATableViewController {
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
 
-        setupDataSource()
         tableView.dataSource = dataSource
 
         enableRefreshing()
@@ -82,8 +81,8 @@ class SearchViewController: TBATableViewController {
 
     // MARK: Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<SearchSection, SearchItem>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<SearchSection, SearchItem> {
+        let dataSource = TableViewDataSource<SearchSection, SearchItem>(tableView: tableView) {
             tableView,
             indexPath,
             item in
@@ -108,6 +107,7 @@ class SearchViewController: TBATableViewController {
             }
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     // MARK: - Search

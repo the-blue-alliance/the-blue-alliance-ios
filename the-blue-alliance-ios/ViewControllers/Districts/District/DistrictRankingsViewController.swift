@@ -12,7 +12,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
 
     private let districtKey: String
 
-    private var dataSource: TableViewDataSource<String, DistrictRanking>!
+    private lazy var dataSource: TableViewDataSource<String, DistrictRanking> = makeDataSource()
     private var allRankings: [DistrictRanking] = []
     private var teamsByKey: [String: TeamSimple] = [:]
 
@@ -36,7 +36,6 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
         setupSearch()
 
         tableView.registerReusableCell(RankingTableViewCell.self)
-        setupDataSource()
         tableView.dataSource = dataSource
     }
 
@@ -49,8 +48,8 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<String, DistrictRanking>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<String, DistrictRanking> {
+        let dataSource = TableViewDataSource<String, DistrictRanking>(tableView: tableView) {
             [weak self] tableView, indexPath, ranking in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             let team = self?.teamsByKey[ranking.teamKey]
@@ -59,6 +58,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     override func updateDataSource() {

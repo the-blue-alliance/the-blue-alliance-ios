@@ -33,7 +33,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     private var state: EventState
     private let eventName: String?
 
-    private var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem>!
+    private lazy var dataSource: TableViewDataSource<EventInfoSection, EventInfoItem> =
+        makeDataSource()
 
     weak var delegate: (any EventInfoViewControllerDelegate)?
 
@@ -69,7 +70,6 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         tableView.registerReusableCell(InfoTableViewCell.self)
 
         tableView.dataSource = dataSource
-        setupDataSource()
 
         updateEventInfo()
     }
@@ -87,8 +87,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
         hasPitMap = true
     }
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<EventInfoSection, EventInfoItem>(
+    private func makeDataSource() -> TableViewDataSource<EventInfoSection, EventInfoItem> {
+        let dataSource = TableViewDataSource<EventInfoSection, EventInfoItem>(
             tableView: tableView,
             cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
                 switch item {
@@ -132,6 +132,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
                 }
             }
         )
+        return dataSource
     }
 
     private func updateEventInfo() {

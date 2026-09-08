@@ -68,7 +68,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
     private let eventKey: EventKey
     private let teamKey: String?
 
-    private var dataSource: TableViewDataSource<String, Award>!
+    private lazy var dataSource: TableViewDataSource<String, Award> = makeDataSource()
     private var awards: [Award] = []
     private var teamsByKey: [String: TeamSimple] = [:]
 
@@ -91,14 +91,13 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
         super.viewDidLoad()
 
         tableView.registerReusableCell(AwardTableViewCell.self)
-        setupDataSource()
         tableView.dataSource = dataSource
     }
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<String, Award>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<String, Award> {
+        let dataSource = TableViewDataSource<String, Award>(tableView: tableView) {
             [weak self] tableView, indexPath, award in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as AwardTableViewCell
             cell.selectionStyle = .none
@@ -109,6 +108,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func applyAwards(_ awards: [Award]) {

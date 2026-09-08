@@ -71,7 +71,8 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     private let eventKey: EventKey
 
-    private var dataSource: TableViewDataSource<String, TeamDistrictPointsRow>!
+    private lazy var dataSource: TableViewDataSource<String, TeamDistrictPointsRow> =
+        makeDataSource()
     private var rows: [TeamDistrictPointsRow] = []
     private var teamsByKey: [String: TeamSimple] = [:]
 
@@ -92,7 +93,6 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
         super.viewDidLoad()
 
         tableView.registerReusableCell(RankingTableViewCell.self)
-        setupDataSource()
         tableView.dataSource = dataSource
     }
 
@@ -105,8 +105,8 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<String, TeamDistrictPointsRow>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<String, TeamDistrictPointsRow> {
+        let dataSource = TableViewDataSource<String, TeamDistrictPointsRow>(tableView: tableView) {
             [weak self] tableView, indexPath, row in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             let team = self?.teamsByKey[row.teamKey]
@@ -119,6 +119,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func apply(points: EventDistrictPoints?) {

@@ -16,7 +16,7 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
     }
 
     private var districts: [District] = []
-    private var dataSource: TableViewDataSource<String, District>!
+    private lazy var dataSource: TableViewDataSource<String, District> = makeDataSource()
 
     // MARK: - Init
 
@@ -35,7 +35,6 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupDataSource()
         tableView.dataSource = dataSource
     }
 
@@ -48,8 +47,8 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        dataSource = TableViewDataSource<String, District>(tableView: tableView) {
+    private func makeDataSource() -> TableViewDataSource<String, District> {
+        let dataSource = TableViewDataSource<String, District>(tableView: tableView) {
             tableView,
             indexPath,
             district in
@@ -60,6 +59,7 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
             return cell
         }
         dataSource.statefulDelegate = self
+        return dataSource
     }
 
     private func apply(_ districts: [District]) {
