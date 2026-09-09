@@ -23,7 +23,7 @@ equivalent, and fastlane is not installed on developer machines. Install it firs
 
 ```
 $ brew install ruby
-$ gem install fastlane
+$ gem install bundler
 
 $ git clone git@github.com:ZachOrr/tba-ios-certificates.git
 $ cd tba-ios-certificates
@@ -36,10 +36,11 @@ $ git pull
 Run `git pull` at the end so the new certs/keys land on your machine.
 
 Other machines pulling the new certs can do so via match from the iOS repo, with the same
-Ruby and fastlane install:
+Ruby and bundler install:
 
 ```
 $ cd the-blue-alliance-ios
+$ bundle install
 $ bundle exec fastlane match
 ```
 

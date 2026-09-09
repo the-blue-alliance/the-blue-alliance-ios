@@ -34,13 +34,23 @@ result = summary.get("result", "Unknown")
 
 print(f"{title}: {result} - {passed}/{total} passed, {failed} failed, {skipped} skipped")
 
+def escape(value, is_property):
+    # Workflow commands need %, CR and LF encoded; property values also need : and ,
+    # which parameterized swift-testing names routinely contain.
+    value = value.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+    if is_property:
+        value = value.replace(":", "%3A").replace(",", "%2C")
+    return value
+
+
 failures = summary.get("testFailures") or []
 on_ci = os.environ.get("GITHUB_ACTIONS") == "true"
 
 for failure in failures:
     name = failure.get("testName") or failure.get("targetName") or "Unknown test"
-    message = (failure.get("failureText") or "").strip().replace("\n", " ")
-    print(f"  {name}: {message}")
+    message = (failure.get("failureText") or "").strip()
+    oneline = " ".join(message.split())
+    print(f"  {name}: {oneline}")
     if on_ci:
-        print(f"::error title={name}::{message}")
+        print(f"::error title={escape(name, True)}::{escape(message, False)}")
 '

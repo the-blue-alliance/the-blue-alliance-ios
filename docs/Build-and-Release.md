@@ -96,7 +96,8 @@ fastlane is not installed locally:
 
 ```
 $ brew install ruby
-$ gem install fastlane
+$ gem install bundler
+$ bundle install
 $ bundle exec fastlane match
 ```
 
