@@ -14,6 +14,18 @@ final class MockTBAAPI: TBAAPIProtocol {
 
     var teams: [TeamSimple] = []
     var teamsByKey: [TeamKey: Team] = [:]
+    var eventsByKey: [EventKey: Event] = [:]
+    /// Latency applied to every stubbed endpoint, so tests can interleave work
+    /// with in-flight requests the way the network does.
+    var latency: Duration = .zero
+
+    private func stub<T>(_ value: T?) async throws -> T {
+        if latency > .zero {
+            try await Task.sleep(for: latency)
+        }
+        guard let value else { throw Unstubbed() }
+        return value
+    }
 
     func setCachePolicy(_ policy: TBAAPI.CachePolicy) async {}
     func clearCache() async {}
@@ -22,8 +34,7 @@ final class MockTBAAPI: TBAAPIProtocol {
     func allTeams() async throws -> [Team] { throw Unstubbed() }
     func allTeamsSimple() async throws -> [TeamSimple] { teams }
     func team(key teamKey: TeamKey) async throws -> Team {
-        guard let team = teamsByKey[teamKey] else { throw Unstubbed() }
-        return team
+        try await stub(teamsByKey[teamKey])
     }
     func teamYearsParticipated(key teamKey: TeamKey) async throws -> [Int] { throw Unstubbed() }
     func teamEventsByYear(key teamKey: TeamKey, year: Int) async throws -> [Event] { throw Unstubbed() }
@@ -34,7 +45,9 @@ final class MockTBAAPI: TBAAPIProtocol {
     func teamMediaByYear(teamKey: TeamKey, year: Int) async throws -> [Media] { throw Unstubbed() }
     func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus] { throw Unstubbed() }
     func eventsByYear(_ year: Int) async throws -> [Event] { throw Unstubbed() }
-    func event(key eventKey: EventKey) async throws -> Event { throw Unstubbed() }
+    func event(key eventKey: EventKey) async throws -> Event {
+        try await stub(eventsByKey[eventKey])
+    }
     func eventTeams(key eventKey: EventKey) async throws -> [Team] { throw Unstubbed() }
     func eventTeamsSimple(key eventKey: EventKey) async throws -> [TeamSimple] { throw Unstubbed() }
     func eventRankings(key eventKey: EventKey) async throws -> EventRanking { throw Unstubbed() }

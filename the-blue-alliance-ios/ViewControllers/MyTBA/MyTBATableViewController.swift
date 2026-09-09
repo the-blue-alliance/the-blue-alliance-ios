@@ -304,28 +304,36 @@ class MyTBATableViewController: UIViewController, DataController,
         updateFailureBanner()
     }
 
+    // Both comparators order off the key, which every row has, rather than off
+    // the loaded model, which only some do. Switching rules mid-sort costs
+    // `sorted` its strict weak ordering, and an inconsistent predicate can walk
+    // Swift's sort off the end of the buffer.
     private func sortItems(_ items: [MyTBAItem], in section: MyTBASection) -> [MyTBAItem] {
         switch section {
         case .event:
             return items.sorted { lhs, rhs in
-                guard case .event(let l) = loadedModels[lhs],
-                    case .event(let r) = loadedModels[rhs]
-                else {
+                let lYear = lhs.modelKey.year ?? 0
+                let rYear = rhs.modelKey.year ?? 0
+                if lYear != rYear { return lYear > rYear }
+                // Within a year, rows whose event loaded sort among themselves
+                // first; the key-only placeholders follow in key order.
+                switch (loadedModels[lhs], loadedModels[rhs]) {
+                case (.event(let l), .event(let r)):
+                    return Event.sectionAscending(l, r)
+                case (.event, _):
+                    return true
+                case (_, .event):
+                    return false
+                default:
                     return lhs.modelKey < rhs.modelKey
                 }
-                let lYear = l.key.year ?? 0
-                let rYear = r.key.year ?? 0
-                if lYear != rYear { return lYear > rYear }
-                return Event.sectionAscending(l, r)
             }
         case .team:
             return items.sorted { lhs, rhs in
-                guard case .team(let l) = loadedModels[lhs],
-                    case .team(let r) = loadedModels[rhs]
-                else {
-                    return lhs.modelKey < rhs.modelKey
-                }
-                return l.teamNumber < r.teamNumber
+                let lNumber = lhs.modelKey.teamNumber ?? .max
+                let rNumber = rhs.modelKey.teamNumber ?? .max
+                if lNumber != rNumber { return lNumber < rNumber }
+                return lhs.modelKey < rhs.modelKey
             }
         }
     }
@@ -363,31 +371,37 @@ class MyTBATableViewController: UIViewController, DataController,
         }
     }
 
+    // Unstructured Task handles instead of a task group. Returning
+    // `(MyTBAItem, Result<LoadedModel, any Error>)` from the children routed
+    // the key through the group's child-result buffer, and hashing it back out
+    // read freed memory - the same allocator behind #996. Handles heap-allocate
+    // their result, and each child applies its own so rows still appear in
+    // completion order rather than list order.
     private func fetchMissingItems() async {
-        await withTaskGroup(of: (MyTBAItem, Result<LoadedModel, any Error>).self) { group in
-            for item in currentItems where loadedModels[item] == nil {
-                group.addTask { [self] in
-                    do {
-                        return (item, .success(try await loadModel(for: item)))
-                    } catch {
-                        return (item, .failure(error))
-                    }
-                }
+        let handles =
+            currentItems
+            .filter { loadedModels[$0] == nil }
+            .map { item in Task { await self.loadAndApply(item) } }
+        for handle in handles {
+            // Unstructured handles don't inherit the refresh's cancellation.
+            if Task.isCancelled {
+                handle.cancel()
             }
-            for await (item, result) in group {
-                switch result {
-                case .success(let model):
-                    loadedModels[item] = model
-                    failedKeys.remove(item)
-                    rebuildSnapshot()
-                case .failure(is CancellationError):
-                    // Refresh was cancelled; leave state untouched.
-                    break
-                case .failure:
-                    failedKeys.insert(item)
-                    updateFailureBanner()
-                }
-            }
+            await handle.value
+        }
+    }
+
+    private func loadAndApply(_ item: MyTBAItem) async {
+        do {
+            let model = try await loadModel(for: item)
+            loadedModels[item] = model
+            failedKeys.remove(item)
+            rebuildSnapshot()
+        } catch is CancellationError {
+            // Refresh was cancelled; leave state untouched.
+        } catch {
+            failedKeys.insert(item)
+            updateFailureBanner()
         }
     }
 
@@ -444,7 +458,7 @@ class MyTBATableViewController: UIViewController, DataController,
         return "Failed to load \(parts.joined(separator: ", "))"
     }
 
-    private func bannerTapped() {
+    func bannerTapped() {
         guard !failedKeys.isEmpty else { return }
         inlineFailedKeys = true
         rebuildSnapshot()
