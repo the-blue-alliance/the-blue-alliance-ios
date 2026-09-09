@@ -85,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        runLegacyCleanup()
+        LegacyCoreDataCleanup.run()
         Self.setupAppearance()
 
         configureFirebase()
@@ -133,12 +133,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 // MARK: - Launch setup
 
 private extension AppDelegate {
-
-    func runLegacyCleanup() {
-        LegacyCoreDataCleanup.run()
-        // Old Refreshable cache key, no longer used.
-        UserDefaults.standard.removeObject(forKey: "successful_refresh_keys")
-    }
 
     func configureFirebase() {
         FirebaseApp.configure()

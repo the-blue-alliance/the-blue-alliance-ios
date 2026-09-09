@@ -34,6 +34,7 @@
 		5EC0D41A2C26042100000004 /* JSONFileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042100000003 /* JSONFileStore.swift */; };
 		5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041F00000001 /* AppGroup.swift */; };
 		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
+		5EC0D41A2C26070100000010 /* LegacyCoreDataCleanupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C2607010000000F /* LegacyCoreDataCleanupTests.swift */; };
 		92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* SessionMocks.swift */; };
 		92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */; };
 		5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* EventSectionTests.swift */; };
@@ -232,6 +233,7 @@
 		5EC0D41A2C26042100000003 /* JSONFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFileStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26041F00000001 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C2607010000000F /* LegacyCoreDataCleanupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanupTests.swift; sourceTree = "<group>"; };
 		92AA7A062F0100000006AAAA /* SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/SessionMocks.swift"; sourceTree = "<group>"; };
 		92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/MyTBASessionServiceTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 			isa = PBXGroup;
 			children = (
 				5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */,
+				5EC0D41A2C2607010000000F /* LegacyCoreDataCleanupTests.swift */,
 				92AA7A062F0100000006AAAA /* SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
@@ -1251,6 +1254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */,
+				5EC0D41A2C26070100000010 /* LegacyCoreDataCleanupTests.swift in Sources */,
 				92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
