@@ -216,7 +216,7 @@ struct APIMatchHelpersTests {
         blue: [String] = [],
         redDQ: [String] = [],
         blueDQ: [String] = [],
-        winningAlliance: Match.WinningAlliancePayload = ._empty_,
+        winningAlliance: AllianceColor = ._empty_,
         time: Int64? = nil,
         actualTime: Int64? = nil,
         predictedTime: Int64? = nil

@@ -306,13 +306,12 @@ class TeamViewController: HeaderContainerViewController {
             return
         }
         guard self.year == year else { return }
-        let avatar = media.first(where: { $0._type == .avatar })
+        let avatar = media.first(where: { $0.type == .avatar })
         avatarImage = Self.decodeAvatar(from: avatar)
     }
 
     private static func decodeAvatar(from media: Media?) -> UIImage? {
-        guard case let .case2(payload) = media?.details,
-            let data = Data(base64Encoded: payload.base64Image)
+        guard let base64 = media?.avatarBase64Image, let data = Data(base64Encoded: base64)
         else { return nil }
         return UIImage(data: data)
     }

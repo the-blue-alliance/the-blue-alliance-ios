@@ -14,6 +14,10 @@ https://www.thebluealliance.com/swagger/api_v3.json and patches out
 swift-openapi-generator (see apple/swift-openapi-generator#817, which
 endorses dropping the null branch as the proper workaround).
 
+Also collapses single-branch `allOf` wrappers (the idiom for attaching a
+`description` to a `$ref`), which the generator would otherwise turn into a
+`<Field>Payload` struct with a lone `value1` instead of the referenced type.
+
 Run: uv run scripts/update-apiv3-spec.py
 """
 
@@ -93,6 +97,23 @@ def _strip_null_compositions(
     return node
 
 
+def _collapse_single_allof(node: object, path: list[str], patches: list[str]) -> object:
+    """Replace `allOf: [X]` with `X` merged over the node's other keys."""
+    if isinstance(node, dict):
+        branches = node.get("allOf")
+        if isinstance(branches, list) and len(branches) == 1 and isinstance(branches[0], dict):
+            patches.append("/".join(path) + " (allOf)")
+            siblings = {k: v for k, v in node.items() if k != "allOf"}
+            return _collapse_single_allof({**siblings, **branches[0]}, path, patches)
+        return {k: _collapse_single_allof(v, path + [k], patches) for k, v in node.items()}
+    if isinstance(node, list):
+        return [
+            _collapse_single_allof(item, path + [str(i)], patches)
+            for i, item in enumerate(node)
+        ]
+    return node
+
+
 def _drop_nullified_required(
     spec: dict, nullified: set[tuple[str, ...]]
 ) -> list[str]:
@@ -141,6 +162,27 @@ def _flatten_score_breakdown_oneof(spec: dict) -> bool:
     return True
 
 
+def _mark_team_event_status_nullable(spec: dict) -> bool:
+    """Declare Team_Event_Status itself nullable.
+
+    The API returns `null` for a team's status at an event that hasn't started
+    (documented since 3.9.4), both as the `/team/{key}/event/{key}/status`
+    body and as values in the `.../statuses` maps. The upstream spec only
+    says so at the reference sites via `oneOf` null branches, which the
+    null-stripping above removes. swift-openapi-generator derives optionality
+    from the referenced schema, so flagging the component is the one place
+    that makes every use (including dictionary values) decode `null` as nil.
+    """
+    try:
+        status = spec["components"]["schemas"]["Team_Event_Status"]
+    except (KeyError, TypeError):
+        return False
+    if status.get("type") != "object":
+        return False
+    status["type"] = ["object", "null"]
+    return True
+
+
 def _find_residual_null_compositions(node: object, path: list[str]) -> list[str]:
     """Return paths where a `oneOf`/`anyOf` still contains a null branch."""
     hits: list[str] = []
@@ -183,8 +225,18 @@ def main() -> int:
         for r in required_removals:
             print(f"  - {r}")
 
+    allof_patches: list[str] = []
+    patched = _collapse_single_allof(patched, [], allof_patches)
+    if allof_patches:
+        print(f"Collapsed {len(allof_patches)} single-branch allOf wrapper(s):")
+        for p in allof_patches:
+            print(f"  - {p}")
+
     if _flatten_score_breakdown_oneof(patched):
         print("Flattened Match.score_breakdown oneOf to free-form nullable object.")
+
+    if _mark_team_event_status_nullable(patched):
+        print("Marked Team_Event_Status nullable.")
 
     OUT_PATH.write_text(json.dumps(patched, indent=2) + "\n")
     print(f"Wrote {OUT_PATH}")

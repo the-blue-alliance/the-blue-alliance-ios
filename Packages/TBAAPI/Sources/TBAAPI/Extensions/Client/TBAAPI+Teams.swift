@@ -152,10 +152,33 @@ nonisolated extension TBAAPI {
         }
     }
 
+    // Teams with no status yet (the event hasn't started) come back as `null` and are dropped.
     public func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus]
     {
         let response = try await client.getEventTeamsStatuses(
             path: .init(eventKey: eventKey)
+        )
+        switch response {
+        case .ok(let ok):
+            return try ok.body.json.additionalProperties.compactMapValues { $0 }
+        case .notModified:
+            throw TBAAPIError.notModified
+        case .unauthorized:
+            throw TBAAPIError.unauthorized
+        case .notFound:
+            throw TBAAPIError.notFound
+        case .undocumented(let statusCode, _):
+            throw TBAAPIError.unexpectedStatus(statusCode)
+        }
+    }
+
+    // Keyed by every event the team is registered for that year. A `nil` value means the
+    // event hasn't started, which is how upcoming registrations are discovered.
+    public func teamEventsStatusesByYear(teamKey: TeamKey, year: Int) async throws
+        -> [EventKey: TeamEventStatus?]
+    {
+        let response = try await client.getTeamEventsStatusesByYear(
+            path: .init(teamKey: teamKey, year: year)
         )
         switch response {
         case .ok(let ok):

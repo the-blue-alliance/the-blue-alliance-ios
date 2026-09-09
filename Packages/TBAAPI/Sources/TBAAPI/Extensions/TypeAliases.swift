@@ -4,6 +4,7 @@ import Foundation
 // say `Event` instead of `Components.Schemas.Event`. These are public so the
 // main app target picks them up through `import TBAAPI`.
 public typealias APIStatus = Components.Schemas.APIStatus
+public typealias AllianceColor = Components.Schemas.AllianceColor
 public typealias Award = Components.Schemas.Award
 public typealias AwardType = Components.Schemas.AwardType
 public typealias CompLevel = Components.Schemas.CompLevel
@@ -26,6 +27,7 @@ public typealias Team = Components.Schemas.Team
 public typealias TeamEventStatus = Components.Schemas.TeamEventStatus
 public typealias TeamSimple = Components.Schemas.TeamSimple
 public typealias Webcast = Components.Schemas.Webcast
+public typealias WebcastStatus = Components.Schemas.WebcastStatus
 
 public typealias EventKey = String
 public typealias TeamKey = String

@@ -30,6 +30,7 @@ final class MockTBAAPI: TBAAPIProtocol {
     func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match] { throw Unstubbed() }
     func teamEventAwards(teamKey: TeamKey, eventKey: EventKey) async throws -> [Award] { throw Unstubbed() }
     func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus { throw Unstubbed() }
+    func teamEventsStatusesByYear(teamKey: TeamKey, year: Int) async throws -> [EventKey: TeamEventStatus?] { throw Unstubbed() }
     func teamMediaByYear(teamKey: TeamKey, year: Int) async throws -> [Media] { throw Unstubbed() }
     func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus] { throw Unstubbed() }
     func eventsByYear(_ year: Int) async throws -> [Event] { throw Unstubbed() }

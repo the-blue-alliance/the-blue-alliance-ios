@@ -20,6 +20,8 @@ public protocol TBAAPIProtocol: Sendable {
     func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match]
     func teamEventAwards(teamKey: TeamKey, eventKey: EventKey) async throws -> [Award]
     func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus
+    func teamEventsStatusesByYear(teamKey: TeamKey, year: Int) async throws
+        -> [EventKey: TeamEventStatus?]
     func teamMediaByYear(teamKey: TeamKey, year: Int) async throws -> [Media]
 
     func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus]
