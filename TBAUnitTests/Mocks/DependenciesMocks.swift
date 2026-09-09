@@ -15,12 +15,23 @@ final class MockTBAAPI: TBAAPIProtocol {
     var teams: [TeamSimple] = []
     var teamsByKey: [TeamKey: Team] = [:]
     var eventsByKey: [EventKey: Event] = [:]
+    var teamEventsByYear: [Int: [Event]] = [:]
     /// Latency applied to every stubbed endpoint, so tests can interleave work
     /// with in-flight requests the way the network does.
     var latency: Duration = .zero
+    /// Lets a cancelled request still return its result, the way a response
+    /// that has already left the network does.
+    var latencyIgnoresCancellation = false
 
     private func stub<T>(_ value: T?) async throws -> T {
-        if latency > .zero {
+        if latency > .zero, latencyIgnoresCancellation {
+            let latency = latency
+            await withCheckedContinuation { continuation in
+                DispatchQueue.global().asyncAfter(deadline: .now() + latency.timeInterval) {
+                    continuation.resume()
+                }
+            }
+        } else if latency > .zero {
             try await Task.sleep(for: latency)
         }
         guard let value else { throw Unstubbed() }
@@ -37,7 +48,9 @@ final class MockTBAAPI: TBAAPIProtocol {
         try await stub(teamsByKey[teamKey])
     }
     func teamYearsParticipated(key teamKey: TeamKey) async throws -> [Int] { throw Unstubbed() }
-    func teamEventsByYear(key teamKey: TeamKey, year: Int) async throws -> [Event] { throw Unstubbed() }
+    func teamEventsByYear(key teamKey: TeamKey, year: Int) async throws -> [Event] {
+        try await stub(teamEventsByYear[year])
+    }
     func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match] { throw Unstubbed() }
     func teamEventAwards(teamKey: TeamKey, eventKey: EventKey) async throws -> [Award] { throw Unstubbed() }
     func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus { throw Unstubbed() }
@@ -123,4 +136,11 @@ extension Dependencies {
 
 final class MockFCMTokenProvider: FCMTokenProvider {
     var fcmToken: String?
+}
+
+extension Duration {
+    fileprivate var timeInterval: TimeInterval {
+        let (seconds, attoseconds) = components
+        return TimeInterval(seconds) + TimeInterval(attoseconds) / 1e18
+    }
 }

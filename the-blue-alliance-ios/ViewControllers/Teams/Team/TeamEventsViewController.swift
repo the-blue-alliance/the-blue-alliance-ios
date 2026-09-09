@@ -7,6 +7,7 @@ class TeamEventsViewController: EventsListViewController {
     var year: Int? {
         didSet {
             if oldValue == year { return }
+            applyEvents([])
             refresh()
         }
     }

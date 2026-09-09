@@ -11,6 +11,8 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
     weak var delegate: (any DistrictsViewControllerDelegate)?
     var year: Int {
         didSet {
+            if oldValue == year { return }
+            apply([])
             refresh()
         }
     }
@@ -79,7 +81,9 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            self.apply(try await self.dependencies.api.districtsByYear(self.year))
+            let districts = try await self.dependencies.api.districtsByYear(self.year)
+            guard !Task.isCancelled else { return }
+            self.apply(districts)
         }
     }
 

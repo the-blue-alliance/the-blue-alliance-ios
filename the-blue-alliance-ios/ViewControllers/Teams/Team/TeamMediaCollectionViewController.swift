@@ -386,6 +386,7 @@ extension TeamMediaCollectionViewController: Refreshable {
                 teamKey: self.teamKey,
                 year: year
             )
+            guard !Task.isCancelled else { return }
             let items: [TeamMediaItem] = apiMedia.compactMap { Self.makeItem(from: $0) }
             self.imageErrors.removeAll()
             self.applyMedia(items)
