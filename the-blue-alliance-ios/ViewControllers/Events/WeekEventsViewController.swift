@@ -21,6 +21,8 @@ class WeekEventsViewController: EventsListViewController {
                 // Switched years — the cached allEvents are for the previous
                 // year, so filtering would drop everything. Refetch; the
                 // refresh path will call applyEvents once the new data lands.
+                allEvents = []
+                applyEvents([])
                 refresh()
             } else {
                 applyEvents(allEvents)
@@ -84,7 +86,9 @@ class WeekEventsViewController: EventsListViewController {
     override func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            self.allEvents = try await self.dependencies.api.eventsByYear(self.currentYear)
+            let events = try await self.dependencies.api.eventsByYear(self.currentYear)
+            guard !Task.isCancelled else { return }
+            self.allEvents = events
             if self.weekEvent == nil {
                 self.weekEvent = WeekEventsViewController.initialWeekEvent(
                     for: self.currentYear,

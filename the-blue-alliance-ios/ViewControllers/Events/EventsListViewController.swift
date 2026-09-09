@@ -106,6 +106,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
         runRefresh { [weak self] in
             guard let self else { return }
             let loaded = try await self.loadEvents()
+            guard !Task.isCancelled else { return }
             self.applyEvents(loaded)
         }
     }

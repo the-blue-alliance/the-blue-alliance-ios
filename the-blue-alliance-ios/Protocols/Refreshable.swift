@@ -44,11 +44,13 @@ extension Refreshable {
         currentRefreshTask = Task { [weak self] in
             guard let self else { return }
             self.updateRefresh()
-            defer {
-                self.currentRefreshTask = nil
-                self.updateRefresh()
-            }
             try? await body()
+            // A newer refresh cancelled this one and now owns the task handle
+            // and the indicator - clearing them here would stop the spinner
+            // and flash the no-data view while that refresh is still loading.
+            guard !Task.isCancelled else { return }
+            self.currentRefreshTask = nil
+            self.updateRefresh()
         }
     }
 
