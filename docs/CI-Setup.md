@@ -37,9 +37,9 @@ The list of macOS images, installed Xcode versions, and other preinstalled softw
 
 ### Bumping the Xcode version
 
-1. Check the [runner image readme](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md) lists the Xcode version, and that its simulator runtime includes the `TEST_DEVICES` model from the `Fastfile`. `setup-xcode` can only select an Xcode already on the image.
+1. Check the [runner image readme](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md) lists the Xcode version, and that its simulator runtime includes the `DESTINATION` model from the `Makefile`. `setup-xcode` can only select an Xcode already on the image.
 2. Edit `.xcode-version` and the version quoted in [`Setup.md`](Setup.md).
-3. Run `bundle exec fastlane test` locally, then a Release build. Only Release runs the SIL optimizer, and a new toolchain can crash on code that Debug compiles fine (see the `Gymfile` workaround):
+3. Run `make test` locally, then a Release build. Only Release runs the SIL optimizer, and a new toolchain can crash on code that Debug compiles fine (see the `Gymfile` workaround):
    ```sh
    xcodebuild -scheme "The Blue Alliance" -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
    ```
