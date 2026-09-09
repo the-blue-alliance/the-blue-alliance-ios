@@ -86,6 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         LegacyCoreDataCleanup.run()
+        appSettings.featureFlags.pruneRetiredFlags()
         Self.setupAppearance()
 
         configureFirebase()

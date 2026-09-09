@@ -3,6 +3,10 @@ import UIKit
 
 extension UIImage {
 
+    static var homeIcon: UIImage? {
+        return UIImage(systemName: "house.fill")
+    }
+
     static var eventIcon: UIImage? {
         return UIImage(systemName: "calendar")
     }

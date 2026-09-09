@@ -107,3 +107,7 @@ extension Dependencies {
     }
 
 }
+
+final class MockFCMTokenProvider: FCMTokenProvider {
+    var fcmToken: String?
+}

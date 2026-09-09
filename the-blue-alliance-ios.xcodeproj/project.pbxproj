@@ -204,6 +204,12 @@
 		AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA00A /* AllianceBadgeView.swift */; };
 		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
+		5EC0D41A2C26090100000002 /* FeatureFlagsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090100000001 /* FeatureFlagsStore.swift */; };
+		5EC0D41A2C26090200000002 /* DashboardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */; };
+		5EC0D41A2C26090300000002 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090300000001 /* DashboardViewController.swift */; };
+		5EC0D41A2C26090400000002 /* FeatureFlagsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090400000001 /* FeatureFlagsStoreTests.swift */; };
+		5EC0D41A2C26090500000002 /* PhoneRootViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090500000001 /* PhoneRootViewControllerTests.swift */; };
+		5EC0D41A2C26090700000002 /* SettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090700000001 /* SettingsViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -399,6 +405,12 @@
 		AA00000000000000000AA00A /* AllianceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceBadgeView.swift; sourceTree = "<group>"; };
 		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26090100000001 /* FeatureFlagsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsStore.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardContainerViewController.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26090300000001 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26090400000001 /* FeatureFlagsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocalStore/FeatureFlagsStoreTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26090500000001 /* PhoneRootViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Root/PhoneRootViewControllerTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26090700000001 /* SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Settings/SettingsViewControllerTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -589,6 +601,9 @@
 			children = (
 				5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */,
 				5EC0D41A2C2607010000000F /* LegacyCoreDataCleanupTests.swift */,
+				5EC0D41A2C26090400000001 /* FeatureFlagsStoreTests.swift */,
+				5EC0D41A2C26090500000001 /* PhoneRootViewControllerTests.swift */,
+				5EC0D41A2C26090700000001 /* SettingsViewControllerTests.swift */,
 				92AA7A062F0100000006AAAA /* SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
@@ -639,6 +654,7 @@
 				92942DB51E215B34008E79CA /* MyTBA */,
 				92A321C5214EF81700FDADFB /* Settings */,
 				92FF10F221A61AC2003BC5C4 /* Match */,
+				5EC0D41A2C26090600000001 /* Dashboard */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -802,6 +818,7 @@
 				5EC0D41A2C26041600000003 /* MyTBALocalStore.swift */,
 				5EC0D41A2C26042100000001 /* NotificationStore.swift */,
 				5EC0D41A2C26042100000003 /* JSONFileStore.swift */,
+				5EC0D41A2C26090100000001 /* FeatureFlagsStore.swift */,
 			);
 			path = LocalStore;
 			sourceTree = "<group>";
@@ -1039,6 +1056,15 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		5EC0D41A2C26090600000001 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */,
+				5EC0D41A2C26090300000001 /* DashboardViewController.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1258,6 +1284,9 @@
 			files = (
 				5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */,
 				5EC0D41A2C26070100000010 /* LegacyCoreDataCleanupTests.swift in Sources */,
+				5EC0D41A2C26090400000002 /* FeatureFlagsStoreTests.swift in Sources */,
+				5EC0D41A2C26090500000002 /* PhoneRootViewControllerTests.swift in Sources */,
+				5EC0D41A2C26090700000002 /* SettingsViewControllerTests.swift in Sources */,
 				92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
@@ -1278,6 +1307,9 @@
 				5EC0D41A2C26041600000002 /* LegacyCoreDataCleanup.swift in Sources */,
 				5EC0D41A2C26041600000004 /* MyTBALocalStore.swift in Sources */,
 				5EC0D41A2C26042100000002 /* NotificationStore.swift in Sources */,
+				5EC0D41A2C26090100000002 /* FeatureFlagsStore.swift in Sources */,
+				5EC0D41A2C26090200000002 /* DashboardContainerViewController.swift in Sources */,
+				5EC0D41A2C26090300000002 /* DashboardViewController.swift in Sources */,
 				5EC0D41A2C26042100000004 /* JSONFileStore.swift in Sources */,
 				5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */,
 				5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */,

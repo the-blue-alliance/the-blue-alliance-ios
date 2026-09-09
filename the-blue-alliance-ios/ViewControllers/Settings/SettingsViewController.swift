@@ -10,6 +10,7 @@ private enum SettingsSection: Int, CaseIterable {
     case networking
     case icons
     case privacy
+    case experimental
     case debug
 }
 
@@ -98,8 +99,23 @@ class SettingsViewController: TBATableViewController {
     private lazy var visibleSections: [SettingsSection] = {
         let canSwitchIcons =
             UIApplication.shared.supportsAlternateIcons && !alternateAppIconNames.isEmpty
-        return SettingsSection.allCases.filter { $0 != .icons || canSwitchIcons }
+        return SettingsSection.allCases.filter { section in
+            switch section {
+            case .icons: return canSwitchIcons
+            case .experimental: return Self.showsExperimentalFeatures
+            default: return true
+            }
+        }
     }()
+
+    // Nothing behind a flag is ready for testers yet.
+    private static var showsExperimentalFeatures: Bool {
+        #if DEBUG && targetEnvironment(simulator)
+            return true
+        #else
+            return false
+        #endif
+    }
 
     private func section(at index: Int) -> SettingsSection? {
         guard visibleSections.indices.contains(index) else {
@@ -126,6 +142,8 @@ class SettingsViewController: TBATableViewController {
             return appIconOptions.count
         case .privacy:
             return PrivacyRow.allCases.count
+        case .experimental:
+            return FeatureFlag.allCases.count
         case .debug:
             return DebugRow.allCases.count
         }
@@ -147,6 +165,8 @@ class SettingsViewController: TBATableViewController {
             return "App Icon"
         case .privacy:
             return "Privacy"
+        case .experimental:
+            return "Experimental"
         case .debug:
             return "Debug"
         }
@@ -159,6 +179,8 @@ class SettingsViewController: TBATableViewController {
         case .privacy:
             return
                 "Analytics helps us understand how the app is used. Crash reports help us find and fix bugs. Both are sent to Firebase."
+        case .experimental:
+            return "Early looks at features still in progress."
         case .debug:
             return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
         default:
@@ -229,7 +251,9 @@ class SettingsViewController: TBATableViewController {
                 cell.textLabel?.text = "Share Analytics"
                 toggle.isOn = dependencies.appSettings.firebaseCollection.analyticsEnabled
                 toggle.addAction(
-                    UIAction { [weak self, unowned toggle] _ in self?.analyticsToggleChanged(toggle)
+                    UIAction { [weak self] action in
+                        guard let toggle = action.sender as? UISwitch else { return }
+                        self?.analyticsToggleChanged(toggle)
                     },
                     for: .valueChanged
                 )
@@ -237,12 +261,29 @@ class SettingsViewController: TBATableViewController {
                 cell.textLabel?.text = "Share Crash Reports"
                 toggle.isOn = dependencies.appSettings.firebaseCollection.crashlyticsEnabled
                 toggle.addAction(
-                    UIAction { [weak self, unowned toggle] _ in
+                    UIAction { [weak self] action in
+                        guard let toggle = action.sender as? UISwitch else { return }
                         self?.crashlyticsToggleChanged(toggle)
                     },
                     for: .valueChanged
                 )
             }
+            cell.accessoryView = toggle
+            cell.selectionStyle = .none
+            return cell
+        case .experimental:
+            let flag = FeatureFlag.allCases[indexPath.row]
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            let toggle = UISwitch()
+            cell.textLabel?.text = flag.title
+            toggle.isOn = dependencies.appSettings.featureFlags.isEnabled(flag)
+            toggle.addAction(
+                UIAction { [weak self] action in
+                    guard let toggle = action.sender as? UISwitch else { return }
+                    self?.experimentalToggleChanged(toggle, flag: flag)
+                },
+                for: .valueChanged
+            )
             cell.accessoryView = toggle
             cell.selectionStyle = .none
             return cell
@@ -296,7 +337,7 @@ class SettingsViewController: TBATableViewController {
             }
         case .icons:
             setAppIcon(appIconOptions[indexPath.row].alternateName)
-        case .privacy:
+        case .privacy, .experimental:
             break
         case .debug:
             let debugRow = DebugRow.allCases[indexPath.row]
@@ -446,6 +487,21 @@ class SettingsViewController: TBATableViewController {
         alertController.addAction(cancelAction)
 
         self.present(alertController, animated: true, completion: nil)
+    }
+
+    // MARK: - Experimental Methods
+
+    private func experimentalToggleChanged(_ sender: UISwitch, flag: FeatureFlag) {
+        dependencies.appSettings.featureFlags.setEnabled(sender.isOn, for: flag)
+        guard flag.requiresRelaunch else { return }
+
+        let alert = UIAlertController(
+            title: "Relaunch to Apply",
+            message: "Quit and reopen The Blue Alliance to see this change.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Okay", style: .default))
+        present(alert, animated: true)
     }
 
     // MARK: - Privacy Methods
