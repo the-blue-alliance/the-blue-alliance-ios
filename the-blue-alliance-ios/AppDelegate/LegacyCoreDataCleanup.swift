@@ -15,11 +15,11 @@ enum LegacyCoreDataCleanup {
     /// One defaults read on every launch after the first; everything else runs once.
     static func run(
         userDefaults: UserDefaults = .standard,
-        storeDirectories: [URL] = legacyStoreDirectories()
+        storeDirectories: [URL]? = nil
     ) {
         guard !userDefaults.bool(forKey: completedFlagKey) else { return }
 
-        for directory in storeDirectories {
+        for directory in storeDirectories ?? legacyStoreDirectories() {
             removeStoreFiles(in: directory)
         }
         // Old Refreshable cache key, no longer used.
