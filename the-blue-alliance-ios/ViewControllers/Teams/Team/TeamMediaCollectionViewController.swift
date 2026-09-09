@@ -398,7 +398,7 @@ extension TeamMediaCollectionViewController: Refreshable {
     }
 
     private static func makeItem(from media: Media) -> TeamMediaItem? {
-        let type = media._type.rawValue
+        let type = media.type.rawValue
         if Self.imageTypes.contains(type) {
             return .image(
                 .init(

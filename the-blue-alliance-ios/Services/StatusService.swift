@@ -9,6 +9,9 @@ struct AppStatus {
     let latestAppVersion: Int
     let isDatafeedDown: Bool
     let downEventKeys: [String]
+    /// Kickoff for the upcoming season, as the server computes it. `nil` until `/status` has
+    /// loaded or if the server omits it.
+    let kickoffDate: Date?
 
     static var `default`: AppStatus {
         let year = Calendar.current.component(.year, from: Date())
@@ -18,7 +21,8 @@ struct AppStatus {
             minAppVersion: -1,
             latestAppVersion: -1,
             isDatafeedDown: false,
-            downEventKeys: []
+            downEventKeys: [],
+            kickoffDate: nil
         )
     }
 
@@ -28,7 +32,8 @@ struct AppStatus {
         minAppVersion: Int,
         latestAppVersion: Int,
         isDatafeedDown: Bool,
-        downEventKeys: [String]
+        downEventKeys: [String],
+        kickoffDate: Date?
     ) {
         self.currentSeason = currentSeason
         self.maxSeason = maxSeason
@@ -36,6 +41,7 @@ struct AppStatus {
         self.latestAppVersion = latestAppVersion
         self.isDatafeedDown = isDatafeedDown
         self.downEventKeys = downEventKeys
+        self.kickoffDate = kickoffDate
     }
 
     init(apiStatus: APIStatus) {
@@ -45,6 +51,7 @@ struct AppStatus {
         self.latestAppVersion = apiStatus.ios.latestAppVersion
         self.isDatafeedDown = apiStatus.isDatafeedDown
         self.downEventKeys = apiStatus.downEvents
+        self.kickoffDate = apiStatus.kickoffDatetime.flatMap { try? Date($0, strategy: .iso8601) }
     }
 }
 

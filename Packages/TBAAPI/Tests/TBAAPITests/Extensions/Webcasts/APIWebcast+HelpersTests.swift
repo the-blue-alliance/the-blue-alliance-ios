@@ -148,7 +148,7 @@ struct APIWebcastHelpersTests {
         type: Webcast._TypePayload,
         channel: String,
         date: String? = nil,
-        status: Webcast.StatusPayload? = nil,
+        status: WebcastStatus? = nil,
         viewerCount: Int? = nil
     ) -> Webcast {
         Webcast(
