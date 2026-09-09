@@ -170,18 +170,20 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         runRefresh { [weak self] in
             guard let self else { return }
             let key = self.state.key
-            async let matchesTask = self.dependencies.api.eventMatches(key: key)
-            async let alliancesTask: [EliminationAlliance]?? = {
-                try? await self.dependencies.api.eventAlliances(key: key)
-            }()
-            async let eventTask: Event? = {
-                try? await self.dependencies.api.event(key: key)
-            }()
-            self.allMatches = try await matchesTask
-            if let alliancesResult = await alliancesTask {
-                self.allianceLookup = alliancesResult.map(AllianceLookup.init)
+            // Unstructured Task handles instead of `async let`: Swift 6.1's
+            // async-let stack allocator trips swift_task_dealloc's LIFO check
+            // here even with reverse-order awaits (#995 didn't fully fix it).
+            // Task handles heap-allocate and sidestep the allocator entirely.
+            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            let matchesHandle = Task { try await self.dependencies.api.eventMatches(key: key) }
+            let alliancesHandle = Task { try await self.dependencies.api.eventAlliances(key: key) }
+            let eventHandle = Task { try? await self.dependencies.api.event(key: key) }
+            self.allMatches = try await matchesHandle.value
+            // A failed request keeps the old lookup; a nil payload clears it.
+            if case .success(let alliances) = await alliancesHandle.result {
+                self.allianceLookup = alliances.map(AllianceLookup.init)
             }
-            if let event = await eventTask {
+            if let event = await eventHandle.value {
                 self.state = .event(event)
             }
             self.applyMatches(self.allMatches)

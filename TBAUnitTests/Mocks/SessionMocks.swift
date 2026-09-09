@@ -138,8 +138,11 @@ final class MockSessionMyTBA: MyTBAProtocol {
         return try Self.baseResponse()
     }
 
-    func fetchFavorites() async throws -> [MyTBAFavorite] { [] }
-    func fetchSubscriptions() async throws -> [MyTBASubscription] { [] }
+    var favorites: [MyTBAFavorite] = []
+    var subscriptions: [MyTBASubscription] = []
+
+    func fetchFavorites() async throws -> [MyTBAFavorite] { favorites }
+    func fetchSubscriptions() async throws -> [MyTBASubscription] { subscriptions }
 
     func updatePreferences(
         modelKey: String,
