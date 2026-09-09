@@ -1,2 +1,0 @@
-buildlog_path("build/reports")
-skip_slack(true)

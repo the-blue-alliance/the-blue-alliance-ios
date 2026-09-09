@@ -27,7 +27,7 @@ jobs:
         with:
           xcode-version: ${{ steps.xcode.outputs.version }}
       - name: Lint
-        run: ./scripts/swift-format.sh --strict
+        run: make lint-format
 
   dependency-pins:
     name: Dependency pins
@@ -36,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Check dependency pins
-        run: ./scripts/check-dependency-pins.py
+        run: make lint-deps
 
   app-icon-previews:
     name: App icon previews
@@ -53,7 +53,7 @@ jobs:
       # Regenerate rather than using --check: that compares mtimes, and a fresh
       # checkout gives every file the same timestamp, so it would always pass here.
       - name: Regenerate previews
-        run: ./scripts/generate-app-icon-previews.sh --force
+        run: make icons
       - name: Check previews are up to date
         run: |
           if ! git diff --quiet -- the-blue-alliance-ios/Assets.xcassets/AppIconPreviews; then
@@ -82,11 +82,6 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: ${{ steps.xcode.outputs.version }}
-      - uses: actions/cache@v6
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
       - name: Cache SwiftPM clones
         uses: actions/cache@v6
         with:
@@ -105,14 +100,13 @@ jobs:
             ${{ runner.os }}-packages-derived-data-
       # These are offline unit tests, so they need neither Secrets.plist nor a
       # signing keychain.
-      - name: Install
-        run: |
-          bundle config set --local path vendor/bundle
-          bundle install
-      - name: fastlane test_packages
-        run: bundle exec fastlane test_packages
-      # Logs holds the .xcresult, which result_bundle already copies into
-      # fastlane/test_output. Neither is worth carrying in the cache.
+      - name: Test packages
+        run: make test-packages
+      - name: Summarize results
+        if: ${{ always() }}
+        run: make summary
+      # Logs holds the .xcresult, which -resultBundlePath already copies into
+      # test_output. Neither is worth carrying in the cache.
       - name: Trim DerivedData
         if: ${{ always() }}
         run: rm -rf DerivedData/Logs DerivedData/Index.noindex
@@ -137,11 +131,6 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: ${{ steps.xcode.outputs.version }}
-      - uses: actions/cache@v6
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
       - name: Cache SwiftPM clones
         uses: actions/cache@v6
         with:
@@ -156,19 +145,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-
             ${{ runner.os }}-derived-data-
-      - name: Install
+      - name: Set up Secrets.plist
         run: |
           cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
-          bundle config set --local path vendor/bundle
-          bundle install
-          bundle exec fastlane run setup_ci
-          bundle exec fastlane setup_secrets
+          make secrets
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
-      - name: fastlane test_app
-        run: bundle exec fastlane test_app
-      # Logs holds the .xcresult, which result_bundle already copies into
-      # fastlane/test_output. Neither is worth carrying in the cache.
+      - name: Test app
+        run: make test-app
+      - name: Summarize results
+        if: ${{ always() }}
+        run: make summary
+      # Logs holds the .xcresult, which -resultBundlePath already copies into
+      # test_output. Neither is worth carrying in the cache.
       - name: Trim DerivedData
         if: ${{ always() }}
         run: rm -rf DerivedData/Logs DerivedData/Index.noindex

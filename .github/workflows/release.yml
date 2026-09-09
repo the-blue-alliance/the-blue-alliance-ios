@@ -38,9 +38,11 @@ jobs:
       - name: Install
         run: |
           cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
+          make secrets
+          # Without this the vendor/bundle cache above never gets a hit.
+          bundle config set --local path vendor/bundle
           bundle install
           bundle exec fastlane run setup_ci
-          bundle exec fastlane setup_secrets
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: fastlane beta_ci

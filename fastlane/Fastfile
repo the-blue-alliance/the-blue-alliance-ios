@@ -1,5 +1,9 @@
 default_platform :ios
 
+# Release only. Everything a developer runs locally - tests, formatting,
+# linting, version bumps - lives in the Makefile at the repo root, and CI calls
+# those same targets. These lanes only ever run from .github/workflows/release.yml.
+
 # Failure messages worth translating into the actual next step, since fastlane's
 # own output either buries the cause or can't explain it.
 KNOWN_FAILURE_HINTS = [
@@ -21,120 +25,13 @@ KNOWN_FAILURE_HINTS = [
   }
 ].freeze
 
-# No runtime version, so these resolve against whatever the pinned Xcode ships.
-TEST_DEVICES = ["iPhone 17 Pro"].freeze
-
-# scan chdirs into `package_path`, so package lanes have to name these
-# absolutely or their output lands inside the package directory - where the
-# app build and swift-format would walk into it.
-TEST_OUTPUT_DIR = File.expand_path("test_output", __dir__).freeze
-DERIVED_DATA_DIR = File.expand_path("../DerivedData", __dir__).freeze
-
-# Build tool plugins (TBAAPI's OpenAPIGenerator) and macros are only trusted
-# through Xcode's UI, so xcodebuild won't run them on CI without these.
-TEST_XCARGS = "-skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO".freeze
-
 RELEASE_LANES = [:beta_ci, :app_store].freeze
 RELEASE_CHANNEL = "#app-releases".freeze
 RELEASE_BOT_ICON_URL = "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png".freeze
 
 platform :ios do
 
-  desc "Install project dependencies"
-  lane :install_deps do
-    bundle_install # Update bundle deps
-  end
-
-  desc "Run MyTBAKit unit tests"
-  lane :test_mytbakit do
-    test_package("MyTBAKit")
-  end
-
-  desc "Run TBAUtils unit tests"
-  lane :test_tbautils do
-    test_package("TBAUtils")
-  end
-
-  desc "Run TBAAPI unit tests"
-  lane :test_tbaapi do
-    test_package("TBAAPI")
-  end
-
-  desc "Run TBAAuth unit tests"
-  lane :test_tbaauth do
-    test_package("TBAAuth")
-  end
-
-  desc "Run TBAUnitTests plus the TBAAPI and MyTBAKit package tests, all in the app scheme"
-  lane :test_app do
-    run_tests(
-      project: "the-blue-alliance-ios.xcodeproj",
-      scheme: "The Blue Alliance",
-      configuration: "Debug",
-      devices: TEST_DEVICES,
-      skip_package_dependencies_resolution: true,
-      # Passes an explicit -resultBundlePath, so scan doesn't have to locate the
-      # .xcresult by diffing derived data.
-      result_bundle: true,
-      # These three exist to keep scan from shelling out to
-      # `xcodebuild -showBuildSettings`, which costs 100-200s on a cold runner.
-      # Scan reads exactly three things from it, and every one of them is
-      # something we already know:
-      #   derived_data_path         -> where to look for build output
-      #   deployment_target_version -> only filters the simulator list, and we
-      #                                pin `devices` above anyway
-      #   app_name                  -> names the raw build log, because the
-      #                                Scanfile sets buildlog_path
-      derived_data_path: "DerivedData",
-      deployment_target_version: "26.0",
-      app_name: "The Blue Alliance",
-      xcargs: TEST_XCARGS
-    )
-  end
-
-  # TBAAPI and MyTBAKit run inside the app scheme. xcodebuild refuses to host
-  # TBAUtilsTests and TBAAuthTests there ("isn't a member of the specified test
-  # plan or scheme") despite identical wiring, so they still run on their own.
-  desc "Run the Swift package unit tests that the app scheme doesn't already cover"
-  lane :test_packages do
-    test_tbautils
-    test_tbaauth
-  end
-
-  desc "Run all of our tests"
-  lane :test do
-    test_packages
-    test_app
-  end
-
-  desc "Format all Swift files with swift-format"
-  lane :format do
-    sh("../scripts/swift-format.sh --fix")
-  end
-
-  desc "Lint Swift formatting (strict, used by CI)"
-  lane :lint do
-    sh("../scripts/swift-format.sh --strict")
-    sh("../scripts/check-dependency-pins.py")
-  end
-
-  ## CI Lanes ##
-
-  desc "Setup Secrets.plist file (used by CI)"
-  lane :setup_secrets do
-    set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV["TBA_API_KEY"])
-  end
-
-  desc "Download dSYMs for a specific build. Usage: fastlane dsyms version:3.2.3 build:2"
-  lane :dsyms do |options|
-    setup_api
-    download_dsyms(
-      version: options[:version],
-      build_number: options[:build],
-      app_identifier: "com.the-blue-alliance.tba",
-      output_directory: options[:output] || "./dsyms"
-    )
-  end
+  ## Release Lanes ##
 
   desc "Configure code signing"
   private_lane :configure_code_signing do
@@ -151,8 +48,6 @@ platform :ios do
       )
     end
   end
-
-  ## Release Lanes ##
 
   desc "Upload a new beta build to TestFlight (for CI machine)"
   lane :beta_ci do
@@ -287,40 +182,6 @@ platform :ios do
   end
 
   ## End Internal Lanes for Shipping Lanes ##
-
-  ## Utility Lanes ##
-
-  desc "Create a new app version (major, minor, patch) by bumping the version number"
-  lane :new_version do |options|
-    version_type = options[:version_type]
-    # Bump version accordingly
-    increment_version_number(bump_type: version_type)
-    increment_build_number(build_number: 1)
-  end
-
-  ## End Utility Lanes ##
-
-  ## Package Tests ##
-
-  # The packages are iOS-only, so `swift test` (which builds for the host Mac)
-  # can't run them - it has to be scan against a simulator. Scan needs
-  # `result_bundle` to find results at all when given a `package_path`, and
-  # each package needs its own output dir: xcodebuild refuses to overwrite an
-  # existing result bundle and scan doesn't clear one.
-  def test_package(name)
-    output_directory = File.join(TEST_OUTPUT_DIR, name)
-    FileUtils.rm_rf(output_directory)
-
-    run_tests(
-      package_path: "Packages/#{name}",
-      scheme: name,
-      devices: TEST_DEVICES,
-      derived_data_path: DERIVED_DATA_DIR,
-      result_bundle: true,
-      output_directory: output_directory,
-      xcargs: TEST_XCARGS
-    )
-  end
 
   ## Error Handling ##
 

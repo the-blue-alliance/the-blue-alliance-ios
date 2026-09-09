@@ -9,13 +9,14 @@ First, decide what type of version the new version should be
 |minor|v2.3.1|v2.**4.0**|
 |patch|v2.3.1|v2.3.**2**|
 
-Once you've decided the type of version, we can create a new version via fastlane.
+Once you've decided the type of version, bump it with `make`.
 
 ```
-$ bundle exec fastlane new_version version_type:{version_type}
+$ make new-version BUMP={version_type}
 ```
 
-fastlane will automatically create a new commit for the version bump.
+This edits `Info.plist` in place via `agvtool` and resets the build number to 1. It does
+not commit — review the diff and commit it yourself.
 
 CI manages build numbers for both TestFlight and App Store builds — bumping incrementally based on the latest build in App Store Connect. You don't need to set them manually.
 
@@ -41,23 +42,25 @@ Before shipping an App Store build, update the [release notes](https://github.co
 
 All [metadata](https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/main/fastlane/metadata) (app name, categories, release notes, etc.) is stored in the `fastlane/metadata` folder. App-wide metadata is in the root of the folder, while locale-specific metadata is in sub-folders (ex: `en-US`). To update app metadata, change the corresponding file in `fastlane/metadata` and [submit a new App Store build](#ship-an-app-store-build) — CI will push the updated metadata to App Store Connect alongside the new release. Metadata can only be updated by releasing a new version of the app.
 
-If you've updated metadata in App Store Connect, you can download it to the repo via Fastlane
+Metadata is plain text — edit the files directly. There is no local download command:
+fastlane only runs on CI, so the App Store Connect web UI is the source of truth if the
+two ever drift.
 
-```
-$ bundle exec fastlane deliver download_metadata
-```
-
-NOTE: Some metadata is not included in the repo, such as emails and addresses. Please make sure to review any downloaded information before pushing to GitHub to make sure you're not doxing anyone.
+NOTE: Some metadata is deliberately not in the repo, such as emails and addresses. If you
+copy anything out of App Store Connect, review it before pushing so you're not doxing
+anyone.
 
 ## Updating Screenshots
 
-[Screenshots](https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/main/fastlane/screenshots) are stored in the `fastlane/screenshots` folder. Screenshots are locale-specific, and updated screenshots must be placed in the corresponding locale sub-folder (ex: `en-US`). Screenshots must be named properly for Fastlane to upload them, but there's zero documentation on the naming specifics. For additional information on App Store screenshots, refer to the [App Store Connect Help page on screenshots](https://help.apple.com/app-store-connect/#/dev910472ff2).
+Screenshots are managed in App Store Connect — upload them there. `skip_screenshots(true)` is set in the
+[`Deliverfile`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/fastlane/Deliverfile),
+so releases leave the live screenshots alone.
 
-If you've uploaded screenshots in App Store Connect, you can download them in to the repo via Fastlane
-
-```
-$ bundle exec fastlane deliver download_screenshots
-```
+`fastlane/screenshots` is therefore no longer a release input. It still holds the 2020-era
+set (pre-2021 device classes: `iphone58`, `iphone65`, `iphone6Plus`), kept only as a
+record. If you ever want the repo to drive screenshots again, refresh that directory
+*before* removing `skip_screenshots`, or a release will overwrite the live listing with
+five-year-old images.
 
 ## Ship a TestFlight Build
 
@@ -72,7 +75,7 @@ TestFlight builds are shipped manually from the GitHub Actions UI:
 
 CI will bump the build number, run the `beta_ci` fastlane lane, and distribute the build to the "Beta" group in TestFlight using the contents of `beta.md` as the test notes.
 
-If you need to bump the version (vs. just shipping another beta of the current version), do that first via [`fastlane new_version`](#create-new-version) and merge the bump to `main` before kicking off the workflow.
+If you need to bump the version (vs. just shipping another beta of the current version), do that first via [`make new-version`](#create-new-version) and merge the bump to `main` before kicking off the workflow.
 
 ## Ship an App Store Build
 
@@ -92,9 +95,12 @@ The confirmation field exists because App Store submissions are public and hard 
 ## Configuring Code Signing via Xcode
 If something on CI fails and a beta or release build has to be shipped manually, you'll need to configure code signing locally.
 
-Pull the latest code signing certificates
+This is the one workflow that still needs Ruby. `match` is not part of the Makefile and
+fastlane is not installed locally:
 
 ```
+$ brew install ruby
+$ bundle install
 $ bundle exec fastlane match
 ```
 
