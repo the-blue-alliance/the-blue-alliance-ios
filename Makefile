@@ -66,7 +66,9 @@ test-tbaauth: ## Run TBAAuth tests
 	$(call package_test,TBAAuth)
 
 summary: ## Summarize the last test run
-	@for bundle in "$(RESULTS)"/*.xcresult; do ./scripts/test-summary.sh "$$bundle"; done
+	@for bundle in "$(RESULTS)"/*.xcresult; do \
+		[ -e "$$bundle" ] && ./scripts/test-summary.sh "$$bundle"; \
+	done; true
 
 new-version:
 	@set -eu; \
@@ -82,8 +84,11 @@ new-version:
 	xcrun agvtool new-version -all 1
 
 secrets: ## Write the TBA_API_KEY env var into Secrets.plist
-	@test -n "$$TBA_API_KEY" || { echo "TBA_API_KEY is not set" >&2; exit 1; }
-	@/usr/libexec/PlistBuddy -c "Set :tba_api_key $$TBA_API_KEY" "$(SECRETS)"
+	@if [ -z "$$TBA_API_KEY" ]; then \
+		echo "TBA_API_KEY unset, leaving $(SECRETS) alone. Offline tests do not need it."; \
+	else \
+		/usr/libexec/PlistBuddy -c "Set :tba_api_key $$TBA_API_KEY" "$(SECRETS)"; \
+	fi
 
 icons: ## Regenerate the app icon preview assets
 	./scripts/generate-app-icon-previews.sh --force
