@@ -52,11 +52,15 @@ anyone.
 
 ## Updating Screenshots
 
-[Screenshots](https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/main/fastlane/screenshots) are stored in the `fastlane/screenshots` folder. Screenshots are locale-specific, and updated screenshots must be placed in the corresponding locale sub-folder (ex: `en-US`). Screenshots must be named properly for Fastlane to upload them, but there's zero documentation on the naming specifics. For additional information on App Store screenshots, refer to the [App Store Connect Help page on screenshots](https://help.apple.com/app-store-connect/#/dev910472ff2).
+Screenshots are managed in App Store Connect — upload them there. `skip_screenshots(true)` is set in the
+[`Deliverfile`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/fastlane/Deliverfile),
+so releases leave the live screenshots alone.
 
-Screenshots are managed in App Store Connect; there is no local download command. Note the
-committed screenshots are stale — they use pre-2021 device classes (`iphone58`, `iphone65`,
-`iphone6Plus`) and have not been refreshed since. Regenerating them is tracked separately.
+`fastlane/screenshots` is therefore no longer a release input. It still holds the 2020-era
+set (pre-2021 device classes: `iphone58`, `iphone65`, `iphone6Plus`), kept only as a
+record. If you ever want the repo to drive screenshots again, refresh that directory
+*before* removing `skip_screenshots`, or a release will overwrite the live listing with
+five-year-old images.
 
 ## Ship a TestFlight Build
 
@@ -96,7 +100,6 @@ fastlane is not installed locally:
 
 ```
 $ brew install ruby
-$ gem install bundler
 $ bundle install
 $ bundle exec fastlane match
 ```

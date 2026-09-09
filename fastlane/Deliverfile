@@ -5,3 +5,7 @@
 force(true)
 submit_for_review(true)
 automatic_release(true)
+
+# App Store Connect owns the screenshots. fastlane/screenshots still holds the
+# 2020-era set, and without this deliver would upload it over whatever is live.
+skip_screenshots(true)
