@@ -22,22 +22,10 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         searchController.searchResultsUpdater = searchViewController
         searchController.scopeBarActivation = .onSearchActivation
 
-        // Style our search bar
-        searchController.searchBar.backgroundColor = UIColor.navigationBarTintColor
         searchController.searchBar.autocapitalizationType = .words
         searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map { $0.title }
         searchController.searchBar.delegate = searchViewController
 
-        // Style our search bar text field
-        searchController.searchBar.searchTextField.textColor = UIColor.white
-        searchController.searchBar.searchTextField.tintColor = UIColor.white
-        searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.white
-        searchController.searchBar.searchTextField.backgroundColor =
-            UIColor.searchFieldBackgroundColor
-        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Search teams and events",
-            attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
-        )
         return searchController
     }
 
@@ -45,6 +33,19 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
+
+        // Adopting the search bar resets its text field to UIKit's own appearance, so the
+        // colors only stick when they go on after the hand-off.
+        let searchBar = searchController.searchBar
+        searchBar.backgroundColor = UIColor.navigationBarTintColor
+        searchBar.searchTextField.textColor = UIColor.white
+        searchBar.searchTextField.tintColor = UIColor.white
+        searchBar.searchTextField.leftView?.tintColor = UIColor.white
+        searchBar.searchTextField.backgroundColor = UIColor.searchFieldBackgroundColor
+        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "Search teams and events",
+            attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
+        )
     }
 
 }
