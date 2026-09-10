@@ -31,6 +31,8 @@ extension SearchSection: TableSectionTitleProviding {
 protocol SearchViewControllerDelegate: AnyObject {
     func eventSelected(eventKey: EventKey, name: String?)
     func teamSelected(teamKey: String, nickname: String?)
+    func searchWillPresent()
+    func searchWillDismiss()
 }
 
 nonisolated enum SearchItem: Hashable {
@@ -228,6 +230,14 @@ class SearchViewController: TBATableViewController {
 }
 
 extension SearchViewController: UISearchControllerDelegate {
+    func willPresentSearchController(_ searchController: UISearchController) {
+        delegate?.searchWillPresent()
+    }
+
+    func willDismissSearchController(_ searchController: UISearchController) {
+        delegate?.searchWillDismiss()
+    }
+
     func didDismissSearchController(_ searchController: UISearchController) {
         searchText = nil
     }
