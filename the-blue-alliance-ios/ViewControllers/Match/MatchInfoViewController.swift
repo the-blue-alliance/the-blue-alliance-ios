@@ -9,6 +9,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     private let teamKey: String?
 
     private var event: Event?
+    private var showsDeviceTimeZone = false
 
     // MARK: - UI
 
@@ -56,6 +57,19 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         return matchStackView
     }()
 
+    private lazy var matchTimesView: MatchTimesView = {
+        let matchTimesView = MatchTimesView()
+        matchTimesView.timeZoneSwitch.addAction(
+            UIAction { [weak self] action in
+                guard let self, let timeZoneSwitch = action.sender as? UISwitch else { return }
+                self.showsDeviceTimeZone = timeZoneSwitch.isOn
+                self.updateMatchTimes()
+            },
+            for: .valueChanged
+        )
+        return matchTimesView
+    }()
+
     private let videoStackView: UIStackView = {
         let videoStackView = UIStackView(forAutoLayout: ())
         videoStackView.axis = .vertical
@@ -64,6 +78,16 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         videoStackView.spacing = 10
         videoStackView.translatesAutoresizingMaskIntoConstraints = false
         return videoStackView
+    }()
+
+    // A stack view so the times section collapses when it has nothing to show.
+    private lazy var contentStackView: UIStackView = {
+        let contentStackView = UIStackView(arrangedSubviews: [
+            matchStackView, matchTimesView, videoStackView,
+        ])
+        contentStackView.axis = .vertical
+        contentStackView.spacing = 8
+        return contentStackView
     }()
 
     var matchSummaryDelegate: (any MatchSummaryViewDelegate)? {
@@ -108,12 +132,13 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     // MARK: Interface Methods
 
     func styleInterface() {
-        scrollView.addSubview(matchStackView)
-        matchStackView.autoSetDimension(.height, toSize: 90)
-        matchStackView.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
-        matchStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
-        matchStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
+        scrollView.addSubview(contentStackView)
+        contentStackView.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
+        contentStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
+        contentStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
+        contentStackView.autoPinEdge(toSuperviewEdge: .bottom)
 
+        matchStackView.autoSetDimension(.height, toSize: 90)
         infoStackView.autoMatch(
             .height,
             to: .height,
@@ -131,18 +156,13 @@ class MatchInfoViewController: TBAViewController, Refreshable {
             withMultiplier: 0.25
         )
 
-        scrollView.addSubview(videoStackView)
-        videoStackView.autoPinEdge(.top, to: .bottom, of: matchStackView, withOffset: 8)
-        videoStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
-        videoStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
-        videoStackView.autoPinEdge(toSuperviewEdge: .bottom)
-
         // Override our default background color to be white
         view.backgroundColor = .systemBackground
     }
 
     func updateInterface() {
         updateMatchSummaryView()
+        updateMatchTimes()
         updateMatchVideos()
     }
 
@@ -161,6 +181,21 @@ class MatchInfoViewController: TBAViewController, Refreshable {
         matchSummaryView.viewModel = viewModel
 
         scoreTitleLabel.text = viewModel.hasScores ? "Score" : "Time"
+    }
+
+    func updateMatchTimes() {
+        guard let match = state.match else {
+            matchTimesView.isHidden = true
+            return
+        }
+        let viewModel = MatchTimesViewModel(
+            match: match,
+            eventTimeZone: event?.timeZone,
+            showsDeviceTimeZone: showsDeviceTimeZone
+        )
+        matchTimesView.viewModel = viewModel
+        matchTimesView.timeZoneSwitch.isOn = showsDeviceTimeZone
+        matchTimesView.isHidden = viewModel.isEmpty
     }
 
     func updateMatchVideos() {

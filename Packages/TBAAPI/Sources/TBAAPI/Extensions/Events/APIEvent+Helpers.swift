@@ -29,6 +29,10 @@ extension Event {
         return shortName
     }
 
+    public var timeZone: TimeZone? {
+        timezone.flatMap { TimeZone(identifier: $0) }
+    }
+
     public var safeNameYear: String {
         name.isEmpty ? key : "\(year) \(name)"
     }
