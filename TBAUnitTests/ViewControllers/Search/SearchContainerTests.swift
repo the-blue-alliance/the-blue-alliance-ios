@@ -9,6 +9,9 @@ struct SearchContainerTests {
 
     /// A container whose search controller has gone through `setupSearchController()` inside a
     /// navigation controller and a window, which is what resets the field's appearance.
+    ///
+    /// The tab bar controller is load bearing. Without one the bar has room to place the search
+    /// field inline, and UIKit swaps in its own SwiftUI-backed field that drops our colors.
     private final class Harness {
         let window: UIWindow
         let container: TeamsContainerViewController
@@ -17,7 +20,11 @@ struct SearchContainerTests {
             container = TeamsContainerViewController(dependencies: .mock())
             window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
             window.overrideUserInterfaceStyle = style
-            window.rootViewController = UINavigationController(rootViewController: container)
+            let tabBarController = UITabBarController()
+            tabBarController.viewControllers = [
+                UINavigationController(rootViewController: container)
+            ]
+            window.rootViewController = tabBarController
             window.makeKeyAndVisible()
             container.loadViewIfNeeded()
             window.layoutIfNeeded()
