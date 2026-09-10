@@ -271,13 +271,11 @@ extension AppDelegate {
         UINavigationBar.appearance().isTranslucent = false
 
         let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
         tabBarAppearance.selectionIndicatorTintColor = UIColor.tabBarTintColor
 
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         UITabBar.appearance().tintColor = UIColor.tabBarTintColor
-        UITabBar.appearance().isTranslucent = false
 
         let segmentedControlAppearance = UISegmentedControl.appearance()
         segmentedControlAppearance.setTitleTextAttributes(
