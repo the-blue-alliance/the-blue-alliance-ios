@@ -38,6 +38,7 @@
 		92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* SessionMocks.swift */; };
 		92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */; };
 		5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* EventSectionTests.swift */; };
+		5EC0D41A2C26091000000006 /* MatchTimesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091000000005 /* MatchTimesViewModelTests.swift */; };
 		5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */; };
 		5EC0D41A2C26070100000002 /* DependenciesMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000001 /* DependenciesMocks.swift */; };
 		5EC0D41A2C26070100000004 /* MatchBreakdownViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000003 /* MatchBreakdownViewControllerTests.swift */; };
@@ -140,6 +141,7 @@
 		92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */; };
 		92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */; };
 		92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */; };
+		5EC0D41A2C26091000000004 /* MatchTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091000000003 /* MatchTimesView.swift */; };
 		92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */; };
 		92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B63214F17440035AF28 /* URLOpener.swift */; };
 		92C079C723F99CA400AE2AFA /* EventInsightsConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C079C623F99CA400AE2AFA /* EventInsightsConfigurator2020.swift */; };
@@ -202,6 +204,7 @@
 		3604CAAD303FEEBD00DC500B /* Offseason.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA9303FEEBD00DC500B /* Offseason.icon */; };
 		AA00000000000000000AA003 /* MatchSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA004 /* MatchSection.swift */; };
 		AA00000000000000000AA007 /* AllianceLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA008 /* AllianceLookup.swift */; };
+		5EC0D41A2C26091000000002 /* MatchTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */; };
 		AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA00A /* AllianceBadgeView.swift */; };
 		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
@@ -245,6 +248,7 @@
 		92AA7A062F0100000006AAAA /* SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/SessionMocks.swift"; sourceTree = "<group>"; };
 		92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/MyTBASessionServiceTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26091000000005 /* MatchTimesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Match/MatchTimesViewModelTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000001 /* DependenciesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/DependenciesMocks.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000003 /* MatchBreakdownViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Match/MatchBreakdownViewControllerTests.swift"; sourceTree = "<group>"; };
@@ -345,6 +349,7 @@
 		92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCell.swift; sourceTree = "<group>"; };
 		92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
 		92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSummaryView.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26091000000003 /* MatchTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTimesView.swift; sourceTree = "<group>"; };
 		92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchSummaryView.xib; sourceTree = "<group>"; };
 		92BB8B63214F17440035AF28 /* URLOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLOpener.swift; sourceTree = "<group>"; };
 		92C079C623F99CA400AE2AFA /* EventInsightsConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsConfigurator2020.swift; sourceTree = "<group>"; };
@@ -404,6 +409,7 @@
 		3604CAA9303FEEBD00DC500B /* Offseason.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Offseason.icon; sourceTree = "<group>"; };
 		AA00000000000000000AA004 /* MatchSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSection.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA008 /* AllianceLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceLookup.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTimesViewModel.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA00A /* AllianceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceBadgeView.swift; sourceTree = "<group>"; };
 		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
@@ -470,6 +476,7 @@
 			children = (
 				92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */,
 				92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */,
+				5EC0D41A2C26091000000003 /* MatchTimesView.swift */,
 				145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */,
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
 				1479693F215E9A580075AF4E /* MatchViewModel.swift */,
@@ -609,6 +616,7 @@
 				92AA7A062F0100000006AAAA /* SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
+				5EC0D41A2C26091000000005 /* MatchTimesViewModelTests.swift */,
 				5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */,
 				5EC0D41A2C26070100000001 /* DependenciesMocks.swift */,
 				5EC0D41A2C26070100000003 /* MatchBreakdownViewControllerTests.swift */,
@@ -1046,6 +1054,7 @@
 			isa = PBXGroup;
 			children = (
 				AA00000000000000000AA008 /* AllianceLookup.swift */,
+				5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */,
 			);
 			path = Match;
 			sourceTree = "<group>";
@@ -1293,6 +1302,7 @@
 				92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
+				5EC0D41A2C26091000000006 /* MatchTimesViewModelTests.swift in Sources */,
 				5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000002 /* DependenciesMocks.swift in Sources */,
 				5EC0D41A2C26070100000004 /* MatchBreakdownViewControllerTests.swift in Sources */,
@@ -1323,6 +1333,7 @@
 				BA0000000000000000000002 /* EventSection.swift in Sources */,
 				AA00000000000000000AA003 /* MatchSection.swift in Sources */,
 				AA00000000000000000AA007 /* AllianceLookup.swift in Sources */,
+				5EC0D41A2C26091000000002 /* MatchTimesViewModel.swift in Sources */,
 				AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */,
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
 				514C2EF52F8F0D5F00C674A9 /* MatchBreakdownConfigurator2026.swift in Sources */,
@@ -1368,6 +1379,7 @@
 				9280B54523CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
 				92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */,
+				5EC0D41A2C26091000000004 /* MatchTimesView.swift in Sources */,
 				9280B54923CEBFA00021FEBE /* MatchBreakdownConfigurator2016.swift in Sources */,
 				92FF111821A61B37003BC5C4 /* DistrictBreakdownViewController.swift in Sources */,
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,

@@ -2,6 +2,7 @@ The Blue Alliance v3.6.0
 
 What's new:
 - The myTBA sign-in screen has been rebuilt, with matching Google and Apple buttons that follow light/dark appearance
+- A match's Info tab now shows its date and its actual, scheduled, and predicted start times, with how far off schedule it ran. Times are in the event's timezone, with a switch to show them in yours
 
 Bug fixes:
 - Signing out of myTBA now guarantees this device stops receiving push notifications, even if the TBA API is unreachable — if the device is fully offline, sign-out says so and leaves you signed in rather than leaving notifications on
@@ -9,6 +10,7 @@ Bug fixes:
 - Changing the cache policy in Settings while a screen is refreshing no longer races the in-flight request
 
 Please poke at:
+- Match → Info on a played match: the Match Times section, and the "Show in my timezone" switch on an event outside your timezone
 - Sign in with Google and with Apple; sign out; force-quit and relaunch and confirm the session restores
 - Airplane mode, then Sign Out — expect a clear error and to still be signed in
 - Tap a push notification and confirm it opens the right screen — this is the one runtime path the Swift 6 move changes

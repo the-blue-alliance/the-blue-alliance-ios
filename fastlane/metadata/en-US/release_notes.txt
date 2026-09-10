@@ -1,3 +1,3 @@
-Hey y'all - this release is mostly under the hood: the app has been rebuilt for Swift 6. The myTBA sign-in screen got a refresh, and signing out of myTBA now reliably stops push notifications on that device.
+Hey y'all - this release is mostly under the hood: the app has been rebuilt for Swift 6. The myTBA sign-in screen got a refresh, match pages now show scheduled, predicted, and actual start times, and signing out of myTBA now reliably stops push notifications on that device.
 
 The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
