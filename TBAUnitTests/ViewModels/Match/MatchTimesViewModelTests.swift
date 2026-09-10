@@ -39,7 +39,7 @@ struct MatchTimesViewModelTests {
         #expect(viewModel.rows.isEmpty)
     }
 
-    @Test func rowsFollowTheEventClockByDefault() {
+    @Test func rowsFollowTheEventClockWhenNotShowingDeviceTime() {
         let viewModel = Self.makeViewModel(
             time: Self.scheduled,
             actualTime: Self.scheduled + 120,
@@ -56,7 +56,7 @@ struct MatchTimesViewModelTests {
         )
     }
 
-    @Test func toggleMovesRowsToTheDeviceClock() {
+    @Test func showingDeviceTimeMovesRowsToTheDeviceClock() {
         let viewModel = Self.makeViewModel(time: Self.scheduled, showsDeviceTimeZone: true)
         #expect(viewModel.rows.map(\.value) == ["Sat, Mar 7", Self.am("6:30")])
     }
@@ -87,17 +87,35 @@ struct MatchTimesViewModelTests {
 
     @Test func offScheduleWording() {
         let scheduled = Self.scheduled
-        #expect(MatchTimesViewModel.offSchedule(actual: scheduled, scheduled: scheduled) == "on time")
-        #expect(MatchTimesViewModel.offSchedule(actual: scheduled + 20, scheduled: scheduled) == "on time")
-        #expect(MatchTimesViewModel.offSchedule(actual: scheduled + 720, scheduled: scheduled) == "12m late")
-        #expect(MatchTimesViewModel.offSchedule(actual: scheduled - 720, scheduled: scheduled) == "12m early")
-        #expect(MatchTimesViewModel.offSchedule(actual: scheduled + 3600, scheduled: scheduled) == "1h late")
-        #expect(MatchTimesViewModel.offSchedule(actual: scheduled - 3900, scheduled: scheduled) == "1h 5m early")
+        #expect(
+            MatchTimesViewModel.offSchedule(actual: scheduled, scheduled: scheduled) == "on time"
+        )
+        #expect(
+            MatchTimesViewModel.offSchedule(actual: scheduled + 20, scheduled: scheduled)
+                == "on time"
+        )
+        #expect(
+            MatchTimesViewModel.offSchedule(actual: scheduled + 720, scheduled: scheduled)
+                == "12m late"
+        )
+        #expect(
+            MatchTimesViewModel.offSchedule(actual: scheduled - 720, scheduled: scheduled)
+                == "12m early"
+        )
+        #expect(
+            MatchTimesViewModel.offSchedule(actual: scheduled + 3600, scheduled: scheduled)
+                == "1h late"
+        )
+        #expect(
+            MatchTimesViewModel.offSchedule(actual: scheduled - 3900, scheduled: scheduled)
+                == "1h 5m early"
+        )
     }
 
     // MARK: - Test helpers
 
-    private static func makeMatch(time: Int64?, actualTime: Int64?, predictedTime: Int64?) -> Match {
+    private static func makeMatch(time: Int64?, actualTime: Int64?, predictedTime: Int64?) -> Match
+    {
         Match(
             key: "2026miket_qm1",
             compLevel: .qm,

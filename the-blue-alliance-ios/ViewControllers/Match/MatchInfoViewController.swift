@@ -9,7 +9,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
     private let teamKey: String?
 
     private var event: Event?
-    private var showsDeviceTimeZone = false
+    private var showsDeviceTimeZone = true
 
     // MARK: - UI
 
@@ -194,6 +194,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
             showsDeviceTimeZone: showsDeviceTimeZone
         )
         matchTimesView.viewModel = viewModel
+        matchTimesView.timeZoneSwitch.isOn = showsDeviceTimeZone
         matchTimesView.isHidden = viewModel.isEmpty
     }
 
