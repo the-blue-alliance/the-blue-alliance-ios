@@ -8,21 +8,6 @@ Contributing
 ===
 Want to add features, fix bugs, or just poke around the code? No problem! [Setup instructions](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki/Setup) (and lots of other documentation) can be found in [the Wiki](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki).
 
-Code Style
----
-Swift code is formatted with Apple's [`swift-format`](https://github.com/swiftlang/swift-format), which ships with Xcode 16+. CI runs `swift-format lint --strict` on every PR; violations block the build.
-
-To fix formatting locally:
-- **Whole tree:** `make format` (wraps `./scripts/swift-format.sh --fix`).
-- **One file in Xcode:** Editor → Structure → Format File with swift-format. In Xcode Settings → Key Bindings, search "swift-format" and bind it (e.g. ⌃⌥⌘F) for one-keystroke formatting.
-
-To run the linter locally (same check CI runs):
-- **Strict (matches CI):** `make lint` (swift-format plus the dependency-pin check). Exits non-zero on any violation.
-- **Non-strict (warnings only):** `./scripts/swift-format.sh` — reports issues without failing.
-- **Ad-hoc:** `xcrun swift-format lint --recursive the-blue-alliance-ios Packages`.
-
-Configuration lives in `.swift-format` at the repo root.
-
 Project Communication
 ---
  - Keep up to date with the [mailing list](https://groups.google.com/forum/#!forum/thebluealliance-developers).
