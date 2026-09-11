@@ -77,18 +77,6 @@ extension UIColor {
         )
     }
 
-    class var searchFieldBackgroundColor: UIColor {
-        // Both modes veil the bar with white rather than one of them painting an opaque
-        // grey, so the field tracks the bar's own color through an appearance change
-        // instead of crossfading through a dark pill on a blue bar. Over systemGray6 the
-        // dark veil lands within a hair of systemGray5, which is what it replaced.
-        return UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor.white.withAlphaComponent(0.05)
-                : UIColor.white.withAlphaComponent(0.22)
-        }
-    }
-
     class var segmentedControlSelectedColor: UIColor {
         return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.white, UIColor.white)
     }

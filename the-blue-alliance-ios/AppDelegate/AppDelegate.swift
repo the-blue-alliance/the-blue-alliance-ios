@@ -258,17 +258,12 @@ extension AppDelegate {
 
     static func setupAppearance() {
         let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = UIColor.navigationBarTintColor
-        navigationBarAppearance.shadowColor = nil
-        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.configureWithTransparentBackground()
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
-        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().isTranslucent = false
 
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.selectionIndicatorTintColor = UIColor.tabBarTintColor

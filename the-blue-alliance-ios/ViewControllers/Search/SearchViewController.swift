@@ -31,8 +31,6 @@ extension SearchSection: TableSectionTitleProviding {
 protocol SearchViewControllerDelegate: AnyObject {
     func eventSelected(eventKey: EventKey, name: String?)
     func teamSelected(teamKey: String, nickname: String?)
-    func searchWillPresent()
-    func searchWillDismiss()
 }
 
 nonisolated enum SearchItem: Hashable {
@@ -68,8 +66,22 @@ class SearchViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.navigationBarTintColor
         tableView.backgroundColor = .systemGroupedBackground
+
+        // The results view fills the screen under the transparent bar, so give the bar the same
+        // blue backdrop the containers do. Pinned to the frame guide so it doesn't scroll.
+        let barBackdrop = UIView()
+        barBackdrop.backgroundColor = UIColor.navigationBarTintColor
+        barBackdrop.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(barBackdrop)
+        NSLayoutConstraint.activate([
+            barBackdrop.topAnchor.constraint(equalTo: tableView.frameLayoutGuide.topAnchor),
+            barBackdrop.leadingAnchor.constraint(equalTo: tableView.frameLayoutGuide.leadingAnchor),
+            barBackdrop.trailingAnchor.constraint(
+                equalTo: tableView.frameLayoutGuide.trailingAnchor
+            ),
+            barBackdrop.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        ])
 
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
@@ -230,14 +242,6 @@ class SearchViewController: TBATableViewController {
 }
 
 extension SearchViewController: UISearchControllerDelegate {
-    func willPresentSearchController(_ searchController: UISearchController) {
-        delegate?.searchWillPresent()
-    }
-
-    func willDismissSearchController(_ searchController: UISearchController) {
-        delegate?.searchWillDismiss()
-    }
-
     func didDismissSearchController(_ searchController: UISearchController) {
         searchText = nil
     }

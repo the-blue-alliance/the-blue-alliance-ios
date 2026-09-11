@@ -33,19 +33,7 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-        view.backgroundColor = UIColor.systemGroupedBackground
-
-        // Adopting the search bar resets its text field to UIKit's own appearance, so the
-        // colors only stick when they go on after the hand-off.
-        let searchBar = searchController.searchBar
-        searchBar.searchTextField.textColor = UIColor.white
-        searchBar.searchTextField.tintColor = UIColor.white
-        searchBar.searchTextField.leftView?.tintColor = UIColor.white
-        searchBar.searchTextField.backgroundColor = UIColor.searchFieldBackgroundColor
-        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Search teams and events",
-            attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
-        )
+        searchController.searchBar.placeholder = "Search teams and events"
     }
 
 }
@@ -81,16 +69,6 @@ extension SearchContainerDelegate where Self: ContainerViewController {
             dependencies: dependencies
         )
         navigationController?.pushViewController(teamViewController, animated: true)
-    }
-
-    // The results controller is laid out below the search bar rather than flush against it, so
-    // the container's own list would otherwise show through the band between the two.
-    func searchWillPresent() {
-        rootStackView.isHidden = true
-    }
-
-    func searchWillDismiss() {
-        rootStackView.isHidden = false
     }
 
 }

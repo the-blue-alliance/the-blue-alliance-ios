@@ -143,6 +143,8 @@ class ContainerViewController: UIViewController, Alertable {
             [.foregroundColor: UIColor.segmentedControlSelectedColor],
             for: .selected
         )
+        // The glass selection pill picks up the blue strip behind it, which leaves the blue
+        // selected title with nothing to contrast against, so pin the pill to a solid.
         segmentedControl.selectedSegmentTintColor = UIColor { traits in
             traits.userInterfaceStyle == .dark ? UIColor.systemGray2 : UIColor.white
         }
@@ -172,6 +174,9 @@ class ContainerViewController: UIViewController, Alertable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // The navigation bar is transparent. The blue behind it is this view showing through,
+        // which is why the bar's text is white.
+        view.backgroundColor = UIColor.navigationBarTintColor
         view.addSubview(rootStackView)
 
         // Add subviews to view hierarchy in reverse order, so first one is showing automatically
