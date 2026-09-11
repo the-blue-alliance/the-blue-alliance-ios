@@ -38,6 +38,7 @@
 		92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* SessionMocks.swift */; };
 		92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */; };
 		5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* EventSectionTests.swift */; };
+		5EC0D41A2C26091100000004 /* EventDivisionsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091100000003 /* EventDivisionsViewModelTests.swift */; };
 		5EC0D41A2C26091000000006 /* MatchTimesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091000000005 /* MatchTimesViewModelTests.swift */; };
 		5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */; };
 		5EC0D41A2C26070100000002 /* DependenciesMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000001 /* DependenciesMocks.swift */; };
@@ -207,6 +208,7 @@
 		5EC0D41A2C26091000000002 /* MatchTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */; };
 		AA00000000000000000AA009 /* AllianceBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000AA00A /* AllianceBadgeView.swift */; };
 		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
+		5EC0D41A2C26091100000002 /* EventDivisionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091100000001 /* EventDivisionsViewModel.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
 		5EC0D41A2C26090100000002 /* FeatureFlagsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090100000001 /* FeatureFlagsStore.swift */; };
 		5EC0D41A2C26090200000002 /* DashboardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */; };
@@ -248,6 +250,7 @@
 		92AA7A062F0100000006AAAA /* SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/SessionMocks.swift"; sourceTree = "<group>"; };
 		92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/MyTBASessionServiceTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000001 /* EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventSectionTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26091100000003 /* EventDivisionsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventDivisionsViewModelTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26091000000005 /* MatchTimesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Match/MatchTimesViewModelTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000001 /* DependenciesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/DependenciesMocks.swift"; sourceTree = "<group>"; };
@@ -412,6 +415,7 @@
 		5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTimesViewModel.swift; sourceTree = "<group>"; };
 		AA00000000000000000AA00A /* AllianceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceBadgeView.swift; sourceTree = "<group>"; };
 		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26091100000001 /* EventDivisionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDivisionsViewModel.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090100000001 /* FeatureFlagsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardContainerViewController.swift; sourceTree = "<group>"; };
@@ -616,6 +620,7 @@
 				92AA7A062F0100000006AAAA /* SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* MyTBASessionServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* EventSectionTests.swift */,
+				5EC0D41A2C26091100000003 /* EventDivisionsViewModelTests.swift */,
 				5EC0D41A2C26091000000005 /* MatchTimesViewModelTests.swift */,
 				5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */,
 				5EC0D41A2C26070100000001 /* DependenciesMocks.swift */,
@@ -728,6 +733,7 @@
 			isa = PBXGroup;
 			children = (
 				BA0000000000000000000001 /* EventSection.swift */,
+				5EC0D41A2C26091100000001 /* EventDivisionsViewModel.swift */,
 				5EC0D41A2C26041700000003 /* WeekEventsGrouping.swift */,
 			);
 			path = Event;
@@ -1302,6 +1308,7 @@
 				92AA7A072F0100000007AAAA /* SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* MyTBASessionServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* EventSectionTests.swift in Sources */,
+				5EC0D41A2C26091100000004 /* EventDivisionsViewModelTests.swift in Sources */,
 				5EC0D41A2C26091000000006 /* MatchTimesViewModelTests.swift in Sources */,
 				5EC0D41A2C26060100000004 /* WeekEventsViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000002 /* DependenciesMocks.swift in Sources */,
@@ -1331,6 +1338,7 @@
 				5EC0D41A2C26041700000004 /* WeekEventsGrouping.swift in Sources */,
 				5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */,
 				BA0000000000000000000002 /* EventSection.swift in Sources */,
+				5EC0D41A2C26091100000002 /* EventDivisionsViewModel.swift in Sources */,
 				AA00000000000000000AA003 /* MatchSection.swift in Sources */,
 				AA00000000000000000AA007 /* AllianceLookup.swift in Sources */,
 				5EC0D41A2C26091000000002 /* MatchTimesViewModel.swift in Sources */,

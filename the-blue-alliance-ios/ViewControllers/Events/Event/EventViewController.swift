@@ -148,6 +148,15 @@ private struct EventSubscribable: MyTBASubscribable {
 
 extension EventViewController: EventInfoViewControllerDelegate {
 
+    func showEvent(key: String, name: String?) {
+        let eventViewController = EventViewController(
+            eventKey: key,
+            name: name,
+            dependencies: dependencies
+        )
+        self.navigationController?.pushViewController(eventViewController, animated: true)
+    }
+
     func showAlliances() {
         guard let event = state.event else { return }
         let eventAlliancesViewController = EventAlliancesContainerViewController(
