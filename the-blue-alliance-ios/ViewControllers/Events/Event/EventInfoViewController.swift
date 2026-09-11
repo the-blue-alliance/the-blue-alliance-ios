@@ -1,4 +1,5 @@
 import Foundation
+import PureLayout
 import TBAAPI
 import UIKit
 
@@ -8,6 +9,7 @@ protocol EventInfoViewControllerDelegate: AnyObject {
     func showDistrictPoints()
     func showInsights()
     func showPitMap()
+    func showEvent(key: String, name: String?)
 }
 
 nonisolated private enum EventInfoSection: Int {
@@ -26,6 +28,7 @@ nonisolated private enum EventInfoItem: Hashable {
     case insights
     case awards
     case website
+    case advancesTo(EventDivision)
 }
 
 class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
@@ -39,6 +42,32 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
     weak var delegate: (any EventInfoViewControllerDelegate)?
 
     private var hasPitMap = false
+    private var divisions = EventDivisionsViewModel()
+
+    private lazy var divisionsButton: UIButton = {
+        var configuration = UIButton.Configuration.tinted()
+        configuration.baseBackgroundColor = UIColor.primaryBlue
+        configuration.baseForegroundColor = UIColor.primaryBlue
+        configuration.image = UIImage(systemName: "chevron.down")
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 6
+        configuration.cornerStyle = .capsule
+        configuration.buttonSize = .small
+
+        let button = UIButton(configuration: configuration)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.showsMenuAsPrimaryAction = true
+        return button
+    }()
+
+    private lazy var divisionsHeaderView: UIView = {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
+        headerView.autoresizingMask = .flexibleWidth
+        headerView.addSubview(divisionsButton)
+        divisionsButton.autoPinEdge(toSuperviewMargin: .trailing)
+        divisionsButton.autoAlignAxis(toSuperviewAxis: .horizontal)
+        return headerView
+    }()
 
     // MARK: - Init
 
@@ -68,6 +97,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(InfoTableViewCell.self)
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
 
         tableView.dataSource = dataSource
 
@@ -129,6 +159,15 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
                     let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                     cell.textLabel?.text = "View event's website"
                     return cell
+                case .advancesTo(let parent):
+                    let cell =
+                        tableView.dequeueReusableCell(indexPath: indexPath)
+                        as ReverseSubtitleTableViewCell
+                    cell.titleLabel.text = "Winners advance to"
+                    cell.subtitleLabel.text = parent.name
+                    cell.selectionStyle = .default
+                    cell.accessoryType = .disclosureIndicator
+                    return cell
                 }
             }
         )
@@ -141,6 +180,9 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
 
         snapshot.appendSections([.title])
         var titleItems: [EventInfoItem] = [.title]
+        if let parent = divisions.parent {
+            titleItems.append(.advancesTo(parent))
+        }
         if hasPitMap {
             titleItems.append(.pitMap)
         }
@@ -179,7 +221,20 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
             snapshot.appendItems([.website], toSection: .link)
         }
 
+        updateDivisionsHeader()
         dataSource.applySnapshotUsingReloadData(snapshot)
+    }
+
+    private func updateDivisionsHeader() {
+        guard let title = divisions.menuTitle, let menu = divisionsMenu() else {
+            tableView.tableHeaderView = nil
+            return
+        }
+        divisionsButton.configuration?.title = title
+        divisionsButton.menu = menu
+        if tableView.tableHeaderView !== divisionsHeaderView {
+            tableView.tableHeaderView = divisionsHeaderView
+        }
     }
 
     // MARK: - Table View Methods
@@ -236,6 +291,8 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
             urlString = webcast.urlString
         case .website:
             urlString = state.event?.website
+        case .advancesTo(let parent):
+            delegate?.showEvent(key: parent.key, name: parent.name)
         default:
             break
         }
@@ -259,7 +316,23 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
             await probeHandle.value
             self.state = .event(event)
             self.updateEventInfo()
+
+            self.divisions = await EventDivisionsViewModel.load(for: event, api: self.api)
+            self.updateEventInfo()
         }
+    }
+
+    // MARK: - Divisions
+
+    private func divisionsMenu() -> UIMenu? {
+        guard !divisions.others.isEmpty else { return nil }
+        return UIMenu(
+            children: divisions.others.map { division in
+                UIAction(title: division.shortName) { [weak self] _ in
+                    self?.delegate?.showEvent(key: division.key, name: division.name)
+                }
+            }
+        )
     }
 
     // MARK: - Stateful
