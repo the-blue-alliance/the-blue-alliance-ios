@@ -38,7 +38,6 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         // Adopting the search bar resets its text field to UIKit's own appearance, so the
         // colors only stick when they go on after the hand-off.
         let searchBar = searchController.searchBar
-        searchBar.backgroundColor = UIColor.navigationBarTintColor
         searchBar.searchTextField.textColor = UIColor.white
         searchBar.searchTextField.tintColor = UIColor.white
         searchBar.searchTextField.leftView?.tintColor = UIColor.white

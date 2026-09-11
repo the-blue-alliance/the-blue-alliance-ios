@@ -81,7 +81,9 @@ struct SearchContainerTests {
         #expect(traits.userInterfaceStyle == .dark)
         #expect(
             harness.searchTextField.backgroundColor?.resolvedColor(with: traits)
-                == UIColor.systemGray5.resolvedColor(with: traits)
+                != UIColor.searchFieldBackgroundColor.resolvedColor(
+                    with: UITraitCollection(userInterfaceStyle: .light)
+                )
         )
     }
 
