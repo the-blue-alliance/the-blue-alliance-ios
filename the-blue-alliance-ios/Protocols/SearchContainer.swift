@@ -33,7 +33,7 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-        view.backgroundColor = UIColor.navigationBarTintColor
+        view.backgroundColor = UIColor.systemGroupedBackground
 
         // Adopting the search bar resets its text field to UIKit's own appearance, so the
         // colors only stick when they go on after the hand-off.

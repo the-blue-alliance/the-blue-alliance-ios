@@ -135,6 +135,17 @@ class ContainerViewController: UIViewController, Alertable {
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.setTitleTextAttributes(
+            [.foregroundColor: UIColor.white],
+            for: .normal
+        )
+        segmentedControl.setTitleTextAttributes(
+            [.foregroundColor: UIColor.segmentedControlSelectedColor],
+            for: .selected
+        )
+        segmentedControl.selectedSegmentTintColor = UIColor { traits in
+            traits.userInterfaceStyle == .dark ? UIColor.systemGray2 : UIColor.white
+        }
 
         super.init(nibName: nil, bundle: nil)
 

@@ -276,16 +276,6 @@ extension AppDelegate {
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         UITabBar.appearance().tintColor = UIColor.tabBarTintColor
-
-        let segmentedControlAppearance = UISegmentedControl.appearance()
-        segmentedControlAppearance.setTitleTextAttributes(
-            [.foregroundColor: UIColor.white],
-            for: .normal
-        )
-        segmentedControlAppearance.setTitleTextAttributes(
-            [.foregroundColor: UIColor.segmentedControlSelectedColor],
-            for: .selected
-        )
     }
 
 }
