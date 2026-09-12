@@ -258,36 +258,19 @@ extension AppDelegate {
 
     static func setupAppearance() {
         let navigationBarAppearance = UINavigationBarAppearance()
-        navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = UIColor.navigationBarTintColor
-        navigationBarAppearance.shadowColor = nil
-        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.configureWithTransparentBackground()
         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
-        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().isTranslucent = false
 
         let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
         tabBarAppearance.selectionIndicatorTintColor = UIColor.tabBarTintColor
 
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         UITabBar.appearance().tintColor = UIColor.tabBarTintColor
-        UITabBar.appearance().isTranslucent = false
-
-        let segmentedControlAppearance = UISegmentedControl.appearance()
-        segmentedControlAppearance.setTitleTextAttributes(
-            [.foregroundColor: UIColor.white],
-            for: .normal
-        )
-        segmentedControlAppearance.setTitleTextAttributes(
-            [.foregroundColor: UIColor.segmentedControlSelectedColor],
-            for: .selected
-        )
     }
 
 }

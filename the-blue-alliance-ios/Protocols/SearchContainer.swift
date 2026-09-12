@@ -33,19 +33,14 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-
-        // Adopting the search bar resets its text field to UIKit's own appearance, so the
-        // colors only stick when they go on after the hand-off.
-        let searchBar = searchController.searchBar
-        searchBar.backgroundColor = UIColor.navigationBarTintColor
-        searchBar.searchTextField.textColor = UIColor.white
-        searchBar.searchTextField.tintColor = UIColor.white
-        searchBar.searchTextField.leftView?.tintColor = UIColor.white
-        searchBar.searchTextField.backgroundColor = UIColor.searchFieldBackgroundColor
-        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Search teams and events",
-            attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
-        )
+        searchController.searchBar.placeholder = "Search teams and events"
+        // The system field is glass, and glass materializes a beat after the bar lands on a
+        // pop, leaving the placeholder floating on blue. A solid fill draws with the bar.
+        searchController.searchBar.searchTextField.backgroundColor = UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor.white.withAlphaComponent(0.05)
+                : UIColor.white.withAlphaComponent(0.22)
+        }
     }
 
 }

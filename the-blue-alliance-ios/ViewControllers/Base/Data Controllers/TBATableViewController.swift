@@ -52,7 +52,7 @@ class TBATableViewController: UITableViewController, DataController, Navigatable
         tableView.registerReusableCell(BasicTableViewCell.self)
 
         tableView.sectionHeaderTopPadding = 0
-        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.contentInsetAdjustmentBehavior = .automatic
     }
 
     override func viewDidAppear(_ animated: Bool) {

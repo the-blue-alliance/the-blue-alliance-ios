@@ -66,8 +66,22 @@ class SearchViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.navigationBarTintColor
         tableView.backgroundColor = .systemGroupedBackground
+
+        // The results view fills the screen under the transparent bar, so give the bar the same
+        // blue backdrop the containers do. Pinned to the frame guide so it doesn't scroll.
+        let barBackdrop = UIView()
+        barBackdrop.backgroundColor = UIColor.navigationBarTintColor
+        barBackdrop.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(barBackdrop)
+        NSLayoutConstraint.activate([
+            barBackdrop.topAnchor.constraint(equalTo: tableView.frameLayoutGuide.topAnchor),
+            barBackdrop.leadingAnchor.constraint(equalTo: tableView.frameLayoutGuide.leadingAnchor),
+            barBackdrop.trailingAnchor.constraint(
+                equalTo: tableView.frameLayoutGuide.trailingAnchor
+            ),
+            barBackdrop.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        ])
 
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)

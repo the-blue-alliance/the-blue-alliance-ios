@@ -135,6 +135,17 @@ class ContainerViewController: UIViewController, Alertable {
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.setTitleTextAttributes(
+            [.foregroundColor: UIColor.white],
+            for: .normal
+        )
+        segmentedControl.setTitleTextAttributes(
+            [.foregroundColor: UIColor.white],
+            for: .selected
+        )
+        // A white title needs a pill darker than the strip. It also survives the glass touch
+        // lens, which can stay parked over the selection after a drag along the control.
+        segmentedControl.selectedSegmentTintColor = UIColor.segmentedControlSelectedColor
 
         super.init(nibName: nil, bundle: nil)
 
@@ -161,6 +172,9 @@ class ContainerViewController: UIViewController, Alertable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // The navigation bar is transparent. The blue behind it is this view showing through,
+        // which is why the bar's text is white.
+        view.backgroundColor = UIColor.navigationBarTintColor
         view.addSubview(rootStackView)
 
         // Add subviews to view hierarchy in reverse order, so first one is showing automatically
