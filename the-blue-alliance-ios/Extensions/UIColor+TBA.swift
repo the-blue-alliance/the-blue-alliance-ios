@@ -78,7 +78,12 @@ extension UIColor {
     }
 
     class var segmentedControlSelectedColor: UIColor {
-        return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.white, UIColor.white)
+        return dynamicColor(
+            UIColor.darkModePrimaryBlue,
+            UIColor.darkModePrimaryBlue,
+            UIColor.systemGray2,
+            UIColor.systemGray2
+        )
     }
 
     class var yearSelectColor: UIColor {

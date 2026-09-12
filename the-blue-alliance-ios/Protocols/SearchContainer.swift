@@ -34,6 +34,13 @@ extension SearchContainer where Self: SearchViewControllerDelegate {
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
         searchController.searchBar.placeholder = "Search teams and events"
+        // The system field is glass, and glass materializes a beat after the bar lands on a
+        // pop, leaving the placeholder floating on blue. A solid fill draws with the bar.
+        searchController.searchBar.searchTextField.backgroundColor = UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor.white.withAlphaComponent(0.05)
+                : UIColor.white.withAlphaComponent(0.22)
+        }
     }
 
 }

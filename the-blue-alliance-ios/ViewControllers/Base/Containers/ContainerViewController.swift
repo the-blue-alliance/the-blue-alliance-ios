@@ -140,14 +140,12 @@ class ContainerViewController: UIViewController, Alertable {
             for: .normal
         )
         segmentedControl.setTitleTextAttributes(
-            [.foregroundColor: UIColor.segmentedControlSelectedColor],
+            [.foregroundColor: UIColor.white],
             for: .selected
         )
-        // The glass selection pill picks up the blue strip behind it, which leaves the blue
-        // selected title with nothing to contrast against, so pin the pill to a solid.
-        segmentedControl.selectedSegmentTintColor = UIColor { traits in
-            traits.userInterfaceStyle == .dark ? UIColor.systemGray2 : UIColor.white
-        }
+        // A white title needs a pill darker than the strip. It also survives the glass touch
+        // lens, which can stay parked over the selection after a drag along the control.
+        segmentedControl.selectedSegmentTintColor = UIColor.segmentedControlSelectedColor
 
         super.init(nibName: nil, bundle: nil)
 
