@@ -8,8 +8,6 @@ class DashboardContainerViewController: ContainerViewController {
 
     private(set) var dashboardViewController: DashboardViewController
 
-    lazy var searchController: UISearchController = makeSearchController()
-
     // MARK: - Init
 
     init(dependencies: Dependencies) {
@@ -21,7 +19,7 @@ class DashboardContainerViewController: ContainerViewController {
             dependencies: dependencies
         )
 
-        title = RootType.dashboard.title
+        navigationItem.backButtonTitle = RootType.dashboard.title
         tabBarItem.image = RootType.dashboard.icon
     }
 
@@ -34,7 +32,6 @@ class DashboardContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearchController()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +42,6 @@ class DashboardContainerViewController: ContainerViewController {
 
 }
 
-extension DashboardContainerViewController: SearchContainer, SearchContainerDelegate,
+extension DashboardContainerViewController: SearchContainerDelegate,
     SearchViewControllerDelegate
 {}

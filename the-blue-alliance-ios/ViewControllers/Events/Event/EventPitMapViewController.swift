@@ -46,6 +46,15 @@ final class EventPitMapViewController: UIViewController, Navigatable, WKNavigati
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        // Blue behind the transparent navigation bar only; the web view is hidden while it
+        // loads, so the rest of the view has to stay the page's own background.
+        let barBackdrop = UIView(forAutoLayout: ())
+        barBackdrop.backgroundColor = UIColor.navigationBarTintColor
+        view.addSubview(barBackdrop)
+        barBackdrop.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
+        NSLayoutConstraint.activate([
+            barBackdrop.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        ])
         view.addSubview(spinner)
         view.addSubview(webView)
         webView.autoPinEdge(toSuperviewSafeArea: .top)

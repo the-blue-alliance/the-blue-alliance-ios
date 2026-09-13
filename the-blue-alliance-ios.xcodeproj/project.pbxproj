@@ -133,10 +133,10 @@
 		92AABBCC000000000000DD21 /* FirebaseCollectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */; };
 		92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectTableViewController.swift */; };
 		92AF73D821EB9E1E006A338D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF73D721EB9E1E006A338D /* SearchViewController.swift */; };
+		5EC0D41A2C26100100000002 /* SearchContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26100100000001 /* SearchContainerViewController.swift */; };
 		92B3873E21CAF6740041A049 /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B3873D21CAF6740041A049 /* IconTableViewCell.swift */; };
 		92B3874021CAF67F0041A049 /* IconCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B3873F21CAF67F0041A049 /* IconCellViewModel.swift */; };
 		92B3874221CAF7190041A049 /* IconTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B3874121CAF7190041A049 /* IconTableViewCell.xib */; };
-		92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */; };
 		92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */; };
 		92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55629215FCB1300C1D9A3 /* Reusable.swift */; };
 		92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */; };
@@ -155,6 +155,7 @@
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAF54F240775180078CA0A /* PhoneRootViewController.swift */; };
+		5EC0D41A2C26100100000004 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26100100000003 /* MoreViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */; };
 		92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D61EC695C400572F27 /* TeamTableViewCell.swift */; };
@@ -343,10 +344,10 @@
 		92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCollectionStore.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTableViewController.swift; sourceTree = "<group>"; };
 		92AF73D721EB9E1E006A338D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26100100000001 /* SearchContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContainerViewController.swift; sourceTree = "<group>"; };
 		92B3873D21CAF6740041A049 /* IconTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
 		92B3873F21CAF67F0041A049 /* IconCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCellViewModel.swift; sourceTree = "<group>"; };
 		92B3874121CAF7190041A049 /* IconTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconTableViewCell.xib; sourceTree = "<group>"; };
-		92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelectViewController.swift; sourceTree = "<group>"; };
 		92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsViewController.swift; sourceTree = "<group>"; };
 		92B55629215FCB1300C1D9A3 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCell.swift; sourceTree = "<group>"; };
@@ -363,6 +364,7 @@
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CAF54F240775180078CA0A /* PhoneRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRootViewController.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26100100000003 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewController.swift; sourceTree = "<group>"; };
 		92D855D61EC695C400572F27 /* TeamTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamTableViewCell.swift; sourceTree = "<group>"; };
@@ -681,7 +683,6 @@
 				92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */,
 				92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */,
 				5EC0D41A2C26041700000005 /* EventsListViewController.swift */,
-				92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */,
 				92FF10FB21A61AF6003BC5C4 /* Event */,
 			);
 			path = Events;
@@ -860,6 +861,7 @@
 			isa = PBXGroup;
 			children = (
 				92AF73D721EB9E1E006A338D /* SearchViewController.swift */,
+				5EC0D41A2C26100100000001 /* SearchContainerViewController.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -897,6 +899,7 @@
 			children = (
 				921DD67C241D3D6C00403192 /* RootController.swift */,
 				92CAF54F240775180078CA0A /* PhoneRootViewController.swift */,
+				5EC0D41A2C26100100000003 /* MoreViewController.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -1393,6 +1396,7 @@
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
 				92FF10F921A61AC2003BC5C4 /* MatchViewController.swift in Sources */,
 				92AF73D821EB9E1E006A338D /* SearchViewController.swift in Sources */,
+				5EC0D41A2C26100100000002 /* SearchContainerViewController.swift in Sources */,
 				92FF10EE21A61A1B003BC5C4 /* TeamSummaryViewController.swift in Sources */,
 				92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */,
 				51BECA942F9D329C003EC868 /* MatchBreakdownConfigurator2025.swift in Sources */,
@@ -1461,6 +1465,7 @@
 				92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */,
 				5105636E2F972A9F00D7FB5D /* EventInsightsConfigurator2024.swift in Sources */,
 				92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */,
+				5EC0D41A2C26100100000004 /* MoreViewController.swift in Sources */,
 				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				F1A2B3C4D5E6F7081A2B3C4D /* EventPitMapViewController.swift in Sources */,
@@ -1476,7 +1481,6 @@
 				9288BD1423CED19200157F74 /* MatchBreakdownConfigurator2018.swift in Sources */,
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,
 				929F571E2092B7A400E5313A /* TBACollectionViewController.swift in Sources */,
-				92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */,
 				929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */,
 				92FF10ED21A61A1B003BC5C4 /* TeamAtEventViewController.swift in Sources */,
 				1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */,

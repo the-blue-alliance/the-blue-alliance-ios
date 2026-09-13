@@ -24,14 +24,13 @@ class DistrictsContainerViewController: ContainerViewController {
         super.init(
             viewControllers: [districtsViewController],
             navigationTitle: "Districts",
-            navigationSubtitle: ContainerViewController.yearSubtitle(year),
             dependencies: dependencies
         )
 
-        title = RootType.districts.title
+        navigationItem.backButtonTitle = RootType.districts.title
         tabBarItem.image = RootType.districts.icon
 
-        navigationTitleDelegate = self
+        rightBarButtonItems = [ContainerViewController.makeBarButtonItem(yearButton)]
         districtsViewController.delegate = self
     }
 
@@ -50,47 +49,24 @@ class DistrictsContainerViewController: ContainerViewController {
     // MARK: - Private Methods
 
     private func updateInterface() {
-        navigationSubtitle = ContainerViewController.yearSubtitle(year)
+        yearButton.configuration?.title = String(year)
     }
 
-}
-
-extension DistrictsContainerViewController: NavigationTitleDelegate {
-
-    func navigationTitleTapped() {
-        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(
-            current: year,
-            options: Array(2009...statusService.maxSeason).reversed(),
-            dependencies: dependencies
-        )
-        selectTableViewController.title = "Select Year"
-        selectTableViewController.delegate = self
-
-        let nav = UINavigationController(rootViewController: selectTableViewController)
-        nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            systemItem: .done,
-            primaryAction: UIAction { [weak self] _ in
-                self?.navigationController?.dismiss(animated: true)
+    private lazy var yearButton: UIButton = {
+        let years = Array(2009...statusService.maxSeason).reversed()
+        let menu = UIMenu(
+            options: .singleSelection,
+            children: years.map { option in
+                UIAction(title: String(option), state: option == year ? .on : .off) {
+                    [weak self] _ in
+                    self?.year = option
+                }
             }
         )
-
-        navigationController?.present(nav, animated: true)
-    }
-
-}
-
-extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
-
-    typealias OptionType = Int
-
-    func optionSelected(_ option: OptionType) {
-        year = option
-    }
-
-    func titleForOption(_ option: OptionType) -> String {
-        return String(option)
-    }
+        let button = ContainerViewController.makeMenuButton(menu: menu)
+        button.configuration?.title = String(year)
+        return button
+    }()
 
 }
 

@@ -77,16 +77,13 @@ extension UIColor {
         )
     }
 
-    class var searchFieldBackgroundColor: UIColor {
-        return UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor.systemGray5
-                : UIColor.white.withAlphaComponent(0.22)
-        }
-    }
-
     class var segmentedControlSelectedColor: UIColor {
-        return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.white, UIColor.white)
+        return dynamicColor(
+            UIColor.darkModePrimaryBlue,
+            UIColor.darkModePrimaryBlue,
+            UIColor.systemGray2,
+            UIColor.systemGray2
+        )
     }
 
     class var yearSelectColor: UIColor {

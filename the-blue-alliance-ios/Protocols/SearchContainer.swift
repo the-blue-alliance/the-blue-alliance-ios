@@ -4,52 +4,6 @@ import Photos
 import TBAAPI
 import UIKit
 
-protocol SearchContainer: ContainerViewController {
-    var searchController: UISearchController { get }
-}
-
-extension SearchContainer where Self: SearchViewControllerDelegate {
-
-    func makeSearchController() -> UISearchController {
-        let searchViewController = SearchViewController(dependencies: dependencies)
-        searchViewController.delegate = self
-
-        let searchController = UISearchController(searchResultsController: searchViewController)
-        searchController.delegate = searchViewController
-
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.showsSearchResultsController = true
-        searchController.searchResultsUpdater = searchViewController
-        searchController.scopeBarActivation = .onSearchActivation
-
-        searchController.searchBar.autocapitalizationType = .words
-        searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map { $0.title }
-        searchController.searchBar.delegate = searchViewController
-
-        return searchController
-    }
-
-    func setupSearchController() {
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        definesPresentationContext = true
-
-        // Adopting the search bar resets its text field to UIKit's own appearance, so the
-        // colors only stick when they go on after the hand-off.
-        let searchBar = searchController.searchBar
-        searchBar.backgroundColor = UIColor.navigationBarTintColor
-        searchBar.searchTextField.textColor = UIColor.white
-        searchBar.searchTextField.tintColor = UIColor.white
-        searchBar.searchTextField.leftView?.tintColor = UIColor.white
-        searchBar.searchTextField.backgroundColor = UIColor.searchFieldBackgroundColor
-        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Search teams and events",
-            attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.7)]
-        )
-    }
-
-}
-
 protocol SearchContainerDelegate {
     var dependencies: Dependencies { get }
 }

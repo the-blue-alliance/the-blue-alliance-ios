@@ -9,6 +9,8 @@ enum RootType: CaseIterable {
     case districts
     case myTBA
     case settings
+    case more
+    case search
 
     var title: String {
         switch self {
@@ -24,6 +26,10 @@ enum RootType: CaseIterable {
             return "myTBA"
         case .settings:
             return "Settings"
+        case .more:
+            return "More"
+        case .search:
+            return "Search"
         }
     }
 
@@ -41,6 +47,10 @@ enum RootType: CaseIterable {
             return UIImage.starIcon
         case .settings:
             return UIImage.settingsIcon
+        case .more:
+            return UIImage(systemName: "ellipsis")
+        case .search:
+            return UIImage(systemName: "magnifyingglass")
         }
     }
 
@@ -58,15 +68,30 @@ enum RootType: CaseIterable {
             return "tab.mytba"
         case .settings:
             return "tab.settings"
+        case .more:
+            return "tab.more"
+        case .search:
+            return "tab.search"
         }
     }
 
-    // Dashboard takes the Teams slot; teams are reachable through search.
+    // Search is last so the tab bar renders it as its own trailing pill. On iPhone the bar
+    // has five slots and the pill is not exempt from overflow, so at most four tabs sit
+    // beside it. Everything else lives behind our own More tab, which keeps the count fixed
+    // no matter how many sections are added. Which four make the bar in dashboard mode is a
+    // product call; for now Dashboard takes myTBA's slot.
     static func tabs(dashboardEnabled: Bool) -> [RootType] {
         if dashboardEnabled {
-            return [.dashboard, .events, .districts, .myTBA, .settings]
+            return [.dashboard, .events, .districts, .more, .search]
         }
-        return [.events, .teams, .districts, .myTBA, .settings]
+        return [.events, .districts, .myTBA, .more, .search]
+    }
+
+    static func moreItems(dashboardEnabled: Bool) -> [RootType] {
+        if dashboardEnabled {
+            return [.teams, .myTBA, .settings]
+        }
+        return [.teams, .settings]
     }
 
 }
@@ -107,6 +132,17 @@ extension RootController {
         return MyTBAViewController(dependencies: dependencies)
     }
 
+    var searchViewController: SearchContainerViewController {
+        return SearchContainerViewController(dependencies: dependencies)
+    }
+
+    var moreViewController: MoreViewController {
+        let dashboardEnabled = dependencies.appSettings.featureFlags.isEnabled(.dashboard)
+        return MoreViewController(items: RootType.moreItems(dashboardEnabled: dashboardEnabled)) {
+            self.makeRootViewController(for: $0)
+        }
+    }
+
     func makeRootViewController(for type: RootType) -> UIViewController {
         switch type {
         case .dashboard:
@@ -121,6 +157,10 @@ extension RootController {
             return myTBAViewController
         case .settings:
             return settingsViewController
+        case .more:
+            return moreViewController
+        case .search:
+            return searchViewController
         }
     }
 

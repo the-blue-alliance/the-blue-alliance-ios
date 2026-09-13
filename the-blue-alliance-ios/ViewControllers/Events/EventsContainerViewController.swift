@@ -9,8 +9,6 @@ class EventsContainerViewController: ContainerViewController {
 
     private(set) var eventsViewController: WeekEventsViewController
 
-    lazy var searchController: UISearchController = makeSearchController()
-
     // MARK: - Init
 
     init(dependencies: Dependencies) {
@@ -25,15 +23,14 @@ class EventsContainerViewController: ContainerViewController {
             navigationTitle: EventsContainerViewController.eventsTitle(
                 eventsViewController.weekEvent
             ),
-            navigationSubtitle: ContainerViewController.yearSubtitle(initialYear),
             dependencies: dependencies
         )
 
         // TODO: We should be able to move this somewhere else and DRY this code
-        title = RootType.events.title
+        navigationItem.backButtonTitle = RootType.events.title
         tabBarItem.image = RootType.events.icon
 
-        navigationTitleDelegate = self
+        rightBarButtonItems = [ContainerViewController.makeBarButtonItem(yearButton)]
         eventsViewController.delegate = self
         eventsViewController.weekEventsDelegate = self
     }
@@ -47,7 +44,6 @@ class EventsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearchController()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -72,33 +68,49 @@ class EventsContainerViewController: ContainerViewController {
 
     private func updateInterface() {
         navigationTitle = EventsContainerViewController.eventsTitle(eventsViewController.weekEvent)
-        navigationSubtitle = ContainerViewController.yearSubtitle(year)
+        yearButton.configuration?.title = String(year)
     }
 
-}
-
-extension EventsContainerViewController: NavigationTitleDelegate {
-
-    func navigationTitleTapped() {
-        let yearSelectViewController = YearSelectViewController(
-            year: year,
-            years: Array(1992...statusService.maxSeason).reversed(),
-            week: eventsViewController.weekEvent,
-            dependencies: dependencies
+    // Years as submenus, each loading its weeks when opened, the way the old modal did in
+    // two screens.
+    private lazy var yearButton: UIButton = {
+        let years = Array(1992...statusService.maxSeason).reversed()
+        let menu = UIMenu(
+            children: years.map { year in
+                UIMenu(
+                    title: String(year),
+                    children: [
+                        UIDeferredMenuElement.uncached { [weak self] completion in
+                            self?.loadWeekActions(for: year, completion: completion)
+                        }
+                    ]
+                )
+            }
         )
-        yearSelectViewController.delegate = self
+        let button = ContainerViewController.makeMenuButton(menu: menu)
+        button.configuration?.title = String(year)
+        return button
+    }()
 
-        let nav = UINavigationController(rootViewController: yearSelectViewController)
-        nav.modalPresentationStyle = .formSheet
-        navigationController?.present(nav, animated: true, completion: nil)
-    }
-
-}
-
-extension EventsContainerViewController: YearSelectViewControllerDelegate {
-
-    func weekEventSelected(_ weekEvent: Event) {
-        eventsViewController.weekEvent = weekEvent
+    private func loadWeekActions(for year: Int, completion: @escaping ([UIMenuElement]) -> Void) {
+        Task { [weak self] in
+            guard let self else { return }
+            let events = (try? await self.dependencies.api.eventsByYear(year)) ?? []
+            let weeks = WeekEventsGrouping.weekEvents(for: year, from: events)
+            guard !weeks.isEmpty else {
+                completion([UIAction(title: "No weeks", attributes: .disabled) { _ in }])
+                return
+            }
+            let currentKey = self.eventsViewController.weekEvent?.key
+            completion(
+                weeks.map { week in
+                    UIAction(title: week.weekString, state: week.key == currentKey ? .on : .off) {
+                        [weak self] _ in
+                        self?.eventsViewController.weekEvent = week
+                    }
+                }
+            )
+        }
     }
 
 }
@@ -111,7 +123,7 @@ extension EventsContainerViewController: WeekEventsDelegate {
 
 }
 
-extension EventsContainerViewController: SearchContainer, SearchContainerDelegate,
+extension EventsContainerViewController: SearchContainerDelegate,
     SearchViewControllerDelegate
 {}
 

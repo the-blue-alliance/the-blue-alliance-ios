@@ -21,10 +21,22 @@ class PhoneRootViewController: UITabBarController, RootController {
 
         let dashboardEnabled = dependencies.appSettings.featureFlags.isEnabled(.dashboard)
         tabs = RootType.tabs(dashboardEnabled: dashboardEnabled).map { type in
-            UITab(title: type.title, image: type.icon, identifier: type.tabIdentifier) {
-                [unowned self] _ in
+            let provider: (UITab) -> UIViewController = { [unowned self] _ in
                 UINavigationController(rootViewController: self.makeRootViewController(for: type))
             }
+            guard type == .search else {
+                return UITab(
+                    title: type.title,
+                    image: type.icon,
+                    identifier: type.tabIdentifier,
+                    viewControllerProvider: provider
+                )
+            }
+            // Tapping the pill opens the field straight away, and cancelling returns to the
+            // tab that was showing before.
+            let searchTab = UISearchTab(viewControllerProvider: provider)
+            searchTab.automaticallyActivatesSearch = true
+            return searchTab
         }
 
         mode = .tabSidebar

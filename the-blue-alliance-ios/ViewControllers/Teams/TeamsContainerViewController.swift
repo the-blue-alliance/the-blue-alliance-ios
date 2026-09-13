@@ -5,8 +5,6 @@ import TBAUtils
 
 class TeamsContainerViewController: ContainerViewController {
 
-    lazy var searchController: UISearchController = makeSearchController()
-
     let teamsViewController: TeamsViewController
 
     // MARK: - Init
@@ -32,7 +30,6 @@ class TeamsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearchController()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -43,8 +40,7 @@ class TeamsContainerViewController: ContainerViewController {
 
 }
 
-extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainer,
-    SearchContainerDelegate,
+extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainerDelegate,
     SearchViewControllerDelegate
 {
 }

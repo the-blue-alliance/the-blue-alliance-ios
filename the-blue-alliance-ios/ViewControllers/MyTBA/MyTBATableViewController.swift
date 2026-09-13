@@ -98,7 +98,7 @@ class MyTBATableViewController: UIViewController, DataController,
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.sectionHeaderTopPadding = 0
-        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.contentInsetAdjustmentBehavior = .automatic
         return tableView
     }()
 
