@@ -49,21 +49,22 @@ nonisolated enum SeasonPhase: Comparable {
     case other
 }
 
-nonisolated struct SeasonPlacement: Comparable {
-    let phase: SeasonPhase
-    let date: Date
-
-    static func < (lhs: Self, rhs: Self) -> Bool {
-        (lhs.phase, lhs.date) < (rhs.phase, rhs.date)
-    }
-}
-
-// Weekly events are placed at their week's earliest start date rather than
-// their own, so sections sharing a week tie and fall back to type order.
-nonisolated struct SeasonTimeline {
-    private struct Week: Hashable {
+// Orders one list's events by phase, then date, then `Event.sectionAscending`.
+// Weekly events take their week's earliest start date rather than their own,
+// so events sharing a week tie and keep the type order.
+struct SeasonTimeline {
+    nonisolated private struct Week: Hashable {
         let year: Int
         let week: Int
+    }
+
+    nonisolated private struct Placement: Comparable {
+        let phase: SeasonPhase
+        let date: Date
+
+        static func < (lhs: Self, rhs: Self) -> Bool {
+            (lhs.phase, lhs.date) < (rhs.phase, rhs.date)
+        }
     }
 
     private let weekStarts: [Week: Date]
@@ -78,22 +79,22 @@ nonisolated struct SeasonTimeline {
         self.weekStarts = weekStarts
     }
 
-    func placement(of event: Event) -> SeasonPlacement {
+    func ascending(_ a: Event, _ b: Event) -> Bool {
+        let (pa, pb) = (placement(of: a), placement(of: b))
+        return pa != pb ? pa < pb : Event.sectionAscending(a, b)
+    }
+
+    private func placement(of event: Event) -> Placement {
         let weekStart = event.week.flatMap { weekStarts[Week(year: event.year, week: $0)] }
-        return SeasonPlacement(
+        return Placement(
             phase: event.seasonPhase,
             date: weekStart ?? event.startDateParsed ?? .distantFuture
         )
     }
-
-    func earliestPlacement(of events: [Event]) -> SeasonPlacement {
-        events.map { placement(of: $0) }.min()
-            ?? SeasonPlacement(phase: .other, date: .distantFuture)
-    }
 }
 
 extension Event {
-    nonisolated var seasonPhase: SeasonPhase {
+    var seasonPhase: SeasonPhase {
         switch eventTypeEnum {
         case .preseason: return .preseason
         case .offseason: return .offseason
@@ -189,10 +190,8 @@ extension Event {
         return Dictionary(grouping: events) {
             $0.section(splitDistrictsByWeek: splitDistrictsByWeek)
         }
-        .sorted {
-            (timeline.earliestPlacement(of: $0.value), $0.key)
-                < (timeline.earliestPlacement(of: $1.value), $1.key)
-        }
-        .map { (section: $0.key, events: $0.value.sorted(by: sectionAscending)) }
+        .map { (section: $0.key, events: $0.value.sorted(by: timeline.ascending)) }
+        // Groups are never empty, so a group's first event is its earliest.
+        .sorted { timeline.ascending($0.events[0], $1.events[0]) }
     }
 }

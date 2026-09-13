@@ -13,16 +13,23 @@ struct MyTBATableViewControllerTests {
         Team(key: "frc\(number)", teamNumber: number, nickname: nickname, name: "")
     }
 
-    private static func event(key: String, startDate: String, endDate: String) -> Event {
+    private static func event(
+        key: String,
+        eventType: APIEventType = .regional,
+        startDate: String,
+        endDate: String,
+        week: Int? = nil
+    ) -> Event {
         Event(
             key: key,
-            name: "",
+            name: key,
             eventCode: String(key.dropFirst(4)),
-            eventType: ._0,
+            eventType: Components.Schemas.EventType(rawValue: eventType.rawValue) ?? ._0,
             startDate: startDate,
             endDate: endDate,
             year: Int(key.prefix(4)) ?? 0,
             eventTypeString: "",
+            week: week,
             webcasts: [],
             divisionKeys: []
         )
@@ -336,6 +343,49 @@ struct MyTBATableViewControllerTests {
         controller.bannerTapped()
         #expect(Self.rows(in: controller.tableView) == 3)
         #expect(Self.teamNumbers(in: controller) == ["254", "1114", "1500"])
+    }
+
+    private static func eventNames(in controller: MyTBATableViewController) -> [String] {
+        let table = controller.tableView
+        return (0..<table.numberOfRows(inSection: 0)).compactMap {
+            let cell = table.dataSource?.tableView(table, cellForRowAt: IndexPath(row: $0, section: 0))
+            return (cell as? EventTableViewCell)?.viewModel?.name
+        }
+    }
+
+    /// Favorited events order by date across weeks, so a district event delayed
+    /// past Championship (2026 Israel) lists after it rather than by type.
+    @Test func favoriteEventsSortChronologicallyAcrossWeeks() async {
+        let api = MockTBAAPI()
+        api.eventsByKey["2026isde1"] = Self.event(
+            key: "2026isde1",
+            eventType: .district,
+            startDate: "2026-06-28",
+            endDate: "2026-06-29",
+            week: 16
+        )
+        api.eventsByKey["2026gal"] = Self.event(
+            key: "2026gal",
+            eventType: .championshipDivision,
+            startDate: "2026-04-29",
+            endDate: "2026-05-02"
+        )
+        api.eventsByKey["2026casj"] = Self.event(
+            key: "2026casj", startDate: "2026-03-04", endDate: "2026-03-07", week: 0
+        )
+        let dependencies = Dependencies.mock(api: api)
+        (dependencies.authService as! MockAuthService).isSignedIn = true
+        let myTBA = dependencies.myTBA as! MockSessionMyTBA
+        myTBA.favorites = ["2026isde1", "2026gal", "2026casj"].map {
+            MyTBAFavorite(modelKey: $0, modelType: .event)
+        }
+
+        let controller = MyTBAFavoritesViewController(dependencies: dependencies)
+        controller.loadViewIfNeeded()
+        controller.refresh()
+
+        #expect(await Self.waitForRows(controller, count: 3) == 3)
+        #expect(Self.eventNames(in: controller) == ["2026casj", "2026gal", "2026isde1"])
     }
 
 }

@@ -9,13 +9,10 @@ enum WeekEventsGrouping {
     // by date → Offseason → Other.
     static func weekEvents(for year: Int, from events: [Event]) -> [Event] {
         let candidates = events.filter { $0.year == year && !$0.isChampionshipDivision }
-        let timeline = SeasonTimeline(candidates)
         var seen = Set<String>()
         return
             candidates
-            .sorted {
-                (timeline.placement(of: $0), $0.section) < (timeline.placement(of: $1), $1.section)
-            }
+            .sorted(by: SeasonTimeline(candidates).ascending)
             .filter { seen.insert($0.weekPickerBucket).inserted }
     }
 }
