@@ -1,85 +1,106 @@
 {
-  "fill-specializations": [
+  "features" : [
+    "refractivity",
+    "specular-location"
+  ],
+  "fill-specializations" : [
     {
-      "value": {
-        "automatic-gradient": "display-p3:0.02617,0.52275,0.96783,1.00000"
+      "value" : {
+        "automatic-gradient" : "display-p3:0.02617,0.52275,0.96783,1.00000"
       }
     },
     {
-      "appearance": "dark",
-      "value": {
-        "automatic-gradient": "display-p3:0.00254,0.05078,0.09402,1.00000"
+      "appearance" : "dark",
+      "value" : {
+        "automatic-gradient" : "display-p3:0.00254,0.05078,0.09402,1.00000"
       }
     }
   ],
-  "groups": [
+  "groups" : [
     {
-      "layers": [
+      "layers" : [
         {
-          "image-name": "tba-lamp.svg",
-          "name": "tba-lamp",
-          "position": {
-            "scale": 6.27,
-            "translation-in-points": [
+          "image-name" : "tba-lamp.svg",
+          "name" : "tba-lamp",
+          "position" : {
+            "scale" : 6.27,
+            "translation-in-points" : [
               0,
-              0
+              14
             ]
           }
         }
       ],
-      "opacity": 0.9,
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 0.5
+      "opacity" : 0.9,
+      "refractivity" : {
+        "depth" : 0.43023437499999995,
+        "enabled" : true,
+        "strength" : 0.463671875
       },
-      "translucency": {
-        "enabled": true,
-        "value": 1
-      }
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.27
+      },
+      "specular" : "outside",
+      "translucency-specializations" : [
+        {
+          "value" : {
+            "enabled" : true,
+            "value" : 0.58
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "enabled" : true,
+            "value" : 0.62
+          }
+        }
+      ]
     },
     {
-      "layers": [
+      "layers" : [
         {
-          "image-name": "offseason-background.png",
-          "name": "offseason-background",
-          "opacity-specializations": [
+          "image-name" : "offseason-background.png",
+          "name" : "offseason-background",
+          "opacity-specializations" : [
             {
-              "value": 1
+              "value" : 1
             },
             {
-              "appearance": "dark",
-              "value": 0.5
+              "appearance" : "dark",
+              "value" : 0.5
             }
           ],
-          "position": {
-            "scale": 1.28,
-            "translation-in-points": [
+          "position" : {
+            "scale" : 1.28,
+            "translation-in-points" : [
               0,
               0
             ]
           }
         }
       ],
-      "opacity-specializations": [
+      "opacity-specializations" : [
         {
-          "appearance": "dark",
-          "value": 1
+          "appearance" : "dark",
+          "value" : 1
         }
       ],
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 0.5
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
       },
-      "translucency": {
-        "enabled": true,
-        "value": 0.42
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.42
       }
     }
   ],
-  "supported-platforms": {
-    "circles": [
+  "supported-platforms" : {
+    "circles" : [
       "watchOS"
     ],
-    "squares": "shared"
+    "squares" : "shared"
   }
 }
