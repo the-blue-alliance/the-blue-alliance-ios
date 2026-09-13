@@ -39,7 +39,70 @@ extension APIEventType {
     }
 }
 
+// Coarse placement within a season, in display order. Official events sort
+// by date inside `.season`, so a week delayed past Championship (2026 Israel,
+// weeks 17–19) lands after it instead of next to the other weeks.
+nonisolated enum SeasonPhase: Comparable {
+    case preseason
+    case season
+    case offseason
+    case other
+}
+
+// Orders one list's events by phase, then date, then `Event.sectionAscending`.
+// Weekly events take their week's earliest start date rather than their own,
+// so events sharing a week tie and keep the type order.
+struct SeasonTimeline {
+    nonisolated private struct Week: Hashable {
+        let year: Int
+        let week: Int
+    }
+
+    nonisolated private struct Placement: Comparable {
+        let phase: SeasonPhase
+        let date: Date
+
+        static func < (lhs: Self, rhs: Self) -> Bool {
+            (lhs.phase, lhs.date) < (rhs.phase, rhs.date)
+        }
+    }
+
+    private let weekStarts: [Week: Date]
+
+    init(_ events: [Event]) {
+        var weekStarts: [Week: Date] = [:]
+        for event in events {
+            guard let week = event.week, let start = event.startDateParsed else { continue }
+            let key = Week(year: event.year, week: week)
+            weekStarts[key] = min(weekStarts[key] ?? start, start)
+        }
+        self.weekStarts = weekStarts
+    }
+
+    func ascending(_ a: Event, _ b: Event) -> Bool {
+        let (pa, pb) = (placement(of: a), placement(of: b))
+        return pa != pb ? pa < pb : Event.sectionAscending(a, b)
+    }
+
+    private func placement(of event: Event) -> Placement {
+        let weekStart = event.week.flatMap { weekStarts[Week(year: event.year, week: $0)] }
+        return Placement(
+            phase: event.seasonPhase,
+            date: weekStart ?? event.startDateParsed ?? .distantFuture
+        )
+    }
+}
+
 extension Event {
+    var seasonPhase: SeasonPhase {
+        switch eventTypeEnum {
+        case .preseason: return .preseason
+        case .offseason: return .offseason
+        case .unlabeled: return .other
+        default: return .season
+        }
+    }
+
     var section: EventSection { section(splitDistrictsByWeek: false) }
 
     // `splitDistrictsByWeek` is for the District tab, where a single district's
@@ -117,5 +180,18 @@ extension Event {
         let bd = b.startDateParsed ?? .distantFuture
         if ad != bd { return ad < bd }
         return a.key < b.key
+    }
+
+    static func groupedBySection(
+        _ events: [Event],
+        splitDistrictsByWeek: Bool = false
+    ) -> [(section: EventSection, events: [Event])] {
+        let timeline = SeasonTimeline(events)
+        return Dictionary(grouping: events) {
+            $0.section(splitDistrictsByWeek: splitDistrictsByWeek)
+        }
+        .map { (section: $0.key, events: $0.value.sorted(by: timeline.ascending)) }
+        // Groups are never empty, so a group's first event is its earliest.
+        .sorted { timeline.ascending($0.events[0], $1.events[0]) }
     }
 }

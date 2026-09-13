@@ -78,15 +78,10 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
     func applyEvents(_ apiEvents: [APIEvent]) {
         events = filter(apiEvents)
 
-        let split = splitsDistrictsByWeek
-        let grouped = Dictionary(grouping: events) { $0.section(splitDistrictsByWeek: split) }
         var snapshot = NSDiffableDataSourceSnapshot<EventSection, APIEvent>()
-        for section in grouped.keys.sorted() {
-            snapshot.appendSections([section])
-            snapshot.appendItems(
-                (grouped[section] ?? []).sorted(by: Event.sectionAscending),
-                toSection: section
-            )
+        for group in Event.groupedBySection(events, splitDistrictsByWeek: splitsDistrictsByWeek) {
+            snapshot.appendSections([group.section])
+            snapshot.appendItems(group.events, toSection: group.section)
         }
         dataSource.applySnapshotUsingReloadData(snapshot)
     }

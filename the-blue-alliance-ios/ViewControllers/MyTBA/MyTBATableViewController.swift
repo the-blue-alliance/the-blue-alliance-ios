@@ -311,6 +311,11 @@ class MyTBATableViewController: UIViewController, DataController,
     private func sortItems(_ items: [MyTBAItem], in section: MyTBASection) -> [MyTBAItem] {
         switch section {
         case .event:
+            let timeline = SeasonTimeline(
+                items.compactMap {
+                    if case .event(let event) = loadedModels[$0] { event } else { nil }
+                }
+            )
             return items.sorted { lhs, rhs in
                 let lYear = lhs.modelKey.year ?? 0
                 let rYear = rhs.modelKey.year ?? 0
@@ -319,7 +324,7 @@ class MyTBATableViewController: UIViewController, DataController,
                 // first; the key-only placeholders follow in key order.
                 switch (loadedModels[lhs], loadedModels[rhs]) {
                 case (.event(let l), .event(let r)):
-                    return Event.sectionAscending(l, r)
+                    return timeline.ascending(l, r)
                 case (.event, _):
                     return true
                 case (_, .event):
