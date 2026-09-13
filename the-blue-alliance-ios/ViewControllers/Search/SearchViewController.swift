@@ -68,21 +68,6 @@ class SearchViewController: TBATableViewController {
 
         tableView.backgroundColor = .systemGroupedBackground
 
-        // The results view fills the screen under the transparent bar, so give the bar the same
-        // blue backdrop the containers do. Pinned to the frame guide so it doesn't scroll.
-        let barBackdrop = UIView()
-        barBackdrop.backgroundColor = UIColor.navigationBarTintColor
-        barBackdrop.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(barBackdrop)
-        NSLayoutConstraint.activate([
-            barBackdrop.topAnchor.constraint(equalTo: tableView.frameLayoutGuide.topAnchor),
-            barBackdrop.leadingAnchor.constraint(equalTo: tableView.frameLayoutGuide.leadingAnchor),
-            barBackdrop.trailingAnchor.constraint(
-                equalTo: tableView.frameLayoutGuide.trailingAnchor
-            ),
-            barBackdrop.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-        ])
-
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
 
@@ -139,6 +124,7 @@ class SearchViewController: TBATableViewController {
         let query = (searchText ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
         guard !query.isEmpty, let index else {
+            contentUnavailableConfiguration = nil
             dataSource.applySnapshotUsingReloadData(NSDiffableDataSourceSnapshot())
             return
         }
@@ -158,6 +144,8 @@ class SearchViewController: TBATableViewController {
     }
 
     private func show(teams: [SearchItem], events: [SearchItem]) {
+        contentUnavailableConfiguration =
+            teams.isEmpty && events.isEmpty ? UIContentUnavailableConfiguration.search() : nil
         var snapshot = NSDiffableDataSourceSnapshot<SearchSection, SearchItem>()
         if !teams.isEmpty {
             snapshot.appendSections([.teams])
@@ -253,25 +241,21 @@ extension SearchViewController: UISearchResultsUpdating {
     }
 }
 
-extension SearchViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        let cases = SearchScope.allCases
-        guard selectedScope < cases.count else { return }
-        scope = cases[selectedScope]
-    }
-}
-
 extension SearchViewController: Refreshable {
     var isDataSourceEmpty: Bool { dataSource.isDataSourceEmpty }
 
     func refresh() {
+        guard index == nil else { return }
         loadIndex()
     }
 }
 
 extension SearchViewController: Stateful {
-    var noDataText: String? {
-        guard let searchText = searchText, !searchText.isEmpty else { return nil }
-        return "No results found"
-    }
+    // Empty states here are the system's content unavailable configuration, which sits clear
+    // of the keyboard. The table background overlay is not used.
+    var noDataText: String? { nil }
+
+    func addNoDataView(_ noDataView: UIView) {}
+
+    func removeNoDataView(_ noDataView: UIView) {}
 }

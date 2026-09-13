@@ -7,18 +7,14 @@ import UIKit
 @MainActor
 struct SearchContainerTests {
 
-    /// A container whose search controller has gone through `setupSearchController()` inside a
-    /// navigation controller and a window.
-    ///
-    /// The tab bar controller is load bearing. Without one the bar has room to place the search
-    /// field inline, and UIKit swaps in its own SwiftUI-backed field. The app always hosts these
-    /// containers inside the phone root tab bar controller, where the field stays stacked.
+    /// The search tab's container, loaded inside the same tab bar and navigation controller
+    /// hierarchy the app uses.
     private final class Harness {
         let window: UIWindow
-        let container: TeamsContainerViewController
+        let container: SearchContainerViewController
 
         init() {
-            container = TeamsContainerViewController(dependencies: .mock())
+            container = SearchContainerViewController(dependencies: .mock())
             window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
             let tabBarController = UITabBarController()
             tabBarController.viewControllers = [
@@ -31,21 +27,14 @@ struct SearchContainerTests {
         }
     }
 
-    @Test func searchBarStaysStackedOnceTheNavigationItemAdoptsIt() {
+    @Test func searchFieldIsIntegratedAndResultsShowInPlace() {
         let harness = Harness()
         let navigationItem = harness.container.navigationItem
 
-        #expect(navigationItem.searchController === harness.container.searchController)
-        #expect(navigationItem.searchBarPlacement == .stacked)
-        #expect(navigationItem.hidesSearchBarWhenScrolling == false)
-    }
-
-    @Test func resultsControllerIsTheSearchViewController() {
-        let harness = Harness()
-
-        #expect(
-            harness.container.searchController.searchResultsController is SearchViewController
-        )
+        let searchController = try? #require(navigationItem.searchController)
+        #expect(searchController?.searchResultsController == nil)
+        #expect(searchController?.searchResultsUpdater is SearchViewController)
+        #expect(navigationItem.preferredSearchBarPlacement == .integrated)
     }
 
 }

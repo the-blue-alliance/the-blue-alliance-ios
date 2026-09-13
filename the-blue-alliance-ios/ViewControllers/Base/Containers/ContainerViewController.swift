@@ -4,10 +4,6 @@ import TBAAPI
 import UIKit
 import PureLayout
 
-protocol NavigationTitleDelegate: AnyObject {
-    func navigationTitleTapped()
-}
-
 protocol Navigatable {
     // Protocol to allow container views to show right bar button items in their container view
     var additionalRightBarButtonItems: [UIBarButtonItem] { get }
@@ -21,13 +17,13 @@ class ContainerViewController: UIViewController, Alertable {
 
     var navigationTitle: String? {
         didSet {
-            navigationTitleLabel.text = navigationTitle
+            navigationItem.title = navigationTitle
         }
     }
 
     var navigationSubtitle: String? {
         didSet {
-            navigationSubtitleLabel.text = navigationSubtitle
+            navigationItem.subtitle = navigationSubtitle
         }
     }
 
@@ -46,33 +42,6 @@ class ContainerViewController: UIViewController, Alertable {
     var urlOpener: any URLOpener { dependencies.urlOpener }
 
     // MARK: - Private View Elements
-
-    private lazy var navigationStackView: UIStackView = {
-        let navigationStackView = UIStackView(arrangedSubviews: [
-            navigationTitleLabel, navigationSubtitleLabel,
-        ])
-        navigationStackView.translatesAutoresizingMaskIntoConstraints = false
-        navigationStackView.axis = .vertical
-        navigationStackView.addGestureRecognizer(
-            UITapGestureRecognizer(target: self, action: #selector(navigationTitleTapped))
-        )
-        return navigationStackView
-    }()
-    private lazy var navigationTitleLabel: UILabel = {
-        let navigationTitleLabel = ContainerViewController.createNavigationLabel()
-        navigationTitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(
-            for: UIFont.systemFont(ofSize: 17)
-        )
-        return navigationTitleLabel
-    }()
-    private lazy var navigationSubtitleLabel: UILabel = {
-        let navigationSubtitleLabel = ContainerViewController.createNavigationLabel()
-        navigationSubtitleLabel.font = UIFontMetrics(forTextStyle: .caption2).scaledFont(
-            for: UIFont.systemFont(ofSize: 11)
-        )
-        return navigationSubtitleLabel
-    }()
-    weak var navigationTitleDelegate: (any NavigationTitleDelegate)?
 
     private let shouldShowSegmentedControl: Bool = false
     lazy var segmentedControlView: UIView = {
@@ -154,11 +123,8 @@ class ContainerViewController: UIViewController, Alertable {
             for: .valueChanged
         )
 
-        if navigationTitle != nil || navigationSubtitle != nil {
-            navigationTitleLabel.text = navigationTitle
-            navigationSubtitleLabel.text = navigationSubtitle
-            navigationItem.titleView = navigationStackView
-        }
+        navigationItem.title = navigationTitle
+        navigationItem.subtitle = navigationSubtitle
 
         updateBarButtonItems()
     }
@@ -226,9 +192,9 @@ class ContainerViewController: UIViewController, Alertable {
 
     static func yearSubtitle(_ year: Int?) -> String {
         if let year = year {
-            return "▾ \(year)"
+            return "\(year)"
         } else {
-            return "▾ ----"
+            return "----"
         }
     }
 
@@ -285,7 +251,6 @@ class ContainerViewController: UIViewController, Alertable {
     }
 
     private func show(view showView: UIView) {
-        var switchedIndex = 0
         for (index, containedView) in viewControllers.compactMap({ $0.view }).enumerated() {
             let shouldHide = !(containedView == showView)
             if !shouldHide {
@@ -298,11 +263,10 @@ class ContainerViewController: UIViewController, Alertable {
                 reloadViewController(refreshViewController)
 
                 refreshViewController.refresh()
-                switchedIndex = index
             }
             containedView.isHidden = shouldHide
         }
-        switchedToIndex(switchedIndex)
+        switchedToIndex(segmentedControl.selectedSegmentIndex)
     }
 
     private func updateBarButtonItems() {
@@ -329,18 +293,52 @@ class ContainerViewController: UIViewController, Alertable {
         }
     }
 
-    @objc private func navigationTitleTapped() {
-        navigationTitleDelegate?.navigationTitleTapped()
-    }
-
     // MARK: - Helper Methods
 
-    private static func createNavigationLabel() -> UILabel {
-        let label = UILabel(forAutoLayout: ())
-        label.textColor = UIColor.white
-        label.textAlignment = .center
-        label.adjustsFontForContentSizeCategory = true
-        return label
+    /// A capsule that opens a menu. Solid rather than glass so it reads the same whether the
+    /// bar is over blue or over scrolled content.
+    static func makeMenuButton(menu: UIMenu) -> UIButton {
+        var configuration = UIButton.Configuration.filled()
+        configuration.cornerStyle = .capsule
+        // White on the blue in light so it stands off the bar; the segment pill's gray in dark.
+        configuration.baseBackgroundColor = UIColor { traits in
+            traits.userInterfaceStyle == .dark ? UIColor.systemGray2 : UIColor.white
+        }
+        configuration.baseForegroundColor = UIColor { traits in
+            traits.userInterfaceStyle == .dark ? UIColor.white : UIColor.primaryBlue
+        }
+        configuration.image = UIImage(systemName: "chevron.down")
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 5
+        configuration.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(
+            textStyle: .body,
+            scale: .small
+        )
+        configuration.contentInsets = NSDirectionalEdgeInsets(
+            top: 8,
+            leading: 14,
+            bottom: 8,
+            trailing: 11
+        )
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
+            var attributes = $0
+            attributes.font = UIFontMetrics(forTextStyle: .body).scaledFont(
+                for: UIFont.systemFont(ofSize: 17, weight: .semibold)
+            )
+            return attributes
+        }
+        let button = UIButton(configuration: configuration)
+        button.menu = menu
+        button.showsMenuAsPrimaryAction = true
+        return button
+    }
+
+    /// Wraps a menu button for the bar without the bar's own glass capsule around it, which
+    /// would otherwise draw a second ring outside the button's.
+    static func makeBarButtonItem(_ button: UIButton) -> UIBarButtonItem {
+        let item = UIBarButtonItem(customView: button)
+        item.hidesSharedBackground = true
+        return item
     }
 
 }

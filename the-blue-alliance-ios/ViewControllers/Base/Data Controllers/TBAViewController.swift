@@ -57,6 +57,16 @@ class TBAViewController: UIViewController, DataController, Navigatable {
         view.backgroundColor = UIColor.systemGroupedBackground
         view.addSubview(scrollView)
         scrollView.autoPinEdgesToSuperviewEdges()
+
+        // Same backdrop as the table base: blue behind the transparent bar on screens that
+        // sit directly under it, nothing inside a container.
+        let barBackdrop = UIView(forAutoLayout: ())
+        barBackdrop.backgroundColor = UIColor.navigationBarTintColor
+        view.addSubview(barBackdrop)
+        barBackdrop.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
+        NSLayoutConstraint.activate([
+            barBackdrop.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        ])
     }
 
     override func viewDidAppear(_ animated: Bool) {

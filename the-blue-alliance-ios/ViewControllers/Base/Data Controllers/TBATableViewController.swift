@@ -53,6 +53,22 @@ class TBATableViewController: UITableViewController, DataController, Navigatable
 
         tableView.sectionHeaderTopPadding = 0
         tableView.contentInsetAdjustmentBehavior = .automatic
+
+        // The navigation bar is transparent. A screen pushed directly under it paints the blue
+        // behind it here; inside a container the safe area top is zero and this has no height.
+        // Pinned to the frame guide so it doesn't scroll with the content.
+        let barBackdrop = UIView()
+        barBackdrop.backgroundColor = UIColor.navigationBarTintColor
+        barBackdrop.translatesAutoresizingMaskIntoConstraints = false
+        tableView.addSubview(barBackdrop)
+        NSLayoutConstraint.activate([
+            barBackdrop.topAnchor.constraint(equalTo: tableView.frameLayoutGuide.topAnchor),
+            barBackdrop.leadingAnchor.constraint(equalTo: tableView.frameLayoutGuide.leadingAnchor),
+            barBackdrop.trailingAnchor.constraint(
+                equalTo: tableView.frameLayoutGuide.trailingAnchor
+            ),
+            barBackdrop.bottomAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.topAnchor),
+        ])
     }
 
     override func viewDidAppear(_ animated: Bool) {
