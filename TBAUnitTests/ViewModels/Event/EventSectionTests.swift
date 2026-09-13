@@ -494,6 +494,182 @@ struct EventSectionTests {
         #expect(Event.sectionAscending(a, b))
     }
 
+    // MARK: - Event.groupedBySection season order
+
+    // 2026 Israeli teams (e.g. frc1690) played Championship before their
+    // district events, which were delayed to weeks 17–19.
+    @Test func groupedBySection_weeksDelayedPastChampionship_sortAfterIt() {
+        let isr = makeDistrict(abbreviation: "isr", displayName: "FIRST Israel")
+        let events = [
+            makeEvent(
+                key: "2026isde1",
+                year: 2026,
+                eventType: .district,
+                district: isr,
+                startDate: "2026-06-28",
+                endDate: "2026-06-29",
+                week: 16
+            ),
+            makeEvent(
+                key: "2026iscmp",
+                year: 2026,
+                eventType: .districtChampionship,
+                district: isr,
+                startDate: "2026-07-06",
+                endDate: "2026-07-08",
+                week: 18
+            ),
+            makeEvent(
+                key: "2026gal",
+                year: 2026,
+                eventType: .championshipDivision,
+                startDate: "2026-04-29",
+                endDate: "2026-05-02",
+                city: "Houston"
+            ),
+            makeEvent(
+                key: "2026cmptx",
+                year: 2026,
+                eventType: .championshipFinals,
+                startDate: "2026-05-02",
+                endDate: "2026-05-02",
+                city: "Houston"
+            ),
+        ]
+        #expect(
+            Event.groupedBySection(events).map { $0.section.title } == [
+                "Championship - Houston Divisions",
+                "Championship - Houston",
+                "FIRST Israel District Events",
+                "FIRST Israel District Championship",
+            ]
+        )
+    }
+
+    @Test func groupedBySection_sameWeek_keepsTypeOrder() {
+        // The district event starts a day earlier, but same-week sections stay in type order.
+        let fim = makeDistrict(abbreviation: "fim", displayName: "FIRST In Michigan")
+        let regional = makeEvent(
+            key: "2026ohcl",
+            year: 2026,
+            eventType: .regional,
+            startDate: "2026-03-12",
+            endDate: "2026-03-14",
+            week: 2
+        )
+        let district = makeEvent(
+            key: "2026miket",
+            year: 2026,
+            eventType: .district,
+            district: fim,
+            startDate: "2026-03-11",
+            endDate: "2026-03-13",
+            week: 2
+        )
+        #expect(
+            Event.groupedBySection([district, regional]).map { $0.section.title } == [
+                "Regional Events",
+                "FIRST In Michigan District Events",
+            ]
+        )
+    }
+
+    @Test func groupedBySection_differentWeeks_chronological() {
+        let fim = makeDistrict(abbreviation: "fim", displayName: "FIRST In Michigan")
+        let district = makeEvent(
+            key: "2026miket",
+            year: 2026,
+            eventType: .district,
+            district: fim,
+            startDate: "2026-03-04",
+            endDate: "2026-03-06",
+            week: 0
+        )
+        let regional = makeEvent(
+            key: "2026ohcl",
+            year: 2026,
+            eventType: .regional,
+            startDate: "2026-03-18",
+            endDate: "2026-03-20",
+            week: 2
+        )
+        #expect(
+            Event.groupedBySection([regional, district]).map { $0.section.title } == [
+                "FIRST In Michigan District Events",
+                "Regional Events",
+            ]
+        )
+    }
+
+    @Test func groupedBySection_offseasonStaysAfterDelayedWeeks() {
+        // The June offseason event starts before the delayed week, but offseason stays pinned after the season.
+        let isr = makeDistrict(abbreviation: "isr", displayName: "FIRST Israel")
+        let delayed = makeEvent(
+            key: "2026isde1",
+            year: 2026,
+            eventType: .district,
+            district: isr,
+            startDate: "2026-06-28",
+            endDate: "2026-06-29",
+            week: 16
+        )
+        let offseason = makeEvent(
+            key: "2026off",
+            year: 2026,
+            eventType: .offseason,
+            startDate: "2026-06-20",
+            endDate: "2026-06-21"
+        )
+        #expect(
+            Event.groupedBySection([offseason, delayed]).map { $0.section.title } == [
+                "FIRST Israel District Events",
+                "June Offseason Events",
+            ]
+        )
+    }
+
+    @Test func groupedBySection_unlabeledPinnedLast() {
+        let unlabeled = makeEvent(
+            key: "2026misc",
+            year: 2026,
+            eventType: .unlabeled,
+            startDate: "2026-01-05",
+            endDate: "2026-01-05"
+        )
+        let preseason = makeEvent(
+            key: "2026pre",
+            year: 2026,
+            eventType: .preseason,
+            startDate: "2026-01-10",
+            endDate: "2026-01-10"
+        )
+        let regional = makeEvent(
+            key: "2026ohcl",
+            year: 2026,
+            eventType: .regional,
+            startDate: "2026-02-25",
+            endDate: "2026-02-28",
+            week: 0
+        )
+        let offseason = makeEvent(
+            key: "2026off",
+            year: 2026,
+            eventType: .offseason,
+            startDate: "2026-09-12",
+            endDate: "2026-09-13"
+        )
+        #expect(
+            Event.groupedBySection([offseason, regional, unlabeled, preseason]).map {
+                $0.section.title
+            } == [
+                "Preseason Events",
+                "Regional Events",
+                "September Offseason Events",
+                "Unknown Events",
+            ]
+        )
+    }
+
     // MARK: - Test helpers
 
     private func makeEvent(
