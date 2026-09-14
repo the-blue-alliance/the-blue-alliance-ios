@@ -63,6 +63,19 @@ struct ContainerViewControllerTests {
         #expect(arrangedSubviews.firstIndex(of: accessoryView) == arrangedSubviews.count - 2)
     }
 
+    @Test func aContainerWithOnlyATitleKeepsIt() {
+        let dependencies = Dependencies.mock()
+        let container = ContainerViewController(
+            viewControllers: [StubTab(dependencies: dependencies)],
+            dependencies: dependencies
+        )
+        container.title = "myTBA"
+        container.loadViewIfNeeded()
+        container.updatePropertiesIfNeeded()
+
+        #expect(container.navigationItem.title == "myTBA")
+    }
+
     @Test func navigationItemFollowsTheContainerAndItsSelectedTab() {
         let harness = Harness()
         let containerItem = UIBarButtonItem(systemItem: .add)
