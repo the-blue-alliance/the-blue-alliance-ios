@@ -17,19 +17,19 @@ class ContainerViewController: UIViewController, Alertable {
 
     var navigationTitle: String? {
         didSet {
-            navigationItem.title = navigationTitle
+            setNeedsNavigationItemUpdate()
         }
     }
 
     var navigationSubtitle: String? {
         didSet {
-            navigationItem.subtitle = navigationSubtitle
+            setNeedsNavigationItemUpdate()
         }
     }
 
     var rightBarButtonItems: [UIBarButtonItem] = [] {
         didSet {
-            updateBarButtonItems()
+            setNeedsNavigationItemUpdate()
         }
     }
 
@@ -43,7 +43,6 @@ class ContainerViewController: UIViewController, Alertable {
 
     // MARK: - Private View Elements
 
-    private let shouldShowSegmentedControl: Bool = false
     lazy var segmentedControlView: UIView = {
         let segmentedControlView = UIView(forAutoLayout: ())
         segmentedControlView.autoSetDimension(.height, toSize: 44.0)
@@ -122,11 +121,6 @@ class ContainerViewController: UIViewController, Alertable {
             UIAction { [weak self] _ in self?.updateSegmentedControlViews() },
             for: .valueChanged
         )
-
-        navigationItem.title = navigationTitle
-        navigationItem.subtitle = navigationSubtitle
-
-        updateBarButtonItems()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -143,17 +137,22 @@ class ContainerViewController: UIViewController, Alertable {
         view.backgroundColor = UIColor.navigationBarTintColor
         view.addSubview(rootStackView)
 
-        // Add subviews to view hierarchy in reverse order, so first one is showing automatically
-        for viewController in viewControllers.reversed() {
-            addChild(viewController)
-            containerView.addSubview(viewController.view)
-            viewController.view.autoPinEdgesToSuperviewEdges()
-            viewController.enableRefreshing()
-        }
-
         rootStackView.autoPinEdge(toSuperviewSafeArea: .top)
         // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
         rootStackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+
+        setNeedsUpdateProperties()
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+
+        navigationItem.title = navigationTitle
+        navigationItem.subtitle = navigationSubtitle
+        navigationItem.setRightBarButtonItems(
+            rightBarButtonItems + (currentViewController()?.additionalRightBarButtonItems ?? []),
+            animated: false
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -243,53 +242,40 @@ class ContainerViewController: UIViewController, Alertable {
 
     // MARK: - Private Methods
 
-    private func updateSegmentedControlViews() {
-        if let viewController = currentViewController() {
-            show(view: viewController.view)
-        }
-        updateBarButtonItems()
+    // Before the view loads there's nothing to update; `viewDidLoad` schedules the first pass.
+    private func setNeedsNavigationItemUpdate() {
+        guard isViewLoaded else { return }
+        setNeedsUpdateProperties()
     }
 
-    private func show(view showView: UIView) {
-        for (index, containedView) in viewControllers.compactMap({ $0.view }).enumerated() {
-            let shouldHide = !(containedView == showView)
-            if !shouldHide {
-                let refreshViewController = viewControllers[index]
-
-                // Reload our view on subsequent appears, since backing relationships
-                // for objects might have changed while the view is in the background.
-                // This can mean our view state falls out of sync with our data state while backgrounded.
-                // Kickoff a reload to make sure our states match up.
-                reloadViewController(refreshViewController)
-
-                refreshViewController.refresh()
-            }
-            containedView.isHidden = shouldHide
+    private func updateSegmentedControlViews() {
+        if let viewController = currentViewController() {
+            show(viewController)
         }
+        setNeedsUpdateProperties()
+    }
+
+    // Tabs join the hierarchy the first time they're shown, so opening a screen doesn't build
+    // every tab behind it.
+    private func show(_ shownViewController: any ContainableViewController) {
+        if shownViewController.parent !== self {
+            addChild(shownViewController)
+            containerView.addSubview(shownViewController.view)
+            shownViewController.view.autoPinEdgesToSuperviewEdges()
+            shownViewController.enableRefreshing()
+            shownViewController.didMove(toParent: self)
+        }
+        for viewController in viewControllers where viewController.parent === self {
+            viewController.view.isHidden = viewController !== shownViewController
+        }
+        shownViewController.refresh()
         switchedToIndex(segmentedControl.selectedSegmentIndex)
     }
 
-    private func updateBarButtonItems() {
-        var rightBarButtonItems: [UIBarButtonItem] = self.rightBarButtonItems
-        if let viewController = currentViewController() {
-            rightBarButtonItems.append(contentsOf: viewController.additionalRightBarButtonItems)
-        }
-        navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
-    }
-
-    private func reloadViewController(_ viewController: UIViewController) {
-        if let viewController = viewController as? TBAViewController {
-            viewController.reloadData()
-        } else if let viewController = viewController as? UITableViewController {
-            viewController.tableView.reloadData()
-        } else if let viewController = viewController as? UICollectionViewController {
-            viewController.collectionView.reloadData()
-        }
-    }
-
     private func cancelRefreshes() {
-        viewControllers.forEach {
-            $0.cancelRefresh()
+        // Tabs that were never shown have nothing to cancel, and touching them would load their views.
+        for viewController in viewControllers where viewController.currentRefreshTask != nil {
+            viewController.cancelRefresh()
         }
     }
 
