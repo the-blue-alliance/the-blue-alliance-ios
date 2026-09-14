@@ -82,23 +82,20 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
         dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
-    // `String.contains` over ~10k teams is tens of ms per keystroke; keep it off the main actor.
+    // ~10k teams per keystroke; keep it off the main actor.
     @concurrent
     private nonisolated static func narrow(_ teams: [APITeam], matching query: String) async
         -> [APITeam]
     {
-        let query = query.lowercased()
-        return teams.filter { matches($0, query: query) }.sorted { $0.teamNumber < $1.teamNumber }
+        teams.filter { matches($0, query: query) }.sorted { $0.teamNumber < $1.teamNumber }
     }
 
+    // Only fields the row shows; the official name is a long sponsor list.
     private nonisolated static func matches(_ team: APITeam, query: String) -> Bool {
-        if "\(team.teamNumber)".contains(query) { return true }
-        if team.nickname.lowercased().contains(query) { return true }
-        if team.name.lowercased().contains(query) { return true }
-        if let city = team.city?.lowercased(), city.contains(query) { return true }
-        if let stateProv = team.stateProv?.lowercased(), stateProv.contains(query) { return true }
-        if let country = team.country?.lowercased(), country.contains(query) { return true }
-        return false
+        if "\(team.teamNumber)".hasPrefix(query) { return true }
+        return [team.nickname, team.city, team.stateProv, team.country].contains {
+            $0?.localizedStandardContains(query) == true
+        }
     }
 
     // MARK: - UITableView Delegate
@@ -113,7 +110,9 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     override func updateDataSource() {
         filterTask?.cancel()
         let candidates = filter(loadedTeams)
-        let query = searchController.searchBar.text ?? ""
+        let query = (searchController.searchBar.text ?? "").trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
         guard !query.isEmpty else {
             show(candidates.sorted { $0.teamNumber < $1.teamNumber })
             return

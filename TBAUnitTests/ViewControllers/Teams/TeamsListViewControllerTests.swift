@@ -8,13 +8,30 @@ import UIKit
 @MainActor
 struct TeamsListViewControllerTests {
 
-    private static func team(_ number: Int, _ nickname: String) -> TeamSimple {
-        TeamSimple(key: "frc\(number)", teamNumber: number, nickname: nickname, name: nickname)
+    private static func team(
+        _ number: Int,
+        _ nickname: String,
+        name: String? = nil,
+        city: String? = nil
+    ) -> TeamSimple {
+        TeamSimple(
+            key: "frc\(number)",
+            teamNumber: number,
+            nickname: nickname,
+            name: name ?? nickname,
+            city: city
+        )
     }
 
     private static func makeController() -> TeamsViewController {
+        makeController(teams: [
+            team(254, "The Cheesy Poofs"), team(2590, "Nemesis"), team(1114, "Simbotics"),
+        ])
+    }
+
+    private static func makeController(teams: [TeamSimple]) -> TeamsViewController {
         let api = MockTBAAPI()
-        api.teams = [team(254, "The Cheesy Poofs"), team(2590, "Nemesis"), team(1114, "Simbotics")]
+        api.teams = teams
         let controller = TeamsViewController(dependencies: .mock(api: api))
         controller.loadViewIfNeeded()
         return controller
@@ -49,7 +66,7 @@ struct TeamsListViewControllerTests {
         #expect(await Self.waitForTeams(controller, count: 3) == [254, 1114, 2590])
     }
 
-    @Test func matchesNumberNicknameAndName() async {
+    @Test func matchesNickname() async {
         let controller = Self.makeController()
         controller.refresh()
         _ = await Self.waitForTeams(controller, count: 3)
@@ -57,6 +74,51 @@ struct TeamsListViewControllerTests {
         controller.searchController.searchBar.text = "nemesis"
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 1) == [2590])
+    }
+
+    @Test func matchesNumbersFromTheFirstDigit() async {
+        let controller = Self.makeController(teams: [
+            Self.team(254, "The Cheesy Poofs"), Self.team(1254, "Iron Lions"),
+            Self.team(2590, "Nemesis"),
+        ])
+        controller.refresh()
+        _ = await Self.waitForTeams(controller, count: 3)
+
+        controller.searchController.searchBar.text = "25"
+        controller.updateDataSource()
+        #expect(await Self.waitForTeams(controller, count: 2) == [254, 2590])
+    }
+
+    @Test func ignoresCaseAccentsAndSurroundingSpaces() async {
+        let controller = Self.makeController(teams: [
+            Self.team(254, "The Cheesy Poofs"),
+            Self.team(1860, "Alphabots", city: "São José dos Campos"),
+        ])
+        controller.refresh()
+        _ = await Self.waitForTeams(controller, count: 2)
+
+        controller.searchController.searchBar.text = "SAO JOSE"
+        controller.updateDataSource()
+        #expect(await Self.waitForTeams(controller, count: 1) == [1860])
+
+        controller.searchController.searchBar.text = ""
+        controller.updateDataSource()
+        controller.searchController.searchBar.text = "poofs "
+        controller.updateDataSource()
+        #expect(await Self.waitForTeams(controller, count: 1) == [254])
+    }
+
+    @Test func ignoresTheOfficialName() async {
+        let controller = Self.makeController(teams: [
+            Self.team(1114, "Simbotics", name: "General Motors Canada & Governor Simcoe Secondary School"),
+            Self.team(2590, "Nemesis"),
+        ])
+        controller.refresh()
+        _ = await Self.waitForTeams(controller, count: 2)
+
+        controller.searchController.searchBar.text = "secondary"
+        controller.updateDataSource()
+        #expect(await Self.waitForTeams(controller, count: 0) == [])
     }
 
     @Test func everyTeamListShowsTheFilter() {
