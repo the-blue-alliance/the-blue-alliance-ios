@@ -253,7 +253,7 @@
 		5EC0D41A2C26091100000003 /* EventDivisionsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Event/EventDivisionsViewModelTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26091000000005 /* MatchTimesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/Match/MatchTimesViewModelTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/WeekEventsViewControllerTests.swift"; sourceTree = "<group>"; };
-		5EC0D41A2C26150200000001 /* EventViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/Event/EventViewControllerTests.swift"; sourceTree = "<group>"; };
+		5EC0D41A2C26150200000001 /* EventViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Events/EventViewControllerTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000001 /* DependenciesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mocks/DependenciesMocks.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000003 /* MatchBreakdownViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Match/MatchBreakdownViewControllerTests.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000005 /* TeamsListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewControllers/Teams/TeamsListViewControllerTests.swift"; sourceTree = "<group>"; };
