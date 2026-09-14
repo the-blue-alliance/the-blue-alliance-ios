@@ -109,8 +109,10 @@ struct TeamEventsViewControllerTests {
             try? await Task.sleep(for: .milliseconds(10))
         }
         let noDataView = controller.tableView.backgroundView as? NoDataView
-        #expect(noDataView?.contentUnavailableView.configuration.text == "No Data")
-        #expect(noDataView?.contentUnavailableView.configuration.secondaryText == "No events for team")
+        let configuration =
+            noDataView?.contentUnavailableView.configuration as? UIContentUnavailableConfiguration
+        #expect(configuration?.text == "No Data")
+        #expect(configuration?.secondaryText == "No events for team")
 
         api.teamEventsByYear[2025] = [Self.event("2025miket", year: 2025)]
         controller.refresh()
