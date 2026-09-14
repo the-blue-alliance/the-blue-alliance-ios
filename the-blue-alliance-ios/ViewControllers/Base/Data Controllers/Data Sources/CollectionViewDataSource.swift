@@ -7,7 +7,7 @@ class CollectionViewDataSource<Section: Hashable & Sendable, Item: Hashable & Se
     UICollectionViewDiffableDataSource<Section, Item>
 {
 
-    weak var delegate: (any Stateful & Refreshable)?
+    weak var noDataDelegate: (any Refreshable)?
 
     // MARK: - Public Methods
 
@@ -41,9 +41,9 @@ class CollectionViewDataSource<Section: Hashable & Sendable, Item: Hashable & Se
 
     private func updateEmptyState() {
         if isDataSourceEmpty {
-            delegate?.showNoDataView()
+            noDataDelegate?.showNoDataView()
         } else {
-            delegate?.removeNoDataView()
+            noDataDelegate?.removeNoDataView()
         }
     }
 

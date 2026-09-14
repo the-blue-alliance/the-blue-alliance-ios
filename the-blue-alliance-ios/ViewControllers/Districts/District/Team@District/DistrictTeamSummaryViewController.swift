@@ -6,7 +6,7 @@ protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
     func eventPointsSelected(eventKey: EventKey)
 }
 
-class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
+class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
 
     private let teamKey: String
     private let districtKey: String
@@ -117,8 +117,6 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable, St
             self.tableView.reloadData()
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No summary for team at district" }
 }

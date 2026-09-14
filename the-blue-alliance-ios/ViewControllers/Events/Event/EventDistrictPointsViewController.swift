@@ -65,7 +65,7 @@ nonisolated private struct TeamDistrictPointsRow: Hashable {
     let total: Int
 }
 
-private class EventDistrictPointsViewController: TBATableViewController, Refreshable, Stateful {
+private class EventDistrictPointsViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any EventDistrictPointsViewControllerDelegate)?
 
@@ -118,7 +118,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
             )
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -166,8 +166,6 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
             self.apply(points: response)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No district points for event" }
 }

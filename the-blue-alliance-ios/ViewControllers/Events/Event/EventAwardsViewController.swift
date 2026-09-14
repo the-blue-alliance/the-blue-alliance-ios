@@ -61,7 +61,7 @@ protocol EventAwardsViewControllerDelegate: AnyObject {
     func teamSelected(teamKey: String)
 }
 
-class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
+class EventAwardsViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any EventAwardsViewControllerDelegate)?
 
@@ -107,7 +107,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
             }
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -152,8 +152,6 @@ class EventAwardsViewController: TBATableViewController, Refreshable, Stateful {
             self.applyAwards(try await awardsHandle.value)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? {
         "No awards for \(teamKey != nil ? "team at event" : "event")"

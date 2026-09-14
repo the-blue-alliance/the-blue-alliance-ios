@@ -6,7 +6,7 @@ protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)
 }
 
-class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
+class DistrictsViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any DistrictsViewControllerDelegate)?
     var year: Int {
@@ -60,7 +60,7 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
             cell.accessibilityIdentifier = "district.\(district.key)"
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -86,8 +86,6 @@ class DistrictsViewController: TBATableViewController, Refreshable, Stateful {
             self.apply(districts)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No districts for year" }
 }

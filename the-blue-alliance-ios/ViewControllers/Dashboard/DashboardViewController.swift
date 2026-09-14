@@ -2,7 +2,7 @@ import Foundation
 import TBAAPI
 import UIKit
 
-class DashboardViewController: TBATableViewController, Refreshable, Stateful {
+class DashboardViewController: TBATableViewController, Refreshable {
 
     init(dependencies: Dependencies) {
         super.init(style: .insetGrouped, dependencies: dependencies)
@@ -21,8 +21,6 @@ class DashboardViewController: TBATableViewController, Refreshable, Stateful {
     func refresh() {
         noDataReload()
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "Nothing to show yet. Search for teams and events above." }
 

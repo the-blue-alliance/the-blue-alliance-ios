@@ -6,7 +6,7 @@ protocol EventRankingsViewControllerDelegate: AnyObject {
     func rankingSelected(_ ranking: EventRanking.RankingsPayloadPayload)
 }
 
-class EventRankingsViewController: TBATableViewController, Refreshable, Stateful {
+class EventRankingsViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any EventRankingsViewControllerDelegate)?
 
@@ -65,7 +65,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
             )
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -138,8 +138,6 @@ class EventRankingsViewController: TBATableViewController, Refreshable, Stateful
             self.applyRanking(response)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No rankings for event" }
 }

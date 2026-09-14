@@ -2,7 +2,7 @@ import Foundation
 import TBAAPI
 import UIKit
 
-class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stateful {
+class DistrictBreakdownViewController: TBATableViewController, Refreshable {
 
     private let teamKey: String
     private let districtKey: String
@@ -114,8 +114,6 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Stat
             self.tableView.reloadData()
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No district points for team" }
 }

@@ -27,10 +27,6 @@ class TBAViewController: UIViewController, DataController, Navigatable {
 
     var currentRefreshTask: Task<Void, Never>?
 
-    // MARK: - Stateful
-
-    var noDataViewController: NoDataViewController = NoDataViewController()
-
     // MARK: - Navigatable
 
     var additionalRightBarButtonItems: [UIBarButtonItem] {
@@ -95,43 +91,6 @@ extension Refreshable where Self: TBAViewController {
 
     var refreshView: UIScrollView {
         return scrollView
-    }
-
-    func hideNoData() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-    func noDataReload() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-}
-
-extension Stateful where Self: TBAViewController {
-
-    func addNoDataView(_ noDataView: UIView) {
-        view.insertSubview(noDataView, at: 0)
-        view.autoPinEdgesToSuperviewEdges()
-    }
-
-    func removeNoDataView(_ noDataView: UIView) {
-        noDataView.removeFromSuperview()
-    }
-
-}
-
-extension Refreshable where Self: TBAViewController & Stateful {
-
-    func hideNoData() {
-        removeNoDataView()
-    }
-
-    func noDataReload() {
-        if isDataSourceEmpty {
-            showNoDataView()
-        } else {
-            removeNoDataView()
-        }
     }
 
 }

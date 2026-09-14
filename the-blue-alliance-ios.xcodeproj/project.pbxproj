@@ -67,7 +67,6 @@
 		92435E2E23CBC2ED00CDD2D4 /* EventInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */; };
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
 		924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */; };
-		924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924AFD782171AB1A00D7BE7E /* NoDataView.xib */; };
 		924BDD8A26D2B366008BE7D2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */; };
 		924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */; };
 		924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */; };
@@ -152,7 +151,6 @@
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
 		92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */; };
-		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAF54F240775180078CA0A /* PhoneRootViewController.swift */; };
 		5EC0D41A2C26100100000004 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26100100000003 /* MoreViewController.swift */; };
@@ -162,7 +160,6 @@
 		92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D855D81EC695CE00572F27 /* TeamTableViewCell.xib */; };
 		92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92D8CD1220C2634200777D93 /* GoogleService-Info.plist */; };
 		92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF54E021B1B65A0082C58C /* StatusService.swift */; };
-		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F63E9B2BA91B4F0025CC03 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 92F63E9A2BA91B4F0025CC03 /* MyTBAKit */; };
 		92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F79A7523D6536A0026E9E8 /* SearchContainer.swift */; };
@@ -278,7 +275,6 @@
 		92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsView.swift; sourceTree = "<group>"; };
 		924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwardTableViewCell.swift; sourceTree = "<group>"; };
 		924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AwardTableViewCell.xib; sourceTree = "<group>"; };
-		924AFD782171AB1A00D7BE7E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
 		924BDD7E26D2A95D008BE7D2 /* MyTBAKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MyTBAKit; sourceTree = "<group>"; };
 		925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCell.swift; sourceTree = "<group>"; };
 		925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventAllianceTableViewCell.xib; sourceTree = "<group>"; };
@@ -361,7 +357,6 @@
 		92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
 		92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAContainerViewController.swift; sourceTree = "<group>"; };
-		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CAF54F240775180078CA0A /* PhoneRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRootViewController.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26100100000003 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
@@ -371,7 +366,6 @@
 		92D855D81EC695CE00572F27 /* TeamTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamTableViewCell.xib; sourceTree = "<group>"; };
 		92D8CD1220C2634200777D93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		92DF54E021B1B65A0082C58C /* StatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusService.swift; sourceTree = "<group>"; };
-		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F79A7523D6536A0026E9E8 /* SearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContainer.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
@@ -516,8 +510,6 @@
 			isa = PBXGroup;
 			children = (
 				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
-				92E9F0AA216C439700C1F916 /* NoDataViewController.swift */,
-				924AFD782171AB1A00D7BE7E /* NoDataView.xib */,
 			);
 			path = LaunchViews;
 			sourceTree = "<group>";
@@ -921,7 +913,6 @@
 			children = (
 				929F57292092BAFD00E5313A /* Refreshable.swift */,
 				929F572B2092BB1C00E5313A /* Alertable.swift */,
-				92C9BD342096907E007FB9C8 /* Stateful.swift */,
 				92BB8B63214F17440035AF28 /* URLOpener.swift */,
 				92C8CE4321ACB03300683558 /* Subscribable.swift */,
 				92F79A7523D6536A0026E9E8 /* SearchContainer.swift */,
@@ -1216,7 +1207,6 @@
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
-				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				A11CF00E00000000000000BB /* AppIcon.icon in Resources */,
 				3604CABD3040CAFF00DC500B /* Canopy.icon in Resources */,
@@ -1419,7 +1409,6 @@
 				92943B08222E1DF700EA35B2 /* SwitchTableViewCell.swift in Sources */,
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
 				5105636C2F97286300D7FB5D /* EventInsightsConfigurator2025.swift in Sources */,
-				92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */,
 				92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */,
 				D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */,
 				92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */,
@@ -1439,7 +1428,6 @@
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				9279737B23CFF39B00FF9B86 /* EventInsightsConfigurator2017.swift in Sources */,
-				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
 				92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */,
 				928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */,
 				9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */,

@@ -26,7 +26,7 @@ nonisolated struct TeamStatRow: Hashable {
     let ccwm: Float
 }
 
-class EventTeamStatsTableViewController: TBATableViewController, Refreshable, Stateful {
+class EventTeamStatsTableViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any EventTeamStatsSelectionDelegate)?
 
@@ -98,7 +98,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
             )
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -169,8 +169,6 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable, St
             self.apply(oprs: response)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No team stats for event" }
 }

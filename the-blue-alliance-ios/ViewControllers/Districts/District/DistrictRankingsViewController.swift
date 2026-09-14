@@ -6,7 +6,7 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ ranking: DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBASearchableTableViewController, Refreshable, Stateful {
+class DistrictRankingsViewController: TBASearchableTableViewController, Refreshable {
 
     weak var delegate: (any DistrictRankingsViewControllerDelegate)?
 
@@ -57,7 +57,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
             cell.accessibilityIdentifier = "ranking.\(ranking.teamKey)"
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -113,8 +113,6 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
             self.applyRankings(self.allRankings)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No rankings for district" }
 }

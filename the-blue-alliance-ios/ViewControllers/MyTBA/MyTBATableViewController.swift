@@ -75,10 +75,6 @@ class MyTBATableViewController: UIViewController, DataController,
 
     var currentRefreshTask: Task<Void, Never>?
 
-    // MARK: - Stateful
-
-    var noDataViewController: NoDataViewController = NoDataViewController()
-
     // MARK: - Navigatable
 
     var additionalRightBarButtonItems: [UIBarButtonItem] {
@@ -232,6 +228,7 @@ class MyTBATableViewController: UIViewController, DataController,
                 return UITableViewCell()
             }
         )
+        dataSource.noDataDelegate = self as? any Refreshable
         return dataSource
     }
 
@@ -341,15 +338,6 @@ class MyTBATableViewController: UIViewController, DataController,
                 return lhs.modelKey < rhs.modelKey
             }
         }
-    }
-
-    // MARK: - Stateful wiring
-
-    /// Concrete subclasses call this from `viewDidLoad` (after `super`) to
-    /// hook the no-data view into the data source. Walked via an Obj-C cast so
-    /// the base doesn't have to conform.
-    func attachStatefulDelegate() {
-        dataSource.statefulDelegate = self as? (any Refreshable & Stateful)
     }
 
     // MARK: - Refresh
@@ -506,7 +494,7 @@ extension MyTBATableViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - Refreshable / Stateful
+// MARK: - Refreshable
 
 extension Refreshable where Self: MyTBATableViewController {
 
@@ -516,52 +504,13 @@ extension Refreshable where Self: MyTBATableViewController {
     }
 
     var refreshView: UIScrollView { tableView }
-
-    func hideNoData() {
-        // Default no-op; the Stateful override handles the real case.
-    }
-
-    func noDataReload() {
-        // Default no-op; the Stateful override handles the real case.
-    }
-}
-
-extension Stateful where Self: MyTBATableViewController {
-
-    func addNoDataView(_ noDataView: UIView) {
-        tableView.backgroundView = noDataView
-    }
-
-    func removeNoDataView(_ noDataView: UIView) {
-        tableView.backgroundView = nil
-    }
-}
-
-extension Refreshable where Self: MyTBATableViewController & Stateful {
-
-    func hideNoData() {
-        removeNoDataView()
-    }
-
-    func noDataReload() {
-        if isDataSourceEmpty {
-            showNoDataView()
-        } else {
-            removeNoDataView()
-        }
-    }
 }
 
 // MARK: - Favorites
 
-class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, Stateful {
+class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable {
 
     private var favoritesStore: FavoritesStore { myTBAStores.favorites }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        attachStatefulDelegate()
-    }
 
     override var currentItems: [MyTBAItem] {
         favoritesStore.favorites.compactMap {
@@ -579,21 +528,14 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable, State
         dependencies.authService.isSignedIn && favoritesStore.favorites.isEmpty
     }
 
-    // MARK: - Stateful
-
     var noDataText: String? { "No favorites" }
 }
 
 // MARK: - Subscriptions
 
-class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, Stateful {
+class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable {
 
     private var subscriptionsStore: SubscriptionsStore { myTBAStores.subscriptions }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        attachStatefulDelegate()
-    }
 
     override var currentItems: [MyTBAItem] {
         subscriptionsStore.subscriptions.compactMap {
@@ -610,8 +552,6 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable, S
     var isDataSourceEmpty: Bool {
         dependencies.authService.isSignedIn && subscriptionsStore.subscriptions.isEmpty
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No subscriptions" }
 }

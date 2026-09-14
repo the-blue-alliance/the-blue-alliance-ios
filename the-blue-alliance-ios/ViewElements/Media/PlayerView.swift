@@ -18,10 +18,10 @@ class PlayerView: UIView {
     }()
     private(set) var loadedKey: String?
 
-    lazy var noDataViewController: NoDataViewController = {
-        let noDataViewController = NoDataViewController()
-        noDataViewController.view.backgroundColor = UIColor.systemGray6
-        return noDataViewController
+    private lazy var errorView: UIContentUnavailableView = {
+        let errorView = UIContentUnavailableView(configuration: .empty())
+        errorView.backgroundColor = UIColor.systemGray6
+        return errorView
     }()
 
     init() {
@@ -76,16 +76,18 @@ class PlayerView: UIView {
     }
 
     private func showErrorView(error: String) {
-        noDataViewController.textLabel.text = error
-        if noDataViewController.view.superview == nil {
-            addSubview(noDataViewController.view)
-            noDataViewController.view.autoPinEdgesToSuperviewEdges()
+        var configuration = UIContentUnavailableConfiguration.empty()
+        configuration.text = error
+        errorView.configuration = configuration
+        if errorView.superview == nil {
+            addSubview(errorView)
+            errorView.autoPinEdgesToSuperviewEdges()
         }
     }
 
     private func removeErrorView() {
-        if noDataViewController.view.superview != nil {
-            noDataViewController.view.removeFromSuperview()
+        if errorView.superview != nil {
+            errorView.removeFromSuperview()
         }
     }
 

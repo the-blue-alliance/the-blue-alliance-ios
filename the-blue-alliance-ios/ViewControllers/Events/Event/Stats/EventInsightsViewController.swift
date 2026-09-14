@@ -25,7 +25,7 @@ private final class EventInsightsDataSource: TableViewDataSource<String, Insight
     }
 }
 
-class EventInsightsViewController: TBATableViewController, Refreshable, Stateful {
+class EventInsightsViewController: TBATableViewController, Refreshable {
 
     private let eventKey: EventKey
     private let year: Int
@@ -139,7 +139,7 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
                 return cell
             }
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -182,8 +182,6 @@ class EventInsightsViewController: TBATableViewController, Refreshable, Stateful
         }
         return out
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? {
         guard eventStatsConfigurator == nil else {

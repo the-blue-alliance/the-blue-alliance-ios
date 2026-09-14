@@ -28,7 +28,7 @@ nonisolated struct BreakdownRow: Hashable, @unchecked Sendable {
 
 }
 
-class MatchBreakdownViewController: TBATableViewController, Refreshable, Stateful {
+class MatchBreakdownViewController: TBATableViewController, Refreshable {
 
     private var state: MatchState
     private let year: Int
@@ -100,7 +100,7 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
             cell.type = row.type
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -171,8 +171,6 @@ class MatchBreakdownViewController: TBATableViewController, Refreshable, Statefu
             )
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? {
         guard breakdownConfigurator == nil else {

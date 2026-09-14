@@ -7,7 +7,7 @@ protocol TeamsListViewControllerDelegate: AnyObject {
 
 class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     TBASearchableTableViewController,
-    Refreshable, Stateful
+    Refreshable
 {
 
     weak var delegate: (any TeamsListViewControllerDelegate)?
@@ -69,7 +69,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
             cell.accessibilityIdentifier = "team.\(team.key)"
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -140,8 +140,6 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
             self.applyTeams(try await self.loadTeams())
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No teams" }
 }

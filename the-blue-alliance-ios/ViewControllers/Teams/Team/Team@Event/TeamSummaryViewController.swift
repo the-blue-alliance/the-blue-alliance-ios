@@ -45,7 +45,7 @@ nonisolated private enum TeamSummaryItem: Hashable {
     case match(match: Match, baseTeamKey: String?)
 }
 
-class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
+class TeamSummaryViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any TeamSummaryViewControllerDelegate)?
 
@@ -164,7 +164,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
                 }
             }
         )
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -464,8 +464,6 @@ class TeamSummaryViewController: TBATableViewController, Refreshable, Stateful {
             self.rebuildSnapshot()
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No status for team at event" }
 }
