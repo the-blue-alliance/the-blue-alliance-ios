@@ -3,8 +3,8 @@ To develop for The Blue Alliance for iOS, you will need a machine running macOS.
 ## Install Build Tool Dependencies
 Xcode is the only prerequisite.
 
-1. Install [Xcode](https://developer.apple.com/xcode/) from the Mac App Store.
-   - The version pinned in CI is in [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) (currently **26.6**). Anything `>=` that should build cleanly.
+1. Install [Xcode 27](https://developer.apple.com/xcode/) from the Mac App Store. The app builds against the iOS 27 SDK and runs on iOS 26 and later.
+   - CI still builds with the version pinned in [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) (currently **26.6**) until GitHub's standard macOS runners ship Xcode 27, so changes need to build with both.
 2. Install the Xcode command line tools.
    - `xcode-select --install`
    - Or, open Xcode → Settings → Locations → Command Line Tools and select your version of Xcode.
@@ -49,7 +49,7 @@ Building in Xcode
 3. Open the workspace file (`the-blue-alliance-ios.xcworkspace`).
 4. Build and run The Blue Alliance for iOS.
 
-> **Pick a Simulator as the run destination.** In the Xcode toolbar, set the destination to one of the iOS Simulators (e.g. _iPhone 16 Pro_). Building against an attached physical device requires provisioning, a paid Apple Developer account, and a unique bundle identifier — none of which are necessary for day-to-day development. If you _do_ know what you're doing and want to run on hardware, change the bundle identifier to something namespaced to you (e.g. `com.the-blue-alliance.tba.<your-name>`) so it doesn't collide with the production build, and use your own signing team.
+> **Pick a Simulator as the run destination.** In the Xcode toolbar, set the destination to one of the iOS Simulators (e.g. _iPhone 17 Pro_). Building against an attached physical device requires provisioning, a paid Apple Developer account, and a unique bundle identifier — none of which are necessary for day-to-day development. If you _do_ know what you're doing and want to run on hardware, change the bundle identifier to something namespaced to you (e.g. `com.the-blue-alliance.tba.<your-name>`) so it doesn't collide with the production build, and use your own signing team.
 
 Updating Your Environment
 ---

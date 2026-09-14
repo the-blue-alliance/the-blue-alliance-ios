@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Your Environment (please complete the following information):**
  - Device: [e.g. iPhone XS]
- - OS: [e.g. iOS 12.1]
+ - OS: [e.g. iOS 27.0]
  - TBA for iOS Version: [e.g. 1.1.5]
 
 **Additional context**
