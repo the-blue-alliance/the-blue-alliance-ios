@@ -12,7 +12,7 @@ class EventTeamsViewController: TeamsListViewController<Team> {
     init(eventKey: EventKey, dependencies: Dependencies) {
         self.eventKey = eventKey
 
-        super.init(showSearch: false, dependencies: dependencies)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {

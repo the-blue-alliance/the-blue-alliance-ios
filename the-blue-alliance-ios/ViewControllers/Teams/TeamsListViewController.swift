@@ -18,10 +18,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
 
     private lazy var dataSource: TableViewDataSource<String, APITeam> = makeDataSource()
 
-    private let showSearch: Bool
-
-    init(showSearch: Bool = true, dependencies: Dependencies) {
-        self.showSearch = showSearch
+    init(dependencies: Dependencies) {
         super.init(dependencies: dependencies)
     }
 
@@ -34,9 +31,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if showSearch {
-            setupSearch()
-        }
+        setupSearch()
 
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.dataSource = dataSource
@@ -118,7 +113,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     override func updateDataSource() {
         filterTask?.cancel()
         let candidates = filter(loadedTeams)
-        let query = showSearch ? (searchController.searchBar.text ?? "") : ""
+        let query = searchController.searchBar.text ?? ""
         guard !query.isEmpty else {
             show(candidates.sorted { $0.teamNumber < $1.teamNumber })
             return

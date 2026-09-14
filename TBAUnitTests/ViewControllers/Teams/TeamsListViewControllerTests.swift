@@ -59,4 +59,17 @@ struct TeamsListViewControllerTests {
         #expect(await Self.waitForTeams(controller, count: 1) == [2590])
     }
 
+    @Test func everyTeamListShowsTheFilter() {
+        let dependencies = Dependencies.mock()
+        let lists: [TBASearchableTableViewController] = [
+            TeamsContainerViewController(dependencies: dependencies).teamsViewController,
+            EventTeamsViewController(eventKey: "2026casj", dependencies: dependencies),
+            DistrictTeamsViewController(districtKey: "2026fim", year: 2026, dependencies: dependencies),
+        ]
+        for list in lists {
+            list.loadViewIfNeeded()
+            #expect(list.tableView.tableHeaderView === list.searchController.searchBar)
+        }
+    }
+
 }
