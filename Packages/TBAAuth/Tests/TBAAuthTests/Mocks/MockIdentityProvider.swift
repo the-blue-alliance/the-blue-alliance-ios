@@ -60,15 +60,6 @@ final class MockIdentityProvider: IdentityProviding {
     }
 }
 
-@MainActor
-final class MockAuthStateObserver: AuthStateObserving {
-    private(set) var states: [Bool] = []
-
-    func authStateChanged(isSignedIn: Bool) {
-        states.append(isSignedIn)
-    }
-}
-
 final class MockReporter: Reporter {
     private(set) var errors: [Error] = []
     private(set) var messages: [String] = []

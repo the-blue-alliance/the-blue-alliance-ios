@@ -1,3 +1,4 @@
+import Observation
 import Testing
 import UIKit
 
@@ -140,47 +141,15 @@ struct AuthServiceTests {
         #expect(firebase.listenerCount == 1)
     }
 
-    @Test func observersReceiveStateChanges() {
-        let observer = MockAuthStateObserver()
-        service.addStateObserver(observer)
+    @Test func signInStateChangesAreObservable() async {
         service.start()
+        var changes = Observations { self.service.isSignedIn }.makeAsyncIterator()
+        #expect(await changes.next() == false)
 
-        firebase.fireStateChange(isSignedIn: true)
-        firebase.fireStateChange(isSignedIn: false)
-
-        #expect(observer.states == [true, false])
-    }
-
-    @Test func addingTheSameObserverTwiceDoesNotDoublePost() {
-        let observer = MockAuthStateObserver()
-        service.addStateObserver(observer)
-        service.addStateObserver(observer)
-        service.start()
-
+        firebase.isSignedIn = true
         firebase.fireStateChange(isSignedIn: true)
 
-        #expect(observer.states == [true])
-    }
-
-    @Test func removedObserverStopsReceivingUpdates() {
-        let observer = MockAuthStateObserver()
-        service.addStateObserver(observer)
-        service.start()
-        service.removeStateObserver(observer)
-
-        firebase.fireStateChange(isSignedIn: true)
-
-        #expect(observer.states.isEmpty)
-    }
-
-    @Test func observersAreHeldWeakly() {
-        var observer: MockAuthStateObserver? = MockAuthStateObserver()
-        service.addStateObserver(observer!)
-        service.start()
-
-        observer = nil
-        // Nothing to assert beyond "this doesn't crash on a zeroed reference".
-        firebase.fireStateChange(isSignedIn: true)
+        #expect(await changes.next() == true)
     }
 
     // MARK: - Derived state

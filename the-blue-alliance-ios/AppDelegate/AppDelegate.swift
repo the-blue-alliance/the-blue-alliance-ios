@@ -153,7 +153,6 @@ private extension AppDelegate {
     func configurePushNotifications() {
         messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
-        authService.addStateObserver(pushService)
         pushService.router = pushNotificationRouter
         // Best-effort registration; failures will surface later.
         pushService.registerForRemoteNotifications(nil)

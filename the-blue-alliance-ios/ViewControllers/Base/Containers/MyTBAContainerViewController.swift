@@ -33,32 +33,16 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
             segmentedControlTitles: segmentedControlTitles,
             dependencies: dependencies
         )
-
-        updateFavoriteButton()
-
-        dependencies.authService.addStateObserver(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Interface Methods
+    // MARK: - Navigation Item
 
-    func updateFavoriteButton() {
-        if dependencies.authService.isSignedIn {
-            rightBarButtonItems = [favoriteBarButtonItem]
-        } else {
-            rightBarButtonItems = []
-        }
-    }
-
-}
-
-extension MyTBAContainerViewController: AuthStateObserving {
-
-    func authStateChanged(isSignedIn: Bool) {
-        updateFavoriteButton()
+    override var currentRightBarButtonItems: [UIBarButtonItem] {
+        rightBarButtonItems + (dependencies.authService.isSignedIn ? [favoriteBarButtonItem] : [])
     }
 
 }

@@ -35,6 +35,12 @@ class ContainerViewController: UIViewController, Alertable, DependenciesProvidin
         }
     }
 
+    // What `updateProperties()` puts on the right of the bar, ahead of the selected tab's items.
+    // Override to derive the buttons from observable state; reads here are tracked.
+    var currentRightBarButtonItems: [UIBarButtonItem] {
+        rightBarButtonItems
+    }
+
     let dependencies: Dependencies
 
     // MARK: - Private View Elements
@@ -147,7 +153,8 @@ class ContainerViewController: UIViewController, Alertable, DependenciesProvidin
         navigationItem.title = navigationTitle
         navigationItem.subtitle = navigationSubtitle
         navigationItem.setRightBarButtonItems(
-            rightBarButtonItems + (currentViewController()?.additionalRightBarButtonItems ?? []),
+            currentRightBarButtonItems
+                + (currentViewController()?.additionalRightBarButtonItems ?? []),
             animated: false
         )
     }

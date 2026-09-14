@@ -1,4 +1,5 @@
 import MyTBAKit
+import Observation
 import Photos
 import PureLayout
 import TBAAPI
@@ -24,10 +25,11 @@ class MyTBAViewController: ContainerViewController {
     )
     private var signOutActivityIndicatorBarButtonItem =
         UIBarButtonItem.activityIndicatorBarButtonItem()
+    private var signInObservation: Task<Void, Never>?
 
     var isLoggingOut: Bool = false {
         didSet {
-            updateInterface()
+            setNeedsUpdateProperties()
         }
     }
     private var isLoggedIn: Bool {
@@ -59,6 +61,10 @@ class MyTBAViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    isolated deinit {
+        signInObservation?.cancel()
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -66,7 +72,7 @@ class MyTBAViewController: ContainerViewController {
 
         styleInterface()
 
-        dependencies.authService.addStateObserver(self)
+        observeSignIn()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -88,21 +94,38 @@ class MyTBAViewController: ContainerViewController {
             signInView.autoPinEdge(toSuperviewEdge: edge)
         }
         signInViewController.didMove(toParent: self)
-
-        updateInterface()
     }
 
-    private func updateInterface() {
+    override var currentRightBarButtonItems: [UIBarButtonItem] {
         if isLoggingOut {
-            rightBarButtonItems = [signOutActivityIndicatorBarButtonItem]
-        } else {
-            rightBarButtonItems = isLoggedIn ? [signOutBarButtonItem] : []
+            return [signOutActivityIndicatorBarButtonItem]
         }
+        return isLoggedIn ? [signOutBarButtonItem] : []
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
 
         // Disable interaction with our view while logging out
         view.isUserInteractionEnabled = !isLoggingOut
 
         signInView.isHidden = isLoggedIn
+    }
+
+    // The rest of the screen follows `isSignedIn` through `updateProperties()`; this refreshes the
+    // current tab when someone signs in.
+    private func observeSignIn() {
+        let authService = dependencies.authService
+        signInObservation = Task { [weak self] in
+            var wasSignedIn = authService.isSignedIn
+            for await isSignedIn in Observations({ authService.isSignedIn }) {
+                guard let self else { return }
+                if isSignedIn, !wasSignedIn {
+                    currentViewController()?.refresh()
+                }
+                wasSignedIn = isSignedIn
+            }
+        }
     }
 
     private func logout() {
@@ -165,17 +188,6 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
     func teamSelected(teamKey: TeamKey) {
         let viewController = TeamViewController(teamKey: teamKey, dependencies: dependencies)
         navigationController?.pushViewController(viewController, animated: true)
-    }
-
-}
-
-extension MyTBAViewController: AuthStateObserving {
-
-    func authStateChanged(isSignedIn: Bool) {
-        if isSignedIn, let viewController = currentViewController() {
-            viewController.refresh()
-        }
-        updateInterface()
     }
 
 }

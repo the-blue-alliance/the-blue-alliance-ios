@@ -305,7 +305,7 @@ struct MyTBATableViewControllerTests {
         try? await Task.sleep(for: .milliseconds(10))
 
         try? await dependencies.myTBASession.signOut()
-        controller.authStateChanged(isSignedIn: false)
+        controller.updatePropertiesIfNeeded()
         window.layoutIfNeeded()
 
         #expect(await Self.waitForRows(controller.favoritesViewController, count: 0) == 0)

@@ -16,14 +16,14 @@ class MyTBAPreferenceViewController: TBATableViewController,
     private(set) var isFavoriteInitially: Bool
     var isFavorite: Bool {
         didSet {
-            updateInterface()
+            setNeedsUpdateProperties()
         }
     }
 
     private(set) var notificationsInitial: [NotificationType]
     var notifications: [NotificationType] {
         didSet {
-            updateInterface()
+            setNeedsUpdateProperties()
         }
     }
 
@@ -38,7 +38,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
     // silently wipe the user's real server-side subscriptions.
     private var isLoading: Bool = false {
         didSet {
-            updateInterface()
+            setNeedsUpdateProperties()
         }
     }
     private var loadFailed: Bool = false
@@ -49,7 +49,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
 
     private var isSaving: Bool = false {
         didSet {
-            updateInterface()
+            setNeedsUpdateProperties()
             tableView.reloadData()
         }
     }
@@ -117,10 +117,12 @@ class MyTBAPreferenceViewController: TBATableViewController,
 
     func styleInterface() {
         navigationItem.leftBarButtonItem = closeBarButtonItem
-        updateInterface()
+        setNeedsUpdateProperties()
     }
 
-    func updateInterface() {
+    override func updateProperties() {
+        super.updateProperties()
+
         saveBarButtonItem.isEnabled = hasChanges && !isLoading && !loadFailed
         isModalInPresentation = hasChanges
 

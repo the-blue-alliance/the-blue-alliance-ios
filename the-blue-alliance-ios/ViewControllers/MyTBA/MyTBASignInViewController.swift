@@ -14,8 +14,7 @@ class MyTBASignInViewController: UIViewController {
 
     private var isSigningIn: Bool = false {
         didSet {
-            googleSignInButton.isEnabled = !isSigningIn
-            appleSignInButton.isEnabled = !isSigningIn
+            setNeedsUpdateProperties()
         }
     }
 
@@ -127,6 +126,13 @@ class MyTBASignInViewController: UIViewController {
         coordinator.animate { [weak self] _ in
             self?.applyImageVisibility(for: newCollection)
         }
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+
+        googleSignInButton.isEnabled = !isSigningIn
+        appleSignInButton.isEnabled = !isSigningIn
     }
 
     // MARK: - Interface Methods
