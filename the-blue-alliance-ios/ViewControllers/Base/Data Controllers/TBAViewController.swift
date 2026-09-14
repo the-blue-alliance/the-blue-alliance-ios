@@ -4,17 +4,9 @@ import TBAAPI
 import UIKit
 import PureLayout
 
-typealias DataController = Alertable
-
-class TBAViewController: UIViewController, DataController, Navigatable {
+class TBAViewController: UIViewController, Alertable, DependenciesProviding, Navigatable {
 
     let dependencies: Dependencies
-
-    var api: any TBAAPIProtocol { dependencies.api }
-    var myTBA: any MyTBAProtocol { dependencies.myTBA }
-    var myTBAStores: MyTBAStores { dependencies.myTBAStores }
-    var statusService: any StatusServiceProtocol { dependencies.statusService }
-    var urlOpener: any URLOpener { dependencies.urlOpener }
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
@@ -69,11 +61,6 @@ class TBAViewController: UIViewController, DataController, Navigatable {
         super.viewDidAppear(animated)
 
         (self as? any Refreshable)?.updateRefreshOnAppear()
-    }
-
-    // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
-    func reloadData() {
-        fatalError("Implement this downstream")
     }
 
 }

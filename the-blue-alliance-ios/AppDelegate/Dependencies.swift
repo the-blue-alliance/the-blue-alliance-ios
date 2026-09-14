@@ -38,3 +38,15 @@ class Dependencies {
         self.urlOpener = urlOpener
     }
 }
+
+protocol DependenciesProviding: AnyObject {
+    var dependencies: Dependencies { get }
+}
+
+extension DependenciesProviding {
+    var api: any TBAAPIProtocol { dependencies.api }
+    var myTBA: any MyTBAProtocol { dependencies.myTBA }
+    var myTBAStores: MyTBAStores { dependencies.myTBAStores }
+    var statusService: any StatusServiceProtocol { dependencies.statusService }
+    var urlOpener: any URLOpener { dependencies.urlOpener }
+}

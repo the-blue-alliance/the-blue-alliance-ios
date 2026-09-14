@@ -3,15 +3,9 @@ import MyTBAKit
 import TBAAPI
 import UIKit
 
-class TBATableViewController: UITableViewController, DataController, Navigatable {
+class TBATableViewController: UITableViewController, Alertable, DependenciesProviding, Navigatable {
 
     let dependencies: Dependencies
-
-    var api: any TBAAPIProtocol { dependencies.api }
-    var myTBA: any MyTBAProtocol { dependencies.myTBA }
-    var myTBAStores: MyTBAStores { dependencies.myTBAStores }
-    var statusService: any StatusServiceProtocol { dependencies.statusService }
-    var urlOpener: any URLOpener { dependencies.urlOpener }
 
     // MARK: - Refreshable
 

@@ -11,7 +11,7 @@ protocol Navigatable {
 
 typealias ContainableViewController = UIViewController & Refreshable & Navigatable
 
-class ContainerViewController: UIViewController, Alertable {
+class ContainerViewController: UIViewController, Alertable, DependenciesProviding {
 
     // MARK: - Public Properties
 
@@ -34,12 +34,6 @@ class ContainerViewController: UIViewController, Alertable {
     }
 
     let dependencies: Dependencies
-
-    var api: any TBAAPIProtocol { dependencies.api }
-    var myTBA: any MyTBAProtocol { dependencies.myTBA }
-    var myTBAStores: MyTBAStores { dependencies.myTBAStores }
-    var statusService: any StatusServiceProtocol { dependencies.statusService }
-    var urlOpener: any URLOpener { dependencies.urlOpener }
 
     // MARK: - Private View Elements
 
