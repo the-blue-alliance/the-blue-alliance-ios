@@ -150,7 +150,8 @@ class ContainerViewController: UIViewController, Alertable, DependenciesProvidin
     override func updateProperties() {
         super.updateProperties()
 
-        navigationItem.title = navigationTitle
+        // Some containers only set `title`, which UIKit copies to the navigation item.
+        navigationItem.title = navigationTitle ?? title
         navigationItem.subtitle = navigationSubtitle
         navigationItem.setRightBarButtonItems(
             currentRightBarButtonItems
