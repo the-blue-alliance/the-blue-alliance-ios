@@ -11,7 +11,7 @@ class TeamsContainerViewController: ContainerViewController {
 
     init(dependencies: Dependencies) {
 
-        teamsViewController = TeamsViewController(showSearch: false, dependencies: dependencies)
+        teamsViewController = TeamsViewController(dependencies: dependencies)
 
         super.init(viewControllers: [teamsViewController], dependencies: dependencies)
 

@@ -10,7 +10,7 @@ class DistrictTeamsViewController: TeamsListViewController<TeamSimple> {
         self.districtKey = districtKey
         self.year = year
 
-        super.init(showSearch: false, dependencies: dependencies)
+        super.init(dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
