@@ -344,7 +344,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 return cell
             }
         }
-        dataSource.delegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -456,7 +456,7 @@ extension TeamMediaCollectionViewController: Refreshable {
 
 }
 
-extension TeamMediaCollectionViewController: Stateful {
+extension TeamMediaCollectionViewController {
 
     var noDataText: String? {
         return "No media for team"

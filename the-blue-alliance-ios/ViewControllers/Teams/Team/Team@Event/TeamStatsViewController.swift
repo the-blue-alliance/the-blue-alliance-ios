@@ -2,7 +2,7 @@ import Foundation
 import TBAAPI
 import UIKit
 
-class TeamStatsViewController: TBATableViewController, Refreshable, Stateful {
+class TeamStatsViewController: TBATableViewController, Refreshable {
 
     private let teamKey: String
     private let eventKey: EventKey
@@ -71,8 +71,6 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Stateful {
             self.tableView.reloadData()
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No stats for team at event" }
 }

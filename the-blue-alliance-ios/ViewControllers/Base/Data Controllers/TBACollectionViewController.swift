@@ -17,10 +17,6 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
 
     var currentRefreshTask: Task<Void, Never>?
 
-    // MARK: - Stateful
-
-    var noDataViewController: NoDataViewController = NoDataViewController()
-
     // MARK: - Navigatable
 
     var additionalRightBarButtonItems: [UIBarButtonItem] {
@@ -73,42 +69,6 @@ extension Refreshable where Self: TBACollectionViewController {
 
     var refreshView: UIScrollView {
         return collectionView
-    }
-
-    func hideNoData() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-    func noDataReload() {
-        // Does not conform to Stateful - probably no no data view
-    }
-
-}
-
-extension Stateful where Self: TBACollectionViewController {
-
-    func addNoDataView(_ noDataView: UIView) {
-        collectionView.backgroundView = noDataView
-    }
-
-    func removeNoDataView(_ view: UIView) {
-        collectionView.backgroundView = nil
-    }
-
-}
-
-extension Refreshable where Self: TBACollectionViewController & Stateful {
-
-    func hideNoData() {
-        removeNoDataView()
-    }
-
-    func noDataReload() {
-        if isDataSourceEmpty {
-            showNoDataView()
-        } else {
-            removeNoDataView()
-        }
     }
 
 }

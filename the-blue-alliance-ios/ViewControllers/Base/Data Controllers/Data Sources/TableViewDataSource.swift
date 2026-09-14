@@ -11,7 +11,7 @@ class TableViewDataSource<Section: Hashable & Sendable, Item: Hashable & Sendabl
     >
 {
 
-    weak var statefulDelegate: (any Stateful & Refreshable)?
+    weak var noDataDelegate: (any Refreshable)?
 
     // MARK: - Public Methods
 
@@ -45,9 +45,9 @@ class TableViewDataSource<Section: Hashable & Sendable, Item: Hashable & Sendabl
 
     private func updateEmptyState() {
         if isDataSourceEmpty {
-            statefulDelegate?.showNoDataView()
+            noDataDelegate?.showNoDataView()
         } else {
-            statefulDelegate?.removeNoDataView()
+            noDataDelegate?.removeNoDataView()
         }
     }
 

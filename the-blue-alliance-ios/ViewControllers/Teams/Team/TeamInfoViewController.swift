@@ -14,7 +14,7 @@ nonisolated private enum TeamInfoItem {
     case website
 }
 
-class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
+class TeamInfoViewController: TBATableViewController, Refreshable {
 
     private var state: TeamState
 
@@ -207,8 +207,4 @@ class TeamInfoViewController: TBATableViewController, Refreshable, Stateful {
             self.updateTeamInfo()
         }
     }
-
-    // MARK: - Stateful
-
-    var noDataText: String? { nil }
 }

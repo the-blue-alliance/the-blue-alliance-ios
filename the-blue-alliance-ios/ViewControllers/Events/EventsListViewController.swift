@@ -24,7 +24,7 @@ private final class EventsListDataSource: TableViewDataSource<EventSection, Even
     }
 }
 
-class EventsListViewController: TBATableViewController, Refreshable, Stateful {
+class EventsListViewController: TBATableViewController, Refreshable {
 
     typealias APIEvent = Event
 
@@ -69,7 +69,7 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
             _ = self
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         dataSource.titleOverride = { [weak self] event in self?.delegate?.title(for: event) }
         tableView.dataSource = dataSource
         return dataSource
@@ -105,8 +105,6 @@ class EventsListViewController: TBATableViewController, Refreshable, Stateful {
             self.applyEvents(loaded)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { fatalError("subclass must override") }
 }

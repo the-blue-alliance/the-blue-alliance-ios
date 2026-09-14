@@ -12,18 +12,19 @@ protocol Refreshable: AnyObject {
     var isDataSourceEmpty: Bool { get }
     /// False when the screen has nothing to fetch, so containers don't attach a refresh control.
     var supportsRefreshing: Bool { get }
+    /// Shown behind the list when it's empty. `nil` shows nothing.
+    var noDataText: String? { get }
 
     func refresh()
 
     func updateRefresh()
-
-    func hideNoData()
-    func noDataReload()
 }
 
 extension Refreshable {
 
     var supportsRefreshing: Bool { true }
+
+    var noDataText: String? { nil }
 
     var isRefreshing: Bool {
         guard let task = currentRefreshTask else { return false }
@@ -56,7 +57,7 @@ extension Refreshable {
 
     func updateRefresh() {
         if isRefreshing {
-            hideNoData()
+            removeNoDataView()
 
             showRefreshControl()
         } else {
@@ -109,6 +110,66 @@ extension Refreshable {
 
     func disableRefreshing() {
         refreshControl = nil
+    }
+
+    // MARK: - No Data
+
+    func noDataReload() {
+        if isDataSourceEmpty {
+            showNoDataView()
+        } else {
+            removeNoDataView()
+        }
+    }
+
+    /// Skipped mid-refresh so it doesn't flash before the data lands.
+    func showNoDataView() {
+        guard !isRefreshing else {
+            return
+        }
+        guard let noDataText else {
+            removeNoDataView()
+            return
+        }
+
+        var configuration = UIContentUnavailableConfiguration.empty()
+        configuration.text = noDataText
+
+        if let noDataView = listBackgroundView as? UIContentUnavailableView {
+            noDataView.configuration = configuration
+            return
+        }
+
+        let noDataView = UIContentUnavailableView(configuration: configuration)
+        noDataView.alpha = 0
+        listBackgroundView = noDataView
+        UIView.animate(withDuration: 0.25) {
+            noDataView.alpha = 1
+        }
+    }
+
+    func removeNoDataView() {
+        if listBackgroundView is UIContentUnavailableView {
+            listBackgroundView = nil
+        }
+    }
+
+    // Behind the cells, where it can't intercept the pull-to-refresh drag.
+    private var listBackgroundView: UIView? {
+        get {
+            switch refreshView {
+            case let tableView as UITableView: tableView.backgroundView
+            case let collectionView as UICollectionView: collectionView.backgroundView
+            default: nil
+            }
+        }
+        set {
+            switch refreshView {
+            case let tableView as UITableView: tableView.backgroundView = newValue
+            case let collectionView as UICollectionView: collectionView.backgroundView = newValue
+            default: break
+            }
+        }
     }
 
 }

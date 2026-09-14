@@ -137,7 +137,5 @@ class WeekEventsViewController: EventsListViewController {
             .first
     }
 
-    // MARK: - Stateful
-
     override var noDataText: String? { "No events for year" }
 }

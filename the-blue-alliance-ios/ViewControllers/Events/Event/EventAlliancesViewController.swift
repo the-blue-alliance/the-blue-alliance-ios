@@ -60,7 +60,7 @@ protocol EventAlliancesViewControllerDelegate: AnyObject {
     func teamSelected(teamKey: String)
 }
 
-private class EventAlliancesViewController: TBATableViewController, Refreshable, Stateful {
+private class EventAlliancesViewController: TBATableViewController, Refreshable {
 
     private let eventKey: EventKey
     private var alliances: [EliminationAlliance] = []
@@ -129,8 +129,6 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable,
             self.tableView.reloadData()
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? { "No alliances for event" }
 }

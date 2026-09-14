@@ -8,7 +8,7 @@ protocol MatchesViewControllerDelegate: AnyObject {
     func matchSelected(_ match: Match)
 }
 
-class MatchesViewController: TBATableViewController, Refreshable, Stateful {
+class MatchesViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any MatchesViewControllerDelegate)?
     var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
@@ -108,7 +108,7 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             cell.accessibilityIdentifier = "match.\(match.key)"
             return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.noDataDelegate = self
         return dataSource
     }
 
@@ -189,8 +189,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             self.applyMatches(self.allMatches)
         }
     }
-
-    // MARK: - Stateful
 
     var noDataText: String? {
         if query.isDefault {

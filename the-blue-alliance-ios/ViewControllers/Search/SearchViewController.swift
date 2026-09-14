@@ -105,7 +105,6 @@ class SearchViewController: TBATableViewController {
                 return cell
             }
         }
-        dataSource.statefulDelegate = self
         return dataSource
     }
 
@@ -144,6 +143,8 @@ class SearchViewController: TBATableViewController {
     }
 
     private func show(teams: [SearchItem], events: [SearchItem]) {
+        // The view controller's empty state rather than the list background, so it sits clear of
+        // the keyboard.
         contentUnavailableConfiguration =
             teams.isEmpty && events.isEmpty ? UIContentUnavailableConfiguration.search() : nil
         var snapshot = NSDiffableDataSourceSnapshot<SearchSection, SearchItem>()
@@ -248,14 +249,4 @@ extension SearchViewController: Refreshable {
         guard index == nil else { return }
         loadIndex()
     }
-}
-
-extension SearchViewController: Stateful {
-    // Empty states here are the system's content unavailable configuration, which sits clear
-    // of the keyboard. The table background overlay is not used.
-    var noDataText: String? { nil }
-
-    func addNoDataView(_ noDataView: UIView) {}
-
-    func removeNoDataView(_ noDataView: UIView) {}
 }

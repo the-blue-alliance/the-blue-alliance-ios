@@ -31,7 +31,7 @@ nonisolated private enum EventInfoItem: Hashable {
     case advancesTo(EventDivision)
 }
 
-class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
+class EventInfoViewController: TBATableViewController, Refreshable {
 
     private var state: EventState
     private let eventName: String?
@@ -334,8 +334,4 @@ class EventInfoViewController: TBATableViewController, Refreshable, Stateful {
             }
         )
     }
-
-    // MARK: - Stateful
-
-    var noDataText: String? { nil }
 }

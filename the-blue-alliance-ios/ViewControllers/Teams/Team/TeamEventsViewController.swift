@@ -30,7 +30,5 @@ class TeamEventsViewController: EventsListViewController {
         return try await dependencies.api.teamEventsByYear(key: teamKey, year: year)
     }
 
-    // MARK: - Stateful
-
     override var noDataText: String? { "No events for team" }
 }
