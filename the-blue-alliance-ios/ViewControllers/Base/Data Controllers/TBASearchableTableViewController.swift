@@ -7,32 +7,27 @@ protocol SearchableController {
 
 class TBASearchableTableViewController: TBATableViewController, SearchableController {
 
-    lazy var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.tintColor = UIColor.tabBarTintColor
-        return searchController
+    lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.tintColor = UIColor.tabBarTintColor
+        // Blue like the segmented control above it, so the filter reads as part of the header.
+        searchBar.backgroundImage = UIImage()
+        searchBar.backgroundColor = UIColor.navigationBarTintColor
+        return searchBar
     }()
 
-    // MARK: - Public Methods
-
-    func setupSearch() {
-        tableView.tableHeaderView = searchController.searchBar
-        // Hack to fix white background when refreshing in dark mode
-        tableView.backgroundView = UIView()
-
-        // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
-        definesPresentationContext = true
+    // The container pins it above the list, so it stays put while the list scrolls.
+    override var containerAccessoryView: UIView? {
+        return searchBar
     }
 
-    // MARK: - Table View Delegate
+    // MARK: - View Lifecycle
 
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let text = searchController.searchBar.text, text.isEmpty, searchController.isActive {
-            searchController.isActive = false
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.keyboardDismissMode = .onDrag
     }
 
     // MARK: - SearchableController
@@ -43,9 +38,28 @@ class TBASearchableTableViewController: TBATableViewController, SearchableContro
 
 }
 
-extension TBASearchableTableViewController: UISearchResultsUpdating {
+extension TBASearchableTableViewController: UISearchBarDelegate {
 
-    func updateSearchResults(for searchController: UISearchController) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        updateDataSource()
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        // Cancel stays while a filter is applied, so it can still be cleared in one tap.
+        searchBar.setShowsCancelButton(!(searchBar.text ?? "").isEmpty, animated: true)
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
         updateDataSource()
     }
 

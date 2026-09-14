@@ -17,6 +17,10 @@ class TBATableViewController: UITableViewController, Alertable, DependenciesProv
         return []
     }
 
+    var containerAccessoryView: UIView? {
+        return nil
+    }
+
     // MARK: - Init
 
     init(style: UITableView.Style = .plain, dependencies: Dependencies) {

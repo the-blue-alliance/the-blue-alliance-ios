@@ -7,6 +7,8 @@ import PureLayout
 protocol Navigatable {
     // Protocol to allow container views to show right bar button items in their container view
     var additionalRightBarButtonItems: [UIBarButtonItem] { get }
+    // Pinned between the segmented control and the list while this child is selected.
+    var containerAccessoryView: UIView? { get }
 }
 
 typealias ContainableViewController = UIViewController & Refreshable & Navigatable
@@ -51,6 +53,7 @@ class ContainerViewController: UIViewController, Alertable, DependenciesProvidin
 
     private let containerView: UIView = UIView()
     private let viewControllers: [any ContainableViewController]
+    private var shownAccessoryView: UIView?
     lazy var rootStackView: UIStackView = {
         // Skip the segmented control when there's nothing to switch between
         var arrangedSubviews = [containerView]
@@ -262,8 +265,21 @@ class ContainerViewController: UIViewController, Alertable, DependenciesProvidin
         for viewController in viewControllers where viewController.parent === self {
             viewController.view.isHidden = viewController !== shownViewController
         }
+        showAccessoryView(of: shownViewController)
         shownViewController.refresh()
         switchedToIndex(segmentedControl.selectedSegmentIndex)
+    }
+
+    private func showAccessoryView(of viewController: any ContainableViewController) {
+        let accessoryView = viewController.containerAccessoryView
+        guard accessoryView !== shownAccessoryView else { return }
+        shownAccessoryView?.removeFromSuperview()
+        if let accessoryView,
+            let index = rootStackView.arrangedSubviews.firstIndex(of: containerView)
+        {
+            rootStackView.insertArrangedSubview(accessoryView, at: index)
+        }
+        shownAccessoryView = accessoryView
     }
 
     private func cancelRefreshes() {

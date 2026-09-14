@@ -75,6 +75,10 @@ class MyTBATableViewController: UIViewController, Alertable, DependenciesProvidi
         return []
     }
 
+    var containerAccessoryView: UIView? {
+        return nil
+    }
+
     // MARK: - Views
 
     private(set) lazy var tableView: UITableView = {

@@ -19,6 +19,10 @@ class TBACollectionViewController: UICollectionViewController, Alertable, Depend
         return []
     }
 
+    var containerAccessoryView: UIView? {
+        return nil
+    }
+
     // MARK: - Init
 
     init(

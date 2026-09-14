@@ -9,9 +9,12 @@ struct ContainerViewControllerTests {
 
     private final class StubTab: TBATableViewController, Refreshable {
         var barButtonItems: [UIBarButtonItem] = []
+        var accessoryView: UIView?
         private(set) var refreshCount = 0
 
         override var additionalRightBarButtonItems: [UIBarButtonItem] { barButtonItems }
+
+        override var containerAccessoryView: UIView? { accessoryView }
 
         var isDataSourceEmpty: Bool { false }
 
@@ -25,7 +28,7 @@ struct ContainerViewControllerTests {
         let second: StubTab
         let container: ContainerViewController
 
-        init() {
+        init(firstAccessoryView: UIView? = nil) {
             let dependencies = Dependencies.mock()
             first = StubTab(dependencies: dependencies)
             second = StubTab(dependencies: dependencies)
@@ -35,6 +38,7 @@ struct ContainerViewControllerTests {
                 segmentedControlTitles: ["First", "Second"],
                 dependencies: dependencies
             )
+            first.accessoryView = firstAccessoryView
             container.loadViewIfNeeded()
             container.beginAppearanceTransition(true, animated: false)
             container.endAppearanceTransition()
@@ -48,6 +52,15 @@ struct ContainerViewControllerTests {
         #expect(harness.first.refreshCount == 1)
         #expect(harness.second.parent == nil)
         #expect(!harness.second.isViewLoaded)
+    }
+
+    @Test func theSelectedTabsAccessoryIsPinnedAboveTheList() {
+        let accessoryView = UIView()
+        let harness = Harness(firstAccessoryView: accessoryView)
+
+        let arrangedSubviews = harness.container.rootStackView.arrangedSubviews
+        #expect(arrangedSubviews.contains(accessoryView))
+        #expect(arrangedSubviews.firstIndex(of: accessoryView) == arrangedSubviews.count - 2)
     }
 
     @Test func navigationItemFollowsTheContainerAndItsSelectedTab() {

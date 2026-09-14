@@ -25,6 +25,10 @@ class TBAViewController: UIViewController, Alertable, DependenciesProviding, Nav
         return []
     }
 
+    var containerAccessoryView: UIView? {
+        return nil
+    }
+
     // MARK: - Init
 
     init(dependencies: Dependencies) {
