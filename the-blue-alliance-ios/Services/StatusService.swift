@@ -1,8 +1,9 @@
 import Foundation
+import Observation
 import TBAAPI
 import TBAUtils
 
-struct AppStatus {
+struct AppStatus: Equatable {
     let currentSeason: Int
     let maxSeason: Int
     let minAppVersion: Int
@@ -60,16 +61,10 @@ protocol StatusServiceProtocol: AnyObject {
     var currentSeason: Int { get }
     var maxSeason: Int { get }
 
-    func registerForStatusChanges(_ subscriber: any StatusSubscribable)
-    func registerForFMSStatusChanges(_ subscriber: any FMSStatusSubscribable)
-    func registerForEventStatusChanges(
-        _ subscriber: any EventStatusSubscribable,
-        eventKey: EventKey
-    )
-
     func start()
 }
 
+@Observable
 final class StatusService: StatusServiceProtocol {
 
     private let reporter: any Reporter
@@ -77,13 +72,7 @@ final class StatusService: StatusServiceProtocol {
 
     private(set) var status: AppStatus = .default
 
-    private let statusSubscribers = NSHashTable<AnyObject>.weakObjects()
-    private let fmsStatusSubscribers = NSHashTable<AnyObject>.weakObjects()
-    private let eventStatusSubscribers = NSMapTable<NSString, NSHashTable<AnyObject>>()
-
-    private var previousFMSStatus: Bool = false
-    private var previouslyDownEventKeys: [String] = []
-    private var pollTask: Task<Void, Never>?
+    @ObservationIgnored private var pollTask: Task<Void, Never>?
 
     var currentSeason: Int { status.currentSeason }
     var maxSeason: Int { status.maxSeason }
@@ -107,121 +96,13 @@ final class StatusService: StatusServiceProtocol {
     private func fetchStatus() async {
         do {
             let newStatus = AppStatus(apiStatus: try await api.getStatus())
-            status = newStatus
-            dispatchStatusChanged(newStatus)
-            dispatchFMSDown(newStatus.isDatafeedDown)
-            dispatchEvents(downEventKeys: newStatus.downEventKeys)
+            // Every assignment notifies observers, and this polls every five minutes.
+            if newStatus != status {
+                status = newStatus
+            }
         } catch {
             reporter.record(error)
         }
-    }
-
-    private func dispatchStatusChanged(_ status: AppStatus) {
-        for obj in statusSubscribers.allObjects {
-            (obj as? any StatusSubscribable)?.statusChanged(status: status)
-        }
-    }
-
-    private func dispatchFMSDown(_ fmsStatus: Bool) {
-        if fmsStatus != previousFMSStatus {
-            for obj in fmsStatusSubscribers.allObjects {
-                (obj as? any FMSStatusSubscribable)?.fmsStatusChanged(isDatafeedDown: fmsStatus)
-            }
-        }
-        previousFMSStatus = fmsStatus
-    }
-
-    private func dispatchEvents(downEventKeys: [String]) {
-        let newlyDownEventKeys = downEventKeys.filter { !previouslyDownEventKeys.contains($0) }
-        for eventKey in newlyDownEventKeys {
-            updateEventSubscribers(eventKey: eventKey, isEventOffline: true)
-        }
-
-        let newlyUpEventKeys = previouslyDownEventKeys.filter { !downEventKeys.contains($0) }
-        for eventKey in newlyUpEventKeys {
-            updateEventSubscribers(eventKey: eventKey, isEventOffline: false)
-        }
-
-        previouslyDownEventKeys = downEventKeys
-    }
-
-    // MARK: - Subscription Registration
-
-    func registerForStatusChanges(_ subscriber: any StatusSubscribable) {
-        statusSubscribers.add(subscriber as AnyObject)
-    }
-
-    func registerForFMSStatusChanges(_ subscriber: any FMSStatusSubscribable) {
-        fmsStatusSubscribers.add(subscriber as AnyObject)
-    }
-
-    func registerForEventStatusChanges(
-        _ subscriber: any EventStatusSubscribable,
-        eventKey: EventKey
-    ) {
-        let subscribers =
-            eventStatusSubscribers.object(forKey: eventKey as NSString)
-            ?? NSHashTable<AnyObject>.weakObjects()
-        subscribers.add(subscriber as AnyObject)
-        eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
-    }
-
-    private func updateEventSubscribers(eventKey: EventKey, isEventOffline: Bool) {
-        guard let subscribersTable = eventStatusSubscribers.object(forKey: eventKey as NSString)
-        else {
-            return
-        }
-        for obj in subscribersTable.allObjects {
-            (obj as? any EventStatusSubscribable)?.eventStatusChanged(
-                isEventOffline: isEventOffline
-            )
-        }
-    }
-
-}
-
-protocol StatusSubscribable: AnyObject {
-    var statusService: any StatusServiceProtocol { get }
-
-    func statusChanged(status: AppStatus)
-}
-
-extension StatusSubscribable {
-
-    func registerForStatusChanges() {
-        statusService.registerForStatusChanges(self)
-    }
-
-}
-
-protocol FMSStatusSubscribable: AnyObject {
-    var statusService: any StatusServiceProtocol { get }
-
-    func fmsStatusChanged(isDatafeedDown: Bool)
-}
-
-extension FMSStatusSubscribable {
-
-    func registerForFMSStatusChanges() {
-        statusService.registerForFMSStatusChanges(self)
-    }
-
-}
-
-protocol EventStatusSubscribable: AnyObject {
-    var statusService: any StatusServiceProtocol { get }
-
-    func eventStatusChanged(isEventOffline: Bool)
-}
-
-extension EventStatusSubscribable {
-
-    func registerForEventStatusChanges(eventKey: EventKey) {
-        statusService.registerForEventStatusChanges(self, eventKey: eventKey)
-    }
-
-    func isEventDown(eventKey: EventKey) -> Bool {
-        return statusService.status.downEventKeys.contains(eventKey)
     }
 
 }
