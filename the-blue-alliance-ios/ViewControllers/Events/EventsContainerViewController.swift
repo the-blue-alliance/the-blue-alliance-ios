@@ -123,10 +123,6 @@ extension EventsContainerViewController: WeekEventsDelegate {
 
 }
 
-extension EventsContainerViewController: SearchContainerDelegate,
-    SearchViewControllerDelegate
-{}
-
 // MARK: - EventsListViewControllerDelegate
 
 extension EventsContainerViewController: EventsListViewControllerDelegate {

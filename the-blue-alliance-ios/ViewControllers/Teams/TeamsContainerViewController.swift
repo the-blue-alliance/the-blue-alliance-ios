@@ -1,5 +1,6 @@
 import MyTBAKit
 import Photos
+import TBAAPI
 import UIKit
 import TBAUtils
 
@@ -27,11 +28,6 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - View Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -40,7 +36,15 @@ class TeamsContainerViewController: ContainerViewController {
 
 }
 
-extension TeamsContainerViewController: TeamsListViewControllerDelegate, SearchContainerDelegate,
-    SearchViewControllerDelegate
-{
+extension TeamsContainerViewController: TeamsListViewControllerDelegate {
+
+    func teamSelected(_ team: any TeamDisplayable) {
+        let teamViewController = TeamViewController(
+            teamKey: team.key,
+            nickname: team.nickname,
+            dependencies: dependencies
+        )
+        navigationController?.pushViewController(teamViewController, animated: true)
+    }
+
 }
