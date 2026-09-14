@@ -2,6 +2,7 @@ import UIKit
 
 @MainActor
 public protocol AuthServiceProtocol: AnyObject {
+    /// Observable: reads inside `updateProperties()` or `Observations` update on sign-in and sign-out.
     var isSignedIn: Bool { get }
     var currentProviderKind: AuthProviderKind? { get }
 
@@ -18,12 +19,4 @@ public protocol AuthServiceProtocol: AnyObject {
     @discardableResult func restorePreviousSignIn() async -> Bool
 
     @discardableResult func handle(_ url: URL) -> Bool
-
-    func addStateObserver(_ observer: any AuthStateObserving)
-    func removeStateObserver(_ observer: any AuthStateObserving)
-}
-
-@MainActor
-public protocol AuthStateObserving: AnyObject {
-    func authStateChanged(isSignedIn: Bool)
 }

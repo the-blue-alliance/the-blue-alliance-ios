@@ -58,18 +58,12 @@ nonisolated enum MyTBAItem: Hashable {
 // SubscriptionsStore, then pass their entries through the common rendering
 // pipeline. Owns the loaded-model cache, failure tracking, and the pinned
 // failure banner that sits above the table.
-class MyTBATableViewController: UIViewController, DataController,
+class MyTBATableViewController: UIViewController, Alertable, DependenciesProviding,
     Navigatable
 {
 
     let dependencies: Dependencies
     weak var delegate: (any MyTBATableViewControllerDelegate)?
-
-    var api: any TBAAPIProtocol { dependencies.api }
-    var myTBA: any MyTBAProtocol { dependencies.myTBA }
-    var myTBAStores: MyTBAStores { dependencies.myTBAStores }
-    var statusService: any StatusServiceProtocol { dependencies.statusService }
-    var urlOpener: any URLOpener { dependencies.urlOpener }
 
     // MARK: - Refreshable
 
@@ -79,6 +73,10 @@ class MyTBATableViewController: UIViewController, DataController,
 
     var additionalRightBarButtonItems: [UIBarButtonItem] {
         return []
+    }
+
+    var containerAccessoryView: UIView? {
+        return nil
     }
 
     // MARK: - Views

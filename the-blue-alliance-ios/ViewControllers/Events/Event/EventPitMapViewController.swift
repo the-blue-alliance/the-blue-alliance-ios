@@ -11,6 +11,7 @@ final class EventPitMapViewController: UIViewController, Navigatable, WKNavigati
     private let focusLabelKey: String?
 
     var additionalRightBarButtonItems: [UIBarButtonItem] { [] }
+    var containerAccessoryView: UIView? { nil }
 
     private lazy var webView: WKWebView = {
         let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())

@@ -46,6 +46,7 @@
 		5EC0D41A2C26042200000002 /* NotificationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */; };
 		5EC0D41A2C26060100000002 /* ViewModels/Event/EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */; };
 		5EC0D41A2C26060100000004 /* ViewControllers/Events/WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* ViewControllers/Events/WeekEventsViewControllerTests.swift */; };
+		5EC0D41A2C26150200000002 /* ViewControllers/Events/EventViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26150200000001 /* ViewControllers/Events/EventViewControllerTests.swift */; };
 		5EC0D41A2C26060100000006 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000005 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift */; };
 		5EC0D41A2C26070100000002 /* Mocks/DependenciesMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000001 /* Mocks/DependenciesMocks.swift */; };
 		5EC0D41A2C26070100000004 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000003 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift */; };
@@ -54,6 +55,7 @@
 		5EC0D41A2C2607010000000D /* FormatStyle+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C2607010000000C /* FormatStyle+TBA.swift */; };
 		5EC0D41A2C26070100000010 /* LegacyCoreDataCleanupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C2607010000000F /* LegacyCoreDataCleanupTests.swift */; };
 		5EC0D41A2C26070100000020 /* ViewControllers/Search/SearchContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C2607010000001F /* ViewControllers/Search/SearchContainerTests.swift */; };
+		5EC0D41A2C26150100000002 /* ViewControllers/Base/ContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26150100000001 /* ViewControllers/Base/ContainerViewControllerTests.swift */; };
 		5EC0D41A2C26090100000002 /* FeatureFlagsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090100000001 /* FeatureFlagsStore.swift */; };
 		5EC0D41A2C26090200000002 /* DashboardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */; };
 		5EC0D41A2C26090300000002 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090300000001 /* DashboardViewController.swift */; };
@@ -267,6 +269,7 @@
 		5EC0D41A2C26042200000001 /* NotificationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStoreTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/Event/EventSectionTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* ViewControllers/Events/WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Events/WeekEventsViewControllerTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26150200000001 /* ViewControllers/Events/EventViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Events/EventViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000005 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000001 /* Mocks/DependenciesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks/DependenciesMocks.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000003 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Match/MatchBreakdownViewControllerTests.swift; sourceTree = "<group>"; };
@@ -275,6 +278,7 @@
 		5EC0D41A2C2607010000000C /* FormatStyle+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormatStyle+TBA.swift"; sourceTree = "<group>"; };
 		5EC0D41A2C2607010000000F /* LegacyCoreDataCleanupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCoreDataCleanupTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C2607010000001F /* ViewControllers/Search/SearchContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Search/SearchContainerTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26150100000001 /* ViewControllers/Base/ContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Base/ContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090100000001 /* FeatureFlagsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsStore.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardContainerViewController.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090300000001 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
@@ -1065,11 +1069,13 @@
 				5EC0D41A2C26091100000003 /* ViewModels/Event/EventDivisionsViewModelTests.swift */,
 				5EC0D41A2C26091000000005 /* ViewModels/Match/MatchTimesViewModelTests.swift */,
 				5EC0D41A2C26060100000003 /* ViewControllers/Events/WeekEventsViewControllerTests.swift */,
+				5EC0D41A2C26150200000001 /* ViewControllers/Events/EventViewControllerTests.swift */,
 				5EC0D41A2C26070100000001 /* Mocks/DependenciesMocks.swift */,
 				5EC0D41A2C26070100000003 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift */,
 				5EC0D41A2C26070100000005 /* ViewControllers/Teams/TeamsListViewControllerTests.swift */,
 				5EC0D41A2C26090900000001 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift */,
 				5EC0D41A2C2607010000001F /* ViewControllers/Search/SearchContainerTests.swift */,
+				5EC0D41A2C26150100000001 /* ViewControllers/Base/ContainerViewControllerTests.swift */,
 				5EC0D41A2C26070100000007 /* ViewControllers/MyTBA/MyTBATableViewControllerTests.swift */,
 				5EC0D41A2C26060100000005 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift */,
 			);
@@ -1304,11 +1310,13 @@
 				5EC0D41A2C26091100000004 /* ViewModels/Event/EventDivisionsViewModelTests.swift in Sources */,
 				5EC0D41A2C26091000000006 /* ViewModels/Match/MatchTimesViewModelTests.swift in Sources */,
 				5EC0D41A2C26060100000004 /* ViewControllers/Events/WeekEventsViewControllerTests.swift in Sources */,
+				5EC0D41A2C26150200000002 /* ViewControllers/Events/EventViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000002 /* Mocks/DependenciesMocks.swift in Sources */,
 				5EC0D41A2C26070100000004 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000006 /* ViewControllers/Teams/TeamsListViewControllerTests.swift in Sources */,
 				5EC0D41A2C26090900000002 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000020 /* ViewControllers/Search/SearchContainerTests.swift in Sources */,
+				5EC0D41A2C26150100000002 /* ViewControllers/Base/ContainerViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000008 /* ViewControllers/MyTBA/MyTBATableViewControllerTests.swift in Sources */,
 				5EC0D41A2C26060100000006 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift in Sources */,
 			);

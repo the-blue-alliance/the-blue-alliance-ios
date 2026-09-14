@@ -53,15 +53,15 @@ struct TeamsListViewControllerTests {
         controller.refresh()
         #expect(await Self.waitForTeams(controller, count: 3) == [254, 1114, 2590])
 
-        controller.searchController.searchBar.text = "254"
+        controller.searchBar.text = "254"
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 1) == [254])
 
-        controller.searchController.searchBar.text = "25"
+        controller.searchBar.text = "25"
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 2) == [254, 2590])
 
-        controller.searchController.searchBar.text = ""
+        controller.searchBar.text = ""
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 3) == [254, 1114, 2590])
     }
@@ -71,7 +71,7 @@ struct TeamsListViewControllerTests {
         controller.refresh()
         _ = await Self.waitForTeams(controller, count: 3)
 
-        controller.searchController.searchBar.text = "nemesis"
+        controller.searchBar.text = "nemesis"
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 1) == [2590])
     }
@@ -84,7 +84,7 @@ struct TeamsListViewControllerTests {
         controller.refresh()
         _ = await Self.waitForTeams(controller, count: 3)
 
-        controller.searchController.searchBar.text = "25"
+        controller.searchBar.text = "25"
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 2) == [254, 2590])
     }
@@ -97,13 +97,13 @@ struct TeamsListViewControllerTests {
         controller.refresh()
         _ = await Self.waitForTeams(controller, count: 2)
 
-        controller.searchController.searchBar.text = "SAO JOSE"
+        controller.searchBar.text = "SAO JOSE"
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 1) == [1860])
 
-        controller.searchController.searchBar.text = ""
+        controller.searchBar.text = ""
         controller.updateDataSource()
-        controller.searchController.searchBar.text = "poofs "
+        controller.searchBar.text = "poofs "
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 1) == [254])
     }
@@ -116,7 +116,7 @@ struct TeamsListViewControllerTests {
         controller.refresh()
         _ = await Self.waitForTeams(controller, count: 2)
 
-        controller.searchController.searchBar.text = "secondary"
+        controller.searchBar.text = "secondary"
         controller.updateDataSource()
         #expect(await Self.waitForTeams(controller, count: 0) == [])
     }
@@ -130,7 +130,8 @@ struct TeamsListViewControllerTests {
         ]
         for list in lists {
             list.loadViewIfNeeded()
-            #expect(list.tableView.tableHeaderView === list.searchController.searchBar)
+            #expect(list.containerAccessoryView === list.searchBar)
+            #expect(list.searchBar.placeholder == "Search Teams")
         }
     }
 

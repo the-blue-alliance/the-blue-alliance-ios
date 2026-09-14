@@ -31,8 +31,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearch()
-
+        searchBar.placeholder = "Search Teams"
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.dataSource = dataSource
     }
@@ -110,7 +109,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     override func updateDataSource() {
         filterTask?.cancel()
         let candidates = filter(loadedTeams)
-        let query = (searchController.searchBar.text ?? "").trimmingCharacters(
+        let query = (searchBar.text ?? "").trimmingCharacters(
             in: .whitespacesAndNewlines
         )
         guard !query.isEmpty else {

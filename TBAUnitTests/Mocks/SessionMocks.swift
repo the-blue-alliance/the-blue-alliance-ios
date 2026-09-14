@@ -1,5 +1,6 @@
 import Foundation
 import MyTBAKit
+import Observation
 import TBAAuth
 import TBAUtils
 import UIKit
@@ -20,6 +21,7 @@ enum MockError: Error, Equatable {
 }
 
 @MainActor
+@Observable
 final class MockAuthService: AuthServiceProtocol {
 
     let callLog: CallLog
@@ -39,8 +41,6 @@ final class MockAuthService: AuthServiceProtocol {
     }
 
     func start() {}
-    func addStateObserver(_ observer: any AuthStateObserving) {}
-    func removeStateObserver(_ observer: any AuthStateObserving) {}
     func handle(_ url: URL) -> Bool { false }
 
     func signIn(

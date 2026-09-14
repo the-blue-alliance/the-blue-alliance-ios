@@ -1,4 +1,5 @@
 import Foundation
+import PureLayout
 import UIKit
 
 // Refreshable describes a class that has some data that can be refreshed from the server.
@@ -133,14 +134,16 @@ extension Refreshable {
         }
 
         var configuration = UIContentUnavailableConfiguration.empty()
-        configuration.text = noDataText
+        configuration.image = UIImage(systemName: "tray")
+        configuration.text = "No Data"
+        configuration.secondaryText = noDataText
 
-        if let noDataView = listBackgroundView as? UIContentUnavailableView {
-            noDataView.configuration = configuration
+        if let noDataView = listBackgroundView as? NoDataView {
+            noDataView.contentUnavailableView.configuration = configuration
             return
         }
 
-        let noDataView = UIContentUnavailableView(configuration: configuration)
+        let noDataView = NoDataView(configuration: configuration)
         noDataView.alpha = 0
         listBackgroundView = noDataView
         UIView.animate(withDuration: 0.25) {
@@ -149,7 +152,7 @@ extension Refreshable {
     }
 
     func removeNoDataView() {
-        if listBackgroundView is UIContentUnavailableView {
+        if listBackgroundView is NoDataView {
             listBackgroundView = nil
         }
     }
@@ -170,6 +173,30 @@ extension Refreshable {
             default: break
             }
         }
+    }
+
+}
+
+/// The empty state behind a list. Its content ends at the keyboard, so the message stays visible
+/// while a search field is up.
+final class NoDataView: UIView {
+
+    let contentUnavailableView: UIContentUnavailableView
+
+    init(configuration: UIContentUnavailableConfiguration) {
+        contentUnavailableView = UIContentUnavailableView(configuration: configuration)
+
+        super.init(frame: .zero)
+
+        addSubview(contentUnavailableView)
+        contentUnavailableView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
+        // PureLayout can't pin to a layout guide.
+        contentUnavailableView.bottomAnchor.constraint(equalTo: keyboardLayoutGuide.topAnchor)
+            .isActive = true
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }

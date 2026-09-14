@@ -33,8 +33,6 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupSearch()
-
         tableView.registerReusableCell(RankingTableViewCell.self)
         tableView.dataSource = dataSource
     }
@@ -66,7 +64,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
     }
 
     private func applyRankings(_ rankings: [DistrictRanking]) {
-        let query = searchController.searchBar.text?.lowercased() ?? ""
+        let query = searchBar.text?.lowercased() ?? ""
         let filtered: [DistrictRanking]
         if query.isEmpty {
             filtered = rankings

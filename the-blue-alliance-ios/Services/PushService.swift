@@ -1,6 +1,7 @@
 import FirebaseMessaging
 import Foundation
 import MyTBAKit
+import Observation
 import TBAAuth
 import TBAUtils
 import UserNotifications
@@ -29,6 +30,7 @@ class PushService: NSObject, PushServiceProtocol {
     weak var router: (any PushNotificationRouting)?
 
     private var registerTask: Task<Void, Never>?
+    private var signInObservation: Task<Void, Never>?
 
     init(
         reporter: any Reporter,
@@ -42,6 +44,12 @@ class PushService: NSObject, PushServiceProtocol {
         self.registrar = registrar
 
         super.init()
+
+        observeSignIn()
+    }
+
+    isolated deinit {
+        signInObservation?.cancel()
     }
 
     // Both triggers (auth state, FCM token) land here and either can come first.
@@ -92,15 +100,26 @@ extension PushService {
 
 }
 
-extension PushService: AuthStateObserving {
+extension PushService {
 
-    func authStateChanged(isSignedIn: Bool) {
-        if isSignedIn {
-            registerPushToken()
-        } else {
-            registerTask?.cancel()
+    // Firebase re-reports the current state when it starts listening, so only a real change acts.
+    private func observeSignIn() {
+        let authService = authService
+        signInObservation = Task { [weak self] in
+            var wasSignedIn: Bool?
+            for await isSignedIn in Observations({ authService.isSignedIn }) {
+                guard let self else { return }
+                guard isSignedIn != wasSignedIn else { continue }
+                wasSignedIn = isSignedIn
+                if isSignedIn {
+                    registerPushToken()
+                } else {
+                    registerTask?.cancel()
+                }
+            }
         }
     }
+
 }
 
 extension PushService: MessagingDelegate {

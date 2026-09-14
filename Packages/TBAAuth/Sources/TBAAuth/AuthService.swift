@@ -1,16 +1,17 @@
 import FirebaseAuth
+import Observation
 import TBAUtils
 import UIKit
 
 @MainActor
+@Observable
 public final class AuthService: AuthServiceProtocol {
 
     private let firebase: any FirebaseAuthenticating
     private let providers: [any IdentityProviding]
     private let reporter: any Reporter
 
-    private var isListening = false
-    private let observers = NSHashTable<AnyObject>.weakObjects()
+    @ObservationIgnored private var isListening = false
 
     public convenience init(reporter: any Reporter) {
         self.init(
@@ -36,8 +37,10 @@ public final class AuthService: AuthServiceProtocol {
 
     // MARK: - State
 
+    // Read straight from Firebase so it's never stale; the listener marks it changed for observers.
     public var isSignedIn: Bool {
-        firebase.isSignedIn
+        access(keyPath: \.isSignedIn)
+        return firebase.isSignedIn
     }
 
     public var currentProviderKind: AuthProviderKind? {
@@ -49,20 +52,9 @@ public final class AuthService: AuthServiceProtocol {
             return
         }
         isListening = true
-        firebase.startListening { [weak self] isSignedIn in
-            guard let self else { return }
-            for case let observer as any AuthStateObserving in self.observers.allObjects {
-                observer.authStateChanged(isSignedIn: isSignedIn)
-            }
+        firebase.startListening { [weak self] _ in
+            self?.withMutation(keyPath: \.isSignedIn) {}
         }
-    }
-
-    public func addStateObserver(_ observer: any AuthStateObserving) {
-        observers.add(observer)
-    }
-
-    public func removeStateObserver(_ observer: any AuthStateObserving) {
-        observers.remove(observer)
     }
 
     // MARK: - Sign in / out

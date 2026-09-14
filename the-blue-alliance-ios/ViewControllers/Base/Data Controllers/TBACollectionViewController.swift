@@ -3,15 +3,11 @@ import MyTBAKit
 import TBAAPI
 import UIKit
 
-class TBACollectionViewController: UICollectionViewController, DataController, Navigatable {
+class TBACollectionViewController: UICollectionViewController, Alertable, DependenciesProviding,
+    Navigatable
+{
 
     let dependencies: Dependencies
-
-    var api: any TBAAPIProtocol { dependencies.api }
-    var myTBA: any MyTBAProtocol { dependencies.myTBA }
-    var myTBAStores: MyTBAStores { dependencies.myTBAStores }
-    var statusService: any StatusServiceProtocol { dependencies.statusService }
-    var urlOpener: any URLOpener { dependencies.urlOpener }
 
     // MARK: - Refreshable
 
@@ -21,6 +17,10 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
 
     var additionalRightBarButtonItems: [UIBarButtonItem] {
         return []
+    }
+
+    var containerAccessoryView: UIView? {
+        return nil
     }
 
     // MARK: - Init

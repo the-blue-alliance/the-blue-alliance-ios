@@ -23,7 +23,7 @@ enum EventState {
     }
 }
 
-class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
+class EventViewController: MyTBAContainerViewController {
 
     private var state: EventState
 
@@ -107,11 +107,6 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if isEventDown(eventKey: state.key) {
-            showOfflineEventMessage(shouldShow: true, animated: false)
-        }
-        registerForEventStatusChanges(eventKey: state.key)
-
         Task {
             if let fetched = try? await api.event(key: state.key) {
                 state = .event(fetched)
@@ -127,10 +122,14 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         dependencies.reporter.log("Event: \(state.key)")
     }
 
-    // MARK: - Interface Methods
+    // Reading the status here re-runs this when a poll marks the event down or back up.
+    override func updateProperties() {
+        super.updateProperties()
 
-    func eventStatusChanged(isEventOffline: Bool) {
-        showOfflineEventMessage(shouldShow: isEventOffline)
+        showOfflineEventMessage(
+            shouldShow: statusService.status.downEventKeys.contains(state.key),
+            animated: view.window != nil
+        )
     }
 
 }

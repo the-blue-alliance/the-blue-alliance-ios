@@ -73,6 +73,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var pendingAlerts: [PendingAlert] = []
 
+    private var statusObservation: Task<Void, Never>?
+
     // MARK: - Push registration callback
 
     // Holds the completion passed to `registerForRemoteNotifications` until
@@ -151,7 +153,6 @@ private extension AppDelegate {
     func configurePushNotifications() {
         messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
-        authService.addStateObserver(pushService)
         pushService.router = pushNotificationRouter
         // Best-effort registration; failures will surface later.
         pushService.registerForRemoteNotifications(nil)
@@ -166,9 +167,22 @@ private extension AppDelegate {
     }
 
     func configureStatusService() {
-        registerForFMSStatusChanges()
-        registerForStatusChanges()
         statusService.start()
+
+        let statusService = statusService
+        statusObservation = Task { [weak self] in
+            var wasDatafeedDown = false
+            for await status in Observations({ statusService.status }) {
+                guard let self else { return }
+                if !Self.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
+                    showAlert(.minVersion(currentAppVersion: status.latestAppVersion))
+                }
+                if status.isDatafeedDown, !wasDatafeedDown {
+                    showAlert(.fmsStatus(isDatafeedDown: true))
+                }
+                wasDatafeedDown = status.isDatafeedDown
+            }
+        }
     }
 
 }
@@ -182,28 +196,6 @@ extension AppDelegate {
             return true
         }
         return Bundle.main.buildVersionNumber >= minimumAppVersion
-    }
-
-}
-
-// MARK: - Status subscriptions
-
-extension AppDelegate: StatusSubscribable {
-
-    func statusChanged(status: AppStatus) {
-        if !Self.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
-            showAlert(.minVersion(currentAppVersion: statusService.status.latestAppVersion))
-        }
-    }
-
-}
-
-extension AppDelegate: FMSStatusSubscribable {
-
-    func fmsStatusChanged(isDatafeedDown: Bool) {
-        if isDatafeedDown {
-            showAlert(.fmsStatus(isDatafeedDown: isDatafeedDown))
-        }
     }
 
 }

@@ -77,7 +77,8 @@ class PlayerView: UIView {
 
     private func showErrorView(error: String) {
         var configuration = UIContentUnavailableConfiguration.empty()
-        configuration.text = error
+        configuration.image = UIImage(systemName: "tray")
+        configuration.secondaryText = error
         errorView.configuration = configuration
         if errorView.superview == nil {
             addSubview(errorView)
