@@ -40,6 +40,7 @@ class PhoneRootViewController: UITabBarController, RootController {
         }
 
         mode = .tabSidebar
+        tabBarMinimizeBehavior = .onScrollDown
     }
 
     required init?(coder: NSCoder) {

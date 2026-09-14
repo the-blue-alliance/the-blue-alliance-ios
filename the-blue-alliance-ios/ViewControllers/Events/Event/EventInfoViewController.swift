@@ -309,7 +309,7 @@ class EventInfoViewController: TBATableViewController, Refreshable {
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            // See https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/996
+            // Task handles instead of async let, see #996.
             let eventHandle = Task { try await self.api.event(key: self.state.key) }
             let probeHandle = Task { await self.probePitMapIfNeeded() }
             let event = try await eventHandle.value
