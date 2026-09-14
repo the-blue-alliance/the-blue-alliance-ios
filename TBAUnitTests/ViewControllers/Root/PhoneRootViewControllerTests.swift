@@ -19,48 +19,52 @@ struct PhoneRootViewControllerTests {
         )
     }
 
-    @Test func flagOff_keepsTheOriginalFiveTabs() {
+    @Test func flagOff_eventsLeadsAndSearchTrails() {
         let root = Self.makeRoot(dashboardEnabled: false)
         #expect(
-            root.tabs.map(\.identifier) == [
-                "tab.events", "tab.teams", "tab.districts", "tab.mytba", "tab.settings",
+            root.tabs.dropLast().map(\.identifier) == [
+                "tab.events", "tab.districts", "tab.mytba", "tab.more",
             ]
         )
+        #expect(root.tabs.last is UISearchTab)
     }
 
-    @Test func flagOn_dashboardLeadsAndTeamsIsDropped() {
+    @Test func flagOn_dashboardLeadsAndSearchTrails() {
         let root = Self.makeRoot(dashboardEnabled: true)
         #expect(
-            root.tabs.map(\.identifier) == [
-                "tab.dashboard", "tab.events", "tab.districts", "tab.mytba", "tab.settings",
+            root.tabs.dropLast().map(\.identifier) == [
+                "tab.dashboard", "tab.events", "tab.districts", "tab.more",
             ]
         )
+        #expect(root.tabs.last is UISearchTab)
         #expect(root.selectedTab?.identifier == "tab.dashboard")
     }
 
-    @Test func flagOn_dashboardTabHostsTheContainerWithSearch() {
+    @Test func flagOn_dashboardTabHostsTheContainer() {
         let root = Self.makeRoot(dashboardEnabled: true)
         let navigationController = root.selectedTab?.viewController as? UINavigationController
-        let container =
-            navigationController?.viewControllers.first as? DashboardContainerViewController
-        #expect(container != nil)
+        #expect(navigationController?.viewControllers.first is DashboardContainerViewController)
+    }
 
-        container?.loadViewIfNeeded()
-        #expect(container?.navigationItem.searchController === container?.searchController)
-        #expect(container?.navigationItem.hidesSearchBarWhenScrolling == false)
+    @Test func searchTabHostsTheSearchContainer() {
+        let root = Self.makeRoot(dashboardEnabled: false)
+        let navigationController = root.tabs.last?.viewController as? UINavigationController
+        #expect(navigationController?.viewControllers.first is SearchContainerViewController)
     }
 
     @Test func tabLists_matchTheRootTypeTable() {
         #expect(
             RootType.tabs(dashboardEnabled: false) == [
-                .events, .teams, .districts, .myTBA, .settings,
+                .events, .districts, .myTBA, .more, .search,
             ]
         )
         #expect(
             RootType.tabs(dashboardEnabled: true) == [
-                .dashboard, .events, .districts, .myTBA, .settings,
+                .dashboard, .events, .districts, .more, .search,
             ]
         )
+        #expect(RootType.moreItems(dashboardEnabled: false) == [.teams, .settings])
+        #expect(RootType.moreItems(dashboardEnabled: true) == [.teams, .myTBA, .settings])
     }
 
 }
