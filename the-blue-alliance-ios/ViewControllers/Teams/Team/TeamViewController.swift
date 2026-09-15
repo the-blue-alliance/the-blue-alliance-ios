@@ -56,6 +56,7 @@ class TeamViewController: HeaderContainerViewController {
         eventsViewController.year = year
         mediaViewController.year = year
         updateInterface()
+        updateYearMenu()
     }
 
     private func animateAvatarForYearChange() {
@@ -178,13 +179,6 @@ class TeamViewController: HeaderContainerViewController {
 
         eventsViewController.delegate = self
         mediaViewController.delegate = self
-
-        teamHeaderView.yearButton.addAction(
-            UIAction { [weak self] _ in
-                self?.showSelectYear()
-            },
-            for: .touchUpInside
-        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -197,9 +191,6 @@ class TeamViewController: HeaderContainerViewController {
         super.viewDidLoad()
 
         teamHeaderView.showLoadingSkeleton()
-        if year != nil {
-            teamHeaderView.yearButton.isLoading = true
-        }
         loadTeamData()
     }
 
@@ -226,7 +217,6 @@ class TeamViewController: HeaderContainerViewController {
             if let years = await yearsHandle.value {
                 self.yearsParticipated = years.sorted().reversed()
             }
-            teamHeaderView.yearButton.isLoading = false
 
             if let team = await teamHandle.value {
                 self.state = .team(team)
@@ -307,27 +297,19 @@ class TeamViewController: HeaderContainerViewController {
         return UIImage(data: data)
     }
 
-    private func showSelectYear() {
-        guard !yearsParticipated.isEmpty else { return }
-
-        let selectTableViewController = SelectTableViewController<TeamViewController>(
-            current: year,
-            options: yearsParticipated,
-            dependencies: dependencies
-        )
-        selectTableViewController.title = "Select Year"
-        selectTableViewController.delegate = self
-
-        let nav = UINavigationController(rootViewController: selectTableViewController)
-        nav.modalPresentationStyle = .formSheet
-        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            systemItem: .done,
-            primaryAction: UIAction { [weak self] _ in
-                self?.navigationController?.dismiss(animated: true)
-            }
-        )
-
-        navigationController?.present(nav, animated: true)
+    private func updateYearMenu() {
+        teamHeaderView.yearButton.menu =
+            yearsParticipated.isEmpty
+            ? nil
+            : UIMenu(
+                options: .singleSelection,
+                children: yearsParticipated.map { option in
+                    UIAction(title: String(option), state: option == year ? .on : .off) {
+                        [weak self] _ in
+                        self?.year = option
+                    }
+                }
+            )
     }
 
 }
@@ -338,20 +320,6 @@ private struct TeamSubscribable: MyTBASubscribable {
     static var notificationTypes: [NotificationType] {
         [.upcomingMatch, .matchScore, .allianceSelection, .awards, .mediaPosted]
     }
-}
-
-extension TeamViewController: SelectTableViewControllerDelegate {
-
-    typealias OptionType = Int
-
-    func optionSelected(_ option: Int) {
-        year = option
-    }
-
-    func titleForOption(_ option: Int) -> String {
-        return String(option)
-    }
-
 }
 
 extension TeamViewController: EventsListViewControllerDelegate {
