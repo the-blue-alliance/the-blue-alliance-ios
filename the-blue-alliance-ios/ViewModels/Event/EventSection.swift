@@ -39,27 +39,27 @@ extension APIEventType {
     }
 }
 
-// Coarse placement within a season, in display order. Official events sort
-// by date inside `.season`, so a week delayed past Championship (2026 Israel,
-// weeks 17–19) lands after it instead of next to the other weeks.
-nonisolated enum SeasonPhase: Comparable {
-    case preseason
-    case season
-    case offseason
-    case other
-}
-
 // Orders one list's events by phase, then date, then `Event.sectionAscending`.
 // Weekly events take their week's earliest start date rather than their own,
 // so events sharing a week tie and keep the type order.
 struct SeasonTimeline {
+    // Coarse placement within a season, in display order. Official events sort
+    // by date inside `.season`, so a week delayed past Championship (2026 Israel,
+    // weeks 17–19) lands after it instead of next to the other weeks.
+    nonisolated enum Phase: Comparable {
+        case preseason
+        case season
+        case offseason
+        case other
+    }
+
     nonisolated private struct Week: Hashable {
         let year: Int
         let week: Int
     }
 
     nonisolated private struct Placement: Comparable {
-        let phase: SeasonPhase
+        let phase: Phase
         let date: Date
 
         static func < (lhs: Self, rhs: Self) -> Bool {
@@ -94,7 +94,7 @@ struct SeasonTimeline {
 }
 
 extension Event {
-    var seasonPhase: SeasonPhase {
+    var seasonPhase: SeasonTimeline.Phase {
         switch eventTypeEnum {
         case .preseason: return .preseason
         case .offseason: return .offseason
