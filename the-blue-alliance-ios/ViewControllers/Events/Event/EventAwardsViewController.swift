@@ -5,58 +5,6 @@ import TBAAPI
 import UIKit
 import TBAUtils
 
-class EventAwardsContainerViewController: ContainerViewController {
-
-    private(set) var event: Event
-
-    // MARK: - Init
-
-    init(event: Event, teamKey: String? = nil, dependencies: Dependencies) {
-        self.event = event
-
-        let awardsViewController = EventAwardsViewController(
-            eventKey: event.key,
-            teamKey: teamKey,
-            dependencies: dependencies
-        )
-
-        super.init(
-            viewControllers: [awardsViewController],
-            navigationTitle: "Awards",
-            navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-            dependencies: dependencies
-        )
-
-        awardsViewController.delegate = self
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        dependencies.reporter.log("Event Awards: \(event.key)")
-    }
-
-}
-
-extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
-
-    func teamSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(
-            teamKey: teamKey,
-            eventKey: event.key,
-            dependencies: dependencies
-        )
-        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
-    }
-
-}
-
 protocol EventAwardsViewControllerDelegate: AnyObject {
     func teamSelected(teamKey: String)
 }
@@ -81,6 +29,14 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
         super.init(dependencies: dependencies)
     }
 
+    /// The event's awards as their own screen, rather than a team's awards as a Team@Event tab.
+    convenience init(event: Event, dependencies: Dependencies) {
+        self.init(eventKey: event.key, dependencies: dependencies)
+
+        navigationItem.title = "Awards"
+        navigationItem.subtitle = "@ \(event.friendlyNameWithYear)"
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -92,6 +48,14 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
 
         tableView.registerReusableCell(AwardTableViewCell.self)
         tableView.dataSource = dataSource
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if teamKey == nil {
+            dependencies.reporter.log("Event Awards: \(eventKey)")
+        }
     }
 
     // MARK: Table View Data Source

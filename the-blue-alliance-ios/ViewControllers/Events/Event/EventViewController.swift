@@ -158,28 +158,31 @@ extension EventViewController: EventInfoViewControllerDelegate {
 
     func showAlliances() {
         guard let event = state.event else { return }
-        let eventAlliancesViewController = EventAlliancesContainerViewController(
+        let eventAlliancesViewController = EventAlliancesViewController(
             event: event,
             dependencies: dependencies
         )
+        eventAlliancesViewController.delegate = self
         self.navigationController?.pushViewController(eventAlliancesViewController, animated: true)
     }
 
     func showAwards() {
         guard let event = state.event else { return }
-        let eventAwardsViewController = EventAwardsContainerViewController(
+        let eventAwardsViewController = EventAwardsViewController(
             event: event,
             dependencies: dependencies
         )
+        eventAwardsViewController.delegate = self
         self.navigationController?.pushViewController(eventAwardsViewController, animated: true)
     }
 
     func showDistrictPoints() {
         guard let event = state.event else { return }
-        let eventDistrictPointsViewController = EventDistrictPointsContainerViewController(
+        let eventDistrictPointsViewController = EventDistrictPointsViewController(
             event: event,
             dependencies: dependencies
         )
+        eventDistrictPointsViewController.delegate = self
         self.navigationController?.pushViewController(
             eventDistrictPointsViewController,
             animated: true
@@ -238,6 +241,16 @@ extension EventViewController: EventRankingsViewControllerDelegate {
             dependencies: dependencies
         )
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+    }
+
+}
+
+extension EventViewController: EventAlliancesViewControllerDelegate,
+    EventAwardsViewControllerDelegate, EventDistrictPointsViewControllerDelegate
+{
+
+    func teamSelected(teamKey: String) {
+        pushTeamAtEvent(teamKey: teamKey)
     }
 
 }

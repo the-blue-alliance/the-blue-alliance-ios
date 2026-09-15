@@ -63,12 +63,38 @@ class TBATableViewController: UITableViewController, Alertable, DependenciesProv
             ),
             barBackdrop.bottomAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.topAnchor),
         ])
+
+        if !isInContainer {
+            (self as? any Refreshable)?.enableRefreshing()
+        }
+    }
+
+    // A container refreshes its selected tab and cancels its tabs' refreshes when popped.
+    // A screen pushed on its own does both itself.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if !isInContainer {
+            (self as? any Refreshable)?.refresh()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         (self as? any Refreshable)?.updateRefreshOnAppear()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if isMovingFromParent, !isInContainer {
+            (self as? any Refreshable)?.cancelRefresh()
+        }
+    }
+
+    private var isInContainer: Bool {
+        parent is ContainerViewController
     }
 
     // MARK: - UITableViewDelegate

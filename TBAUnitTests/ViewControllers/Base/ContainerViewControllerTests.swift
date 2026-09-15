@@ -54,6 +54,16 @@ struct ContainerViewControllerTests {
         #expect(!harness.second.isViewLoaded)
     }
 
+    @Test func aScreenOutsideAContainerRefreshesItself() {
+        let screen = StubTab(dependencies: Dependencies.mock())
+        screen.loadViewIfNeeded()
+        screen.beginAppearanceTransition(true, animated: false)
+        screen.endAppearanceTransition()
+
+        #expect(screen.tableView.refreshControl != nil)
+        #expect(screen.refreshCount == 1)
+    }
+
     @Test func theSelectedTabsAccessoryIsPinnedAboveTheList() {
         let accessoryView = UIView()
         let harness = Harness(firstAccessoryView: accessoryView)
