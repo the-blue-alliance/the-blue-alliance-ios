@@ -63,9 +63,7 @@ class DistrictsContainerViewController: ContainerViewController {
                 }
             }
         )
-        let button = UIButton.menuPill(menu: menu)
-        button.configuration?.title = String(year)
-        return button
+        return UIButton.menuPill(title: String(year), menu: menu)
     }()
 
 }

@@ -4,8 +4,9 @@ extension UIButton {
 
     /// A capsule that opens a menu. Solid rather than glass so it reads the same whether the
     /// bar is over blue or over scrolled content.
-    static func menuPill(menu: UIMenu? = nil) -> UIButton {
+    static func menuPill(title: String, menu: UIMenu? = nil) -> UIButton {
         var configuration = UIButton.Configuration.filled()
+        configuration.title = title
         configuration.cornerStyle = .capsule
         // White on the blue in light so it stands off the bar; the segment pill's gray in dark.
         configuration.baseBackgroundColor = UIColor { traits in

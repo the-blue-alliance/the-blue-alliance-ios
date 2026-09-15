@@ -72,11 +72,7 @@ class EventsContainerViewController: ContainerViewController {
         yearButton.menu = yearMenu()
     }
 
-    private lazy var yearButton: UIButton = {
-        let button = UIButton.menuPill(menu: yearMenu())
-        button.configuration?.title = String(year)
-        return button
-    }()
+    private lazy var yearButton = UIButton.menuPill(title: String(year), menu: yearMenu())
 
     // Years as submenus, each loading its weeks when opened, the way the old modal did in
     // two screens. A submenu can't be checked, so the selected year shows its week as a subtitle.
