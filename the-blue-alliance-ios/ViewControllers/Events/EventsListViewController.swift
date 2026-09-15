@@ -24,7 +24,7 @@ private final class EventsListDataSource: TableViewDataSource<EventSection, Even
     }
 }
 
-class EventsListViewController: TBATableViewController, Refreshable {
+class EventsListViewController: TBATableViewController {
 
     typealias APIEvent = Event
 
@@ -42,10 +42,6 @@ class EventsListViewController: TBATableViewController, Refreshable {
     }
 
     // MARK: - Subclass override points
-
-    func loadEvents() async throws -> [APIEvent] {
-        fatalError("subclass must override")
-    }
 
     func filter(_ events: [APIEvent]) -> [APIEvent] { events }
 
@@ -69,7 +65,7 @@ class EventsListViewController: TBATableViewController, Refreshable {
             _ = self
             return cell
         }
-        dataSource.noDataDelegate = self
+        dataSource.noDataDelegate = self as? any Refreshable
         dataSource.titleOverride = { [weak self] event in self?.delegate?.title(for: event) }
         tableView.dataSource = dataSource
         return dataSource
@@ -96,6 +92,16 @@ class EventsListViewController: TBATableViewController, Refreshable {
     // MARK: - Refreshable
 
     var isDataSourceEmpty: Bool { events.isEmpty }
+}
+
+/// An event list loads its events. Conforming is what makes it refreshable.
+protocol EventsList: Refreshable {
+    func loadEvents() async throws -> [Event]
+    // Provided by EventsListViewController.
+    func applyEvents(_ apiEvents: [Event])
+}
+
+extension EventsList {
 
     func refresh() {
         runRefresh { [weak self] in
@@ -106,5 +112,4 @@ class EventsListViewController: TBATableViewController, Refreshable {
         }
     }
 
-    var noDataText: String? { fatalError("subclass must override") }
 }

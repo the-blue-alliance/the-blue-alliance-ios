@@ -31,10 +31,6 @@ class MatchViewController: MyTBAContainerViewController {
     private(set) var infoViewController: MatchInfoViewController
     private let breakdownViewController: MatchBreakdownViewController
 
-    override var subscribableModel: any MyTBASubscribable {
-        MatchSubscribable(modelKey: state.key)
-    }
-
     // MARK: Init
 
     convenience init(matchKey: String, teamKey: String? = nil, dependencies: Dependencies) {
@@ -75,6 +71,7 @@ class MatchViewController: MyTBAContainerViewController {
 
         let navTitle = state.match?.friendlyName(playoffType: nil) ?? state.key
         super.init(
+            subscribableModel: MatchSubscribable(modelKey: state.key),
             viewControllers: [infoViewController, breakdownViewController],
             navigationTitle: navTitle,
             navigationSubtitle: nil,

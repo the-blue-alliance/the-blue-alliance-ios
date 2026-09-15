@@ -6,8 +6,7 @@ protocol TeamsListViewControllerDelegate: AnyObject {
 }
 
 class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
-    TBASearchableTableViewController,
-    Refreshable
+    TBATableViewController
 {
 
     weak var delegate: (any TeamsListViewControllerDelegate)?
@@ -17,6 +16,15 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     private var filterTask: Task<Void, Never>?
 
     private lazy var dataSource: TableViewDataSource<String, APITeam> = makeDataSource()
+
+    private(set) lazy var searchBar: ListFilterSearchBar = ListFilterSearchBar { [weak self] in
+        self?.updateDataSource()
+    }
+
+    // The container pins it above the list, so it stays put while the list scrolls.
+    override var containerAccessoryView: UIView? {
+        return searchBar
+    }
 
     init(dependencies: Dependencies) {
         super.init(dependencies: dependencies)
@@ -32,15 +40,12 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
         super.viewDidLoad()
 
         searchBar.placeholder = "Search Teams"
+        tableView.keyboardDismissMode = .onDrag
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.dataSource = dataSource
     }
 
     // MARK: - Subclass override points
-
-    func loadTeams() async throws -> [APITeam] {
-        fatalError("subclass must override")
-    }
 
     func filter(_ teams: [APITeam]) -> [APITeam] { teams }
 
@@ -63,11 +68,11 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
             cell.accessibilityIdentifier = "team.\(team.key)"
             return cell
         }
-        dataSource.noDataDelegate = self
+        dataSource.noDataDelegate = self as? any Refreshable
         return dataSource
     }
 
-    private func applyTeams(_ loaded: [APITeam]) {
+    func applyTeams(_ loaded: [APITeam]) {
         loadedTeams = loaded
         updateDataSource()
     }
@@ -104,9 +109,9 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
         delegate?.teamSelected(team)
     }
 
-    // MARK: - SearchableController
+    // MARK: - Filtering
 
-    override func updateDataSource() {
+    func updateDataSource() {
         filterTask?.cancel()
         let candidates = filter(loadedTeams)
         let query = (searchBar.text ?? "").trimmingCharacters(
@@ -127,6 +132,20 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
 
     var isDataSourceEmpty: Bool { teams.isEmpty }
 
+    var noDataText: String? { "No teams" }
+}
+
+/// A team list loads its teams. Conforming is what makes it refreshable.
+protocol TeamsList: Refreshable {
+    associatedtype ListedTeam
+
+    func loadTeams() async throws -> [ListedTeam]
+    // Provided by TeamsListViewController.
+    func applyTeams(_ loaded: [ListedTeam])
+}
+
+extension TeamsList {
+
     func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
@@ -134,5 +153,4 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
         }
     }
 
-    var noDataText: String? { "No teams" }
 }

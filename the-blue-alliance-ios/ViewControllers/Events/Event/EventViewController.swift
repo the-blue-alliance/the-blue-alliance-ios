@@ -32,10 +32,6 @@ class EventViewController: MyTBAContainerViewController {
     private(set) var rankingsViewController: EventRankingsViewController
     private(set) var matchesViewController: MatchesViewController
 
-    override var subscribableModel: any MyTBASubscribable {
-        EventSubscribable(modelKey: state.key)
-    }
-
     // MARK: - Init
 
     convenience init(eventKey: EventKey, name: String? = nil, dependencies: Dependencies) {
@@ -81,6 +77,7 @@ class EventViewController: MyTBAContainerViewController {
 
         let navTitle = state.event?.friendlyNameWithYear ?? state.key
         super.init(
+            subscribableModel: EventSubscribable(modelKey: state.key),
             viewControllers: [
                 infoViewController, teamsViewController, rankingsViewController,
                 matchesViewController,

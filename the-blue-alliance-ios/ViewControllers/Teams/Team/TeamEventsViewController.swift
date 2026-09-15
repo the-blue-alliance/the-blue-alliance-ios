@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-class TeamEventsViewController: EventsListViewController {
+class TeamEventsViewController: EventsListViewController, EventsList {
 
     private let teamKey: String
     var year: Int? {
@@ -23,12 +23,12 @@ class TeamEventsViewController: EventsListViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - EventsListViewController
+    // MARK: - EventsList
 
-    override func loadEvents() async throws -> [APIEvent] {
+    func loadEvents() async throws -> [APIEvent] {
         guard let year else { return [] }
         return try await dependencies.api.teamEventsByYear(key: teamKey, year: year)
     }
 
-    override var noDataText: String? { "No events for team" }
+    var noDataText: String? { "No events for team" }
 }

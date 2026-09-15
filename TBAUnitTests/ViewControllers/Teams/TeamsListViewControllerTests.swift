@@ -123,15 +123,22 @@ struct TeamsListViewControllerTests {
 
     @Test func everyTeamListShowsTheFilter() {
         let dependencies = Dependencies.mock()
-        let lists: [TBASearchableTableViewController] = [
-            TeamsContainerViewController(dependencies: dependencies).teamsViewController,
-            EventTeamsViewController(eventKey: "2026casj", dependencies: dependencies),
-            DistrictTeamsViewController(districtKey: "2026fim", year: 2026, dependencies: dependencies),
+        let teams = TeamsContainerViewController(dependencies: dependencies).teamsViewController
+        let eventTeams = EventTeamsViewController(eventKey: "2026casj", dependencies: dependencies)
+        let districtTeams = DistrictTeamsViewController(
+            districtKey: "2026fim",
+            year: 2026,
+            dependencies: dependencies
+        )
+        let lists: [(list: TBATableViewController, searchBar: UISearchBar)] = [
+            (teams, teams.searchBar),
+            (eventTeams, eventTeams.searchBar),
+            (districtTeams, districtTeams.searchBar),
         ]
-        for list in lists {
+        for (list, searchBar) in lists {
             list.loadViewIfNeeded()
-            #expect(list.containerAccessoryView === list.searchBar)
-            #expect(list.searchBar.placeholder == "Search Teams")
+            #expect(list.containerAccessoryView === searchBar)
+            #expect(searchBar.placeholder == "Search Teams")
         }
     }
 
