@@ -154,6 +154,19 @@ extension UIColor {
         return .colorWithRGB(rgbValue: 0x487fcc)
     }
 
+    // Some teams look better in Red, some teams look better in Blue.
+    class func avatarBaseColor(teamNumber: Int) -> UIColor {
+        let blackTeams = [148, 1684]
+        if blackTeams.contains(teamNumber) {
+            return UIColor.black
+        }
+        let redTeams = [1114, 2337]
+        if redTeams.contains(teamNumber) {
+            return UIColor.avatarRed
+        }
+        return UIColor.avatarBlue
+    }
+
     class var dangerRed: UIColor {
         let dangerRed = UIColor.colorWithRGB(rgbValue: 0xf2dede)
         return dynamicColor(dangerRed, dangerRed, dangerRed, dangerRed)
