@@ -27,14 +27,14 @@ struct SearchContainerTests {
         }
     }
 
-    @Test func searchFieldIsIntegratedAndResultsShowInPlace() {
+    @Test func searchFieldIsLeftToTheSearchTabAndResultsShowInPlace() {
         let harness = Harness()
         let navigationItem = harness.container.navigationItem
 
         let searchController = try? #require(navigationItem.searchController)
         #expect(searchController?.searchResultsController == nil)
         #expect(searchController?.searchResultsUpdater is SearchViewController)
-        #expect(navigationItem.preferredSearchBarPlacement == .integrated)
+        #expect(navigationItem.preferredSearchBarPlacement == .automatic)
     }
 
 }

@@ -40,8 +40,19 @@ class SearchContainerViewController: ContainerViewController {
         super.viewDidLoad()
 
         navigationItem.searchController = searchController
-        navigationItem.preferredSearchBarPlacement = .integrated
         definesPresentationContext = true
+    }
+
+    // Search has no title and its field sits in the tab bar, so the navigation bar would only be
+    // an empty band. Hiding it before the tab shows keeps search activation from collapsing it.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
     // The segmented control filters the one child rather than switching between children.
