@@ -27,9 +27,20 @@ final class MockTBAAPI: TBAAPIProtocol {
 
     var teams: [TeamSimple] = []
     var teamsByKey: [TeamKey: Team] = [:]
+    var eventsByYear: [Int: [Event]] = [:]
     var eventsByKey: [EventKey: Event] = [:]
     var teamEventsByYear: [Int: [Event]] = [:]
-    /// Latency applied to every stubbed endpoint, so tests can interleave work
+    /// Wins over `teamEventsByYear` when a test needs different events per team.
+    var teamEventsByTeam: [TeamKey: [Event]] = [:]
+    /// Keyed by `"\(teamKey)@\(eventKey)"`.
+    var teamEventStatuses: [String: TeamEventStatus] = [:]
+    var matchesByKey: [String: Match] = [:]
+    var mediaByTeam: [TeamKey: [Media]] = [:]
+    var rankingsByEvent: [EventKey: EventRanking] = [:]
+    var alliancesByEvent: [EventKey: [EliminationAlliance]] = [:]
+    private(set) var requestedPaths: [String] = []
+
+    /// Latency to apply to every stubbed endpoint, so tests can interleave work
     /// with in-flight requests the way the network does.
     var latency: Duration = .zero
     /// Lets a cancelled request still return its result, the way a response
@@ -37,7 +48,8 @@ final class MockTBAAPI: TBAAPIProtocol {
     var latencyIgnoresCancellation = false
     private(set) var statusRequestCount = 0
 
-    private func stub<T>(_ value: T?) async throws -> T {
+    private func stub<T>(_ path: String, _ value: T?) async throws -> T {
+        requestedPaths.append(path)
         if latency > .zero, latencyIgnoresCancellation {
             let latency = latency
             await withCheckedContinuation { continuation in
@@ -62,31 +74,46 @@ final class MockTBAAPI: TBAAPIProtocol {
     func allTeams() async throws -> [Team] { throw Unstubbed() }
     func allTeamsSimple() async throws -> [TeamSimple] { teams }
     func team(key teamKey: TeamKey) async throws -> Team {
-        try await stub(teamsByKey[teamKey])
+        try await stub("team/\(teamKey)", teamsByKey[teamKey])
     }
     func teamYearsParticipated(key teamKey: TeamKey) async throws -> [Int] { throw Unstubbed() }
     func teamEventsByYear(key teamKey: TeamKey, year: Int) async throws -> [Event] {
-        try await stub(teamEventsByYear[year])
+        try await stub(
+            "team/\(teamKey)/events/\(year)",
+            teamEventsByTeam[teamKey] ?? teamEventsByYear[year]
+        )
     }
     func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match] { throw Unstubbed() }
     func teamEventAwards(teamKey: TeamKey, eventKey: EventKey) async throws -> [Award] { throw Unstubbed() }
-    func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus { throw Unstubbed() }
+    func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus {
+        try await stub("team/\(teamKey)/event/\(eventKey)/status", teamEventStatuses["\(teamKey)@\(eventKey)"])
+    }
     func teamEventsStatusesByYear(teamKey: TeamKey, year: Int) async throws -> [EventKey: TeamEventStatus?] { throw Unstubbed() }
-    func teamMediaByYear(teamKey: TeamKey, year: Int) async throws -> [Media] { throw Unstubbed() }
+    func teamMediaByYear(teamKey: TeamKey, year: Int) async throws -> [Media] {
+        try await stub("team/\(teamKey)/media/\(year)", mediaByTeam[teamKey])
+    }
     func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus] { throw Unstubbed() }
-    func eventsByYear(_ year: Int) async throws -> [Event] { throw Unstubbed() }
+    func eventsByYear(_ year: Int) async throws -> [Event] {
+        try await stub("events/\(year)", eventsByYear[year])
+    }
     func event(key eventKey: EventKey) async throws -> Event {
-        try await stub(eventsByKey[eventKey])
+        try await stub("event/\(eventKey)", eventsByKey[eventKey])
     }
     func eventTeams(key eventKey: EventKey) async throws -> [Team] { throw Unstubbed() }
     func eventTeamsSimple(key eventKey: EventKey) async throws -> [TeamSimple] { throw Unstubbed() }
-    func eventRankings(key eventKey: EventKey) async throws -> EventRanking { throw Unstubbed() }
-    func eventAlliances(key eventKey: EventKey) async throws -> [EliminationAlliance]? { throw Unstubbed() }
+    func eventRankings(key eventKey: EventKey) async throws -> EventRanking {
+        try await stub("event/\(eventKey)/rankings", rankingsByEvent[eventKey])
+    }
+    func eventAlliances(key eventKey: EventKey) async throws -> [EliminationAlliance]? {
+        try await stub("event/\(eventKey)/alliances", alliancesByEvent[eventKey])
+    }
     func eventAwards(key eventKey: EventKey) async throws -> [Award] { throw Unstubbed() }
     func eventDistrictPoints(key eventKey: EventKey) async throws -> EventDistrictPoints { throw Unstubbed() }
     func eventInsights(key eventKey: EventKey) async throws -> EventInsights { throw Unstubbed() }
     func eventMatches(key eventKey: EventKey) async throws -> [Match] { throw Unstubbed() }
-    func match(key matchKey: String) async throws -> Match { throw Unstubbed() }
+    func match(key matchKey: String) async throws -> Match {
+        try await stub("match/\(matchKey)", matchesByKey[matchKey])
+    }
     func eventOPRs(key eventKey: EventKey) async throws -> EventOPRs { throw Unstubbed() }
     func districtsByYear(_ year: Int) async throws -> [District] { throw Unstubbed() }
     func districtEvents(key districtKey: String) async throws -> [Event] { throw Unstubbed() }

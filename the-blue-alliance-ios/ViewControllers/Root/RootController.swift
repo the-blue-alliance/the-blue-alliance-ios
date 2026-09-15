@@ -2,7 +2,7 @@ import Foundation
 import MyTBAKit
 import UIKit
 
-enum RootType: CaseIterable {
+nonisolated enum RootType: CaseIterable {
     case dashboard
     case events
     case teams
@@ -33,7 +33,7 @@ enum RootType: CaseIterable {
         }
     }
 
-    var icon: UIImage? {
+    @MainActor var icon: UIImage? {
         switch self {
         case .dashboard:
             return UIImage.homeIcon

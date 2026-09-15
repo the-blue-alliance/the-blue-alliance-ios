@@ -219,6 +219,26 @@
 		BA0000000000000000000002 /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0000000000000000000001 /* EventSection.swift */; };
 		D105BC4723E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */; };
 		F1A2B3C4D5E6F7081A2B3C4D /* EventPitMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7081A2B3C4E /* EventPitMapViewController.swift */; };
+		5EC0D41A2C27100100000002 /* Kickoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100100000001 /* Kickoff.swift */; };
+		5EC0D41A2C27100200000002 /* DashboardPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100200000001 /* DashboardPhase.swift */; };
+		5EC0D41A2C27100300000002 /* DashboardCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100300000001 /* DashboardCard.swift */; };
+		5EC0D41A2C27100400000002 /* DashboardFeedBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100400000001 /* DashboardFeedBuilder.swift */; };
+		5EC0D41A2C27110100000002 /* DashboardDebugOverrides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27110100000001 /* DashboardDebugOverrides.swift */; };
+		5EC0D41A2C27120100000002 /* DashboardRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120100000001 /* DashboardRows.swift */; };
+		5EC0D41A2C27120200000002 /* DashboardTeamHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120200000001 /* DashboardTeamHeaderTableViewCell.swift */; };
+		5EC0D41A2C27120300000002 /* DashboardSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120300000001 /* DashboardSectionHeaderView.swift */; };
+		5EC0D41A2C27120400000002 /* DashboardListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120400000001 /* DashboardListTableViewCell.swift */; };
+		5EC0D41A2C27120500000002 /* DashboardSeasonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120500000001 /* DashboardSeasonTableViewCell.swift */; };
+		5EC0D41A2C27120600000002 /* DashboardUpNextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120600000001 /* DashboardUpNextTableViewCell.swift */; };
+		5EC0D41A2C27120700000002 /* DashboardTilesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120700000001 /* DashboardTilesTableViewCell.swift */; };
+		5EC0D41A2C27110200000002 /* DashboardDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27110200000001 /* DashboardDebugViewController.swift */; };
+		5EC0D41A2C27100500000002 /* Mocks/APIFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100500000001 /* Mocks/APIFixtures.swift */; };
+		5EC0D41A2C27100600000002 /* ViewModels/Dashboard/KickoffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100600000001 /* ViewModels/Dashboard/KickoffTests.swift */; };
+		5EC0D41A2C27100700000002 /* ViewModels/Dashboard/DashboardPhaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100700000001 /* ViewModels/Dashboard/DashboardPhaseTests.swift */; };
+		5EC0D41A2C27100800000002 /* ViewModels/Dashboard/DashboardFeedBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27100800000001 /* ViewModels/Dashboard/DashboardFeedBuilderTests.swift */; };
+		5EC0D41A2C27110300000002 /* ViewModels/Dashboard/DashboardDebugOverridesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27110300000001 /* ViewModels/Dashboard/DashboardDebugOverridesTests.swift */; };
+		5EC0D41A2C27120800000002 /* ViewModels/Dashboard/DashboardRowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27120800000001 /* ViewModels/Dashboard/DashboardRowsTests.swift */; };
+		5EC0D41A2C27110400000002 /* ViewControllers/Dashboard/DashboardDebugViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C27110400000001 /* ViewControllers/Dashboard/DashboardDebugViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -439,6 +459,26 @@
 		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7081A2B3C4E /* EventPitMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPitMapViewController.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100100000001 /* Kickoff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kickoff.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100200000001 /* DashboardPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPhase.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100300000001 /* DashboardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCard.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100400000001 /* DashboardFeedBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardFeedBuilder.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27110100000001 /* DashboardDebugOverrides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDebugOverrides.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120100000001 /* DashboardRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardRows.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120200000001 /* DashboardTeamHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTeamHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120300000001 /* DashboardSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSectionHeaderView.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120400000001 /* DashboardListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardListTableViewCell.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120500000001 /* DashboardSeasonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSeasonTableViewCell.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120600000001 /* DashboardUpNextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardUpNextTableViewCell.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120700000001 /* DashboardTilesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTilesTableViewCell.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27110200000001 /* DashboardDebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDebugViewController.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100500000001 /* Mocks/APIFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks/APIFixtures.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100600000001 /* ViewModels/Dashboard/KickoffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/Dashboard/KickoffTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100700000001 /* ViewModels/Dashboard/DashboardPhaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/Dashboard/DashboardPhaseTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27100800000001 /* ViewModels/Dashboard/DashboardFeedBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/Dashboard/DashboardFeedBuilderTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27110300000001 /* ViewModels/Dashboard/DashboardDebugOverridesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/Dashboard/DashboardDebugOverridesTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27120800000001 /* ViewModels/Dashboard/DashboardRowsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/Dashboard/DashboardRowsTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C27110400000001 /* ViewControllers/Dashboard/DashboardDebugViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Dashboard/DashboardDebugViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -517,6 +557,7 @@
 			children = (
 				5EC0D41A2C26090200000001 /* DashboardContainerViewController.swift */,
 				5EC0D41A2C26090300000001 /* DashboardViewController.swift */,
+				5EC0D41A2C27110200000001 /* DashboardDebugViewController.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -1013,6 +1054,7 @@
 			isa = PBXGroup;
 			children = (
 				92B55628215FCB0900C1D9A3 /* Protocols */,
+				5EC0D41A2C27120900000001 /* Dashboard */,
 				929DB38A209563E800FB575F /* Base */,
 				92564C69216180470047917F /* Media */,
 				145C57B31ED377DE004955B2 /* Match */,
@@ -1059,6 +1101,7 @@
 			children = (
 				929AACF32F95A8EA00587DEA /* Event */,
 				AA00000000000000000AA00B /* Match */,
+				5EC0D41A2C27100900000001 /* Dashboard */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1075,6 +1118,13 @@
 				92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */,
 				92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */,
+				5EC0D41A2C27100500000001 /* Mocks/APIFixtures.swift */,
+				5EC0D41A2C27100600000001 /* ViewModels/Dashboard/KickoffTests.swift */,
+				5EC0D41A2C27100700000001 /* ViewModels/Dashboard/DashboardPhaseTests.swift */,
+				5EC0D41A2C27100800000001 /* ViewModels/Dashboard/DashboardFeedBuilderTests.swift */,
+				5EC0D41A2C27110300000001 /* ViewModels/Dashboard/DashboardDebugOverridesTests.swift */,
+				5EC0D41A2C27120800000001 /* ViewModels/Dashboard/DashboardRowsTests.swift */,
+				5EC0D41A2C27110400000001 /* ViewControllers/Dashboard/DashboardDebugViewControllerTests.swift */,
 				5EC0D41A2C26091100000003 /* ViewModels/Event/EventDivisionsViewModelTests.swift */,
 				5EC0D41A2C26091000000005 /* ViewModels/Match/MatchTimesViewModelTests.swift */,
 				5EC0D41A2C26060100000003 /* ViewControllers/Events/WeekEventsViewControllerTests.swift */,
@@ -1089,6 +1139,32 @@
 				5EC0D41A2C26060100000005 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift */,
 			);
 			path = TBAUnitTests;
+			sourceTree = "<group>";
+		};
+		5EC0D41A2C27100900000001 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C27100100000001 /* Kickoff.swift */,
+				5EC0D41A2C27100200000001 /* DashboardPhase.swift */,
+				5EC0D41A2C27100300000001 /* DashboardCard.swift */,
+				5EC0D41A2C27100400000001 /* DashboardFeedBuilder.swift */,
+				5EC0D41A2C27110100000001 /* DashboardDebugOverrides.swift */,
+				5EC0D41A2C27120100000001 /* DashboardRows.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		5EC0D41A2C27120900000001 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C27120200000001 /* DashboardTeamHeaderTableViewCell.swift */,
+				5EC0D41A2C27120300000001 /* DashboardSectionHeaderView.swift */,
+				5EC0D41A2C27120400000001 /* DashboardListTableViewCell.swift */,
+				5EC0D41A2C27120500000001 /* DashboardSeasonTableViewCell.swift */,
+				5EC0D41A2C27120600000001 /* DashboardUpNextTableViewCell.swift */,
+				5EC0D41A2C27120700000001 /* DashboardTilesTableViewCell.swift */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1317,6 +1393,13 @@
 				92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */,
 				92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* ViewModels/Event/EventSectionTests.swift in Sources */,
+				5EC0D41A2C27100500000002 /* Mocks/APIFixtures.swift in Sources */,
+				5EC0D41A2C27100600000002 /* ViewModels/Dashboard/KickoffTests.swift in Sources */,
+				5EC0D41A2C27100700000002 /* ViewModels/Dashboard/DashboardPhaseTests.swift in Sources */,
+				5EC0D41A2C27100800000002 /* ViewModels/Dashboard/DashboardFeedBuilderTests.swift in Sources */,
+				5EC0D41A2C27110300000002 /* ViewModels/Dashboard/DashboardDebugOverridesTests.swift in Sources */,
+				5EC0D41A2C27120800000002 /* ViewModels/Dashboard/DashboardRowsTests.swift in Sources */,
+				5EC0D41A2C27110400000002 /* ViewControllers/Dashboard/DashboardDebugViewControllerTests.swift in Sources */,
 				5EC0D41A2C26091100000004 /* ViewModels/Event/EventDivisionsViewModelTests.swift in Sources */,
 				5EC0D41A2C26091000000006 /* ViewModels/Match/MatchTimesViewModelTests.swift in Sources */,
 				5EC0D41A2C26060100000004 /* ViewControllers/Events/WeekEventsViewControllerTests.swift in Sources */,
@@ -1342,6 +1425,19 @@
 				5EC0D41A2C26090100000002 /* FeatureFlagsStore.swift in Sources */,
 				5EC0D41A2C26090200000002 /* DashboardContainerViewController.swift in Sources */,
 				5EC0D41A2C26090300000002 /* DashboardViewController.swift in Sources */,
+				5EC0D41A2C27100100000002 /* Kickoff.swift in Sources */,
+				5EC0D41A2C27100200000002 /* DashboardPhase.swift in Sources */,
+				5EC0D41A2C27100300000002 /* DashboardCard.swift in Sources */,
+				5EC0D41A2C27100400000002 /* DashboardFeedBuilder.swift in Sources */,
+				5EC0D41A2C27110100000002 /* DashboardDebugOverrides.swift in Sources */,
+				5EC0D41A2C27120100000002 /* DashboardRows.swift in Sources */,
+				5EC0D41A2C27120200000002 /* DashboardTeamHeaderTableViewCell.swift in Sources */,
+				5EC0D41A2C27120300000002 /* DashboardSectionHeaderView.swift in Sources */,
+				5EC0D41A2C27120400000002 /* DashboardListTableViewCell.swift in Sources */,
+				5EC0D41A2C27120500000002 /* DashboardSeasonTableViewCell.swift in Sources */,
+				5EC0D41A2C27120600000002 /* DashboardUpNextTableViewCell.swift in Sources */,
+				5EC0D41A2C27120700000002 /* DashboardTilesTableViewCell.swift in Sources */,
+				5EC0D41A2C27110200000002 /* DashboardDebugViewController.swift in Sources */,
 				5EC0D41A2C26042100000004 /* JSONFileStore.swift in Sources */,
 				5EC0D41A2C26041F00000002 /* AppGroup.swift in Sources */,
 				5EC0D41A2C26041B00000002 /* PushNotificationPayload.swift in Sources */,
