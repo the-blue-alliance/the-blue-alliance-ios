@@ -298,18 +298,19 @@ class TeamViewController: HeaderContainerViewController {
     }
 
     private func updateYearMenu() {
-        teamHeaderView.yearButton.menu =
-            yearsParticipated.isEmpty
-            ? nil
-            : UIMenu(
-                options: .singleSelection,
-                children: yearsParticipated.map { option in
-                    UIAction(title: String(option), state: option == year ? .on : .off) {
-                        [weak self] _ in
-                        self?.year = option
-                    }
+        guard !yearsParticipated.isEmpty else {
+            teamHeaderView.yearButton.menu = nil
+            return
+        }
+        teamHeaderView.yearButton.menu = UIMenu(
+            options: .singleSelection,
+            children: yearsParticipated.map { option in
+                UIAction(title: String(option), state: option == year ? .on : .off) {
+                    [weak self] _ in
+                    self?.year = option
                 }
-            )
+            }
+        )
     }
 
 }
