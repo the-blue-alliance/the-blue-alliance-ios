@@ -47,6 +47,7 @@
 		5EC0D41A2C26060100000002 /* ViewModels/Event/EventSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */; };
 		5EC0D41A2C26060100000004 /* ViewControllers/Events/WeekEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000003 /* ViewControllers/Events/WeekEventsViewControllerTests.swift */; };
 		5EC0D41A2C26150200000002 /* ViewControllers/Events/EventViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26150200000001 /* ViewControllers/Events/EventViewControllerTests.swift */; };
+		5EC0D41A2C26150300000002 /* ViewControllers/YearMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26150300000001 /* ViewControllers/YearMenuTests.swift */; };
 		5EC0D41A2C26060100000006 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26060100000005 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift */; };
 		5EC0D41A2C26070100000002 /* Mocks/DependenciesMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000001 /* Mocks/DependenciesMocks.swift */; };
 		5EC0D41A2C26070100000004 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26070100000003 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift */; };
@@ -273,6 +274,7 @@
 		5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/Event/EventSectionTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000003 /* ViewControllers/Events/WeekEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Events/WeekEventsViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26150200000001 /* ViewControllers/Events/EventViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Events/EventViewControllerTests.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26150300000001 /* ViewControllers/YearMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/YearMenuTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26060100000005 /* ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewElements/Match/Breakdown/MatchBreakdownConfigurator2023Tests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000001 /* Mocks/DependenciesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks/DependenciesMocks.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26070100000003 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Match/MatchBreakdownViewControllerTests.swift; sourceTree = "<group>"; };
@@ -1079,6 +1081,7 @@
 				5EC0D41A2C26091000000005 /* ViewModels/Match/MatchTimesViewModelTests.swift */,
 				5EC0D41A2C26060100000003 /* ViewControllers/Events/WeekEventsViewControllerTests.swift */,
 				5EC0D41A2C26150200000001 /* ViewControllers/Events/EventViewControllerTests.swift */,
+				5EC0D41A2C26150300000001 /* ViewControllers/YearMenuTests.swift */,
 				5EC0D41A2C26070100000001 /* Mocks/DependenciesMocks.swift */,
 				5EC0D41A2C26070100000003 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift */,
 				5EC0D41A2C26070100000005 /* ViewControllers/Teams/TeamsListViewControllerTests.swift */,
@@ -1321,6 +1324,7 @@
 				5EC0D41A2C26091000000006 /* ViewModels/Match/MatchTimesViewModelTests.swift in Sources */,
 				5EC0D41A2C26060100000004 /* ViewControllers/Events/WeekEventsViewControllerTests.swift in Sources */,
 				5EC0D41A2C26150200000002 /* ViewControllers/Events/EventViewControllerTests.swift in Sources */,
+				5EC0D41A2C26150300000002 /* ViewControllers/YearMenuTests.swift in Sources */,
 				5EC0D41A2C26070100000002 /* Mocks/DependenciesMocks.swift in Sources */,
 				5EC0D41A2C26070100000004 /* ViewControllers/Match/MatchBreakdownViewControllerTests.swift in Sources */,
 				5EC0D41A2C26070100000006 /* ViewControllers/Teams/TeamsListViewControllerTests.swift in Sources */,

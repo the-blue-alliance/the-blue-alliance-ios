@@ -52,19 +52,26 @@ class DistrictsContainerViewController: ContainerViewController {
         yearButton.configuration?.title = String(year)
     }
 
-    private lazy var yearButton: UIButton = {
-        let years = Array(2009...statusService.maxSeason).reversed()
-        let menu = UIMenu(
+    private lazy var yearButton = UIButton.menuPill(title: String(year), menu: yearMenu())
+
+    // Reading `maxSeason` here rebuilds the menu when `/status` loads after the button is built.
+    override func updateProperties() {
+        super.updateProperties()
+
+        yearButton.menu = yearMenu()
+    }
+
+    private func yearMenu() -> UIMenu {
+        UIMenu(
             options: .singleSelection,
-            children: years.map { option in
+            children: Array(2009...statusService.maxSeason).reversed().map { option in
                 UIAction(title: String(option), state: option == year ? .on : .off) {
                     [weak self] _ in
                     self?.year = option
                 }
             }
         )
-        return UIButton.menuPill(title: String(year), menu: menu)
-    }()
+    }
 
 }
 
