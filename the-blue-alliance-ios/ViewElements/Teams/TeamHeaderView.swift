@@ -94,7 +94,7 @@ class TeamHeaderView: UIView {
         return stackView
     }()
 
-    let yearButton = ContainerViewController.makeMenuButton()
+    let yearButton = UIButton.menuPill()
     private lazy var yearStackView: UIStackView = {
         let spacerView = UIView()
         spacerView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -178,7 +178,7 @@ class TeamHeaderView: UIView {
     private lazy var skeletonYearPill: UIView = {
         let v = UIView()
         v.isSkeletonable = true
-        let pill = ContainerViewController.makeMenuButton()
+        let pill = UIButton.menuPill()
         pill.configuration?.title = "0000"
         let size = pill.intrinsicContentSize
         v.skeletonCornerRadius = Float(size.height / 2)

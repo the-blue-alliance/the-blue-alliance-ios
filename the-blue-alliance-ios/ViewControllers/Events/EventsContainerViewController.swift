@@ -30,7 +30,7 @@ class EventsContainerViewController: ContainerViewController {
         navigationItem.backButtonTitle = RootType.events.title
         tabBarItem.image = RootType.events.icon
 
-        rightBarButtonItems = [ContainerViewController.makeBarButtonItem(yearButton)]
+        rightBarButtonItems = [UIBarButtonItem(pill: yearButton)]
         eventsViewController.delegate = self
         eventsViewController.weekEventsDelegate = self
     }
@@ -73,7 +73,7 @@ class EventsContainerViewController: ContainerViewController {
     }
 
     private lazy var yearButton: UIButton = {
-        let button = ContainerViewController.makeMenuButton(menu: yearMenu())
+        let button = UIButton.menuPill(menu: yearMenu())
         button.configuration?.title = String(year)
         return button
     }()
