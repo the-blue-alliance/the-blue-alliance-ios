@@ -73,6 +73,7 @@ final class StatusService: StatusServiceProtocol {
     private(set) var status: AppStatus = .default
 
     @ObservationIgnored private var pollTask: Task<Void, Never>?
+    @ObservationIgnored private var foregroundObserver: NotificationCenter.ObservationToken?
 
     var currentSeason: Int { status.currentSeason }
     var maxSeason: Int { status.maxSeason }
@@ -83,6 +84,14 @@ final class StatusService: StatusServiceProtocol {
     }
 
     func start() {
+        startPolling()
+        // Coming back checks right away, then every five minutes from there.
+        foregroundObserver = NotificationCenter.default.addForegroundObserver { [weak self] in
+            self?.startPolling()
+        }
+    }
+
+    private func startPolling() {
         pollTask?.cancel()
         pollTask = Task { [weak self] in
             while !Task.isCancelled {

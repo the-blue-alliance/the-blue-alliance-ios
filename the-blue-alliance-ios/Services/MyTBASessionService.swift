@@ -33,6 +33,7 @@ final class MyTBASessionService {
     private let pushService: any PushServiceProtocol
     private let reporter: any Reporter
     private let applicationState: @MainActor () -> UIApplication.State
+    private var foregroundObserver: NotificationCenter.ObservationToken?
 
     init(
         authService: any AuthServiceProtocol,
@@ -52,6 +53,43 @@ final class MyTBASessionService {
         self.applicationState = applicationState
     }
 
+    /// Refreshes favorites and subscriptions each time the app comes back to the foreground, so
+    /// a change made on the web or another device shows up without a silent push.
+    func start() {
+        foregroundObserver = NotificationCenter.default.addForegroundObserver { [weak self] in
+            try? await self?.refresh()
+        }
+    }
+
+    // MARK: - Refresh
+    //
+    // The only place favorites and subscriptions are fetched and saved. The foreground, sign-in,
+    // silent pushes, and the myTBA screens all ask for a refresh here, and stars and lists update
+    // from the stores.
+
+    func refresh() async throws {
+        // Task handles instead of async let, see #996.
+        let favorites = Task { try await refreshFavorites() }
+        let subscriptions = Task { try await refreshSubscriptions() }
+        try await favorites.value
+        try await subscriptions.value
+    }
+
+    func refreshFavorites() async throws {
+        guard authService.isSignedIn else { return }
+        let favorites = try await myTBA.fetchFavorites()
+        // A sign-out while this was loading has already cleared the store.
+        guard authService.isSignedIn else { return }
+        myTBAStores.favorites.replaceAll(with: favorites)
+    }
+
+    func refreshSubscriptions() async throws {
+        guard authService.isSignedIn else { return }
+        let subscriptions = try await myTBA.fetchSubscriptions()
+        guard authService.isSignedIn else { return }
+        myTBAStores.subscriptions.replaceAll(with: subscriptions)
+    }
+
     func signIn(
         with kind: AuthProviderKind,
         presenting viewController: UIViewController
@@ -63,6 +101,8 @@ final class MyTBASessionService {
         } catch {
             throw MyTBASessionError.signIn(error)
         }
+        // Not awaited, so it doesn't wait on the notification prompt below.
+        Task { try? await refresh() }
 
         // The auth state change already kicked PushService into registering the
         // device. Without this prompt those pushes never display.
@@ -118,6 +158,8 @@ final class MyTBASessionService {
         guard await authService.restorePreviousSignIn() else {
             return
         }
+        // At launch the first foreground refresh runs before the session is back, so it skips.
+        Task { try? await refresh() }
         // A silent push can launch us straight into the background, where
         // there's no one to answer a permission alert and a tight time budget
         // to spend. Registering the device doesn't depend on this - the

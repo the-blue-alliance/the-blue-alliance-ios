@@ -163,6 +163,7 @@ private extension AppDelegate {
         // The actual ID token is fetched per-request via `FirebaseIDTokenProvider`,
         // so we no longer listen for (or care about) token refreshes here.
         authService.start()
+        myTBASession.start()
         Task { await myTBASession.restorePreviousSignIn() }
     }
 

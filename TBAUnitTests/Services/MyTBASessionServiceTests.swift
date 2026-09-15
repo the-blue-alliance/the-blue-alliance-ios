@@ -240,6 +240,66 @@ struct MyTBASessionServiceTests {
         #expect(harness.stores.subscriptions.subscriptions.count == 1)
     }
 
+    // MARK: - Refresh
+
+    private static func waitForFavorites(_ harness: Harness, keys: [String]) async -> [String] {
+        for _ in 0..<200 where harness.stores.favorites.favorites.map(\.modelKey) != keys {
+            try? await Task.sleep(for: .milliseconds(10))
+        }
+        return harness.stores.favorites.favorites.map(\.modelKey)
+    }
+
+    @Test func refreshReplacesTheStoresWithTheServersLists() async throws {
+        let harness = Self.makeHarness()
+        defer { try? FileManager.default.removeItem(at: harness.directory) }
+        Self.seedStores(harness)
+        harness.authService.isSignedIn = true
+        harness.myTBA.favorites = [MyTBAFavorite(modelKey: "2026casj", modelType: .event)]
+
+        try await harness.service.refresh()
+
+        #expect(harness.stores.favorites.favorites.map(\.modelKey) == ["2026casj"])
+        #expect(harness.stores.subscriptions.subscriptions.isEmpty)
+    }
+
+    @Test func refreshLeavesTheStoresAloneWhenSignedOut() async throws {
+        let harness = Self.makeHarness()
+        defer { try? FileManager.default.removeItem(at: harness.directory) }
+        Self.seedStores(harness)
+
+        try await harness.service.refresh()
+
+        #expect(harness.stores.favorites.favorites.count == 1)
+        #expect(harness.stores.subscriptions.subscriptions.count == 1)
+    }
+
+    @Test func comingBackToTheForegroundRefreshes() async {
+        let harness = Self.makeHarness()
+        defer { try? FileManager.default.removeItem(at: harness.directory) }
+        harness.authService.isSignedIn = true
+        harness.myTBA.favorites = [MyTBAFavorite(modelKey: "frc254", modelType: .team)]
+        harness.service.start()
+
+        NotificationCenter.default.post(
+            name: UIApplication.willEnterForegroundNotification,
+            object: UIApplication.shared
+        )
+
+        #expect(await Self.waitForFavorites(harness, keys: ["frc254"]) == ["frc254"])
+    }
+
+    @Test func restoringASessionRefreshes() async {
+        let harness = Self.makeHarness()
+        defer { try? FileManager.default.removeItem(at: harness.directory) }
+        harness.authService.restoreResult = true
+        harness.authService.isSignedIn = true
+        harness.myTBA.favorites = [MyTBAFavorite(modelKey: "frc1114", modelType: .team)]
+
+        await harness.service.restorePreviousSignIn()
+
+        #expect(await Self.waitForFavorites(harness, keys: ["frc1114"]) == ["frc1114"])
+    }
+
     // MARK: - Restore
 
     @Test func restoreRequestsPushOnlyWhenASessionCameBack() async {

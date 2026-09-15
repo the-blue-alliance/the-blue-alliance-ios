@@ -35,6 +35,7 @@ final class MockTBAAPI: TBAAPIProtocol {
     /// Lets a cancelled request still return its result, the way a response
     /// that has already left the network does.
     var latencyIgnoresCancellation = false
+    private(set) var statusRequestCount = 0
 
     private func stub<T>(_ value: T?) async throws -> T {
         if latency > .zero, latencyIgnoresCancellation {
@@ -53,7 +54,10 @@ final class MockTBAAPI: TBAAPIProtocol {
 
     func setCachePolicy(_ policy: TBAAPI.CachePolicy) async {}
     func clearCache() async {}
-    func getStatus() async throws -> APIStatus { throw Unstubbed() }
+    func getStatus() async throws -> APIStatus {
+        statusRequestCount += 1
+        throw Unstubbed()
+    }
     func getSearchIndex() async throws -> SearchIndex { throw Unstubbed() }
     func allTeams() async throws -> [Team] { throw Unstubbed() }
     func allTeamsSimple() async throws -> [TeamSimple] { teams }
