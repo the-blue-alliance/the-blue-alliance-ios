@@ -13,8 +13,6 @@ class TeamHeaderView: UIView {
 
     fileprivate static let avatarSize: CGSize = .init(width: 55, height: 55)
     fileprivate static let avatarCornerRadius: CGFloat = 5
-    fileprivate static let yearPillSize: CGSize = .init(width: 84, height: 28)
-    fileprivate static var yearPillCornerRadius: CGFloat { yearPillSize.height / 2 }
     fileprivate static let headerStackSpacing: CGFloat = 8
 
     fileprivate static func teamNumberFont() -> UIFont {
@@ -96,7 +94,7 @@ class TeamHeaderView: UIView {
         return stackView
     }()
 
-    let yearButton = YearButton()
+    let yearButton = UIButton.menuPill(title: "----")
     private lazy var yearStackView: UIStackView = {
         let spacerView = UIView()
         spacerView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -180,11 +178,9 @@ class TeamHeaderView: UIView {
     private lazy var skeletonYearPill: UIView = {
         let v = UIView()
         v.isSkeletonable = true
-        v.skeletonCornerRadius = Float(Self.yearPillCornerRadius)
-        // Sized for "YYYY" + chevron + YearButton's content insets — the year
-        // is always 4 digits, so this matches the real button to within a
-        // pixel and avoids a width snap when the real button replaces it.
-        v.autoSetDimensions(to: Self.yearPillSize)
+        let size = UIButton.menuPill(title: "0000").intrinsicContentSize
+        v.skeletonCornerRadius = Float(size.height / 2)
+        v.autoSetDimensions(to: size)
         return v
     }()
 
@@ -311,7 +307,7 @@ class TeamHeaderView: UIView {
         teamNameLabel.text = viewModel.nickname
         teamNameLabel.isHidden = viewModel.nickname == nil
 
-        yearButton.year = viewModel.year
+        yearButton.configuration?.title = viewModel.year.map(String.init) ?? "----"
     }
 
     // MARK: Avatar API
@@ -533,127 +529,4 @@ private class AvatarImageView: UIView {
         layer.borderColor = newColor.cgColor
     }
 
-}
-
-class YearButton: UIControl {
-
-    private static let minimumTouchTarget: CGFloat = 44
-
-    private let label: UILabel = {
-        let label = UILabel()
-        let base = UIFont.preferredFont(forTextStyle: .callout).pointSize
-        label.font = UIFont.monospacedDigitSystemFont(ofSize: base, weight: .bold)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = UIColor.navigationBarTintColor
-        label.text = "----"
-        return label
-    }()
-
-    private let chevronView: UIImageView = {
-        let imageView = UIImageView(
-            image: UIImage(
-                systemName: "chevron.down",
-                withConfiguration: UIImage.SymbolConfiguration(
-                    textStyle: .callout,
-                    scale: .small
-                )
-            )
-        )
-        imageView.tintColor = UIColor.navigationBarTintColor
-        imageView.contentMode = .center
-        return imageView
-    }()
-
-    private let spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.color = UIColor.navigationBarTintColor
-        spinner.hidesWhenStopped = false
-        spinner.isHidden = true
-        return spinner
-    }()
-
-    private let trailingContainer = TrailingContainerView()
-
-    var year: Int? {
-        didSet { label.text = year.map(String.init) ?? "----" }
-    }
-
-    var isLoading: Bool = false {
-        didSet {
-            guard isLoading != oldValue else { return }
-            chevronView.isHidden = isLoading
-            spinner.isHidden = !isLoading
-            if isLoading {
-                spinner.startAnimating()
-            } else {
-                spinner.stopAnimating()
-            }
-        }
-    }
-
-    override var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? UIColor.lightGray : UIColor.white
-        }
-    }
-
-    init() {
-        super.init(frame: .zero)
-
-        backgroundColor = UIColor.white
-        layer.masksToBounds = true
-
-        for child in [chevronView, spinner] as [UIView] {
-            child.translatesAutoresizingMaskIntoConstraints = false
-            trailingContainer.addSubview(child)
-            NSLayoutConstraint.activate([
-                child.centerXAnchor.constraint(equalTo: trailingContainer.centerXAnchor),
-                child.centerYAnchor.constraint(equalTo: trailingContainer.centerYAnchor),
-            ])
-        }
-
-        let stack = UIStackView(arrangedSubviews: [label, trailingContainer])
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.spacing = 2
-        stack.isUserInteractionEnabled = false
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
-        ])
-
-        setContentHuggingPriority(.defaultHigh, for: .horizontal)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layer.cornerRadius = bounds.height / 2
-    }
-
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let dx = max(0, (Self.minimumTouchTarget - bounds.width) / 2)
-        let dy = max(0, (Self.minimumTouchTarget - bounds.height) / 2)
-        return bounds.insetBy(dx: -dx, dy: -dy).contains(point)
-    }
-
-}
-
-private final class TrailingContainerView: UIView {
-    override var intrinsicContentSize: CGSize {
-        var size = CGSize.zero
-        for sub in subviews {
-            let s = sub.intrinsicContentSize
-            size.width = max(size.width, s.width)
-            size.height = max(size.height, s.height)
-        }
-        return size
-    }
 }

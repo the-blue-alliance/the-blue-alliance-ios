@@ -30,7 +30,7 @@ class DistrictsContainerViewController: ContainerViewController {
         navigationItem.backButtonTitle = RootType.districts.title
         tabBarItem.image = RootType.districts.icon
 
-        rightBarButtonItems = [ContainerViewController.makeBarButtonItem(yearButton)]
+        rightBarButtonItems = [UIBarButtonItem(pill: yearButton)]
         districtsViewController.delegate = self
     }
 
@@ -63,9 +63,7 @@ class DistrictsContainerViewController: ContainerViewController {
                 }
             }
         )
-        let button = ContainerViewController.makeMenuButton(menu: menu)
-        button.configuration?.title = String(year)
-        return button
+        return UIButton.menuPill(title: String(year), menu: menu)
     }()
 
 }

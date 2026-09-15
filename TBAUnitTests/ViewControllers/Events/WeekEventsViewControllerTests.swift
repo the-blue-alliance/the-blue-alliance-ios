@@ -330,6 +330,40 @@ struct WeekEventsGroupingTests {
                 .map(\.weekString) == ["Week 1", "September Offseason", "Other"]
         )
     }
+
+    @Test func sameWeek_matchesAnyEventInTheBucket() {
+        let representative = makeEvent(
+            key: "2026grc",
+            year: 2026,
+            eventType: .offseason,
+            startDate: "2026-09-11",
+            endDate: "2026-09-12"
+        )
+        let selected = makeEvent(
+            key: "2026cc",
+            year: 2026,
+            eventType: .offseason,
+            startDate: "2026-09-18",
+            endDate: "2026-09-20"
+        )
+        let october = makeEvent(
+            key: "2026oct",
+            year: 2026,
+            eventType: .offseason,
+            startDate: "2026-10-03",
+            endDate: "2026-10-04"
+        )
+        let lastYear = makeEvent(
+            key: "2025cc",
+            year: 2025,
+            eventType: .offseason,
+            startDate: "2025-09-19",
+            endDate: "2025-09-21"
+        )
+        #expect(WeekEventsGrouping.isSameWeek(representative, selected))
+        #expect(!WeekEventsGrouping.isSameWeek(representative, october))
+        #expect(!WeekEventsGrouping.isSameWeek(selected, lastYear))
+    }
 }
 
 // MARK: - Test helpers
