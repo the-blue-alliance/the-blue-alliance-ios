@@ -32,7 +32,7 @@ $ plutil -extract CFBundleIcons.CFBundleAlternateIcons raw -o - \
 
 If you skip step 3 the icon never registers as an alternate, and the App Icon section hides itself rather than showing a picker with nothing to pick — so a vanished section usually means a missing build setting.
 
-Keep the lamp layer at the placement used by the other icons — `scale 6.27`, `translation-in-points [0, 0]` — which matches the official mark in [the-blue-alliance-logo](https://github.com/the-blue-alliance/the-blue-alliance-logo). Icons that disagree make the lamp visibly jump when switching.
+Keep the lamp layer at the placement used by the other icons — `scale 6.27`, `translation-in-points [0, 14]`, which matches the official mark in [the-blue-alliance-logo](https://github.com/the-blue-alliance/the-blue-alliance-logo) nudged down so it reads as optically centered under Liquid Glass lighting. Copy the lamp group from `AppIcon.icon` (opacity, translucency, shadow, specular, refractivity) rather than tuning it per icon. Icons that disagree make the lamp visibly jump when switching.
 
 Name image layers descriptively (`canopy-leaf-1.png`, not `leaf3 2.png`), and avoid spaces — Icon Composer will happily hand you filenames containing a narrow no-break space (U+202F), which is a cross-platform hazard.
 

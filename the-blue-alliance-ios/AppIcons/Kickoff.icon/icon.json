@@ -3,19 +3,9 @@
     "refractivity",
     "specular-location"
   ],
-  "fill-specializations" : [
-    {
-      "value" : {
-        "automatic-gradient" : "display-p3:0.02617,0.52275,0.96783,1.00000"
-      }
-    },
-    {
-      "appearance" : "dark",
-      "value" : {
-        "automatic-gradient" : "display-p3:0.00254,0.05078,0.09402,1.00000"
-      }
-    }
-  ],
+  "fill" : {
+    "automatic-gradient" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+  },
   "groups" : [
     {
       "layers" : [
@@ -50,39 +40,24 @@
     {
       "layers" : [
         {
-          "image-name" : "offseason-background.png",
-          "name" : "offseason-background",
-          "opacity-specializations" : [
-            {
-              "value" : 1
-            },
-            {
-              "appearance" : "dark",
-              "value" : 0.5
-            }
-          ],
+          "image-name" : "kickoff-background.png",
+          "name" : "kickoff-background",
           "position" : {
-            "scale" : 1.28,
+            "scale" : 1.15,
             "translation-in-points" : [
-              0,
-              0
+              -15.0234375,
+              13.4609375
             ]
           }
         }
       ],
-      "opacity-specializations" : [
-        {
-          "appearance" : "dark",
-          "value" : 1
-        }
-      ],
       "shadow" : {
         "kind" : "neutral",
-        "opacity" : 0.5
+        "opacity" : 0.54
       },
       "translucency" : {
         "enabled" : true,
-        "value" : 0.42
+        "value" : 0
       }
     }
   ],
