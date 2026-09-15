@@ -22,6 +22,7 @@
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		3604CAAA303FEEBD00DC500B /* Champs.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA8303FEEBD00DC500B /* Champs.icon */; };
+		3604CAC13041000000DC500B /* Kickoff.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAC03041000000DC500B /* Kickoff.icon */; };
 		3604CAAD303FEEBD00DC500B /* Offseason.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CAA9303FEEBD00DC500B /* Offseason.icon */; };
 		3604CABD3040CAFF00DC500B /* Canopy.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3604CABC3040CAFF00DC500B /* Canopy.icon */; };
 		371D9C9D2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */; };
@@ -249,6 +250,7 @@
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		3604CAA8303FEEBD00DC500B /* Champs.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Champs.icon; sourceTree = "<group>"; };
+		3604CAC03041000000DC500B /* Kickoff.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Kickoff.icon; sourceTree = "<group>"; };
 		3604CAA9303FEEBD00DC500B /* Offseason.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Offseason.icon; sourceTree = "<group>"; };
 		3604CABC3040CAFF00DC500B /* Canopy.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Canopy.icon; sourceTree = "<group>"; };
 		371D9C9C2BA608EC00341829 /* MatchBreakdownConfigurator2024.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2024.swift; sourceTree = "<group>"; };
@@ -493,6 +495,7 @@
 				A11CF00E00000000000000FF /* AppIcon.icon */,
 				3604CABC3040CAFF00DC500B /* Canopy.icon */,
 				3604CAA8303FEEBD00DC500B /* Champs.icon */,
+				3604CAC03041000000DC500B /* Kickoff.icon */,
 				3604CAA9303FEEBD00DC500B /* Offseason.icon */,
 			);
 			path = AppIcons;
@@ -1222,6 +1225,7 @@
 				A11CF00E00000000000000BB /* AppIcon.icon in Resources */,
 				3604CABD3040CAFF00DC500B /* Canopy.icon in Resources */,
 				3604CAAA303FEEBD00DC500B /* Champs.icon in Resources */,
+				3604CAC13041000000DC500B /* Kickoff.icon in Resources */,
 				3604CAAD303FEEBD00DC500B /* Offseason.icon in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
@@ -1678,7 +1682,7 @@
 		92942DA71E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Offseason";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Kickoff Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
@@ -1703,7 +1707,7 @@
 		92942DA81E2154DA008E79CA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Offseason";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Kickoff Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";

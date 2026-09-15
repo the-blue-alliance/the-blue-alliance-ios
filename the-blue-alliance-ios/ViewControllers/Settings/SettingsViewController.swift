@@ -374,16 +374,23 @@ class SettingsViewController: TBATableViewController {
         return primaryIconsDictionary["CFBundleIconName"] as? String
     }
 
-    /// The names of every alternate icon, as passed to `setAlternateIconName`.
+    /// The names of every alternate icon, as passed to `setAlternateIconName`, in the order
+    /// they're listed in `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES`.
     private lazy var alternateAppIconNames: [String] = {
         guard let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
             let alternateIconsDictionary = iconsDictionary["CFBundleAlternateIcons"]
                 as? [String: Any]
         else { return [] }
-        return Array(alternateIconsDictionary.keys)
+        // `CFBundleAlternateIcons` is a dictionary, so the build setting's order is lost there.
+        // Info.plist carries the setting through verbatim to recover it.
+        let order =
+            (Bundle.main.infoDictionary?["TBAAlternateAppIconOrder"] as? String)?
+            .split(separator: " ").map(String.init) ?? []
+        let unordered = alternateIconsDictionary.keys.filter { !order.contains($0) }.sorted()
+        return order.filter { alternateIconsDictionary[$0] != nil } + unordered
     }()
 
-    /// The primary icon followed by every alternate icon, sorted for a stable order.
+    /// The primary icon followed by every alternate icon.
     private lazy var appIconOptions: [AppIconOption] = {
         let primary = AppIconOption(
             alternateName: nil,
@@ -399,7 +406,6 @@ class SettingsViewController: TBATableViewController {
                     imageName: Self.previewImageName(for: $0)
                 )
             }
-            .sorted { $0.displayName.localizedStandardCompare($1.displayName) == .orderedAscending }
         return [primary] + alternates
     }()
 

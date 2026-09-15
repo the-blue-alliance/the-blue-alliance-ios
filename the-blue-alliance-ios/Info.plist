@@ -51,6 +51,8 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>TBAAlternateAppIconOrder</key>
+	<string>$(ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>

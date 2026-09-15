@@ -1,100 +1,119 @@
 {
-  "fill": {
-    "automatic-gradient": "display-p3:0.33183,0.45590,0.22411,1.00000"
+  "features" : [
+    "refractivity",
+    "specular-location"
+  ],
+  "fill" : {
+    "automatic-gradient" : "display-p3:0.33183,0.45590,0.22411,1.00000"
   },
-  "groups": [
+  "groups" : [
     {
-      "blur-material": 0.11,
-      "layers": [
+      "blur-material-specializations" : [
         {
-          "image-name": "tba-lamp.svg",
-          "name": "tba-lamp",
-          "position": {
-            "scale": 6.27,
-            "translation-in-points": [
+          "value" : 0.05
+        },
+        {
+          "appearance" : "dark",
+          "value" : 0.11
+        },
+        {
+          "appearance" : "tinted",
+          "value" : 0.27
+        }
+      ],
+      "layers" : [
+        {
+          "image-name" : "tba-lamp.svg",
+          "name" : "tba-lamp",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0.92
+            }
+          ],
+          "position" : {
+            "scale" : 6.27,
+            "translation-in-points" : [
               0,
-              0
+              14
             ]
           }
         }
       ],
-      "name": "Group",
-      "opacity-specializations": [
-        {
-          "value": 0.91
-        },
-        {
-          "appearance": "dark",
-          "value": 1
-        }
-      ],
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 1
+      "opacity" : 0.87,
+      "refractivity" : {
+        "depth" : 0.39140624999999996,
+        "enabled" : true,
+        "strength" : 0.53234375
       },
-      "translucency": {
-        "enabled": true,
-        "value": 0.74
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.27
+      },
+      "specular" : "outside",
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.49
       }
     },
     {
-      "blur-material": 0.04,
-      "layers": [
+      "blur-material" : 0.04,
+      "layers" : [
         {
-          "hidden": false,
-          "image-name": "canopy-leaf-1.png",
-          "name": "canopy-leaf-1",
-          "position": {
-            "scale": 1,
-            "translation-in-points": [
+          "hidden" : false,
+          "image-name" : "canopy-leaf-1.png",
+          "name" : "canopy-leaf-1",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
               -462.03906250000006,
               371.51406250000014
             ]
           }
         },
         {
-          "image-name": "canopy-leaf-2.png",
-          "name": "canopy-leaf-2",
-          "position": {
-            "scale": 0.77,
-            "translation-in-points": [
+          "image-name" : "canopy-leaf-2.png",
+          "name" : "canopy-leaf-2",
+          "position" : {
+            "scale" : 0.77,
+            "translation-in-points" : [
               -336.0234375,
               -413.109375
             ]
           }
         },
         {
-          "image-name": "canopy-leaf-3.png",
-          "name": "canopy-leaf-3",
-          "position": {
-            "scale": 0.72,
-            "translation-in-points": [
+          "image-name" : "canopy-leaf-3.png",
+          "name" : "canopy-leaf-3",
+          "position" : {
+            "scale" : 0.72,
+            "translation-in-points" : [
               371.40999999999997,
               -289.5490625
             ]
           }
         }
       ],
-      "opacity-specializations": [
+      "opacity-specializations" : [
         {
-          "appearance": "dark",
-          "value": 0.63
+          "appearance" : "dark",
+          "value" : 0.63
         }
       ],
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 0.5
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
       },
-      "translucency": {
-        "enabled": true,
-        "value": 0.5
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
       }
     }
   ],
-  "supported-platforms": {
-    "circles": [
+  "supported-platforms" : {
+    "circles" : [
       "watchOS"
     ],
-    "squares": "shared"
+    "squares" : "shared"
   }
 }
