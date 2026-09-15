@@ -70,54 +70,6 @@ It also deletes previews whose `.icon` no longer exists, so removing an icon can
 
 CI runs the **App icon previews** job on every pull request, which regenerates with `--force` and fails if the result differs from what's committed. It deliberately does not use `--check`: that compares modification times, and a fresh checkout gives every file the same timestamp, so it would always pass on a runner.
 
-## Icon Switching Is Broken in the Simulator
-
-**Alternate icon switching does not work reliably in the iOS 26 simulator.** The first switch after a fresh boot succeeds; every switch after that fails.
-
-This is a simulator defect, not an app bug, and it is **not** caused by Icon Composer — a build from before the app adopted `.icon` bundles fails in exactly the same way.
-
-### What Happens
-
-`UIApplication.setAlternateIconName(_:completionHandler:)` is gated on the system first presenting the "You have changed the icon for…" confirmation alert. In the simulator runtime, the process that presents that alert — `CoreServicesUIAgent` — ships as a binary but has **no launchd job**, so it can never start. The result:
-
-```
-lsd: #ChangeIconWithAlert begin ... to Champs
-lsd: #ChangeIconWithAlert couldn't make icon alert token:
-     NSPOSIXErrorDomain Code=35 "Resource temporarily unavailable"
-     -[LSIconAlertManager iconChangeAlertTokenForIdentity:error:]
-```
-
-The first attempt squeaks through with a spurious `Input/output error` and leaks the alert token. Every later attempt gets `EAGAIN` forever. The token lives in `lsd`, not in the app, so relaunching the app does not clear it.
-
-Note that `alternateIconName` still updates and the completion handler can report success even when the icon does not visibly change — so the Settings checkmark may move while the Home Screen does not.
-
-### Workaround
-
-Restart the LaunchServices daemon to release the stuck token. This takes about two seconds, preserves installed apps and data, and buys exactly **one** more successful switch:
-
-```
-$ xcrun simctl spawn booted launchctl kickstart -k user/foreground/com.apple.lsd
-```
-
-`system/com.apple.lsd` works too, but `launchctl` warns that the identifier is deprecated.
-
-Rebooting or erasing the simulator also works, but both are slower and gain you nothing extra.
-
-### Test on a Device
-
-Because of the above, **verify icon switching on real hardware** before shipping changes to it. Signing values are intentionally left empty in the project, so pass them at the command line rather than editing the project file:
-
-```
-$ xcodebuild -project the-blue-alliance-ios.xcodeproj -scheme "The Blue Alliance" \
-    -configuration Debug -destination 'id=<device-udid>' -allowProvisioningUpdates \
-    CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=<team-id> PROVISIONING_PROFILE_SPECIFIER="" \
-    build
-$ xcrun devicectl device install app --device <device-udid> \
-    "<DerivedData>/Build/Products/Debug-iphoneos/The Blue Alliance.app"
-```
-
-Run `xcrun devicectl list devices` to find the device identifier.
-
 ## Home Screen Appearance Is a Separate Setting
 
 If a preview in the picker does not match the Home Screen, check this before assuming a bug.
