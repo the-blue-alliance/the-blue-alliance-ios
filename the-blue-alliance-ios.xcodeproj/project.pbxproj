@@ -116,6 +116,7 @@
 		9288BD1623D00BE500157F74 /* MatchBreakdownConfigurator2019.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */; };
 		928AAC5A23C82BEA001E6C11 /* ScrollableContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */; };
 		928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928DE031222AF10A00C6234A /* UIImage+TBA.swift */; };
+		928DE0B1222AF10A00C6234A /* NotificationCenter+Foreground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928DE0B0222AF10A00C6234A /* NotificationCenter+Foreground.swift */; };
 		928EF686222E026E00A75DDF /* MatchQueryOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
 		92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9E1E2154DA008E79CA /* Assets.xcassets */; };
@@ -144,6 +145,7 @@
 		92AA7A052F0100000005AAAA /* MyTBASessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A042F0100000004AAAA /* MyTBASessionService.swift */; };
 		92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */; };
 		92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */; };
+		92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */; };
 		92AABBCC000000000000DD01 /* CachePolicyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD02 /* CachePolicyStore.swift */; };
 		92AABBCC000000000000DD11 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD12 /* AppSettings.swift */; };
 		92AABBCC000000000000DD21 /* FirebaseCollectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */; };
@@ -335,6 +337,7 @@
 		9288BD1523D00BE500157F74 /* MatchBreakdownConfigurator2019.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2019.swift; sourceTree = "<group>"; };
 		928AAC5923C82BEA001E6C11 /* ScrollableContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContainerViewController.swift; sourceTree = "<group>"; };
 		928DE031222AF10A00C6234A /* UIImage+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBA.swift"; sourceTree = "<group>"; };
+		928DE0B0222AF10A00C6234A /* NotificationCenter+Foreground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Foreground.swift"; sourceTree = "<group>"; };
 		928EF685222E026E00A75DDF /* MatchQueryOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchQueryOptionsViewController.swift; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* The Blue Alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Blue Alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -364,6 +367,7 @@
 		92AA7A042F0100000004AAAA /* MyTBASessionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASessionService.swift; sourceTree = "<group>"; };
 		92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks/SessionMocks.swift; sourceTree = "<group>"; };
 		92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/MyTBASessionServiceTests.swift; sourceTree = "<group>"; };
+		92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/StatusServiceTests.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD02 /* CachePolicyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePolicyStore.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD12 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCollectionStore.swift; sourceTree = "<group>"; };
@@ -807,6 +811,7 @@
 				92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */,
 				92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */,
 				928DE031222AF10A00C6234A /* UIImage+TBA.swift */,
+				928DE0B0222AF10A00C6234A /* NotificationCenter+Foreground.swift */,
 				921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */,
 				92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */,
 			);
@@ -1065,6 +1070,7 @@
 				5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */,
 				92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */,
+				92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */,
 				5EC0D41A2C26091100000003 /* ViewModels/Event/EventDivisionsViewModelTests.swift */,
 				5EC0D41A2C26091000000005 /* ViewModels/Match/MatchTimesViewModelTests.swift */,
@@ -1306,6 +1312,7 @@
 				5EC0D41A2C26090700000002 /* ViewControllers/Settings/SettingsViewControllerTests.swift in Sources */,
 				92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */,
+				92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* ViewModels/Event/EventSectionTests.swift in Sources */,
 				5EC0D41A2C26091100000004 /* ViewModels/Event/EventDivisionsViewModelTests.swift in Sources */,
 				5EC0D41A2C26091000000006 /* ViewModels/Match/MatchTimesViewModelTests.swift in Sources */,
@@ -1438,6 +1445,7 @@
 				9279737B23CFF39B00FF9B86 /* EventInsightsConfigurator2017.swift in Sources */,
 				92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */,
 				928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */,
+				928DE0B1222AF10A00C6234A /* NotificationCenter+Foreground.swift in Sources */,
 				9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,
 				929F57202092B7D400E5313A /* TBAViewController.swift in Sources */,

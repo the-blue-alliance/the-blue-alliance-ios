@@ -66,15 +66,12 @@ final class PushNotificationRouter: PushNotificationRouting {
     // MARK: - Silent refresh
 
     func performSilentRefresh(_ kind: PushNotificationPayload.SilentKind) async {
-        guard dependencies.authService.isSignedIn else { return }
         do {
             switch kind {
             case .favorites:
-                let favorites = try await dependencies.myTBA.fetchFavorites()
-                dependencies.myTBAStores.favorites.replaceAll(with: favorites)
+                try await dependencies.myTBASession.refreshFavorites()
             case .subscriptions:
-                let subscriptions = try await dependencies.myTBA.fetchSubscriptions()
-                dependencies.myTBAStores.subscriptions.replaceAll(with: subscriptions)
+                try await dependencies.myTBASession.refreshSubscriptions()
             }
         } catch {
             dependencies.reporter.record(error)

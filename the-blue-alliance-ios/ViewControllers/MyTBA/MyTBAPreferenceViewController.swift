@@ -146,26 +146,19 @@ class MyTBAPreferenceViewController: TBATableViewController,
         loadTask = Task { [weak self] in
             guard let self else { return }
             do {
-                // Task handles instead of async let, see #996.
-                let favoritesHandle = Task { try await self.myTBA.fetchFavorites() }
-                let subscriptionsHandle = Task { try await self.myTBA.fetchSubscriptions() }
-                let fetchedFavorites = try await favoritesHandle.value
-                let fetchedSubscriptions = try await subscriptionsHandle.value
+                try await self.dependencies.myTBASession.refresh()
 
-                self.favoritesStore.replaceAll(with: fetchedFavorites)
-                self.subscriptionsStore.replaceAll(with: fetchedSubscriptions)
-
-                let existingFavorite = fetchedFavorites.first {
+                let existingFavorite = self.favoritesStore.favorites.first {
                     $0.modelKey == self.subscribableModel.modelKey
                         && $0.modelType == self.subscribableModel.modelType
                 }
                 self.isFavorite = (existingFavorite != nil)
                 self.isFavoriteInitially = self.isFavorite
 
-                let existingSubscription = fetchedSubscriptions.first {
-                    $0.modelKey == self.subscribableModel.modelKey
-                        && $0.modelType == self.subscribableModel.modelType
-                }
+                let existingSubscription = self.subscriptionsStore.subscription(
+                    modelKey: self.subscribableModel.modelKey,
+                    modelType: self.subscribableModel.modelType
+                )
                 self.notifications = existingSubscription?.notifications ?? []
                 self.notificationsInitial = self.notifications
 

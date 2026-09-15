@@ -518,9 +518,7 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable {
                 }
             },
             performRemoteRefresh: {
-                dependencies.myTBAStores.favorites.replaceAll(
-                    with: try await dependencies.myTBA.fetchFavorites()
-                )
+                try await dependencies.myTBASession.refreshFavorites()
             }
         )
     }
@@ -553,9 +551,7 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable {
                 }
             },
             performRemoteRefresh: {
-                dependencies.myTBAStores.subscriptions.replaceAll(
-                    with: try await dependencies.myTBA.fetchSubscriptions()
-                )
+                try await dependencies.myTBASession.refreshSubscriptions()
             }
         )
     }
