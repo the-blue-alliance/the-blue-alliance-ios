@@ -10,6 +10,14 @@
     {
       "layers" : [
         {
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
           "image-name" : "tba-lamp.svg",
           "name" : "tba-lamp",
           "position" : {
