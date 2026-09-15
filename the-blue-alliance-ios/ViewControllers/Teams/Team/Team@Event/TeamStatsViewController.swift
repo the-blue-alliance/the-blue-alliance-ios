@@ -2,12 +2,18 @@ import Foundation
 import TBAAPI
 import UIKit
 
+nonisolated private struct StatRow: Hashable {
+    let name: String
+    let value: Float?
+}
+
 class TeamStatsViewController: TBATableViewController, Refreshable {
 
     private let teamKey: String
     private let eventKey: EventKey
 
     private var stats: TeamStats?
+    private lazy var dataSource: TableViewDataSource<String, StatRow> = makeDataSource()
 
     // MARK: - Init
 
@@ -28,35 +34,42 @@ class TeamStatsViewController: TBATableViewController, Refreshable {
         super.viewDidLoad()
 
         tableView.registerReusableCell(EventTeamStatTableViewCell.self)
+        tableView.dataSource = dataSource
     }
 
     // MARK: Table View Data Source
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if stats == nil {
-            showNoDataView()
-            return 0
+    private func makeDataSource() -> TableViewDataSource<String, StatRow> {
+        let dataSource = TableViewDataSource<String, StatRow>(tableView: tableView) {
+            tableView,
+            indexPath,
+            row in
+            let cell =
+                tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
+            cell.selectionStyle = .none
+            cell.viewModel = EventTeamStatCellViewModel(statName: row.name, value: row.value)
+            return cell
         }
-        removeNoDataView()
-        return 3
+        dataSource.noDataDelegate = self
+        return dataSource
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
-        -> EventTeamStatTableViewCell
-    {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
-        cell.selectionStyle = .none
+    private func applyStats(_ stats: TeamStats?) {
+        self.stats = stats
 
-        let (statName, statValue): (String, Float?) = {
-            switch indexPath.row {
-            case 0: return ("OPR", stats?.opr)
-            case 1: return ("DPR", stats?.dpr)
-            case 2: return ("CCWM", stats?.ccwm)
-            default: return ("", nil)
-            }
-        }()
-        cell.viewModel = EventTeamStatCellViewModel(statName: statName, value: statValue)
-        return cell
+        var snapshot = NSDiffableDataSourceSnapshot<String, StatRow>()
+        snapshot.appendSections([""])
+        if let stats {
+            snapshot.appendItems(
+                [
+                    StatRow(name: "OPR", value: stats.opr),
+                    StatRow(name: "DPR", value: stats.dpr),
+                    StatRow(name: "CCWM", value: stats.ccwm),
+                ],
+                toSection: ""
+            )
+        }
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Refreshable
@@ -67,8 +80,7 @@ class TeamStatsViewController: TBATableViewController, Refreshable {
         runRefresh { [weak self] in
             guard let self else { return }
             let oprs = try await self.dependencies.api.eventOPRs(key: self.eventKey)
-            self.stats = TeamStats(teamKey: self.teamKey, oprs: oprs)
-            self.tableView.reloadData()
+            self.applyStats(TeamStats(teamKey: self.teamKey, oprs: oprs))
         }
     }
 

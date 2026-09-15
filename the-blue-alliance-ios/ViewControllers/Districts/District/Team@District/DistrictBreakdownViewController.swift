@@ -2,12 +2,29 @@ import Foundation
 import TBAAPI
 import UIKit
 
+nonisolated private struct BreakdownSection: Hashable {
+    let eventKey: String
+    let title: String
+}
+
+extension BreakdownSection: TableSectionTitleProviding {
+    var headerTitle: String? { title }
+}
+
+nonisolated private struct PointsRow: Hashable {
+    let eventKey: String
+    let title: String
+    let points: Int
+}
+
 class DistrictBreakdownViewController: TBATableViewController, Refreshable {
 
     private let teamKey: String
     private let districtKey: String
     private var ranking: DistrictRanking
     private var eventsByKey: [String: Event] = [:]
+    private lazy var dataSource: TableViewDataSource<BreakdownSection, PointsRow> =
+        makeDataSource()
 
     // MARK: - Init
 
@@ -29,65 +46,57 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable {
         super.viewDidLoad()
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
+        tableView.dataSource = dataSource
+        applyRanking()
     }
 
     // MARK: Table View Data Source
 
-    private var eventPoints: [DistrictRanking.EventPointsPayloadPayload] {
-        ranking.eventPoints
-    }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        let sections = eventPoints.count
-        if sections == 0 {
-            showNoDataView()
-        } else {
-            removeNoDataView()
+    private func makeDataSource() -> TableViewDataSource<BreakdownSection, PointsRow> {
+        let dataSource = TableViewDataSource<BreakdownSection, PointsRow>(tableView: tableView) {
+            tableView,
+            indexPath,
+            row in
+            let cell =
+                tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+            cell.titleLabel.text = "\(row.title) Points"
+            cell.subtitleLabel.text = "\(row.points) Points"
+            return cell
         }
-        return sections
+        dataSource.noDataDelegate = self
+        return dataSource
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Qual Points, Elim Points, Alliance Points, Award Points, Total Points
-        return 5
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
-        -> ReverseSubtitleTableViewCell
-    {
-        let cell =
-            tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
-        let points = eventPoints[indexPath.section]
-
-        let (pointsType, pointsValue): (String, Int) = {
-            switch indexPath.row {
-            case 0: return ("Qualification", points.qualPoints)
-            case 1: return ("Elimination", points.elimPoints)
-            case 2: return ("Alliance", points.alliancePoints)
-            case 3: return ("Award", points.awardPoints)
-            case 4: return ("Total", points.total)
-            default: return ("", 0)
-            }
-        }()
-
-        cell.titleLabel.text = "\(pointsType) Points"
-        cell.subtitleLabel.text = "\(pointsValue) Points"
-
-        return cell
-    }
-
-    // MARK: - UITableViewDelegate
-
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int)
-        -> String?
-    {
-        let eventKey = eventPoints[section].eventKey
-        return eventsByKey[eventKey]?.safeShortName ?? eventKey
+    private func applyRanking() {
+        var snapshot = NSDiffableDataSourceSnapshot<BreakdownSection, PointsRow>()
+        for points in ranking.eventPoints {
+            let eventKey = points.eventKey
+            let section = BreakdownSection(
+                eventKey: eventKey,
+                title: eventsByKey[eventKey]?.safeShortName ?? eventKey
+            )
+            snapshot.appendSections([section])
+            snapshot.appendItems(
+                [
+                    PointsRow(
+                        eventKey: eventKey,
+                        title: "Qualification",
+                        points: points.qualPoints
+                    ),
+                    PointsRow(eventKey: eventKey, title: "Elimination", points: points.elimPoints),
+                    PointsRow(eventKey: eventKey, title: "Alliance", points: points.alliancePoints),
+                    PointsRow(eventKey: eventKey, title: "Award", points: points.awardPoints),
+                    PointsRow(eventKey: eventKey, title: "Total", points: points.total),
+                ],
+                toSection: section
+            )
+        }
+        dataSource.applySnapshotUsingReloadData(snapshot)
     }
 
     // MARK: - Refreshable
 
-    var isDataSourceEmpty: Bool { eventPoints.isEmpty }
+    var isDataSourceEmpty: Bool { ranking.eventPoints.isEmpty }
 
     func refresh() {
         runRefresh { [weak self] in
@@ -107,7 +116,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable {
             if let updated = fetched?.first(where: { $0.teamKey == self.teamKey }) {
                 self.ranking = updated
             }
-            self.tableView.reloadData()
+            self.applyRanking()
         }
     }
 
