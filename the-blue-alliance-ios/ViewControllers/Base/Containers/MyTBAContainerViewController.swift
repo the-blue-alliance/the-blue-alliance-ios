@@ -7,7 +7,7 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     lazy var favoriteBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(
-            image: UIImage.starIcon,
+            image: UIImage.starOutlineIcon,
             primaryAction: UIAction { [weak self] _ in self?.presentMyTBAPreferences() }
         )
     }()
@@ -43,6 +43,16 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     override var currentRightBarButtonItems: [UIBarButtonItem] {
         rightBarButtonItems + (dependencies.authService.isSignedIn ? [favoriteBarButtonItem] : [])
+    }
+
+    // Reading the favorites store here re-runs this when a favorite is saved or removed.
+    override func updateProperties() {
+        super.updateProperties()
+
+        let isFavorite = dependencies.myTBAStores.favorites.favorites.contains {
+            $0.modelKey == subscribableModel.modelKey && $0.modelType == subscribableModel.modelType
+        }
+        favoriteBarButtonItem.image = isFavorite ? UIImage.starIcon : UIImage.starOutlineIcon
     }
 
 }

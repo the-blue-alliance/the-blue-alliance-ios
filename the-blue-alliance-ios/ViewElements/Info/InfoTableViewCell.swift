@@ -31,18 +31,19 @@ class InfoTableViewCell: UITableViewCell, Reusable {
         let label = UILabel()
         label.text = text
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         return label
     }
 
     private func titleLabelWithText(_ text: String) -> UILabel {
         let label = labelWithText(text)
-        label.font = .systemFont(ofSize: 18)
+        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: .systemFont(ofSize: 18))
         return label
     }
 
     private func subtitleLabelWithText(_ text: String) -> UILabel {
         let label = labelWithText(text)
-        label.font = .systemFont(ofSize: 16)
+        label.font = UIFontMetrics(forTextStyle: .callout).scaledFont(for: .systemFont(ofSize: 16))
         label.textColor = UIColor.secondaryLabel
         return label
     }
