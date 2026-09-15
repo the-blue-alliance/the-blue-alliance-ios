@@ -1666,7 +1666,7 @@
 		92942DA71E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Kickoff Offseason";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Kickoff Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
@@ -1691,7 +1691,7 @@
 		92942DA81E2154DA008E79CA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Champs Kickoff Offseason";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Canopy Kickoff Champs Offseason";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";

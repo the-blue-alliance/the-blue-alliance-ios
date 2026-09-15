@@ -27,7 +27,7 @@ $ plutil -extract CFBundleIcons.CFBundleAlternateIcons raw -o - \
 
 1. Design the icon in **Icon Composer** and save it as `the-blue-alliance-ios/AppIcons/<Name>.icon`.
 2. Add it to the app target's **Copy Bundle Resources** phase.
-3. Append `<Name>` to `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES` for both Debug and Release.
+3. Add `<Name>` to `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES` for both Debug and Release. Settings lists icons in this order, after the primary icon.
 4. Build. The **Generate App Icon Previews** build phase creates the preview image set automatically.
 
 If you skip step 3 the icon never registers as an alternate, and the App Icon section hides itself rather than showing a picker with nothing to pick — so a vanished section usually means a missing build setting.

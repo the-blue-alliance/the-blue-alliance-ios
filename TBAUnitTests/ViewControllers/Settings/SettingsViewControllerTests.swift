@@ -58,4 +58,22 @@ struct SettingsViewControllerTests {
         #expect(alert?.title == "Relaunch to Apply")
     }
 
+    @Test func appIconsFollowTheBuildSettingOrder() throws {
+        let settings = Harness(dashboardEnabled: false).settings
+        let tableView = try #require(settings.tableView)
+        let section = try #require(
+            (0..<tableView.numberOfSections).first {
+                settings.tableView(tableView, titleForHeaderInSection: $0) == "App Icon"
+            }
+        )
+        let names = (0..<settings.tableView(tableView, numberOfRowsInSection: section)).map {
+            let cell = settings.tableView(
+                tableView,
+                cellForRowAt: IndexPath(row: $0, section: section)
+            )
+            return (cell as? IconTableViewCell)?.viewModel?.name
+        }
+        #expect(names == ["The Blue Alliance", "Canopy", "Kickoff", "Champs", "Offseason"])
+    }
+
 }
