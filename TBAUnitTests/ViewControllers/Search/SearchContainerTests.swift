@@ -15,7 +15,7 @@ struct SearchContainerTests {
 
         init() {
             container = SearchContainerViewController(dependencies: .mock())
-            window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
+            window = UIWindow.makeForTesting()
             let tabBarController = UITabBarController()
             tabBarController.viewControllers = [
                 UINavigationController(rootViewController: container)

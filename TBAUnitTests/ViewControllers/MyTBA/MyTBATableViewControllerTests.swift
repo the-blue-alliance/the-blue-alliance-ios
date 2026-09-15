@@ -155,7 +155,7 @@ struct MyTBATableViewControllerTests {
 
         let controller = MyTBAViewController(dependencies: dependencies)
         let navigation = UINavigationController(rootViewController: controller)
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
+        let window = UIWindow.makeForTesting()
         window.rootViewController = navigation
         window.makeKeyAndVisible()
         window.layoutIfNeeded()
@@ -186,7 +186,7 @@ struct MyTBATableViewControllerTests {
         myTBA.favorites = numbers.map { MyTBAFavorite(modelKey: "frc\($0)", modelType: .team) }
 
         let controller = MyTBAFavoritesViewController(dependencies: dependencies)
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
+        let window = UIWindow.makeForTesting()
         window.rootViewController = controller
         window.makeKeyAndVisible()
         controller.refresh()
@@ -223,7 +223,7 @@ struct MyTBATableViewControllerTests {
 
         let controller = MyTBAViewController(dependencies: dependencies)
         let navigation = UINavigationController(rootViewController: controller)
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
+        let window = UIWindow.makeForTesting()
         window.rootViewController = navigation
         window.makeKeyAndVisible()
         window.layoutIfNeeded()
@@ -261,7 +261,7 @@ struct MyTBATableViewControllerTests {
 
         let controller = MyTBAViewController(dependencies: dependencies)
         let navigation = UINavigationController(rootViewController: controller)
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
+        let window = UIWindow.makeForTesting()
         window.rootViewController = navigation
         window.makeKeyAndVisible()
         window.layoutIfNeeded()
@@ -296,7 +296,7 @@ struct MyTBATableViewControllerTests {
 
         let controller = MyTBAViewController(dependencies: dependencies)
         let navigation = UINavigationController(rootViewController: controller)
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
+        let window = UIWindow.makeForTesting()
         window.rootViewController = navigation
         window.makeKeyAndVisible()
         window.layoutIfNeeded()

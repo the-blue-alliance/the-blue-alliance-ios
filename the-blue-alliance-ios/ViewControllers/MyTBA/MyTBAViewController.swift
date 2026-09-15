@@ -132,7 +132,7 @@ class MyTBAViewController: ContainerViewController {
         isLoggingOut = true
         Task {
             defer { isLoggingOut = false }
-            for vc in [favoritesViewController, subscriptionsViewController] as [Refreshable] {
+            for vc in [favoritesViewController, subscriptionsViewController] as [any Refreshable] {
                 vc.cancelRefresh()
             }
             do {
