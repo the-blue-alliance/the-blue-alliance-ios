@@ -23,6 +23,10 @@ extension UIImage {
         return UIImage(systemName: "star.fill")
     }
 
+    static var starOutlineIcon: UIImage? {
+        return UIImage(systemName: "star")
+    }
+
     static var settingsIcon: UIImage? {
         return UIImage(systemName: "gear")
     }
