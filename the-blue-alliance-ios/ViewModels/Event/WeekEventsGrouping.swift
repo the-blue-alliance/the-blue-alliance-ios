@@ -15,6 +15,11 @@ enum WeekEventsGrouping {
             .sorted(by: SeasonTimeline(candidates).ascending)
             .filter { seen.insert($0.weekPickerBucket).inserted }
     }
+
+    // The selected event usually isn't the one picked to represent its week, so compare buckets.
+    static func isSameWeek(_ lhs: Event, _ rhs: Event) -> Bool {
+        lhs.year == rhs.year && lhs.weekPickerBucket == rhs.weekPickerBucket
+    }
 }
 
 private extension Event {

@@ -69,16 +69,24 @@ class EventsContainerViewController: ContainerViewController {
     private func updateInterface() {
         navigationTitle = EventsContainerViewController.eventsTitle(eventsViewController.weekEvent)
         yearButton.configuration?.title = String(year)
+        yearButton.menu = yearMenu()
     }
 
-    // Years as submenus, each loading its weeks when opened, the way the old modal did in
-    // two screens.
     private lazy var yearButton: UIButton = {
-        let years = Array(1992...statusService.maxSeason).reversed()
-        let menu = UIMenu(
-            children: years.map { year in
+        let button = ContainerViewController.makeMenuButton(menu: yearMenu())
+        button.configuration?.title = String(year)
+        return button
+    }()
+
+    // Years as submenus, each loading its weeks when opened, the way the old modal did in
+    // two screens. A submenu can't be checked, so the selected year shows its week as a subtitle.
+    private func yearMenu() -> UIMenu {
+        let selectedWeek = eventsViewController.weekEvent
+        return UIMenu(
+            children: Array(1992...statusService.maxSeason).reversed().map { year in
                 UIMenu(
                     title: String(year),
+                    subtitle: year == selectedWeek?.year ? selectedWeek?.weekString : nil,
                     children: [
                         UIDeferredMenuElement.uncached { [weak self] completion in
                             self?.loadWeekActions(for: year, completion: completion)
@@ -87,10 +95,7 @@ class EventsContainerViewController: ContainerViewController {
                 )
             }
         )
-        let button = ContainerViewController.makeMenuButton(menu: menu)
-        button.configuration?.title = String(year)
-        return button
-    }()
+    }
 
     private func loadWeekActions(for year: Int, completion: @escaping ([UIMenuElement]) -> Void) {
         Task { [weak self] in
@@ -101,10 +106,12 @@ class EventsContainerViewController: ContainerViewController {
                 completion([UIAction(title: "No weeks", attributes: .disabled) { _ in }])
                 return
             }
-            let currentKey = self.eventsViewController.weekEvent?.key
+            let currentWeek = self.eventsViewController.weekEvent
             completion(
                 weeks.map { week in
-                    UIAction(title: week.weekString, state: week.key == currentKey ? .on : .off) {
+                    let isCurrent =
+                        currentWeek.map { WeekEventsGrouping.isSameWeek(week, $0) } ?? false
+                    return UIAction(title: week.weekString, state: isCurrent ? .on : .off) {
                         [weak self] _ in
                         self?.eventsViewController.weekEvent = week
                     }
