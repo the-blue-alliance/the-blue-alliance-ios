@@ -1,7 +1,7 @@
 import Foundation
 import TBAAPI
 
-class DistrictEventsViewController: EventsListViewController {
+class DistrictEventsViewController: EventsListViewController, EventsList {
 
     let districtKey: String
     let year: Int
@@ -16,11 +16,11 @@ class DistrictEventsViewController: EventsListViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadEvents() async throws -> [APIEvent] {
+    func loadEvents() async throws -> [APIEvent] {
         try await dependencies.api.districtEvents(key: districtKey)
     }
 
     override var splitsDistrictsByWeek: Bool { true }
 
-    override var noDataText: String? { "No events for district" }
+    var noDataText: String? { "No events for district" }
 }

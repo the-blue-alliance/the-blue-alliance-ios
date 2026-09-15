@@ -32,17 +32,9 @@ class TeamViewController: HeaderContainerViewController {
 
     private let teamHeaderView: TeamHeaderView
 
-    override var headerView: UIView {
-        return teamHeaderView
-    }
-
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
-
-    override var subscribableModel: any MyTBASubscribable {
-        TeamSubscribable(modelKey: state.key)
-    }
 
     // Avatars were introduced into FRC in 2018. Pre-2018 years never have
     // avatar media, so we skip the API roundtrip + skeleton entirely and
@@ -143,7 +135,7 @@ class TeamViewController: HeaderContainerViewController {
         }()
         let teamNumberNickname = state.team?.teamNumberNickname ?? "Team \(teamNumber)"
 
-        self.teamHeaderView = TeamHeaderView(
+        let teamHeaderView = TeamHeaderView(
             TeamHeaderViewModel(
                 teamNumber: teamNumber,
                 avatar: nil,
@@ -152,6 +144,7 @@ class TeamViewController: HeaderContainerViewController {
                 year: year
             )
         )
+        self.teamHeaderView = teamHeaderView
 
         switch state {
         case .key(let teamKey):
@@ -174,6 +167,8 @@ class TeamViewController: HeaderContainerViewController {
         )
 
         super.init(
+            headerView: teamHeaderView,
+            subscribableModel: TeamSubscribable(modelKey: state.key),
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
             navigationTitle: teamNumberNickname,
             navigationSubtitle: nil,

@@ -12,19 +12,19 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
         )
     }()
 
-    var subscribableModel: any MyTBASubscribable {
-        fatalError("Implement subscribableModel in subclass")
-    }
+    let subscribableModel: any MyTBASubscribable
 
     // MARK: - Init
 
-    override init(
+    init(
+        subscribableModel: any MyTBASubscribable,
         viewControllers: [any ContainableViewController],
         navigationTitle: String? = nil,
         navigationSubtitle: String? = nil,
         segmentedControlTitles: [String]? = nil,
         dependencies: Dependencies
     ) {
+        self.subscribableModel = subscribableModel
 
         super.init(
             viewControllers: viewControllers,

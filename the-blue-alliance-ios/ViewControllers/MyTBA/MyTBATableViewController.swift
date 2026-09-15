@@ -138,10 +138,21 @@ class MyTBATableViewController: UIViewController, Alertable, DependenciesProvidi
     /// the banner stays hidden until the next refresh repopulates `failedKeys`.
     private var inlineFailedKeys: Bool = false
 
+    /// The entries to display, grouped by `MyTBASection` order.
+    private let items: @MainActor () -> [MyTBAItem]
+    /// Kicks off a remote refresh, writes the result into the backing store.
+    private let performRemoteRefresh: @MainActor () async throws -> Void
+
     // MARK: - Init
 
-    init(dependencies: Dependencies) {
+    init(
+        dependencies: Dependencies,
+        items: @escaping @MainActor () -> [MyTBAItem],
+        performRemoteRefresh: @escaping @MainActor () async throws -> Void
+    ) {
         self.dependencies = dependencies
+        self.items = items
+        self.performRemoteRefresh = performRemoteRefresh
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -167,7 +178,7 @@ class MyTBATableViewController: UIViewController, Alertable, DependenciesProvidi
         tableView.dataSource = dataSource
 
         storeObservation = Task { [weak self] in
-            for await _ in Observations({ [weak self] in self?.currentItems ?? [] }) {
+            for await _ in Observations({ [weak self] in self?.items() ?? [] }) {
                 self?.storeDidChange()
             }
         }
@@ -189,18 +200,6 @@ class MyTBATableViewController: UIViewController, Alertable, DependenciesProvidi
         super.viewDidAppear(animated)
 
         (self as? any Refreshable)?.updateRefreshOnAppear()
-    }
-
-    // MARK: Subclass Hooks
-
-    /// The entries to display, grouped by `MyTBASection` order.
-    var currentItems: [MyTBAItem] {
-        fatalError("Subclasses must override currentItems")
-    }
-
-    /// Kicks off a remote refresh, writes the result into the backing store.
-    func performRemoteRefresh() async throws {
-        fatalError("Subclasses must override performRemoteRefresh()")
     }
 
     // MARK: - Refreshable default
@@ -277,12 +276,12 @@ class MyTBATableViewController: UIViewController, Alertable, DependenciesProvidi
     }
 
     private func rebuildSnapshot() {
-        let validItems = Set(currentItems)
+        let validItems = Set(items())
         loadedModels = loadedModels.filter { validItems.contains($0.key) }
         failedKeys.formIntersection(validItems)
 
         var snapshot = NSDiffableDataSourceSnapshot<MyTBASection, MyTBAItem>()
-        let visible = currentItems.filter { item in
+        let visible = items().filter { item in
             if loadedModels[item] != nil { return true }
             if inlineFailedKeys, failedKeys.contains(item) { return true }
             return false
@@ -370,7 +369,7 @@ class MyTBATableViewController: UIViewController, Alertable, DependenciesProvidi
     // completion order rather than list order.
     private func fetchMissingItems() async {
         let handles =
-            currentItems
+            items()
             .filter { loadedModels[$0] == nil }
             .map { item in Task { await self.loadAndApply(item) } }
         for handle in handles {
@@ -510,14 +509,24 @@ class MyTBAFavoritesViewController: MyTBATableViewController, Refreshable {
 
     private var favoritesStore: FavoritesStore { myTBAStores.favorites }
 
-    override var currentItems: [MyTBAItem] {
-        favoritesStore.favorites.compactMap {
-            MyTBAItem(modelType: $0.modelType, key: $0.modelKey)
-        }
+    init(dependencies: Dependencies) {
+        super.init(
+            dependencies: dependencies,
+            items: {
+                dependencies.myTBAStores.favorites.favorites.compactMap {
+                    MyTBAItem(modelType: $0.modelType, key: $0.modelKey)
+                }
+            },
+            performRemoteRefresh: {
+                dependencies.myTBAStores.favorites.replaceAll(
+                    with: try await dependencies.myTBA.fetchFavorites()
+                )
+            }
+        )
     }
 
-    override func performRemoteRefresh() async throws {
-        favoritesStore.replaceAll(with: try await myTBA.fetchFavorites())
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Refreshable
@@ -535,14 +544,24 @@ class MyTBASubscriptionsViewController: MyTBATableViewController, Refreshable {
 
     private var subscriptionsStore: SubscriptionsStore { myTBAStores.subscriptions }
 
-    override var currentItems: [MyTBAItem] {
-        subscriptionsStore.subscriptions.compactMap {
-            MyTBAItem(modelType: $0.modelType, key: $0.modelKey)
-        }
+    init(dependencies: Dependencies) {
+        super.init(
+            dependencies: dependencies,
+            items: {
+                dependencies.myTBAStores.subscriptions.subscriptions.compactMap {
+                    MyTBAItem(modelType: $0.modelType, key: $0.modelKey)
+                }
+            },
+            performRemoteRefresh: {
+                dependencies.myTBAStores.subscriptions.replaceAll(
+                    with: try await dependencies.myTBA.fetchSubscriptions()
+                )
+            }
+        )
     }
 
-    override func performRemoteRefresh() async throws {
-        subscriptionsStore.replaceAll(with: try await myTBA.fetchSubscriptions())
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Refreshable

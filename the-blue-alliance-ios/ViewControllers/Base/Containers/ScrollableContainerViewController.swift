@@ -5,8 +5,33 @@ import PureLayout
 
 class HeaderContainerViewController: MyTBAContainerViewController {
 
-    var headerView: UIView {
-        fatalError("Implement headerView in a subclass")
+    let headerView: UIView
+
+    // MARK: - Init
+
+    init(
+        headerView: UIView,
+        subscribableModel: any MyTBASubscribable,
+        viewControllers: [any ContainableViewController],
+        navigationTitle: String? = nil,
+        navigationSubtitle: String? = nil,
+        segmentedControlTitles: [String]? = nil,
+        dependencies: Dependencies
+    ) {
+        self.headerView = headerView
+
+        super.init(
+            subscribableModel: subscribableModel,
+            viewControllers: viewControllers,
+            navigationTitle: navigationTitle,
+            navigationSubtitle: navigationSubtitle,
+            segmentedControlTitles: segmentedControlTitles,
+            dependencies: dependencies
+        )
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - View Lifecycle

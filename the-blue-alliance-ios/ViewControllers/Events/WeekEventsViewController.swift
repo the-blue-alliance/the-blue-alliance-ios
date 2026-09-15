@@ -6,7 +6,7 @@ protocol WeekEventsDelegate: AnyObject {
     func weekEventUpdated()
 }
 
-class WeekEventsViewController: EventsListViewController {
+class WeekEventsViewController: EventsListViewController, EventsList {
 
     private let year: Int
     weak var weekEventsDelegate: (any WeekEventsDelegate)?
@@ -81,12 +81,17 @@ class WeekEventsViewController: EventsListViewController {
         }
     }
 
-    // MARK: - Refresh
+    // MARK: - EventsList
 
-    override func refresh() {
+    func loadEvents() async throws -> [APIEvent] {
+        try await dependencies.api.eventsByYear(currentYear)
+    }
+
+    // Keeps the whole year, so switching weeks within it doesn't refetch.
+    func refresh() {
         runRefresh { [weak self] in
             guard let self else { return }
-            let events = try await self.dependencies.api.eventsByYear(self.currentYear)
+            let events = try await self.loadEvents()
             guard !Task.isCancelled else { return }
             self.allEvents = events
             if self.weekEvent == nil {
@@ -137,5 +142,5 @@ class WeekEventsViewController: EventsListViewController {
             .first
     }
 
-    override var noDataText: String? { "No events for year" }
+    var noDataText: String? { "No events for year" }
 }

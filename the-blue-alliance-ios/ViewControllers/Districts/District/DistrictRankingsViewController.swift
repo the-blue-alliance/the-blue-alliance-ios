@@ -6,7 +6,7 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ ranking: DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBASearchableTableViewController, Refreshable {
+class DistrictRankingsViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any DistrictRankingsViewControllerDelegate)?
 
@@ -15,6 +15,15 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
     private lazy var dataSource: TableViewDataSource<String, DistrictRanking> = makeDataSource()
     private var allRankings: [DistrictRanking] = []
     private var teamsByKey: [String: TeamSimple] = [:]
+
+    private lazy var searchBar: ListFilterSearchBar = ListFilterSearchBar { [weak self] in
+        self?.updateDataSource()
+    }
+
+    // The container pins it above the list, so it stays put while the list scrolls.
+    override var containerAccessoryView: UIView? {
+        return searchBar
+    }
 
     // MARK: - Init
 
@@ -35,6 +44,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
 
         tableView.registerReusableCell(RankingTableViewCell.self)
         tableView.dataSource = dataSource
+        tableView.keyboardDismissMode = .onDrag
     }
 
     // MARK: UITableView Delegate
@@ -59,7 +69,7 @@ class DistrictRankingsViewController: TBASearchableTableViewController, Refresha
         return dataSource
     }
 
-    override func updateDataSource() {
+    private func updateDataSource() {
         applyRankings(allRankings)
     }
 
