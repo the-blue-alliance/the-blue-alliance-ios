@@ -18,7 +18,8 @@ struct AppStatus: Equatable {
         let year = Calendar.current.component(.year, from: Date())
         return AppStatus(
             currentSeason: year,
-            maxSeason: year,
+            // The 2027 season has already rolled over; this only shows until `/status` loads.
+            maxSeason: max(year, 2027),
             minAppVersion: -1,
             latestAppVersion: -1,
             isDatafeedDown: false,

@@ -69,10 +69,17 @@ class EventsContainerViewController: ContainerViewController {
     private func updateInterface() {
         navigationTitle = EventsContainerViewController.eventsTitle(eventsViewController.weekEvent)
         yearButton.configuration?.title = String(year)
-        yearButton.menu = yearMenu()
+        setNeedsUpdateProperties()
     }
 
     private lazy var yearButton = UIButton.menuPill(title: String(year), menu: yearMenu())
+
+    // Reading `maxSeason` here rebuilds the menu when `/status` loads after the first week does.
+    override func updateProperties() {
+        super.updateProperties()
+
+        yearButton.menu = yearMenu()
+    }
 
     // Years as submenus, each loading its weeks when opened, the way the old modal did in
     // two screens. A submenu can't be checked, so the selected year shows its week as a subtitle.
