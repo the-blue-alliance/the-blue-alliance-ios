@@ -5,57 +5,6 @@ import TBAAPI
 import UIKit
 import TBAUtils
 
-class EventDistrictPointsContainerViewController: ContainerViewController {
-
-    private(set) var event: Event
-
-    // MARK: - Init
-
-    init(event: Event, dependencies: Dependencies) {
-        self.event = event
-
-        let districtPointsViewController = EventDistrictPointsViewController(
-            eventKey: event.key,
-            dependencies: dependencies
-        )
-
-        super.init(
-            viewControllers: [districtPointsViewController],
-            navigationTitle: "District Points",
-            navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-            dependencies: dependencies
-        )
-
-        districtPointsViewController.delegate = self
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        dependencies.reporter.log("Event District Points: \(event.key)")
-    }
-
-}
-
-extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
-
-    func teamSelected(teamKey: String) {
-        let teamAtEventViewController = TeamAtEventViewController(
-            teamKey: teamKey,
-            eventKey: event.key,
-            dependencies: dependencies
-        )
-        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
-    }
-
-}
-
 protocol EventDistrictPointsViewControllerDelegate: AnyObject {
     func teamSelected(teamKey: String)
 }
@@ -65,7 +14,7 @@ nonisolated private struct TeamDistrictPointsRow: Hashable {
     let total: Int
 }
 
-private class EventDistrictPointsViewController: TBATableViewController, Refreshable {
+class EventDistrictPointsViewController: TBATableViewController, Refreshable {
 
     weak var delegate: (any EventDistrictPointsViewControllerDelegate)?
 
@@ -78,9 +27,12 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     // MARK: - Init
 
-    init(eventKey: EventKey, dependencies: Dependencies) {
-        self.eventKey = eventKey
+    init(event: Event, dependencies: Dependencies) {
+        self.eventKey = event.key
         super.init(dependencies: dependencies)
+
+        navigationItem.title = "District Points"
+        navigationItem.subtitle = "@ \(event.friendlyNameWithYear)"
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -94,6 +46,12 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
         tableView.registerReusableCell(RankingTableViewCell.self)
         tableView.dataSource = dataSource
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        dependencies.reporter.log("Event District Points: \(eventKey)")
     }
 
     // MARK: UITableView Delegate
