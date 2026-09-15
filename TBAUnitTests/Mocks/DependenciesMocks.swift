@@ -9,6 +9,18 @@ import UIKit
 
 struct Unstubbed: Error {}
 
+extension UIWindow {
+
+    /// A phone-sized window attached to the test host's scene.
+    static func makeForTesting() -> UIWindow {
+        let scene = UIApplication.shared.connectedScenes.first as! UIWindowScene
+        let window = UIWindow(windowScene: scene)
+        window.frame = CGRect(x: 0, y: 0, width: 393, height: 852)
+        return window
+    }
+
+}
+
 /// Every endpoint throws until a test stubs it; add a stored property per endpoint as needed.
 @MainActor
 final class MockTBAAPI: TBAAPIProtocol {

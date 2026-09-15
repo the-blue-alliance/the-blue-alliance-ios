@@ -47,4 +47,10 @@ class PhoneRootViewController: UITabBarController, RootController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // Every tab sits under the blue bar, so the root owns the style. Deferring to the tab's
+    // navigation controller would pick dark text from its default bar style.
+    override var childForStatusBarStyle: UIViewController? { nil }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
+
 }

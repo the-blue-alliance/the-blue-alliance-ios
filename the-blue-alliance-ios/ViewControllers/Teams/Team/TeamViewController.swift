@@ -386,6 +386,12 @@ extension MediaViewer {
         } else {
             return
         }
+        agrume.statusBarStyle = .lightContent
+        // Agrume's non-animated custom dismissal leaves the status bar on the default (dark)
+        // style until something else asks the root for it again.
+        agrume.didDismiss = { [weak self] in
+            self?.view.window?.rootViewController?.setNeedsStatusBarAppearanceUpdate()
+        }
         agrume.onLongPress = { [weak self] image, agrumeVC in
             self?.presentMediaActions(image: image, viewURL: viewURL, from: agrumeVC)
         }

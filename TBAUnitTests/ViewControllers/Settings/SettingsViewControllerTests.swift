@@ -21,7 +21,7 @@ struct SettingsViewControllerTests {
                 pushService: MockPushService(),
                 dependencies: dependencies
             )
-            window = UIWindow(frame: CGRect(x: 0, y: 0, width: 393, height: 852))
+            window = UIWindow.makeForTesting()
             window.rootViewController = settings
             window.makeKeyAndVisible()
             settings.loadViewIfNeeded()
