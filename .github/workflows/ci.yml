@@ -16,16 +16,15 @@ on:
 jobs:
   swift-format:
     name: swift-format
-    runs-on: macos-latest
+    runs-on: xcode-27
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Read Xcode version
+      - name: Record Xcode build
         id: xcode
-        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ${{ steps.xcode.outputs.version }}
+        run: |
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - name: Lint
         run: make lint-format
 
@@ -40,16 +39,15 @@ jobs:
 
   app-icon-previews:
     name: App icon previews
-    runs-on: macos-latest
+    runs-on: xcode-27
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Read Xcode version
+      - name: Record Xcode build
         id: xcode
-        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ${{ steps.xcode.outputs.version }}
+        run: |
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       # Regenerate rather than using --check: that compares mtimes, and a fresh
       # checkout gives every file the same timestamp, so it would always pass here.
       - name: Regenerate previews
@@ -71,17 +69,16 @@ jobs:
   test-packages:
     name: Test packages
     if: ${{ inputs.run-tests }}
-    runs-on: macos-latest
+    runs-on: xcode-27
     timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Read Xcode version
+      - name: Record Xcode build
         id: xcode
-        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ${{ steps.xcode.outputs.version }}
+        run: |
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - name: Cache SwiftPM clones
         uses: actions/cache@v6
         with:
@@ -94,10 +91,10 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-
-            ${{ runner.os }}-packages-derived-data-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-
       # These are offline unit tests, so they need neither Secrets.plist nor a
       # signing keychain.
       - name: Test packages
@@ -115,22 +112,21 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
 
   test-app:
     name: Test app
     if: ${{ inputs.run-tests }}
-    runs-on: macos-latest
+    runs-on: xcode-27
     timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Read Xcode version
+      - name: Record Xcode build
         id: xcode
-        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ${{ steps.xcode.outputs.version }}
+        run: |
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - name: Cache SwiftPM clones
         uses: actions/cache@v6
         with:
@@ -141,10 +137,10 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-
-            ${{ runner.os }}-derived-data-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-
       - name: Set up Secrets.plist
         run: |
           cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
@@ -166,4 +162,4 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}

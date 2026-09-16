@@ -38,4 +38,4 @@ Please poke at:
 Under the hood:
 - The app and all four packages build in Swift 6 language mode with strict concurrency checking
 - Sign-in moved into a TBAAuth package, and screens update through Swift Observation and UIKit's `updateProperties()`
-- The project is updated for Xcode 27; CI and TestFlight builds still use Xcode 26.6 until GitHub's runners ship Xcode 27
+- The project is updated for Xcode 27, and CI and TestFlight builds now run on Xcode 27 too
