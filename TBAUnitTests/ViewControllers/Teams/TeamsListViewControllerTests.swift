@@ -110,7 +110,11 @@ struct TeamsListViewControllerTests {
 
     @Test func ignoresTheOfficialName() async {
         let controller = Self.makeController(teams: [
-            Self.team(1114, "Simbotics", name: "General Motors Canada & Governor Simcoe Secondary School"),
+            Self.team(
+                1114,
+                "Simbotics",
+                name: "General Motors Canada & Governor Simcoe Secondary School"
+            ),
             Self.team(2590, "Nemesis"),
         ])
         controller.refresh()

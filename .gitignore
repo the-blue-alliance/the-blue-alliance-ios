@@ -91,8 +91,9 @@ fastlane/metadata/review_information
 !fastlane/metadata/review_information/notes.txt
 
 ## Environment normalization:
-/.bundle/
-/vendor/bundle
+# BUNDLE_GEMFILE points at fastlane/Gemfile, so bundler roots itself there.
+fastlane/.bundle/
+fastlane/vendor/bundle
 /lib/bundler/man/
 
 # Python (scripts/)

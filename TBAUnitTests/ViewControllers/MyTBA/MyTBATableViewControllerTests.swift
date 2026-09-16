@@ -40,7 +40,8 @@ struct MyTBATableViewControllerTests {
     }
 
     /// Store changes arrive through `Observations`, a tick after the mutation.
-    private static func waitForRows(_ controller: MyTBATableViewController, count: Int) async -> Int {
+    private static func waitForRows(_ controller: MyTBATableViewController, count: Int) async -> Int
+    {
         for _ in 0..<200 where rows(in: controller.tableView) != count {
             try? await Task.sleep(for: .milliseconds(10))
         }
@@ -49,7 +50,9 @@ struct MyTBATableViewControllerTests {
 
     @Test func favoritesTableFollowsTheStore() async {
         let api = MockTBAAPI()
-        for (key, number, name) in [("frc254", 254, "The Cheesy Poofs"), ("frc1114", 1114, "Simbotics")] {
+        for (key, number, name) in [
+            ("frc254", 254, "The Cheesy Poofs"), ("frc1114", 1114, "Simbotics"),
+        ] {
             api.teamsByKey[key] = Team(key: key, teamNumber: number, nickname: name, name: name)
         }
         let dependencies = Dependencies.mock(api: api)
@@ -69,8 +72,9 @@ struct MyTBATableViewControllerTests {
         #expect(await Self.waitForRows(controller, count: 0) == 0)
     }
 
-
-    private static func waitForSections(_ controller: MyTBATableViewController, count: Int) async -> Int {
+    private static func waitForSections(_ controller: MyTBATableViewController, count: Int) async
+        -> Int
+    {
         for _ in 0..<200 where controller.tableView.numberOfSections != count {
             try? await Task.sleep(for: .milliseconds(10))
         }
@@ -84,10 +88,14 @@ struct MyTBATableViewControllerTests {
         api.teamsByKey["frc254"] = Self.team(254, nickname: "The Cheesy Poofs")
         api.teamsByKey["frc1114"] = Self.team(1114, nickname: "Simbotics")
         api.eventsByKey["2026casj"] = Self.event(
-            key: "2026casj", startDate: "2026-03-01", endDate: "2026-03-03"
+            key: "2026casj",
+            startDate: "2026-03-01",
+            endDate: "2026-03-03"
         )
         api.eventsByKey["2026miket"] = Self.event(
-            key: "2026miket", startDate: "2026-04-01", endDate: "2026-04-03"
+            key: "2026miket",
+            startDate: "2026-04-01",
+            endDate: "2026-04-03"
         )
 
         let dependencies = Dependencies.mock(api: api)
@@ -119,7 +127,9 @@ struct MyTBATableViewControllerTests {
         myTBA.subscriptions = [
             MyTBASubscription(modelKey: "frc7332", modelType: .team, notifications: [.matchScore]),
             MyTBASubscription(
-                modelKey: "2026casj_qm1", modelType: .match, notifications: [.matchScore]
+                modelKey: "2026casj_qm1",
+                modelType: .match,
+                notifications: [.matchScore]
             ),
         ]
 
@@ -130,14 +140,15 @@ struct MyTBATableViewControllerTests {
         #expect(await Self.waitForRows(controller, count: 1) == 1)
     }
 
-
     /// The real shape: signed in, hosted in a window, with an API that fails
     /// every model load so the failure banner path runs too.
     @Test func signedInMyTBAViewInAWindowLoadsFavorites() async {
         let api = MockTBAAPI()
         api.teamsByKey["frc254"] = Self.team(254, nickname: "The Cheesy Poofs")
         api.eventsByKey["2026casj"] = Self.event(
-            key: "2026casj", startDate: "2026-03-01", endDate: "2026-03-03"
+            key: "2026casj",
+            startDate: "2026-03-01",
+            endDate: "2026-03-03"
         )
         let dependencies = Dependencies.mock(api: api)
         (dependencies.authService as! MockAuthService).isSignedIn = true
@@ -170,7 +181,6 @@ struct MyTBATableViewControllerTests {
         window.layoutIfNeeded()
     }
 
-
     /// A big favorites list where only some models load, then the user taps the
     /// failure banner so loaded and key-only rows are sorted together.
     @Test func manyFavoritesWithSomeFailuresRenderAfterTappingTheBanner() async {
@@ -198,7 +208,6 @@ struct MyTBATableViewControllerTests {
         window.layoutIfNeeded()
     }
 
-
     /// A returning signed-in user: the store is already populated off disk before
     /// the view exists, so the first snapshot, the observation's first emit, and
     /// the pull-to-refresh all load models at once.
@@ -207,7 +216,9 @@ struct MyTBATableViewControllerTests {
         api.teamsByKey["frc254"] = Self.team(254, nickname: "The Cheesy Poofs")
         api.teamsByKey["frc1114"] = Self.team(1114, nickname: "Simbotics")
         api.eventsByKey["2026casj"] = Self.event(
-            key: "2026casj", startDate: "2026-03-01", endDate: "2026-03-03"
+            key: "2026casj",
+            startDate: "2026-03-01",
+            endDate: "2026-03-03"
         )
         let dependencies = Dependencies.mock(api: api)
         (dependencies.authService as! MockAuthService).isSignedIn = true
@@ -232,7 +243,6 @@ struct MyTBATableViewControllerTests {
         window.layoutIfNeeded()
     }
 
-
     /// Refreshes that overlap the way they do on a real network: the user lands
     /// on myTBA, pulls to refresh, and flips between segments while loads are
     /// still in flight.
@@ -245,7 +255,9 @@ struct MyTBATableViewControllerTests {
         }
         for year in 2024...2026 {
             api.eventsByKey["\(year)casj"] = Self.event(
-                key: "\(year)casj", startDate: "\(year)-03-01", endDate: "\(year)-03-03"
+                key: "\(year)casj",
+                startDate: "\(year)-03-01",
+                endDate: "\(year)-03-03"
             )
         }
 
@@ -311,11 +323,13 @@ struct MyTBATableViewControllerTests {
         #expect(await Self.waitForRows(controller.favoritesViewController, count: 0) == 0)
     }
 
-
     private static func teamNumbers(in controller: MyTBATableViewController) -> [String] {
         let table = controller.tableView
         return (0..<table.numberOfRows(inSection: 0)).compactMap {
-            let cell = table.dataSource?.tableView(table, cellForRowAt: IndexPath(row: $0, section: 0))
+            let cell = table.dataSource?.tableView(
+                table,
+                cellForRowAt: IndexPath(row: $0, section: 0)
+            )
             return (cell as? TeamTableViewCell)?.viewModel?.teamNumber
         }
     }
@@ -348,7 +362,10 @@ struct MyTBATableViewControllerTests {
     private static func eventNames(in controller: MyTBATableViewController) -> [String] {
         let table = controller.tableView
         return (0..<table.numberOfRows(inSection: 0)).compactMap {
-            let cell = table.dataSource?.tableView(table, cellForRowAt: IndexPath(row: $0, section: 0))
+            let cell = table.dataSource?.tableView(
+                table,
+                cellForRowAt: IndexPath(row: $0, section: 0)
+            )
             return (cell as? EventTableViewCell)?.viewModel?.name
         }
     }
@@ -371,7 +388,10 @@ struct MyTBATableViewControllerTests {
             endDate: "2026-05-02"
         )
         api.eventsByKey["2026casj"] = Self.event(
-            key: "2026casj", startDate: "2026-03-04", endDate: "2026-03-07", week: 0
+            key: "2026casj",
+            startDate: "2026-03-04",
+            endDate: "2026-03-07",
+            week: 0
         )
         let dependencies = Dependencies.mock(api: api)
         (dependencies.authService as! MockAuthService).isSignedIn = true

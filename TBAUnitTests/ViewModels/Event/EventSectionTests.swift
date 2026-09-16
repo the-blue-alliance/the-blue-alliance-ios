@@ -373,15 +373,15 @@ struct EventSectionTests {
 
         #expect(
             sorted.map(\.sortOrder) == [
-                APIEventType.preseason.displayOrder,            // -1
-                APIEventType.regional.displayOrder,             //  0
-                APIEventType.district.displayOrder,             //  1
-                APIEventType.districtChampionship.displayOrder, //  2
-                APIEventType.championshipDivision.displayOrder, //  3
-                APIEventType.championshipFinals.displayOrder,   //  4
+                APIEventType.preseason.displayOrder,  // -1
+                APIEventType.regional.displayOrder,  //  0
+                APIEventType.district.displayOrder,  //  1
+                APIEventType.districtChampionship.displayOrder,  //  2
+                APIEventType.championshipDivision.displayOrder,  //  3
+                APIEventType.championshipFinals.displayOrder,  //  4
                 APIEventType.festivalOfChampions.displayOrder,  //  6
-                APIEventType.offseason.displayOrder,            // 99
-                APIEventType.unlabeled.displayOrder,            // Int.max
+                APIEventType.offseason.displayOrder,  // 99
+                APIEventType.unlabeled.displayOrder,  // Int.max
             ]
         )
     }
@@ -397,15 +397,20 @@ struct EventSectionTests {
             endDate: "2026-04-03"
         )
         // Later by date but earlier by section sort.
-        #expect(Event.sectionAscending(regional, makeEvent(
-            key: "d",
-            year: 2026,
-            eventType: .district,
-            district: makeDistrict(abbreviation: "fim"),
-            startDate: "2026-03-01",
-            endDate: "2026-03-03",
-            week: 0
-        )))
+        #expect(
+            Event.sectionAscending(
+                regional,
+                makeEvent(
+                    key: "d",
+                    year: 2026,
+                    eventType: .district,
+                    district: makeDistrict(abbreviation: "fim"),
+                    startDate: "2026-03-01",
+                    endDate: "2026-03-03",
+                    week: 0
+                )
+            )
+        )
     }
 
     @Test func sectionAscending_dcmp_divisionsBeforeFinals() {

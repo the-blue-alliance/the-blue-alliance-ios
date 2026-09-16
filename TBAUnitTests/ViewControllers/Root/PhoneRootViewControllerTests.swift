@@ -5,7 +5,6 @@ import UIKit
 
 @testable import The_Blue_Alliance
 
-
 @MainActor
 struct PhoneRootViewControllerTests {
 

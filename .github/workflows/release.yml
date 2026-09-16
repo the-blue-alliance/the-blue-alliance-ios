@@ -21,6 +21,8 @@ jobs:
     name: Release (${{ inputs.lane }})
     runs-on: xcode-27
     if: ${{ inputs.confirm == inputs.lane && github.ref == 'refs/heads/main' }}
+    env:
+      BUNDLE_GEMFILE: fastlane/Gemfile
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -31,14 +33,14 @@ jobs:
           echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v6
         with:
-          path: vendor/bundle
+          path: fastlane/vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: ${{ runner.os }}-gems-
       - name: Install
         run: |
-          cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
           make secrets
-          # Without this the vendor/bundle cache above never gets a hit.
+          # Without this the cache above never gets a hit. BUNDLE_GEMFILE makes
+          # fastlane/ the bundle root, so this path resolves under it.
           bundle config set --local path vendor/bundle
           bundle install
           bundle exec fastlane run setup_ci

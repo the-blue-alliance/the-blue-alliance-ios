@@ -34,11 +34,13 @@ We'll use this key in the [Setup Secrets](#setup-secrets) step when setting up l
 
 Setup Secrets
 ---
-The Blue Alliance for iOS stores secrets locally in a `Secrets.plist` file, which is loaded dynamically at runtime as a dictionary to be used in the app. Create a `Secrets.plist` file from the template `mock-Secrets.plist`
+The Blue Alliance for iOS stores secrets locally in a `Secrets.plist` file, which is loaded dynamically at runtime as a dictionary to be used in the app. `make secrets` creates the file if it's missing, and fills in `tba_api_key` from the `TBA_API_KEY` environment variable when one is set.
 
 ```
-$ cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
+$ TBA_API_KEY=<your key> make secrets
 ```
+
+Running it without `TBA_API_KEY` still creates an empty `Secrets.plist`, which is all the offline tests need.
 
 If linked properly, the `Secrets.plist` file in the Xcode project navigation should go from being red to being black. Edit `Secrets.plist` (either in Xcode or in a text editor) and fill out the secret values. `tba_api_key` should be the TBA API key you generated in the [Setup TBA API](#setup-tba-api) step.
 
@@ -46,7 +48,7 @@ Building in Xcode
 ---
 1. Be sure you have all required build tools, as described in the [Install Build Tool Dependencies](#install-build-tool-dependencies) section.
 2. Setup your `Secrets.plist` file, as described in the [Setup Secrets](#setup-secrets) section.
-3. Open the workspace file (`the-blue-alliance-ios.xcworkspace`).
+3. Open the project file (`the-blue-alliance-ios.xcodeproj`).
 4. Build and run The Blue Alliance for iOS.
 
 > **Pick a Simulator as the run destination.** In the Xcode toolbar, set the destination to one of the iOS Simulators (e.g. _iPhone 17 Pro_). Building against an attached physical device requires provisioning, a paid Apple Developer account, and a unique bundle identifier — none of which are necessary for day-to-day development. If you _do_ know what you're doing and want to run on hardware, change the bundle identifier to something namespaced to you (e.g. `com.the-blue-alliance.tba.<your-name>`) so it doesn't collide with the production build, and use your own signing team.
