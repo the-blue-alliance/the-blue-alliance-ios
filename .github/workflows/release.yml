@@ -24,17 +24,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Select Xcode
+      - name: Record Xcode build
         id: xcode
         run: |
-          version="$(cat .xcode-version)"
-          dir="/Applications/Xcode_$version.app/Contents/Developer"
-          if [ ! -d "$dir" ]; then
-            echo "::error::Xcode $version is not installed on this runner image."
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "DEVELOPER_DIR=$dir" >> "$GITHUB_ENV"
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v6
         with:
           path: vendor/bundle

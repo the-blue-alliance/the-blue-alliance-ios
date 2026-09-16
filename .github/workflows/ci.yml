@@ -20,17 +20,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Select Xcode
+      - name: Record Xcode build
         id: xcode
         run: |
-          version="$(cat .xcode-version)"
-          dir="/Applications/Xcode_$version.app/Contents/Developer"
-          if [ ! -d "$dir" ]; then
-            echo "::error::Xcode $version is not installed on this runner image."
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "DEVELOPER_DIR=$dir" >> "$GITHUB_ENV"
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - name: Lint
         run: make lint-format
 
@@ -49,17 +43,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Select Xcode
+      - name: Record Xcode build
         id: xcode
         run: |
-          version="$(cat .xcode-version)"
-          dir="/Applications/Xcode_$version.app/Contents/Developer"
-          if [ ! -d "$dir" ]; then
-            echo "::error::Xcode $version is not installed on this runner image."
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "DEVELOPER_DIR=$dir" >> "$GITHUB_ENV"
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       # Regenerate rather than using --check: that compares mtimes, and a fresh
       # checkout gives every file the same timestamp, so it would always pass here.
       - name: Regenerate previews
@@ -86,17 +74,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Select Xcode
+      - name: Record Xcode build
         id: xcode
         run: |
-          version="$(cat .xcode-version)"
-          dir="/Applications/Xcode_$version.app/Contents/Developer"
-          if [ ! -d "$dir" ]; then
-            echo "::error::Xcode $version is not installed on this runner image."
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "DEVELOPER_DIR=$dir" >> "$GITHUB_ENV"
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - name: Cache SwiftPM clones
         uses: actions/cache@v6
         with:
@@ -109,10 +91,10 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-
-            ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-packages-derived-data-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-
       # These are offline unit tests, so they need neither Secrets.plist nor a
       # signing keychain.
       - name: Test packages
@@ -130,7 +112,7 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-packages-derived-data-${{ hashFiles('Packages/*/Package.swift', 'Packages/*/Package.resolved') }}-${{ github.sha }}
 
   test-app:
     name: Test app
@@ -140,17 +122,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Select Xcode
+      - name: Record Xcode build
         id: xcode
         run: |
-          version="$(cat .xcode-version)"
-          dir="/Applications/Xcode_$version.app/Contents/Developer"
-          if [ ! -d "$dir" ]; then
-            echo "::error::Xcode $version is not installed on this runner image."
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "DEVELOPER_DIR=$dir" >> "$GITHUB_ENV"
+          xcodebuild -version
+          echo "build=$(xcodebuild -version | awk 'NR==2 { print $3 }')" >> "$GITHUB_OUTPUT"
       - name: Cache SwiftPM clones
         uses: actions/cache@v6
         with:
@@ -161,10 +137,10 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-
-            ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-derived-data-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-
+            ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-
       - name: Set up Secrets.plist
         run: |
           cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
@@ -186,4 +162,4 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: DerivedData
-          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.version }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-${{ github.sha }}
