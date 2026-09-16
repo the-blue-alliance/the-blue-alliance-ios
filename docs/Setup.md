@@ -4,7 +4,7 @@ To develop for The Blue Alliance for iOS, you will need a machine running macOS.
 Xcode is the only prerequisite.
 
 1. Install [Xcode 27](https://developer.apple.com/xcode/) from the Mac App Store. The app builds against the iOS 27 SDK and runs on iOS 26 and later.
-   - CI still builds with the version pinned in [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) (currently **26.6**) until GitHub's standard macOS runners ship Xcode 27, so changes need to build with both.
+   - CI builds with the version pinned in [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version) (currently **27.0**).
 2. Install the Xcode command line tools.
    - `xcode-select --install`
    - Or, open Xcode → Settings → Locations → Command Line Tools and select your version of Xcode.

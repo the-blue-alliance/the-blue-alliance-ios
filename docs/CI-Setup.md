@@ -29,18 +29,20 @@ The username/password style fastlane secrets (`FASTLANE_USERNAME` / `FASTLANE_PA
 
 ## Setting macOS / Xcode Versions
 
-The macOS image is set per-job via `runs-on:` (currently `macos-latest` on every job).
+The macOS image is set per-job via `runs-on:` (currently `xcode-27` on every macOS job; `dependency-pins` runs on `ubuntu-latest`).
 
-The Xcode version comes from [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version). Every job in `ci.yml` and `release.yml` reads it into a step output for [`maxim-lobanov/setup-xcode`](https://github.com/maxim-lobanov/setup-xcode), so checkout has to run before that step.
+The Xcode version comes from [`.xcode-version`](https://github.com/the-blue-alliance/the-blue-alliance-ios/blob/main/.xcode-version). Each macOS job's `Select Xcode` step reads it, points `DEVELOPER_DIR` at `/Applications/Xcode_<version>.app`, and fails if that isn't on the image, so checkout has to run before that step. The value has to match the image's Xcode app name, not a SemVer range.
 
 The list of macOS images, installed Xcode versions, and other preinstalled software lives in the [actions/runner-images](https://github.com/actions/runner-images/tree/main/images/macos) repo (formerly `actions/virtual-environments`).
 
 ### Bumping the Xcode version
 
-Xcode 27 isn't on `macos-latest` yet. GitHub only offers it on the `xcode-27-arm64` public preview image (an Xcode 27.0 beta as of September 2026), so CI stays on 26.6 for now.
+Every macOS job runs on `xcode-27`, GitHub's public preview image, because it is the only image that carries Xcode 27 — `macos-latest` still tops out at 26.6. The app's `.icon` files use Icon Composer features (`refractivity`, `specular-location`) that 26.6's `actool` can't parse, so 26.6 can't build the app at all.
 
-1. Check the [runner image readme](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md) lists the Xcode version, and that its simulator runtime includes the `DEVICE` model from the `Makefile`. `setup-xcode` can only select an Xcode already on the image.
-2. Edit `.xcode-version` and the version quoted in [`Setup.md`](Setup.md).
+The image installs exactly one Xcode and already makes it the default, so nothing needs to select it — `DEVELOPER_DIR` just pins which one we meant. Both the current image (27.0 beta 6) and the next one (27.0 RC, build `27A266a`) publish an `/Applications/Xcode_27.0.app` symlink, so the pin holds across that refresh. Until it lands, archives are built with a beta Xcode, which App Store Connect rejects for App Store review and external TestFlight groups; internal TestFlight still works.
+
+1. Check the [runner image readme](https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md) lists the Xcode version, and that its simulator runtime includes the `DEVICE` model from the `Makefile`. The pin has to name an Xcode already on the image.
+2. Edit `.xcode-version` and the version quoted in [`Setup.md`](Setup.md). The DerivedData cache keys include the pin, so a bump starts from a cold cache rather than reusing another toolchain's build artifacts.
 3. Run `make test` locally, then a Release build. Only Release runs the SIL optimizer, and a new toolchain can crash on code that Debug compiles fine (see the `Gymfile` workaround):
    ```sh
    xcodebuild -scheme "The Blue Alliance" -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
