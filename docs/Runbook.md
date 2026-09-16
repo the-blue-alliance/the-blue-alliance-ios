@@ -39,6 +39,7 @@ Ruby install:
 
 ```
 $ cd the-blue-alliance-ios
+$ export BUNDLE_GEMFILE=fastlane/Gemfile
 $ bundle install
 $ bundle exec fastlane match
 ```

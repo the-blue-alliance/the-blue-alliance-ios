@@ -12,7 +12,7 @@ or push from the command line:
 
 ```sh
 xcrun simctl push booted com.the-blue-alliance.tba \
-  debug/notifications/match_score_team_scoped.apns
+  scripts/notifications/match_score_team_scoped.apns
 ```
 
 `booted` targets whichever simulator is currently running; replace with a

@@ -83,7 +83,11 @@ new-version:
 	xcrun agvtool new-marketing-version "$$next"; \
 	xcrun agvtool new-version -all 1
 
-secrets: ## Write the TBA_API_KEY env var into Secrets.plist
+secrets: ## Create Secrets.plist if absent, then write the TBA_API_KEY env var into it
+	@if [ ! -f "$(SECRETS)" ]; then \
+		/usr/libexec/PlistBuddy -c "Add :tba_api_key string ''" -c "Save" "$(SECRETS)" >/dev/null; \
+		echo "Created $(SECRETS)."; \
+	fi
 	@if [ -z "$$TBA_API_KEY" ]; then \
 		echo "TBA_API_KEY unset, leaving $(SECRETS) alone. Offline tests do not need it."; \
 	else \

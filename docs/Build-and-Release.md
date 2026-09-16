@@ -96,15 +96,17 @@ The confirmation field exists because App Store submissions are public and hard 
 If something on CI fails and a beta or release build has to be shipped manually, you'll need to configure code signing locally.
 
 This is the one workflow that still needs Ruby. `match` is not part of the Makefile and
-fastlane is not installed locally:
+fastlane is not installed locally. The `Gemfile` lives in `fastlane/`, so `bundle` needs
+`BUNDLE_GEMFILE` pointed at it:
 
 ```
 $ brew install ruby
+$ export BUNDLE_GEMFILE=fastlane/Gemfile
 $ bundle install
 $ bundle exec fastlane match
 ```
 
-1. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
+1. Open the project file (`the-blue-alliance-ios.xcodeproj`)
 2. Click `the-blue-alliance-ios` project in the project navigator
 3. On the left sidebar, under `Targets` click `The Blue Alliance`
 4. Click the `General` tab along the top bar

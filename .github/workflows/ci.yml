@@ -142,9 +142,7 @@ jobs:
             ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-${{ hashFiles('**/Package.swift', '**/Package.resolved', '**/*.pbxproj') }}-
             ${{ runner.os }}-xcode${{ steps.xcode.outputs.build }}-derived-data-
       - name: Set up Secrets.plist
-        run: |
-          cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
-          make secrets
+        run: make secrets
         env:
           TBA_API_KEY: ${{ secrets.TBA_API_KEY }}
       - name: Test app

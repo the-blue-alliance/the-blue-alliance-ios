@@ -68,12 +68,22 @@ final class MockTBAAPI: TBAAPIProtocol {
     func teamEventsByYear(key teamKey: TeamKey, year: Int) async throws -> [Event] {
         try await stub(teamEventsByYear[year])
     }
-    func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match] { throw Unstubbed() }
-    func teamEventAwards(teamKey: TeamKey, eventKey: EventKey) async throws -> [Award] { throw Unstubbed() }
-    func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus { throw Unstubbed() }
-    func teamEventsStatusesByYear(teamKey: TeamKey, year: Int) async throws -> [EventKey: TeamEventStatus?] { throw Unstubbed() }
+    func teamEventMatches(teamKey: TeamKey, eventKey: EventKey) async throws -> [Match] {
+        throw Unstubbed()
+    }
+    func teamEventAwards(teamKey: TeamKey, eventKey: EventKey) async throws -> [Award] {
+        throw Unstubbed()
+    }
+    func teamEventStatus(teamKey: TeamKey, eventKey: EventKey) async throws -> TeamEventStatus {
+        throw Unstubbed()
+    }
+    func teamEventsStatusesByYear(teamKey: TeamKey, year: Int) async throws -> [EventKey:
+        TeamEventStatus?]
+    { throw Unstubbed() }
     func teamMediaByYear(teamKey: TeamKey, year: Int) async throws -> [Media] { throw Unstubbed() }
-    func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus] { throw Unstubbed() }
+    func eventTeamsStatuses(key eventKey: EventKey) async throws -> [String: TeamEventStatus] {
+        throw Unstubbed()
+    }
     func eventsByYear(_ year: Int) async throws -> [Event] { throw Unstubbed() }
     func event(key eventKey: EventKey) async throws -> Event {
         try await stub(eventsByKey[eventKey])
@@ -81,9 +91,13 @@ final class MockTBAAPI: TBAAPIProtocol {
     func eventTeams(key eventKey: EventKey) async throws -> [Team] { throw Unstubbed() }
     func eventTeamsSimple(key eventKey: EventKey) async throws -> [TeamSimple] { throw Unstubbed() }
     func eventRankings(key eventKey: EventKey) async throws -> EventRanking { throw Unstubbed() }
-    func eventAlliances(key eventKey: EventKey) async throws -> [EliminationAlliance]? { throw Unstubbed() }
+    func eventAlliances(key eventKey: EventKey) async throws -> [EliminationAlliance]? {
+        throw Unstubbed()
+    }
     func eventAwards(key eventKey: EventKey) async throws -> [Award] { throw Unstubbed() }
-    func eventDistrictPoints(key eventKey: EventKey) async throws -> EventDistrictPoints { throw Unstubbed() }
+    func eventDistrictPoints(key eventKey: EventKey) async throws -> EventDistrictPoints {
+        throw Unstubbed()
+    }
     func eventInsights(key eventKey: EventKey) async throws -> EventInsights { throw Unstubbed() }
     func eventMatches(key eventKey: EventKey) async throws -> [Match] { throw Unstubbed() }
     func match(key matchKey: String) async throws -> Match { throw Unstubbed() }
@@ -91,8 +105,12 @@ final class MockTBAAPI: TBAAPIProtocol {
     func districtsByYear(_ year: Int) async throws -> [District] { throw Unstubbed() }
     func districtEvents(key districtKey: String) async throws -> [Event] { throw Unstubbed() }
     func districtTeams(key districtKey: String) async throws -> [Team] { throw Unstubbed() }
-    func districtTeamsSimple(key districtKey: String) async throws -> [TeamSimple] { throw Unstubbed() }
-    func districtRankings(key districtKey: String) async throws -> [DistrictRanking]? { throw Unstubbed() }
+    func districtTeamsSimple(key districtKey: String) async throws -> [TeamSimple] {
+        throw Unstubbed()
+    }
+    func districtRankings(key districtKey: String) async throws -> [DistrictRanking]? {
+        throw Unstubbed()
+    }
 
 }
 

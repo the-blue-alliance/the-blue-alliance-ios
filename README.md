@@ -2,7 +2,7 @@ The Blue Alliance - iOS App
 ===
 An iOS app for accessing information about the FIRST Robotics Competition. This is a native mobile version of [The Blue Alliance](http://www.thebluealliance.com).
 
-![](https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-ios/main/screenshots/app-preview.png)
+![](https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-ios/main/.github/assets/app-preview.png)
 
 Contributing
 ===
