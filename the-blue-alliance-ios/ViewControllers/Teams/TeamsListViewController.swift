@@ -27,7 +27,7 @@ class TeamsListViewController<APITeam: TeamDisplayable & Hashable & Sendable>:
     }
 
     init(dependencies: Dependencies) {
-        super.init(dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {

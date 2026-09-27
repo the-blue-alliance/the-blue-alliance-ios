@@ -52,7 +52,8 @@ class EventInsightsViewController: TBATableViewController, Refreshable {
         default: eventStatsConfigurator = nil
         }
 
-        super.init(dependencies: dependencies)
+        super.init(style:.insetGrouped,dependencies: dependencies)
+
     }
 
     required init?(coder aDecoder: NSCoder) {

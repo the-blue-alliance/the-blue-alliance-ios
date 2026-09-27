@@ -36,7 +36,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable {
     private init(state: TeamState, dependencies: Dependencies) {
         self.state = state
 
-        super.init(style: .grouped, dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {

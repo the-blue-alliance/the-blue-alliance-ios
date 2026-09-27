@@ -16,26 +16,26 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G3o-Lz-YIs">
-                        <rect key="frame" x="16" y="6" width="36" height="36"/>
+                        <rect key="frame" x="16" y="8" width="32" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="G3o-Lz-YIs" secondAttribute="height" multiplier="1:1" id="67K-ty-SjS"/>
                             <constraint firstAttribute="width" relation="lessThanOrEqual" priority="999" constant="36" id="H6c-X4-IZC"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rH3-DS-iJh">
-                        <rect key="frame" x="60" y="14" width="354" height="20.5"/>
+                        <rect key="frame" x="56" y="14" width="358" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="G3o-Lz-YIs" firstAttribute="top" secondItem="06r-TA-IAo" secondAttribute="top" constant="6" id="4ov-Uu-rlS"/>
+                    <constraint firstItem="G3o-Lz-YIs" firstAttribute="top" secondItem="06r-TA-IAo" secondAttribute="top" constant="8" id="4ov-Uu-rlS"/>
                     <constraint firstAttribute="trailingMargin" secondItem="rH3-DS-iJh" secondAttribute="trailing" id="Aea-15-itp"/>
                     <constraint firstItem="G3o-Lz-YIs" firstAttribute="leading" secondItem="06r-TA-IAo" secondAttribute="leadingMargin" id="I6Y-wm-zFN"/>
                     <constraint firstItem="rH3-DS-iJh" firstAttribute="leading" secondItem="G3o-Lz-YIs" secondAttribute="trailing" constant="8" id="LxN-9H-6TM"/>
                     <constraint firstItem="rH3-DS-iJh" firstAttribute="centerY" secondItem="06r-TA-IAo" secondAttribute="centerY" id="O0W-bw-ISu"/>
-                    <constraint firstAttribute="bottom" secondItem="G3o-Lz-YIs" secondAttribute="bottom" constant="6" id="W7E-ua-MzJ"/>
+                    <constraint firstAttribute="bottom" secondItem="G3o-Lz-YIs" secondAttribute="bottom" constant="8" id="W7E-ua-MzJ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

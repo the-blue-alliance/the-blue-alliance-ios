@@ -83,7 +83,7 @@ class EventInfoViewController: TBATableViewController, Refreshable {
         self.state = state
         self.eventName = eventName
 
-        super.init(style: .grouped, dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {

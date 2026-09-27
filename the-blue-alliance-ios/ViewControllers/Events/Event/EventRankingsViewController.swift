@@ -23,7 +23,8 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
 
     init(eventKey: EventKey, dependencies: Dependencies) {
         self.eventKey = eventKey
-        super.init(dependencies: dependencies)
+        super.init(style:.insetGrouped,dependencies: dependencies)
+
     }
 
     required init?(coder aDecoder: NSCoder) {

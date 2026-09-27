@@ -29,7 +29,8 @@ class EventDistrictPointsViewController: TBATableViewController, Refreshable {
 
     init(event: Event, dependencies: Dependencies) {
         self.eventKey = event.key
-        super.init(dependencies: dependencies)
+        super.init(style:.insetGrouped,dependencies: dependencies)
+
 
         navigationItem.title = "District Points"
         navigationItem.subtitle = "@ \(event.friendlyNameWithYear)"

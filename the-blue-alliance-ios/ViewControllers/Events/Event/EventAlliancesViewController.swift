@@ -26,7 +26,8 @@ class EventAlliancesViewController: TBATableViewController, Refreshable {
 
     init(event: Event, dependencies: Dependencies) {
         self.eventKey = event.key
-        super.init(dependencies: dependencies)
+        super.init(style:.insetGrouped,dependencies: dependencies)
+
 
         navigationItem.title = "Alliances"
         navigationItem.subtitle = "@ \(event.friendlyNameWithYear)"
