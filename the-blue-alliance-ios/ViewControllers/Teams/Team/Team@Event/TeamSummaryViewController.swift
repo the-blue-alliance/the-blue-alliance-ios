@@ -65,7 +65,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
         self.teamKey = teamKey
         self.eventKey = eventKey
 
-        super.init(dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -463,3 +463,4 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
 
     var noDataText: String? { "No status for team at event" }
 }
+

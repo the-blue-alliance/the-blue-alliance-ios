@@ -21,7 +21,7 @@ class TeamStatsViewController: TBATableViewController, Refreshable {
         self.teamKey = teamKey
         self.eventKey = eventKey
 
-        super.init(dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {

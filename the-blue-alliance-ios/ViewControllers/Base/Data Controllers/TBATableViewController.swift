@@ -104,18 +104,7 @@ class TBATableViewController: UITableViewController, Alertable, DependenciesProv
         willDisplayHeaderView view: UIView,
         forSection section: Int
     ) {
-        if type(of: view) == UITableViewHeaderFooterView.self,
-            let view = view as? UITableViewHeaderFooterView
-        {
-            // Setup text
-            view.textLabel?.textColor = UIColor.white
-            view.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
-
-            // Set custom background color
-            let headerView = UIView()
-            headerView.backgroundColor = UIColor.tableViewHeaderColor
-            view.backgroundView = headerView
-        }
+        // Use the system/default header appearance (plain text, no colored background).
     }
 
 }
