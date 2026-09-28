@@ -26,7 +26,8 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
         self.eventKey = eventKey
         self.teamKey = teamKey
 
-        super.init(dependencies: dependencies)
+        super.init(style:.insetGrouped,dependencies: dependencies)
+
     }
 
     /// The event's awards as their own screen, rather than a team's awards as a Team@Event tab.

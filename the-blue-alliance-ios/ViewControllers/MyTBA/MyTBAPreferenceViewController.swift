@@ -88,7 +88,7 @@ class MyTBAPreferenceViewController: TBATableViewController,
         notifications = existingSubscription?.notifications ?? []
         notificationsInitial = notifications
 
-        super.init(style: .grouped, dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
 
         title = "myTBA Preferences"
     }

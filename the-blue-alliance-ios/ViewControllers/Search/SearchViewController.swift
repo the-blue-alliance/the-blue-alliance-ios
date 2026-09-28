@@ -54,7 +54,7 @@ class SearchViewController: TBATableViewController {
     private lazy var dataSource: TableViewDataSource<SearchSection, SearchItem> = makeDataSource()
 
     init(dependencies: Dependencies) {
-        super.init(dependencies: dependencies)
+        super.init(style:.insetGrouped,dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -29,7 +29,7 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
         self.teamKey = ranking.teamKey
         self.districtKey = districtKey
 
-        super.init(dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -124,3 +124,4 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
 
     var noDataText: String? { "No summary for team at district" }
 }
+

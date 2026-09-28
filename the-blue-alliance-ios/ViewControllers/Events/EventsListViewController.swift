@@ -32,7 +32,14 @@ class EventsListViewController: TBATableViewController {
 
     private(set) var events: [APIEvent] = []
     private lazy var dataSource: EventsListDataSource = makeDataSource()
+    
+    init(dependencies: Dependencies) {
+        super.init(style: .insetGrouped, dependencies: dependencies)
+    }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {

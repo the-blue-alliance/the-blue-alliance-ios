@@ -171,6 +171,8 @@ class MatchSummaryView: UIView {
         existing = constraint
     }
 
+    private let tableCornerRadius: CGFloat = 10
+
     private func styleInterface() {
         redContainerView.backgroundColor = UIColor.redAllianceBackgroundColor
         redScoreLabel.backgroundColor = UIColor.redAllianceScoreBackgroundColor
@@ -179,6 +181,17 @@ class MatchSummaryView: UIView {
         blueContainerView.backgroundColor = UIColor.blueAllianceBackgroundColor
         blueScoreLabel.backgroundColor = UIColor.blueAllianceScoreBackgroundColor
         blueScoreLabel.adjustsFontForContentSizeCategory = true
+
+     
+        for (container, corners) in [
+            (redContainerView!, CACornerMask([.layerMinXMinYCorner, .layerMaxXMinYCorner])),
+            (blueContainerView!, CACornerMask([.layerMinXMaxYCorner, .layerMaxXMaxYCorner])),
+        ] {
+            container.clipsToBounds = true
+            container.layer.cornerRadius = tableCornerRadius
+            container.layer.cornerCurve = .continuous
+            container.layer.maskedCorners = corners
+        }
     }
 
     // MARK: - Public Methods
@@ -291,6 +304,7 @@ class MatchSummaryView: UIView {
         if viewModel.redAllianceWon {
             redContainerView.layer.borderWidth = 2.0
             redScoreLabel.font = winnerFont
+            
         } else if viewModel.blueAllianceWon {
             blueContainerView.layer.borderWidth = 2.0
             blueScoreLabel.font = winnerFont

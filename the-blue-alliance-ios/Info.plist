@@ -6,10 +6,6 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>TBA</string>
-	<key>GOOGLE_ANALYTICS_IDFA_COLLECTION_ENABLED</key>
-	<false/>
-	<key>GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED</key>
-	<false/>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
@@ -47,12 +43,18 @@
 	<string>1</string>
 	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
 	<false/>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<false/>
+	<key>GIDClientID</key>
+	<string>836511118694-aj54f0d17nui5453fe0rbj230cqto6sl.apps.googleusercontent.com</string>
+	<key>GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED</key>
+	<false/>
+	<key>GOOGLE_ANALYTICS_IDFA_COLLECTION_ENABLED</key>
+	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>TBAAlternateAppIconOrder</key>
-	<string>$(ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
@@ -62,10 +64,8 @@
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
+	<key>TBAAlternateAppIconOrder</key>
+	<string>$(ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -83,10 +83,12 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>GIDClientID</key>
-	<string>836511118694-aj54f0d17nui5453fe0rbj230cqto6sl.apps.googleusercontent.com</string>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
@@ -102,7 +104,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>FirebaseCrashlyticsCollectionEnabled</key>
-	<false/>
 </dict>
 </plist>

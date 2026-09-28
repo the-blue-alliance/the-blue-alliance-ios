@@ -66,7 +66,7 @@ class SettingsViewController: TBATableViewController {
         self.fcmTokenProvider = fcmTokenProvider
         self.pushService = pushService
 
-        super.init(style: .grouped, dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
 
         title = RootType.settings.title
         tabBarItem.image = RootType.settings.icon

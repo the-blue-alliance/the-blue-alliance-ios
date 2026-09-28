@@ -62,7 +62,7 @@ class NotificationsViewController: TBATableViewController {
         self.fcmTokenProvider = fcmTokenProvider
         self.pushService = pushService
 
-        super.init(style: .grouped, dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
 
         title = "Troubleshoot Notifications"
         hidesBottomBarWhenPushed = true

@@ -48,7 +48,7 @@ class MatchesViewController: TBATableViewController, Refreshable {
         self.state = state
         self.teamKey = teamKey
 
-        super.init(dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     private var favoritesStore: FavoritesStore { myTBAStores.favorites }

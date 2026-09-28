@@ -25,7 +25,7 @@ class DistrictsViewController: TBATableViewController, Refreshable {
     init(year: Int, dependencies: Dependencies) {
         self.year = year
 
-        super.init(dependencies: dependencies)
+        super.init(style: .insetGrouped, dependencies: dependencies)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -89,3 +89,4 @@ class DistrictsViewController: TBATableViewController, Refreshable {
 
     var noDataText: String? { "No districts for year" }
 }
+
