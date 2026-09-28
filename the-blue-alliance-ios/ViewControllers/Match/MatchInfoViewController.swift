@@ -35,7 +35,7 @@ class MatchInfoViewController: TBAViewController, Refreshable {
             )
             label.adjustsFontForContentSizeCategory = true
             label.textAlignment = .center
-            label.backgroundColor = UIColor.systemFill
+         //   label.backgroundColor = UIColor.systemFill
             label.translatesAutoresizingMaskIntoConstraints = false
         }
         let infoStackView = UIStackView(arrangedSubviews: labels)

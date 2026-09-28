@@ -30,7 +30,7 @@ class MatchTimesView: UIView {
 
     private lazy var headerView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [headerLabel])
-        stackView.backgroundColor = UIColor.systemFill
+       // stackView.backgroundColor = UIColor.systemFill
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
