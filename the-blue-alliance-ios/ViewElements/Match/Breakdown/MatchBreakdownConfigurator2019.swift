@@ -86,8 +86,14 @@ struct MatchBreakdownConfigurator2019: MatchBreakdownConfigurator {
             boolImageRow(title: "HAB Docking", key: "habDockingRankingPoint", red: red, blue: blue)
         )
         rows.append(
-            row(title: "Fouls", key: "foulPoints", formatString: "+%@", red: red, blue: blue)
+            foulRow(
+                title: "Fouls / Tech Fouls Committed",
+                keys: ["foulCount", "techFoulCount"],
+                red: red,
+                blue: blue
+            )
         )
+        rows.append(foulPointsRow(red: red, blue: blue))
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
         rows.append(
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)

@@ -2,12 +2,6 @@ import Foundation
 import TBAAPI
 import UIKit
 
-internal enum FoulRowType {
-    case count
-    case points
-    case both
-}
-
 protocol MatchBreakdownConfigurator {
     static func configureDataSource(
         _ snapshot: inout NSDiffableDataSourceSnapshot<String?, BreakdownRow>,
@@ -281,20 +275,14 @@ extension MatchBreakdownConfigurator {
         )
     }
 
-    // Function for generating a row showing fouls / secondary fouls for each alliance. Type can be points, count, or both to allow for flexibility between years. The `reversed` Boolean is for whether to show fouls on the alliance that made the offense (typically for the `points` type) or the alliance that received the points (typically for the `count` type).
-
+    // Shows the fouls / secondary fouls each alliance committed, from its own count keys.
     static func foulRow(
         title: String,
         keys: [String],
-        pointValues: [Int],
         red: [String: Any]?,
-        blue: [String: Any]?,
-        reversed: Bool,
-        type: FoulRowType
-    )
-        -> BreakdownRow?
-    {
-        guard keys.count == 2, pointValues.count == 2 else {
+        blue: [String: Any]?
+    ) -> BreakdownRow? {
+        guard keys.count == 2 else {
             return nil
         }
         guard let foulValues = values(key: keys[0], red: red, blue: blue) else {
@@ -313,28 +301,21 @@ extension MatchBreakdownConfigurator {
             return nil
         }
 
-        let foulTuples =
-            reversed
-            ? [(blueFouls, blueSecondaryFouls), (redFouls, redSecondaryFouls)]
-            : [(redFouls, redSecondaryFouls), (blueFouls, blueSecondaryFouls)]
-        let elements: [String]
-        switch type {
-        case .count:
-            elements = foulTuples.map { (fouls, secondaryFouls) in
-                "\(fouls) / \(secondaryFouls)"
-            }
-        case .points:
-            elements = foulTuples.map { (fouls, secondaryFouls) in
-                "+\(fouls * pointValues[0]) / +\(secondaryFouls * pointValues[1])"
-            }
-        case .both:
-            elements = foulTuples.map { (fouls, secondaryFouls) in
-                let points = fouls * pointValues[0]
-                let secondaryPoints = secondaryFouls * pointValues[1]
-                return
-                    "\(fouls)\(points > 0 ? " (+\(points))" : "") / \(secondaryFouls)\(secondaryPoints > 0 ? " (+\(secondaryPoints))" : "")"
-            }
-        }
-        return BreakdownRow(title: title, red: [elements.first], blue: [elements.last])
+        return BreakdownRow(
+            title: title,
+            red: ["\(redFouls) / \(redSecondaryFouls)"],
+            blue: ["\(blueFouls) / \(blueSecondaryFouls)"]
+        )
+    }
+
+    // Shows the points each alliance received from the other alliance's fouls.
+    static func foulPointsRow(red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
+        return row(
+            title: "Foul Points Received",
+            key: "foulPoints",
+            red: red,
+            blue: blue,
+            type: .subtotal
+        )
     }
 }

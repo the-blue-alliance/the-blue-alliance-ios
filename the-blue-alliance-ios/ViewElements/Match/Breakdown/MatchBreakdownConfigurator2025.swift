@@ -125,18 +125,13 @@ struct MatchBreakdownConfigurator2025: MatchBreakdownConfigurator {
         }
         rows.append(
             foulRow(
-                title: "Fouls / Major Fouls",
+                title: "Fouls / Major Fouls Committed",
                 keys: ["foulCount", "techFoulCount"],
-                pointValues: [2, 6],
                 red: red,
-                blue: blue,
-                reversed: false,
-                type: .count
+                blue: blue
             )
         )
-        rows.append(
-            row(title: "Foul Points", key: "foulPoints", red: red, blue: blue, type: .subtotal)
-        )
+        rows.append(foulPointsRow(red: red, blue: blue))
         rows.append(row(title: "Adjustments", key: "adjustPoints", red: red, blue: blue))
         rows.append(
             row(title: "Total Score", key: "totalPoints", red: red, blue: blue, type: .total)

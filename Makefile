@@ -7,7 +7,7 @@ RESULTS := $(ROOT)/test_output
 PROJECT := the-blue-alliance-ios.xcodeproj
 SCHEME  := The Blue Alliance
 SECRETS := the-blue-alliance-ios/Secrets.plist
-DEVICE  := platform=iOS Simulator,name=iPhone 17 Pro
+DEVICE  := platform=iOS Simulator,name=iPhone 17
 
 # Build tool plugins and macros are only trusted through Xcode's UI.
 XCARGS  := -skipPackagePluginValidation -skipMacroValidation COMPILER_INDEX_STORE_ENABLE=NO
