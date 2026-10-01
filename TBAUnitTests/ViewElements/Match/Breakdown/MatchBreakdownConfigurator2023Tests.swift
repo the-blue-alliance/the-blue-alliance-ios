@@ -31,7 +31,8 @@ struct MatchBreakdownConfigurator2023Tests {
                 "Coopertition Criteria Met",
                 "Sustainability Bonus",
                 "Activation Bonus",
-                "Fouls / Tech Fouls",
+                "Fouls / Tech Fouls Committed",
+                "Foul Points",
                 "Adjustments",
                 "Total Score",
                 "Ranking Points",
@@ -129,14 +130,23 @@ struct MatchBreakdownConfigurator2023Tests {
         #expect(text(row(r, "Activation Bonus")?.blue ?? []) == "")
     }
 
-    // Fouls are reversed so each alliance sees the points the other's fouls awarded it.
-    @Test func foulsAreReversedAndWorth5And12() {
+    // Each alliance's column shows the fouls it committed, with no point values.
+    @Test func foulsShowCommittedCounts() {
         let r = rows()
-        #expect(text(row(r, "Fouls / Tech Fouls")?.red ?? []) == "2 (+10) / 0")
-        #expect(text(row(r, "Fouls / Tech Fouls")?.blue ?? []) == "3 (+15) / 0")
+        #expect(text(row(r, "Fouls / Tech Fouls Committed")?.red ?? []) == "3 / 0")
+        #expect(text(row(r, "Fouls / Tech Fouls Committed")?.blue ?? []) == "2 / 0")
 
         let techFouls = rows { red, _ in red["techFoulCount"] = 2 }
-        #expect(text(row(techFouls, "Fouls / Tech Fouls")?.blue ?? []) == "3 (+15) / 2 (+24)")
+        #expect(text(row(techFouls, "Fouls / Tech Fouls Committed")?.red ?? []) == "3 / 2")
+        #expect(text(row(techFouls, "Fouls / Tech Fouls Committed")?.blue ?? []) == "2 / 0")
+    }
+
+    // Each alliance's foul points come from the other alliance's fouls.
+    @Test func foulPointsShowEachAllianceOwnFoulPoints() {
+        let r = rows()
+        #expect(row(r, "Foul Points")?.type == .subtotal)
+        #expect(text(row(r, "Foul Points")?.red ?? []) == "10")
+        #expect(text(row(r, "Foul Points")?.blue ?? []) == "15")
     }
 
     @Test func rankingPointsOnlyShownForQualificationMatches() {
@@ -251,6 +261,7 @@ struct MatchBreakdownConfigurator2023Tests {
             "activationBonusAchieved": true,
             "foulCount": 3,
             "techFoulCount": 0,
+            "foulPoints": 10,
             "adjustPoints": 0,
             "totalPoints": 126,
             "rp": 1,
@@ -286,6 +297,7 @@ struct MatchBreakdownConfigurator2023Tests {
             "activationBonusAchieved": false,
             "foulCount": 2,
             "techFoulCount": 0,
+            "foulPoints": 15,
             "adjustPoints": 0,
             "totalPoints": 130,
             "rp": 3,
