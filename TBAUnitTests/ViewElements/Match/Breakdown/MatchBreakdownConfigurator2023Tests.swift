@@ -32,7 +32,7 @@ struct MatchBreakdownConfigurator2023Tests {
                 "Sustainability Bonus",
                 "Activation Bonus",
                 "Fouls / Tech Fouls Committed",
-                "Foul Points",
+                "Foul Points Received",
                 "Adjustments",
                 "Total Score",
                 "Ranking Points",
@@ -144,9 +144,9 @@ struct MatchBreakdownConfigurator2023Tests {
     // Each alliance's foul points come from the other alliance's fouls.
     @Test func foulPointsShowEachAllianceOwnFoulPoints() {
         let r = rows()
-        #expect(row(r, "Foul Points")?.type == .subtotal)
-        #expect(text(row(r, "Foul Points")?.red ?? []) == "10")
-        #expect(text(row(r, "Foul Points")?.blue ?? []) == "15")
+        #expect(row(r, "Foul Points Received")?.type == .subtotal)
+        #expect(text(row(r, "Foul Points Received")?.red ?? []) == "10")
+        #expect(text(row(r, "Foul Points Received")?.blue ?? []) == "15")
     }
 
     @Test func rankingPointsOnlyShownForQualificationMatches() {

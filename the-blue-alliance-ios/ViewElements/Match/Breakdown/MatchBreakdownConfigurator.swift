@@ -310,6 +310,12 @@ extension MatchBreakdownConfigurator {
 
     // Shows the points each alliance received from the other alliance's fouls.
     static func foulPointsRow(red: [String: Any]?, blue: [String: Any]?) -> BreakdownRow? {
-        return row(title: "Foul Points", key: "foulPoints", red: red, blue: blue, type: .subtotal)
+        return row(
+            title: "Foul Points Received",
+            key: "foulPoints",
+            red: red,
+            blue: blue,
+            type: .subtotal
+        )
     }
 }

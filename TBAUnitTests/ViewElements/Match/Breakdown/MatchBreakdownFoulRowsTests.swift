@@ -124,7 +124,7 @@ struct MatchBreakdownFoulRowsTests {
     @Test(arguments: seasons)
     func foulPointsRowShowsEachAllianceOwnFoulPoints(_ season: Season) {
         let r = rows(season, red: season.red, blue: season.blue)
-        let foulPoints = row(r, "Foul Points")
+        let foulPoints = row(r, "Foul Points Received")
         #expect(foulPoints?.type == .subtotal)
         #expect(text(foulPoints?.red ?? []) == "\(season.red["foulPoints"] ?? -1)")
         #expect(text(foulPoints?.blue ?? []) == "\(season.blue["foulPoints"] ?? -1)")
@@ -137,7 +137,7 @@ struct MatchBreakdownFoulRowsTests {
             Issue.record("Missing \(season.title)")
             return
         }
-        #expect(titles.dropFirst(committed + 1).first == "Foul Points")
+        #expect(titles.dropFirst(committed + 1).first == "Foul Points Received")
         #expect(!titles.contains("Fouls"))
     }
 
@@ -146,7 +146,7 @@ struct MatchBreakdownFoulRowsTests {
         let points = ["foulPoints": 4]
         let r = rows(season, red: points, blue: points)
         #expect(row(r, season.title) == nil)
-        #expect(text(row(r, "Foul Points")?.red ?? []) == "4")
+        #expect(text(row(r, "Foul Points Received")?.red ?? []) == "4")
     }
 
     // MARK: - Test helpers

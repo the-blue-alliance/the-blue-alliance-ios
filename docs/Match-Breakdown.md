@@ -30,7 +30,7 @@ These live in `MatchBreakdownConfigurator.swift`.
 - `rankingPointsRow`: Used for RP values in the breakdown.
 - `boolImageRow`: Used to show a ✓/✗ in the given row based on a boolean value.
 - `foulRow`: Shows the fouls / secondary fouls each alliance *committed*, read from that alliance's own count keys (e.g. `foulCount` / `techFoulCount`, or `minorFoulCount` / `majorFoulCount` in 2026). Title it "Fouls / Tech Fouls Committed" or "Fouls / Major Fouls Committed" to match the season's naming.
-- `foulPointsRow`: Shows each alliance's own `foulPoints`, the points it *received* from the other alliance's fouls. Place it directly after `foulRow`.
+- `foulPointsRow`: A "Foul Points Received" row showing each alliance's own `foulPoints`, the points it *received* from the other alliance's fouls. Place it directly after `foulRow`.
 
 ## Adding a New Year
 1. **Find the API shape**: hit `/match/{match_key}` for an event in the new year, one that is real and finished.
