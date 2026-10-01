@@ -149,6 +149,54 @@ struct MatchBreakdownFoulRowsTests {
         #expect(text(row(r, "Foul Points Received")?.red ?? []) == "4")
     }
 
+    // MARK: - 2015
+
+    // Red and blue alliances of 2015hop_qm49.
+    private func rows2015(redFoulPoints: Int = 6, blueFoulPoints: Int = 18) -> [BreakdownRow] {
+        let red = makeBreakdown(["foul_count": redFoulPoints / 6, "foul_points": redFoulPoints])
+        let blue = makeBreakdown(["foul_count": blueFoulPoints / 6, "foul_points": blueFoulPoints])
+        var snapshot = NSDiffableDataSourceSnapshot<String?, BreakdownRow>()
+        MatchBreakdownConfigurator2015.configureDataSource(
+            &snapshot,
+            ["red": red, "blue": blue],
+            red,
+            blue,
+            .qm
+        )
+        return snapshot.itemIdentifiers
+    }
+
+    @Test func foulsCommittedShowEachAllianceOwnCount2015() {
+        let r = rows2015()
+        #expect(text(row(r, "Fouls Committed")?.red ?? []) == "1")
+        #expect(text(row(r, "Fouls Committed")?.blue ?? []) == "3")
+        #expect(row(r, "Fouls Committed")?.type == .normal)
+    }
+
+    // 2015 fouls were deducted from the offending alliance's own score.
+    @Test func foulPointsDeductedShowEachAllianceOwnDeduction2015() {
+        let r = rows2015()
+        #expect(text(row(r, "Foul Points Deducted")?.red ?? []) == "\u{2212}6")
+        #expect(text(row(r, "Foul Points Deducted")?.blue ?? []) == "\u{2212}18")
+        #expect(row(r, "Foul Points Deducted")?.type == .normal)
+    }
+
+    @Test func noFoulPointsDeductedShowsZero2015() {
+        let r = rows2015(redFoulPoints: 0)
+        #expect(text(row(r, "Foul Points Deducted")?.red ?? []) == "0")
+    }
+
+    @Test func foulRowsOrder2015() {
+        let titles = rows2015().map(\.title)
+        guard let committed = titles.firstIndex(of: "Fouls Committed") else {
+            Issue.record("Missing Fouls Committed")
+            return
+        }
+        #expect(titles.dropFirst(committed + 1).first == "Foul Points Deducted")
+        #expect(!titles.contains("Fouls"))
+        #expect(!titles.contains("Foul Points Received"))
+    }
+
     // MARK: - Test helpers
 
     private func rows(_ season: Season, red: [String: Int], blue: [String: Int]) -> [BreakdownRow] {

@@ -34,9 +34,8 @@ struct MatchBreakdownConfigurator2015: MatchBreakdownConfigurator {
         )
         // Final
         rows.append(coopertitionRow(dict: breakdown))
-        rows.append(
-            row(title: "Fouls", key: "foul_points", formatString: "-%@", red: red, blue: blue)
-        )
+        rows.append(row(title: "Fouls Committed", key: "foul_count", red: red, blue: blue))
+        rows.append(foulPointsDeductedRow(red: red, blue: blue))
         rows.append(row(title: "Adjustments", key: "adjust_points", red: red, blue: blue))
         rows.append(
             row(title: "Total Score", key: "total_points", red: red, blue: blue, type: .total)
@@ -70,6 +69,24 @@ struct MatchBreakdownConfigurator2015: MatchBreakdownConfigurator {
             title: title,
             red: [redBool ? "\(value)" : "0"],
             blue: [blueBool ? "\(value)" : "0"]
+        )
+    }
+
+    // 2015 fouls were deducted from the offending alliance's own score.
+    private static func foulPointsDeductedRow(
+        red: [String: Any]?,
+        blue: [String: Any]?
+    ) -> BreakdownRow? {
+        guard let (rv, bv) = values(key: "foul_points", red: red, blue: blue),
+            let redPoints = rv as? Int, let bluePoints = bv as? Int
+        else {
+            return nil
+        }
+        func deducted(_ points: Int) -> String { points == 0 ? "0" : "\u{2212}\(points)" }
+        return BreakdownRow(
+            title: "Foul Points Deducted",
+            red: [deducted(redPoints)],
+            blue: [deducted(bluePoints)]
         )
     }
 
