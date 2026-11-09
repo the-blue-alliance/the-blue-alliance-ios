@@ -2,7 +2,7 @@ import Foundation
 
 public enum MyTBAError: Error, Equatable, Sendable {
     case error(Int?, String)
-    /// No FID from Firebase Messaging yet, so this device can't be registered.
+    /// Firebase hasn't provided this install's FID, so there's no device to name to TBA.
     case missingFID
 
     public var code: Int? {

@@ -16,7 +16,6 @@ protocol RemoteNotificationRegistering: AnyObject {
 protocol FirebasePushRegistering: AnyObject {
     func installationID() async throws -> String
     func register() async throws
-    func unregister() async throws
     func deleteInstallation() async throws
 }
 
@@ -30,27 +29,42 @@ final class FirebasePushRegistrar: FirebasePushRegistering {
         try await Messaging.messaging().register()
     }
 
-    func unregister() async throws {
-        try await Messaging.messaging().unregister()
-    }
-
     func deleteInstallation() async throws {
         try await Installations.installations().delete()
     }
 
 }
 
+enum PushServiceError: LocalizedError {
+    case registrationPaused
+    case notRegisteredWithFirebase
+
+    var errorDescription: String? {
+        switch self {
+        case .registrationPaused:
+            return "Signing out of myTBA."
+        case .notRegisteredWithFirebase:
+            return "Firebase hasn't registered this device for notifications yet."
+        }
+    }
+}
+
 protocol PushServiceProtocol: AnyObject {
+    /// Whether FCM has confirmed it delivers to this install's FID. TBA can't have the FID
+    /// before then: registering it deletes the install's old FCM token, which may be the
+    /// only way pushes still reach it.
+    var isRegisteredWithFirebase: Bool { get }
     func registerForRemoteNotifications(_ completion: (((any Error)?) -> Void)?)
     @discardableResult func requestAuthorizationForNotifications() async throws -> Bool
-    /// Stops registering with TBA, waiting out any request in flight, so it can't re-add
-    /// the device while sign-out removes it. Signing in again resumes it.
+    /// Registers this install's FID with TBA. Every registration goes through here, so
+    /// pausing covers them all.
+    func registerWithTBA() async throws -> MyTBABaseResponse
+    /// Stops registering with TBA and waits out any request already sent, so none can re-add
+    /// the device after sign-out removes it. Also reads the FID again if that failed at
+    /// launch, since sign-out names it to TBA. Signing in again resumes registration.
     func pauseRegistration() async
-    /// Registers again after a sign-out that didn't go through.
+    /// Picks registration back up, after signing in or a sign-out that didn't go through.
     func resumeRegistration()
-    /// Unregisters this install's FID from FCM. Not enough on its own to stop pushes for
-    /// good: the FID survives, and auto-init registers it again at the next launch.
-    func unregisterFromFirebase() async throws
     /// Deletes this install's Firebase installation, so its FID stops working for good,
     /// including any TBA registration still pointing at it. Needs no TBA auth, which is
     /// what lets sign-out finish when TBA can't be told.
@@ -69,12 +83,16 @@ class PushService: NSObject, PushServiceProtocol {
     weak var router: (any PushNotificationRouting)?
 
     private(set) var registerTask: Task<Void, Never>?
+    /// The last /register request sent to TBA. Each waits for the one before it, so a newer
+    /// FID lands last, and awaiting this waits them all out.
+    private var lastTBARegistration: Task<MyTBABaseResponse, any Error>?
     private var signInObservation: Task<Void, Never>?
     private var hasAPNSToken = false
     private var isRegistrationPaused = false
 
     /// This install's Firebase Installation ID, which FCM delivers its pushes to.
     private(set) var fid: String?
+    private(set) var isRegisteredWithFirebase = false
 
     init(
         reporter: any Reporter,
@@ -91,7 +109,7 @@ class PushService: NSObject, PushServiceProtocol {
 
         super.init()
 
-        loadFID()
+        Task { [weak self] in await self?.loadFID() }
         observeSignIn()
     }
 
@@ -123,24 +141,50 @@ extension PushService {
         )
     }
 
+    func registerWithTBA() async throws -> MyTBABaseResponse {
+        guard !isRegistrationPaused else {
+            throw PushServiceError.registrationPaused
+        }
+        guard isRegisteredWithFirebase else {
+            throw PushServiceError.notRegisteredWithFirebase
+        }
+        // Its own task, so cancelling the caller doesn't cancel it: TBA may already be
+        // handling the request, and pausing has to wait for it to land.
+        let previous = lastTBARegistration
+        let registration = Task {
+            _ = try? await previous?.value
+            // Pausing waits out a request already sent, not one still queued behind it.
+            guard !isRegistrationPaused else {
+                throw PushServiceError.registrationPaused
+            }
+            return try await myTBA.register()
+        }
+        lastTBARegistration = registration
+        return try await registration.value
+    }
+
     func pauseRegistration() async {
         isRegistrationPaused = true
         registerTask?.cancel()
-        await registerTask?.value
+        _ = try? await lastTBARegistration?.value
+        if fid == nil {
+            await loadFID()
+        }
     }
 
     func resumeRegistration() {
         isRegistrationPaused = false
-        registerWithFirebase()
-    }
-
-    func unregisterFromFirebase() async throws {
-        try await firebase.unregister()
+        if isRegisteredWithFirebase {
+            keepRegisteringWithTBA()
+        } else {
+            registerWithFirebase()
+        }
     }
 
     func deleteFirebaseInstallation() async throws {
         try await firebase.deleteInstallation()
         fid = nil
+        isRegisteredWithFirebase = false
     }
 
 }
@@ -149,17 +193,14 @@ extension PushService {
 
     // Firebase keeps the FID in this device's keychain, so it's known at launch, before
     // Messaging reports its registration.
-    private func loadFID() {
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let fid = try await firebase.installationID()
-                if self.fid == nil {
-                    self.fid = fid
-                }
-            } catch {
-                reporter.record(error)
+    private func loadFID() async {
+        do {
+            let fid = try await firebase.installationID()
+            if self.fid == nil {
+                self.fid = fid
             }
+        } catch {
+            reporter.record(error)
         }
     }
 
@@ -173,8 +214,7 @@ extension PushService {
                 guard isSignedIn != wasSignedIn else { continue }
                 wasSignedIn = isSignedIn
                 if isSignedIn {
-                    isRegistrationPaused = false
-                    registerWithFirebase()
+                    resumeRegistration()
                 } else {
                     registerTask?.cancel()
                 }
@@ -197,8 +237,9 @@ extension PushService {
         }
     }
 
-    // Restarting an in-flight attempt is deliberate: a changed FID must win.
-    private func registerWithTBA() {
+    // Retries every minute until TBA has the FID. A new FID restarts it, and its request
+    // waits for the old one's, so the new FID lands last.
+    private func keepRegisteringWithTBA() {
         registerTask?.cancel()
         guard authService.isSignedIn, !isRegistrationPaused else {
             return
@@ -207,7 +248,7 @@ extension PushService {
             while !Task.isCancelled {
                 guard let self else { return }
                 do {
-                    _ = try await myTBA.register()
+                    _ = try await registerWithTBA()
                     return
                 } catch {
                     guard !Task.isCancelled else { return }
@@ -230,10 +271,11 @@ extension PushService: MessagingDelegate {
 
     // Separate from the delegate method so tests don't need a `Messaging` instance.
     func didReceiveRegistration(_ fid: String?) {
-        // Firebase also reports nil when an unregister finishes, even one that failed
+        // Firebase reports nil when unregistering, which this app doesn't do.
         guard let fid else { return }
         self.fid = fid
-        registerWithTBA()
+        isRegisteredWithFirebase = true
+        keepRegisteringWithTBA()
     }
 
 }

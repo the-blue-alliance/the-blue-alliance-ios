@@ -147,14 +147,14 @@ class NotificationsViewController: TBATableViewController {
                 }
             case .firebase:
                 let status: NotificationStatus = {
-                    if fidProvider.fid == nil {
-                        return .invalid("No Firebase installation ID")
-                    } else {
+                    if pushService.isRegisteredWithFirebase {
                         return .valid
+                    } else {
+                        return .invalid("Not registered with Firebase")
                     }
                 }()
                 return NotificationStatusCellViewModel(
-                    title: "Firebase Installation ID",
+                    title: "Firebase Registration",
                     notificationStatus: status
                 )
             case .myTBA:
@@ -252,7 +252,7 @@ class NotificationsViewController: TBATableViewController {
             }
         case .firebase:
             showErrorAlert(
-                with: "No Firebase installation ID - try force quitting and re-launching the app."
+                with: "Not registered with Firebase - try force quitting and re-launching the app."
             )
         case .myTBA:
             let status = myTBARegistrationNotificationStatus()
@@ -352,7 +352,7 @@ class NotificationsViewController: TBATableViewController {
         myTBARegisterTask = Task { [weak self] in
             guard let self else { return }
             do {
-                let response = try await self.myTBA.register()
+                let response = try await self.pushService.registerWithTBA()
                 self.myTBARegisterResponse = response
                 self.myTBARegisterError = nil
             } catch {
@@ -360,6 +360,8 @@ class NotificationsViewController: TBATableViewController {
                 self.myTBARegisterError = error
             }
             self.myTBARegisterTask = nil
+            // Leaving the screen doesn't stop the request, but nothing should follow it.
+            guard !Task.isCancelled else { return }
             self.sendPing()
             self.tableView.reloadData()
         }
