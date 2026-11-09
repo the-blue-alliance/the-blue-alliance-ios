@@ -114,39 +114,61 @@ final class MyTBASessionService {
     }
 
     func signOut() async throws {
-        // Two independent ways to stop pushes: TBA forgetting the device, or FCM
-        // unregistering its FID. Either is enough; at least one has to reach a
-        // server before local state goes, or a signed-out phone keeps getting
-        // the old user's notifications. TBA has to go first, for two reasons: it
-        // needs an ID token, so it can't follow Firebase sign-out, and it needs
-        // the FID, which PushService forgets once FCM unregisters it.
-        var stoppedPushes = false
+        // At least one of these has to reach a server before local state goes, or a
+        // signed-out phone keeps getting the old user's notifications:
+        // - TBA forgetting the device.
+        // - Retiring the Firebase installation, which kills the FID along with any TBA
+        //   row still pointing at it. Unregistering from FCM alone isn't enough: the
+        //   FID survives, and auto-init registers it again at the next launch.
+        // TBA has to go first: it needs an ID token, so it can't follow Firebase
+        // sign-out, and it needs the FID, which retiring the installation discards.
+        // Pausing first keeps a pending registration from re-adding the device.
+        await pushService.pauseRegistration()
+
+        var tbaForgotDevice = false
         do {
             _ = try await myTBA.unregister()
-            stoppedPushes = true
+            tbaForgotDevice = true
         } catch let error as MyTBAError where error.code == 404 {
             // Already unregistered server-side.
-            stoppedPushes = true
+            tbaForgotDevice = true
         } catch MyTBAError.missingFID {
-            // No FID from Firebase, which normally means this device was never
-            // registered, so there's nothing to stop.
-            stoppedPushes = true
+            // Firebase hasn't provided the FID, so there's nothing to name to TBA.
         } catch {
             reporter.record(error)
         }
+
+        // Also clears Firebase's cached registration, so retiring the installation
+        // below can't register the new FID it gets.
         do {
             try await pushService.unregisterFromFirebase()
-            stoppedPushes = true
         } catch {
             reporter.record(error)
         }
-        // Safe to bail here: neither unregister went through, so the FID is still
-        // registered with both, for the user who's still signed in.
-        guard stoppedPushes else {
+
+        var retiredInstallation = false
+        if !tbaForgotDevice {
+            do {
+                try await pushService.deleteFirebaseInstallation()
+                retiredInstallation = true
+            } catch {
+                reporter.record(error)
+            }
+        }
+
+        // Bailing leaves the user signed in, so register again: TBA still has the device,
+        // but Firebase may have just unregistered it.
+        guard tbaForgotDevice || retiredInstallation else {
+            pushService.resumeRegistration()
             throw MyTBASessionError.offline
         }
 
-        try authService.signOut()
+        do {
+            try authService.signOut()
+        } catch {
+            pushService.resumeRegistration()
+            throw error
+        }
 
         // After sign-out succeeds, so a failure can't strand us signed in with
         // the cached data already gone.
