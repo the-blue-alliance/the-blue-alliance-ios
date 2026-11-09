@@ -76,8 +76,10 @@ final class MockPushService: PushServiceProtocol {
     let callLog: CallLog
     var error: (any Error)?
     var unregisterFromFirebaseError: (any Error)?
+    var deleteFirebaseInstallationError: (any Error)?
     private(set) var callCount = 0
     private(set) var unregisterFromFirebaseCallCount = 0
+    private(set) var deleteFirebaseInstallationCallCount = 0
 
     init(callLog: CallLog = CallLog()) {
         self.callLog = callLog
@@ -95,11 +97,27 @@ final class MockPushService: PushServiceProtocol {
         return true
     }
 
+    func pauseRegistration() async {
+        callLog.append("push.pauseRegistration")
+    }
+
+    func resumeRegistration() {
+        callLog.append("push.resumeRegistration")
+    }
+
     func unregisterFromFirebase() async throws {
         callLog.append("push.unregisterFromFirebase")
         unregisterFromFirebaseCallCount += 1
         if let unregisterFromFirebaseError {
             throw unregisterFromFirebaseError
+        }
+    }
+
+    func deleteFirebaseInstallation() async throws {
+        callLog.append("push.deleteFirebaseInstallation")
+        deleteFirebaseInstallationCallCount += 1
+        if let deleteFirebaseInstallationError {
+            throw deleteFirebaseInstallationError
         }
     }
 }

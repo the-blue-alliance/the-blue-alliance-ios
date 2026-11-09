@@ -110,6 +110,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        // Swizzling also hands Firebase the token, but not necessarily before this runs,
+        // and PushService registers with Firebase as soon as it's told.
+        messaging.apnsToken = deviceToken
+        pushService.didReceiveAPNSToken()
         registerForRemoteNotificationsCompletion?(nil)
     }
 
@@ -237,11 +241,11 @@ extension AppDelegate: RemoteNotificationRegistering {
 
 // MARK: - FIDProvider
 
-// Firebase only reports the FID to PushService's Messaging delegate. Reading it through
-// the app delegate keeps MyTBA from needing PushService, which itself needs MyTBA.
+// PushService tracks the FID. Reading it through the app delegate keeps MyTBA from
+// needing PushService, which itself needs MyTBA.
 extension AppDelegate: FIDProvider {
 
-    var fid: String? { pushService.registeredFID }
+    var fid: String? { pushService.fid }
 
 }
 

@@ -8,7 +8,7 @@ extension MyTBA {
 
     public func ping() async throws -> MyTBABaseResponse {
         guard let fid else {
-            throw MyTBAError.error(nil, "Missing Firebase installation ID")
+            throw MyTBAError.missingFID
         }
         let encoded = try MyTBA.jsonEncoder.encode(MyTBAPingRequest(mobileId: fid))
         return try await callApi(method: "ping", bodyData: encoded)

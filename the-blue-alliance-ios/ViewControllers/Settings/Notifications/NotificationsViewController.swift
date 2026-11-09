@@ -148,13 +148,13 @@ class NotificationsViewController: TBATableViewController {
             case .firebase:
                 let status: NotificationStatus = {
                     if fidProvider.fid == nil {
-                        return .invalid("Not registered with Firebase Messaging")
+                        return .invalid("No Firebase installation ID")
                     } else {
                         return .valid
                     }
                 }()
                 return NotificationStatusCellViewModel(
-                    title: "Firebase Registration",
+                    title: "Firebase Installation ID",
                     notificationStatus: status
                 )
             case .myTBA:
@@ -252,7 +252,7 @@ class NotificationsViewController: TBATableViewController {
             }
         case .firebase:
             showErrorAlert(
-                with: "Not registered with Firebase - try force quitting and re-launching the app."
+                with: "No Firebase installation ID - try force quitting and re-launching the app."
             )
         case .myTBA:
             let status = myTBARegistrationNotificationStatus()
@@ -371,7 +371,7 @@ class NotificationsViewController: TBATableViewController {
         if !dependencies.authService.isSignedIn {
             return .invalid("Not signed in to myTBA. Sign in under the myTBA tab.")
         } else if fidProvider.fid == nil {
-            return .invalid("Not registered with Firebase Messaging.")
+            return .invalid("No Firebase installation ID.")
         } else if let myTBARegisterError = myTBARegisterError {
             return .invalid(myTBARegisterError.localizedDescription)
         } else if myTBARegisterResponse != nil {
