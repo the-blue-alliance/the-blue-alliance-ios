@@ -16,11 +16,18 @@ struct StatusServiceTests {
 
     @Test func comingBackToTheForegroundChecksStatusRightAway() async {
         let api = MockTBAAPI()
-        let service = StatusService(reporter: MockReporter(), api: api)
+        // Its own center, so other tests coming back to the foreground in parallel don't
+        // restart this service's polling and count extra requests.
+        let notificationCenter = NotificationCenter()
+        let service = StatusService(
+            reporter: MockReporter(),
+            api: api,
+            notificationCenter: notificationCenter
+        )
         service.start()
         #expect(await Self.waitForRequests(api, count: 1) == 1)
 
-        NotificationCenter.default.post(
+        notificationCenter.post(
             name: UIApplication.willEnterForegroundNotification,
             object: UIApplication.shared
         )

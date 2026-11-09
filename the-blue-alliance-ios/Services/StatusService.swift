@@ -70,6 +70,7 @@ final class StatusService: StatusServiceProtocol {
 
     private let reporter: any Reporter
     private let api: any TBAAPIProtocol
+    private let notificationCenter: NotificationCenter
 
     private(set) var status: AppStatus = .default
 
@@ -79,15 +80,20 @@ final class StatusService: StatusServiceProtocol {
     var currentSeason: Int { status.currentSeason }
     var maxSeason: Int { status.maxSeason }
 
-    init(reporter: any Reporter, api: any TBAAPIProtocol) {
+    init(
+        reporter: any Reporter,
+        api: any TBAAPIProtocol,
+        notificationCenter: NotificationCenter = .default
+    ) {
         self.reporter = reporter
         self.api = api
+        self.notificationCenter = notificationCenter
     }
 
     func start() {
         startPolling()
         // Coming back checks right away, then every five minutes from there.
-        foregroundObserver = NotificationCenter.default.addForegroundObserver { [weak self] in
+        foregroundObserver = notificationCenter.addForegroundObserver { [weak self] in
             self?.startPolling()
         }
     }
