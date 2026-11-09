@@ -118,8 +118,7 @@ final class MyTBASessionService {
         // signed-out phone keeps getting the old user's notifications:
         // - TBA forgetting the device.
         // - Retiring the Firebase installation, which kills the FID along with any TBA
-        //   row still pointing at it. Unregistering from FCM alone isn't enough: the
-        //   FID survives, and auto-init registers it again at the next launch.
+        //   row still pointing at it.
         // TBA has to go first: it needs an ID token, so it can't follow Firebase
         // sign-out, and it needs the FID, which retiring the installation discards.
         // Pausing first keeps a pending registration from re-adding the device.
@@ -138,14 +137,8 @@ final class MyTBASessionService {
             reporter.record(error)
         }
 
-        // Also clears Firebase's cached registration, so retiring the installation
-        // below can't register the new FID it gets.
-        do {
-            try await pushService.unregisterFromFirebase()
-        } catch {
-            reporter.record(error)
-        }
-
+        // Not FCM's unregister: the FID survives it, auto-init registers it again at the
+        // next launch, and offline it retries for up to 17 minutes before failing.
         var retiredInstallation = false
         if !tbaForgotDevice {
             do {
@@ -156,8 +149,8 @@ final class MyTBASessionService {
             }
         }
 
-        // Bailing leaves the user signed in, so register again: TBA still has the device,
-        // but Firebase may have just unregistered it.
+        // Bailing leaves the user signed in, so register again: pausing may have stopped
+        // a registration TBA hasn't gotten yet.
         guard tbaForgotDevice || retiredInstallation else {
             pushService.resumeRegistration()
             throw MyTBASessionError.offline

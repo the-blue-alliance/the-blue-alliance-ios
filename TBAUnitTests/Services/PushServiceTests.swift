@@ -8,12 +8,10 @@ import Testing
 final class MockFirebasePush: FirebasePushRegistering {
 
     var installationIDResult: String? = "fid-1"
-    var unregisterError: (any Error)?
     var deleteInstallationError: (any Error)?
     /// Stands in for Firebase calling back `messaging(_:didReceiveRegistration:)`.
     var onRegister: (() -> Void)?
     private(set) var registerCallCount = 0
-    private(set) var unregisterCallCount = 0
     private(set) var deleteInstallationCallCount = 0
 
     func installationID() async throws -> String {
@@ -26,13 +24,6 @@ final class MockFirebasePush: FirebasePushRegistering {
     func register() async throws {
         registerCallCount += 1
         onRegister?()
-    }
-
-    func unregister() async throws {
-        unregisterCallCount += 1
-        if let unregisterError {
-            throw unregisterError
-        }
     }
 
     func deleteInstallation() async throws {
@@ -75,6 +66,16 @@ struct PushServiceTests {
     func waitUntil(_ condition: () -> Bool) async {
         for _ in 0..<200 where !condition() {
             try? await Task.sleep(for: .milliseconds(10))
+        }
+    }
+
+    /// Lets held registrations finish once the caller has suspended, e.g. inside a pause,
+    /// which has already taken effect by then.
+    func releaseHeldRegistrationsSoon() {
+        let myTBA = myTBA
+        Task {
+            try? await Task.sleep(for: .milliseconds(50))
+            myTBA.holdsRegister = false
         }
     }
 
@@ -137,6 +138,7 @@ struct PushServiceTests {
         #expect(reporter.errors.isEmpty)
     }
 
+    // Resuming doesn't need Firebase again, which may be what failed: it's still registered.
     @Test func pausingStopsTBARegistrationUntilResumed() async {
         authService.isSignedIn = true
         let pushService = makePushService()
@@ -146,35 +148,112 @@ struct PushServiceTests {
 
         await pushService.pauseRegistration()
         let registrations = myTBA.registerCallCount
+        let firebaseRegistrations = firebase.registerCallCount
         pushService.didReceiveRegistration("fid-1")
         await pushService.registerTask?.value
+        await #expect(throws: PushServiceError.registrationPaused) {
+            _ = try await pushService.registerWithTBA()
+        }
         #expect(myTBA.registerCallCount == registrations)
 
         pushService.resumeRegistration()
         await waitUntil { myTBA.registerCallCount == registrations + 1 }
 
         #expect(myTBA.registerCallCount == registrations + 1)
+        #expect(firebase.registerCallCount == firebaseRegistrations)
     }
 
-    // Unregistering doesn't change the installation's FID.
-    @Test func unregisteringFromFirebaseKeepsFID() async throws {
+    // Cancelling a request wouldn't stop TBA handling it, and one landing after sign-out's
+    // unregister would re-add the device.
+    @Test func pausingWaitsOutARegistrationTBAIsHandling() async {
+        authService.isSignedIn = true
+        myTBA.holdsRegister = true
+        let pushService = makePushService()
+        pushService.didReceiveRegistration("fid-1")
+        await waitUntil { myTBA.registerCallCount == 1 }
+
+        releaseHeldRegistrationsSoon()
+        await pushService.pauseRegistration()
+
+        #expect(myTBA.finishedRegisterCount == 1)
+        #expect(myTBA.cancelledRegisterCount == 0)
+    }
+
+    // Pausing waits out the request TBA has, but doesn't send one queued behind it.
+    @Test func pausingDropsAQueuedRegistration() async {
+        authService.isSignedIn = true
+        myTBA.holdsRegister = true
+        let pushService = makePushService()
+        pushService.didReceiveRegistration("fid-1")
+        await waitUntil { myTBA.registerCallCount == 1 }
+        let queued = Task { try await pushService.registerWithTBA() }
+        await Task.yield()
+
+        releaseHeldRegistrationsSoon()
+        await pushService.pauseRegistration()
+
+        await #expect(throws: PushServiceError.registrationPaused) {
+            _ = try await queued.value
+        }
+        #expect(myTBA.registerCallCount == 1)
+    }
+
+    @Test func aNewFIDWaitsForTheRegistrationItReplaces() async {
+        authService.isSignedIn = true
+        myTBA.holdsRegister = true
+        let pushService = makePushService()
+        myTBA.currentFID = { [weak pushService] in pushService?.fid }
+        pushService.didReceiveRegistration("fid-1")
+        await waitUntil { myTBA.registerCallCount == 1 }
+
+        pushService.didReceiveRegistration("fid-2")
+        myTBA.holdsRegister = false
+        await waitUntil { myTBA.finishedRegisterCount == 2 }
+
+        #expect(myTBA.registeredFIDs == ["fid-1", "fid-2"])
+        #expect(myTBA.cancelledRegisterCount == 0)
+    }
+
+    // Registering a FID with TBA deletes the install's old FCM token, which until Firebase
+    // registers the FID is the only way pushes reach it.
+    @Test func tbaRegistrationWaitsForFirebaseToRegisterTheFID() async {
+        authService.isSignedIn = true
         let pushService = makePushService()
         await waitUntil { pushService.fid != nil }
 
-        try await pushService.unregisterFromFirebase()
+        await #expect(throws: PushServiceError.notRegisteredWithFirebase) {
+            _ = try await pushService.registerWithTBA()
+        }
+        #expect(myTBA.registerCallCount == 0)
+        #expect(!pushService.isRegisteredWithFirebase)
 
-        #expect(firebase.unregisterCallCount == 1)
+        pushService.didReceiveRegistration("fid-1")
+        #expect(pushService.isRegisteredWithFirebase)
+    }
+
+    // Sign-out names the FID to TBA.
+    @Test func pausingReadsTheFIDAgainWhenLaunchCouldNot() async {
+        firebase.installationIDResult = nil
+        let pushService = makePushService()
+        await waitUntil { reporter.errors.count == 1 }
+        #expect(pushService.fid == nil)
+
+        firebase.installationIDResult = "fid-1"
+        await pushService.pauseRegistration()
+
         #expect(pushService.fid == "fid-1")
     }
 
     @Test func deletingInstallationForgetsFID() async throws {
         let pushService = makePushService()
         await waitUntil { pushService.fid != nil }
+        pushService.didReceiveRegistration("fid-1")
 
         try await pushService.deleteFirebaseInstallation()
 
         #expect(firebase.deleteInstallationCallCount == 1)
         #expect(pushService.fid == nil)
+        #expect(!pushService.isRegisteredWithFirebase)
     }
 
     @Test func failedInstallationDeleteKeepsFID() async {
