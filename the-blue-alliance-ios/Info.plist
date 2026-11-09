@@ -104,5 +104,7 @@
 	</array>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
 	<false/>
+	<key>FirebaseMessagingInstallationIdEnabled</key>
+	<true/>
 </dict>
 </plist>

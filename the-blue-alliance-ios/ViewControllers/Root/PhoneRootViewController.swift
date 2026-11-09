@@ -5,16 +5,16 @@ import UIKit
 class PhoneRootViewController: UITabBarController, RootController {
 
     let dependencies: Dependencies
-    let fcmTokenProvider: any FCMTokenProvider
+    let fidProvider: any FIDProvider
     let pushService: any PushServiceProtocol
 
     init(
-        fcmTokenProvider: any FCMTokenProvider,
+        fidProvider: any FIDProvider,
         pushService: any PushServiceProtocol,
         dependencies: Dependencies
     ) {
         self.dependencies = dependencies
-        self.fcmTokenProvider = fcmTokenProvider
+        self.fidProvider = fidProvider
         self.pushService = pushService
 
         super.init(nibName: nil, bundle: nil)

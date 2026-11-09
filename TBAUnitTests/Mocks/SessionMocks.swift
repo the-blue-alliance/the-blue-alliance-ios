@@ -75,9 +75,9 @@ final class MockPushService: PushServiceProtocol {
 
     let callLog: CallLog
     var error: (any Error)?
-    var deleteTokenError: (any Error)?
+    var unregisterFromFirebaseError: (any Error)?
     private(set) var callCount = 0
-    private(set) var deleteTokenCallCount = 0
+    private(set) var unregisterFromFirebaseCallCount = 0
 
     init(callLog: CallLog = CallLog()) {
         self.callLog = callLog
@@ -95,11 +95,11 @@ final class MockPushService: PushServiceProtocol {
         return true
     }
 
-    func deletePushToken() async throws {
-        callLog.append("push.deleteToken")
-        deleteTokenCallCount += 1
-        if let deleteTokenError {
-            throw deleteTokenError
+    func unregisterFromFirebase() async throws {
+        callLog.append("push.unregisterFromFirebase")
+        unregisterFromFirebaseCallCount += 1
+        if let unregisterFromFirebaseError {
+            throw unregisterFromFirebaseError
         }
     }
 }
@@ -109,6 +109,7 @@ final class MockSessionMyTBA: MyTBAProtocol {
     let callLog: CallLog
     var unregisterError: (any Error)?
     private(set) var unregisterCallCount = 0
+    private(set) var registerCallCount = 0
 
     init(callLog: CallLog = CallLog()) {
         self.callLog = callLog
@@ -135,6 +136,8 @@ final class MockSessionMyTBA: MyTBAProtocol {
     }
 
     func register() async throws -> MyTBABaseResponse {
+        callLog.append("myTBA.register")
+        registerCallCount += 1
         return try Self.baseResponse()
     }
 

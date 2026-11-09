@@ -98,7 +98,7 @@ enum RootType: CaseIterable {
 
 protocol RootController {
     var dependencies: Dependencies { get }
-    var fcmTokenProvider: any FCMTokenProvider { get }
+    var fidProvider: any FIDProvider { get }
     var pushService: any PushServiceProtocol { get }
 }
 
@@ -122,7 +122,7 @@ extension RootController {
 
     var settingsViewController: SettingsViewController {
         return SettingsViewController(
-            fcmTokenProvider: fcmTokenProvider,
+            fidProvider: fidProvider,
             pushService: pushService,
             dependencies: dependencies
         )

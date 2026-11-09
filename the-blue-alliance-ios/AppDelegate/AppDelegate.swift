@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var myTBA: any MyTBAProtocol = MyTBA(
         uuid: UIDevice.current.identifierForVendor!.uuidString,
         deviceName: UIDevice.current.name,
-        fcmTokenProvider: messaging,
+        fidProvider: self,
         idTokenProvider: idTokenProvider
     )
     lazy var pushService: PushService = PushService(
@@ -205,7 +205,7 @@ extension AppDelegate {
 
 extension AppDelegate: AppServicesProviding {
 
-    var fcmTokenProvider: any FCMTokenProvider { messaging }
+    var fidProvider: any FIDProvider { self }
 
 }
 
@@ -235,9 +235,15 @@ extension AppDelegate: RemoteNotificationRegistering {
 
 }
 
-// MARK: - FCMTokenProvider conformance for Firebase Messaging
+// MARK: - FIDProvider
 
-extension Messaging: @retroactive FCMTokenProvider {}
+// Firebase only reports the FID to PushService's Messaging delegate. Reading it through
+// the app delegate keeps MyTBA from needing PushService, which itself needs MyTBA.
+extension AppDelegate: FIDProvider {
+
+    var fid: String? { pushService.registeredFID }
+
+}
 
 // MARK: - IDTokenProvider
 
