@@ -167,8 +167,8 @@ extension Dependencies {
 
 }
 
-final class MockFCMTokenProvider: FCMTokenProvider {
-    var fcmToken: String?
+final class MockFIDProvider: FIDProvider {
+    var fid: String?
 }
 
 extension Duration {

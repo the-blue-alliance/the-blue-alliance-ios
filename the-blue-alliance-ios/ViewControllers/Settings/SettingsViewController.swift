@@ -53,17 +53,17 @@ private extension TBAAPI.CachePolicy {
 
 class SettingsViewController: TBATableViewController {
 
-    private let fcmTokenProvider: any FCMTokenProvider
+    private let fidProvider: any FIDProvider
     private let pushService: any PushServiceProtocol
 
     // MARK: - Init
 
     init(
-        fcmTokenProvider: any FCMTokenProvider,
+        fidProvider: any FIDProvider,
         pushService: any PushServiceProtocol,
         dependencies: Dependencies
     ) {
-        self.fcmTokenProvider = fcmTokenProvider
+        self.fidProvider = fidProvider
         self.pushService = pushService
 
         super.init(style: .grouped, dependencies: dependencies)
@@ -552,7 +552,7 @@ class SettingsViewController: TBATableViewController {
 
     private func pushTroubleshootNotifications() {
         let notificationsViewController = NotificationsViewController(
-            fcmTokenProvider: fcmTokenProvider,
+            fidProvider: fidProvider,
             pushService: pushService,
             dependencies: dependencies
         )

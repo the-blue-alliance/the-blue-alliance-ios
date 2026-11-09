@@ -9,7 +9,7 @@ struct MyTBAErrorTests {
     @Test func code() {
         #expect(MyTBAError.error(nil, "").code == nil)
         #expect(MyTBAError.error(210, "").code == 210)
-        #expect(MyTBAError.missingFCMToken.code == nil)
+        #expect(MyTBAError.missingFID.code == nil)
     }
 
     @Test func errorMessage() {
@@ -25,17 +25,17 @@ struct MyTBATests {
     let myTBA = MockMyTBA()
 
     @Test func initStoresIdentity() {
-        let fcmTokenProvider = MockFCMTokenProvider()
-        fcmTokenProvider.fcmToken = "abc"
+        let fidProvider = MockFIDProvider()
+        fidProvider.fid = "abc"
         let subject = MyTBA(
             uuid: "abcd123",
             deviceName: "My Device",
-            fcmTokenProvider: fcmTokenProvider,
+            fidProvider: fidProvider,
             idTokenProvider: MockIDTokenProvider()
         )
         #expect(subject.uuid == "abcd123")
         #expect(subject.deviceName == "My Device")
-        #expect(subject.fcmToken == "abc")
+        #expect(subject.fid == "abc")
     }
 
     @Test func noBearerWhenSignedOut() async throws {

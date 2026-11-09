@@ -150,6 +150,7 @@
 		92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */; };
 		92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */; };
 		92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */; };
+		92AA7A0D2F010000000DAAAA /* Services/PushServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A0C2F010000000CAAAA /* Services/PushServiceTests.swift */; };
 		92AABBCC000000000000DD01 /* CachePolicyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD02 /* CachePolicyStore.swift */; };
 		92AABBCC000000000000DD11 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD12 /* AppSettings.swift */; };
 		92AABBCC000000000000DD21 /* FirebaseCollectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */; };
@@ -376,6 +377,7 @@
 		92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks/SessionMocks.swift; sourceTree = "<group>"; };
 		92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/MyTBASessionServiceTests.swift; sourceTree = "<group>"; };
 		92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/StatusServiceTests.swift; sourceTree = "<group>"; };
+		92AA7A0C2F010000000CAAAA /* Services/PushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/PushServiceTests.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD02 /* CachePolicyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePolicyStore.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD12 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCollectionStore.swift; sourceTree = "<group>"; };
@@ -1081,6 +1083,7 @@
 				92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */,
 				92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */,
+				92AA7A0C2F010000000CAAAA /* Services/PushServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */,
 				5EC0D41A2C26091100000003 /* ViewModels/Event/EventDivisionsViewModelTests.swift */,
 				5EC0D41A2C26091000000005 /* ViewModels/Match/MatchTimesViewModelTests.swift */,
@@ -1326,6 +1329,7 @@
 				92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */,
 				92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */,
+				92AA7A0D2F010000000DAAAA /* Services/PushServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* ViewModels/Event/EventSectionTests.swift in Sources */,
 				5EC0D41A2C26091100000004 /* ViewModels/Event/EventDivisionsViewModelTests.swift in Sources */,
 				5EC0D41A2C26091000000006 /* ViewModels/Match/MatchTimesViewModelTests.swift in Sources */,

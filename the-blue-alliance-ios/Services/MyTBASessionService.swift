@@ -115,12 +115,11 @@ final class MyTBASessionService {
 
     func signOut() async throws {
         // Two independent ways to stop pushes: TBA forgetting the device, or FCM
-        // invalidating its token. Either is enough; at least one has to reach a
+        // unregistering its FID. Either is enough; at least one has to reach a
         // server before local state goes, or a signed-out phone keeps getting
-        // the old user's notifications. Unregister has to go first, for two
-        // reasons: it needs an ID token, so it can't follow Firebase sign-out,
-        // and it needs the FCM token, which deleteToken drops from Firebase's
-        // local cache before it even reaches the network.
+        // the old user's notifications. TBA has to go first, for two reasons: it
+        // needs an ID token, so it can't follow Firebase sign-out, and it needs
+        // the FID, which PushService forgets once FCM unregisters it.
         var stoppedPushes = false
         do {
             _ = try await myTBA.unregister()
@@ -128,20 +127,21 @@ final class MyTBASessionService {
         } catch let error as MyTBAError where error.code == 404 {
             // Already unregistered server-side.
             stoppedPushes = true
-        } catch MyTBAError.missingFCMToken {
-            // Never registered, so there's nothing to stop.
+        } catch MyTBAError.missingFID {
+            // No FID from Firebase, which normally means this device was never
+            // registered, so there's nothing to stop.
             stoppedPushes = true
         } catch {
             reporter.record(error)
         }
         do {
-            try await pushService.deletePushToken()
+            try await pushService.unregisterFromFirebase()
             stoppedPushes = true
         } catch {
             reporter.record(error)
         }
-        // Safe to bail here: FCM already dropped its cached token, so it fetches
-        // a fresh one, and PushService re-registers it since we're still signed in.
+        // Safe to bail here: neither unregister went through, so the FID is still
+        // registered with both, for the user who's still signed in.
         guard stoppedPushes else {
             throw MyTBASessionError.offline
         }

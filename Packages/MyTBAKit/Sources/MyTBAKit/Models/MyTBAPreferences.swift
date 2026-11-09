@@ -25,7 +25,7 @@ extension MyTBA {
         notifications: [NotificationType]
     ) async throws -> MyTBAPreferencesMessageResponse {
         let preferences = MyTBAPreferences(
-            deviceKey: fcmToken,
+            deviceKey: fid,
             favorite: favorite,
             modelKey: modelKey,
             modelType: modelType,
