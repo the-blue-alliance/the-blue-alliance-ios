@@ -15,7 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../TBAUtils"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.12.1"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.18.0"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "10.0.0"),
     ],
     targets: [

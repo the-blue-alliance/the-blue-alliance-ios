@@ -114,13 +114,16 @@ final class MyTBASessionService {
     }
 
     func signOut() async throws {
-        // Two independent ways to stop pushes: TBA forgetting the device, or FCM
-        // invalidating its token. Either is enough; at least one has to reach a
-        // server before local state goes, or a signed-out phone keeps getting
-        // the old user's notifications. Unregister has to go first, for two
-        // reasons: it needs an ID token, so it can't follow Firebase sign-out,
-        // and it needs the FCM token, which deleteToken drops from Firebase's
-        // local cache before it even reaches the network.
+        // At least one of these has to reach a server before local state goes, or a
+        // signed-out phone keeps getting the old user's notifications:
+        // - TBA forgetting the device.
+        // - Deleting the Firebase installation, which kills the FID along with any TBA
+        //   registration still pointing at it.
+        // TBA has to go first: it needs an ID token, so it can't follow Firebase
+        // sign-out, and it needs the FID, which deleting the installation discards.
+        // Pausing first keeps a pending registration from re-adding the device.
+        await pushService.pauseRegistration()
+
         var stoppedPushes = false
         do {
             _ = try await myTBA.unregister()
@@ -128,25 +131,34 @@ final class MyTBASessionService {
         } catch let error as MyTBAError where error.code == 404 {
             // Already unregistered server-side.
             stoppedPushes = true
-        } catch MyTBAError.missingFCMToken {
-            // Never registered, so there's nothing to stop.
-            stoppedPushes = true
+        } catch MyTBAError.missingFID {
+            // Firebase hasn't provided the FID, so there's nothing to name to TBA.
         } catch {
             reporter.record(error)
         }
-        do {
-            try await pushService.deletePushToken()
-            stoppedPushes = true
-        } catch {
-            reporter.record(error)
+        // Not FCM's unregister: the FID survives it, auto-init registers it again at the
+        // next launch, and offline it retries for up to 17 minutes before failing.
+        if !stoppedPushes {
+            do {
+                try await pushService.deleteFirebaseInstallation()
+                stoppedPushes = true
+            } catch {
+                reporter.record(error)
+            }
         }
-        // Safe to bail here: FCM already dropped its cached token, so it fetches
-        // a fresh one, and PushService re-registers it since we're still signed in.
+        // Bailing leaves the user signed in, so register again: pausing may have stopped
+        // a registration TBA hasn't gotten yet.
         guard stoppedPushes else {
+            pushService.resumeRegistration()
             throw MyTBASessionError.offline
         }
 
-        try authService.signOut()
+        do {
+            try authService.signOut()
+        } catch {
+            pushService.resumeRegistration()
+            throw error
+        }
 
         // After sign-out succeeds, so a failure can't strand us signed in with
         // the cached data already gone.

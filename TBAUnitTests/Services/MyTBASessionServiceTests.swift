@@ -146,7 +146,9 @@ struct MyTBASessionServiceTests {
         try await harness.service.signOut()
 
         #expect(
-            harness.callLog.entries == ["myTBA.unregister", "push.deleteToken", "auth.signOut"]
+            harness.callLog.entries == [
+                "push.pauseRegistration", "myTBA.unregister", "auth.signOut",
+            ]
         )
         #expect(harness.stores.favorites.favorites.isEmpty)
         #expect(harness.stores.subscriptions.subscriptions.isEmpty)
@@ -157,32 +159,51 @@ struct MyTBASessionServiceTests {
         defer { try? FileManager.default.removeItem(at: harness.directory) }
         Self.seedStores(harness)
         harness.myTBA.unregisterError = MyTBAError.error(404, "Not found")
-        harness.pushService.deleteTokenError = MockError.boom
 
         try await harness.service.signOut()
 
+        #expect(harness.pushService.deleteFirebaseInstallationCallCount == 0)
         #expect(harness.authService.signOutCallCount == 1)
         #expect(harness.stores.favorites.favorites.isEmpty)
-        #expect(harness.reporter.errors.count == 1)
+        #expect(harness.reporter.errors.isEmpty)
     }
 
-    @Test func signOutTreatsNoFCMTokenAsNothingToStop() async throws {
+    // With no FID, TBA can't be told which device to forget, so the installation is
+    // retired instead.
+    @Test func signOutRetiresInstallationWhenThereIsNoFID() async throws {
         let harness = Self.makeHarness()
         defer { try? FileManager.default.removeItem(at: harness.directory) }
         Self.seedStores(harness)
-        harness.myTBA.unregisterError = MyTBAError.missingFCMToken
-        harness.pushService.deleteTokenError = MockError.boom
+        harness.myTBA.unregisterError = MyTBAError.missingFID
 
         try await harness.service.signOut()
 
+        #expect(harness.pushService.deleteFirebaseInstallationCallCount == 1)
         #expect(harness.authService.signOutCallCount == 1)
         #expect(harness.stores.favorites.favorites.isEmpty)
-        #expect(harness.reporter.errors.count == 1)
+        #expect(harness.reporter.errors.isEmpty)
     }
 
-    // Unregister needs the TBA API and can't be retried after Firebase sign-out,
-    // so it's best-effort; deleting the FCM token is what stops pushes anyway.
-    @Test func signOutContinuesWhenUnregisterFails() async throws {
+    // A missing FID doesn't prove the device was never registered, so it doesn't count
+    // as nothing to stop.
+    @Test func signOutRefusesWithoutFIDWhenInstallationCantBeRetired() async {
+        let harness = Self.makeHarness()
+        defer { try? FileManager.default.removeItem(at: harness.directory) }
+        Self.seedStores(harness)
+        harness.myTBA.unregisterError = MyTBAError.missingFID
+        harness.pushService.deleteFirebaseInstallationError = MockError.boom
+
+        await #expect(throws: MyTBASessionError.self) {
+            try await harness.service.signOut()
+        }
+        #expect(harness.callLog.entries.last == "push.resumeRegistration")
+        #expect(harness.authService.signOutCallCount == 0)
+        #expect(harness.stores.favorites.favorites.count == 1)
+    }
+
+    // Unregister needs the TBA API and can't be retried after Firebase sign-out. When
+    // it fails, retiring the Firebase installation kills the FID TBA still has.
+    @Test func signOutRetiresInstallationWhenUnregisterFails() async throws {
         let harness = Self.makeHarness()
         defer { try? FileManager.default.removeItem(at: harness.directory) }
         Self.seedStores(harness)
@@ -190,9 +211,13 @@ struct MyTBASessionServiceTests {
 
         try await harness.service.signOut()
 
+        #expect(
+            harness.callLog.entries == [
+                "push.pauseRegistration", "myTBA.unregister", "push.deleteFirebaseInstallation",
+                "auth.signOut",
+            ]
+        )
         #expect(harness.reporter.errors.count == 1)
-        #expect(harness.pushService.deleteTokenCallCount == 1)
-        #expect(harness.authService.signOutCallCount == 1)
         #expect(harness.stores.favorites.favorites.isEmpty)
     }
 
@@ -203,28 +228,16 @@ struct MyTBASessionServiceTests {
         defer { try? FileManager.default.removeItem(at: harness.directory) }
         Self.seedStores(harness)
         harness.myTBA.unregisterError = MyTBAError.error(500, "Server error")
-        harness.pushService.deleteTokenError = MockError.boom
+        harness.pushService.deleteFirebaseInstallationError = MockError.boom
 
         await #expect(throws: MyTBASessionError.self) {
             try await harness.service.signOut()
         }
+        #expect(harness.callLog.entries.last == "push.resumeRegistration")
         #expect(harness.reporter.errors.count == 2)
         #expect(harness.authService.signOutCallCount == 0)
         #expect(harness.stores.favorites.favorites.count == 1)
         #expect(harness.stores.subscriptions.subscriptions.count == 1)
-    }
-
-    @Test func signOutContinuesWhenDeleteTokenFails() async throws {
-        let harness = Self.makeHarness()
-        defer { try? FileManager.default.removeItem(at: harness.directory) }
-        Self.seedStores(harness)
-        harness.pushService.deleteTokenError = MockError.boom
-
-        try await harness.service.signOut()
-
-        #expect(harness.reporter.errors.count == 1)
-        #expect(harness.authService.signOutCallCount == 1)
-        #expect(harness.stores.favorites.favorites.isEmpty)
     }
 
     @Test func signOutLeavesStoresIntactWhenAuthSignOutFails() async {
@@ -236,6 +249,7 @@ struct MyTBASessionServiceTests {
         await #expect(throws: MockError.boom) {
             try await harness.service.signOut()
         }
+        #expect(harness.callLog.entries.last == "push.resumeRegistration")
         #expect(harness.stores.favorites.favorites.count == 1)
         #expect(harness.stores.subscriptions.subscriptions.count == 1)
     }

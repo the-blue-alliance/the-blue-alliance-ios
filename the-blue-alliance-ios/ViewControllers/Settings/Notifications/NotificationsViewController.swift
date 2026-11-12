@@ -32,9 +32,9 @@ class NotificationsViewController: TBATableViewController {
 
     private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(
         target: self,
-        action: #selector(showCopyFCMToken)
+        action: #selector(showCopyFID)
     )
-    private var notificationTokenFooter: UIView?
+    private var fidFooter: UIView?
 
     private var fetchingRemoteNotificationRegistrationStatus = false
     private var hasCheckedRemoteNotificationRegistration = false
@@ -51,15 +51,12 @@ class NotificationsViewController: TBATableViewController {
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: (any Error)?
 
-    private let fcmTokenProvider: any FCMTokenProvider
     private let pushService: any PushServiceProtocol
 
     init(
-        fcmTokenProvider: any FCMTokenProvider,
         pushService: any PushServiceProtocol,
         dependencies: Dependencies
     ) {
-        self.fcmTokenProvider = fcmTokenProvider
         self.pushService = pushService
 
         super.init(style: .grouped, dependencies: dependencies)
@@ -147,14 +144,14 @@ class NotificationsViewController: TBATableViewController {
                 }
             case .firebase:
                 let status: NotificationStatus = {
-                    if fcmTokenProvider.fcmToken == nil {
-                        return .invalid("No FCM token from Firebase")
-                    } else {
+                    if pushService.isRegisteredWithFirebase {
                         return .valid
+                    } else {
+                        return .invalid("Not registered with Firebase")
                     }
                 }()
                 return NotificationStatusCellViewModel(
-                    title: "Firebase Token",
+                    title: "Firebase Registration",
                     notificationStatus: status
                 )
             case .myTBA:
@@ -204,8 +201,8 @@ class NotificationsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int)
         -> String?
     {
-        if let fcmToken = fcmTokenProvider.fcmToken {
-            return "FCM Token: \(fcmToken)"
+        if let fid = pushService.fid {
+            return "Firebase Installation ID: \(fid)"
         }
         return nil
     }
@@ -216,7 +213,7 @@ class NotificationsViewController: TBATableViewController {
         forSection section: Int
     ) {
         if section == 0, !(view.gestureRecognizers?.contains(longPressGestureRecognizer) ?? false) {
-            notificationTokenFooter = view
+            fidFooter = view
             view.addGestureRecognizer(longPressGestureRecognizer)
         }
     }
@@ -252,7 +249,7 @@ class NotificationsViewController: TBATableViewController {
             }
         case .firebase:
             showErrorAlert(
-                with: "No FCM token from Firebase - try force quitting and re-launching the app."
+                with: "Not registered with Firebase - try force quitting and re-launching the app."
             )
         case .myTBA:
             let status = myTBARegistrationNotificationStatus()
@@ -352,7 +349,7 @@ class NotificationsViewController: TBATableViewController {
         myTBARegisterTask = Task { [weak self] in
             guard let self else { return }
             do {
-                let response = try await self.myTBA.register()
+                let response = try await self.pushService.registerWithTBA()
                 self.myTBARegisterResponse = response
                 self.myTBARegisterError = nil
             } catch {
@@ -360,6 +357,8 @@ class NotificationsViewController: TBATableViewController {
                 self.myTBARegisterError = error
             }
             self.myTBARegisterTask = nil
+            // Leaving the screen doesn't stop the request, but nothing should follow it.
+            guard !Task.isCancelled else { return }
             self.sendPing()
             self.tableView.reloadData()
         }
@@ -370,8 +369,8 @@ class NotificationsViewController: TBATableViewController {
     private func myTBARegistrationNotificationStatus() -> NotificationStatus {
         if !dependencies.authService.isSignedIn {
             return .invalid("Not signed in to myTBA. Sign in under the myTBA tab.")
-        } else if fcmTokenProvider.fcmToken == nil {
-            return .invalid("No FCM token from Firebase.")
+        } else if pushService.fid == nil {
+            return .invalid("No Firebase installation ID.")
         } else if let myTBARegisterError = myTBARegisterError {
             return .invalid(myTBARegisterError.localizedDescription)
         } else if myTBARegisterResponse != nil {
@@ -433,7 +432,7 @@ class NotificationsViewController: TBATableViewController {
     private func myTBAPingNotificationStatus() -> NotificationStatus {
         if !dependencies.authService.isSignedIn {
             return .unknown
-        } else if fcmTokenProvider.fcmToken == nil {
+        } else if pushService.fid == nil {
             return .unknown
         } else if let myTBAPingError = myTBAPingError {
             return .invalid(myTBAPingError.localizedDescription)
@@ -446,27 +445,27 @@ class NotificationsViewController: TBATableViewController {
 
     // MARK: - UI Methods
 
-    @objc func showCopyFCMToken() {
-        guard let fcmToken = fcmTokenProvider.fcmToken else {
+    @objc func showCopyFID() {
+        guard let fid = pushService.fid else {
             return
         }
 
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         actionSheet.addAction(
-            UIAlertAction(title: "Copy Token", style: .default) { _ in
-                self.copyFCMTokenToPasteboard(fcmToken)
+            UIAlertAction(title: "Copy Installation ID", style: .default) { _ in
+                self.copyFIDToPasteboard(fid)
             }
         )
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        if let notificationTokenFooter = notificationTokenFooter {
-            actionSheet.popoverPresentationController?.sourceView = notificationTokenFooter
+        if let fidFooter = fidFooter {
+            actionSheet.popoverPresentationController?.sourceView = fidFooter
         }
 
         present(actionSheet, animated: true, completion: nil)
     }
 
-    private func copyFCMTokenToPasteboard(_ fcmToken: String) {
-        UIPasteboard.general.string = fcmToken
+    private func copyFIDToPasteboard(_ fid: String) {
+        UIPasteboard.general.string = fid
     }
 
 }

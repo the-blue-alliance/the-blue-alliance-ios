@@ -75,9 +75,11 @@ final class MockPushService: PushServiceProtocol {
 
     let callLog: CallLog
     var error: (any Error)?
-    var deleteTokenError: (any Error)?
+    var deleteFirebaseInstallationError: (any Error)?
+    var fid: String?
+    var isRegisteredWithFirebase = true
     private(set) var callCount = 0
-    private(set) var deleteTokenCallCount = 0
+    private(set) var deleteFirebaseInstallationCallCount = 0
 
     init(callLog: CallLog = CallLog()) {
         self.callLog = callLog
@@ -95,11 +97,24 @@ final class MockPushService: PushServiceProtocol {
         return true
     }
 
-    func deletePushToken() async throws {
-        callLog.append("push.deleteToken")
-        deleteTokenCallCount += 1
-        if let deleteTokenError {
-            throw deleteTokenError
+    func registerWithTBA() async throws -> MyTBABaseResponse {
+        callLog.append("push.registerWithTBA")
+        throw MockError.boom
+    }
+
+    func pauseRegistration() async {
+        callLog.append("push.pauseRegistration")
+    }
+
+    func resumeRegistration() {
+        callLog.append("push.resumeRegistration")
+    }
+
+    func deleteFirebaseInstallation() async throws {
+        callLog.append("push.deleteFirebaseInstallation")
+        deleteFirebaseInstallationCallCount += 1
+        if let deleteFirebaseInstallationError {
+            throw deleteFirebaseInstallationError
         }
     }
 }
@@ -108,7 +123,13 @@ final class MockSessionMyTBA: MyTBAProtocol {
 
     let callLog: CallLog
     var unregisterError: (any Error)?
+    /// Holds `register()` open until cleared, like a request TBA is slow to answer.
+    /// Cancelling the caller ends it early with an error, as URLSession does.
+    var holdsRegister = false
     private(set) var unregisterCallCount = 0
+    private(set) var registerCallCount = 0
+    private(set) var finishedRegisterCount = 0
+    private(set) var cancelledRegisterCount = 0
 
     init(callLog: CallLog = CallLog()) {
         self.callLog = callLog
@@ -135,6 +156,16 @@ final class MockSessionMyTBA: MyTBAProtocol {
     }
 
     func register() async throws -> MyTBABaseResponse {
+        callLog.append("myTBA.register")
+        registerCallCount += 1
+        while holdsRegister, !Task.isCancelled {
+            try? await Task.sleep(for: .milliseconds(10))
+        }
+        guard !Task.isCancelled else {
+            cancelledRegisterCount += 1
+            throw CancellationError()
+        }
+        finishedRegisterCount += 1
         return try Self.baseResponse()
     }
 

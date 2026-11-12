@@ -2,14 +2,14 @@ import Foundation
 
 public enum MyTBAError: Error, Equatable, Sendable {
     case error(Int?, String)
-    /// No FCM token, so this device was never registered and can't be.
-    case missingFCMToken
+    /// Firebase hasn't provided this install's FID, so there's no device to name to TBA.
+    case missingFID
 
     public var code: Int? {
         switch self {
         case .error(let code, _):
             return code
-        case .missingFCMToken:
+        case .missingFID:
             return nil
         }
     }
@@ -21,8 +21,8 @@ extension MyTBAError: LocalizedError {
         case .error(_, let message):
             // TODO: This, unlike the name says, isn't localized
             return message
-        case .missingFCMToken:
-            return "Missing FCM token"
+        case .missingFID:
+            return "Missing Firebase installation ID"
         }
     }
 }
@@ -33,8 +33,8 @@ public protocol MyTBAURLSession: Sendable {
 
 extension URLSession: MyTBAURLSession {}
 
-/// Main-actor on purpose: every caller already is, and it keeps the `Messaging.fcmToken`
-/// read on the thread Firebase delivers on - that getter reads an unsynchronized ivar.
+/// Main-actor on purpose: every caller already is, and it keeps the `fid` read on the
+/// thread Firebase reports the FID on, so it can't race the write.
 @MainActor
 open class MyTBA {
 
@@ -43,25 +43,25 @@ open class MyTBA {
     public init(
         uuid: String,
         deviceName: String,
-        fcmTokenProvider: FCMTokenProvider,
+        fidProvider: FIDProvider,
         idTokenProvider: IDTokenProvider,
         urlSession: MyTBAURLSession? = nil
     ) {
         self.uuid = uuid
         self.deviceName = deviceName
-        self.fcmTokenProvider = fcmTokenProvider
+        self.fidProvider = fidProvider
         self.idTokenProvider = idTokenProvider
         self.urlSession = urlSession ?? URLSession(configuration: .default)
     }
 
-    internal var fcmToken: String? {
-        return fcmTokenProvider.fcmToken
+    internal var fid: String? {
+        return fidProvider.fid
     }
 
     internal let urlSession: MyTBAURLSession
     internal let uuid: String
     internal let deviceName: String
-    private let fcmTokenProvider: FCMTokenProvider
+    private let fidProvider: FIDProvider
     private let idTokenProvider: IDTokenProvider
 
     static var jsonEncoder: JSONEncoder {

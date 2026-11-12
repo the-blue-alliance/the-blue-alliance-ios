@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var myTBA: any MyTBAProtocol = MyTBA(
         uuid: UIDevice.current.identifierForVendor!.uuidString,
         deviceName: UIDevice.current.name,
-        fcmTokenProvider: messaging,
+        fidProvider: self,
         idTokenProvider: idTokenProvider
     )
     lazy var pushService: PushService = PushService(
@@ -110,6 +110,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        // Swizzling also hands Firebase the token, but not necessarily before this runs,
+        // and PushService registers with Firebase as soon as it's told.
+        messaging.apnsToken = deviceToken
+        pushService.didReceiveAPNSToken()
         registerForRemoteNotificationsCompletion?(nil)
     }
 
@@ -203,11 +207,7 @@ extension AppDelegate {
 
 // MARK: - AppServicesProviding
 
-extension AppDelegate: AppServicesProviding {
-
-    var fcmTokenProvider: any FCMTokenProvider { messaging }
-
-}
+extension AppDelegate: AppServicesProviding {}
 
 private extension AppDelegate {
 
@@ -235,9 +235,15 @@ extension AppDelegate: RemoteNotificationRegistering {
 
 }
 
-// MARK: - FCMTokenProvider conformance for Firebase Messaging
+// MARK: - FIDProvider
 
-extension Messaging: @retroactive FCMTokenProvider {}
+// PushService tracks the FID. Reading it through the app delegate keeps MyTBA from
+// needing PushService, which itself needs MyTBA.
+extension AppDelegate: FIDProvider {
+
+    var fid: String? { pushService.fid }
+
+}
 
 // MARK: - IDTokenProvider
 
