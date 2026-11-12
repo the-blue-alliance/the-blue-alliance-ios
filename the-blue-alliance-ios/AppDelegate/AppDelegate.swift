@@ -207,11 +207,7 @@ extension AppDelegate {
 
 // MARK: - AppServicesProviding
 
-extension AppDelegate: AppServicesProviding {
-
-    var fidProvider: any FIDProvider { self }
-
-}
+extension AppDelegate: AppServicesProviding {}
 
 private extension AppDelegate {
 

@@ -69,16 +69,6 @@ struct PushServiceTests {
         }
     }
 
-    /// Lets held registrations finish once the caller has suspended, e.g. inside a pause,
-    /// which has already taken effect by then.
-    func releaseHeldRegistrationsSoon() {
-        let myTBA = myTBA
-        Task {
-            try? await Task.sleep(for: .milliseconds(50))
-            myTBA.holdsRegister = false
-        }
-    }
-
     @Test func loadsFIDFromFirebaseAtLaunch() async {
         let pushService = makePushService()
 
@@ -124,7 +114,6 @@ struct PushServiceTests {
         #expect(myTBA.registerCallCount == 1)
     }
 
-    // Firebase reports nil when an unregister finishes, even one that failed.
     @Test func nilRegistrationKeepsFIDAndSkipsTBA() async {
         authService.isSignedIn = true
         let pushService = makePushService()
@@ -134,7 +123,26 @@ struct PushServiceTests {
         await pushService.registerTask?.value
 
         #expect(pushService.fid == "fid-1")
+        #expect(!pushService.isRegisteredWithFirebase)
         #expect(myTBA.registerCallCount == 0)
+        #expect(reporter.errors.isEmpty)
+    }
+
+    // Firebase 12.18.0 calls back without the FID when `register()` finds it already
+    // registered but hasn't loaded it yet this launch.
+    @Test func registersWhenFirebaseCallsBackWithoutTheFID() async {
+        authService.isSignedIn = true
+        let pushService = makePushService()
+        await waitUntil { pushService.fid != nil }
+        firebase.onRegister = { [weak pushService] in
+            pushService?.didReceiveRegistration(nil)
+        }
+
+        pushService.didReceiveAPNSToken()
+        await waitUntil { myTBA.registerCallCount == 1 }
+
+        #expect(pushService.isRegisteredWithFirebase)
+        #expect(myTBA.registerCallCount == 1)
         #expect(reporter.errors.isEmpty)
     }
 
@@ -172,45 +180,35 @@ struct PushServiceTests {
         pushService.didReceiveRegistration("fid-1")
         await waitUntil { myTBA.registerCallCount == 1 }
 
-        releaseHeldRegistrationsSoon()
+        // TBA answers once the pause is already waiting on it.
+        let myTBA = myTBA
+        Task {
+            try? await Task.sleep(for: .milliseconds(50))
+            myTBA.holdsRegister = false
+        }
         await pushService.pauseRegistration()
 
         #expect(myTBA.finishedRegisterCount == 1)
         #expect(myTBA.cancelledRegisterCount == 0)
     }
 
-    // Pausing waits out the request TBA has, but doesn't send one queued behind it.
-    @Test func pausingDropsAQueuedRegistration() async {
+    // Requests go one after another, so the last one finishing means they all have, which
+    // is what pausing waits for.
+    @Test func aNewFIDWaitsForTheRegistrationBeforeIt() async {
         authService.isSignedIn = true
         myTBA.holdsRegister = true
         let pushService = makePushService()
-        pushService.didReceiveRegistration("fid-1")
-        await waitUntil { myTBA.registerCallCount == 1 }
-        let queued = Task { try await pushService.registerWithTBA() }
-        await Task.yield()
-
-        releaseHeldRegistrationsSoon()
-        await pushService.pauseRegistration()
-
-        await #expect(throws: PushServiceError.registrationPaused) {
-            _ = try await queued.value
-        }
-        #expect(myTBA.registerCallCount == 1)
-    }
-
-    @Test func aNewFIDWaitsForTheRegistrationItReplaces() async {
-        authService.isSignedIn = true
-        myTBA.holdsRegister = true
-        let pushService = makePushService()
-        myTBA.currentFID = { [weak pushService] in pushService?.fid }
         pushService.didReceiveRegistration("fid-1")
         await waitUntil { myTBA.registerCallCount == 1 }
 
         pushService.didReceiveRegistration("fid-2")
+        try? await Task.sleep(for: .milliseconds(50))
+        #expect(myTBA.registerCallCount == 1)
+
         myTBA.holdsRegister = false
         await waitUntil { myTBA.finishedRegisterCount == 2 }
 
-        #expect(myTBA.registeredFIDs == ["fid-1", "fid-2"])
+        #expect(myTBA.finishedRegisterCount == 2)
         #expect(myTBA.cancelledRegisterCount == 0)
     }
 

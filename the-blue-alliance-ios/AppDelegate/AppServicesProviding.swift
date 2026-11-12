@@ -1,5 +1,4 @@
 import FirebaseMessaging
-import MyTBAKit
 import TBAAuth
 import UIKit
 
@@ -13,7 +12,6 @@ protocol AppServicesProviding: AnyObject {
     var authService: any AuthServiceProtocol { get }
     var pushService: PushService { get }
     var pushNotificationRouter: PushNotificationRouter { get }
-    var fidProvider: any FIDProvider { get }
     var pendingAlerts: [PendingAlert] { get set }
 }
 
