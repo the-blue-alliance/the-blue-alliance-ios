@@ -1,20 +1,16 @@
 import Foundation
-import MyTBAKit
 import UIKit
 
 class PhoneRootViewController: UITabBarController, RootController {
 
     let dependencies: Dependencies
-    let fidProvider: any FIDProvider
     let pushService: any PushServiceProtocol
 
     init(
-        fidProvider: any FIDProvider,
         pushService: any PushServiceProtocol,
         dependencies: Dependencies
     ) {
         self.dependencies = dependencies
-        self.fidProvider = fidProvider
         self.pushService = pushService
 
         super.init(nibName: nil, bundle: nil)

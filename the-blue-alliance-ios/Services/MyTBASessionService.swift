@@ -117,41 +117,38 @@ final class MyTBASessionService {
         // At least one of these has to reach a server before local state goes, or a
         // signed-out phone keeps getting the old user's notifications:
         // - TBA forgetting the device.
-        // - Retiring the Firebase installation, which kills the FID along with any TBA
-        //   row still pointing at it.
+        // - Deleting the Firebase installation, which kills the FID along with any TBA
+        //   registration still pointing at it.
         // TBA has to go first: it needs an ID token, so it can't follow Firebase
-        // sign-out, and it needs the FID, which retiring the installation discards.
+        // sign-out, and it needs the FID, which deleting the installation discards.
         // Pausing first keeps a pending registration from re-adding the device.
         await pushService.pauseRegistration()
 
-        var tbaForgotDevice = false
+        var stoppedPushes = false
         do {
             _ = try await myTBA.unregister()
-            tbaForgotDevice = true
+            stoppedPushes = true
         } catch let error as MyTBAError where error.code == 404 {
             // Already unregistered server-side.
-            tbaForgotDevice = true
+            stoppedPushes = true
         } catch MyTBAError.missingFID {
             // Firebase hasn't provided the FID, so there's nothing to name to TBA.
         } catch {
             reporter.record(error)
         }
-
         // Not FCM's unregister: the FID survives it, auto-init registers it again at the
         // next launch, and offline it retries for up to 17 minutes before failing.
-        var retiredInstallation = false
-        if !tbaForgotDevice {
+        if !stoppedPushes {
             do {
                 try await pushService.deleteFirebaseInstallation()
-                retiredInstallation = true
+                stoppedPushes = true
             } catch {
                 reporter.record(error)
             }
         }
-
         // Bailing leaves the user signed in, so register again: pausing may have stopped
         // a registration TBA hasn't gotten yet.
-        guard tbaForgotDevice || retiredInstallation else {
+        guard stoppedPushes else {
             pushService.resumeRegistration()
             throw MyTBASessionError.offline
         }

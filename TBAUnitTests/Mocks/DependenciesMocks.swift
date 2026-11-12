@@ -167,10 +167,6 @@ extension Dependencies {
 
 }
 
-final class MockFIDProvider: FIDProvider {
-    var fid: String?
-}
-
 extension Duration {
     fileprivate var timeInterval: TimeInterval {
         let (seconds, attoseconds) = components

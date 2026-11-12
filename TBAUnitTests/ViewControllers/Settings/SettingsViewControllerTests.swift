@@ -17,7 +17,6 @@ struct SettingsViewControllerTests {
             dependencies = Dependencies.mock()
             dependencies.appSettings.featureFlags.setEnabled(dashboardEnabled, for: .dashboard)
             settings = SettingsViewController(
-                fidProvider: MockFIDProvider(),
                 pushService: MockPushService(),
                 dependencies: dependencies
             )

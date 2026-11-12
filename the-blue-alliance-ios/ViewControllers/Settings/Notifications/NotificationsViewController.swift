@@ -51,15 +51,12 @@ class NotificationsViewController: TBATableViewController {
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: (any Error)?
 
-    private let fidProvider: any FIDProvider
     private let pushService: any PushServiceProtocol
 
     init(
-        fidProvider: any FIDProvider,
         pushService: any PushServiceProtocol,
         dependencies: Dependencies
     ) {
-        self.fidProvider = fidProvider
         self.pushService = pushService
 
         super.init(style: .grouped, dependencies: dependencies)
@@ -204,7 +201,7 @@ class NotificationsViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int)
         -> String?
     {
-        if let fid = fidProvider.fid {
+        if let fid = pushService.fid {
             return "Firebase Installation ID: \(fid)"
         }
         return nil
@@ -372,7 +369,7 @@ class NotificationsViewController: TBATableViewController {
     private func myTBARegistrationNotificationStatus() -> NotificationStatus {
         if !dependencies.authService.isSignedIn {
             return .invalid("Not signed in to myTBA. Sign in under the myTBA tab.")
-        } else if fidProvider.fid == nil {
+        } else if pushService.fid == nil {
             return .invalid("No Firebase installation ID.")
         } else if let myTBARegisterError = myTBARegisterError {
             return .invalid(myTBARegisterError.localizedDescription)
@@ -435,7 +432,7 @@ class NotificationsViewController: TBATableViewController {
     private func myTBAPingNotificationStatus() -> NotificationStatus {
         if !dependencies.authService.isSignedIn {
             return .unknown
-        } else if fidProvider.fid == nil {
+        } else if pushService.fid == nil {
             return .unknown
         } else if let myTBAPingError = myTBAPingError {
             return .invalid(myTBAPingError.localizedDescription)
@@ -449,7 +446,7 @@ class NotificationsViewController: TBATableViewController {
     // MARK: - UI Methods
 
     @objc func showCopyFID() {
-        guard let fid = fidProvider.fid else {
+        guard let fid = pushService.fid else {
             return
         }
 

@@ -1,6 +1,5 @@
 import FirebaseAnalytics
 import FirebaseCrashlytics
-import MyTBAKit
 import TBAAPI
 import UIKit
 import TBAUtils
@@ -53,17 +52,14 @@ private extension TBAAPI.CachePolicy {
 
 class SettingsViewController: TBATableViewController {
 
-    private let fidProvider: any FIDProvider
     private let pushService: any PushServiceProtocol
 
     // MARK: - Init
 
     init(
-        fidProvider: any FIDProvider,
         pushService: any PushServiceProtocol,
         dependencies: Dependencies
     ) {
-        self.fidProvider = fidProvider
         self.pushService = pushService
 
         super.init(style: .grouped, dependencies: dependencies)
@@ -552,7 +548,6 @@ class SettingsViewController: TBATableViewController {
 
     private func pushTroubleshootNotifications() {
         let notificationsViewController = NotificationsViewController(
-            fidProvider: fidProvider,
             pushService: pushService,
             dependencies: dependencies
         )

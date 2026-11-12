@@ -50,18 +50,20 @@ enum PushServiceError: LocalizedError {
 }
 
 protocol PushServiceProtocol: AnyObject {
-    /// Whether FCM has confirmed it delivers to this install's FID. TBA can't have the FID
-    /// before then: registering it deletes the install's old FCM token, which may be the
-    /// only way pushes still reach it.
+    /// This install's Firebase Installation ID, which FCM delivers its pushes to.
+    var fid: String? { get }
+    /// Whether FCM has confirmed it delivers to `fid`. TBA can't have the FID before then:
+    /// registering it deletes the install's old FCM token, which may be the only way pushes
+    /// still reach it.
     var isRegisteredWithFirebase: Bool { get }
     func registerForRemoteNotifications(_ completion: (((any Error)?) -> Void)?)
     @discardableResult func requestAuthorizationForNotifications() async throws -> Bool
     /// Registers this install's FID with TBA. Every registration goes through here, so
     /// pausing covers them all.
     func registerWithTBA() async throws -> MyTBABaseResponse
-    /// Stops registering with TBA and waits out any request already sent, so none can re-add
-    /// the device after sign-out removes it. Also reads the FID again if that failed at
-    /// launch, since sign-out names it to TBA. Signing in again resumes registration.
+    /// Refuses new registrations with TBA and waits out the ones already asked for, so none
+    /// can re-add the device after sign-out removes it. Also reads the FID again if that
+    /// failed at launch, since sign-out names it to TBA. Signing in again resumes registration.
     func pauseRegistration() async
     /// Picks registration back up, after signing in or a sign-out that didn't go through.
     func resumeRegistration()
@@ -83,14 +85,13 @@ class PushService: NSObject, PushServiceProtocol {
     weak var router: (any PushNotificationRouting)?
 
     private(set) var registerTask: Task<Void, Never>?
-    /// The last /register request sent to TBA. Each waits for the one before it, so a newer
-    /// FID lands last, and awaiting this waits them all out.
+    /// The last /register request sent to TBA. Each waits for the one before it, so awaiting
+    /// this waits them all out.
     private var lastTBARegistration: Task<MyTBABaseResponse, any Error>?
     private var signInObservation: Task<Void, Never>?
     private var hasAPNSToken = false
     private var isRegistrationPaused = false
 
-    /// This install's Firebase Installation ID, which FCM delivers its pushes to.
     private(set) var fid: String?
     private(set) var isRegisteredWithFirebase = false
 
@@ -121,8 +122,9 @@ class PushService: NSObject, PushServiceProtocol {
         registrar.registerForRemoteNotifications(completion: completion)
     }
 
-    /// Firebase can only register the FID once it has the APNs token, and it won't retry on
-    /// its own when it already has a pre-FID token cached, as every upgraded install does.
+    /// Firebase can't register the FID without the APNs token, and has to be asked: on its
+    /// own it neither registers an install with a pre-FID token cached, as every upgrade has,
+    /// nor reports a FID it registered at an earlier launch.
     func didReceiveAPNSToken() {
         hasAPNSToken = true
         if authService.isSignedIn {
@@ -153,10 +155,6 @@ extension PushService {
         let previous = lastTBARegistration
         let registration = Task {
             _ = try? await previous?.value
-            // Pausing waits out a request already sent, not one still queued behind it.
-            guard !isRegistrationPaused else {
-                throw PushServiceError.registrationPaused
-            }
             return try await myTBA.register()
         }
         lastTBARegistration = registration
@@ -231,14 +229,18 @@ extension PushService {
             guard let self else { return }
             do {
                 try await firebase.register()
+                // The callback comes without the FID when Firebase already had it registered
+                // but hasn't loaded it yet this launch (firebase-ios-sdk 12.18.0).
+                if !isRegisteredWithFirebase, let fid {
+                    didReceiveRegistration(fid)
+                }
             } catch {
                 reporter.record(error)
             }
         }
     }
 
-    // Retries every minute until TBA has the FID. A new FID restarts it, and its request
-    // waits for the old one's, so the new FID lands last.
+    // Retries every minute until TBA has the FID. A new FID restarts it.
     private func keepRegisteringWithTBA() {
         registerTask?.cancel()
         guard authService.isSignedIn, !isRegistrationPaused else {
@@ -264,14 +266,15 @@ extension PushService {
 extension PushService: MessagingDelegate {
 
     // Firebase delivers this on the main thread (-[FIRMessaging notifyDelegateOfFCMTokenAvailability]),
-    // once per app start under auto-init and again after each `register()`.
+    // after each `register()` and whenever it registers a FID on its own.
     func messaging(_ messaging: Messaging, didReceiveRegistration installationId: String?) {
         didReceiveRegistration(installationId)
     }
 
     // Separate from the delegate method so tests don't need a `Messaging` instance.
     func didReceiveRegistration(_ fid: String?) {
-        // Firebase reports nil when unregistering, which this app doesn't do.
+        // Firebase can report no FID for one it has registered. `registerWithFirebase()`
+        // covers that.
         guard let fid else { return }
         self.fid = fid
         isRegisteredWithFirebase = true

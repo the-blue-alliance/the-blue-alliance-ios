@@ -76,6 +76,7 @@ final class MockPushService: PushServiceProtocol {
     let callLog: CallLog
     var error: (any Error)?
     var deleteFirebaseInstallationError: (any Error)?
+    var fid: String?
     var isRegisteredWithFirebase = true
     private(set) var callCount = 0
     private(set) var deleteFirebaseInstallationCallCount = 0
@@ -125,10 +126,6 @@ final class MockSessionMyTBA: MyTBAProtocol {
     /// Holds `register()` open until cleared, like a request TBA is slow to answer.
     /// Cancelling the caller ends it early with an error, as URLSession does.
     var holdsRegister = false
-    /// The FID `register()` sends, read when it starts, as the real client does.
-    var currentFID: () -> String? = { nil }
-    /// The FIDs of finished registrations, in the order TBA would have them.
-    private(set) var registeredFIDs: [String?] = []
     private(set) var unregisterCallCount = 0
     private(set) var registerCallCount = 0
     private(set) var finishedRegisterCount = 0
@@ -161,7 +158,6 @@ final class MockSessionMyTBA: MyTBAProtocol {
     func register() async throws -> MyTBABaseResponse {
         callLog.append("myTBA.register")
         registerCallCount += 1
-        let fid = currentFID()
         while holdsRegister, !Task.isCancelled {
             try? await Task.sleep(for: .milliseconds(10))
         }
@@ -170,7 +166,6 @@ final class MockSessionMyTBA: MyTBAProtocol {
             throw CancellationError()
         }
         finishedRegisterCount += 1
-        registeredFIDs.append(fid)
         return try Self.baseResponse()
     }
 
