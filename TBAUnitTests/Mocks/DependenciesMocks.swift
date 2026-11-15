@@ -36,6 +36,8 @@ final class MockTBAAPI: TBAAPIProtocol {
     /// that has already left the network does.
     var latencyIgnoresCancellation = false
     private(set) var statusRequestCount = 0
+    var sponsors: [Sponsor]?
+    private(set) var sponsorsRequestCount = 0
 
     private func stub<T>(_ value: T?) async throws -> T {
         if latency > .zero, latencyIgnoresCancellation {
@@ -57,6 +59,10 @@ final class MockTBAAPI: TBAAPIProtocol {
     func getStatus() async throws -> APIStatus {
         statusRequestCount += 1
         throw Unstubbed()
+    }
+    func getSponsors() async throws -> [Sponsor] {
+        sponsorsRequestCount += 1
+        return try await stub(sponsors)
     }
     func getSearchIndex() async throws -> SearchIndex { throw Unstubbed() }
     func allTeams() async throws -> [Team] { throw Unstubbed() }
@@ -160,6 +166,10 @@ extension Dependencies {
                 applicationState: { .active }
             ),
             reporter: reporter,
+            sponsorService: SponsorService(
+                api: api,
+                fileURL: directory.appendingPathComponent("sponsors.json")
+            ),
             statusService: MockStatusService(),
             urlOpener: MockURLOpener()
         )

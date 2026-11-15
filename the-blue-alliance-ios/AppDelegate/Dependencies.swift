@@ -13,6 +13,7 @@ class Dependencies {
     let myTBAStores: MyTBAStores
     let myTBASession: MyTBASessionService
     let reporter: any Reporter
+    let sponsorService: SponsorService
     let statusService: any StatusServiceProtocol
     let urlOpener: any URLOpener
 
@@ -24,6 +25,7 @@ class Dependencies {
         myTBAStores: MyTBAStores,
         myTBASession: MyTBASessionService,
         reporter: any Reporter,
+        sponsorService: SponsorService,
         statusService: any StatusServiceProtocol,
         urlOpener: any URLOpener = UIApplication.shared
     ) {
@@ -34,6 +36,7 @@ class Dependencies {
         self.myTBAStores = myTBAStores
         self.myTBASession = myTBASession
         self.reporter = reporter
+        self.sponsorService = sponsorService
         self.statusService = statusService
         self.urlOpener = urlOpener
     }

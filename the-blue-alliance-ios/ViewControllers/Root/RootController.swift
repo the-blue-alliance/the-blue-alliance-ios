@@ -138,7 +138,11 @@ extension RootController {
 
     var moreViewController: MoreViewController {
         let dashboardEnabled = dependencies.appSettings.featureFlags.isEnabled(.dashboard)
-        return MoreViewController(items: RootType.moreItems(dashboardEnabled: dashboardEnabled)) {
+        return MoreViewController(
+            items: RootType.moreItems(dashboardEnabled: dashboardEnabled),
+            sponsorService: dependencies.sponsorService,
+            urlOpener: dependencies.urlOpener
+        ) {
             self.makeRootViewController(for: $0)
         }
     }

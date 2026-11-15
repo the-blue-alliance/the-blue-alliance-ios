@@ -8,6 +8,9 @@ public protocol TBAAPIProtocol: Sendable {
     // Status
     func getStatus() async throws -> APIStatus
 
+    // Sponsors
+    func getSponsors() async throws -> [Sponsor]
+
     // Search
     func getSearchIndex() async throws -> SearchIndex
 

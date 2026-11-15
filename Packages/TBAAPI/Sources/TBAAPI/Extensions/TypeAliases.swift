@@ -23,6 +23,7 @@ public typealias MatchAlliance = Components.Schemas.MatchAlliance
 public typealias Media = Components.Schemas.Media
 public typealias PlayoffType = Components.Schemas.PlayoffType
 public typealias SearchIndex = Components.Schemas.SearchIndex
+public typealias Sponsor = Components.Schemas.Sponsor
 public typealias Team = Components.Schemas.Team
 public typealias TeamEventStatus = Components.Schemas.TeamEventStatus
 public typealias TeamSimple = Components.Schemas.TeamSimple

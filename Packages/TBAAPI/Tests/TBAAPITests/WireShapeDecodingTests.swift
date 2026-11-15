@@ -86,4 +86,41 @@ struct WireShapeDecodingTests {
         #expect(status.kickoffDatetime == "2027-01-09T17:00:00+00:00")
     }
 
+    // `logo_style` is a plain string so a style added later doesn't fail the whole list.
+    @Test func sponsors_decodeUnknownStyleAndNullLogos() throws {
+        let payload = try JSONDecoder().decode(
+            Components.Schemas.Sponsors.self,
+            from: Data(
+                """
+                {
+                  "sponsors": [
+                    {
+                      "name": "AndyMark", "url": "https://www.andymark.com/",
+                      "logo_style": "wordmark",
+                      "logo_url": "https://example.com/on-light.png",
+                      "logo_url_dark": "https://example.com/on-dark.png"
+                    },
+                    {
+                      "name": "Quillfeather Robotics", "url": "https://example.com/",
+                      "logo_style": "banner", "logo_url": null, "logo_url_dark": null
+                    }
+                  ]
+                }
+                """.utf8
+            )
+        )
+        #expect(payload.sponsors.map(\.name) == ["AndyMark", "Quillfeather Robotics"])
+        #expect(payload.sponsors[0].logoUrlDark == "https://example.com/on-dark.png")
+        #expect(payload.sponsors[1].logoStyle == "banner")
+        #expect(payload.sponsors[1].logoUrl == nil)
+    }
+
+    @Test func sponsors_decodeEmptyList() throws {
+        let payload = try JSONDecoder().decode(
+            Components.Schemas.Sponsors.self,
+            from: Data(#"{ "sponsors": [] }"#.utf8)
+        )
+        #expect(payload.sponsors.isEmpty)
+    }
+
 }

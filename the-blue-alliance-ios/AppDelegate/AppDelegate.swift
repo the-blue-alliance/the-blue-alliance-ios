@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         reporter: reporter,
         api: api
     )
+    lazy var sponsorService = SponsorService(api: api)
     lazy var authService: any AuthServiceProtocol = AuthService(reporter: reporter)
     lazy var myTBASession = MyTBASessionService(
         authService: authService,
@@ -65,6 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         myTBAStores: myTBAStores,
         myTBASession: myTBASession,
         reporter: reporter,
+        sponsorService: sponsorService,
         statusService: statusService,
         urlOpener: urlOpener
     )
