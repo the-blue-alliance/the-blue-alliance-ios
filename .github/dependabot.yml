@@ -14,6 +14,19 @@ updates:
       - "/Packages/*"
     schedule:
       interval: daily
+    # Direct dependencies only. For the Xcode project, Dependabot bumps transitive pins in Package.resolved without
+    # resolving the graph, so it proposes versions our dependencies don't allow (e.g. OpenAPIKit 7). Firebase is
+    # bumped by hand: each release narrows the ranges of its Google dependencies, and Dependabot only moves
+    # Firebase's own pin.
+    allow:
+      - dependency-name: "github.com/purelayout/purelayout"
+      - dependency-name: "github.com/youtube/youtube-ios-player-helper"
+      - dependency-name: "github.com/jangorman/agrume"
+      - dependency-name: "github.com/juanpe/skeletonview"
+      - dependency-name: "github.com/apple/swift-openapi-generator"
+      - dependency-name: "github.com/apple/swift-openapi-runtime"
+      - dependency-name: "github.com/apple/swift-openapi-urlsession"
+      - dependency-name: "github.com/google/googlesignin-ios"
     groups:
       # One PR per dependency across the app and package lockfiles, so shared pins move together.
       swift-packages:
