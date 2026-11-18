@@ -75,11 +75,11 @@ class MyTBAPreferenceViewController: TBATableViewController,
     init(subscribableModel: any MyTBASubscribable, dependencies: Dependencies) {
         self.subscribableModel = subscribableModel
 
-        isFavorite = dependencies.myTBAStores.favorites.contains(subscribableModel.myTBAModelID)
+        isFavorite = dependencies.myTBAStores.favorites.contains(subscribableModel)
         isFavoriteInitially = isFavorite
 
         let existingSubscription = dependencies.myTBAStores.subscriptions.subscription(
-            subscribableModel.myTBAModelID
+            for: subscribableModel
         )
         notifications = existingSubscription?.notifications ?? []
         notificationsInitial = notifications
@@ -144,11 +144,11 @@ class MyTBAPreferenceViewController: TBATableViewController,
             do {
                 try await self.dependencies.myTBASession.refresh()
 
-                self.isFavorite = self.favoritesStore.contains(self.subscribableModel.myTBAModelID)
+                self.isFavorite = self.favoritesStore.contains(self.subscribableModel)
                 self.isFavoriteInitially = self.isFavorite
 
                 let existingSubscription = self.subscriptionsStore.subscription(
-                    self.subscribableModel.myTBAModelID
+                    for: self.subscribableModel
                 )
                 self.notifications = existingSubscription?.notifications ?? []
                 self.notificationsInitial = self.notifications
@@ -201,12 +201,12 @@ class MyTBAPreferenceViewController: TBATableViewController,
                             )
                         )
                     } else {
-                        self.favoritesStore.remove(self.subscribableModel.myTBAModelID)
+                        self.favoritesStore.remove(self.subscribableModel)
                     }
                 }
                 if response.subscription.code < 500 {
                     if self.notifications.isEmpty {
-                        self.subscriptionsStore.remove(self.subscribableModel.myTBAModelID)
+                        self.subscriptionsStore.remove(self.subscribableModel)
                     } else {
                         self.subscriptionsStore.upsert(
                             MyTBASubscription(

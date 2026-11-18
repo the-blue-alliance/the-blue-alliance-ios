@@ -52,13 +52,13 @@ final class FavoritesStore {
         persist()
     }
 
-    func remove(_ id: MyTBAModelID) {
-        byID[id] = nil
+    func remove(_ model: some MyTBAModelIdentifiable) {
+        byID[model.myTBAModelID] = nil
         persist()
     }
 
-    func contains(_ id: MyTBAModelID) -> Bool {
-        byID[id] != nil
+    func contains(_ model: some MyTBAModelIdentifiable) -> Bool {
+        byID[model.myTBAModelID] != nil
     }
 
     func clear() {
@@ -102,8 +102,8 @@ final class SubscriptionsStore {
         persist()
     }
 
-    func remove(_ id: MyTBAModelID) {
-        byID[id] = nil
+    func remove(_ model: some MyTBAModelIdentifiable) {
+        byID[model.myTBAModelID] = nil
         persist()
     }
 
@@ -112,8 +112,8 @@ final class SubscriptionsStore {
         file.delete()
     }
 
-    func subscription(_ id: MyTBAModelID) -> MyTBASubscription? {
-        byID[id]
+    func subscription(for model: some MyTBAModelIdentifiable) -> MyTBASubscription? {
+        byID[model.myTBAModelID]
     }
 
     func flush() async {

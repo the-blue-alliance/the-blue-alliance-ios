@@ -41,6 +41,16 @@ public struct MyTBAModelID: Hashable, Sendable {
     }
 }
 
+// Anything that names a myTBA model, so the stores can be queried with the model
+// itself rather than its ID.
+public protocol MyTBAModelIdentifiable {
+    var myTBAModelID: MyTBAModelID { get }
+}
+
+extension MyTBAModelID: MyTBAModelIdentifiable {
+    public var myTBAModelID: MyTBAModelID { self }
+}
+
 // Models for Favorite/Subscription
 public protocol MyTBAModel: Codable, Sendable, Identifiable where ID == MyTBAModelID {
 

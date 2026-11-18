@@ -49,7 +49,7 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
     override func updateProperties() {
         super.updateProperties()
 
-        let isFavorite = dependencies.myTBAStores.favorites.contains(subscribableModel.myTBAModelID)
+        let isFavorite = dependencies.myTBAStores.favorites.contains(subscribableModel)
         favoriteBarButtonItem.image = isFavorite ? UIImage.starIcon : UIImage.starOutlineIcon
     }
 

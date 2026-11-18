@@ -97,8 +97,8 @@ struct MyTBALocalStoreTests {
         ])
 
         #expect(store.subscriptions.count == 2)
-        #expect(store.subscription(teamID)?.notifications == [.matchScore])
-        #expect(store.subscription(eventID)?.notifications == [.awards])
+        #expect(store.subscription(for: teamID)?.notifications == [.matchScore])
+        #expect(store.subscription(for: eventID)?.notifications == [.awards])
     }
 
     @Test func subscriptionsKeepTheFirstOfEachModelFromDisk() async {
@@ -113,7 +113,7 @@ struct MyTBALocalStoreTests {
         let store = SubscriptionsStore(fileURL: subscriptionsURL)
 
         #expect(store.subscriptions.count == 1)
-        #expect(store.subscription(eventID)?.notifications == [.awards])
+        #expect(store.subscription(for: eventID)?.notifications == [.awards])
     }
 
     @Test func upsertReplacesTheExistingSubscription() {
@@ -128,6 +128,49 @@ struct MyTBALocalStoreTests {
         )
 
         #expect(store.subscriptions.count == 1)
-        #expect(store.subscription(teamID)?.notifications == [.awards])
+        #expect(store.subscription(for: teamID)?.notifications == [.awards])
     }
+
+    // MARK: - Subscribable models
+
+    @Test func favoritesAreFoundBySubscribableModel() {
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = FavoritesStore(fileURL: favoritesURL)
+        store.replaceAll(with: [team])
+
+        #expect(store.contains(Subscribable(modelKey: "frc7332", modelType: .team)))
+        #expect(!store.contains(Subscribable(modelKey: "frc2337", modelType: .team)))
+    }
+
+    @Test func favoritesAreRemovedBySubscribableModel() {
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = FavoritesStore(fileURL: favoritesURL)
+        store.replaceAll(with: [event, team])
+
+        store.remove(Subscribable(modelKey: "frc7332", modelType: .team))
+
+        #expect(!store.contains(teamID))
+        #expect(store.contains(eventID))
+    }
+
+    @Test func subscriptionsAreFoundAndRemovedBySubscribableModel() {
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = SubscriptionsStore(fileURL: subscriptionsURL)
+        let model = Subscribable(modelKey: "2026miket", modelType: .event)
+        store.upsert(
+            MyTBASubscription(modelKey: "2026miket", modelType: .event, notifications: [.awards])
+        )
+
+        #expect(store.subscription(for: model)?.notifications == [.awards])
+
+        store.remove(model)
+
+        #expect(store.subscription(for: model) == nil)
+    }
+}
+
+private struct Subscribable: MyTBASubscribable {
+    let modelKey: String
+    let modelType: MyTBAModelType
+    static var notificationTypes: [NotificationType] { [] }
 }
