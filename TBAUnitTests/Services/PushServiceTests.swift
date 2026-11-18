@@ -12,6 +12,7 @@ final class MockFirebasePush: FirebasePushRegistering {
     /// Stands in for Firebase calling back `messaging(_:didReceiveRegistration:)`.
     var onRegister: (() -> Void)?
     private(set) var registerCallCount = 0
+    private(set) var unregisterCallCount = 0
     private(set) var deleteInstallationCallCount = 0
 
     func installationID() async throws -> String {
@@ -24,6 +25,10 @@ final class MockFirebasePush: FirebasePushRegistering {
     func register() async throws {
         registerCallCount += 1
         onRegister?()
+    }
+
+    func unregister() async throws {
+        unregisterCallCount += 1
     }
 
     func deleteInstallation() async throws {
@@ -46,6 +51,7 @@ struct PushServiceTests {
     let myTBA = MockSessionMyTBA()
     let firebase = MockFirebasePush()
     let reporter = MockReporter()
+    let defaults = UserDefaults(suiteName: UUID().uuidString)!
 
     /// A PushService whose Firebase registration calls back with "fid-1", as Firebase does.
     func makePushService() -> PushService {
@@ -54,7 +60,8 @@ struct PushServiceTests {
             authService: authService,
             myTBA: myTBA,
             registrar: MockRemoteNotificationRegistrar(),
-            firebase: firebase
+            firebase: firebase,
+            defaults: defaults
         )
         firebase.onRegister = { [weak pushService] in
             pushService?.didReceiveRegistration("fid-1")
@@ -88,8 +95,65 @@ struct PushServiceTests {
         await waitUntil { myTBA.registerCallCount == 1 }
 
         #expect(firebase.registerCallCount == 1)
+        #expect(firebase.unregisterCallCount == 0)
         #expect(myTBA.registerCallCount == 1)
         #expect(reporter.errors.isEmpty)
+    }
+
+    // Sign-out deletes the installation when it can't reach TBA. If the app quits before
+    // Firebase registers the new one, Firebase's cache keeps reporting the deleted FID.
+    @Test func theDeletedInstallationsFIDIsClearedFromFirebaseAndNeverSentToTBA() async throws {
+        do {
+            let pushService = makePushService()
+            await waitUntil { pushService.fid != nil }
+            try await pushService.deleteFirebaseInstallation()
+        }
+        // The next launch.
+        firebase.installationIDResult = "fid-2"
+        let firebase = firebase
+        let pushService = makePushService()
+        var acceptedDeletedFID = false
+        firebase.onRegister = { [weak pushService] in
+            let cachedFID = firebase.unregisterCallCount == 0 ? "fid-1" : "fid-2"
+            pushService?.didReceiveRegistration(cachedFID)
+            if cachedFID == "fid-1", pushService?.isRegisteredWithFirebase == true {
+                acceptedDeletedFID = true
+            }
+        }
+
+        authService.isSignedIn = true
+        pushService.didReceiveAPNSToken()
+        await waitUntil { myTBA.registerCallCount == 1 }
+
+        #expect(!acceptedDeletedFID)
+        #expect(firebase.unregisterCallCount == 1)
+        #expect(pushService.fid == "fid-2")
+
+        pushService.didReceiveAPNSToken()
+        await waitUntil { firebase.registerCallCount == 3 }
+
+        #expect(firebase.unregisterCallCount == 1)
+    }
+
+    // Usually Firebase registers the new installation right after the delete, so its cache
+    // has the new FID.
+    @Test func firebaseReportingANewFIDStopsRejectingTheDeletedOne() async throws {
+        authService.isSignedIn = true
+        let pushService = makePushService()
+        await waitUntil { pushService.fid != nil }
+        try await pushService.deleteFirebaseInstallation()
+        firebase.onRegister = { [weak pushService] in
+            pushService?.didReceiveRegistration("fid-2")
+        }
+
+        pushService.didReceiveAPNSToken()
+        await waitUntil { myTBA.registerCallCount == 1 }
+        pushService.didReceiveAPNSToken()
+        await waitUntil { firebase.registerCallCount == 2 }
+
+        #expect(firebase.unregisterCallCount == 0)
+        #expect(pushService.fid == "fid-2")
+        #expect(pushService.isRegisteredWithFirebase)
     }
 
     @Test func doesNotRegisterWhenSignedOut() async {

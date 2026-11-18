@@ -16,6 +16,7 @@ protocol RemoteNotificationRegistering: AnyObject {
 protocol FirebasePushRegistering: AnyObject {
     func installationID() async throws -> String
     func register() async throws
+    func unregister() async throws
     func deleteInstallation() async throws
 }
 
@@ -27,6 +28,10 @@ final class FirebasePushRegistrar: FirebasePushRegistering {
 
     func register() async throws {
         try await Messaging.messaging().register()
+    }
+
+    func unregister() async throws {
+        try await Messaging.messaging().unregister()
     }
 
     func deleteInstallation() async throws {
@@ -77,11 +82,14 @@ protocol PushServiceProtocol: AnyObject {
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
 class PushService: NSObject, PushServiceProtocol {
 
+    private static let deletedFIDKey = "push_deleted_firebase_installation_id"
+
     private let reporter: any Reporter
     private let authService: any AuthServiceProtocol
     private let myTBA: any MyTBAProtocol
     private let registrar: any RemoteNotificationRegistering
     private let firebase: any FirebasePushRegistering
+    private let defaults: UserDefaults
     weak var router: (any PushNotificationRouting)?
 
     private(set) var registerTask: Task<Void, Never>?
@@ -100,13 +108,15 @@ class PushService: NSObject, PushServiceProtocol {
         authService: any AuthServiceProtocol,
         myTBA: any MyTBAProtocol,
         registrar: any RemoteNotificationRegistering,
-        firebase: any FirebasePushRegistering = FirebasePushRegistrar()
+        firebase: any FirebasePushRegistering = FirebasePushRegistrar(),
+        defaults: UserDefaults = .standard
     ) {
         self.reporter = reporter
         self.authService = authService
         self.myTBA = myTBA
         self.registrar = registrar
         self.firebase = firebase
+        self.defaults = defaults
 
         super.init()
 
@@ -180,7 +190,13 @@ extension PushService {
     }
 
     func deleteFirebaseInstallation() async throws {
+        let deletedFID = fid
         try await firebase.deleteInstallation()
+        // Firebase's cache can keep reporting it, so it's rejected until Firebase reports
+        // another FID. An earlier one still saved is the one the cache would have.
+        if defaults.string(forKey: Self.deletedFIDKey) == nil {
+            defaults.set(deletedFID, forKey: Self.deletedFIDKey)
+        }
         fid = nil
         isRegisteredWithFirebase = false
     }
@@ -229,9 +245,21 @@ extension PushService {
             guard let self else { return }
             do {
                 try await firebase.register()
-                // The callback comes without the FID when Firebase already had it registered
-                // but hasn't loaded it yet this launch (firebase-ios-sdk 12.18.0).
-                if !isRegisteredWithFirebase, let fid {
+                if defaults.string(forKey: Self.deletedFIDKey) != nil {
+                    // `register()` answers from Firebase's cache without checking it against the
+                    // installation, so if the app quit before Firebase registered the one that
+                    // replaced the deleted installation, it reports the deleted FID, or nothing
+                    // (firebase-ios-sdk 12.18.0 through 13.2.0). Unregistering clears the cache,
+                    // even if its request to FCM then fails.
+                    do {
+                        try await firebase.unregister()
+                    } catch {
+                        reporter.record(error)
+                    }
+                    try await firebase.register()
+                } else if !isRegisteredWithFirebase, let fid {
+                    // The callback comes without the FID when Firebase already had it registered
+                    // but hasn't loaded it yet this launch (firebase-ios-sdk 12.18.0).
                     didReceiveRegistration(fid)
                 }
             } catch {
@@ -276,6 +304,10 @@ extension PushService: MessagingDelegate {
         // Firebase can report no FID for one it has registered. `registerWithFirebase()`
         // covers that.
         guard let fid else { return }
+        if let deletedFID = defaults.string(forKey: Self.deletedFIDKey) {
+            guard fid != deletedFID else { return }
+            defaults.removeObject(forKey: Self.deletedFIDKey)
+        }
         self.fid = fid
         isRegisteredWithFirebase = true
         keepRegisteringWithTBA()
