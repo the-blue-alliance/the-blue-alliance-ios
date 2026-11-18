@@ -4,8 +4,8 @@ import Foundation
 
 extension MockURLSession: MyTBAURLSession {}
 
-final class MockFCMTokenProvider: FCMTokenProvider {
-    var fcmToken: String?
+final class MockFIDProvider: FIDProvider {
+    var fid: String?
 }
 
 @MainActor
@@ -30,14 +30,14 @@ struct MissingFixture: Error {
 final class MockMyTBA: MyTBA {
 
     let session = MockURLSession()
-    let fcmTokenProvider = MockFCMTokenProvider()
+    let fidProvider = MockFIDProvider()
     let idTokenProvider = MockIDTokenProvider()
 
     init() {
         super.init(
             uuid: "abcd123",
             deviceName: "MyTBATesting",
-            fcmTokenProvider: fcmTokenProvider,
+            fidProvider: fidProvider,
             idTokenProvider: idTokenProvider,
             urlSession: session
         )

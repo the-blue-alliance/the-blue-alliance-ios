@@ -167,10 +167,6 @@ extension Dependencies {
 
 }
 
-final class MockFCMTokenProvider: FCMTokenProvider {
-    var fcmToken: String?
-}
-
 extension Duration {
     fileprivate var timeInterval: TimeInterval {
         let (seconds, attoseconds) = components

@@ -12,7 +12,6 @@ struct PhoneRootViewControllerTests {
         let dependencies = Dependencies.mock()
         dependencies.appSettings.featureFlags.setEnabled(dashboardEnabled, for: .dashboard)
         return PhoneRootViewController(
-            fcmTokenProvider: MockFCMTokenProvider(),
             pushService: MockPushService(),
             dependencies: dependencies
         )

@@ -1,5 +1,4 @@
 import Foundation
-import MyTBAKit
 import UIKit
 
 enum RootType: CaseIterable {
@@ -98,7 +97,6 @@ enum RootType: CaseIterable {
 
 protocol RootController {
     var dependencies: Dependencies { get }
-    var fcmTokenProvider: any FCMTokenProvider { get }
     var pushService: any PushServiceProtocol { get }
 }
 
@@ -122,7 +120,6 @@ extension RootController {
 
     var settingsViewController: SettingsViewController {
         return SettingsViewController(
-            fcmTokenProvider: fcmTokenProvider,
             pushService: pushService,
             dependencies: dependencies
         )

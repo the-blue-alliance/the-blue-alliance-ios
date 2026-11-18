@@ -16,7 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneAlertPresenting {
         let services = UIApplication.shared.appServices
         let window = UIWindow(windowScene: windowScene)
         let root = PhoneRootViewController(
-            fcmTokenProvider: services.fcmTokenProvider,
             pushService: services.pushService,
             dependencies: services.dependencies
         )

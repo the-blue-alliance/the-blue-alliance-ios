@@ -65,6 +65,7 @@
 		5EC0D41A2C26090400000002 /* LocalStore/FeatureFlagsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090400000001 /* LocalStore/FeatureFlagsStoreTests.swift */; };
 		5EC0D41A2C26111700000002 /* LocalStore/MyTBALocalStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26111700000001 /* LocalStore/MyTBALocalStoreTests.swift */; };
 		5EC0D41A2C26090500000002 /* ViewControllers/Root/PhoneRootViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090500000001 /* ViewControllers/Root/PhoneRootViewControllerTests.swift */; };
+		92AA7A0F2F010000000DAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A0E2F010000000CAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift */; };
 		5EC0D41A2C26090700000002 /* ViewControllers/Settings/SettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */; };
 		5EC0D41A2C26090900000002 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090900000001 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift */; };
 		5EC0D41A2C26091000000002 /* MatchTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */; };
@@ -88,6 +89,7 @@
 		924BDD8A26D2B366008BE7D2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */; };
 		924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */; };
 		924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */; };
+		92AA7A0F2F010000000FAAAA /* FirebaseInstallations in Frameworks */ = {isa = PBXBuildFile; productRef = 92AA7A0E2F010000000EAAAA /* FirebaseInstallations */; };
 		925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */; };
 		925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */; };
 		92564C6B21644AA30047917F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6A21644AA30047917F /* Secrets.swift */; };
@@ -151,6 +153,7 @@
 		92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */; };
 		92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */; };
 		92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */; };
+		92AA7A0D2F010000000DAAAA /* Services/PushServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A0C2F010000000CAAAA /* Services/PushServiceTests.swift */; };
 		92AABBCC000000000000DD01 /* CachePolicyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD02 /* CachePolicyStore.swift */; };
 		92AABBCC000000000000DD11 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD12 /* AppSettings.swift */; };
 		92AABBCC000000000000DD21 /* FirebaseCollectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */; };
@@ -295,6 +298,7 @@
 		5EC0D41A2C26090400000001 /* LocalStore/FeatureFlagsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore/FeatureFlagsStoreTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26111700000001 /* LocalStore/MyTBALocalStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore/MyTBALocalStoreTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090500000001 /* ViewControllers/Root/PhoneRootViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Root/PhoneRootViewControllerTests.swift; sourceTree = "<group>"; };
+		92AA7A0E2F010000000CAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Settings/NotificationsViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Settings/SettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090900000001 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Teams/TeamEventsViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTimesViewModel.swift; sourceTree = "<group>"; };
@@ -378,6 +382,7 @@
 		92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks/SessionMocks.swift; sourceTree = "<group>"; };
 		92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/MyTBASessionServiceTests.swift; sourceTree = "<group>"; };
 		92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/StatusServiceTests.swift; sourceTree = "<group>"; };
+		92AA7A0C2F010000000CAAAA /* Services/PushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/PushServiceTests.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD02 /* CachePolicyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePolicyStore.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD12 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		92AABBCC000000000000DD22 /* FirebaseCollectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCollectionStore.swift; sourceTree = "<group>"; };
@@ -463,6 +468,7 @@
 			files = (
 				92C5FBDC2B0037E10006AE48 /* YouTubeiOSPlayerHelper in Frameworks */,
 				924BDD9026D2B366008BE7D2 /* FirebaseMessaging in Frameworks */,
+				92AA7A0F2F010000000FAAAA /* FirebaseInstallations in Frameworks */,
 				924BDD8E26D2B366008BE7D2 /* FirebaseCrashlytics in Frameworks */,
 				921843032DB42424003B4F9E /* TBAAPI in Frameworks */,
 				921843072DB42424003B4F9E /* TBAUtils in Frameworks */,
@@ -1080,10 +1086,12 @@
 				5EC0D41A2C26090400000001 /* LocalStore/FeatureFlagsStoreTests.swift */,
 				5EC0D41A2C26111700000001 /* LocalStore/MyTBALocalStoreTests.swift */,
 				5EC0D41A2C26090500000001 /* ViewControllers/Root/PhoneRootViewControllerTests.swift */,
+				92AA7A0E2F010000000CAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift */,
 				5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */,
 				92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */,
 				92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */,
+				92AA7A0C2F010000000CAAAA /* Services/PushServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */,
 				5EC0D41A2C26091100000003 /* ViewModels/Event/EventDivisionsViewModelTests.swift */,
 				5EC0D41A2C26091000000005 /* ViewModels/Match/MatchTimesViewModelTests.swift */,
@@ -1144,6 +1152,7 @@
 				924BDD8926D2B366008BE7D2 /* FirebaseAnalytics */,
 				924BDD8D26D2B366008BE7D2 /* FirebaseCrashlytics */,
 				924BDD8F26D2B366008BE7D2 /* FirebaseMessaging */,
+				92AA7A0E2F010000000EAAAA /* FirebaseInstallations */,
 				920240062AEB6AAD0003D118 /* PureLayout */,
 				92C5FBDB2B0037E10006AE48 /* YouTubeiOSPlayerHelper */,
 				92C5FBDE2B0038250006AE48 /* Agrume */,
@@ -1326,10 +1335,12 @@
 				5EC0D41A2C26090400000002 /* LocalStore/FeatureFlagsStoreTests.swift in Sources */,
 				5EC0D41A2C26111700000002 /* LocalStore/MyTBALocalStoreTests.swift in Sources */,
 				5EC0D41A2C26090500000002 /* ViewControllers/Root/PhoneRootViewControllerTests.swift in Sources */,
+				92AA7A0F2F010000000DAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift in Sources */,
 				5EC0D41A2C26090700000002 /* ViewControllers/Settings/SettingsViewControllerTests.swift in Sources */,
 				92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */,
 				92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */,
+				92AA7A0D2F010000000DAAAA /* Services/PushServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* ViewModels/Event/EventSectionTests.swift in Sources */,
 				5EC0D41A2C26091100000004 /* ViewModels/Event/EventDivisionsViewModelTests.swift in Sources */,
 				5EC0D41A2C26091000000006 /* ViewModels/Match/MatchTimesViewModelTests.swift in Sources */,
@@ -1871,6 +1882,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		92AA7A0E2F010000000EAAAA /* FirebaseInstallations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 924BDD8826D2B366008BE7D2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseInstallations;
 		};
 		92AA7A022F0100000002AAAA /* TBAAuth */ = {
 			isa = XCSwiftPackageProductDependency;

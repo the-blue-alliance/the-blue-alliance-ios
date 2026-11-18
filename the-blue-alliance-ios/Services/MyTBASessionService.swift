@@ -7,7 +7,7 @@ import UIKit
 enum MyTBASessionError: LocalizedError {
     case signIn(any Error)
     case pushAuthorization(any Error)
-    case offline
+    case unregister(any Error)
 
     var errorDescription: String? {
         switch self {
@@ -15,8 +15,8 @@ enum MyTBASessionError: LocalizedError {
             return error.localizedDescription
         case .pushAuthorization(let error):
             return error.localizedDescription
-        case .offline:
-            return "Sign out needs a connection so this device stops receiving notifications."
+        case .unregister(let error):
+            return "Couldn't turn off this device's notifications: \(error.localizedDescription)"
         }
     }
 }
@@ -114,39 +114,32 @@ final class MyTBASessionService {
     }
 
     func signOut() async throws {
-        // Two independent ways to stop pushes: TBA forgetting the device, or FCM
-        // invalidating its token. Either is enough; at least one has to reach a
-        // server before local state goes, or a signed-out phone keeps getting
-        // the old user's notifications. Unregister has to go first, for two
-        // reasons: it needs an ID token, so it can't follow Firebase sign-out,
-        // and it needs the FCM token, which deleteToken drops from Firebase's
-        // local cache before it even reaches the network.
-        var stoppedPushes = false
+        // TBA has to forget the device before local state goes, or a signed-out phone keeps
+        // getting the old user's notifications. Nothing on the phone can stand in for it:
+        // the FID outlives FCM's unregister, and deleting the Firebase installation can leave
+        // Firebase reporting the dead FID. It has to come before Firebase sign-out, since it
+        // needs an ID token, and pausing first keeps a pending registration from re-adding
+        // the device.
+        await pushService.pauseRegistration()
+
         do {
             _ = try await myTBA.unregister()
-            stoppedPushes = true
         } catch let error as MyTBAError where error.code == 404 {
             // Already unregistered server-side.
-            stoppedPushes = true
-        } catch MyTBAError.missingFCMToken {
-            // Never registered, so there's nothing to stop.
-            stoppedPushes = true
         } catch {
             reporter.record(error)
-        }
-        do {
-            try await pushService.deletePushToken()
-            stoppedPushes = true
-        } catch {
-            reporter.record(error)
-        }
-        // Safe to bail here: FCM already dropped its cached token, so it fetches
-        // a fresh one, and PushService re-registers it since we're still signed in.
-        guard stoppedPushes else {
-            throw MyTBASessionError.offline
+            // Bailing leaves the user signed in, so register again: pausing may have stopped
+            // a registration TBA hasn't gotten yet.
+            pushService.resumeRegistration()
+            throw MyTBASessionError.unregister(error)
         }
 
-        try authService.signOut()
+        do {
+            try authService.signOut()
+        } catch {
+            pushService.resumeRegistration()
+            throw error
+        }
 
         // After sign-out succeeds, so a failure can't strand us signed in with
         // the cached data already gone.

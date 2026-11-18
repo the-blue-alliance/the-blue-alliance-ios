@@ -7,10 +7,10 @@ struct MyTBAPingRequest: Codable {
 extension MyTBA {
 
     public func ping() async throws -> MyTBABaseResponse {
-        guard let token = fcmToken else {
-            throw MyTBAError.error(nil, "Missing FCM token")
+        guard let fid else {
+            throw MyTBAError.missingFID
         }
-        let encoded = try MyTBA.jsonEncoder.encode(MyTBAPingRequest(mobileId: token))
+        let encoded = try MyTBA.jsonEncoder.encode(MyTBAPingRequest(mobileId: fid))
         return try await callApi(method: "ping", bodyData: encoded)
     }
 
