@@ -6,3 +6,9 @@ public protocol MyTBASubscribable {
     var modelType: MyTBAModelType { get }
     static var notificationTypes: [NotificationType] { get }
 }
+
+extension MyTBASubscribable {
+    public var myTBAModelID: MyTBAModelID {
+        MyTBAModelID(modelType: modelType, modelKey: modelKey)
+    }
+}

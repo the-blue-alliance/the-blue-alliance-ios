@@ -31,11 +31,25 @@ public struct MyTBABaseResponse: MyTBAResponse {
     }
 }
 
+public struct MyTBAModelID: Hashable, Sendable {
+    public let modelType: MyTBAModelType
+    public let modelKey: String
+
+    public init(modelType: MyTBAModelType, modelKey: String) {
+        self.modelType = modelType
+        self.modelKey = modelKey
+    }
+}
+
 // Models for Favorite/Subscription
-public protocol MyTBAModel: Codable, Sendable {
+public protocol MyTBAModel: Codable, Sendable, Identifiable where ID == MyTBAModelID {
 
     static var arrayKey: String { get }
 
     var modelKey: String { get set }
     var modelType: MyTBAModelType { get set }
+}
+
+extension MyTBAModel {
+    public var id: MyTBAModelID { MyTBAModelID(modelType: modelType, modelKey: modelKey) }
 }
