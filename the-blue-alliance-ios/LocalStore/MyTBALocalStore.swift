@@ -29,26 +29,33 @@ struct MyTBAStores {
     let subscriptions: SubscriptionsStore
 }
 
+typealias FavoritesStore = MyTBAModelStore<MyTBAFavorite>
+typealias SubscriptionsStore = MyTBAModelStore<MyTBASubscription>
+
 @Observable
-final class FavoritesStore {
+final class MyTBAModelStore<Model: MyTBAModel> {
 
-    private var byID: [MyTBAModelID: MyTBAFavorite]
-    @ObservationIgnored private let file: JSONFileStore<[MyTBAFavorite]>
+    private var byID: [MyTBAModelID: Model]
+    @ObservationIgnored private let file: JSONFileStore<[Model]>
 
-    var favorites: [MyTBAFavorite] { Array(byID.values) }
+    private var models: [Model] { Array(byID.values) }
 
-    init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("favorites.json")) {
+    static var defaultFileURL: URL {
+        MyTBALocalStore.directory.appendingPathComponent("\(Model.arrayKey).json")
+    }
+
+    init(fileURL: URL = MyTBAModelStore.defaultFileURL) {
         self.file = JSONFileStore(url: fileURL)
         self.byID = Dictionary((file.load() ?? []).map { ($0.id, $0) }) { first, _ in first }
     }
 
-    func replaceAll(with favorites: [MyTBAFavorite]) {
-        byID = Dictionary(favorites.map { ($0.id, $0) }) { first, _ in first }
+    func replaceAll(with models: [Model]) {
+        byID = Dictionary(models.map { ($0.id, $0) }) { first, _ in first }
         persist()
     }
 
-    func upsert(_ favorite: MyTBAFavorite) {
-        byID[favorite.id] = favorite
+    func upsert(_ model: Model) {
+        byID[model.id] = model
         persist()
     }
 
@@ -66,61 +73,27 @@ final class FavoritesStore {
         file.delete()
     }
 
-    func favoriteTeamKeys() -> [String] {
-        byID.keys.filter { $0.modelType == .team }.map(\.modelKey).sorted()
-    }
-
     func flush() async {
         await file.flush()
     }
 
     private func persist() {
-        file.save(favorites)
+        file.save(models)
     }
 }
 
-@Observable
-final class SubscriptionsStore {
+extension MyTBAModelStore where Model == MyTBAFavorite {
+    var favorites: [MyTBAFavorite] { models }
 
-    private var byID: [MyTBAModelID: MyTBASubscription]
-    @ObservationIgnored private let file: JSONFileStore<[MyTBASubscription]>
-
-    var subscriptions: [MyTBASubscription] { Array(byID.values) }
-
-    init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("subscriptions.json")) {
-        self.file = JSONFileStore(url: fileURL)
-        self.byID = Dictionary((file.load() ?? []).map { ($0.id, $0) }) { first, _ in first }
+    func favoriteTeamKeys() -> [String] {
+        byID.keys.filter { $0.modelType == .team }.map(\.modelKey).sorted()
     }
+}
 
-    func replaceAll(with subscriptions: [MyTBASubscription]) {
-        byID = Dictionary(subscriptions.map { ($0.id, $0) }) { first, _ in first }
-        persist()
-    }
-
-    func upsert(_ subscription: MyTBASubscription) {
-        byID[subscription.id] = subscription
-        persist()
-    }
-
-    func remove(_ model: some MyTBAModelIdentifiable) {
-        byID[model.myTBAModelID] = nil
-        persist()
-    }
-
-    func clear() {
-        byID = [:]
-        file.delete()
-    }
+extension MyTBAModelStore where Model == MyTBASubscription {
+    var subscriptions: [MyTBASubscription] { models }
 
     func subscription(for model: some MyTBAModelIdentifiable) -> MyTBASubscription? {
         byID[model.myTBAModelID]
-    }
-
-    func flush() async {
-        await file.flush()
-    }
-
-    private func persist() {
-        file.save(subscriptions)
     }
 }

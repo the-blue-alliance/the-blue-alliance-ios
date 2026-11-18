@@ -19,6 +19,12 @@ struct MyTBALocalStoreTests {
     private let event = MyTBAFavorite(modelKey: "2026miket", modelType: .event)
     private let team = MyTBAFavorite(modelKey: "frc7332", modelType: .team)
 
+    // Installed apps already have their cache at these paths.
+    @Test func defaultFilesKeepTheirNames() {
+        #expect(FavoritesStore.defaultFileURL.lastPathComponent == "favorites.json")
+        #expect(SubscriptionsStore.defaultFileURL.lastPathComponent == "subscriptions.json")
+    }
+
     // MARK: - Favorites
 
     @Test func favoritesKeepOneEntryPerModelFromTheServer() {
