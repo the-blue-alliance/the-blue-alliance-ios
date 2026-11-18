@@ -133,8 +133,7 @@ class PushService: NSObject, PushServiceProtocol {
     }
 
     /// Firebase can't register the FID without the APNs token, and has to be asked: on its
-    /// own it neither registers an install with a pre-FID token cached, as every upgrade has,
-    /// nor reports a FID it registered at an earlier launch.
+    /// own it doesn't register an install with a pre-FID token cached, as every upgrade has.
     func didReceiveAPNSToken() {
         hasAPNSToken = true
         if authService.isSignedIn {
@@ -249,8 +248,8 @@ extension PushService {
                     // `register()` answers from Firebase's cache without checking it against the
                     // installation, so if the app quit before Firebase registered the one that
                     // replaced the deleted installation, it reports the deleted FID, or nothing
-                    // (firebase-ios-sdk 12.18.0 through 13.2.0). Unregistering clears the cache,
-                    // even if its request to FCM then fails.
+                    // (firebase-ios-sdk 13.2.0). Unregistering clears the cache, even if its
+                    // request to FCM then fails.
                     do {
                         try await firebase.unregister()
                     } catch {
@@ -259,7 +258,7 @@ extension PushService {
                     try await firebase.register()
                 } else if !isRegisteredWithFirebase, let fid {
                     // The callback comes without the FID when Firebase already had it registered
-                    // but hasn't loaded it yet this launch (firebase-ios-sdk 12.18.0).
+                    // but hasn't loaded it yet this launch (firebase-ios-sdk 13.2.0).
                     didReceiveRegistration(fid)
                 }
             } catch {
@@ -294,7 +293,8 @@ extension PushService {
 extension PushService: MessagingDelegate {
 
     // Firebase delivers this on the main thread (-[FIRMessaging notifyDelegateOfFCMTokenAvailability]),
-    // after each `register()` and whenever it registers a FID on its own.
+    // at launch for a FID it registered before, after each `register()`, and whenever it
+    // registers a FID on its own.
     func messaging(_ messaging: Messaging, didReceiveRegistration installationId: String?) {
         didReceiveRegistration(installationId)
     }

@@ -192,7 +192,7 @@ struct PushServiceTests {
         #expect(reporter.errors.isEmpty)
     }
 
-    // Firebase 12.18.0 calls back without the FID when `register()` finds it already
+    // Firebase 13.2.0 calls back without the FID when `register()` finds it already
     // registered but hasn't loaded it yet this launch.
     @Test func registersWhenFirebaseCallsBackWithoutTheFID() async {
         authService.isSignedIn = true
