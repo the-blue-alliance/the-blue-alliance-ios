@@ -8,3 +8,13 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+  - package-ecosystem: swift
+    directories:
+      - "/"
+      - "/Packages/*"
+    schedule:
+      interval: daily
+    groups:
+      # One PR per dependency across the app and package lockfiles, so shared pins move together.
+      swift-packages:
+        group-by: dependency-name
