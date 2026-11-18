@@ -75,15 +75,11 @@ class MyTBAPreferenceViewController: TBATableViewController,
     init(subscribableModel: any MyTBASubscribable, dependencies: Dependencies) {
         self.subscribableModel = subscribableModel
 
-        let existingFavorite = dependencies.myTBAStores.favorites.favorites.first {
-            $0.modelKey == subscribableModel.modelKey && $0.modelType == subscribableModel.modelType
-        }
-        isFavorite = (existingFavorite != nil)
+        isFavorite = dependencies.myTBAStores.favorites.contains(subscribableModel)
         isFavoriteInitially = isFavorite
 
         let existingSubscription = dependencies.myTBAStores.subscriptions.subscription(
-            modelKey: subscribableModel.modelKey,
-            modelType: subscribableModel.modelType
+            for: subscribableModel
         )
         notifications = existingSubscription?.notifications ?? []
         notificationsInitial = notifications
@@ -148,16 +144,11 @@ class MyTBAPreferenceViewController: TBATableViewController,
             do {
                 try await self.dependencies.myTBASession.refresh()
 
-                let existingFavorite = self.favoritesStore.favorites.first {
-                    $0.modelKey == self.subscribableModel.modelKey
-                        && $0.modelType == self.subscribableModel.modelType
-                }
-                self.isFavorite = (existingFavorite != nil)
+                self.isFavorite = self.favoritesStore.contains(self.subscribableModel)
                 self.isFavoriteInitially = self.isFavorite
 
                 let existingSubscription = self.subscriptionsStore.subscription(
-                    modelKey: self.subscribableModel.modelKey,
-                    modelType: self.subscribableModel.modelType
+                    for: self.subscribableModel
                 )
                 self.notifications = existingSubscription?.notifications ?? []
                 self.notificationsInitial = self.notifications
@@ -210,18 +201,12 @@ class MyTBAPreferenceViewController: TBATableViewController,
                             )
                         )
                     } else {
-                        self.favoritesStore.remove(
-                            modelKey: self.subscribableModel.modelKey,
-                            modelType: self.subscribableModel.modelType
-                        )
+                        self.favoritesStore.remove(self.subscribableModel)
                     }
                 }
                 if response.subscription.code < 500 {
                     if self.notifications.isEmpty {
-                        self.subscriptionsStore.remove(
-                            modelKey: self.subscribableModel.modelKey,
-                            modelType: self.subscribableModel.modelType
-                        )
+                        self.subscriptionsStore.remove(self.subscribableModel)
                     } else {
                         self.subscriptionsStore.upsert(
                             MyTBASubscription(

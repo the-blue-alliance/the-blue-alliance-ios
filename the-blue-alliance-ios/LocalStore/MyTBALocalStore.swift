@@ -5,7 +5,9 @@ import Observation
 // Local mirrors of the user's MyTBA favorites and subscriptions. Stored as
 // Codable JSON in a single `Application Support/tba-myTBA/` directory so that
 // `MyTBALocalStore.wipeAll()` can trivially erase everything if the MyTBA
-// API shape ever changes.
+// API shape ever changes. Both are keyed by model: the server can hold the same
+// favorite or subscription twice, and a repeated row crashes the myTBA list's
+// diffable snapshot.
 
 enum MyTBALocalStore {
     static let directory: URL = {
@@ -27,43 +29,48 @@ struct MyTBAStores {
     let subscriptions: SubscriptionsStore
 }
 
+typealias FavoritesStore = MyTBAModelStore<MyTBAFavorite>
+typealias SubscriptionsStore = MyTBAModelStore<MyTBASubscription>
+
 @Observable
-final class FavoritesStore {
+final class MyTBAModelStore<Model: MyTBAModel> {
 
-    private(set) var favorites: [MyTBAFavorite]
-    @ObservationIgnored private let file: JSONFileStore<[MyTBAFavorite]>
+    private var byID: [MyTBAModelID: Model]
+    @ObservationIgnored private let file: JSONFileStore<[Model]>
 
-    init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("favorites.json")) {
+    private var models: [Model] { Array(byID.values) }
+
+    static var defaultFileURL: URL {
+        MyTBALocalStore.directory.appendingPathComponent("\(Model.arrayKey).json")
+    }
+
+    init(fileURL: URL = MyTBAModelStore.defaultFileURL) {
         self.file = JSONFileStore(url: fileURL)
-        self.favorites = file.load() ?? []
+        self.byID = Dictionary((file.load() ?? []).map { ($0.id, $0) }) { first, _ in first }
     }
 
-    func replaceAll(with favorites: [MyTBAFavorite]) {
-        self.favorites = favorites
+    func replaceAll(with models: [Model]) {
+        byID = Dictionary(models.map { ($0.id, $0) }) { first, _ in first }
         persist()
     }
 
-    func upsert(_ favorite: MyTBAFavorite) {
-        var copy = favorites.filter {
-            !($0.modelKey == favorite.modelKey && $0.modelType == favorite.modelType)
-        }
-        copy.append(favorite)
-        favorites = copy
+    func upsert(_ model: Model) {
+        byID[model.id] = model
         persist()
     }
 
-    func remove(modelKey: String, modelType: MyTBAModelType) {
-        favorites = favorites.filter { !($0.modelKey == modelKey && $0.modelType == modelType) }
+    func remove(_ model: some MyTBAModelIdentifiable) {
+        byID[model.myTBAModelID] = nil
         persist()
+    }
+
+    func contains(_ model: some MyTBAModelIdentifiable) -> Bool {
+        byID[model.myTBAModelID] != nil
     }
 
     func clear() {
-        favorites = []
+        byID = [:]
         file.delete()
-    }
-
-    func favoriteTeamKeys() -> [String] {
-        favorites.filter { $0.modelType == .team }.map { $0.modelKey }
     }
 
     func flush() async {
@@ -71,56 +78,22 @@ final class FavoritesStore {
     }
 
     private func persist() {
-        file.save(favorites)
+        file.save(models)
     }
 }
 
-@Observable
-final class SubscriptionsStore {
+extension MyTBAModelStore where Model == MyTBAFavorite {
+    var favorites: [MyTBAFavorite] { models }
 
-    private(set) var subscriptions: [MyTBASubscription]
-    @ObservationIgnored private let file: JSONFileStore<[MyTBASubscription]>
-
-    init(fileURL: URL = MyTBALocalStore.directory.appendingPathComponent("subscriptions.json")) {
-        self.file = JSONFileStore(url: fileURL)
-        self.subscriptions = file.load() ?? []
+    func favoriteTeamKeys() -> [String] {
+        byID.keys.filter { $0.modelType == .team }.map(\.modelKey).sorted()
     }
+}
 
-    func replaceAll(with subscriptions: [MyTBASubscription]) {
-        self.subscriptions = subscriptions
-        persist()
-    }
+extension MyTBAModelStore where Model == MyTBASubscription {
+    var subscriptions: [MyTBASubscription] { models }
 
-    func upsert(_ subscription: MyTBASubscription) {
-        var copy = subscriptions.filter {
-            !($0.modelKey == subscription.modelKey && $0.modelType == subscription.modelType)
-        }
-        copy.append(subscription)
-        subscriptions = copy
-        persist()
-    }
-
-    func remove(modelKey: String, modelType: MyTBAModelType) {
-        subscriptions = subscriptions.filter {
-            !($0.modelKey == modelKey && $0.modelType == modelType)
-        }
-        persist()
-    }
-
-    func clear() {
-        subscriptions = []
-        file.delete()
-    }
-
-    func subscription(modelKey: String, modelType: MyTBAModelType) -> MyTBASubscription? {
-        subscriptions.first { $0.modelKey == modelKey && $0.modelType == modelType }
-    }
-
-    func flush() async {
-        await file.flush()
-    }
-
-    private func persist() {
-        file.save(subscriptions)
+    func subscription(for model: some MyTBAModelIdentifiable) -> MyTBASubscription? {
+        byID[model.myTBAModelID]
     }
 }
