@@ -11,6 +11,7 @@ final class MockFirebasePush: FirebasePushRegistering {
     var deleteInstallationError: (any Error)?
     /// Stands in for Firebase calling back `messaging(_:didReceiveRegistration:)`.
     var onRegister: (() -> Void)?
+    var holdsUnregister = false
     private(set) var registerCallCount = 0
     private(set) var unregisterCallCount = 0
     private(set) var deleteInstallationCallCount = 0
@@ -29,6 +30,9 @@ final class MockFirebasePush: FirebasePushRegistering {
 
     func unregister() async throws {
         unregisterCallCount += 1
+        while holdsUnregister {
+            try? await Task.sleep(for: .milliseconds(10))
+        }
     }
 
     func deleteInstallation() async throws {
@@ -113,7 +117,7 @@ struct PushServiceTests {
         let firebase = firebase
         let pushService = makePushService()
         var acceptedDeletedFID = false
-        firebase.onRegister = { [weak pushService] in
+        firebase.onRegister = { [weak pushService, unowned firebase] in
             let cachedFID = firebase.unregisterCallCount == 0 ? "fid-1" : "fid-2"
             pushService?.didReceiveRegistration(cachedFID)
             if cachedFID == "fid-1", pushService?.isRegisteredWithFirebase == true {
@@ -154,6 +158,46 @@ struct PushServiceTests {
         #expect(firebase.unregisterCallCount == 0)
         #expect(pushService.fid == "fid-2")
         #expect(pushService.isRegisteredWithFirebase)
+    }
+
+    // Clearing Firebase's cache unregisters the FID, so it could undo a registration made
+    // meanwhile that Firebase goes on reporting.
+    @Test func aFirebaseRegistrationWaitsForTheOneBeforeIt() async throws {
+        authService.isSignedIn = true
+        let pushService = makePushService()
+        await waitUntil { pushService.fid != nil }
+        try await pushService.deleteFirebaseInstallation()
+        let firebase = firebase
+        firebase.onRegister = { [weak pushService, unowned firebase] in
+            let cachedFID = firebase.unregisterCallCount == 0 ? "fid-1" : "fid-2"
+            pushService?.didReceiveRegistration(cachedFID)
+        }
+        firebase.holdsUnregister = true
+
+        pushService.didReceiveAPNSToken()
+        await waitUntil { firebase.unregisterCallCount == 1 }
+        pushService.didReceiveAPNSToken()
+        try? await Task.sleep(for: .milliseconds(50))
+        #expect(firebase.registerCallCount == 1)
+
+        firebase.holdsUnregister = false
+        await waitUntil { firebase.registerCallCount == 3 }
+
+        #expect(firebase.registerCallCount == 3)
+        #expect(firebase.unregisterCallCount == 1)
+        #expect(pushService.fid == "fid-2")
+    }
+
+    // Without the FID there'd be nothing to reject when Firebase's cache reports it.
+    @Test func deletingInstallationNeedsTheFID() async {
+        firebase.installationIDResult = nil
+        let pushService = makePushService()
+        await waitUntil { reporter.errors.count == 1 }
+
+        await #expect(throws: PushServiceError.missingFID) {
+            try await pushService.deleteFirebaseInstallation()
+        }
+        #expect(firebase.deleteInstallationCallCount == 0)
     }
 
     @Test func doesNotRegisterWhenSignedOut() async {

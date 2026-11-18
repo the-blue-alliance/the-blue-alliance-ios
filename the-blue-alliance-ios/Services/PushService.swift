@@ -43,6 +43,7 @@ final class FirebasePushRegistrar: FirebasePushRegistering {
 enum PushServiceError: LocalizedError {
     case registrationPaused
     case notRegisteredWithFirebase
+    case missingFID
 
     var errorDescription: String? {
         switch self {
@@ -50,6 +51,8 @@ enum PushServiceError: LocalizedError {
             return "Signing out of myTBA."
         case .notRegisteredWithFirebase:
             return "Firebase hasn't registered this device for notifications yet."
+        case .missingFID:
+            return "Firebase hasn't provided this device's installation ID."
         }
     }
 }
@@ -74,7 +77,8 @@ protocol PushServiceProtocol: AnyObject {
     func resumeRegistration()
     /// Deletes this install's Firebase installation, so its FID stops working for good,
     /// including any TBA registration still pointing at it. Needs no TBA auth, which is
-    /// what lets sign-out finish when TBA can't be told.
+    /// what lets sign-out finish when TBA can't be told. Throws `missingFID` without
+    /// deleting when the FID isn't known.
     func deleteFirebaseInstallation() async throws
 }
 
@@ -96,6 +100,9 @@ class PushService: NSObject, PushServiceProtocol {
     /// The last /register request sent to TBA. Each waits for the one before it, so awaiting
     /// this waits them all out.
     private var lastTBARegistration: Task<MyTBABaseResponse, any Error>?
+    /// The last registration with Firebase. Each waits for the one before it, since clearing
+    /// Firebase's cache unregisters the FID and could undo another's registration.
+    private var lastFirebaseRegistration: Task<Void, Never>?
     private var signInObservation: Task<Void, Never>?
     private var hasAPNSToken = false
     private var isRegistrationPaused = false
@@ -189,13 +196,14 @@ extension PushService {
     }
 
     func deleteFirebaseInstallation() async throws {
-        let deletedFID = fid
-        try await firebase.deleteInstallation()
-        // Firebase's cache can keep reporting it, so it's rejected until Firebase reports
-        // another FID. An earlier one still saved is the one the cache would have.
-        if defaults.string(forKey: Self.deletedFIDKey) == nil {
-            defaults.set(deletedFID, forKey: Self.deletedFIDKey)
+        // Firebase's cache can keep reporting the deleted FID, so it's rejected until Firebase
+        // reports another, which takes knowing it. An earlier one still saved is the one the
+        // cache would have.
+        guard let deletedFID = defaults.string(forKey: Self.deletedFIDKey) ?? fid else {
+            throw PushServiceError.missingFID
         }
+        try await firebase.deleteInstallation()
+        defaults.set(deletedFID, forKey: Self.deletedFIDKey)
         fid = nil
         isRegisteredWithFirebase = false
     }
@@ -240,7 +248,9 @@ extension PushService {
     // fail, so a sign-in restored at launch waits for `didReceiveAPNSToken()`.
     private func registerWithFirebase() {
         guard hasAPNSToken else { return }
-        Task { [weak self] in
+        let previous = lastFirebaseRegistration
+        lastFirebaseRegistration = Task { [weak self] in
+            await previous?.value
             guard let self else { return }
             do {
                 try await firebase.register()

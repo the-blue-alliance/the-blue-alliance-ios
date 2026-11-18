@@ -168,8 +168,8 @@ struct MyTBASessionServiceTests {
         #expect(harness.reporter.errors.isEmpty)
     }
 
-    // With no FID, TBA can't be told which device to forget, so the installation is
-    // retired instead.
+    // With no FID, TBA can't be told which device to forget, so sign-out asks to retire
+    // the installation instead.
     @Test func signOutRetiresInstallationWhenThereIsNoFID() async throws {
         let harness = Self.makeHarness()
         defer { try? FileManager.default.removeItem(at: harness.directory) }

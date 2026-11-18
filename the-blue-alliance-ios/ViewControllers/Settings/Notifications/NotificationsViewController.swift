@@ -357,9 +357,10 @@ class NotificationsViewController: TBATableViewController {
                 self.myTBARegisterError = error
             }
             self.myTBARegisterTask = nil
-            // Leaving the screen doesn't stop the request, but nothing should follow it.
-            guard !Task.isCancelled else { return }
-            self.sendPing()
+            // Leaving the screen doesn't stop the request, but the ping shouldn't follow it.
+            if !Task.isCancelled {
+                self.sendPing()
+            }
             self.tableView.reloadData()
         }
 

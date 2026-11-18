@@ -78,6 +78,7 @@ final class MockPushService: PushServiceProtocol {
     var deleteFirebaseInstallationError: (any Error)?
     var fid: String?
     var isRegisteredWithFirebase = true
+    var holdsRegisterWithTBA = false
     private(set) var callCount = 0
     private(set) var deleteFirebaseInstallationCallCount = 0
 
@@ -99,6 +100,12 @@ final class MockPushService: PushServiceProtocol {
 
     func registerWithTBA() async throws -> MyTBABaseResponse {
         callLog.append("push.registerWithTBA")
+        // Its own task, like PushService's, so cancelling the caller doesn't end the hold.
+        await Task {
+            while holdsRegisterWithTBA {
+                try? await Task.sleep(for: .milliseconds(10))
+            }
+        }.value
         throw MockError.boom
     }
 

@@ -65,6 +65,7 @@
 		5EC0D41A2C26090400000002 /* LocalStore/FeatureFlagsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090400000001 /* LocalStore/FeatureFlagsStoreTests.swift */; };
 		5EC0D41A2C26111700000002 /* LocalStore/MyTBALocalStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26111700000001 /* LocalStore/MyTBALocalStoreTests.swift */; };
 		5EC0D41A2C26090500000002 /* ViewControllers/Root/PhoneRootViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090500000001 /* ViewControllers/Root/PhoneRootViewControllerTests.swift */; };
+		92AA7A0F2F010000000DAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A0E2F010000000CAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift */; };
 		5EC0D41A2C26090700000002 /* ViewControllers/Settings/SettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */; };
 		5EC0D41A2C26090900000002 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26090900000001 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift */; };
 		5EC0D41A2C26091000000002 /* MatchTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */; };
@@ -297,6 +298,7 @@
 		5EC0D41A2C26090400000001 /* LocalStore/FeatureFlagsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore/FeatureFlagsStoreTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26111700000001 /* LocalStore/MyTBALocalStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore/MyTBALocalStoreTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090500000001 /* ViewControllers/Root/PhoneRootViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Root/PhoneRootViewControllerTests.swift; sourceTree = "<group>"; };
+		92AA7A0E2F010000000CAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Settings/NotificationsViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Settings/SettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26090900000001 /* ViewControllers/Teams/TeamEventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Teams/TeamEventsViewControllerTests.swift; sourceTree = "<group>"; };
 		5EC0D41A2C26091000000001 /* MatchTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTimesViewModel.swift; sourceTree = "<group>"; };
@@ -1084,6 +1086,7 @@
 				5EC0D41A2C26090400000001 /* LocalStore/FeatureFlagsStoreTests.swift */,
 				5EC0D41A2C26111700000001 /* LocalStore/MyTBALocalStoreTests.swift */,
 				5EC0D41A2C26090500000001 /* ViewControllers/Root/PhoneRootViewControllerTests.swift */,
+				92AA7A0E2F010000000CAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift */,
 				5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */,
 				92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */,
@@ -1332,6 +1335,7 @@
 				5EC0D41A2C26090400000002 /* LocalStore/FeatureFlagsStoreTests.swift in Sources */,
 				5EC0D41A2C26111700000002 /* LocalStore/MyTBALocalStoreTests.swift in Sources */,
 				5EC0D41A2C26090500000002 /* ViewControllers/Root/PhoneRootViewControllerTests.swift in Sources */,
+				92AA7A0F2F010000000DAAAA /* ViewControllers/Settings/NotificationsViewControllerTests.swift in Sources */,
 				5EC0D41A2C26090700000002 /* ViewControllers/Settings/SettingsViewControllerTests.swift in Sources */,
 				92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */,
