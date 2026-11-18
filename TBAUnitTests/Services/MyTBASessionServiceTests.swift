@@ -162,82 +162,59 @@ struct MyTBASessionServiceTests {
 
         try await harness.service.signOut()
 
-        #expect(harness.pushService.deleteFirebaseInstallationCallCount == 0)
         #expect(harness.authService.signOutCallCount == 1)
         #expect(harness.stores.favorites.favorites.isEmpty)
         #expect(harness.reporter.errors.isEmpty)
     }
 
-    // With no FID, TBA can't be told which device to forget, so sign-out asks to retire
-    // the installation instead.
-    @Test func signOutRetiresInstallationWhenThereIsNoFID() async throws {
+    // TBA didn't hear from us, so the device would keep receiving the old user's pushes.
+    // Refuse, and leave everything as it was.
+    @Test func signOutRefusesWhenTBACantBeTold() async {
         let harness = Self.makeHarness()
         defer { try? FileManager.default.removeItem(at: harness.directory) }
         Self.seedStores(harness)
-        harness.myTBA.unregisterError = MyTBAError.missingFID
+        harness.myTBA.unregisterError = MyTBAError.error(500, "Server error")
 
-        try await harness.service.signOut()
-
-        #expect(harness.pushService.deleteFirebaseInstallationCallCount == 1)
-        #expect(harness.authService.signOutCallCount == 1)
-        #expect(harness.stores.favorites.favorites.isEmpty)
-        #expect(harness.reporter.errors.isEmpty)
+        let error = await #expect(throws: MyTBASessionError.self) {
+            try await harness.service.signOut()
+        }
+        #expect(Self.unregisterCause(error) == .error(500, "Server error"))
+        #expect(
+            harness.callLog.entries == [
+                "push.pauseRegistration", "myTBA.unregister", "push.resumeRegistration",
+            ]
+        )
+        #expect(harness.reporter.errors.count == 1)
+        #expect(harness.authService.signOutCallCount == 0)
+        #expect(harness.stores.favorites.favorites.count == 1)
+        #expect(harness.stores.subscriptions.subscriptions.count == 1)
     }
 
     // A missing FID doesn't prove the device was never registered, so it doesn't count
     // as nothing to stop.
-    @Test func signOutRefusesWithoutFIDWhenInstallationCantBeRetired() async {
+    @Test func signOutRefusesWithoutFID() async {
         let harness = Self.makeHarness()
         defer { try? FileManager.default.removeItem(at: harness.directory) }
         Self.seedStores(harness)
         harness.myTBA.unregisterError = MyTBAError.missingFID
-        harness.pushService.deleteFirebaseInstallationError = MockError.boom
 
-        await #expect(throws: MyTBASessionError.self) {
+        let error = await #expect(throws: MyTBASessionError.self) {
             try await harness.service.signOut()
         }
-        #expect(harness.callLog.entries.last == "push.resumeRegistration")
-        #expect(harness.authService.signOutCallCount == 0)
-        #expect(harness.stores.favorites.favorites.count == 1)
-    }
-
-    // Unregister needs the TBA API and can't be retried after Firebase sign-out. When
-    // it fails, retiring the Firebase installation kills the FID TBA still has.
-    @Test func signOutRetiresInstallationWhenUnregisterFails() async throws {
-        let harness = Self.makeHarness()
-        defer { try? FileManager.default.removeItem(at: harness.directory) }
-        Self.seedStores(harness)
-        harness.myTBA.unregisterError = MyTBAError.error(500, "Server error")
-
-        try await harness.service.signOut()
-
+        #expect(Self.unregisterCause(error) == .missingFID)
         #expect(
             harness.callLog.entries == [
-                "push.pauseRegistration", "myTBA.unregister", "push.deleteFirebaseInstallation",
-                "auth.signOut",
+                "push.pauseRegistration", "myTBA.unregister", "push.resumeRegistration",
             ]
         )
-        #expect(harness.reporter.errors.count == 1)
-        #expect(harness.stores.favorites.favorites.isEmpty)
-    }
-
-    // Neither server heard from us, so the device would keep receiving the old
-    // user's pushes. Refuse, and leave everything as it was.
-    @Test func signOutRefusesWhenNeitherServerIsReachable() async {
-        let harness = Self.makeHarness()
-        defer { try? FileManager.default.removeItem(at: harness.directory) }
-        Self.seedStores(harness)
-        harness.myTBA.unregisterError = MyTBAError.error(500, "Server error")
-        harness.pushService.deleteFirebaseInstallationError = MockError.boom
-
-        await #expect(throws: MyTBASessionError.self) {
-            try await harness.service.signOut()
-        }
-        #expect(harness.callLog.entries.last == "push.resumeRegistration")
-        #expect(harness.reporter.errors.count == 2)
         #expect(harness.authService.signOutCallCount == 0)
         #expect(harness.stores.favorites.favorites.count == 1)
-        #expect(harness.stores.subscriptions.subscriptions.count == 1)
+    }
+
+    /// What sign-out's `.unregister` error says went wrong with TBA, if it threw that.
+    private static func unregisterCause(_ error: MyTBASessionError?) -> MyTBAError? {
+        guard case .unregister(let cause)? = error else { return nil }
+        return cause as? MyTBAError
     }
 
     @Test func signOutLeavesStoresIntactWhenAuthSignOutFails() async {

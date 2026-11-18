@@ -7,7 +7,7 @@ import UIKit
 enum MyTBASessionError: LocalizedError {
     case signIn(any Error)
     case pushAuthorization(any Error)
-    case offline
+    case unregister(any Error)
 
     var errorDescription: String? {
         switch self {
@@ -15,8 +15,8 @@ enum MyTBASessionError: LocalizedError {
             return error.localizedDescription
         case .pushAuthorization(let error):
             return error.localizedDescription
-        case .offline:
-            return "Sign out needs a connection so this device stops receiving notifications."
+        case .unregister(let error):
+            return "Couldn't turn off this device's notifications: \(error.localizedDescription)"
         }
     }
 }
@@ -114,43 +114,24 @@ final class MyTBASessionService {
     }
 
     func signOut() async throws {
-        // At least one of these has to reach a server before local state goes, or a
-        // signed-out phone keeps getting the old user's notifications:
-        // - TBA forgetting the device.
-        // - Deleting the Firebase installation, which kills the FID along with any TBA
-        //   registration still pointing at it.
-        // TBA has to go first: it needs an ID token, so it can't follow Firebase
-        // sign-out, and it needs the FID, which deleting the installation discards.
-        // Pausing first keeps a pending registration from re-adding the device.
+        // TBA has to forget the device before local state goes, or a signed-out phone keeps
+        // getting the old user's notifications. Nothing on the phone can stand in for it:
+        // the FID outlives FCM's unregister, and deleting the Firebase installation can leave
+        // Firebase reporting the dead FID. It has to come before Firebase sign-out, since it
+        // needs an ID token, and pausing first keeps a pending registration from re-adding
+        // the device.
         await pushService.pauseRegistration()
 
-        var stoppedPushes = false
         do {
             _ = try await myTBA.unregister()
-            stoppedPushes = true
         } catch let error as MyTBAError where error.code == 404 {
             // Already unregistered server-side.
-            stoppedPushes = true
-        } catch MyTBAError.missingFID {
-            // Firebase hasn't provided the FID, so there's nothing to name to TBA.
         } catch {
             reporter.record(error)
-        }
-        // Not FCM's unregister: the FID survives it, auto-init registers it again at the
-        // next launch, and offline it retries for up to 17 minutes before failing.
-        if !stoppedPushes {
-            do {
-                try await pushService.deleteFirebaseInstallation()
-                stoppedPushes = true
-            } catch {
-                reporter.record(error)
-            }
-        }
-        // Bailing leaves the user signed in, so register again: pausing may have stopped
-        // a registration TBA hasn't gotten yet.
-        guard stoppedPushes else {
+            // Bailing leaves the user signed in, so register again: pausing may have stopped
+            // a registration TBA hasn't gotten yet.
             pushService.resumeRegistration()
-            throw MyTBASessionError.offline
+            throw MyTBASessionError.unregister(error)
         }
 
         do {
