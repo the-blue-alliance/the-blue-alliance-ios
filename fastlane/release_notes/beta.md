@@ -11,15 +11,20 @@ What's new:
 - The myTBA sign-in screen has been rebuilt, with Google and Apple buttons that follow light/dark appearance
 - Event Info and Team@Event Summary text scales with your text size
 - Events are ordered by the season timeline, so weeks delayed past Championship (like 2026 Israel) list after it
+- Match breakdowns show the fouls each alliance committed, with a separate Foul Points Received row. 2015 shows Foul Points Deducted instead, since that year's fouls took points from the offending alliance
+- A new Kickoff app icon, and the other icons are updated for iOS 27
 
 Bug fixes:
 - Fixed the crash signed-in myTBA users hit in 3.6.0 (3)
+- Fixed a myTBA crash when the server has the same favorite or subscription saved twice (also in 3.5.0)
 - Opening Search no longer makes the header jump
 - Changing the year on Events, Districts, or a team's Events clears the old year's list right away, and a slow response can no longer land on the new year
 - Filtering all teams widens again as you delete characters
 - Search results no longer sit behind the navigation bar
 - Decimal numbers (OPRs, insights, breakdowns) use your region's decimal separator
 - The status bar stays light on iOS 27, including in the photo viewer
+- App icons no longer look washed out on iOS 27
+- The Events and Districts year menus pick up a new season without a relaunch
 - Signing out of myTBA stops push notifications on this device even if the TBA API is unreachable. If you're fully offline, sign-out says so and keeps you signed in
 - A myTBA session the server rejects no longer wipes your cached favorites and subscriptions
 
@@ -30,12 +35,15 @@ Please poke at:
 - Year pickers on Events, Districts, and a Team page: the current year is checked (and the week on Events), and picking a year updates the page
 - A Championship division event: the "Winners advance to" row and the divisions menu
 - Match → Info on a played match: Match Times and the "Show in my timezone" switch
+- Match → Breakdown across a few seasons: each alliance's column shows the fouls it committed, then Foul Points Received (Foul Points Deducted in 2015)
 - myTBA: favorite a team and watch the star fill; change a favorite on the web, come back to the app, and check it shows up
+- myTBA subscriptions: change notifications for a team, event, and match, and check the choices stick after you leave and come back
 - Sign in with Google and with Apple, sign out, and relaunch to confirm the session restores. In Airplane mode, Sign Out should show an error and keep you signed in
-- Tap a push notification and confirm it opens the right screen
-- Settings → App Icon, Cache Policy, and Delete Network Cache
+- Push notifications after the Firebase 13 update: they still arrive, and tapping one opens the right screen
+- Settings → App Icon (try the new Kickoff icon), Cache Policy, and Delete Network Cache
 
 Under the hood:
 - The app and all four packages build in Swift 6 language mode with strict concurrency checking
 - Sign-in moved into a TBAAuth package, and screens update through Swift Observation and UIKit's `updateProperties()`
 - The project is updated for Xcode 27, and CI and TestFlight builds now run on Xcode 27 too
+- Firebase is updated to 13, along with the other Swift package dependencies
