@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92AA7A172F01000000BBBB17 /* ViewControllers/Root/MoreViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A162F01000000AAAA16 /* ViewControllers/Root/MoreViewControllerTests.swift */; };
+		92AA7A152F01000000BBBB15 /* Services/SponsorServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A142F01000000AAAA14 /* Services/SponsorServiceTests.swift */; };
+		92AA7A132F01000000BBBB13 /* SponsorCreditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A122F01000000AAAA12 /* SponsorCreditView.swift */; };
+		92AA7A112F01000000BBBB11 /* SponsorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AA7A102F01000000AAAA10 /* SponsorService.swift */; };
 		02600260260026002600A002 /* PlayerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02600260260026002600A001 /* PlayerCollectionViewCell.swift */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
@@ -236,6 +240,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		92AA7A162F01000000AAAA16 /* ViewControllers/Root/MoreViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers/Root/MoreViewControllerTests.swift; sourceTree = "<group>"; };
+		92AA7A142F01000000AAAA14 /* Services/SponsorServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SponsorServiceTests.swift; sourceTree = "<group>"; };
+		92AA7A122F01000000AAAA12 /* SponsorCreditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsorCreditView.swift; sourceTree = "<group>"; };
+		92AA7A102F01000000AAAA10 /* SponsorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsorService.swift; sourceTree = "<group>"; };
 		02600260260026002600A001 /* PlayerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerCollectionViewCell.swift; sourceTree = "<group>"; };
 		0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TBAUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
@@ -623,6 +631,7 @@
 			isa = PBXGroup;
 			children = (
 				92B3873C21CAF65F0041A049 /* Icons */,
+				92AA7A122F01000000AAAA12 /* SponsorCreditView.swift */,
 				92B3873021C93DF70041A049 /* Notifications */,
 			);
 			path = Settings;
@@ -931,6 +940,7 @@
 				92AA7A042F0100000004AAAA /* MyTBASessionService.swift */,
 				5EC0D41A2C26041B00000003 /* PushNotificationRouter.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
+				92AA7A102F01000000AAAA10 /* SponsorService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1080,10 +1090,12 @@
 				5EC0D41A2C26090400000001 /* LocalStore/FeatureFlagsStoreTests.swift */,
 				5EC0D41A2C26111700000001 /* LocalStore/MyTBALocalStoreTests.swift */,
 				5EC0D41A2C26090500000001 /* ViewControllers/Root/PhoneRootViewControllerTests.swift */,
+				92AA7A162F01000000AAAA16 /* ViewControllers/Root/MoreViewControllerTests.swift */,
 				5EC0D41A2C26090700000001 /* ViewControllers/Settings/SettingsViewControllerTests.swift */,
 				92AA7A062F0100000006AAAA /* Mocks/SessionMocks.swift */,
 				92AA7A082F0100000008AAAA /* Services/MyTBASessionServiceTests.swift */,
 				92AA7A0A2F010000000AAAAA /* Services/StatusServiceTests.swift */,
+				92AA7A142F01000000AAAA14 /* Services/SponsorServiceTests.swift */,
 				5EC0D41A2C26060100000001 /* ViewModels/Event/EventSectionTests.swift */,
 				5EC0D41A2C26091100000003 /* ViewModels/Event/EventDivisionsViewModelTests.swift */,
 				5EC0D41A2C26091000000005 /* ViewModels/Match/MatchTimesViewModelTests.swift */,
@@ -1326,10 +1338,12 @@
 				5EC0D41A2C26090400000002 /* LocalStore/FeatureFlagsStoreTests.swift in Sources */,
 				5EC0D41A2C26111700000002 /* LocalStore/MyTBALocalStoreTests.swift in Sources */,
 				5EC0D41A2C26090500000002 /* ViewControllers/Root/PhoneRootViewControllerTests.swift in Sources */,
+				92AA7A172F01000000BBBB17 /* ViewControllers/Root/MoreViewControllerTests.swift in Sources */,
 				5EC0D41A2C26090700000002 /* ViewControllers/Settings/SettingsViewControllerTests.swift in Sources */,
 				92AA7A072F0100000007AAAA /* Mocks/SessionMocks.swift in Sources */,
 				92AA7A092F0100000009AAAA /* Services/MyTBASessionServiceTests.swift in Sources */,
 				92AA7A0B2F010000000BAAAA /* Services/StatusServiceTests.swift in Sources */,
+				92AA7A152F01000000BBBB15 /* Services/SponsorServiceTests.swift in Sources */,
 				5EC0D41A2C26060100000002 /* ViewModels/Event/EventSectionTests.swift in Sources */,
 				5EC0D41A2C26091100000004 /* ViewModels/Event/EventDivisionsViewModelTests.swift in Sources */,
 				5EC0D41A2C26091000000006 /* ViewModels/Match/MatchTimesViewModelTests.swift in Sources */,
@@ -1453,6 +1467,8 @@
 				9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
+				92AA7A132F01000000BBBB13 /* SponsorCreditView.swift in Sources */,
+				92AA7A112F01000000BBBB11 /* SponsorService.swift in Sources */,
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,

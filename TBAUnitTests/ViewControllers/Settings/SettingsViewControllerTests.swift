@@ -76,4 +76,9 @@ struct SettingsViewControllerTests {
         #expect(names == ["The Blue Alliance", "Canopy", "Kickoff", "Champs", "Offseason"])
     }
 
+    @Test func settingsHasNoSponsorCredit() {
+        let settings = Harness(dashboardEnabled: false).settings
+        #expect(!(settings.tableView.tableFooterView is SponsorCreditView))
+    }
+
 }
